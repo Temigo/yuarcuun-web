@@ -14,6 +14,8 @@ class App extends Component {
       search: '',
     }
     this.onChangeSearch = this.onChangeSearch.bind(this);
+    this.selectWord = this.selectWord.bind(this);
+    
     this.index = elasticlunr(function () {
       this.addField('english');
       this.addField('yupik');
@@ -24,8 +26,9 @@ class App extends Component {
   componentDidMount() {
     console.log("did mount");
     axios
-      .get("http://localhost:8000/noun/all")
+      .get("http://yuarcuun.herokuapp.com/noun/all")
       .then(response => {
+        console.log(typeof(response.data));
         response.data.forEach((word) => {
           this.index.addDoc(word);
         });
@@ -48,6 +51,11 @@ class App extends Component {
     }
   }
   
+  selectWord(word, event) {
+    console.log(word);
+    console.log(event);
+  }
+  
   render() {
     console.log(this.state.wordsList);
     let displayList = this.state.search.length >= 2;
@@ -61,10 +69,10 @@ class App extends Component {
           icon='search' 
           onChange={this.onChangeSearch}
           fluid />
-        <List divided>
+        <List divided selection>
           {displayList ? this.state.wordsList.map((word) => {
             return (
-              <List.Item key={word.id}>
+              <List.Item key={word.id} onClick={this.selectWord.bind(this, word)}>
                 <List.Content>
                   <List.Header as='p'>{word.yupik}</List.Header>
                   <List.Description>{word.english}</List.Description>
