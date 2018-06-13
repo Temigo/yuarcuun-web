@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import { Container, Header, Image, Divider, Grid, Icon, Input, List, Button } from 'semantic-ui-react';
 import './semantic/dist/semantic.min.css';
 import axios from 'axios';
-import API_URL from './App.js';
+import { API_URL } from './App.js';
 
 class YupikDetails extends Component {
   constructor(props) {
     super(props);
+    console.log(API_URL);
     this.state = {
       currentWord: props.word.yupik,
       modifiedWord: props.word.yupik,
@@ -66,7 +67,7 @@ class YupikDetails extends Component {
     };
     // FIXME remove dash for verbs only
     axios
-      .get("http://localhost:5000/concat?root=" + word.replace('-', '') + "&postbase='" + endings[people][person] + "'")
+      .get(API_URL + "/concat?root=" + word.replace('-', '') + "&postbase='" + endings[people][person] + "'")
       .then(response => {
         console.log(response.data);
         this.setState({ modifiedWord: response.data.concat });

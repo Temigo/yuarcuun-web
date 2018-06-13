@@ -6,8 +6,8 @@ import YupikDetails from './YupikDetails.js';
 import './App.css';
 import './semantic/dist/semantic.min.css';
 
-//let API_URL = "http://yuarcuun.herokuapp.com";
-let API_URL = "http://localhost:5000";
+export const API_URL = "http://yuarcuun.herokuapp.com";
+//export const API_URL = "http://localhost:5000";
 
 class App extends Component {
   constructor(props) {
@@ -26,32 +26,30 @@ class App extends Component {
       this.addField('english');
       this.addField('yupik');
       this.addField('rootForm');
-      this.setRef("id");
+      this.setRef("yupik");
     });
   }
 
   componentDidMount() {
-    console.log("did mount");
+    axios
+      .get(API_URL + "/verb/all")
+      .then(response => {
+        response.data.forEach((word) => {
+          word['rootForm'] = 'verb';
+          this.index.addDoc(word);
+        });
+        this.setState({ dictionaryVerbs: response.data });
+      });
     axios
       .get(API_URL + "/noun/all")
       .then(response => {
-        console.log(typeof(response.data));
         response.data.forEach((word) => {
           word['rootForm'] = 'noun';
           this.index.addDoc(word);
         });
         this.setState({ dictionaryNouns: response.data });
       });
-      axios
-        .get(API_URL + "/verb/all")
-        .then(response => {
-          console.log(typeof(response.data));
-          response.data.forEach((word) => {
-            word['rootForm'] = 'verb';
-            this.index.addDoc(word);
-          });
-          this.setState({ dictionaryVerbs: response.data });
-        });
+
   }
 
   onChangeSearch(event, data) {
@@ -62,6 +60,7 @@ class App extends Component {
       let wordsList = results.map((e) => {
         return this.index.documentStore.getDoc(e.ref);
       });
+      console.log(wordsList);
       this.setState({ wordsList: wordsList.sort((w1, w2) => { return (w1.yupik > w2.yupik) ? 1 : ((w1.yupik < w2.yupik) ? -1 : 0); }), search: new_search });
     }
     else {
@@ -70,7 +69,6 @@ class App extends Component {
   }
 
   selectWord(word, event) {
-    console.log(word);
     this.setState({ currentWord: word });
   }
 
@@ -79,7 +77,7 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.state.wordsList);
+    console.log(this.state);
     let displayList = this.state.search.length >= 2;
     let displayWord = this.state.currentWord.yupik !== undefined;
     return (
@@ -103,7 +101,7 @@ class App extends Component {
           <List divided selection>
             {displayList ? this.state.wordsList.map((word) => {
               return (
-                <List.Item key={word.id} onClick={this.selectWord.bind(this, word)}>
+                <List.Item key={word.yupik} onClick={this.selectWord.bind(this, word)}>
                   <List.Content>
                     <List.Header as='p'>{word.yupik}</List.Header>
                     <List.Description>{word.english}</List.Description>
