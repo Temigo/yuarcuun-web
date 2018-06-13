@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Container, Header, Image, Divider, Grid, Icon, Input, List, Button } from 'semantic-ui-react';
 import './semantic/dist/semantic.min.css';
 import axios from 'axios';
+import API_URL from './App.js';
 
 class YupikDetails extends Component {
   constructor(props) {
@@ -32,7 +33,7 @@ class YupikDetails extends Component {
   }
 
   speak(event, data) {
-      let audio = new Audio("http://localhost:5000/tts/" + this.state.modifiedWord.replace('-', ''));
+      let audio = new Audio(API_URL + "/tts/" + this.state.modifiedWord.replace('-', ''));
       audio.play();
   }
 
