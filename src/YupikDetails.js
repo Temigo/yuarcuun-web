@@ -7,8 +7,8 @@ class YupikDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentWord: "nere-", // props.word,
-      modifiedWord: "nere-",
+      currentWord: props.word,
+      modifiedWord: props.word,
       people: 0,
       person: 0,
       // wantModifier: false
@@ -16,7 +16,7 @@ class YupikDetails extends Component {
 
     this.modifyWord = this.modifyWord.bind(this);
   }
-  
+
   componentWillUpdate(newProps, newState) {
     if (newState.people != this.state.people || newState.person != this.state.person) {
       this.modifyWord(newState.person, newState.people, this.state.currentWord);
@@ -71,7 +71,7 @@ class YupikDetails extends Component {
     console.log(this.state);
     return (
       <Container>
-        <p>{this.state.modifiedWord} </p>
+        <Header textAlign='center'>{this.state.modifiedWord} </Header>
         <p>How many people are you talking about?</p>
         <Button.Group widths='3' key='0'>
           <Button inverted color='blue' onClick={this.setPeople.bind(this, 1)} active={this.state.people == 1}>1</Button>

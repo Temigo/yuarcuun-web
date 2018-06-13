@@ -6,11 +6,15 @@ import YupikDetails from './YupikDetails.js';
 import './App.css';
 import './semantic/dist/semantic.min.css';
 
+//let API_URL = "http://yuarcuun.herokuapp.com";
+let API_URL = "http://localhost:5000";
+
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dictionary: [],
+      dictionaryNouns: [],
+      dictionaryVerbs: [],
       wordsList: [],
       search: '',
       currentWord: '',
@@ -21,6 +25,7 @@ class App extends Component {
     this.index = elasticlunr(function () {
       this.addField('english');
       this.addField('yupik');
+      this.addField('rootForm');
       this.setRef("id");
     });
   }
@@ -28,14 +33,25 @@ class App extends Component {
   componentDidMount() {
     console.log("did mount");
     axios
-      .get("http://yuarcuun.herokuapp.com/noun/all")
+      .get(API_URL + "/noun/all")
       .then(response => {
         console.log(typeof(response.data));
         response.data.forEach((word) => {
+          word['rootForm'] = 'noun';
           this.index.addDoc(word);
         });
-        this.setState({ dictionary: response.data });
+        this.setState({ dictionaryNouns: response.data });
       });
+      axios
+        .get(API_URL + "/verb/all")
+        .then(response => {
+          console.log(typeof(response.data));
+          response.data.forEach((word) => {
+            word['rootForm'] = 'verb';
+            this.index.addDoc(word);
+          });
+          this.setState({ dictionaryVerbs: response.data });
+        });
   }
 
   onChangeSearch(event, data) {
@@ -46,7 +62,7 @@ class App extends Component {
       let wordsList = results.map((e) => {
         return this.index.documentStore.getDoc(e.ref);
       });
-      this.setState({ wordsList: wordsList, search: new_search });
+      this.setState({ wordsList: wordsList.sort((w1, w2) => { return (w1.yupik > w2.yupik) ? 1 : ((w1.yupik < w2.yupik) ? -1 : 0); }), search: new_search });
     }
     else {
       this.setState({ search: new_search });
