@@ -7,11 +7,11 @@ class YupikDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentWord: props.word,
-      modifiedWord: props.word,
+      currentWord: props.word.yupik,
+      modifiedWord: props.word.yupik,
       people: 0,
       person: 0,
-      // wantModifier: false
+      fullWord: props.word,
     };
 
     this.modifyWord = this.modifyWord.bind(this);
@@ -29,6 +29,11 @@ class YupikDetails extends Component {
 
   setPerson(person, event, data) {
     this.setState({ person: person });
+  }
+
+  speak(event, data) {
+      let audio = new Audio("http://localhost:5000/tts/" + this.state.modifiedWord.replace('-', ''));
+      audio.play();
   }
 
   modifyWord(person, people, word) {
@@ -71,7 +76,15 @@ class YupikDetails extends Component {
     console.log(this.state);
     return (
       <Container>
-        <Header textAlign='center'>{this.state.modifiedWord} </Header>
+        <Header textAlign='center'>
+          {this.state.modifiedWord}
+          <Header.Subheader>
+            {this.state.fullWord.english}
+          </Header.Subheader>
+        </Header>
+        <Container textAlign='center'>
+          <Button circular color='blue' icon='volume up' onClick={this.speak.bind(this)} />
+        </Container>
         <p>How many people are you talking about?</p>
         <Button.Group widths='3' key='0'>
           <Button inverted color='blue' onClick={this.setPeople.bind(this, 1)} active={this.state.people == 1}>1</Button>

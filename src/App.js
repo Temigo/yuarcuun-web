@@ -17,7 +17,7 @@ class App extends Component {
       dictionaryVerbs: [],
       wordsList: [],
       search: '',
-      currentWord: '',
+      currentWord: {},
     }
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.selectWord = this.selectWord.bind(this);
@@ -71,17 +71,17 @@ class App extends Component {
 
   selectWord(word, event) {
     console.log(word);
-    this.setState({ currentWord: word.yupik });
+    this.setState({ currentWord: word });
   }
 
   resetCurrentWord(event, data) {
-    this.setState({ currentWord: '' });
+    this.setState({ currentWord: {} });
   }
 
   render() {
     console.log(this.state.wordsList);
     let displayList = this.state.search.length >= 2;
-    let displayWord = this.state.currentWord.length > 0;
+    let displayWord = this.state.currentWord.yupik !== undefined;
     return (
       <Container text>
         <Header as='h1' dividing>
@@ -90,7 +90,7 @@ class App extends Component {
         {displayWord ?
         <Container>
           <Button onClick={this.resetCurrentWord.bind(this)}>Return</Button>
-          <YupikDetails word={this.state.currentWord}/>
+          <YupikDetails word={this.state.currentWord} />
         </Container>
         :
         <Container>
