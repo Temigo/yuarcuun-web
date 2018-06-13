@@ -87,20 +87,24 @@ class YupikDetails extends Component {
         <Container textAlign='center'>
           <Button circular color='blue' icon='volume up' onClick={this.speak.bind(this)} />
         </Container>
-        <p>How many people are you talking about?</p>
-        <Button.Group widths='3' key='0'>
-          <Button inverted color='blue' onClick={this.setPeople.bind(this, 1)} active={this.state.people == 1}>1</Button>
-          <Button inverted color='blue' onClick={this.setPeople.bind(this, 2)} active={this.state.people == 2}>2</Button>
-          <Button inverted color='blue' onClick={this.setPeople.bind(this, 3)} active={this.state.people == 3}>3+</Button>
-        </Button.Group>
-        <Divider />
-        <p>1st, 2nd, or 3rd person point-of-view?</p>
-        <Button.Group widths='3' key='1'>
-          <Button inverted color='blue' onClick={this.setPerson.bind(this, 1)} active={this.state.person == 1}>I, us two, we</Button>
-          <Button inverted color='blue' onClick={this.setPerson.bind(this, 2)} active={this.state.person == 2}>you, you all</Button>
-          <Button inverted color='blue' onClick={this.setPerson.bind(this, 3)} active={this.state.person == 3}>he, she, them, it</Button>
-        </Button.Group>
-        <Divider />
+        {(this.state.fullWord.rootForm == 'verb') ?
+        <Container>
+          <p>How many people are you talking about?</p>
+          <Button.Group widths='3' key='0'>
+            <Button inverted color='blue' onClick={this.setPeople.bind(this, 1)} active={this.state.people == 1}>1</Button>
+            <Button inverted color='blue' onClick={this.setPeople.bind(this, 2)} active={this.state.people == 2}>2</Button>
+            <Button inverted color='blue' onClick={this.setPeople.bind(this, 3)} active={this.state.people == 3}>3+</Button>
+          </Button.Group>
+          <Divider />
+          <p>1st, 2nd, or 3rd person point-of-view?</p>
+          <Button.Group widths='3' key='1'>
+            <Button inverted color='blue' onClick={this.setPerson.bind(this, 1)} active={this.state.person == 1}>I, us two, we</Button>
+            <Button inverted color='blue' onClick={this.setPerson.bind(this, 2)} active={this.state.person == 2}>you, you all</Button>
+            <Button inverted color='blue' onClick={this.setPerson.bind(this, 3)} active={this.state.person == 3}>he, she, them, it</Button>
+          </Button.Group>
+          <Divider />
+        </Container>
+        : ''}
 
       </Container>
     );
