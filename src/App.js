@@ -6,8 +6,8 @@ import YupikDetails from './YupikDetails.js';
 import './App.css';
 import './semantic/dist/semantic.min.css';
 
-export const API_URL = "http://yuarcuun.herokuapp.com";
-//export const API_URL = "http://localhost:5000";
+//export const API_URL = "http://yuarcuun.herokuapp.com";
+export const API_URL = "http://localhost:5000";
 
 class App extends Component {
   constructor(props) {
