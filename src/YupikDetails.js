@@ -4,6 +4,8 @@ import './semantic/dist/semantic.min.css';
 import axios from 'axios';
 import nlp from 'compromise';
 import { API_URL } from './App.js';
+import YupikEntry from './YupikEntry.js';
+import { Link } from 'react-router-dom';
 
 const postbases = [
   {
@@ -45,18 +47,41 @@ class YupikDetails extends Component {
   constructor(props) {
     super(props);
     console.log(API_URL);
+    console.log(props.location);
     // FIXME some way of locating the verb only
-    let currentVerb = props.word.english.replace('to', '');
+    //let currentVerb = props.word.english.replace('to', '');
     this.state = {
-      currentWord: props.word.yupik,
-      modifiedWord: props.word.yupik,
-      currentEnglish: currentVerb,
-      modifiedEnglish: props.word.english,//new Inflectors(currentVerb),
+      currentWord: "",//props.word.yupik,
+      modifiedWord: "",//props.word.yupik,
+      currentEnglish: "",//currentVerb,
+      modifiedEnglish: "",//props.word.english,//new Inflectors(currentVerb),
       people: 0,
       person: 0,
-      fullWord: props.word,
+      fullWord: "",//props.word,
       currentPostbases: [],
+      fromSearch: props.location.state.word !== undefined,
     };
+    if (!this.state.fromSearch) {
+      let word = props.match.params.word;
+      axios
+        .get(API_URL + "/word/" + word)
+        .then(response => {
+          this.setState({
+            currentWord: response.data.yupik,
+            modifiedWord: response.data.yupik,
+            fullWord: response.data
+          });
+        });
+    }
+    else {
+      this.state = {
+        ...this.state,
+        currentWord: props.location.state.word.yupik,
+        modifiedWord: props.location.state.word.yupik,
+        fullWord: props.location.state.word
+      };
+    }
+
 
     this.modifyWord = this.modifyWord.bind(this);
     //console.log(nlp(props.word.english).sentences().toFutureTense().out('text'));
@@ -174,43 +199,63 @@ class YupikDetails extends Component {
     this.modifyWord(this.state.person, this.state.people, this.state.currentWord, currentPostbases);
   }
 
+  /*
+  <Header.Subheader>
+    {this.state.modifiedEnglish}
+  </Header.Subheader>
+
+
+  {(this.state.fullWord.rootForm == 'verb') ?
+  <Container>
+    <p>How many people are you talking about?</p>
+    <Button.Group widths='3' key='0'>
+      <Button inverted color='blue' onClick={this.setPeople.bind(this, 1)} active={this.state.people == 1}>1</Button>
+      <Button inverted color='blue' onClick={this.setPeople.bind(this, 2)} active={this.state.people == 2}>2</Button>
+      <Button inverted color='blue' onClick={this.setPeople.bind(this, 3)} active={this.state.people == 3}>3+</Button>
+    </Button.Group>
+    <Divider />
+    <p>1st, 2nd, or 3rd person point-of-view?</p>
+    <Button.Group widths='3' key='1'>
+      <Button inverted color='blue' onClick={this.setPerson.bind(this, 1)} active={this.state.person == 1}>I, us two, we</Button>
+      <Button inverted color='blue' onClick={this.setPerson.bind(this, 2)} active={this.state.person == 2}>you, you all</Button>
+      <Button inverted color='blue' onClick={this.setPerson.bind(this, 3)} active={this.state.person == 3}>he, she, them, it</Button>
+    </Button.Group>
+    <Divider />
+    {postbases.map((postbase, id) => {
+      return (
+        <Button toggle key={id} onClick={this.setPostbase.bind(this, id)} active={this.state.currentPostbases.indexOf(id) >= 0}>{postbase.description}</Button>
+      );
+    })}
+  </Container>
+  : ''}
+
+  */
+
   render() {
     console.log(this.state);
     return (
       <Container>
-        <Header textAlign='center'>
-          {this.state.modifiedWord}
-          <Header.Subheader>
-            {this.state.modifiedEnglish}
-          </Header.Subheader>
-        </Header>
-        <Container textAlign='center'>
-          <Button circular color='blue' icon='volume up' onClick={this.speak.bind(this)} />
-        </Container>
-        {(this.state.fullWord.rootForm == 'verb') ?
-        <Container>
-          <p>How many people are you talking about?</p>
-          <Button.Group widths='3' key='0'>
-            <Button inverted color='blue' onClick={this.setPeople.bind(this, 1)} active={this.state.people == 1}>1</Button>
-            <Button inverted color='blue' onClick={this.setPeople.bind(this, 2)} active={this.state.people == 2}>2</Button>
-            <Button inverted color='blue' onClick={this.setPeople.bind(this, 3)} active={this.state.people == 3}>3+</Button>
-          </Button.Group>
-          <Divider />
-          <p>1st, 2nd, or 3rd person point-of-view?</p>
-          <Button.Group widths='3' key='1'>
-            <Button inverted color='blue' onClick={this.setPerson.bind(this, 1)} active={this.state.person == 1}>I, us two, we</Button>
-            <Button inverted color='blue' onClick={this.setPerson.bind(this, 2)} active={this.state.person == 2}>you, you all</Button>
-            <Button inverted color='blue' onClick={this.setPerson.bind(this, 3)} active={this.state.person == 3}>he, she, them, it</Button>
-          </Button.Group>
-          <Divider />
-          {postbases.map((postbase, id) => {
-            return (
-              <Button toggle key={id} onClick={this.setPostbase.bind(this, id)} active={this.state.currentPostbases.indexOf(id) >= 0}>{postbase.description}</Button>
-            );
-          })}
-        </Container>
+        {this.state.fromSearch ?
+        <Button onClick={() => { this.props.history.goBack(); }}>Return</Button>
         : ''}
+        <Header dividing as='h1'>
+          {this.state.modifiedWord}
+          <Icon name='volume up' color='teal' size='mini' onClick={this.speak.bind(this)} />
+        </Header>
+        {Object.keys(this.state.fullWord).map((entryNumber) => {
+          //console.log(entryNumber);
+          //console.log(this.state.fullWord[entryNumber]);
+          if (entryNumber == 'english' || entryNumber == 'yupik') {
+            return '';
+          }
+          else {
+            console.log(entryNumber);
+            return (
+              <YupikEntry key={entryNumber} entry={this.state.fullWord[entryNumber]} />
+            );
+          }
 
+        })}
       </Container>
     );
   }

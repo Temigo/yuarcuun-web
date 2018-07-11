@@ -4,5 +4,13 @@ import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import { BrowserRouter } from 'react-router-dom';
+
+const supportsHistory = 'pushState' in window.history;
+ReactDOM.render(
+  <BrowserRouter forceRefresh={!supportsHistory} keyLength={20}>
+    <App />
+  </BrowserRouter>,
+  document.getElementById('root')
+);
 registerServiceWorker();
