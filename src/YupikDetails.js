@@ -46,11 +46,11 @@ const postbases = [
 class YupikDetails extends Component {
   constructor(props) {
     super(props);
-    console.log(API_URL);
     console.log(props.location);
     // FIXME some way of locating the verb only
     //let currentVerb = props.word.english.replace('to', '');
     this.state = {
+      search: props.location.state.search,
       currentWord: "",//props.word.yupik,
       modifiedWord: "",//props.word.yupik,
       currentEnglish: "",//currentVerb,
@@ -236,7 +236,7 @@ class YupikDetails extends Component {
     return (
       <Container>
         {this.state.fromSearch ?
-        <Button onClick={() => { this.props.history.goBack(); }}>Return</Button>
+        <Button onClick={() => { this.props.history.push('/', { search: this.state.search }); }}>Return</Button>
         : ''}
         <Header dividing as='h1'>
           {this.state.modifiedWord}

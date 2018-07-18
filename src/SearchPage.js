@@ -11,13 +11,13 @@ import { API_URL } from './App.js';
 class SearchPage extends Component {
   constructor(props) {
     super(props);
-
+    console.log(props.location);
     this.state = {
       dictionary: [],
       dictionaryNouns: [],
       dictionaryVerbs: [],
       wordsList: [],
-      search: '',
+      search: props.location.state == undefined ? '' : props.location.state.search,
       currentWord: {},
     }
     this.onChangeSearch = this.onChangeSearch.bind(this);
@@ -30,6 +30,7 @@ class SearchPage extends Component {
       this.setRef("yupik");
       //this.saveDocument(false);
     });
+
   }
 
   componentDidMount() {
@@ -60,6 +61,13 @@ class SearchPage extends Component {
         });
         this.setState({ dictionary: response.data });
       });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.dictionary.length != this.state.dictionary.length) {
+      console.log('update!');
+      this.onChangeSearch(undefined, {value: this.state.search});
+    }
   }
 
   onChangeSearch(event, data) {
@@ -105,12 +113,14 @@ class SearchPage extends Component {
           <List divided selection>
             {displayList ? this.state.wordsList.map((word) => {
               return (
+                <Link to={{pathname: '/' + word.yupik, state: { word: word, search: this.state.search }}}>
                 <List.Item key={word.yupik}>
                   <List.Content>
-                    <List.Header><Link to={{pathname: '/' + word.yupik, state: { word: word }}}>{word.yupik}</Link></List.Header>
+                    <List.Header>{word.yupik}</List.Header>
                     <List.Description>{word.english}</List.Description>
                   </List.Content>
                 </List.Item>
+                </Link>
               );
             }) : ''}
           </List>
