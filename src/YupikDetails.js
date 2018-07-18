@@ -46,11 +46,11 @@ const postbases = [
 class YupikDetails extends Component {
   constructor(props) {
     super(props);
-    console.log(props.location);
+    console.log(props);
     // FIXME some way of locating the verb only
     //let currentVerb = props.word.english.replace('to', '');
     this.state = {
-      search: props.location.state.search,
+      search: props.location.state == undefined ? '' : props.location.state.search ,
       currentWord: "",//props.word.yupik,
       modifiedWord: "",//props.word.yupik,
       currentEnglish: "",//currentVerb,
@@ -59,9 +59,9 @@ class YupikDetails extends Component {
       person: 0,
       fullWord: "",//props.word,
       currentPostbases: [],
-      fromSearch: props.location.state.word !== undefined,
+      fromSearch: props.location.state !== undefined,
     };
-    if (!this.state.fromSearch) {
+    if (props.location.state == undefined) { // from search page
       let word = props.match.params.word;
       axios
         .get(API_URL + "/word/" + word)
@@ -235,9 +235,8 @@ class YupikDetails extends Component {
     console.log(this.state);
     return (
       <Container>
-        {this.state.fromSearch ?
         <Button onClick={() => { this.props.history.push('/', { search: this.state.search }); }}>Return</Button>
-        : ''}
+
         <Header dividing as='h1'>
           {this.state.modifiedWord}
           <Icon name='volume up' color='teal' size='mini' onClick={this.speak.bind(this)} />
