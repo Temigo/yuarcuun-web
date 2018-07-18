@@ -233,6 +233,8 @@ class YupikDetails extends Component {
 
   render() {
     console.log(this.state);
+    let numEntries = Object.keys(this.state.fullWord).filter((entryNumber) => { return entryNumber !== 'english' && entryNumber !== 'yupik'; }).length;
+    console.log(numEntries);
     return (
       <Container>
         <Button onClick={() => { this.props.history.push('/', { search: this.state.search }); }}>Return</Button>
@@ -250,7 +252,7 @@ class YupikDetails extends Component {
           else {
             console.log(entryNumber);
             return (
-              <YupikEntry key={entryNumber} entry={this.state.fullWord[entryNumber]} />
+              <YupikEntry key={entryNumber} entry={this.state.fullWord[entryNumber]} entryNumber={entryNumber} displayEntryNumber={numEntries > 1} />
             );
           }
 
