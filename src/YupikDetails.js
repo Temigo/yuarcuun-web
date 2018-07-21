@@ -4,7 +4,7 @@ import './semantic/dist/semantic.min.css';
 import axios from 'axios';
 import nlp from 'compromise';
 import { API_URL } from './App.js';
-import YupikEntry from './YupikEntry.js';
+import AddEndings from './AddEndings.js';
 import { Link } from 'react-router-dom';
 
 const postbases = [
@@ -252,7 +252,7 @@ class YupikDetails extends Component {
           else {
             console.log(entryNumber);
             return (
-              <YupikEntry key={entryNumber} entry={this.state.fullWord[entryNumber]} entryNumber={entryNumber} displayEntryNumber={numEntries > 1} />
+              <AddEndings key={entryNumber} entry={this.state.fullWord[entryNumber]} currentWord={this.state.currentWord} entryNumber={entryNumber} displayEntryNumber={numEntries > 1} />
             );
           }
 
