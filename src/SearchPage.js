@@ -11,7 +11,6 @@ import { API_URL } from './App.js';
 class SearchPage extends Component {
   constructor(props) {
     super(props);
-    console.log(props.location);
     this.state = {
       dictionary: [],
       dictionaryNouns: [],
@@ -26,9 +25,7 @@ class SearchPage extends Component {
     this.index = elasticlunr(function () {
       this.addField('english');
       this.addField('yupik');
-      //this.addField('rootForm');
       this.setRef("yupik");
-      //this.saveDocument(false);
     });
 
   }
@@ -56,7 +53,6 @@ class SearchPage extends Component {
       .get(API_URL + "/word/all")
       .then(response => {
         response.data.forEach((word) => {
-          //console.log(word);
           this.index.addDoc(word);
         });
         this.setState({ dictionary: response.data });
@@ -65,7 +61,6 @@ class SearchPage extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.dictionary.length != this.state.dictionary.length) {
-      console.log('update!');
       this.onChangeSearch(undefined, {value: this.state.search});
     }
   }
@@ -78,7 +73,6 @@ class SearchPage extends Component {
       let wordsList = results.map((e) => {
         return this.index.documentStore.getDoc(e.ref);
       });
-      console.log(wordsList);
       this.setState({ wordsList: wordsList.sort((w1, w2) => { return (w1.yupik > w2.yupik) ? 1 : ((w1.yupik < w2.yupik) ? -1 : 0); }), search: new_search });
     }
     else {
@@ -95,7 +89,7 @@ class SearchPage extends Component {
   }
 
   render() {
-    console.log(this.state);
+    console.log("SearchPage state: ", this.state);
     let displayList = this.state.search.length >= 2;
     let displayWord = this.state.currentWord.yupik !== undefined;
     return (
@@ -113,8 +107,8 @@ class SearchPage extends Component {
           <List divided selection>
             {displayList ? this.state.wordsList.map((word) => {
               return (
-                <Link to={{pathname: '/' + word.yupik, state: { word: word, search: this.state.search }}}>
-                <List.Item key={word.yupik}>
+                <Link key={word.yupik} to={{pathname: '/' + word.yupik, state: { word: word, search: this.state.search }}}>
+                <List.Item>
                   <List.Content>
                     <List.Header>{word.yupik}</List.Header>
                     <List.Description>{word.english}</List.Description>

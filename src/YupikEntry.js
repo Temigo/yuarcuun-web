@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Segment, Button } from 'semantic-ui-react';
+import { Segment, Button, List, Header, Label } from 'semantic-ui-react';
 import './semantic/dist/semantic.min.css';
 import axios from 'axios';
 import nlp from 'compromise';
@@ -9,10 +9,11 @@ import { Link } from 'react-router-dom';
 class YupikEntry extends Component {
   constructor(props) {
     super(props);
-    console.log(props.entry);
+    console.log("YupikEntry props: ", props);
 
     this.state = {
       entry: props.entry,
+      word: props.word,
       displayEntryNumber: props.displayEntryNumber,
       entryNumber: props.entryNumber
     };
@@ -20,73 +21,86 @@ class YupikEntry extends Component {
   }
 
   render() {
-    console.log(this.state.entryNumber)
-    console.log(nlp('[he] included <it> along with the others he was acting on').sentences().toFutureTense().out())
-    console.log(nlp('he is stupid').verbs().data())
-    console.log(nlp('he is gathering firewood').verbs().data())
-    console.log(nlp('it is repulsive, ugly, disgusting, earthy').verbs().data())
-    console.log(nlp('he is in up to his waist').verbs().data())
-    console.log(nlp('[he] is upset and fussing').verbs().data())
-    console.log(nlp('he has ceased').sentences().toQuestion().out())
-    console.log(nlp('he is braiding them').sentences().toQuestion().out())
-    console.log(nlp('he is braiding them').verbs().conjugate())
     return (
       <Segment style={{fontSize:'20px'}}>
-      <p> {this.state.entry.descriptor} </p>
+      <p>
+      {this.state.entry.descriptor.map((descriptor) => {
+        return <Label color='blue' horizontal key={descriptor}>{descriptor.toUpperCase()}</Label>;
+      })}
+
       {this.state.displayEntryNumber == true ?  //if multiple entries
-        <p> <span style={{ fontWeight: 'bold' }}>{this.state.entryNumber} </span>   {this.state.entry.definition}  </p> 
-        : 
-        <p> {this.state.entry.definition} </p>
+        <span><span style={{ fontWeight: 'bold' }}>{this.state.entryNumber} </span>   {this.state.entry.definition}</span>
+        :
+        <span>{this.state.entry.definition}</span>
       }
+      </p>
 
-      <button class="fluid ui button"> + Add Endings</button>
-
-      <Segment>
-      {this.state.entry.usage.length > 0 ? <span> Main Usage: </span> : ''}
-      {this.state.entry.usage.map((usage) => {
+      {this.state.entry.usage.length > 0 ? <Header as='h2'> Main Usage</Header> : ''}
+      <List bulleted>
+      {this.state.entry.usage.map((usage, index) => {
         return (
-        <li style={{fontStyle:'italic'}} key={usage}>{usage}</li>
+
+          <List.Item key={usage} style={{fontStyle:'italic'}}>
+          <Link  to={{pathname: '/' + this.state.word + '/' + index + '/modify', state: { entry: this.state.entry, word: this.state.word }}}>
+            <List.Header>{usage[0]}</List.Header>
+            <List.Description>{usage[1]}</List.Description>
+          </Link>
+          </List.Item>
+
          );
       })
       }
-      <ul></ul>
+      </List>
 
-      {this.state.entry.synonyms.length > 0 ? <span> Synonyms: </span> : ''}
+      {this.state.entry.synonyms.length > 0 ? <Header as='h2'> Synonyms</Header> : ''}
+      <List bulleted horizontal>
       {this.state.entry.synonyms.map(function(synonym,index){
         return (
-        <Link style={{fontStyle:'italic'}} key={synonym} to={'/' + synonym}>{synonym}, </Link>
+          <List.Item key={synonym}>
+            <Link style={{fontStyle:'italic'}} to={'/' + synonym}>{synonym}</Link>
+          </List.Item>
          );
       })
       }
-      <ul></ul>
+      </List>
 
-      {this.state.entry.example_sentence.length > 0 ? <span> Example Sentences: </span> : ''}
+      {this.state.entry.example_sentence.length > 0 ? <Header as='h2'> Example Sentences </Header> : ''}
+      <List>
       {this.state.entry.example_sentence.map((sentence) => {
         return (
-        <li style={{fontStyle:'italic'}} key={sentence[0]}>{sentence[0]}<br/>{sentence[1]}</li>
+          <List.Item key={sentence[0]}>
+            <List.Header>{sentence[0]}</List.Header>
+            <List.Description>{sentence[1]}</List.Description>
+          </List.Item>
          );
       })
       }
-      <ul></ul>
+      </List>
 
-      {this.state.entry.related_words.length > 0 ? <span> Related Words: </span> : ''}
+      {this.state.entry.related_words.length > 0 ? <Header as='h2'> Related Words </Header> : ''}
+      <List bulleted horizontal>
       {this.state.entry.related_words.map(function(related_words,index){
         return (
-        <Link style={{fontStyle:'italic'}} key={related_words} to={'/' + related_words}>{related_words}, </Link>
+          <List.Item key={related_words}>
+            <Link style={{fontStyle:'italic'}} to={'/' + related_words}>{related_words}</Link>
+          </List.Item>
          );
       })
       }
-      <ul></ul>
+      </List>
 
-      {this.state.entry.additional_info.length > 0 ? <span> Additional Information: </span> : ''}
+      {this.state.entry.additional_info.length > 0 ? <Header as='h2'> Additional Information </Header> : ''}
+      <List bulleted>
       {this.state.entry.additional_info.map((additional_info) => {
         return (
-        <li style={{fontStyle:'italic'}} key={additional_info}>{additional_info}</li>
+          <List.Item key={additional_info}>
+            {additional_info}
+          </List.Item>
          );
       })
       }
+      </List>
 
-      </Segment>
       </Segment>
     );
   }
