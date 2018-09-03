@@ -78,7 +78,7 @@ const postbases = [
     description: 'to want',
     englishModifier: (english) => { return 'want to ' + english; },
     expression: '@~+yug\\',
-    group: 'love'
+    group: 'love',
     priority: 4,
     common: true,
     transitive: true,
