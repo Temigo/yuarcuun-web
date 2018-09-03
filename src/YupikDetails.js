@@ -16,6 +16,7 @@ class YupikDetails extends Component {
     //let currentVerb = props.word.english.replace('to', '');
     this.state = {
       search: props.location.state == undefined ? '' : props.location.state.search ,
+      wordsList: props.location.state == undefined ? [] : props.location.state.wordsList,
       currentWord: "",//props.word.yupik,
       modifiedWord: "",//props.word.yupik,
       fullWord: "",//props.word,
@@ -55,7 +56,7 @@ class YupikDetails extends Component {
     console.log(numEntries);
     return (
       <Container text>
-        <Button onClick={() => { this.props.history.push('/', { search: this.state.search }); }}>Return</Button>
+        <Button onClick={() => { this.props.history.push('/', { search: this.state.search, wordsList: this.state.wordsList }); }}>Return</Button>
 
         <Header dividing as='h1'>
           {this.state.currentWord}

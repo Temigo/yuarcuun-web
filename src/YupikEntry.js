@@ -36,7 +36,7 @@ class YupikEntry extends Component {
       </p>
 
       {this.state.entry.usage.length > 0 ? <Header as='h2'> Main Usage</Header> : ''}
-      <List bulleted>
+      <List ordered selection celled>
       {this.state.entry.usage.map((usage, index) => {
         return (
 

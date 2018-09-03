@@ -107,7 +107,7 @@ class SearchPage extends Component {
           <List divided selection>
             {displayList ? this.state.wordsList.map((word) => {
               return (
-                <Link key={word.yupik} to={{pathname: '/' + word.yupik, state: { word: word, search: this.state.search }}}>
+                <Link key={word.yupik} to={{pathname: '/' + word.yupik, state: { word: word, search: this.state.search, wordsList: this.state.wordsList }}}>
                 <List.Item>
                   <List.Content>
                     <List.Header>{word.yupik}</List.Header>

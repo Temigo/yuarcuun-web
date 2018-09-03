@@ -102,6 +102,8 @@ class YupikModify extends Component {
       value2: "",
       value3: "",
       possessiveObject: false,
+      objectExists: false,
+      subjectExists: false,
       tense: 'present',
       text1: "",
       text2: "is hunting",
@@ -116,7 +118,8 @@ class YupikModify extends Component {
       modifiedEnglish: "",//props.word.english,//new Inflectors(currentVerb),
     };
     this.processUsage=this.processUsage.bind(this);
-    this.processUsage(this.state.usage);
+    let new_state = this.processUsage(this.state.usage);
+    this.state = {...this.state, ...new_state};
     this.modifyWord = this.modifyWord.bind(this);
     this.modifyWord(this.state.person, this.state.people, this.state.objectPerson, this.state.objectPeople, this.state.currentWord, this.state.currentPostbases);
 
@@ -148,47 +151,64 @@ class YupikModify extends Component {
   }
 
   processUsage(usage, event, data) {
-    console.log(usage);
-    if (usage.includes('[he]')) {
-      var res = usage.split("[he]");
-      this.state.value1="31-1(1)"
-      this.state.people= 1
-      this.state.person= 3
-      this.state.text1 = res[0]
-      res = res[1]
-      console.log(res)
+    let new_state = {};
+    let res = usage;
+    var rx1 = /\[([^\]]+)]/; // regex to match [text]
+    var rx2 = /<([^\]]+)>/; // regex to match (text)
+    let subject = usage.match(rx1);
+    let object = usage.match(rx2);
+    if (subject !== null) {
+      res = res.split(rx1);
+      new_state = {...new_state, subjectExists: true};
+      new_state = {
+        ...new_state,
+        value1: "31-1(1)",
+        people: 1,
+        person: 3,
+        text1: res[0] + res[1]
+      }
+      res = res[2];
+    }
+    if (object !== null) {
+      res = res.split(rx2);
+      new_state = {...new_state, objectExists: true};
+      if (res[1] === 'it') {
+        new_state = {
+          ...new_state,
+          value2: "31-3(2)",
+          objectPeople: 1,
+          objectPerson: 3,
+          text2: res[1],
+          originalText2: res[0],
+          text3: res[2]
+        }
+      }
+      else if (res[1] === 'its') {
+        new_state = {
+          ...new_state,
+          value3: "31-3(3)",
+          objectPeople: 1,
+          objectPerson: 3,
+          possessiveObject: true,
+          text2: res[1],
+          originalText2: res[0],
+          text3: res[2]
+        }
+      }
     }
     else {
-      var res = usage;
-    }
-    if (res.includes('<it>')) {
-      res = res.split('<it>')
-      this.state.value2="31-3(2)"
-      this.state.objectPeople= 1
-      this.state.objectPerson= 3
-      this.state.text2 = res[0]
-      this.state.originalText2 = res[0]
-      this.state.text3 = res[1]
-    }
-    else if (res.includes('<its>')) {
-      res = res.split('<its>')
-      this.state.value3="31-3(3)"
-      this.state.objectPeople= 1
-      this.state.objectPerson= 3
-      this.state.possessiveObject= true
-      this.state.text2 = res[0]
-      this.state.originalText2 = res[0]
-      this.state.text3 = res[1]
-    }
-    else {
-      this.state.text2 = res
-      this.state.originalText2 = res
+      new_state = {
+        ...new_state,
+        text2: res,
+        originalText2: res
+      }
     }
     // var res = usage.split("|");
     // // need an error case in case it's not all available here
     // this.state.text1 =res[0].trim()
     // this.state.text2 =res[1].trim()
     // this.state.text3 =res[2].trim()
+    return new_state;
   }
 
   setValue1(e, data) {
