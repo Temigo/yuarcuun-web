@@ -20,16 +20,8 @@ class YupikEntry extends Component {
   }
 
   render() {
+    console.log('hi');
     console.log(this.state.entryNumber)
-    console.log(nlp('[he] included <it> along with the others he was acting on').sentences().toFutureTense().out())
-    console.log(nlp('he is stupid').verbs().data())
-    console.log(nlp('he is gathering firewood').verbs().data())
-    console.log(nlp('it is repulsive, ugly, disgusting, earthy').verbs().data())
-    console.log(nlp('he is in up to his waist').verbs().data())
-    console.log(nlp('[he] is upset and fussing').verbs().data())
-    console.log(nlp('he has ceased').sentences().toQuestion().out())
-    console.log(nlp('he is braiding them').sentences().toQuestion().out())
-    console.log(nlp('he is braiding them').verbs().conjugate())
     return (
       <Segment style={{fontSize:'20px'}}>
       <p> {this.state.entry.descriptor} </p>

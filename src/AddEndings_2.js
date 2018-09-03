@@ -1,55 +1,10 @@
 import React, { Component } from 'react';
-import { Container, Header, Image, Divider, Dropdown, Grid, Icon, Input, List, Button } from 'semantic-ui-react';
+import { Container, Header, Image, Divider, Grid, Icon, Input, List, Button, Segment}  from 'semantic-ui-react';
 import './semantic/dist/semantic.min.css';
 import axios from 'axios';
 import nlp from 'compromise';
 import { API_URL } from './App.js';
-import YupikEntry from './YupikEntry.js';
 import { Link } from 'react-router-dom';
-
-
-const options1 = [
-  {value: '11(1)', text:'I'},
-  {value: '21(1)', text:'You'},
-  {value: '31-1(1)', text:'He'},
-  {value: '31-2(1)', text:'She'},
-  {value: '31-3(1)', text:'It'},
-  {value: '12(1)', text:'The two of us'},
-  {value: '22(1)', text:'The two of you'},
-  {value: '32(1)', text:'The two of them'},
-  {value: '13(1)', text:'We all (3+)'},
-  {value: '23(1)', text:'You all (3+)'},
-  {value: '33(1)', text:'They all (3+)'}
-]
-
-const options2 = [
-  {value: '11(2)', text:'me'},
-  {value: '21(2)', text:'you'},
-  {value: '31-1(2)', text:'him'},
-  {value: '31-2(2)', text:'her'},
-  {value: '31-3(2)', text:'it'},
-  {value: '12(2)', text:'the two of us'},
-  {value: '22(2)', text:'the two of you'},
-  {value: '32(2)', text:'the two of them'},
-  {value: '13(2)', text:'us all (3+)'},
-  {value: '23(2)', text:'you all (3+)'},
-  {value: '33(2)', text:'them all (3+)'}
-]
-
-const options3 = [
-  {value: '11(3)', text:'my'},
-  {value: '21(3)', text:'your'},
-  {value: '31-1(3)', text:'his'},
-  {value: '31-2(3)', text:'her'},
-  {value: '31-3(3)', text:'its'},
-  {value: '12(3)', text:'our (two)'},
-  {value: '22(3)', text:'your (two)'},
-  {value: '32(3)', text:'their (two)'},
-  {value: '13(3)', text:'our (3+)'},
-  {value: '23(3)', text:'your (3+)'},
-  {value: '33(3)', text:'their (3+)'}
-]
-
 
 const postbases = [
   {
@@ -87,60 +42,26 @@ const postbases = [
   },
 ];
 
-class YupikDetails extends Component {
+class AddEndings extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
-    // FIXME some way of locating the verb only
-    //let currentVerb = props.word.english.replace('to', '');
+    console.log(props.entry);
+
     this.state = {
-      search: props.location.state == undefined ? '' : props.location.state.search ,
-      currentWord: "",//props.word.yupik,
-      modifiedWord: "",//props.word.yupik,
-      currentEnglish: "",//currentVerb,
-      modifiedEnglish: "",//props.word.english,//new Inflectors(currentVerb),
+      entry: props.entry,
+      displayEntryNumber: props.displayEntryNumber,
+      entryNumber: props.entryNumber,
+      currentWord: props.currentWord,
+      modifiedWord: props.currentWord,
+      fullWord: props.currentWord,
+      subjectExists: false,
+      objectExists: false,
       people: 1,
       person: 3,
+      objectPerson: 3,
       objectPeople: 1,
-      objectPerson: 1,
-      fullWord: "",//props.word,
       currentPostbases: [],
-      fromSearch: props.location.state !== undefined,
-      value1: "",
-      value2: "",
-      value3: "",
-      transitive: true,
-      usage: "[he] is hunting <it>",
-      text1: "",
-      text2: "is hunting",
-      originalText2: "",
-      text3: "",
-      possessiveObject: false,
-      tense: 'present'
     };
-    if (props.location.state == undefined) { // from search page
-      let word = props.match.params.word;
-      axios
-        .get(API_URL + "/word/" + word)
-        .then(response => {
-          this.setState({
-            currentWord: response.data.yupik,
-            modifiedWord: response.data.yupik,
-            fullWord: response.data
-          });
-        });
-    }
-    else {
-      this.state = {
-        ...this.state,
-        currentWord: props.location.state.word.yupik,
-        modifiedWord: props.location.state.word.yupik,
-        fullWord: props.location.state.word
-      };
-    }
-
-    this.processUsage=this.processUsage.bind(this);
-    this.processUsage(this.state.usage);
     this.modifyWord = this.modifyWord.bind(this);
     this.modifyWord(this.state.person, this.state.people, this.state.objectPerson, this.state.objectPeople, this.state.currentWord, this.state.currentPostbases);
   }
@@ -169,45 +90,6 @@ class YupikDetails extends Component {
     this.setState({ objectPerson: (this.state.objectPerson == objectPerson) ? 0 : objectPerson });
   }
 
-  processUsage(usage, event, data) {
-    if (usage.includes('[he]')) {
-      var res = usage.split("[he]");
-      this.state.value1="31-1(1)"
-      this.state.people= 1
-      this.state.person= 3
-      this.state.text1 = res[0]
-      res = res[1]
-      console.log(res)
-    }
-    if (res.includes('<it>')) {
-      res = res.split('<it>')
-      this.state.value2="31-3(2)"
-      this.state.objectPeople= 1
-      this.state.objectPerson= 3
-      this.state.text2 = res[0]
-      this.state.originalText2 = res[0]
-      this.state.text3 = res[1]
-    }
-    else if (res.includes('<its>')) {
-      res = res.split('<its>')
-      this.state.value3="31-3(3)"
-      this.state.objectPeople= 1
-      this.state.objectPerson= 3
-      this.state.possessiveObject= true
-      this.state.text2 = res[0]
-      this.state.originalText2 = res[0]
-      this.state.text3 = res[1]
-    }
-    else {
-      this.state.text2 = res
-      this.state.originalText2 = res
-    }
-    // var res = usage.split("|");
-    // // need an error case in case it's not all available here
-    // this.state.text1 =res[0].trim()
-    // this.state.text2 =res[1].trim()
-    // this.state.text3 =res[2].trim()
-  }
   speak(event, data) {
       let audio = new Audio(API_URL + "/tts/" + this.state.modifiedWord.replace('-', ''));
       audio.play();
@@ -667,6 +549,7 @@ class YupikDetails extends Component {
         }
       }
     };
+
     let person_english = {
       0: '',
       1: 'I',
@@ -679,93 +562,39 @@ class YupikDetails extends Component {
       2: '(2)',
       3: '(3+)',
     }
+
     currentPostbases = currentPostbases.sort((p1, p2) => {
       return (postbases[p1].priority > postbases[p2].priority) ? 1 : ((postbases[p1].priority < postbases[p2].priority) ? -1 : 0);
     });
     let newEnglish =  this.state.currentEnglish;
     //newEnglish = nlp(newEnglish).sentences().toPresentTense().out('text');
     // FIXME remove dash for verbs only
-    // currentPostbases.forEach((p) => {
-    //   if (!postbases[p].tense) {
-    //     newEnglish = postbases[p].englishModifier(newEnglish);
-    //   }
-    // });
-    // newEnglish = person_english[person] + ' ' + newEnglish  + ' ' + people_english[people];
-    // currentPostbases.forEach((p) => {
-    //   if (postbases[p].tense) {
-    //     newEnglish = postbases[p].englishModifier(newEnglish);
-    //   }
-    // });
-
-    let newText2 = this.state.originalText2
-    console.log(currentPostbases)
-    if (currentPostbases.length>0) {      
-      newText2 = nlp(this.state.originalText2).sentences().toFutureTense().out() //change to future tense first so that word attachment looks good
-      let adder = ''
-      currentPostbases.forEach((p) => {
-        if (!postbases[p].tense) {
-          adder = postbases[p].englishModifier(adder);
-        }
-      })
-      newText2 = newText2.replace("will","will "+adder) //replace 'will' hunt with 'will try to' hunt or 'will want to' hunt, etc.
-      if (this.state.tense == 'present'){
-        newText2 = nlp(newText2).sentences().toPresentTense().out()
-      } else if (this.state.tense == 'past'){
-        newText2 = nlp(newText2).sentences().toPastTense().out()
-      } else {
-        newText2 = nlp(newText2).sentences().toFutureTense().out()
+    currentPostbases.forEach((p) => {
+      if (!postbases[p].tense) {
+        newEnglish = postbases[p].englishModifier(newEnglish);
       }
-      currentPostbases.forEach((p) => {
-        if (postbases[p].tense) {
-          newText2 = postbases[p].englishModifier(newText2);
-        }
-      })
-    }
-
-    
-    // let s1 = newText2.match(/\@(\S*)\@/g)
-    // if (s1.length>0) {
-    // s1.forEach((p) => {
-    //   let s2 = p.slice(1,-1);
-    //   if (this.state.people > 1) {
-    //     s2 = nlp(s2).nouns().toPlural().out()
-    //     console.log(p)
-    //     console.log(s2)
-    //     newText2 = newText2.replace(p,s2)
-    //   } else {
-    //     newText2 = newText2.replace(p,s2)
-    //   } 
-    // })
-    // }
-    // let d1 = newText2.match(/\#(\S*)\#/g)
-    // console.log(d1)
-    // d1.forEach((p) => {
-    //   let d2 = p.slice(1,-1);
-    //   if (this.state.objectPeople > 1) {
-    //     d2 = nlp(d2).nouns().toPlural().out()
-    //     console.log(p)
-    //     console.log(d2)
-    //     newText2 = newText2.replace(p,d2)
-    //   } else {
-    //     newText2 = newText2.replace(p,d2)
-    //   } 
-    // })
-
-
+    });
+    newEnglish = person_english[person] + ' ' + newEnglish  + ' ' + people_english[people];
+    currentPostbases.forEach((p) => {
+      if (postbases[p].tense) {
+        newEnglish = postbases[p].englishModifier(newEnglish);
+      }
+    });
     let postbasesList = [];
-
-    if (this.state.transitive) {
-      postbasesList = currentPostbases.map((p) => {
+    if (this.state.objectExists) {
+    postbasesList = currentPostbases.map((p) => {
       return postbases[p].expression;
     }).concat([indicative_transitive_endings[person][people][objectPerson][objectPeople]]);
     } else {
-      postbasesList = currentPostbases.map((p) => {
+    postbasesList = currentPostbases.map((p) => {
       return postbases[p].expression;
-    }).concat([indicative_intransitive_endings[person][people]]);      
+    }).concat([indicative_intransitive_endings[person][people]]);  
     }
 
 
     let postbasesString = "";
+    console.log(postbasesList)
+
     postbasesList.forEach((e) => {
       postbasesString = postbasesString + "&postbase='" + e + "'";
     });
@@ -773,7 +602,7 @@ class YupikDetails extends Component {
     axios
       .get(API_URL + "/concat?root=" + word.replace('-', '') + postbasesString)
       .then(response => {
-        this.setState({ modifiedWord: response.data.concat, modifiedEnglish: newEnglish, currentPostbases: currentPostbases, text2: newText2});
+        this.setState({ modifiedWord: response.data.concat, currentPostbases: currentPostbases}); //removed  modifiedEnglish: newEnglish
       });
   }
 
@@ -787,7 +616,7 @@ class YupikDetails extends Component {
     else {
       let newGroup = true;
       currentPostbases.forEach((id) => {
-        console.log( postbases[id].group !== postbases[postbase_id].group);
+        //console.log( postbases[id].group !== postbases[postbase_id].group);
         newGroup = newGroup && postbases[id].group !== postbases[postbase_id].group;
       });
       if (newGroup) {
@@ -798,168 +627,170 @@ class YupikDetails extends Component {
     this.modifyWord(this.state.person, this.state.people, this.state.objectPerson, this.state.objectPeople, this.state.currentWord, currentPostbases);
   }
 
-  setValue1(e, data) {
-    this.setState({ value1: data.value });
-    this.setState({ person: data.value[0]});
-    this.setState({ people: data.value[1]});
-  }
-  setValue2(e, data) {
-    this.setState({ value2: data.value });
-    this.setState({ objectPerson: data.value[0]});
-    this.setState({ objectPeople: data.value[1]});
-  }
-  setValue3(e, data) {
-    this.setState({ value3: data.value });
-    this.setState({ objectPerson: data.value[0]});
-    this.setState({ objectPeople: data.value[1]});
-  }
-  /*
-  <Header.Subheader>
-    {this.state.modifiedEnglish}
-  </Header.Subheader>
-
-
-  {(this.state.fullWord.rootForm == 'verb') ?
-  <Container>
-        <Button onClick={() => { this.props.history.push('/', { search: this.state.search }); }}>Return</Button>
-
-        <Header dividing as='h1'>
-          {this.state.currentWord}
-          <Icon name='volume up' color='teal' size='mini' onClick={this.speak.bind(this)} />
-        </Header>
-        {Object.keys(this.state.fullWord).map((entryNumber) => {
-          //console.log(entryNumber);
-          //console.log(this.state.fullWord[entryNumber]);
-          if (entryNumber == 'english' || entryNumber == 'yupik') {
-            return '';
-          }
-          else {
-            console.log(entryNumber);
-            return (
-              <YupikEntry key={entryNumber} entry={this.state.fullWord[entryNumber]} entryNumber={entryNumber} displayEntryNumber={numEntries > 1} />
-            );
-          }
-        })}
-
-        <div class="ui horizontal divider">
-          Modify Word
-        </div>
-
-      <Grid columns={3}>
-        <Grid.Column />
-        <Grid.Column verticalAlign='middle' align='center'>
-          <Header centered as='h1'>
-          {this.state.modifiedWord}
-          </Header>
-        </Grid.Column>
-        <Grid.Row>
-          <Grid.Column verticalAlign='right'>
-            <Dropdown as='h4' fluid onChange={this.setValue1.bind(this)} options={options1} selection value={value1} />
-          </Grid.Column>
-          <Grid.Column as='h4' fluid verticalAlign='middle' align='center'>joined</Grid.Column>
-          <Grid.Column verticalAlign='left'>
-            <Dropdown as='h4' fluid onChange={this.setValue2.bind(this)} options={options2} selection value={value2} />
-          </Grid.Column>
-        </Grid.Row>
-        <Grid.Row/>
-      </Grid>
-      <span>
-      <text as='h4' fluid verticalAlign='middle' align='center'> {this.state.text1} </text>
-      <Dropdown inline  as='h4'  onChange={this.setValue1.bind(this)} options={options1} selection value={value1} />
-      <text as='h4' fluid verticalAlign='middle' align='center'> {this.state.text2} </text>
-      <Dropdown inline as='h4'  onChange={this.setValue2.bind(this)} options={options2} selection value={value2} />
-      <text as='h4' fluid verticalAlign='middle' align='center'> {this.state.text3} </text>
-      </span>
-        <div align="center">
-        {postbases.map((postbase, id) => {
-          return (
-            <Button as='h4' toggle key={id} onClick={this.setPostbase.bind(this, id)} active={this.state.currentPostbases.indexOf(id) >= 0}>{postbase.description}</Button>
-          );
-        })}
-        </div>
-
-  </Container>
-  : ''}
-          <Dropdown inline options={options2} onChange={this.setValue2.bind(this)} value={value2} />
-
-  */
- 
   render() {
-
-    const{value1}=this.state
-    const{value2}=this.state
-    const{value3}=this.state
-    console.log(this.state);
-    console.log(nlp('wants to').nouns().toPlural().out())
-    let numEntries = Object.keys(this.state.fullWord).filter((entryNumber) => { return entryNumber !== 'english' && entryNumber !== 'yupik'; }).length;
-    console.log(numEntries);
+    console.log('hi');
+    console.log(this.state.objectPerson)
+    console.log(this.state.objectExists)
     return (
       <Container>
-        <Button onClick={() => { this.props.history.push('/', { search: this.state.search }); }}>Return</Button>
-
-        <Header dividing as='h1'>
-          {this.state.currentWord}
-          <Icon name='volume up' color='teal' size='mini' onClick={this.speak.bind(this)} />
+        <Header textAlign='center'>
+        {this.state.modifiedWord}
+          <Header.Subheader>
+           {this.state.entry.definition}
+          </Header.Subheader>
         </Header>
-        {Object.keys(this.state.fullWord).map((entryNumber) => {
-          //console.log(entryNumber);
-          //console.log(this.state.fullWord[entryNumber]);
-          if (entryNumber == 'english' || entryNumber == 'yupik') {
-            return '';
-          }
-          else {
-            console.log(entryNumber);
-            return (
-              <YupikEntry key={entryNumber} entry={this.state.fullWord[entryNumber]} entryNumber={entryNumber} displayEntryNumber={numEntries > 1} />
-            );
-          }
-        })}
 
-        <div class="ui horizontal divider">
-          Modify Word
-        </div>
-
-      <Grid columns={3}>
-        <Grid.Column />
-        <Grid.Column verticalAlign='middle' align='center'>
-          <Header centered as='h1'>
-          {this.state.modifiedWord}
-          </Header>
-        </Grid.Column>
-      </Grid>
-
-      <Grid columns={1}>
-      <Grid.Column verticalAlign='middle' align='center'>
-        <span as='h4' align='center'> 
-          {this.state.text1}
-          {' '}
-          <Dropdown inline options={options1} onChange={this.setValue1.bind(this)} value={value1} />
-          {' '}
-          {this.state.text2}
-          {' '}
-          <Dropdown inline options={options2} onChange={this.setValue2.bind(this)} value={value2} />
-          {' '}
-          {this.state.text3}
-        </span>
-      </Grid.Column>
-       <Grid.Row/>   
-       </Grid> 
+        <Container textAlign='center'>
+          <Button circular color='blue' icon='volume up' />
+        </Container>
         
-        <div align="center">
-        {postbases.map((postbase, id) => {
-          return (
-            <Button as='h4' toggle key={id} onClick={this.setPostbase.bind(this, id)} active={this.state.currentPostbases.indexOf(id) >= 0}>{postbase.description}</Button>
-          );
-        })}
+        <Divider />
+        <div class="ui grid">
+          <div class="four wide centered column">
+          {(this.state.person == 1 && this.state.people == 1) ? 'I' 
+          :(this.state.person == 1 && this.state.people == 2) ? 'We (two)'
+          :(this.state.person == 1 && this.state.people == 3) ? 'We (3+)'
+          :(this.state.person == 2 && this.state.people == 1) ? 'You'
+          :(this.state.person == 2 && this.state.people == 2) ? 'You two'
+          :(this.state.person == 2 && this.state.people == 3) ? 'You all (3+)'
+          :(this.state.person == 3 && this.state.people == 1) ? 'She/He/It'
+          :(this.state.person == 3 && this.state.people == 2) ? 'They two'
+          :(this.state.person == 3 && this.state.people == 3) ? 'They all (3+)'
+          :''}
+          </div>
+          <div class="eight wide centered column">{this.state.entry.definition}</div>
+          <div class="four wide centered column">
+          {(this.state.objectPerson == 1 && this.state.objectPeople == 1) ? 'me' 
+          :(this.state.objectPerson == 1 && this.state.objectPeople == 2) ? 'us two'
+          :(this.state.objectPerson == 1 && this.state.objectPeople == 3) ? 'us (3+)'
+          :(this.state.objectPerson == 2 && this.state.objectPeople == 1) ? 'you'
+          :(this.state.objectPerson == 2 && this.state.objectPeople == 2) ? 'you two'
+          :(this.state.objectPerson == 2 && this.state.objectPeople == 3) ? 'you (3+)'
+          :(this.state.objectPerson == 3 && this.state.objectPeople == 1) ? 'her/him/it'
+          :(this.state.objectPerson == 3 && this.state.objectPeople == 2) ? 'them two'
+          :(this.state.objectPerson == 3 && this.state.objectPeople == 3) ? 'them (3+)'
+          :''}
+          </div>
         </div>
+        <Divider />
 
+        <Container>
+        <div className="ui equal width grid">
+          <div className="equal centered width column">
+            <p> Subject </p>
+            <div className="ui vertical buttons">
+              <Button inverted color='blue' onClick={this.setPerson.bind(this, 1)} active={this.state.person == 1}>we all</Button>
+              <Button inverted color='blue' onClick={this.setPerson.bind(this, 2)} active={this.state.person == 2}>you all</Button>
+              <Button inverted color='blue' onClick={this.setPerson.bind(this, 3)} active={this.state.person == 3}>they all</Button>
+            </div>
+            <div className="ui vertical buttons">
+              <Button inverted color='blue' onClick={this.setPeople.bind(this, 1)} active={this.state.people == 1}>1</Button>
+              <Button inverted color='blue' onClick={this.setPeople.bind(this, 2)} active={this.state.people == 2}>2</Button>
+              <Button inverted color='blue' onClick={this.setPeople.bind(this, 3)} active={this.state.people == 3}>3+</Button>
+            </div>
+          </div>
+          <div className="equal centered width column">
+            <p> Object </p>
+            <div className="ui vertical buttons">
+              <Button inverted color='blue' onClick={this.setObjectPerson.bind(this, 1)} active={this.state.objectPerson == 1}>us all</Button>
+              <Button inverted color='blue' onClick={this.setObjectPerson.bind(this, 2)} active={this.state.objectPerson == 2}>you all</Button>
+              <Button inverted color='blue' onClick={this.setObjectPerson.bind(this, 3)} active={this.state.objectPerson == 3}>them all</Button>
+            </div>
+            <div className="ui vertical buttons">
+              <Button inverted color='blue' onClick={this.setObjectPeople.bind(this, 1)} active={this.state.objectPeople == 1}>1</Button>
+              <Button inverted color='blue' onClick={this.setObjectPeople.bind(this, 2)} active={this.state.objectPeople == 2}>2</Button>
+              <Button inverted color='blue' onClick={this.setObjectPeople.bind(this, 3)} active={this.state.objectPeople == 3}>3+</Button>
+            </div>
+          </div>
+        </div>
+          <Divider />
+          {postbases.map((postbase, id) => {
+            return (
+              <Button toggle key={id} onClick={this.setPostbase.bind(this, id)} active={this.state.currentPostbases.indexOf(id) >= 0}>{postbase.description}</Button>
+            );
+          })}
+            <div className="ui vertical buttons">
+              <Button inverted color='red' active={this.state.person == 4}>to want to V</Button>
+              <Button inverted color='red' active={this.state.person == 4}>to love to V</Button>
+              <Button inverted color='red' active={this.state.person == 4}>to yearn to V</Button>
+              <Button inverted color='red' active={this.state.person == 4}>to NOT care to V</Button>
+              <Button inverted color='red' active={this.state.person == 4}>to NO longer want to V</Button>
+            </div>
+            <Divider />
+            <div className="ui vertical buttons">
+              <Button inverted color='green' active={this.state.person == 4}>to have (in the past) V</Button>
+              <Button inverted color='green' active={this.state.person == 4}>to NOT have yet (in the past) V</Button>
+              <Button inverted color='green' active={this.state.person == 4}>will (in the future) V</Button>
+              <Button inverted color='green' active={this.state.person == 4}>to be about to V</Button>
+              <Button inverted color='green' active={this.state.person == 4}>to soon be going to V</Button>
+              <Button inverted color='green' active={this.state.person == 4}>to NOT (in the future) V</Button>
+            </div>
+            <Divider />
+            <div className="ui vertical buttons">
+              <Button inverted color='blue' active={this.state.person == 4}>before (they) V</Button>
+              <Button inverted color='blue' active={this.state.person == 4}>because (they) V</Button>
+              <Button inverted color='blue' active={this.state.person == 4}>whenever (they) V</Button>
+              <Button inverted color='blue' active={this.state.person == 4}>although (they) V</Button>
+              <Button inverted color='blue' active={this.state.person == 4}>while (they) V</Button>
+              <Button inverted color='blue' active={this.state.person == 4}>when (they in the future) V</Button>
+              <Button inverted color='blue' active={this.state.person == 4}>when (they in the past) V</Button>
+              <Button inverted color='blue' active={this.state.person == 4}>by or being V</Button>
+            </div>
+            <Divider />
+            <div className="ui vertical buttons">
+              <Button inverted color='purple' active={this.state.person == 4}>who?</Button>
+              <Button inverted color='purple' active={this.state.person == 4}>when? (past)</Button>
+              <Button inverted color='purple' active={this.state.person == 4}>when? (future)</Button>
+              <Button inverted color='purple' active={this.state.person == 4}>(at) where?</Button>
+              <Button inverted color='purple' active={this.state.person == 4}>from where?</Button>
+              <Button inverted color='purple' active={this.state.person == 4}>toward where?</Button>
+              <Button inverted color='purple' active={this.state.person == 4}>why?</Button>
+              <Button inverted color='purple' active={this.state.person == 4}>how?</Button>
+            </div>
+            <Divider />
+            <div className="ui vertical buttons">
+              <Button inverted color='brown' active={this.state.person == 4}>do V!</Button>
+              <Button inverted color='brown' active={this.state.person == 4}>do V (in the future)!</Button>
+              <Button inverted color='brown' active={this.state.person == 4}>do not V!</Button>
+              <Button inverted color='brown' active={this.state.person == 4}>stop V!</Button>
+              <Button inverted color='brown' active={this.state.person == 4}>do not V (in the future)</Button>
+            </div>
+            <Divider />
+            <div className="ui basic vertical buttons">
+              <Button  basic active={this.state.person == 4}>the one who is V-ing</Button>
+                            <Button  basic active={this.state.person == 3}>to NOT V</Button>
 
-
-
+              <Button  basic active={this.state.person == 4}>device for V-ing</Button>
+              <Button  basic active={this.state.person == 4}>one that customarily Vs</Button>
+              <Button  basic active={this.state.person == 4}>way of V-ing; how to V</Button>
+              <Button  basic active={this.state.person == 4}>act or state of V-ing</Button>
+            </div>
+                        <Divider />
+            <div className="ui basic vertical buttons">
+            	<button class="ui  right labeled icon button">
+            		<i class="right inverted purple arrow icon"></i>
+            		Question Form
+				</button>
+            	<button class="ui  right labeled icon button">
+            		<i class="right brown arrow icon"></i>
+            		Make a Command
+				</button>
+            	<button class="ui  right labeled icon button">
+            		<i class="right blue arrow icon"></i>
+            		Connective Mood
+				</button>
+            	<button class="ui active basic right labeled icon button">
+            		<i class="right arrow icon"></i>
+            		Convert to Noun
+				</button>
+            </div>
+            <Divider />
+        </Container>
       </Container>
 
+    
     );
   }
 }
 
-export default YupikDetails;
+export default AddEndings;
