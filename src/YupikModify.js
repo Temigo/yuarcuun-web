@@ -53,7 +53,7 @@ const postbases = [
   {
     description: 'future tense',
     englishModifier: (english) => { return nlp(english).sentences().toFutureTense().out('text'); },
-    expression: '+ciqe-',
+    expression: '+ciqe\\',
     expression_conditional: '@ciiqe-',  // conditional te_ending
     conditional_rule: 'attaching_to_te',  // defined later and if satisfied display expression_conditional
     group: 'future',
@@ -66,7 +66,7 @@ const postbases = [
   {
     description: 'to love',
     englishModifier: (english) => { return 'love to ' + english; },
-    expression: '@~+yunqegg-',
+    expression: '@~+yunqegg\\',
     group: 'love',
     priority: 4,
     common: true,
@@ -77,8 +77,8 @@ const postbases = [
   {
     description: 'to want',
     englishModifier: (english) => { return 'want to ' + english; },
-    expression: '@~+yug-',
-    group: 'love',
+    expression: '@~+yug\\',
+    group: 'love'
     priority: 4,
     common: true,
     transitive: true,
@@ -88,7 +88,7 @@ const postbases = [
   {
     description: 'past tense',
     englishModifier: (english) => { return nlp(english).sentences().toPastTense().out('text'); },
-    expression: '-llru-',
+    expression: '-llru\\',
     group: 'past',
     priority: 5,
     common: true,
@@ -446,15 +446,15 @@ class YupikModify extends Component {
       }
     };
     let interrogative_intransitive_endings = {
-      1: { // 1st person 
-        1: '~+(t)sia', 
+      1: { // 1st person
+        1: '~+(t)sia',
         2: '@~+ceuk',
-        3: '@~+ceta', 
+        3: '@~+ceta',
       },
       2: {
         1: '~+(t)sit',
-        2: '@~+cetek', 
-        3: '@~+ceci', 
+        2: '@~+cetek',
+        3: '@~+ceci',
       },
       3: {
         1: '+\'(g/t)a',
@@ -467,17 +467,17 @@ class YupikModify extends Component {
         1: {
           1: {
             1:'',
-            2:'', 
+            2:'',
             3:'',
           },
           2: {
             1:'',
-            2:'', 
+            2:'',
             3:'',
           },
           3: {
             1:'',
-            2:'', 
+            2:'',
             3:'',
           },
         },
@@ -489,12 +489,12 @@ class YupikModify extends Component {
           },
           2: {
             1:'',
-            2:'', 
+            2:'',
             3:'',
           },
           3: {
             1:'',
-            2:'', 
+            2:'',
             3:'',
           },
         },
@@ -506,12 +506,12 @@ class YupikModify extends Component {
           },
           2: {
             1:'',
-            2:'', 
+            2:'',
             3:'',
           },
           3: {
             1:'',
-            2:'', 
+            2:'',
             3:'',
           }
         }
@@ -735,10 +735,9 @@ class YupikModify extends Component {
 
       let postbasesString = "";
       postbasesList.forEach((e) => {
-        postbasesString = postbasesString + "&postbase=" + e;
+        postbasesString = postbasesString + "&postbase=" + encodeURIComponent(e);
       });
-      postbasesString = encodeURI(postbasesString);
-      console.log(postbasesList)
+      console.log(postbasesString)
 
       axios
         .get(API_URL + "/concat?root=" + word.replace('-', '') + postbasesString)
