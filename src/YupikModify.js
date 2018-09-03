@@ -51,6 +51,19 @@ const options3 = [
 
 const postbases = [
   {
+    description: 'future tense',
+    englishModifier: (english) => { return nlp(english).sentences().toFutureTense().out('text'); },
+    expression: '+ciqe-',
+    expression_conditional: '@ciiqe-',  // conditional te_ending
+    conditional_rule: 'attaching_to_te',  // defined later and if satisfied display expression_conditional
+    group: 'future',
+    priority: 4,
+    common: true,
+    transitive: true,
+    intransitive: true,
+    tense:true,
+  },
+  {
     description: 'to love',
     englishModifier: (english) => { return 'love to ' + english; },
     expression: '@~+yunqegg-',
@@ -698,7 +711,7 @@ class YupikModify extends Component {
       let postbasesList = [];
       console.log(this.state.mood)
       if (mood == 'indicative') {
-        if (this.state.transitive) {
+        if (this.state.objectExists) {
           postbasesList = currentPostbases.map((p) => {
           return postbases[p].expression;
         }).concat([indicative_transitive_endings[person][people][objectPerson][objectPeople]]);
@@ -708,7 +721,7 @@ class YupikModify extends Component {
         }).concat([indicative_intransitive_endings[person][people]]);
         }
       } else if (mood == 'interrogative') {
-        if (this.state.transitive) {
+        if (this.state.objectExists) {
           postbasesList = currentPostbases.map((p) => {
           return postbases[p].expression;
         }).concat([interrogative_transitive_endings[person][people][objectPerson][objectPeople]]);
@@ -722,8 +735,10 @@ class YupikModify extends Component {
 
       let postbasesString = "";
       postbasesList.forEach((e) => {
-        postbasesString = postbasesString + "&postbase='" + e + "'";
+        postbasesString = postbasesString + "&postbase=" + e;
       });
+      postbasesString = encodeURI(postbasesString);
+      console.log(postbasesList)
 
       axios
         .get(API_URL + "/concat?root=" + word.replace('-', '') + postbasesString)
