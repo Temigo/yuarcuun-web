@@ -51,10 +51,41 @@ const options3 = [
 
 const postbases = [
   {
+    id: 0,
+    description: 'repeatedly',
+    englishModifier: (english) => { return 'repeatedly ' + english; },
+    expression: '-lar\\',
+    expression_conditional: '',  
+    conditional_rule: '',
+    group: 'placeholder',
+    priority: 4,
+    common: true,
+    transitive: true,
+    intransitive: true,
+    tense:false,
+    allowable_next_ids: [0,1,3,4], // only refers to the postbases, not the endings
+  },
+  {
+    id: 1,
+    description: 'never',
+    englishModifier: (english) => { return 'never ' + english; },
+    expression: '@~-yuite\\',
+    expression_conditional: '',  
+    conditional_rule: '',
+    group: 'placeholder',
+    priority: 4,
+    common: true,
+    transitive: true,
+    intransitive: true,
+    tense:false,
+    allowable_next_ids: [0,1,3,4],
+  },
+  {
+    id: 2,
     description: 'future tense',
     englishModifier: (english) => { return nlp(english).sentences().toFutureTense().out('text'); },
     expression: '+ciqe\\',
-    expression_conditional: '@ciiqe-',  // conditional te_ending
+    expression_conditional: '@ciiqe\\',  // conditional te_ending
     conditional_rule: 'attaching_to_te',  // defined later and if satisfied display expression_conditional
     group: 'future',
     priority: 4,
@@ -62,39 +93,52 @@ const postbases = [
     transitive: true,
     intransitive: true,
     tense:true,
+    allowable_next_ids: [0,1,2,3,4]
   },
   {
+    id: 3,
     description: 'to love',
     englishModifier: (english) => { return 'love to ' + english; },
     expression: '@~+yunqegg\\',
+    expression_conditional: '',
+    conditional_rule: '',
     group: 'love',
     priority: 4,
     common: true,
     transitive: true,
     intransitive: true,
     tense:false,
+    allowable_next_ids: [1,3,4]
   },
   {
+    id: 4,
     description: 'to want',
     englishModifier: (english) => { return 'want to ' + english; },
     expression: '@~+yug\\',
+    expression_conditional: '',
+    conditional_rule: '',
     group: 'love',
     priority: 4,
     common: true,
     transitive: true,
     intransitive: true,
     tense: false,
+    allowable_next_ids: [1,3,4]
   },
   {
+    id: 5,
     description: 'past tense',
     englishModifier: (english) => { return nlp(english).sentences().toPastTense().out('text'); },
     expression: '-llru\\',
+    expression_conditional: '',
+    conditional_rule: '',
     group: 'past',
     priority: 5,
     common: true,
     transitive: true,
     intransitive: true,
     tense: true,
+    allowable_next_ids: [0,1,3,4,5]
   }
 ];
 
@@ -114,12 +158,13 @@ class YupikModify extends Component {
       value1: "",
       value2: "",
       value3: "",
+      allowable_next_ids: [0,1,2,3,4,5],
       possessiveObject: false,
       objectExists: false,
       subjectExists: false,
       tense: 'present',
       text1: "",
-      text2: "is hunting",
+      text2: "",
       mood:"indicative",
       originalText2: "",
       text3: "",
@@ -173,13 +218,14 @@ class YupikModify extends Component {
     let object = usage.match(rx2);
     if (subject !== null) {
       res = res.split(rx1);
+      console.log(res)
       new_state = {...new_state, subjectExists: true};
       new_state = {
         ...new_state,
         value1: "31-1(1)",
         people: 1,
         person: 3,
-        text1: res[0] + res[1]
+        text1: res[0]
       }
       res = res[2];
     }
@@ -249,15 +295,22 @@ class YupikModify extends Component {
       currentPostbases.splice(index, 1);
     }
     else {
-      let newGroup = true;
-      currentPostbases.forEach((id) => {
-        console.log( postbases[id].group !== postbases[postbase_id].group);
-        newGroup = newGroup && postbases[id].group !== postbases[postbase_id].group;
-      });
-      if (newGroup) {
-        currentPostbases.push(postbase_id);
-      }
-
+      currentPostbases.push(postbase_id);
+      // let newGroup = true;
+      // currentPostbases.forEach((id) => {
+      //   console.log( postbases[id].group !== postbases[postbase_id].group);
+      //   newGroup = newGroup && postbases[id].group !== postbases[postbase_id].group;
+      // });
+      // if (newGroup) {
+      //   currentPostbases.push(postbase_id);
+      // }
+    }
+    if (currentPostbases.length === 0) {
+      this.setState({allowable_next_ids: [0,1,2,3,4,5]})
+    } else if (currentPostbases.length === 1) {
+      this.setState({allowable_next_ids: postbases[currentPostbases[0]].allowable_next_ids})
+    } else {
+      this.setState({allowable_next_ids:currentPostbases})
     }
     this.modifyWord(this.state.person, this.state.people, this.state.objectPerson, this.state.objectPeople, this.state.mood, this.state.currentWord, currentPostbases);
   }
@@ -622,129 +675,163 @@ class YupikModify extends Component {
           }
         }
       }
-    };
-      let person_english = {
-        0: '',
-        1: 'I',
-        2: 'You',
-        3: 'He',
-      };
-      let people_english = {
-        0: '',
-        1: '(1)',
-        2: '(2)',
-        3: '(3+)',
-      }
-      currentPostbases = currentPostbases.sort((p1, p2) => {
-        return (postbases[p1].priority > postbases[p2].priority) ? 1 : ((postbases[p1].priority < postbases[p2].priority) ? -1 : 0);
-      });
-      let newEnglish =  this.state.currentEnglish;
-      //newEnglish = nlp(newEnglish).sentences().toPresentTense().out('text');
-      // FIXME remove dash for verbs only
-      // currentPostbases.forEach((p) => {
-      //   if (!postbases[p].tense) {
-      //     newEnglish = postbases[p].englishModifier(newEnglish);
-      //   }
-      // });
-      // newEnglish = person_english[person] + ' ' + newEnglish  + ' ' + people_english[people];
-      // currentPostbases.forEach((p) => {
-      //   if (postbases[p].tense) {
-      //     newEnglish = postbases[p].englishModifier(newEnglish);
-      //   }
-      // });
+  };
+    console.log(currentPostbases)
 
-      let newText2 = this.state.originalText2
-      console.log(currentPostbases)
-      if (currentPostbases.length>0) {
-        newText2 = nlp(this.state.originalText2).sentences().toFutureTense().out() //change to future tense first so that word attachment looks good
-        let adder = ''
-        currentPostbases.forEach((p) => {
-          if (!postbases[p].tense) {
-            adder = postbases[p].englishModifier(adder);
-          }
-        })
-        newText2 = newText2.replace("will","will "+adder) //replace 'will' hunt with 'will try to' hunt or 'will want to' hunt, etc.
-        if (this.state.tense == 'present'){
-          newText2 = nlp(newText2).sentences().toPresentTense().out()
-        } else if (this.state.tense == 'past'){
-          newText2 = nlp(newText2).sentences().toPastTense().out()
-        } else {
-          newText2 = nlp(newText2).sentences().toFutureTense().out()
+    // currentPostbases = currentPostbases.sort((p1, p2) => {
+    //   return (postbases[p1].priority > postbases[p2].priority) ? 1 : ((postbases[p1].priority < postbases[p2].priority) ? -1 : 0);
+    // });
+    currentPostbases = currentPostbases.reverse()
+
+    let newEnglish =  this.state.currentEnglish;
+    //newEnglish = nlp(newEnglish).sentences().toPresentTense().out('text');
+    // FIXME remove dash for verbs only
+    // currentPostbases.forEach((p) => {
+    //   if (!postbases[p].tense) {
+    //     newEnglish = postbases[p].englishModifier(newEnglish);
+    //   }
+    // });
+    // newEnglish = person_english[person] + ' ' + newEnglish  + ' ' + people_english[people];
+    // currentPostbases.forEach((p) => {
+    //   if (postbases[p].tense) {
+    //     newEnglish = postbases[p].englishModifier(newEnglish);
+    //   }
+    // });
+
+    let newText2 = this.state.originalText2
+    console.log(newText2)
+    if (currentPostbases.length>0) {
+      newText2 = nlp(this.state.originalText2).sentences().toFutureTense().out() //change to future tense first so that word attachment looks good
+      let adder = ''
+      currentPostbases.forEach((p) => {
+        if (!postbases[p].tense) {
+          adder = postbases[p].englishModifier(adder);
         }
-        currentPostbases.forEach((p) => {
-          if (postbases[p].tense) {
-            newText2 = postbases[p].englishModifier(newText2);
-          }
-        })
-      }
-
-
-      // let s1 = newText2.match(/\@(\S*)\@/g)
-      // if (s1.length>0) {
-      // s1.forEach((p) => {
-      //   let s2 = p.slice(1,-1);
-      //   if (this.state.people > 1) {
-      //     s2 = nlp(s2).nouns().toPlural().out()
-      //     console.log(p)
-      //     console.log(s2)
-      //     newText2 = newText2.replace(p,s2)
-      //   } else {
-      //     newText2 = newText2.replace(p,s2)
-      //   }
-      // })
+      })
+      newText2 = newText2.replace("will","will "+adder) //replace 'will' hunt with 'will try to' hunt or 'will want to' hunt, etc.
+      
+      // if (this.state.tense == 'present'){
+         newText2 = nlp(newText2).sentences().toPresentTense().out()
+      // } else if (this.state.tense == 'past'){
+      //   newText2 = nlp(newText2).sentences().toPastTense().out()
+      // } else {
+      //   newText2 = nlp(newText2).sentences().toFutureTense().out()
       // }
-      // let d1 = newText2.match(/\#(\S*)\#/g)
-      // console.log(d1)
-      // d1.forEach((p) => {
-      //   let d2 = p.slice(1,-1);
-      //   if (this.state.objectPeople > 1) {
-      //     d2 = nlp(d2).nouns().toPlural().out()
-      //     console.log(p)
-      //     console.log(d2)
-      //     newText2 = newText2.replace(p,d2)
-      //   } else {
-      //     newText2 = newText2.replace(p,d2)
-      //   }
-      // })
-
-
-      let postbasesList = [];
-      console.log(this.state.mood)
-      if (mood == 'indicative') {
-        if (this.state.objectExists) {
-          postbasesList = currentPostbases.map((p) => {
-          return postbases[p].expression;
-        }).concat([indicative_transitive_endings[person][people][objectPerson][objectPeople]]);
-        } else {
-          postbasesList = currentPostbases.map((p) => {
-          return postbases[p].expression;
-        }).concat([indicative_intransitive_endings[person][people]]);
+      console.log(newText2)
+      currentPostbases.forEach((p) => {
+        if (postbases[p].tense) {
+          newText2 = postbases[p].englishModifier(newText2);
         }
-      } else if (mood == 'interrogative') {
-        if (this.state.objectExists) {
-          postbasesList = currentPostbases.map((p) => {
-          return postbases[p].expression;
-        }).concat([interrogative_transitive_endings[person][people][objectPerson][objectPeople]]);
-        } else {
-          postbasesList = currentPostbases.map((p) => {
-          return postbases[p].expression;
-        }).concat([interrogative_intransitive_endings[person][people]]);
-        }
-      }
-
-
-      let postbasesString = "";
-      postbasesList.forEach((e) => {
-        postbasesString = postbasesString + "&postbase=" + encodeURIComponent(e);
-      });
-      console.log(postbasesString)
-
-      axios
-        .get(API_URL + "/concat?root=" + word.replace('-', '') + postbasesString)
-        .then(response => {
-          this.setState({ modifiedWord: response.data.concat, modifiedEnglish: newEnglish, currentPostbases: currentPostbases, text2: newText2});
-        });
+      })
     }
+
+
+    // let s1 = newText2.match(/\@(\S*)\@/g)
+    // if (s1.length>0) {
+    // s1.forEach((p) => {
+    //   let s2 = p.slice(1,-1);
+    //   if (this.state.people > 1) {
+    //     s2 = nlp(s2).nouns().toPlural().out()
+    //     console.log(p)
+    //     console.log(s2)
+    //     newText2 = newText2.replace(p,s2)
+    //   } else {
+    //     newText2 = newText2.replace(p,s2)
+    //   }
+    // })
+    // }
+    // let d1 = newText2.match(/\#(\S*)\#/g)
+    // console.log(d1)
+    // d1.forEach((p) => {
+    //   let d2 = p.slice(1,-1);
+    //   if (this.state.objectPeople > 1) {
+    //     d2 = nlp(d2).nouns().toPlural().out()
+    //     console.log(p)
+    //     console.log(d2)
+    //     newText2 = newText2.replace(p,d2)
+    //   } else {
+    //     newText2 = newText2.replace(p,d2)
+    //   }
+    // })
+
+
+    let postbasesList = [];
+    let base = '';
+    if (currentPostbases.length == 0) {
+      base = word
+    } else {
+      base = postbases[currentPostbases[0]].expression
+    }
+    console.log(base.slice(base.length-3,base.length-1))
+    console.log(this.state.mood)
+    if (mood == 'indicative') {
+      if (this.state.objectExists) {
+        postbasesList = currentPostbases.map((p) => {
+          if (postbases[p].conditional_rule == 'attaching_to_te') {
+            if (base.slice(base.length-3,base.length-1)=='te') {
+              return postbases[p].expression_conditional
+            } else {
+              return postbases[p].expression
+            }
+          } else {
+            return postbases[p].expression
+          }
+        ;
+      }).concat([indicative_transitive_endings[person][people][objectPerson][objectPeople]]);
+      } else {
+        postbasesList = currentPostbases.map((p) => {
+          if (postbases[p].conditional_rule == 'attaching_to_te') {
+            if (base.slice(base.length-3,base.length-1)=='te') {
+              return postbases[p].expression_conditional
+            } else {
+              return postbases[p].expression
+            }
+          } else {
+            return postbases[p].expression
+          }
+      }).concat([indicative_intransitive_endings[person][people]]);
+      }
+    } else if (mood == 'interrogative') {
+      if (this.state.objectExists) {
+        postbasesList = currentPostbases.map((p) => {
+          if (postbases[p].conditional_rule == 'attaching_to_te') {
+            if (base.slice(base.length-3,base.length-1)=='te') {
+              return postbases[p].expression_conditional
+            } else {
+              return postbases[p].expression
+            }
+          } else {
+            return postbases[p].expression
+          }
+      }).concat([interrogative_transitive_endings[person][people][objectPerson][objectPeople]]);
+      } else {
+        postbasesList = currentPostbases.map((p) => {
+          if (postbases[p].conditional_rule == 'attaching_to_te') {
+            if (base.slice(base.length-3,base.length-1)=='te') {
+              return postbases[p].expression_conditional
+            } else {
+              return postbases[p].expression
+            }
+          } else {
+            return postbases[p].expression
+          }
+      }).concat([interrogative_intransitive_endings[person][people]]);
+      }
+    }
+
+
+    let postbasesString = "";
+    postbasesList.forEach((e) => {
+      postbasesString = postbasesString + "&postbase=" + encodeURIComponent(e);
+    });
+    console.log(postbasesString)
+
+    axios
+      .get(API_URL + "/concat?root=" + word.replace('-', '') + postbasesString)
+      .then(response => {
+        this.setState({ modifiedWord: response.data.concat, modifiedEnglish: newEnglish, currentPostbases: currentPostbases, text2: newText2});
+      });
+  }
 
 
       render() {
@@ -776,7 +863,8 @@ class YupikModify extends Component {
                   {' '}
                   {this.state.text2}
                   {' '}
-                  <Dropdown inline options={options2} onChange={this.setValue2.bind(this)} value={value2} />
+                  {this.state.objectExists ? 
+                  <Dropdown inline options={options2} onChange={this.setValue2.bind(this)} value={value2} /> : ''}
                   {' '}
                   {this.state.text3}
                 </span>
@@ -787,7 +875,7 @@ class YupikModify extends Component {
             <div align="center">
             {postbases.map((postbase, id) => {
               return (
-                <Button as='h4' toggle key={id} onClick={this.setPostbase.bind(this, id)} active={this.state.currentPostbases.indexOf(id) >= 0}>{postbase.description}</Button>
+                <Button as='h4' toggle key={id} onClick={this.setPostbase.bind(this, id)} disabled={(this.state.allowable_next_ids.indexOf(id) < 0)} active={this.state.currentPostbases.indexOf(id) >= 0}>{postbase.description}</Button>
               );
             })}
             <Button as='h4' toggle onClick={this.setMood.bind(this,'interrogative')} active={this.state.mood=='interrogative'}>interrogative</Button>
