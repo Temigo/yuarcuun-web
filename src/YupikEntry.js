@@ -5,6 +5,7 @@ import axios from 'axios';
 import nlp from 'compromise';
 import { API_URL } from './App.js';
 import { Link } from 'react-router-dom';
+import {withRouter} from 'react-router';
 
 class YupikEntry extends Component {
   constructor(props) {
@@ -18,6 +19,17 @@ class YupikEntry extends Component {
       entryNumber: props.entryNumber
     };
 
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.word !== this.props.word) {
+      this.setState({
+        entry: this.props.entry,
+        word: this.props.word,
+        displayEntryNumber: this.props.displayEntryNumber,
+        entryNumber: this.props.entryNumber
+      });
+    }
   }
 
   render() {
@@ -106,4 +118,4 @@ class YupikEntry extends Component {
   }
 }
 
-export default YupikEntry;
+export default withRouter(YupikEntry);

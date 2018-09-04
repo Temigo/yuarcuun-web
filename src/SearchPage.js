@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import elasticlunr from 'elasticlunr';
-import { Container, Header, Image, Divider, Grid, Icon, Input, List, Button } from 'semantic-ui-react';
+import { Container, Header, Image, Divider, Grid, Icon, Input, List, Button, Transition } from 'semantic-ui-react';
 import YupikDetails from './YupikDetails.js';
 import './App.css';
 import './semantic/dist/semantic.min.css';
@@ -18,6 +18,7 @@ class SearchPage extends Component {
       wordsList: [],
       search: props.location.state == undefined ? '' : props.location.state.search,
       currentWord: {},
+      startingSearch: true,
     }
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.selectWord = this.selectWord.bind(this);
@@ -27,7 +28,6 @@ class SearchPage extends Component {
       this.addField('yupik');
       this.setRef("yupik");
     });
-
   }
 
   componentDidMount() {
@@ -66,6 +66,7 @@ class SearchPage extends Component {
   }
 
   onChangeSearch(event, data) {
+    let newStartingSearch = event == undefined;
     let new_search = data.value;
     if (new_search.length >= 2) {
       // Search
@@ -73,10 +74,10 @@ class SearchPage extends Component {
       let wordsList = results.map((e) => {
         return this.index.documentStore.getDoc(e.ref);
       });
-      this.setState({ wordsList: wordsList.sort((w1, w2) => { return (w1.yupik > w2.yupik) ? 1 : ((w1.yupik < w2.yupik) ? -1 : 0); }), search: new_search });
+      this.setState({ startingSearch: newStartingSearch, wordsList: wordsList.sort((w1, w2) => { return (w1.yupik > w2.yupik) ? 1 : ((w1.yupik < w2.yupik) ? -1 : 0); }), search: new_search });
     }
     else {
-      this.setState({ search: new_search });
+      this.setState({ startingSearch: newStartingSearch, search: new_search });
     }
   }
 
@@ -93,7 +94,8 @@ class SearchPage extends Component {
     let displayList = this.state.search.length >= 2;
     let displayWord = this.state.currentWord.yupik !== undefined;
     return (
-      <Container text>
+      <Grid textAlign='center' style={{ height: '100%' }} verticalAlign={(displayList || !this.state.startingSearch) ? 'top' : 'middle'}>
+      <Grid.Column style={{ maxWidth: 800, padding: 10 }} textAlign='left'>
         <Header as='h1' dividing>
           Yuarcuun
         </Header>
@@ -101,25 +103,30 @@ class SearchPage extends Component {
           <Input
             placeholder='Search...'
             icon='search'
+            iconPosition='left'
+            size='huge'
             onChange={this.onChangeSearch}
             value={this.state.search}
-            fluid />
+            fluid transparent />
           <List divided selection>
             {displayList ? this.state.wordsList.map((word) => {
               return (
-                <Link key={word.yupik} to={{pathname: '/' + word.yupik, state: { word: word, search: this.state.search, wordsList: this.state.wordsList }}}>
-                <List.Item>
+
+                <List.Item key={word.yupik}>
+                <Link to={{pathname: '/' + word.yupik, state: { word: word, search: this.state.search, wordsList: this.state.wordsList }}}>
                   <List.Content>
                     <List.Header>{word.yupik}</List.Header>
                     <List.Description>{word.english}</List.Description>
                   </List.Content>
-                </List.Item>
                 </Link>
+                </List.Item>
+
               );
             }) : ''}
           </List>
         </Container>
-      </Container>
+        </Grid.Column>
+      </Grid>
     );
   }
 }
