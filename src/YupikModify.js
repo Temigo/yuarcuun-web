@@ -757,7 +757,7 @@ class YupikModify extends Component {
 
     let postbasesList = [];
     let base = '';
-    if (currentPostbases.length == 0) {
+    if (currentPostbases.length == 1 || currentPostbases.length == 0) {
       base = word
     } else {
       base = postbases[currentPostbases[0]].expression
@@ -836,6 +836,7 @@ class YupikModify extends Component {
 
       render() {
         console.log("YupikModify state: ", this.state);
+        console.log(nlp('repeatedly hunts').sentences().toFutureTense().out())
         const{value1}=this.state
         const{value2}=this.state
         const{value3}=this.state
@@ -867,6 +868,7 @@ class YupikModify extends Component {
                   <Dropdown inline options={options2} onChange={this.setValue2.bind(this)} value={value2} /> : ''}
                   {' '}
                   {this.state.text3}
+                  {this.state.mood == 'interrogative' ? '?':''}
                 </span>
               </Grid.Column>
               <Grid.Row/>
