@@ -272,7 +272,7 @@ const postbases = [
     id: 21,
     description: 'to love to',
     englishModifier: (english) => { return 'loves to' + english; },
-    expression: '@~+yunqegg\\',
+    expression: '@~+yunqe4\\',
     expression_conditional: '',
     conditional_rule: '',
     tense:false,
@@ -395,6 +395,9 @@ class YupikModify extends Component {
       possessiveObject: false,
       objectExists: false,
       subjectExists: false,
+      enclitic: '',
+      nounEnding: '',
+      encliticExpression: '',
       tense: 'present',
       text1: "",
       text2: "",
@@ -403,6 +406,7 @@ class YupikModify extends Component {
       originalText2: "",
       text3: "",
       transitive: true,
+      postbasesList: [],
       //usage: "[he] is hunting <it>",
       currentPostbases: [],
       modifiedWord: this.props.location.state.word,//props.word.yupik,
@@ -414,13 +418,24 @@ class YupikModify extends Component {
     let new_state = this.processUsage(this.state.usage);
     this.state = {...this.state, ...new_state};
     this.modifyWord = this.modifyWord.bind(this);
-    this.modifyWord(this.state.person, this.state.people, this.state.objectPerson, this.state.objectPeople, this.state.mood, this.state.moodSpecific, this.state.currentWord, this.state.currentPostbases);
+    if (this.state.objectExists) {
+      this.state.postbasesList = ["+'(g)aa"]
+    } else {
+      this.state.postbasesList = ["+'(g/t)uq"]
+    }
+    this.modifyWord(this.state.person, this.state.people, this.state.objectPerson, this.state.objectPeople, this.state.mood, this.state.moodSpecific, this.state.nounEnding, this.state.currentWord, this.state.currentPostbases);
 
   }
 
   componentWillUpdate(newProps, newState) {
-    if (newState.people != this.state.people || newState.person != this.state.person || newState.objectPerson != this.state.objectPerson || newState.objectPeople != this.state.objectPeople || newState.moodSpecific != this.state.moodSpecific) {
+    if (newState.people != this.state.people || newState.person != this.state.person || newState.objectPerson != this.state.objectPerson || newState.objectPeople != this.state.objectPeople || newState.moodSpecific != this.state.moodSpecific || newState.nounEnding != this.state.nounEnding) {
       if (newState.mood != this.state.mood) {
+        newState.nounEnding = ''
+        this.state.nounEnding = ''
+        newState.enclitic = ''
+        newState.encliticExpression = ''
+        this.state.enclitic = ''
+        this.state.encliticExpression = ''
         if (newState.mood == 'indicative' || newState.mood == 'interrogative' || newState.mood == 'optative') {
           if (this.state.value1[0] == '4') {  // if 4th person subject, switch to 3rd person singular
             this.setState({people: 1, person: 3, value1: '31-1(1)'})
@@ -467,7 +482,14 @@ class YupikModify extends Component {
           }
         }
       }
-      this.modifyWord(newState.person, newState.people, newState.objectPerson, newState.objectPeople, newState.mood, newState.moodSpecific, this.state.currentWord, this.state.currentPostbases);
+      if (newState.moodSpecific != this.state.moodSpecific) {
+        if (newState.moodSpecific == 'You, stop!' || newState.moodSpecific == 'You, do not!') {
+          this.setState({people: 1, person: 2, value1: '21(1)'})
+          newState.person = 2
+          newState.people = 1        
+        }
+      }
+      this.modifyWord(newState.person, newState.people, newState.objectPerson, newState.objectPeople, newState.mood, newState.moodSpecific, newState.nounEnding, this.state.currentWord, this.state.currentPostbases);
     }
   }
 
@@ -597,13 +619,23 @@ class YupikModify extends Component {
     } else {
       this.setState({allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]})
     }
-    this.modifyWord(this.state.person, this.state.people, this.state.objectPerson, this.state.objectPeople, this.state.mood, this.state.moodSpecific, this.state.currentWord, currentPostbases);
+    this.modifyWord(this.state.person, this.state.people, this.state.objectPerson, this.state.objectPeople, this.state.mood, this.state.moodSpecific, this.state.nounEnding, this.state.currentWord, currentPostbases);
   }
 
   setMood(newMood, moodSpecific, event, data) {
     this.setState({ mood: (this.state.moodSpecific == moodSpecific) ? 'indicative' : newMood });
     this.setState({ moodSpecific: (this.state.moodSpecific == moodSpecific) ? 'indicative' : moodSpecific })
   }
+
+  setEnclitic(enclitic, encliticExpression, event, data) {
+    this.setState({ enclitic: (this.state.enclitic == enclitic) ? '' : enclitic })
+    this.setState({ encliticExpression: (this.state.enclitic == enclitic) ? '' : encliticExpression })
+  }
+
+  setNounEnding(ending, event, data) {
+    this.setState({ nounEnding: (this.state.nounEnding == ending) ? '' : ending})
+  }
+
   // expression_conditional_func(p, base, event, data) {
   //   if (postbases[p].conditional_rule == 'attaching_to_te') {
   //     if (base.slice(base.length-3,base.length-1)=='te') {
@@ -616,7 +648,15 @@ class YupikModify extends Component {
   //   };  
   // }
 
-  modifyWord(person, people, objectPerson, objectPeople, mood, moodSpecific, word, currentPostbases) {
+  modifyWord(person, people, objectPerson, objectPeople, mood, moodSpecific, nounEnding, word, currentPostbases) {
+    let nounEndings = {
+      'the one who is': '-lria',
+      'device for': '+cuun',
+      'one that customarily/capably': '-tuli',
+      'way of/how to': '@~+yaraq',
+      'one who is good at': '@~-yuli',
+      'act or state of': '-lleq '
+    };
     let indicative_intransitive_endings = {
       1: { // 1st person
         1: '+\'(g/t)u:6a', // I
@@ -677,7 +717,7 @@ class YupikModify extends Component {
             3:'',
           },
           2: {
-            1:'+\'(g)amteggen',
+            1:'+\'(g)amte4en',
             2:'+\'(g)amcetek',
             3:'+\'(g)amceci',
           },
@@ -1033,7 +1073,7 @@ class YupikModify extends Component {
             3:'',
           },
           2: {
-            1:'@~+lamteggen',
+            1:'@~+lamte4en',
             2:'@~+lamcetek', 
             3:'@~+lamceci',
           },
@@ -1047,7 +1087,7 @@ class YupikModify extends Component {
       2: {
         1: {
           1: {
-            1:'@+nga',
+            1:'@+:(6)a',
             2:'@+kuk',
             3:'@+kut',
           },
@@ -1404,12 +1444,12 @@ class YupikModify extends Component {
             3:'',
           },
           2: {
-            1:'-mteggen',
+            1:'-mte4en',
             2:'-mcetek', 
             3:'-mceci',
           },
           3: {
-            1:'-mteggu',
+            1:'-mte4u',
             2:'-mtekek', 
             3:'-mteki',
           },
@@ -1608,12 +1648,308 @@ class YupikModify extends Component {
             3:'+megtekut',
           },
           2: {
-            1:'+megteggen',
+            1:'+megte4en',
             2:'+megcetek', 
             3:'+megneci',
           },
           3: {
-            1:'+megteggu',
+            1:'+megte4u',
+            2:'+megtekek', 
+            3:'+megteki',
+          },
+          4: {
+            1:'',
+            2:'', 
+            3:'',
+          }
+        }
+      }
+    };
+    let connective_consonantEnd_intransitive_endings = {
+      1: { 
+        1: '+ma',
+        2: '-megnuk',
+        3: '-mta',
+      },
+      2: {
+        1: '+(t)vet',
+        2: '+(t)vetek',
+        3: '+(t)veci',
+      },
+      3: {
+        1: ':an',
+        2: ':agnek',
+        3: ':ata',
+      },
+      4: {
+        1: '+mi',
+        2: '+mek',
+        3: '+meng',
+      }
+    };
+    let connective_consonantEnd_transitive_endings = {
+      1: {
+        1: {
+          1: {
+            1:'',
+            2:'', 
+            3:'',
+          },
+          2: {
+            1:'-mken',
+            2:'-mtek', 
+            3:'-mci',
+          },
+          3: {
+            1:'-mku',
+            2:'-mkek', 
+            3:'-mki',
+          },
+          4: {
+            1:'-mni',
+            2:'-mtek', 
+            3:'-mteng',
+          },
+        },
+        2: {
+          1: {
+            1:'',
+            2:'', 
+            3:'',
+          },
+          2: {
+            1:'-megten',
+            2:'-megtek', 
+            3:'-megci',
+          },
+          3: {
+            1:'-megnegu',
+            2:'-megkek', 
+            3:'-megki',
+          },
+          4: {
+            1:'-megni',
+            2:'-megtek', 
+            3:'-megteng',
+          },
+        },
+        3: {
+          1: {
+            1:'',
+            2:'', 
+            3:'',
+          },
+          2: {
+            1:'-mte4en',
+            2:'-mcetek', 
+            3:'-mceci',
+          },
+          3: {
+            1:'-mte4u',
+            2:'-mtekek', 
+            3:'-mteki',
+          },
+          4: {
+            1:'-mteni',
+            2:'-mcetek', 
+            3:'-mceteng',
+          },
+        }
+      },
+      2: {
+        1: {
+          1: {
+            1:'+(t)venga',
+            2:'+(t)vekuk', 
+            3:'+(t)vekut',
+          },
+          2: {
+            1:'',
+            2:'', 
+            3:'',
+          },
+          3: {
+            1:'+(t)vegu',
+            2:'+(t)vekek', 
+            3:'+(t)veki',
+          },
+          4: {
+            1:'+(t)veni',
+            2:'+(t)vetek', 
+            3:'+(t)veteng',
+          },
+        },
+        2: {
+          1: {
+            1:'+(t)vetegnga',
+            2:'+(t)vetegkuk', 
+            3:'+(t)vetegkut',
+          },
+          2: {
+            1:'',
+            2:'', 
+            3:'',
+          },
+          3: {
+            1:'+(t)vetegni',
+            2:'+(t)vetegtek', 
+            3:'+(t)vetegteng',
+          },
+          4: {
+            1:'+(t)vetgu',
+            2:'+(t)vetegkek', 
+            3:'+(t)vetegki',
+          },
+        },
+        3: {
+          1: {
+            1:'+(t)vecia',
+            2:'+(t)vecikuk', 
+            3:'+(t)vecikut',
+          },
+          2: {
+            1:'',
+            2:'', 
+            3:'',
+          },
+          3: {
+            1:'+(t)veciu',
+            2:'+(t)vecikek', 
+            3:'+(t)veciki',
+          },
+          4: {
+            1:'+(t)vece8i',
+            2:'+(t)vecetek', 
+            3:'+(t)veceteng',
+          }
+        }
+      },
+      3: {
+        1: {
+          1: {
+            1:':anga',
+            2:':akuk', 
+            3:':akut',
+          },
+          2: {
+            1:':aten',
+            2:':atek', 
+            3:':aci',
+          },
+          3: {
+            1:':aku',
+            2:':akek', 
+            3:':aki',
+          },
+          4: {
+            1:':ani',
+            2:':atek', 
+            3:':ateng',
+          },
+        },
+        2: {
+          1: {
+            1:':agnga',
+            2:':agkuk', 
+            3:':agkut',
+          },
+          2: {
+            1:':agten',
+            2:':agtek', 
+            3:':agci',
+          },
+          3: {
+            1:':agku',
+            2:':agkek', 
+            3:':agki',
+          },
+          4: {
+            1:':agni',
+            2:':agtek', 
+            3:':agteng',
+          },
+        },
+        3: {
+          1: {
+            1:':atnga',
+            2:':atkuk', 
+            3:':atkut',
+          },
+          2: {
+            1:':atgen',
+            2:':acetek', 
+            3:':aceci',
+          },
+          3: {
+            1:':atgu',
+            2:':atkek', 
+            3:':atki',
+          },
+          4: {
+            1:':atni',
+            2:':acetek', 
+            3:':aceteng',
+          },
+        }
+      },
+      4: {
+        1: {
+          1: {
+            1:'+mia',
+            2:'+mikuk', 
+            3:'+mikut',
+          },
+          2: {
+            1:'+miten',
+            2:'+mitek', 
+            3:'+mici',
+          },
+          3: {
+            1:'+miu',
+            2:'+mikek', 
+            3:'+miki',
+          },
+          4: {
+            1:'',
+            2:'', 
+            3:'',
+          },
+        },
+        2: {
+          1: {
+            1:'+megnenga',
+            2:'+megnekuk', 
+            3:'+megnekut',
+          },
+          2: {
+            1:'+megnegen',
+            2:'+megnetek', 
+            3:'+megneci',
+          },
+          3: {
+            1:'+megnegu',
+            2:'+megnekek', 
+            3:'+megneki',
+          },
+          4: {
+            1:'',
+            2:'', 
+            3:'',
+          },
+        },
+        3: {
+          1: {
+            1:'+megtenga',
+            2:'+megtekuk', 
+            3:'+megtekut',
+          },
+          2: {
+            1:'+megte4en',
+            2:'+megcetek', 
+            3:'+megneci',
+          },
+          3: {
+            1:'+megte4u',
             2:'+megtekek', 
             3:'+megteki',
           },
@@ -1644,7 +1980,7 @@ class YupikModify extends Component {
       4: {
         1: '+mini',
         2: '+megni',
-        3: '+meggni',
+        3: '+me4ni',
       }
     };
     let connective_contemporative_transitive_endings = {
@@ -1700,12 +2036,12 @@ class YupikModify extends Component {
             3:'',
           },
           2: {
-            1:'-mteggen',
+            1:'-mte4en',
             2:'-mcetek', 
             3:'-mceci',
           },
           3: {
-            1:'-mteggu',
+            1:'-mte4u',
             2:'-mtekek', 
             3:'-mteki',
           },
@@ -1719,9 +2055,9 @@ class YupikModify extends Component {
       2: {
         1: {
           1: {
-            1:'+(t)vnga',
-            2:'+(t)vkuk', 
-            3:'+(t)vkut',
+            1:'+(t)venga',
+            2:'+(t)vekuk', 
+            3:'+(t)vekut',
           },
           2: {
             1:'',
@@ -1729,21 +2065,21 @@ class YupikModify extends Component {
             3:'',
           },
           3: {
-            1:'+(t)vgu',
-            2:'+(t)vkek', 
-            3:'+(t)vki',
+            1:'+(t)vegu',
+            2:'+(t)vekek', 
+            3:'+(t)veki',
           },
           4: {
-            1:'+(t)vni',
-            2:'+(t)vtek', 
-            3:'+(t)vteng',
+            1:'+(t)veni',
+            2:'+(t)vetek', 
+            3:'+(t)veteng',
           },
         },
         2: {
           1: {
-            1:'+(t)vtegnga',
-            2:'+(t)vtegkuk', 
-            3:'+(t)vtegkut',
+            1:'+(t)vetegnga',
+            2:'+(t)vetegkuk', 
+            3:'+(t)vetegkut',
           },
           2: {
             1:'',
@@ -1751,21 +2087,21 @@ class YupikModify extends Component {
             3:'',
           },
           3: {
-            1:'+(t)vtegni',
-            2:'+(t)vtegtek', 
-            3:'+(t)vtegteng',
+            1:'+(t)vetegni',
+            2:'+(t)vetegtek', 
+            3:'+(t)vetegteng',
           },
           4: {
-            1:'+(t)vtegu',
-            2:'+(t)vtegkek', 
-            3:'+(t)vtegki',
+            1:'+(t)vetgu',
+            2:'+(t)vetegkek', 
+            3:'+(t)vetegki',
           },
         },
         3: {
           1: {
-            1:'+(t)vcia',
-            2:'+(t)vcikuk', 
-            3:'+(t)vcikut',
+            1:'+(t)vecia',
+            2:'+(t)vecikuk', 
+            3:'+(t)vecikut',
           },
           2: {
             1:'',
@@ -1773,14 +2109,14 @@ class YupikModify extends Component {
             3:'',
           },
           3: {
-            1:'+(t)vciu',
-            2:'+(t)vcikek', 
-            3:'+(t)vciki',
+            1:'+(t)veciu',
+            2:'+(t)vecikek', 
+            3:'+(t)veciki',
           },
           4: {
-            1:'+(t)vce8i',
-            2:'+(t)vcetek', 
-            3:'+(t)vceteng',
+            1:'+(t)vece8i',
+            2:'+(t)vecetek', 
+            3:'+(t)veceteng',
           }
         }
       },
@@ -1904,12 +2240,12 @@ class YupikModify extends Component {
             3:'+minegtekut',
           },
           2: {
-            1:'+minegteggen',
+            1:'+minegte4en',
             2:'+minegcetek', 
             3:'+minegneci',
           },
           3: {
-            1:'+minegteggu',
+            1:'+minegte4u',
             2:'+minegtekek', 
             3:'+minegteki',
           },
@@ -1996,12 +2332,12 @@ class YupikModify extends Component {
             3:'',
           },
           2: {
-            1:'-mteggen',
+            1:'-mte4en',
             2:'-mcetek', 
             3:'-mceci',
           },
           3: {
-            1:'-mteggu',
+            1:'-mte4u',
             2:'-mtekek', 
             3:'-mteki',
           },
@@ -2200,12 +2536,12 @@ class YupikModify extends Component {
             3:'+negtekut',
           },
           2: {
-            1:'+negteggen',
+            1:'+negte4en',
             2:'+negcetek', 
             3:'+negneci',
           },
           3: {
-            1:'+negteggu',
+            1:'+negte4u',
             2:'+negtekek', 
             3:'+negteki',
           },
@@ -2236,41 +2572,44 @@ class YupikModify extends Component {
     //     newEnglish = postbases[p].englishModifier(newEnglish);
     //   }
     // });
-
-    let newText2 = this.state.originalText2
-    console.log(newText2)
-    if (currentPostbases.length>0) {
-      newText2 = nlp(this.state.originalText2).sentences().toFutureTense().out() //change to future tense first so that word attachment looks good
-      let adder = ''
-      currentPostbases.forEach((p) => {
-        if (!postbases[p].tense) {
-          adder = postbases[p].englishModifier(adder);
-        }
-      })
-      newText2 = newText2.replace("will"," will "+adder+" ") //replace 'will' hunt with 'will try to' hunt or 'will want to' hunt, etc.
-      
-      // if (this.state.tense == 'present'){
-         newText2 = nlp(newText2).sentences().toPresentTense().out()
-      // } else if (this.state.tense == 'past'){
-      //   newText2 = nlp(newText2).sentences().toPastTense().out()
-      // } else {
-      //   newText2 = nlp(newText2).sentences().toFutureTense().out()
-      // }
-      console.log(newText2)
-      currentPostbases.forEach((p) => {
-        if (postbases[p].tense) {
-          newText2 = postbases[p].englishModifier(newText2);
-        }
-      })
-    }
     let newText1 = ''
-    console.log(moodSpecific[0])
-    if (mood[0]=='c' || mood =='interrogative') {
-      newText1 = moodSpecific+' '
+    let newText2 = this.state.originalText2
+    if (nounEnding != '') {
+      newText2 = nounEnding + ' (' + newText2 + ') '
     } else {
-      newText1 = ''
+      console.log(newText2)
+      if (currentPostbases.length>0) {
+        newText2 = nlp(this.state.originalText2).sentences().toFutureTense().out() //change to future tense first so that word attachment looks good
+        let adder = ''
+        currentPostbases.forEach((p) => {
+          if (!postbases[p].tense) {
+            adder = postbases[p].englishModifier(adder);
+          }
+        })
+        newText2 = newText2.replace("will"," will "+adder+" ") //replace 'will' hunt with 'will try to' hunt or 'will want to' hunt, etc.
+        
+        // if (this.state.tense == 'present'){
+           newText2 = nlp(newText2).sentences().toPresentTense().out()
+        // } else if (this.state.tense == 'past'){
+        //   newText2 = nlp(newText2).sentences().toPastTense().out()
+        // } else {
+        //   newText2 = nlp(newText2).sentences().toFutureTense().out()
+        // }
+        console.log(newText2)
+        currentPostbases.forEach((p) => {
+          if (postbases[p].tense) {
+            newText2 = postbases[p].englishModifier(newText2);
+          }
+        })
+      }
+      console.log(moodSpecific[0])
+      if (mood[0]=='c' || mood =='interrogative') {
+        newText1 = moodSpecific+' '
+      } else {
+        newText1 = ''
+      }
     }
-    
+      
 
 
     // let s1 = newText2.match(/\@(\S*)\@/g)
@@ -2310,6 +2649,20 @@ class YupikModify extends Component {
       base = postbases[currentPostbases[0]].expression
     }
 
+    if (nounEnding != '') {
+      postbasesList = currentPostbases.map((p) => {
+        if (postbases[p].conditional_rule == 'attaching_to_te') {
+          if (base.slice(base.length-3,base.length-1)=='te') {
+            return postbases[p].expression_conditional
+          } else {
+            return postbases[p].expression
+          }
+        } else {
+          return postbases[p].expression
+        };
+      })
+      postbasesList = postbasesList.concat([nounEndings[nounEnding]]);  
+    } else {
     if (this.state.objectExists) {
       if (mood == 'indicative') {
         postbasesList = currentPostbases.map((p) => {
@@ -2338,19 +2691,6 @@ class YupikModify extends Component {
           }
         })
         postbasesList = postbasesList.concat([interrogative_transitive_endings[person][people][objectPerson][objectPeople]]);        
-      } else if (mood == 'optative') {
-        postbasesList = currentPostbases.map((p) => {
-          if (postbases[p].conditional_rule == 'attaching_to_te') {
-            if (base.slice(base.length-3,base.length-1)=='te') {
-              return postbases[p].expression_conditional
-            } else {
-              return postbases[p].expression
-            }
-          } else {
-            return postbases[p].expression
-          }
-        })
-        postbasesList = postbasesList.concat([optative_transitive_endings[person][people][objectPerson][objectPeople]]);         
       } else if (mood == 'subordinative') {
         postbasesList = currentPostbases.map((p) => {
           if (postbases[p].conditional_rule == 'attaching_to_te') {
@@ -2377,7 +2717,7 @@ class YupikModify extends Component {
           }
         })
         postbasesList = postbasesList.concat(['@~+(t)vaileg\\'])
-        postbasesList = postbasesList.concat([connective_transitive_endings[person][people][objectPerson][objectPeople]]);         
+        postbasesList = postbasesList.concat([connective_consonantEnd_transitive_endings[person][people][objectPerson][objectPeople]]);         
       } else if (mood == 'connective_consequential') {
         postbasesList = currentPostbases.map((p) => {
           if (postbases[p].conditional_rule == 'attaching_to_te') {
@@ -2418,12 +2758,12 @@ class YupikModify extends Component {
             return postbases[p].expression
           }
         })
-        if (person == 2 || person == 4) {
-          postbasesList = postbasesList.concat(['@-ngr\\'])
+        if (person == 2 || person == 1) {
+          postbasesList = postbasesList.concat(['@-6rar\\'])
         } else {
-          postbasesList = postbasesList.concat(['@-ngrar\\'])
+          postbasesList = postbasesList.concat(['@-6r\\'])
         }
-        postbasesList = postbasesList.concat([connective_transitive_endings[person][people][objectPerson][objectPeople]]);         
+        postbasesList = postbasesList.concat([connective_consonantEnd_transitive_endings[person][people][objectPerson][objectPeople]]);         
       } else if (mood == 'connective_conditional') {
         postbasesList = currentPostbases.map((p) => {
           if (postbases[p].conditional_rule == 'attaching_to_te') {
@@ -2466,7 +2806,66 @@ class YupikModify extends Component {
         })
         postbasesList = postbasesList.concat(['@:(6)inaner\\'])
         postbasesList = postbasesList.concat([connective_contemporative_transitive_endings[person][people][objectPerson][objectPeople]]);         
-      } 
+      } else if (moodSpecific == 'do!') {
+        postbasesList = currentPostbases.map((p) => {
+          if (postbases[p].conditional_rule == 'attaching_to_te') {
+            if (base.slice(base.length-3,base.length-1)=='te') {
+              return postbases[p].expression_conditional
+            } else {
+              return postbases[p].expression
+            }
+          } else {
+            return postbases[p].expression
+          }
+        })
+        postbasesList = postbasesList.concat([optative_transitive_endings[person][people][objectPerson][objectPeople]]);        
+      } else if (moodSpecific == 'do (in the future)!') {
+        postbasesList = currentPostbases.map((p) => {
+          if (postbases[p].conditional_rule == 'attaching_to_te') {
+            if (base.slice(base.length-3,base.length-1)=='te') {
+              return postbases[p].expression_conditional
+            } else {
+              return postbases[p].expression
+            }
+          } else {
+            return postbases[p].expression
+          }
+        })
+        postbasesList = postbasesList.concat(['@~-ki\\'])
+        postbasesList = postbasesList.concat([optative_transitive_endings[person][people][objectPerson][objectPeople]]);        
+      } else if (moodSpecific == 'You, stop!') {
+        postbasesList = currentPostbases.map((p) => {
+          if (postbases[p].conditional_rule == 'attaching_to_te') {
+            if (base.slice(base.length-3,base.length-1)=='te') {
+              return postbases[p].expression_conditional
+            } else {
+              return postbases[p].expression
+            }
+          } else {
+            return postbases[p].expression
+          }
+        })
+        postbasesList = postbasesList.concat(['@~+(t)viiqna\\'])
+        postbasesList = postbasesList.concat([optative_transitive_endings[person][people][objectPerson][objectPeople]]);             
+      } else if (moodSpecific == 'You, do not!') {
+        postbasesList = currentPostbases.map((p) => {
+          if (postbases[p].conditional_rule == 'attaching_to_te') {
+            if (base.slice(base.length-3,base.length-1)=='te') {
+              return postbases[p].expression_conditional
+            } else {
+              return postbases[p].expression
+            }
+          } else {
+            return postbases[p].expression
+          }
+        })
+        if (person == 2) {
+          postbasesList = postbasesList.concat(['@~+yaquna\\'])          
+        } else {
+          postbasesList = postbasesList.concat(['-nrilki\\'])
+        }
+        postbasesList = postbasesList.concat([optative_transitive_endings[person][people][objectPerson][objectPeople]]);             
+      }
     } else {
       if (mood == 'indicative') {
         postbasesList = currentPostbases.map((p) => {
@@ -2495,20 +2894,7 @@ class YupikModify extends Component {
         }
       })
         postbasesList = postbasesList.concat([interrogative_intransitive_endings[person][people]]);
-    } else if (mood == 'optative') {
-        postbasesList = currentPostbases.map((p) => {
-          if (postbases[p].conditional_rule == 'attaching_to_te') {
-            if (base.slice(base.length-3,base.length-1)=='te') {
-              return postbases[p].expression_conditional
-            } else {
-              return postbases[p].expression
-            }
-          } else {
-            return postbases[p].expression
-          }
-        })
-        postbasesList = postbasesList.concat([optative_intransitive_endings[person][people]]);         
-      } else if (mood == 'subordinative') {
+    } else if (mood == 'subordinative') {
         postbasesList = currentPostbases.map((p) => {
           if (postbases[p].conditional_rule == 'attaching_to_te') {
             if (base.slice(base.length-3,base.length-1)=='te') {
@@ -2534,7 +2920,7 @@ class YupikModify extends Component {
           }
         })
         postbasesList = postbasesList.concat(['@~+(t)vaileg\\'])
-        postbasesList = postbasesList.concat([connective_intransitive_endings[person][people]]);         
+        postbasesList = postbasesList.concat([connective_consonantEnd_intransitive_endings[person][people]]);         
       } else if (mood == 'connective_consequential') {
         postbasesList = currentPostbases.map((p) => {
           if (postbases[p].conditional_rule == 'attaching_to_te') {
@@ -2575,12 +2961,12 @@ class YupikModify extends Component {
             return postbases[p].expression
           }
         })
-        if (person == 1 || person == 2 || person == 4) {
-          postbasesList = postbasesList.concat(['@-ngr\\'])
+        if (person == 2 || (person == 1 && people != 1)) {
+          postbasesList = postbasesList.concat(['@-6rar\\'])
         } else {
-          postbasesList = postbasesList.concat(['@-ngrar\\'])
+          postbasesList = postbasesList.concat(['@-6r\\'])
         }
-        postbasesList = postbasesList.concat([connective_intransitive_endings[person][people]]);         
+        postbasesList = postbasesList.concat([connective_consonantEnd_intransitive_endings[person][people]]);         
       } else if (mood == 'connective_conditional') {
         postbasesList = currentPostbases.map((p) => {
           if (postbases[p].conditional_rule == 'attaching_to_te') {
@@ -2623,11 +3009,93 @@ class YupikModify extends Component {
         })
         postbasesList = postbasesList.concat(['@:(6)inaner\\'])
         postbasesList = postbasesList.concat([connective_contemporative_intransitive_endings[person][people]]);         
+      } else if (moodSpecific == 'do!') {
+        postbasesList = currentPostbases.map((p) => {
+          if (postbases[p].conditional_rule == 'attaching_to_te') {
+            if (base.slice(base.length-3,base.length-1)=='te') {
+              return postbases[p].expression_conditional
+            } else {
+              return postbases[p].expression
+            }
+          } else {
+            return postbases[p].expression
+          }
+        })
+        postbasesList = postbasesList.concat([optative_intransitive_endings[person][people]]);        
+      } else if (moodSpecific == 'do (in the future)!') {
+        postbasesList = currentPostbases.map((p) => {
+          if (postbases[p].conditional_rule == 'attaching_to_te') {
+            if (base.slice(base.length-3,base.length-1)=='te') {
+              return postbases[p].expression_conditional
+            } else {
+              return postbases[p].expression
+            }
+          } else {
+            return postbases[p].expression
+          }
+        })
+        postbasesList = postbasesList.concat(['@~-ki\\'])
+        postbasesList = postbasesList.concat([optative_intransitive_endings[person][people]]);        
+      } else if (moodSpecific == 'You, stop!') {
+        postbasesList = currentPostbases.map((p) => {
+          if (postbases[p].conditional_rule == 'attaching_to_te') {
+            if (base.slice(base.length-3,base.length-1)=='te') {
+              return postbases[p].expression_conditional
+            } else {
+              return postbases[p].expression
+            }
+          } else {
+            return postbases[p].expression
+          }
+        })
+        postbasesList = postbasesList.concat(['@~+(t)viiqna\\'])
+        postbasesList = postbasesList.concat([optative_intransitive_endings[person][people]]);             
+      } else if (moodSpecific == 'You, do not!') {
+        postbasesList = currentPostbases.map((p) => {
+          if (postbases[p].conditional_rule == 'attaching_to_te') {
+            if (base.slice(base.length-3,base.length-1)=='te') {
+              return postbases[p].expression_conditional
+            } else {
+              return postbases[p].expression
+            }
+          } else {
+            return postbases[p].expression
+          }
+        })
+        if (person == 2) {
+          postbasesList = postbasesList.concat(['@~+yaquna\\'])          
+        } else {
+          postbasesList = postbasesList.concat(['-nrilki\\'])
+        }
+        postbasesList = postbasesList.concat([optative_intransitive_endings[person][people]]);             
       }
     }
+  }
 
     //post process  '+(t)vtek', => '+(t)vetek' if preceding postbase ends in consonant
-    console.log(postbasesList)
+    
+
+    if (moodSpecific == 'do (in the future)!' && this.state.objectExists == false && person == 2 && people == 1) {
+      postbasesList[postbasesList.length-1] = '+na'
+    }
+    if (moodSpecific == 'do (in the future)!' && postbasesList[postbasesList.length-1] == '@+nga') {
+      postbasesList[postbasesList.length-1] = '@+a'
+    }
+    if (moodSpecific == 'You, do not!' && this.state.objectExists == false && person == 2 && people == 1) {
+      postbasesList[postbasesList.length-1] = '@+k'
+    } else if (moodSpecific == 'You, stop!' && this.state.objectExists == false && person == 2 && people == 1) {
+      postbasesList[postbasesList.length-1] = '@+k'
+    } else if (moodSpecific == 'You, do not!' && this.state.objectExists == true && person == 2 && people == 1 && objectPerson == 3 && objectPeople == 1 ) {
+      postbasesList[postbasesList.length-1] = '@+ku'
+    } else if (moodSpecific == 'You, stop!' && this.state.objectExists == true && person == 2 && people == 1 && objectPerson == 3 && objectPeople == 1 ) {
+      postbasesList[postbasesList.length-1] = '@+ku'
+    } else if (moodSpecific == 'You, do not!' && this.state.objectExists == true && person == 2 && people == 1 && objectPerson == 1 && objectPeople == 1 ) {
+      postbasesList[postbasesList.length-1] = '@+:(6)a'
+      // console.log(postbasesList)
+      // const index = postbasesList.indexOf('@~+yaquna')
+      // postbasesList = postbasesList.splice(index,1)
+      // console.log(postbasesList)
+    } 
     if (postbasesList[postbasesList.length-1] == '+(t)vtek') {
       let k = postbasesList[postbasesList.length-2]
       k = k[k.length-2]
@@ -2667,11 +3135,12 @@ class YupikModify extends Component {
     } else if (moodSpecific=='when (in the future)') {
       newText2 = nlp(newText2).sentences().toFutureTense().out()    
     } 
-
+    this.setState({postbasesList: postbasesList})
     let postbasesString = "";
     postbasesList.forEach((e) => {
       postbasesString = postbasesString + "&postbase=" + encodeURIComponent(e);
     });
+    console.log(postbasesList)
     console.log(postbasesString)
 
     axios
@@ -2740,27 +3209,52 @@ class YupikModify extends Component {
           }
         }
         console.log("YupikModify state: ", this.state);
-        console.log(nlp('repeatedly hunts').sentences().toFutureTense().out())
+        console.log(nlp('hunted').sentences().toNegative().out('text'))
         const{value1}=this.state
         const{value2}=this.state
         const{value3}=this.state
         const{id1}=this.state
-        let completeSentence = 'may also mean: "' + nlp(this.state.text1+' '+this.state.value1_text+' '+this.state.text2+' '+this.state.value2_text+' '+this.state.value3_text+' '+this.state.text3).sentences().toPastTense().out() + '"'
+        let postbasesDisplay = this.state.currentWord+' '+this.state.postbasesList.join(' ')
+        let completeSentence = 'may also mean: "' + nlp(this.state.text1+'<>'+this.state.text2+'<>'+this.state.text3).sentences().toPastTense().out() + '" (past tense)'
         return (
           <Container>
             <Header dividing>Modify Word</Header>
             <Button onClick={() => {this.props.history.goBack()}}>Back</Button>
+
+
+            <Grid columns={1}>
+              <Grid.Column verticalAlign='middle' align='center'>
+                {postbasesDisplay}
+              </Grid.Column>
+            </Grid>
+
+
             <Grid columns={3}>
               <Grid.Column />
               <Grid.Column verticalAlign='middle' align='center'>
                 <Header textAlign='center' as='h1'>
+                {this.state.encliticExpression == '(again)' ? 'ataam '
+                :''}
                 {this.state.modifiedWord}
+                {this.state.enclitic !== '' && this.state.encliticExpression !== '(again)' ? this.state.enclitic
+                :''}
                 </Header>
               </Grid.Column>
             </Grid>
+
+            {this.state.nounEnding !== '' ?
             <Grid columns={1}>
               <Grid.Column verticalAlign='middle' align='center'>
-                <span as='h4' align='center'>
+                <Header as='h4' align='center'>
+                  {this.state.text2}
+                </Header>
+              </Grid.Column>
+              <Grid.Row/>
+            </Grid>
+            :
+            <Grid columns={1}>
+              <Grid.Column verticalAlign='middle' align='center'>
+                <Header as='h4' align='center'>
                   {this.state.text1}
                   {' '}
                   <Dropdown inline options={dict1} onChange={this.setValue1.bind(this)} value={value1} />
@@ -2771,12 +3265,14 @@ class YupikModify extends Component {
                   <Dropdown inline options={dict2} onChange={this.setValue2.bind(this)} value={value2} /> : ''}
                   {' '}
                   {this.state.text3}
+                  {this.state.encliticExpression !== '' ? this.state.encliticExpression :''}
                   {this.state.mood == 'interrogative' ? '?':''}
-                </span>
+                </Header>
               </Grid.Column>
               {this.state.mood == 'indicative' ? <Grid.Column verticalAlign='middle' align='center'>{completeSentence}</Grid.Column> : ''}
               <Grid.Row/>
             </Grid>
+            }
 
             <div align="center">
             Mood Markers:
@@ -2801,9 +3297,8 @@ class YupikModify extends Component {
               optative (command form)
               <Button as='h4' toggle onClick={this.setMood.bind(this,'optative','do!')} active={this.state.moodSpecific=='do!'}>do!</Button>
               <Button as='h4' toggle onClick={this.setMood.bind(this,'optative','do (in the future)!')} active={this.state.moodSpecific=='do (in the future)!'}>do (in the future)!</Button>
-              <Button as='h4' toggle onClick={this.setMood.bind(this,'optative','do not!')} active={this.state.moodSpecific=='do not!'}>do not!</Button>
-              <Button as='h4' toggle onClick={this.setMood.bind(this,'optative','stop!')} active={this.state.moodSpecific=='stop!'}>stop!</Button>
-              <Button as='h4' toggle onClick={this.setMood.bind(this,'optative','do not (in the future)!')} active={this.state.moodSpecific=='do not (in the future)!'}>do not (in the future)!</Button>
+              <Button as='h4' toggle onClick={this.setMood.bind(this,'optative','You, do not!')} active={this.state.moodSpecific=='You, do not!'}>You, do not!</Button>
+              <Button as='h4' toggle onClick={this.setMood.bind(this,'optative','You, stop!')} active={this.state.moodSpecific=='You, stop!'}>You, stop!</Button>
             </Segment>
             </Button.Group>
 
@@ -2818,6 +3313,17 @@ class YupikModify extends Component {
               <Button as='h4' toggle onClick={this.setMood.bind(this,'connective_first_contemporative','when (in the past)')} active={this.state.moodSpecific=='when (in the past)'}>1st_contem (when in the past)</Button>
               <Button as='h4' toggle onClick={this.setMood.bind(this,'connective_second_contemporative','when (in the future)')} active={this.state.moodSpecific=='when (in the future)'}>2nd_contem (when in the future)</Button>
               <Button as='h4' toggle onClick={this.setMood.bind(this,'subordinative','by or being')} active={this.state.moodSpecific=='by or being'}>subordinative (by or being)</Button>
+              </Segment>
+            </Button.Group>
+            <Button.Group inverted color='green' vertical>
+              <Segment>
+                Noun Endings
+                <Button as='h4' toggle onClick={this.setNounEnding.bind(this,'the one who is')} active={this.state.nounEnding=='the one who is'}>the one who is</Button>
+                <Button as='h4' toggle onClick={this.setNounEnding.bind(this,'device for')} active={this.state.nounEnding=='device for'}>device for</Button>
+                <Button as='h4' toggle onClick={this.setNounEnding.bind(this,'one that customarily/capably')} active={this.state.nounEnding=='one that customarily/capably'}>one that customarily/capably</Button>
+                <Button as='h4' toggle onClick={this.setNounEnding.bind(this,'way of/how to')} active={this.state.nounEnding=='way of/how to'}>way of/how to</Button>
+                <Button as='h4' toggle onClick={this.setNounEnding.bind(this,'one who is good at')} active={this.state.nounEnding=='one who is good at'}>one who is good at</Button>
+                <Button as='h4' toggle onClick={this.setNounEnding.bind(this,'act or state of')} active={this.state.nounEnding=='act or state of'}>act or state of</Button>
               </Segment>
             </Button.Group>
             </div>
@@ -2904,6 +3410,29 @@ class YupikModify extends Component {
                 <Button as='h4' toggle key={30} onClick={this.setPostbase.bind(this, 30)} disabled={(this.state.allowable_next_ids.indexOf(30) < 30)} active={this.state.currentPostbases.indexOf(30) >= 0}>{postbases[30].description}</Button>
               </Segment>
             </Button.Group>
+
+            {this.state.mood == 'indicative' ? 
+            <Button.Group inverted color='violet' vertical>
+              <Segment>
+                Enclitics
+                <Button as='h4' toggle onClick={this.setEnclitic.bind(this,'-qaa','(yes or no?)')} active={this.state.enclitic=='-qaa'}>Yes or no?</Button>
+                <Button as='h4' toggle onClick={this.setEnclitic.bind(this,'-wa','(indication of a complete thought)')} active={this.state.enclitic=='-wa'}>indication of a complete thought</Button>
+                <Button as='h4' toggle onClick={this.setEnclitic.bind(this,'-gguq','(one says)')} active={this.state.enclitic=='-gguq'}>one says</Button>
+                <Button as='h4' toggle onClick={this.setEnclitic.bind(this,'-llu','(and, also)')} active={this.state.enclitic=='-llu'}>and, also</Button>
+                <Button as='h4' toggle onClick={this.setEnclitic.bind(this,'ataam','(again)')} active={this.state.enclitic=='ataam'}>again</Button>
+              </Segment>
+            </Button.Group>
+            :''}
+
+            {this.state.mood == 'interrogative' ? 
+            <Button.Group inverted color='violet' vertical>
+              <Segment>
+                Enclitics
+                <Button as='h4' toggle onClick={this.setEnclitic.bind(this,'-kiq','(I wonder...)')} active={this.state.enclitic=='-kiq'}>I wonder...</Button>
+                <Button as='h4' toggle onClick={this.setEnclitic.bind(this,'-tanem','(emphasized)')} active={this.state.enclitic=='-tanem'}>Add emphasis</Button>
+              </Segment>
+            </Button.Group>
+            :''}
           </Container>
         );
       }
