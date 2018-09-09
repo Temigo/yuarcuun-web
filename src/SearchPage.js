@@ -133,7 +133,7 @@ class SearchPage extends Component {
           <Grid.Column>
             <Container textAlign='left'>
               <Divider fluid />
-              <List horizontal>
+              <List horizontal bulleted>
                 <List.Item> © Yugtun by Christopher W. Liu</List.Item>
                 <List.Item> <Link to='/about'>About</Link> </List.Item>
                 <List.Item> contact@yugtun.com</List.Item>
