@@ -2286,7 +2286,8 @@ class YupikModifyNoun extends Component {
       base = postbases[currentPostbases[0]].expression
     }
 
-    if (nounEnding != '') {
+
+    let processPostbases = (currentPostbases, base, postbases) => { 
       postbasesList = currentPostbases.map((p) => {
         if (postbases[p].conditional_rule == 'attaching_to_te') {
           if (base.slice(base.length-3,base.length-1)=='te') {
@@ -2298,413 +2299,138 @@ class YupikModifyNoun extends Component {
           return postbases[p].expression
         };
       })
-      postbasesList = postbasesList.concat([nounEndings[nounEnding]]);
+      return postbasesList
+     };
+     
+
+
+    if (nounEnding != '') {
+      postbasesList = processPostbases(currentPostbases, base, postbases)
+      postbasesList = postbasesList.concat([nounEndings[nounEnding]]);  
     } else {
     if (this.state.objectExists) {
       if (mood == 'indicative') {
-        postbasesList = currentPostbases.map((p) => {
-          // let k = this.expression_conditional_func.bind(this, p, bases) GET SOME HELP ON THIS
-          if (postbases[p].conditional_rule == 'attaching_to_te') {
-            if (base.slice(base.length-3,base.length-1)=='te') {
-              return postbases[p].expression_conditional
-            } else {
-              return postbases[p].expression
-            }
-          } else {
-            return postbases[p].expression
-          };
-        })
-        postbasesList = postbasesList.concat([indicative_transitive_endings[person][people][objectPerson][objectPeople]]);
+        postbasesList = processPostbases(currentPostbases, base, postbases)
+        postbasesList = postbasesList.concat([indicative_transitive_endings[person][people][objectPerson][objectPeople]]);      
       } else if (mood == 'interrogative') {
-        postbasesList = currentPostbases.map((p) => {
-          if (postbases[p].conditional_rule == 'attaching_to_te') {
-            if (base.slice(base.length-3,base.length-1)=='te') {
-              return postbases[p].expression_conditional
-            } else {
-              return postbases[p].expression
-            }
-          } else {
-            return postbases[p].expression
-          }
-        })
-        postbasesList = postbasesList.concat([interrogative_transitive_endings[person][people][objectPerson][objectPeople]]);
+        postbasesList = processPostbases(currentPostbases, base, postbases)
+        postbasesList = postbasesList.concat([interrogative_transitive_endings[person][people][objectPerson][objectPeople]]);        
       } else if (mood == 'subordinative') {
-        postbasesList = currentPostbases.map((p) => {
-          if (postbases[p].conditional_rule == 'attaching_to_te') {
-            if (base.slice(base.length-3,base.length-1)=='te') {
-              return postbases[p].expression_conditional
-            } else {
-              return postbases[p].expression
-            }
-          } else {
-            return postbases[p].expression
-          }
-        })
-        postbasesList = postbasesList.concat([subordinative_transitive_endings[person][people][objectPerson][objectPeople]]);
+        postbasesList = processPostbases(currentPostbases, base, postbases)
+        postbasesList = postbasesList.concat([subordinative_transitive_endings[person][people][objectPerson][objectPeople]]);         
       } else if (mood == 'connective_precessive') {
-        postbasesList = currentPostbases.map((p) => {
-          if (postbases[p].conditional_rule == 'attaching_to_te') {
-            if (base.slice(base.length-3,base.length-1)=='te') {
-              return postbases[p].expression_conditional
-            } else {
-              return postbases[p].expression
-            }
-          } else {
-            return postbases[p].expression
-          }
-        })
+        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@~+(t)vaileg\\'])
-        postbasesList = postbasesList.concat([connective_consonantEnd_transitive_endings[person][people][objectPerson][objectPeople]]);
+        postbasesList = postbasesList.concat([connective_consonantEnd_transitive_endings[person][people][objectPerson][objectPeople]]);         
       } else if (mood == 'connective_consequential') {
-        postbasesList = currentPostbases.map((p) => {
-          if (postbases[p].conditional_rule == 'attaching_to_te') {
-            if (base.slice(base.length-3,base.length-1)=='te') {
-              return postbases[p].expression_conditional
-            } else {
-              return postbases[p].expression
-            }
-          } else {
-            return postbases[p].expression
-          }
-        })
+        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@~:(6)a\\'])
-        postbasesList = postbasesList.concat([connective_transitive_endings[person][people][objectPerson][objectPeople]]);
+        postbasesList = postbasesList.concat([connective_transitive_endings[person][people][objectPerson][objectPeople]]);         
       } else if (mood == 'connective_contingent') {
-        postbasesList = currentPostbases.map((p) => {
-          if (postbases[p].conditional_rule == 'attaching_to_te') {
-            if (base.slice(base.length-3,base.length-1)=='te') {
-              return postbases[p].expression_conditional
-            } else {
-              return postbases[p].expression
-            }
-          } else {
-            return postbases[p].expression
-          }
-        })
+        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['+\'(g)aqa\\'])
-        postbasesList = postbasesList.concat([connective_transitive_endings[person][people][objectPerson][objectPeople]]);
+        postbasesList = postbasesList.concat([connective_transitive_endings[person][people][objectPerson][objectPeople]]);         
       } else if (mood == 'connective_concessive') {
-        postbasesList = currentPostbases.map((p) => {
-          if (postbases[p].conditional_rule == 'attaching_to_te') {
-            if (base.slice(base.length-3,base.length-1)=='te') {
-              return postbases[p].expression_conditional
-            } else {
-              return postbases[p].expression
-            }
-          } else {
-            return postbases[p].expression
-          }
-        })
+        postbasesList = processPostbases(currentPostbases, base, postbases)
         if (person == 2 || person == 1) {
           postbasesList = postbasesList.concat(['@-6rar\\'])
         } else {
           postbasesList = postbasesList.concat(['@-6r\\'])
         }
-        postbasesList = postbasesList.concat([connective_consonantEnd_transitive_endings[person][people][objectPerson][objectPeople]]);
+        postbasesList = postbasesList.concat([connective_consonantEnd_transitive_endings[person][people][objectPerson][objectPeople]]);         
       } else if (mood == 'connective_conditional') {
-        postbasesList = currentPostbases.map((p) => {
-          if (postbases[p].conditional_rule == 'attaching_to_te') {
-            if (base.slice(base.length-3,base.length-1)=='te') {
-              return postbases[p].expression_conditional
-            } else {
-              return postbases[p].expression
-            }
-          } else {
-            return postbases[p].expression
-          }
-        })
+        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@~-ku-\\'])
-        postbasesList = postbasesList.concat([connective_conditional_transitive_endings[person][people][objectPerson][objectPeople]]);
+        postbasesList = postbasesList.concat([connective_conditional_transitive_endings[person][people][objectPerson][objectPeople]]);         
       } else if (mood == 'connective_first_contemporative') {
-        postbasesList = currentPostbases.map((p) => {
-          if (postbases[p].conditional_rule == 'attaching_to_te') {
-            if (base.slice(base.length-3,base.length-1)=='te') {
-              return postbases[p].expression_conditional
-            } else {
-              return postbases[p].expression
-            }
-          } else {
-            return postbases[p].expression
-          }
-        })
+        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['-ller\\'])
-        postbasesList = postbasesList.concat([connective_contemporative_transitive_endings[person][people][objectPerson][objectPeople]]);
+        postbasesList = postbasesList.concat([connective_contemporative_transitive_endings[person][people][objectPerson][objectPeople]]);         
       } else if (mood == 'connective_second_contemporative') {
-        postbasesList = currentPostbases.map((p) => {
-          if (postbases[p].conditional_rule == 'attaching_to_te') {
-            if (base.slice(base.length-3,base.length-1)=='te') {
-              return postbases[p].expression_conditional
-            } else {
-              return postbases[p].expression
-            }
-          } else {
-            return postbases[p].expression
-          }
-        })
+        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@:(6)inaner\\'])
-        postbasesList = postbasesList.concat([connective_contemporative_transitive_endings[person][people][objectPerson][objectPeople]]);
+        postbasesList = postbasesList.concat([connective_contemporative_transitive_endings[person][people][objectPerson][objectPeople]]);         
       } else if (moodSpecific == 'do!') {
-        postbasesList = currentPostbases.map((p) => {
-          if (postbases[p].conditional_rule == 'attaching_to_te') {
-            if (base.slice(base.length-3,base.length-1)=='te') {
-              return postbases[p].expression_conditional
-            } else {
-              return postbases[p].expression
-            }
-          } else {
-            return postbases[p].expression
-          }
-        })
-        postbasesList = postbasesList.concat([optative_transitive_endings[person][people][objectPerson][objectPeople]]);
+        postbasesList = processPostbases(currentPostbases, base, postbases)
+        postbasesList = postbasesList.concat([optative_transitive_endings[person][people][objectPerson][objectPeople]]);        
       } else if (moodSpecific == 'do (in the future)!') {
-        postbasesList = currentPostbases.map((p) => {
-          if (postbases[p].conditional_rule == 'attaching_to_te') {
-            if (base.slice(base.length-3,base.length-1)=='te') {
-              return postbases[p].expression_conditional
-            } else {
-              return postbases[p].expression
-            }
-          } else {
-            return postbases[p].expression
-          }
-        })
+        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@~-ki\\'])
-        postbasesList = postbasesList.concat([optative_transitive_endings[person][people][objectPerson][objectPeople]]);
+        postbasesList = postbasesList.concat([optative_transitive_endings[person][people][objectPerson][objectPeople]]);        
       } else if (moodSpecific == 'You, stop!') {
-        postbasesList = currentPostbases.map((p) => {
-          if (postbases[p].conditional_rule == 'attaching_to_te') {
-            if (base.slice(base.length-3,base.length-1)=='te') {
-              return postbases[p].expression_conditional
-            } else {
-              return postbases[p].expression
-            }
-          } else {
-            return postbases[p].expression
-          }
-        })
+        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@~+(t)viiqna\\'])
-        postbasesList = postbasesList.concat([optative_transitive_endings[person][people][objectPerson][objectPeople]]);
+        postbasesList = postbasesList.concat([optative_transitive_endings[person][people][objectPerson][objectPeople]]);             
       } else if (moodSpecific == 'You, do not!') {
-        postbasesList = currentPostbases.map((p) => {
-          if (postbases[p].conditional_rule == 'attaching_to_te') {
-            if (base.slice(base.length-3,base.length-1)=='te') {
-              return postbases[p].expression_conditional
-            } else {
-              return postbases[p].expression
-            }
-          } else {
-            return postbases[p].expression
-          }
-        })
+        postbasesList = processPostbases(currentPostbases, base, postbases)
         if (person == 2) {
-          postbasesList = postbasesList.concat(['@~+yaquna\\'])
+          postbasesList = postbasesList.concat(['@~+yaquna\\'])          
         } else {
           postbasesList = postbasesList.concat(['-nrilki\\'])
         }
-        postbasesList = postbasesList.concat([optative_transitive_endings[person][people][objectPerson][objectPeople]]);
+        postbasesList = postbasesList.concat([optative_transitive_endings[person][people][objectPerson][objectPeople]]);             
       }
     } else {
       if (mood == 'indicative') {
-        postbasesList = currentPostbases.map((p) => {
-          if (postbases[p].conditional_rule == 'attaching_to_te') {
-            if (base.slice(base.length-3,base.length-1)=='te') {
-              return postbases[p].expression_conditional
-            } else {
-              return postbases[p].expression
-            }
-          } else {
-            return postbases[p].expression
-          }
-        ;
-      })
+        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat([indicative_intransitive_endings[person][people]]);
     } else if (mood == 'interrogative') {
-        postbasesList = currentPostbases.map((p) => {
-        if (postbases[p].conditional_rule == 'attaching_to_te') {
-          if (base.slice(base.length-3,base.length-1)=='te') {
-            return postbases[p].expression_conditional
-          } else {
-            return postbases[p].expression
-          }
-        } else {
-          return postbases[p].expression
-        }
-      })
+        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat([interrogative_intransitive_endings[person][people]]);
     } else if (mood == 'subordinative') {
-        postbasesList = currentPostbases.map((p) => {
-          if (postbases[p].conditional_rule == 'attaching_to_te') {
-            if (base.slice(base.length-3,base.length-1)=='te') {
-              return postbases[p].expression_conditional
-            } else {
-              return postbases[p].expression
-            }
-          } else {
-            return postbases[p].expression
-          }
-        })
-        postbasesList = postbasesList.concat([subordinative_intransitive_endings[person][people]]);
+        postbasesList = processPostbases(currentPostbases, base, postbases)
+        postbasesList = postbasesList.concat([subordinative_intransitive_endings[person][people]]);         
       } else if (mood == 'connective_precessive') {
-        postbasesList = currentPostbases.map((p) => {
-          if (postbases[p].conditional_rule == 'attaching_to_te') {
-            if (base.slice(base.length-3,base.length-1)=='te') {
-              return postbases[p].expression_conditional
-            } else {
-              return postbases[p].expression
-            }
-          } else {
-            return postbases[p].expression
-          }
-        })
+        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@~+(t)vaileg\\'])
-        postbasesList = postbasesList.concat([connective_consonantEnd_intransitive_endings[person][people]]);
+        postbasesList = postbasesList.concat([connective_consonantEnd_intransitive_endings[person][people]]);         
       } else if (mood == 'connective_consequential') {
-        postbasesList = currentPostbases.map((p) => {
-          if (postbases[p].conditional_rule == 'attaching_to_te') {
-            if (base.slice(base.length-3,base.length-1)=='te') {
-              return postbases[p].expression_conditional
-            } else {
-              return postbases[p].expression
-            }
-          } else {
-            return postbases[p].expression
-          }
-        })
+        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@~:(6)a\\'])
-        postbasesList = postbasesList.concat([connective_intransitive_endings[person][people]]);
+        postbasesList = postbasesList.concat([connective_intransitive_endings[person][people]]);         
       } else if (mood == 'connective_contingent') {
-        postbasesList = currentPostbases.map((p) => {
-          if (postbases[p].conditional_rule == 'attaching_to_te') {
-            if (base.slice(base.length-3,base.length-1)=='te') {
-              return postbases[p].expression_conditional
-            } else {
-              return postbases[p].expression
-            }
-          } else {
-            return postbases[p].expression
-          }
-        })
+        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['+\'(g)aqa\\'])
-        postbasesList = postbasesList.concat([connective_intransitive_endings[person][people]]);
+        postbasesList = postbasesList.concat([connective_intransitive_endings[person][people]]);         
       } else if (mood == 'connective_concessive') {
-        postbasesList = currentPostbases.map((p) => {
-          if (postbases[p].conditional_rule == 'attaching_to_te') {
-            if (base.slice(base.length-3,base.length-1)=='te') {
-              return postbases[p].expression_conditional
-            } else {
-              return postbases[p].expression
-            }
-          } else {
-            return postbases[p].expression
-          }
-        })
+        postbasesList = processPostbases(currentPostbases, base, postbases)
         if (person == 2 || (person == 1 && people != 1)) {
           postbasesList = postbasesList.concat(['@-6rar\\'])
         } else {
           postbasesList = postbasesList.concat(['@-6r\\'])
         }
-        postbasesList = postbasesList.concat([connective_consonantEnd_intransitive_endings[person][people]]);
+        postbasesList = postbasesList.concat([connective_consonantEnd_intransitive_endings[person][people]]);         
       } else if (mood == 'connective_conditional') {
-        postbasesList = currentPostbases.map((p) => {
-          if (postbases[p].conditional_rule == 'attaching_to_te') {
-            if (base.slice(base.length-3,base.length-1)=='te') {
-              return postbases[p].expression_conditional
-            } else {
-              return postbases[p].expression
-            }
-          } else {
-            return postbases[p].expression
-          }
-        })
+        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@~-ku\\'])
-        postbasesList = postbasesList.concat([connective_conditional_intransitive_endings[person][people]]);
+        postbasesList = postbasesList.concat([connective_conditional_intransitive_endings[person][people]]);         
       } else if (mood == 'connective_first_contemporative') {
-        postbasesList = currentPostbases.map((p) => {
-          if (postbases[p].conditional_rule == 'attaching_to_te') {
-            if (base.slice(base.length-3,base.length-1)=='te') {
-              return postbases[p].expression_conditional
-            } else {
-              return postbases[p].expression
-            }
-          } else {
-            return postbases[p].expression
-          }
-        })
+        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['-ller\\'])
-        postbasesList = postbasesList.concat([connective_contemporative_intransitive_endings[person][people]]);
+        postbasesList = postbasesList.concat([connective_contemporative_intransitive_endings[person][people]]);         
       } else if (mood == 'connective_second_contemporative') {
-        postbasesList = currentPostbases.map((p) => {
-          if (postbases[p].conditional_rule == 'attaching_to_te') {
-            if (base.slice(base.length-3,base.length-1)=='te') {
-              return postbases[p].expression_conditional
-            } else {
-              return postbases[p].expression
-            }
-          } else {
-            return postbases[p].expression
-          }
-        })
+        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@:(6)inaner\\'])
-        postbasesList = postbasesList.concat([connective_contemporative_intransitive_endings[person][people]]);
+        postbasesList = postbasesList.concat([connective_contemporative_intransitive_endings[person][people]]);         
       } else if (moodSpecific == 'do!') {
-        postbasesList = currentPostbases.map((p) => {
-          if (postbases[p].conditional_rule == 'attaching_to_te') {
-            if (base.slice(base.length-3,base.length-1)=='te') {
-              return postbases[p].expression_conditional
-            } else {
-              return postbases[p].expression
-            }
-          } else {
-            return postbases[p].expression
-          }
-        })
-        postbasesList = postbasesList.concat([optative_intransitive_endings[person][people]]);
+        postbasesList = processPostbases(currentPostbases, base, postbases)
+        postbasesList = postbasesList.concat([optative_intransitive_endings[person][people]]);        
       } else if (moodSpecific == 'do (in the future)!') {
-        postbasesList = currentPostbases.map((p) => {
-          if (postbases[p].conditional_rule == 'attaching_to_te') {
-            if (base.slice(base.length-3,base.length-1)=='te') {
-              return postbases[p].expression_conditional
-            } else {
-              return postbases[p].expression
-            }
-          } else {
-            return postbases[p].expression
-          }
-        })
+        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@~-ki\\'])
-        postbasesList = postbasesList.concat([optative_intransitive_endings[person][people]]);
+        postbasesList = postbasesList.concat([optative_intransitive_endings[person][people]]);        
       } else if (moodSpecific == 'You, stop!') {
-        postbasesList = currentPostbases.map((p) => {
-          if (postbases[p].conditional_rule == 'attaching_to_te') {
-            if (base.slice(base.length-3,base.length-1)=='te') {
-              return postbases[p].expression_conditional
-            } else {
-              return postbases[p].expression
-            }
-          } else {
-            return postbases[p].expression
-          }
-        })
+        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@~+(t)viiqna\\'])
-        postbasesList = postbasesList.concat([optative_intransitive_endings[person][people]]);
+        postbasesList = postbasesList.concat([optative_intransitive_endings[person][people]]);             
       } else if (moodSpecific == 'You, do not!') {
-        postbasesList = currentPostbases.map((p) => {
-          if (postbases[p].conditional_rule == 'attaching_to_te') {
-            if (base.slice(base.length-3,base.length-1)=='te') {
-              return postbases[p].expression_conditional
-            } else {
-              return postbases[p].expression
-            }
-          } else {
-            return postbases[p].expression
-          }
-        })
+        postbasesList = processPostbases(currentPostbases, base, postbases)
         if (person == 2) {
-          postbasesList = postbasesList.concat(['@~+yaquna\\'])
+          postbasesList = postbasesList.concat(['@~+yaquna\\'])          
         } else {
           postbasesList = postbasesList.concat(['-nrilki\\'])
         }
-        postbasesList = postbasesList.concat([optative_intransitive_endings[person][people]]);
+        postbasesList = postbasesList.concat([optative_intransitive_endings[person][people]]);             
       }
     }
   }
