@@ -91,10 +91,12 @@ class SearchPage extends Component {
 
   render() {
     console.log("SearchPage state: ", this.state);
-    let displayList = this.state.search.length >= 2;
+    let displayList = this.state.search.length >= 2 && this.state.wordsList.length > 0;
     let displayWord = this.state.currentWord.yupik !== undefined;
     return (
+      <div>
       <Grid textAlign='center' style={{ height: '100%' }} verticalAlign={(displayList || !this.state.startingSearch) ? 'top' : 'middle'}>
+      <Grid.Row style={displayList ? {height: 'auto'} : {height: '90%'}}>
       <Grid.Column style={{ maxWidth: 800, padding: 10 }} textAlign='left'>
         <Header as='h1' dividing>
           Yuarcuun
@@ -126,7 +128,22 @@ class SearchPage extends Component {
           </List>
         </Container>
         </Grid.Column>
+        </Grid.Row>
+        <Grid.Row verticalAlign='bottom' style={{height: '10%'}}>
+          <Grid.Column>
+            <Container textAlign='left'>
+              <Divider fluid />
+              <List horizontal>
+                <List.Item> © Yugtun by Christopher W. Liu</List.Item>
+                <List.Item> About </List.Item>
+                <List.Item> contact@yugtun.com</List.Item>
+              </List>
+            </Container>
+          </Grid.Column>
+        </Grid.Row>
       </Grid>
+
+      </div>
     );
   }
 }
