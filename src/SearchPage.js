@@ -135,7 +135,7 @@ class SearchPage extends Component {
               <Divider fluid />
               <List horizontal>
                 <List.Item> © Yugtun by Christopher W. Liu</List.Item>
-                <List.Item> About </List.Item>
+                <List.Item> <Link to='/about'>About</Link> </List.Item>
                 <List.Item> contact@yugtun.com</List.Item>
               </List>
             </Container>
