@@ -10,11 +10,13 @@
     "axios": "^0.18.0",
     "compromise": "^11.9.1",
     "elasticlunr": "^0.9.5",
+    "google-palette": "^1.1.0",
     "react": "^16.3.1",
     "react-dom": "^16.3.1",
     "react-expand-text": "^1.0.0",
     "react-router-dom": "^4.3.1",
-    "semantic-ui-react": "^0.79.1"
+    "semantic-ui-react": "^0.79.1",
+    "shuffle-array": "^1.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
