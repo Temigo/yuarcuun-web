@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { Container, Header, Dropdown, Grid, Icon, Button } from 'semantic-ui-react';
+import { Container } from 'semantic-ui-react';
 import './semantic/dist/semantic.min.css';
 import axios from 'axios';
-import nlp from 'compromise';
 import { API_URL } from './App.js';
 import YupikEntry from './YupikEntry.js';
-import { Link } from 'react-router-dom';
 import {withRouter} from 'react-router';
+import StickyMenu from './StickyMenu.js';
 
 class YupikDetails extends Component {
   constructor(props) {
@@ -18,7 +17,7 @@ class YupikDetails extends Component {
       currentWord: "",//props.word.yupik,
       modifiedWord: "",//props.word.yupik,
       fullWord: "",//props.word,
-      fromSearch: props.location.state !== undefined,
+      fromSearch: props.location.state !== undefined
     };
     this.getWord = this.getWord.bind(this);
 
@@ -54,25 +53,14 @@ class YupikDetails extends Component {
       });
   }
 
-  speak(event, data) {
-      let audio = new Audio(API_URL + "/tts/" + this.state.modifiedWord.replace('-', ''));
-      audio.play();
-  }
-
   render() {
     console.log("YupikDetails state: ", this.state);
     let numEntries = Object.keys(this.state.fullWord).filter((entryNumber) => { return entryNumber !== 'english' && entryNumber !== 'yupik'; }).length;
     return (
-      <Container text location={this.props.location}>
-        <Header dividing as='h1' textAlign='center'>
-          {this.state.currentWord}
-          <Icon name='volume up' color='teal' size='mini' onClick={this.speak.bind(this)} />
-        </Header>
+      <div>
+      <StickyMenu word={this.state.currentWord} goBack={this.props.history.goBack} />
 
-        <Button primary icon circular onClick={this.props.history.goBack}>
-          <Icon name='chevron left' />
-        </Button>
-
+      <Container text style={{ marginTop: '5em'}}>
 
         {Object.keys(this.state.fullWord).map((entryNumber) => {
           if (entryNumber == 'english' || entryNumber == 'yupik') {
@@ -91,7 +79,7 @@ class YupikDetails extends Component {
           }
         })}
       </Container>
-
+      </div>
     );
   }
 }

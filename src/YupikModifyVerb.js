@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Segment, Button, Header, Grid, Container, Dropdown, Divider, Label } from 'semantic-ui-react';
+import { Segment, Button, Header, Grid, Container, Dropdown, Divider} from 'semantic-ui-react';
 import './semantic/dist/semantic.min.css';
 import axios from 'axios';
 import nlp from 'compromise';
 import { API_URL } from './App.js';
-import { Link } from 'react-router-dom';
 import { options1, options2, options3, postbases } from './constants.js';
 import { nounEndings, indicative_intransitive_endings,
   indicative_transitive_endings, interrogative_intransitive_endings,
@@ -15,6 +14,7 @@ import { nounEndings, indicative_intransitive_endings,
   connective_consonantEnd_transitive_endings, connective_contemporative_intransitive_endings,
   connective_contemporative_transitive_endings, connective_conditional_intransitive_endings,
   connective_conditional_transitive_endings } from './constants_verbs.js';
+import StickyMenu from './StickyMenu.js';
 import palette from 'google-palette';
 import shuffle from 'shuffle-array';
 
@@ -722,9 +722,10 @@ class YupikModifyVerb extends Component {
         );
         let completeSentence = 'may also mean: "' + nlp(this.state.text1+'<>'+this.state.text2+'<>'+this.state.text3).sentences().toPastTense().out() + '" (past tense)'
         return (
-          <Container>
-            <Header dividing>Modify Word (Verb)</Header>
-            <Button onClick={this.props.history.goBack}>Back</Button>
+          <div>
+          <StickyMenu word={this.state.currentWord} goBack={this.props.history.goBack}/>
+
+          <Container style={{ marginTop: '6em'}}>
 
 
             <Grid columns={1}>
@@ -939,6 +940,7 @@ class YupikModifyVerb extends Component {
             </Button.Group>
             :''}
           </Container>
+          </div>
         );
       }
     };

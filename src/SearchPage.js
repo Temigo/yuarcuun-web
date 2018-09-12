@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import elasticlunr from 'elasticlunr';
-import { Container, Header, Image, Divider, Grid, Icon, Input, List, Button, Transition } from 'semantic-ui-react';
-import YupikDetails from './YupikDetails.js';
+import { Container, Header, Divider, Grid, Input, List, } from 'semantic-ui-react';
 import './App.css';
 import './semantic/dist/semantic.min.css';
 import { Link } from 'react-router-dom';

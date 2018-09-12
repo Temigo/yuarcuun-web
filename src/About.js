@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
 import { Container, Header, Button, Icon, Divider } from 'semantic-ui-react';
 import './semantic/dist/semantic.min.css';
-import { Link } from 'react-router-dom';
 
 class About extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <Container>

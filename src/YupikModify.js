@@ -4,10 +4,6 @@ import YupikModifyNoun from './YupikModifyNoun.js';
 import YupikModifyVerb from './YupikModifyVerb.js';
 
 class YupikModify extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     if (this.props.location.state.entry.descriptor[0].includes('verb')) {
       return <YupikModifyVerb {...this.props} />;

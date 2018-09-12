@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Segment, Button, Header, Grid, Container, Dropdown, Divider, Label } from 'semantic-ui-react';
+import { Segment, Button, Header, Grid, Container, Dropdown, Divider } from 'semantic-ui-react';
 import './semantic/dist/semantic.min.css';
 import axios from 'axios';
 import nlp from 'compromise';
 import { API_URL } from './App.js';
-import { Link } from 'react-router-dom';
 import { options1, options2, options3, postbases } from './constants.js';
+import StickyMenu from './StickyMenu.js';
 
 class YupikModifyNoun extends Component {
   constructor(props) {
@@ -2287,7 +2287,7 @@ class YupikModifyNoun extends Component {
     }
 
 
-    let processPostbases = (currentPostbases, base, postbases) => { 
+    let processPostbases = (currentPostbases, base, postbases) => {
       postbasesList = currentPostbases.map((p) => {
         if (postbases[p].conditional_rule == 'attaching_to_te') {
           if (base.slice(base.length-3,base.length-1)=='te') {
@@ -2301,35 +2301,35 @@ class YupikModifyNoun extends Component {
       })
       return postbasesList
      };
-     
+
 
 
     if (nounEnding != '') {
       postbasesList = processPostbases(currentPostbases, base, postbases)
-      postbasesList = postbasesList.concat([nounEndings[nounEnding]]);  
+      postbasesList = postbasesList.concat([nounEndings[nounEnding]]);
     } else {
     if (this.state.objectExists) {
       if (mood == 'indicative') {
         postbasesList = processPostbases(currentPostbases, base, postbases)
-        postbasesList = postbasesList.concat([indicative_transitive_endings[person][people][objectPerson][objectPeople]]);      
+        postbasesList = postbasesList.concat([indicative_transitive_endings[person][people][objectPerson][objectPeople]]);
       } else if (mood == 'interrogative') {
         postbasesList = processPostbases(currentPostbases, base, postbases)
-        postbasesList = postbasesList.concat([interrogative_transitive_endings[person][people][objectPerson][objectPeople]]);        
+        postbasesList = postbasesList.concat([interrogative_transitive_endings[person][people][objectPerson][objectPeople]]);
       } else if (mood == 'subordinative') {
         postbasesList = processPostbases(currentPostbases, base, postbases)
-        postbasesList = postbasesList.concat([subordinative_transitive_endings[person][people][objectPerson][objectPeople]]);         
+        postbasesList = postbasesList.concat([subordinative_transitive_endings[person][people][objectPerson][objectPeople]]);
       } else if (mood == 'connective_precessive') {
         postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@~+(t)vaileg\\'])
-        postbasesList = postbasesList.concat([connective_consonantEnd_transitive_endings[person][people][objectPerson][objectPeople]]);         
+        postbasesList = postbasesList.concat([connective_consonantEnd_transitive_endings[person][people][objectPerson][objectPeople]]);
       } else if (mood == 'connective_consequential') {
         postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@~:(6)a\\'])
-        postbasesList = postbasesList.concat([connective_transitive_endings[person][people][objectPerson][objectPeople]]);         
+        postbasesList = postbasesList.concat([connective_transitive_endings[person][people][objectPerson][objectPeople]]);
       } else if (mood == 'connective_contingent') {
         postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['+\'(g)aqa\\'])
-        postbasesList = postbasesList.concat([connective_transitive_endings[person][people][objectPerson][objectPeople]]);         
+        postbasesList = postbasesList.concat([connective_transitive_endings[person][people][objectPerson][objectPeople]]);
       } else if (mood == 'connective_concessive') {
         postbasesList = processPostbases(currentPostbases, base, postbases)
         if (person == 2 || person == 1) {
@@ -2337,38 +2337,38 @@ class YupikModifyNoun extends Component {
         } else {
           postbasesList = postbasesList.concat(['@-6r\\'])
         }
-        postbasesList = postbasesList.concat([connective_consonantEnd_transitive_endings[person][people][objectPerson][objectPeople]]);         
+        postbasesList = postbasesList.concat([connective_consonantEnd_transitive_endings[person][people][objectPerson][objectPeople]]);
       } else if (mood == 'connective_conditional') {
         postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@~-ku-\\'])
-        postbasesList = postbasesList.concat([connective_conditional_transitive_endings[person][people][objectPerson][objectPeople]]);         
+        postbasesList = postbasesList.concat([connective_conditional_transitive_endings[person][people][objectPerson][objectPeople]]);
       } else if (mood == 'connective_first_contemporative') {
         postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['-ller\\'])
-        postbasesList = postbasesList.concat([connective_contemporative_transitive_endings[person][people][objectPerson][objectPeople]]);         
+        postbasesList = postbasesList.concat([connective_contemporative_transitive_endings[person][people][objectPerson][objectPeople]]);
       } else if (mood == 'connective_second_contemporative') {
         postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@:(6)inaner\\'])
-        postbasesList = postbasesList.concat([connective_contemporative_transitive_endings[person][people][objectPerson][objectPeople]]);         
+        postbasesList = postbasesList.concat([connective_contemporative_transitive_endings[person][people][objectPerson][objectPeople]]);
       } else if (moodSpecific == 'do!') {
         postbasesList = processPostbases(currentPostbases, base, postbases)
-        postbasesList = postbasesList.concat([optative_transitive_endings[person][people][objectPerson][objectPeople]]);        
+        postbasesList = postbasesList.concat([optative_transitive_endings[person][people][objectPerson][objectPeople]]);
       } else if (moodSpecific == 'do (in the future)!') {
         postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@~-ki\\'])
-        postbasesList = postbasesList.concat([optative_transitive_endings[person][people][objectPerson][objectPeople]]);        
+        postbasesList = postbasesList.concat([optative_transitive_endings[person][people][objectPerson][objectPeople]]);
       } else if (moodSpecific == 'You, stop!') {
         postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@~+(t)viiqna\\'])
-        postbasesList = postbasesList.concat([optative_transitive_endings[person][people][objectPerson][objectPeople]]);             
+        postbasesList = postbasesList.concat([optative_transitive_endings[person][people][objectPerson][objectPeople]]);
       } else if (moodSpecific == 'You, do not!') {
         postbasesList = processPostbases(currentPostbases, base, postbases)
         if (person == 2) {
-          postbasesList = postbasesList.concat(['@~+yaquna\\'])          
+          postbasesList = postbasesList.concat(['@~+yaquna\\'])
         } else {
           postbasesList = postbasesList.concat(['-nrilki\\'])
         }
-        postbasesList = postbasesList.concat([optative_transitive_endings[person][people][objectPerson][objectPeople]]);             
+        postbasesList = postbasesList.concat([optative_transitive_endings[person][people][objectPerson][objectPeople]]);
       }
     } else {
       if (mood == 'indicative') {
@@ -2379,19 +2379,19 @@ class YupikModifyNoun extends Component {
         postbasesList = postbasesList.concat([interrogative_intransitive_endings[person][people]]);
     } else if (mood == 'subordinative') {
         postbasesList = processPostbases(currentPostbases, base, postbases)
-        postbasesList = postbasesList.concat([subordinative_intransitive_endings[person][people]]);         
+        postbasesList = postbasesList.concat([subordinative_intransitive_endings[person][people]]);
       } else if (mood == 'connective_precessive') {
         postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@~+(t)vaileg\\'])
-        postbasesList = postbasesList.concat([connective_consonantEnd_intransitive_endings[person][people]]);         
+        postbasesList = postbasesList.concat([connective_consonantEnd_intransitive_endings[person][people]]);
       } else if (mood == 'connective_consequential') {
         postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@~:(6)a\\'])
-        postbasesList = postbasesList.concat([connective_intransitive_endings[person][people]]);         
+        postbasesList = postbasesList.concat([connective_intransitive_endings[person][people]]);
       } else if (mood == 'connective_contingent') {
         postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['+\'(g)aqa\\'])
-        postbasesList = postbasesList.concat([connective_intransitive_endings[person][people]]);         
+        postbasesList = postbasesList.concat([connective_intransitive_endings[person][people]]);
       } else if (mood == 'connective_concessive') {
         postbasesList = processPostbases(currentPostbases, base, postbases)
         if (person == 2 || (person == 1 && people != 1)) {
@@ -2399,38 +2399,38 @@ class YupikModifyNoun extends Component {
         } else {
           postbasesList = postbasesList.concat(['@-6r\\'])
         }
-        postbasesList = postbasesList.concat([connective_consonantEnd_intransitive_endings[person][people]]);         
+        postbasesList = postbasesList.concat([connective_consonantEnd_intransitive_endings[person][people]]);
       } else if (mood == 'connective_conditional') {
         postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@~-ku\\'])
-        postbasesList = postbasesList.concat([connective_conditional_intransitive_endings[person][people]]);         
+        postbasesList = postbasesList.concat([connective_conditional_intransitive_endings[person][people]]);
       } else if (mood == 'connective_first_contemporative') {
         postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['-ller\\'])
-        postbasesList = postbasesList.concat([connective_contemporative_intransitive_endings[person][people]]);         
+        postbasesList = postbasesList.concat([connective_contemporative_intransitive_endings[person][people]]);
       } else if (mood == 'connective_second_contemporative') {
         postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@:(6)inaner\\'])
-        postbasesList = postbasesList.concat([connective_contemporative_intransitive_endings[person][people]]);         
+        postbasesList = postbasesList.concat([connective_contemporative_intransitive_endings[person][people]]);
       } else if (moodSpecific == 'do!') {
         postbasesList = processPostbases(currentPostbases, base, postbases)
-        postbasesList = postbasesList.concat([optative_intransitive_endings[person][people]]);        
+        postbasesList = postbasesList.concat([optative_intransitive_endings[person][people]]);
       } else if (moodSpecific == 'do (in the future)!') {
         postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@~-ki\\'])
-        postbasesList = postbasesList.concat([optative_intransitive_endings[person][people]]);        
+        postbasesList = postbasesList.concat([optative_intransitive_endings[person][people]]);
       } else if (moodSpecific == 'You, stop!') {
         postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@~+(t)viiqna\\'])
-        postbasesList = postbasesList.concat([optative_intransitive_endings[person][people]]);             
+        postbasesList = postbasesList.concat([optative_intransitive_endings[person][people]]);
       } else if (moodSpecific == 'You, do not!') {
         postbasesList = processPostbases(currentPostbases, base, postbases)
         if (person == 2) {
-          postbasesList = postbasesList.concat(['@~+yaquna\\'])          
+          postbasesList = postbasesList.concat(['@~+yaquna\\'])
         } else {
           postbasesList = postbasesList.concat(['-nrilki\\'])
         }
-        postbasesList = postbasesList.concat([optative_intransitive_endings[person][people]]);             
+        postbasesList = postbasesList.concat([optative_intransitive_endings[person][people]]);
       }
     }
   }
@@ -2580,11 +2580,10 @@ class YupikModifyNoun extends Component {
         let postbasesDisplay = this.state.currentWord+' '+this.state.postbasesList.join(' ')
         let completeSentence = 'may also mean: "' + nlp(this.state.text1+'<>'+this.state.text2+'<>'+this.state.text3).sentences().toPastTense().out() + '" (past tense)'
         return (
-          <Container>
-            <Header dividing>Modify Word (Noun)</Header>
-            <Button onClick={this.props.history.goBack}>Back</Button>
+          <div>
+          <StickyMenu word={this.state.currentWord} goBack={this.props.history.goBack}/>
 
-
+          <Container  style={{ marginTop: '6em'}}>
             <Grid columns={1}>
               <Grid.Column verticalAlign='middle' align='center'>
                 {postbasesDisplay}
@@ -2797,6 +2796,7 @@ class YupikModifyNoun extends Component {
             </Button.Group>
             :''}
           </Container>
+          </div>
         );
       }
     };
