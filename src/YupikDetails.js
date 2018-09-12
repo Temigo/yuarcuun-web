@@ -69,7 +69,7 @@ class YupikDetails extends Component {
           <Icon name='volume up' color='teal' size='mini' onClick={this.speak.bind(this)} />
         </Header>
 
-        <Button primary icon circular onClick={() => { this.props.history.push('/', { search: this.state.search, wordsList: this.state.wordsList }); }}>
+        <Button primary icon circular onClick={this.props.history.goBack}>
           <Icon name='chevron left' />
         </Button>
 
