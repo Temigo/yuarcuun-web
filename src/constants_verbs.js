@@ -1,8 +1,8 @@
 export const nounEndings = {
   'the one who is': '-lria',
   'device for': '+cuun',
-  'one that customarily/capably': '-tuli',
-  'way of/how to': '@~+yaraq',
+  'one that customarily/capably is': '-tuli',
+  'how to/way of': '@~+yaraq',
   'one who is good at': '@~-yuli',
   'act or state of': '-lleq '
 };
