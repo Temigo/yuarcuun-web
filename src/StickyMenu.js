@@ -20,10 +20,10 @@ class StickyMenu extends Component {
           <Menu.Item>
         <Header as='h1' textAlign='center'>
           {this.props.word}
-          <Icon name='volume up' color='teal' size='mini' onClick={this.speak.bind(this)} />
         </Header>
         </Menu.Item>
         <Menu.Item>
+          <Icon name='volume up' color='teal' size='big' onClick={this.speak.bind(this)} />
         </Menu.Item>
       </Menu>
     );
