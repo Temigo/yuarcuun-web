@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import './App.css';
 import './semantic/dist/semantic.min.css';
+import './style.css';
 
 import SearchPage from './SearchPage.js';
 import YupikDetails from './YupikDetails.js';

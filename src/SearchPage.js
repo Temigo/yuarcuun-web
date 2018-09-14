@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import elasticlunr from 'elasticlunr';
-import { Container, Header, Divider, Grid, Input, List, } from 'semantic-ui-react';
+import { Container, Header, Divider, Grid, Input, List, Label, Checkbox } from 'semantic-ui-react';
 import './App.css';
 import './semantic/dist/semantic.min.css';
 import { Link } from 'react-router-dom';
@@ -17,6 +17,7 @@ class SearchPage extends Component {
       wordsList: [],
       search: props.location.state == undefined ? '' : props.location.state.search,
       currentWord: {},
+      onlyCommon: false,
       startingSearch: true,
     }
     this.onChangeSearch = this.onChangeSearch.bind(this);
@@ -92,6 +93,10 @@ class SearchPage extends Component {
     console.log("SearchPage state: ", this.state);
     let displayList = this.state.search.length >= 2 && this.state.wordsList.length > 0;
     let displayWord = this.state.currentWord.yupik !== undefined;
+    let wordsList = this.state.wordsList;
+    if (this.state.onlyCommon) {
+      wordsList = wordsList.filter((word) => { return word['1'].properties.indexOf('common') > -1; });
+    }
     return (
       <div>
       <Grid textAlign='center' style={{ height: '100%' }} verticalAlign={(displayList || !this.state.startingSearch) ? 'top' : 'middle'}>
@@ -101,22 +106,38 @@ class SearchPage extends Component {
           Yuarcuun
         </Header>
         <Container>
-          <Input
-            placeholder='Search...'
-            icon='search'
-            iconPosition='left'
-            size='huge'
-            onChange={this.onChangeSearch}
-            value={this.state.search}
-            fluid transparent />
+          <Grid stackable>
+            <Grid.Row >
+              <Grid.Column style={{ flex: 1 }}>
+              <Input
+                placeholder='Search...'
+                icon='search'
+                iconPosition='left'
+                size='huge'
+                onChange={this.onChangeSearch}
+                value={this.state.search}
+                fluid transparent />
+              </Grid.Column>
+              <Grid.Column floated='right' style={{ flex: '0 0 11em' }}>
+                <Label
+                  as='a'
+                  content='Common only'
+                  color='teal'
+                  basic={!this.state.onlyCommon}
+                  onClick={() => { this.setState({ onlyCommon: !this.state.onlyCommon }); }}
+                  />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
           <List divided selection>
-            {displayList ? this.state.wordsList.map((word) => {
+            {displayList ? wordsList.map((word) => {
+              let isCommon = word['1'].properties.indexOf('common') > -1;
               return (
 
                 <List.Item key={word.yupik}>
                 <Link to={{pathname: '/' + word.yupik, state: { word: word, search: this.state.search, wordsList: this.state.wordsList }}}>
                   <List.Content>
-                    <List.Header>{word.yupik}</List.Header>
+                    <List.Header>{word.yupik} <span style={{ 'margin-left': '10px' }}>{isCommon ? <Label size='mini' color='teal'>COMMON</Label> : ''}</span></List.Header>
                     <List.Description>{word.english}</List.Description>
                   </List.Content>
                 </Link>

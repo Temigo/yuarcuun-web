@@ -20,3 +20,7 @@ div#root {
 .list a .header {
   font-weight: bold;
 }
+
+.ui .list .list > .item, .ui .list > .item, ol.ui.list li, ul.ui.list li {
+  line-height: 1.5em;
+}
