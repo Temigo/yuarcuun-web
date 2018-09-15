@@ -74,6 +74,7 @@ class YupikModifyVerb extends Component {
       currentWord: this.props.location.state.word,//props.word.yupik,
       currentEnglish: "",//currentVerb,
       modifiedEnglish: "",//props.word.english,//new Inflectors(currentVerb),
+      displayPostbases: false,
     };
     if (this.state.properties.includes('momentary')) {
       this.state.alternateTense = 'present'
@@ -1279,71 +1280,92 @@ class YupikModifyVerb extends Component {
           <div>
           <StickyMenu word={this.state.currentWord} goBack={this.props.history.goBack}/>
 
-          <Container style={{ marginTop: '6em'}}>
-
-
-            <Grid columns={1}>
-              <Grid.Column verticalAlign='middle' align='center'>
-                {postbasesDisplay}
-              </Grid.Column>
-            </Grid>
-
-            <Grid columns={3}>
-              <Grid.Column />
-              <Grid.Column verticalAlign='middle' align='center'>
-                <Header textAlign='center' as='h1'>
-                {this.state.encliticExpression == '(again)' ? 'ataam '
-                :''}
-                {wordDisplay}
-                {this.state.enclitic !== '' && this.state.encliticExpression !== '(again)' ? this.state.enclitic
-                :''}
-                </Header>
-              </Grid.Column>
-            </Grid>
-
-            {this.state.nounEnding !== '' ?
-            <Grid columns={1}>
-              <Grid.Column verticalAlign='middle' align='center'>
-                <Header as='h4' align='center'>
-                  {this.state.text2}
-                </Header>
-              </Grid.Column>
-              <Grid.Row/>
-            </Grid>
-            :
-            <Grid columns={1}>
-              <Grid.Column verticalAlign='middle' align='center'>
-                <Header as='h4' align='center'>
-                  {this.state.text1}
-                  {' '}
-                  <Dropdown inline options={dict1} onChange={this.setValue1.bind(this)} value={value1} />
-                  {' '}
-                  {this.state.text2}
-                  {' '}
-                  {this.state.postbasesEnglish.join(' ')}
-                  {' '}
-                  {this.state.englishEnding[0]}
-                  {' '}
-                  {this.state.objectExists ?
-                  <Dropdown inline options={dict2} onChange={this.setValue2.bind(this)} value={value2} /> : ''}
-                  {' '}
-                  {this.state.text3}
-                  {this.state.encliticExpression !== '' ? this.state.encliticExpression :''}
-                  {this.state.mood == 'interrogative' ? '?':''}
-                </Header>
-              </Grid.Column>
-              {this.state.alternateTense != '' && this.state.mood == 'indicative' && this.state.currentPostbases.length == 0 ?
-                <Grid.Column>
-                  <Header fontStyle='italic' as='h5' align='center'>
-                    <i> could also be in {this.state.alternateTense} tense </i>
+          <Container attached style={{ marginTop: '6em' }}>
+            <Grid>
+              <Grid.Row>
+                <Grid.Column verticalAlign='middle' align='center'>
+                  {postbasesDisplay}
+                </Grid.Column>
+              </Grid.Row>
+              <Grid.Row>
+                <Grid.Column verticalAlign='middle' align='center'>
+                  <Header textAlign='center' as='h1'>
+                  {this.state.encliticExpression == '(again)' ? 'ataam '
+                  :''}
+                  {wordDisplay}
+                  {this.state.enclitic !== '' && this.state.encliticExpression !== '(again)' ? this.state.enclitic
+                  :''}
                   </Header>
-                </Grid.Column>:
-                ''
-              }
-              <Grid.Row/>
-            </Grid>
-            }
+                </Grid.Column>
+              </Grid.Row>
 
+              {this.state.nounEnding !== '' ?
+              <Grid.Row>
+                <Grid.Column verticalAlign='middle' align='center'>
+                  <Header as='h4' align='center'>
+                    {this.state.text2}
+                  </Header>
+                </Grid.Column>
+              </Grid.Row>
+              :
+              <Grid.Row>
+                <Grid.Column verticalAlign='middle' align='center'>
+                  <Header as='h4' align='center'>
+                    {this.state.text1}
+                    {' '}
+                    <Dropdown inline options={dict1} onChange={this.setValue1.bind(this)} value={value1} />
+                    {' '}
+                    {this.state.text2}
+                    {' '}
+                    {this.state.postbasesEnglish.join(' ')}
+                    {' '}
+                    {this.state.englishEnding[0]}
+                    {' '}
+                    {this.state.objectExists ?
+                    <Dropdown inline options={dict2} onChange={this.setValue2.bind(this)} value={value2} /> : ''}
+                    {' '}
+                    {this.state.text3}
+                    {this.state.encliticExpression !== '' ? this.state.encliticExpression :''}
+                    {this.state.mood == 'interrogative' ? '?':''}
+                  </Header>
+                </Grid.Column>
+              </Grid.Row>
+              }
+              {this.state.alternateTense != '' && this.state.mood == 'indicative' && this.state.currentPostbases.length == 0 ?
+                <Grid.Row>
+                  <Grid.Column>
+                    <Header fontStyle='italic' as='h5' align='center'>
+                      <i> could also be in {this.state.alternateTense} tense </i>
+                    </Header>
+                  </Grid.Column>
+                </Grid.Row>
+                : ''
+              }
+              <Grid.Row>
+                <Grid.Column>
+                <Card.Group itemsPerRow={3} stackable>
+                  <Card>
+                    <Button toggle >Common postbase 1</Button>
+                  </Card>
+                  <Card>
+                    <Button toggle >Common postbase 2</Button>
+                  </Card>
+                  <Card>
+                    <Button toggle >Common postbase 3</Button>
+                  </Card>
+                  <Card>
+                    <Button toggle >Common postbase 4</Button>
+                  </Card>
+                </Card.Group>
+                </Grid.Column>
+              </Grid.Row>
+              <Grid.Row>
+                <Grid.Column>
+
+
+
+            {this.state.displayPostbases ?
+            <div>
             <Accordion fluid styled exclusive={false}>
               <Accordion.Title active={this.state.activeIndex === 0 || this.state.mood === 'interrogative'} index={0} onClick={this.handleClick}>
                 <Icon name='dropdown' />
@@ -1376,8 +1398,6 @@ class YupikModifyVerb extends Component {
                 })}
                 </Card.Group>
               </Accordion.Content>
-
-
 
               <Accordion.Title active={this.state.activeIndex === 2 || this.state.mood[0] == 'c' || this.state.mood[0] == 's'} index={2} onClick={this.handleClick}>
                 <Icon name='dropdown' />
@@ -1462,8 +1482,20 @@ class YupikModifyVerb extends Component {
                 </Accordion.Content>
             </Accordion>
             :''}
-
+            </div>
+            :
+            ''
+            }
+            </Grid.Column>
+            </Grid.Row>
+            </Grid>
           </Container>
+          {this.state.displayPostbases ? '' :
+          <Button primary fluid attached='bottom' icon onClick={ () => { this.setState( { displayPostbases: !this.state.displayPostbases } ); } }>
+            <Icon name='plus' />
+            More
+          </Button>
+          }
           </div>
         );
       }
