@@ -7,6 +7,554 @@ export const nounEndings = {
   'act or state of': '-lleq '
 };
 
+export const absolutive_endings = {
+  1: {
+    0: {
+      0: ''
+    },
+    1: {
+      1: '-ka',
+      2: '+(t)vuk',
+      3: '+(t)vut'
+    },
+    2: {
+      1: '%:(e)n',
+      2: '-tek',
+      3: '-ci'
+    },
+    3: {
+      1: ':(6)a',
+      2: ':(6)ak',
+      3: ':(6)at'
+    },
+    4: {
+      1: '-ni',
+      2: '-tek',
+      3: '-teng'
+    }
+  },
+  2: {
+    0: {
+      0: '%:(e)k'
+    },
+    1: {
+      1: '%:(e)nka',
+      2: '-puk',
+      3: '-put'
+    },
+    2: {
+      1: '-ten',
+      2: '-tek',
+      3: '-ci'
+    },
+    3: {
+      1: ':(6)i',
+      2: '-kek',
+      3: ':(6)it'
+    },
+    4: {
+      1: '-ni',
+      2: '-tek',
+      3: '-teng'
+    }
+  },
+  3: {
+    0: {
+      0: '%:(e)t'
+    },
+    1: {
+      1: '%:(e)gka',
+      2: '%:(e)gpuk',
+      3: '%:(e)gput'
+    },
+    2: {
+      1: '%:(e)gken',
+      2: '%:(e)gtek',
+      3: '%:(e)gci'
+    },
+    3: {
+      1: '%:(e)k',
+      2: '%:(e)gkek',
+      3: '%:(e)gket'
+    },
+    4: {
+      1: '%:(e)gni',
+      2: '%:(e)gtek',
+      3: '%:(e)gteng'
+    }
+  }
+};
+
+export const relative_endings = {
+  1: {
+    0: {
+      0: '%:(e)m'
+    },
+    1: {
+      1: '-ma',
+      2: '-megnuk',
+      3: '-mta'
+    },
+    2: {
+      1: '+(t)vet',
+      2: '+(t)vetek',
+      3: '+(t)veci'
+    },
+    3: {
+      1: ':(6)an',
+      2: ':(6)agnek',
+      3: ':(6)ata'
+    },
+    4: {
+      1: '-mi',
+      2: '-mek',
+      3: '-meng'
+    }
+  },
+  2: {
+    0: {
+      0: '%:(e)k'
+    },
+    1: {
+      1: '%:(e)gma',
+      2: '%:(e)gmegnuk',
+      3: '%:(e)gemta'
+    },
+    2: {
+      1: '%:(e)gpet',
+      2: '%:(e)gpetek',
+      3: '%:(e)gpeci'
+    },
+    3: {
+      1: '%:(e)gken',
+      2: '%:(e)gkenka',
+      3: '%:(e)gketa'
+    },
+    4: {
+      1: '%:(e)gmi',
+      2: '%:(e)gmek',
+      3: '%:(e)gmeng'
+    }
+  },
+  3: {
+    0: {
+      0: '%:(e)t'
+    },
+    1: {
+      1: '-ma',
+      2: '-megnuk',
+      3: '-mta'
+    },
+    2: {
+      1: '+(t)vet',
+      2: '+(t)vetek',
+      3: '+(t)veci'
+    },
+    3: {
+      1: ':(6)in',
+      2: '-kenka',
+      3: ':(6)ita'
+    },
+    4: {
+      1: '-mi',
+      2: '-mek',
+      3: '-meng'
+    }
+  }
+};
+
+
+
+export const localis_endings = {
+  1: {
+    0: {
+      0: '%~mi'
+    },
+    1: {
+      1: '-mni',
+      2: '-megni',
+      3: '-mte7i'
+    },
+    2: {
+      1: '+(t)veni',
+      2: '+(t)vetegni',
+      3: '+(t)ve7eni'
+    },
+    3: {
+      1: ':(6)ani',
+      2: ':(6)agni',
+      3: ':(6)atni'
+    },
+    4: {
+      1: '-mini',
+      2: '-megni',
+      3: '-meggni'
+    }
+  },
+  2: {
+    0: {
+      0: '%:(e)gni'
+    },
+    1: {
+      1: '%:(e)gemni',
+      2: '%:(e)gmegni',
+      3: '%:(e)gemte7i'
+    },
+    2: {
+      1: '%:(e)gpeni',
+      2: '%:(e)gpetegni',
+      3: '%:(e)gpe7eni'
+    },
+    3: {
+      1: '%:(e)gkeni',
+      2: '%:(e)gkegni',
+      3: '%:(e)gketni'
+    },
+    4: {
+      1: '%:(e)gmini',
+      2: '%:(e)gmegni',
+      3: '%:(e)gmeggni'
+    }
+  },
+  3: {
+    0: {
+      0: '%~ni'
+    },
+    1: {
+      1: '-mni',
+      2: '-megni',
+      3: '-mte7i'
+    },
+    2: {
+      1: '+(t)veni',
+      2: '+(t)vetegni',
+      3: '+(t)ve7eni'
+    },
+    3: {
+      1: ':(6)ini',
+      2: '-kegni',
+      3: ':(6)itni'
+    },
+    4: {
+      1: '-mini',
+      2: '-megni',
+      3: '-meggni'
+    }
+  }
+};
+
+export const ablative_endings = {
+  1: {
+    0: {
+      0: '%~mek'
+    },
+    1: {
+      1: '-mnek',
+      2: '-megnek',
+      3: '-mte7ek'
+    },
+    2: {
+      1: '+(t)venek',
+      2: '+(t)vetegnek',
+      3: '+(t)ve7enek'
+    },
+    3: {
+      1: ':(6)anek',
+      2: ':(6)agnek',
+      3: ':(6)atnek'
+    },
+    4: {
+      1: '-minek',
+      2: '-megnek',
+      3: '-meggnek'
+    }
+  },
+  2: {
+    0: {
+      0: '%:(e)gnek'
+    },
+    1: {
+      1: '%:(e)gemnek',
+      2: '%:(e)gmegnek',
+      3: '%:(e)gemte7ek'
+    },
+    2: {
+      1: '%:(e)gpenek',
+      2: '%:(e)gpetegnek',
+      3: '%:(e)gpe7enek'
+    },
+    3: {
+      1: '%:(e)gkenek',
+      2: '%:(e)gkegnek',
+      3: '%:(e)gketnek'
+    },
+    4: {
+      1: '%:(e)gminek',
+      2: '%:(e)gmegnek',
+      3: '%:(e)gmeggnek'
+    }
+  },
+  3: {
+    0: {
+      0: '%~ni'
+    },
+    1: {
+      1: '-mnek',
+      2: '-megnek',
+      3: '-mte7ek'
+    },
+    2: {
+      1: '+(t)venek',
+      2: '+(t)vetegnek',
+      3: '+(t)ve7enek'
+    },
+    3: {
+      1: ':(6)inek',
+      2: '-kegnek',
+      3: ':(6)itnek'
+    },
+    4: {
+      1: '-minek',
+      2: '-megnek',
+      3: '-meggnek'
+    }
+  }
+};
+
+export const terminalis_endings = {
+  1: {
+    0: {
+      0: '%~mun'
+    },
+    1: {
+      1: '-mnun',
+      2: '-megnun',
+      3: '-mte7un'
+    },
+    2: {
+      1: '+(t)venun',
+      2: '+(t)vetegnun',
+      3: '+(t)ve7enun'
+    },
+    3: {
+      1: ':(6)anun',
+      2: ':(6)agnun',
+      3: ':(6)atnun'
+    },
+    4: {
+      1: '-minun',
+      2: '-megnun',
+      3: '-meggnun'
+    }
+  },
+  2: {
+    0: {
+      0: '%:(e)gnun'
+    },
+    1: {
+      1: '%:(e)gemnun',
+      2: '%:(e)gmegnun',
+      3: '%:(e)gemte7un'
+    },
+    2: {
+      1: '%:(e)gpenun',
+      2: '%:(e)gpetegnun',
+      3: '%:(e)gpe7enun'
+    },
+    3: {
+      1: '%:(e)gkenun',
+      2: '%:(e)gkegnun',
+      3: '%:(e)gketnun'
+    },
+    4: {
+      1: '%:(e)gminun',
+      2: '%:(e)gmegnun',
+      3: '%:(e)gmeggnun'
+    }
+  },
+  3: {
+    0: {
+      0: '%~nun'
+    },
+    1: {
+      1: '-mnun',
+      2: '-megnun',
+      3: '-mte7un'
+    },
+    2: {
+      1: '+(t)venun',
+      2: '+(t)vetegnun',
+      3: '+(t)ve7enun'
+    },
+    3: {
+      1: ':(6)inun',
+      2: '-kegnun',
+      3: ':(6)itnun'
+    },
+    4: {
+      1: '-minun',
+      2: '-megnun',
+      3: '-meggnun'
+    }
+  }
+};
+
+export const vialis_endings = {
+  1: {
+    0: {
+      0: '%kun'
+    },
+    1: {
+      1: '-mkun',
+      2: '-megnegun',
+      3: '-mteggun'
+    },
+    2: {
+      1: '+(t)vegun', //also include -vkun
+      2: '+(t)vecetgun', //-vcetgun
+      3: '+(t)vetegnegun' //-vtegnegun
+    },
+    3: {
+      1: ':(6)akun',
+      2: ':(6)agnegun',
+      3: ':(6)atgnun'
+    },
+    4: {
+      1: '-mikun',
+      2: '-megnegun',
+      3: '-megteggun'
+    }
+  },
+  2: {
+    0: {
+      0: '%:(e)gnegun'
+    },
+    1: {
+      1: '%:(e)gkemkun',
+      2: '%:(e)gmegnegun',
+      3: '%:(e)gemteggun'
+    },
+    2: {
+      1: '%:(e)gpegun',
+      2: '%:(e)gpetegnegun',
+      3: '%:(e)gpecetnun'
+    },
+    3: {
+      1: '%:(e)gkenkun',
+      2: '%:(e)gketgun',
+      3: '%:(e)gkegnegun'
+    },
+    4: {
+      1: '%:(e)gmikun',
+      2: '%:(e)gmegnegun',
+      3: '%:(e)gmegteggun'
+    }
+  },
+  3: {
+    0: {
+      0: '%tgun'
+    },
+    1: {
+      1: '-mkun',
+      2: '-megnegun',
+      3: '-mteggun'
+    },
+    2: {
+      1: '+(t)vegun',
+      2: '+(t)vetegnegun',
+      3: '+(t)vecetgun'
+    },
+    3: {
+      1: ':(6)ikun',
+      2: '-kegnegun',
+      3: ':(6)itgun'
+    },
+    4: {
+      1: '-mikun',
+      2: '-megnegun',
+      3: '-megteggun'
+    }
+  }
+};
+
+export const equalis_endings = {
+  1: {
+    0: {
+      0: '%tun'
+    },
+    1: {
+      1: '-mtun',
+      2: '-megtun',
+      3: '-mcetun'
+    },
+    2: {
+      1: '+(t)vetun', //also include -vkun
+      2: '+(t)vetegtun', //-vcetgun
+      3: '+(t)vecetun' //-vtegnegun
+    },
+    3: {
+      1: ':(6)atun',
+      2: ':(6)agtun',
+      3: ':(6)acetun'
+    },
+    4: {
+      1: '-mitun',
+      2: '-megtun',
+      3: '-megcetun'
+    }
+  },
+  2: {
+    0: {
+      0: '%:(e)gtun'
+    },
+    1: {
+      1: '%:(e)gemtun',
+      2: '%:(e)gmegtun',
+      3: '%:(e)gemcetun'
+    },
+    2: {
+      1: '%:(e)gpetun',
+      2: '%:(e)gpetegtun',
+      3: '%:(e)gpecetun'
+    },
+    3: {
+      1: '%:(e)gketun',
+      2: '%:(e)gkegtun',
+      3: '%:(e)gkecetun'
+    },
+    4: {
+      1: '%:(e)gmitun',
+      2: '%:(e)gmegtun',
+      3: '%:(e)gmegcetun'
+    }
+  },
+  3: {
+    0: {
+      0: '%tun'
+    },
+    1: {
+      1: '-mtun',
+      2: '-megtun',
+      3: '-mcetun'
+    },
+    2: {
+      1: '+(t)vetun', //also include -vkun
+      2: '+(t)vetegtun', //-vcetgun
+      3: '+(t)vecetun' //-vtegnegun
+    },
+    3: {
+      1: ':(6)itun',
+      2: '-kegtun',
+      3: ':(6)icetun'
+    },
+    4: {
+      1: '-mitun',
+      2: '-megtun',
+      3: '-megcetun'
+    }
+  }
+};
+
 export const indicative_intransitive_endings = {
   1: { // 1st person
     1: '+\'(g/t)u:6a', // I
