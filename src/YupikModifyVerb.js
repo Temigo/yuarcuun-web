@@ -57,6 +57,8 @@ class YupikModifyVerb extends Component {
       text2: "",
       mood:"indicative",
       moodSpecific:"indicative",
+      postbasesEnglish: [],
+      englishEnding: [],
       originalText2: "",
       originalText3: "",
       text3: "",
@@ -333,30 +335,30 @@ class YupikModifyVerb extends Component {
     //   if (postbases[p].tense) {
     //     newEnglish = postbases[p].englishModifier(newEnglish);
     //   }
-    // });
+    // // });
 
 
-    console.log(nlp('is grumbling').verbs().conjugate()[0])
-    console.log(nlp('is bloodstained').verbs().conjugate()[0])
-    console.log(nlp('bought something for').verbs().conjugate()[0])
-    console.log(nlp('cried out').verbs().conjugate()[0])
-    console.log(nlp('fell hard').verbs().conjugate()[0])
-    console.log(nlp('is standing').verbs().conjugate()[0])
-    console.log(nlp('beat').verbs().conjugate()[0])
-    console.log(nlp('trying').verbs().conjugate()[0])
+    // console.log(nlp('is grumbling').verbs().conjugate()[0])
+    // console.log(nlp('is bloodstained').verbs().conjugate()[0])
+    // console.log(nlp('bought something for').verbs().conjugate()[0])
+    // console.log(nlp('cried out').verbs().conjugate()[0])
+    // console.log(nlp('fell hard').verbs().conjugate()[0])
+    // console.log(nlp('is standing').verbs().conjugate()[0])
+    // console.log(nlp('beat').verbs().conjugate()[0])
+    // console.log(nlp('trying').verbs().conjugate()[0])
 
-    let test = 'bought'
-    let originalverb = nlp(test).verbs().out().split(' ')[0]
-    let verbtenses = nlp(test).verbs().conjugate()[0]
-    let test1 = test.replace(originalverb,verbtenses.Gerund)
-    let test2 = test.replace(originalverb,verbtenses.Infinitive)
-    console.log(test1)
-    console.log(test2)
+    // // let test = 'bought'
+    // // let originalverb = nlp(test).verbs().out().split(' ')[0]
+    // // let verbtenses = nlp(test).verbs().conjugate()[0]
+    // // let test1 = test.replace(originalverb,verbtenses.Gerund)
+    // // let test2 = test.replace(originalverb,verbtenses.Infinitive)
+    // // console.log(test1)
+    // // console.log(test2)
 
 
 
-        console.log(this.state.properties.includes('adjectival'))
-        console.log(this.state.properties.includes('momentary'))
+    //     console.log(this.state.properties.includes('adjectival'))
+    //     console.log(this.state.properties.includes('momentary'))
 
     let newText1 = ''
     let newText2 = this.state.originalText2
@@ -443,303 +445,361 @@ class YupikModifyVerb extends Component {
     // console.log(newText1)
     // console.log(newText2)
     var postbasesEnglish = []
-    let rootEnglish = ''
-    let adder = ''
-    if (currentPostbases.length>0) {
-      currentPostbases.forEach((p) => {
-        adder = ''
-        if ((p == 21 || p == 22 || p == 23 || p == 24 || p == 25 || p == 26)) {
-          hasDesire = true
-          if (currentPostbases[currentPostbases.length-1] != p) {
-            adder = postbases[p].englishModifierPlural(adder)+' ';
-          } else if (mood == 'interrogative' && moodSpecific != 'who' || mood[0] == 'c') {
-            console.log('hit')
-            adder = postbases[p].englishModifierPlural(adder)+' ';
-            does = 'does'
+    let test = new_adj
+    let originalverb = nlp(test).verbs().out().split(' ')[0]
+    let verbtenses = nlp(test).verbs().conjugate()[0]
+    let gerund_new_adj = test.replace(originalverb,verbtenses.Gerund)
+    let infinitive_new_adj = test.replace(originalverb,verbtenses.Infinitive)
+    let firstpass = true
+    let englishEnding = []
+    console.log(new_adj)
+    if (moodSpecific == 'You, stop!' || nounEnding == 'device for') {
+      if (tense == 'past') {
+        englishEnding.push('(in the past)') 
+      } else if (tense == 'future') {
+        englishEnding.push('(in the future)') 
+      }
+      if (currentPostbases.length>0) {
+        firstpass = true
+        currentPostbases.forEach((p) => {
+          if (firstpass) {
+            if (p > 1 && p < 5) {
+              postbasesEnglish.push('being'+postbases[p].englishModifier(''))
+            } else {
+              postbasesEnglish.push(postbases[p].englishModifier(''))
+            }
+            firstpass = false
+          } else if (p > 1 && p < 5 || p > 15 && p < 19 ) {
+            postbasesEnglish.push('be'+postbases[p].englishModifier(''))
           } else {
-            adder = postbases[p].englishModifier(adder)+' ';
+            postbasesEnglish.push(postbases[p].englishModifier(''))
           }
-        } else {
-          adder = postbases[p].englishModifier(adder)+' ';
-        }
-        postbasesEnglish.push(adder)
-      })
-      postbasesEnglish = postbasesEnglish.reverse()
-      adder = postbasesEnglish.join(' ')
-      if (adder == ' (past) ') {
-        if (nois) {
-          newText2 = nlp(new_adj).sentences().toPastTense().out()
-          rootEnglish = nlp(new_adj).sentences().toPastTense().out()
-        } else {
-          newText2 = new_adj
-          rootEnglish = new_adj
-        }
-        
-      } else if (adder == ' (future) ') {
-        if (moodSpecific == 'optative') {
-          newText2 = '['+new_adj+' (in the future) ]'
-        }
-        else if (nois) {
-          newText2 = nlp(new_adj).sentences().toFutureTense().out()
-        } else {
-          newText2 = nlp(new_adj).sentences().toFutureTense().out().replace('will','')
-        }
-        
-      } else if ([currentPostbases[currentPostbases.length-1]].some(r=> [21, 22, 24, 25].includes(r))) { 
-        newText2 = ' '+adder +' '+ be_adj
-        conditionalbe = ''
-        rootEnglish= be_adj
-      } else if ([currentPostbases[currentPostbases.length-1]].some(r=> [26].includes(r))) { 
-        newText2 = ' '+adder +' '+ being_adj
-        conditionalbe = ''
-        does = 'does'
-        rootEnglish= being_adj
-      } else if ([currentPostbases[currentPostbases.length-1]].some(r=> [23].includes(r))) { 
-        newText2 = ' '+adder +' '+ be_adj
-        conditionalbe = ''
-        does = 'does'
-        rootEnglish= be_adj
-      } else if (currentPostbases.some(r=> [2, 3, 4, 8, 9, 10, 16, 17, 18, 16, 29].includes(r))) {
-        addis = true
-        newText2 = ' '+adder +' '+ be_adj
-        rootEnglish= be_adj
+        })
+        englishEnding.push('be '+gerund_new_adj)
       } else {
-        addis = true
-        newText2 = ' '+adder +' '+ new_adj
-        rootEnglish= new_adj
+        if (this.state.properties.includes('adjectival')) {
+          englishEnding.push('being '+new_adj)
+        } else if (nois) {
+          englishEnding.push(gerund_new_adj)
+        } else {
+          englishEnding.push(gerund_new_adj)
+        }
       }
-      if (currentPostbases[currentPostbases.length-1] == 5) {
-        tense = 'past'
-      } else if (currentPostbases[currentPostbases.length-1] == 7 || currentPostbases[currentPostbases.length-1] == 8 || currentPostbases[currentPostbases.length-1] == 9) {
-        tense = 'future'
-      }
-    } else {
-      newText2 = new_adj
-      rootEnglish= new_adj
+    if (moodSpecific == 'You, stop!') {
+      if (person == '3' || person == '1') {
+        newText1 = 'let'
+        newText2 = 'stop '
+        newText3 = '!'
+      } else {
+        newText2 = ', stop '
+        newText3 = '!'
+      }      
     }
-    // console.log(newText2)
-    // console.log(tense)
-    // console.log(nois)
-    let postbasesEnding = ''
-    let subject1 = getsubjectis(tense, people, person, does)
-    if (this.state.properties.includes('momentary')) {
-      does = 'had'
-    }
-    subjectis = getsubjectis(tense, people, person, does)
-    postbasesEnding = subjectis
-    if (nois==true) {
-      postbasesEnding = ''
-    }
+  }
 
-
-    if (mood == 'interrogative') {
-      if (moodSpecific == 'who') {
-        newText1 = 'who '+subject1
-        newText2 = 'who '+postbasesEnding+' '+newText2
-      } else if (moodSpecific == 'when did (past)') {
-        tense = 'past'
-        subjectis = getsubjectis(tense,people, person,does)
-        newText1 = 'when '+subjectis
-        newText2 = newText2
-      } else if (moodSpecific == 'when will (future)') {
-        newText1 = 'when will'
-        if (nois==true) {
-          newText2 = nlp(newText2).sentences().toFutureTense().out().replace('will','')
-        } else {
-          newText2 = 'be '+newText2
-        }        
-      } else {
-        newText1 = moodSpecific+' '+subjectis
-        newText2 = newText2           
-      }
-    } else if (mood == 'optative') {
-      if (nois==true) {
-        if ([currentPostbases[currentPostbases.length-1]].some(r=> [21, 22, 23, 24, 25, 26].includes(r))) {
-          newText2 = newText2.replace('loves','love')
-          newText2 = newText2.replace('wants','want')
-          newText2 = newText2.replace('yearns','yearn')
-          newText2 = newText2.replace('enjoys','enjoy')
-          } else {
-          if (moodSpecific == 'You, stop!') {
-            newText2 = nlp(newText2).sentences().toPresentTense().out() // CHANGE TO GERUND FORM OF VERB
-          } else {
-            newText2 = 'be '+newText2
-          }
-        }
-      } else {
-        if ([currentPostbases[currentPostbases.length-1]].some(r=> [21, 22, 23, 24, 25, 26].includes(r))) {
-          newText2 = newText2.replace('loves','love')
-          newText2 = newText2.replace('wants','want')
-          newText2 = newText2.replace('yearns','yearn')
-          newText2 = newText2.replace('enjoys','enjoy')
-          } else {
-          if (moodSpecific == 'You, stop!') {
-            newText2 = 'being '+newText2
-          } else {
-            newText2 = 'be '+newText2
-          }
-        }
-      }  
-      if (moodSpecific == 'You, do not!') {
-        if (nois==true) {
-          if (person == '3' || person == '1') {
-            newText1 = 'let'
-            newText2 = 'not ' + nlp(newText2).sentences().toFutureTense().out().replace('will','')
-            newText3 = newText3+'!'
-          } else {
-            newText2 = ', do not '+nlp(newText2).sentences().toFutureTense().out().replace('will','')
-            newText3 = newText3+'!'
-          }
-        } else {
-          if (person == '3' || person == '1') {
-            newText1 = 'let'
-            newText2 = 'not ' + newText2
-            newText3 = newText3+'!'
-          } else {
-            newText2 = ', do not '+newText2
-            newText3 = newText3+'!'
-          }
-        }
-      } else if (moodSpecific == 'You, stop!') {
-        if (person == '3' || person == '1') {
-          newText1 = 'let'
-          newText2 = 'stop ' + newText2
-          newText3 = newText3+'!'
-        } else {
-          newText2 = ', stop '+newText2
-          newText3 = newText3+'!'
-        }
-      } else if (moodSpecific == 'do!'){
-        if (nois==true) {
-          if (person == '3' || person == '1') {
-            newText1 = 'let'
-            newText2 = nlp(newText2).sentences().toFutureTense().out().replace('will','')
-            newText3 = newText3+'!'
-          } else {
-            newText2 = ', '+nlp(newText2).sentences().toFutureTense().out().replace('will','')
-            newText3 = newText3+'!' 
-          } 
-        } else {
-          if (person == '3' || person == '1') {
-            newText1 = 'let'
-            newText2 = newText2
-            newText3 = newText3+'!'
-          } else {
-            newText2 = ', '+newText2
-            newText3 = newText3+'!'
-          }   
-        }
-      } else if (moodSpecific == 'do (in the future)!'){
-        if (nois==true) {
-          if (person == '3' || person == '1') {
-            newText1 = 'let'
-            newText2 = nlp(newText2).sentences().toFutureTense().out().replace('will','')
-            newText3 = newText3+' in the future!' 
-          } else {
-            newText2 = ', '+nlp(newText2).sentences().toFutureTense().out().replace('will','')  
-            newText3 = newText3+' in the future!' 
-          }
-        } else {
-          if (person == '3' || person == '1') {
-            newText1 = 'let'
-            newText2 = newText2
-            newText3 = newText3+' in the future!' 
-          } else {
-            newText2 = ', '+newText2   
-            newText3 = newText3+' in the future!' 
-          }  
-        }  
-      }
-    } else if (mood == 'indicative') {
-      console.log(newText2)
-      console.log(subjectis)
-      console.log(tense)
-      console.log(does)
-      subjectis = getsubjectis(tense,people,person,does)
-      console.log(subjectis)
-      if (currentPostbases.length == 0) {
-        newText2 = subjectis+' '+newText2
-      } else if (addis) {
-        newText2 = subjectis+' '+newText2
-      } else if (hasDesire == true && does != 'does') {
-        newText2 = newText2
-      } else {
-        newText2 = subjectis+' '+newText2
-      }
-    } else if (nounEnding != '') {
-      if (nois==true) {
-        newText2 = nounEnding + ' (to '+nlp(newText2).sentences().toFutureTense().out().replace('will','')+') '
-      } else {
-        if (nounEnding == 'the one who is' || nounEnding == 'one that customarily/capably is') {
-          newText2 = nounEnding + ' ('+ newText2 +') '
-        } else { 
-          newText2 = nounEnding + ' (being '+ newText2 +') '
-        }
-      }
-    } else { //assuming connective
-      if (moodSpecific=='when (past)') {
-        if (nois==true) {
-          newText1 = moodSpecific
-          newText2 = newText2
-        } else {
-          tense = 'past'
-          subjectis = getsubjectis(tense,people, person, does)
-          newText1 = moodSpecific
-          newText2 = subjectis+' '+newText2  
-        }
-      } else if (moodSpecific=='when (future)') {
-        if (nois==true) {
-          newText1 = moodSpecific
-          newText2 = nlp(newText2).sentences().toPresentTense().out()
-        } else {
-          tense = 'future'
-          subjectis = getsubjectis(tense,people, person, does)
-          newText1 = moodSpecific
-          newText2 = subjectis+conditionalbe+newText2  
-        }  
-      } else {
-        newText1 = moodSpecific
-        newText2 = subjectis+' '+newText2       
-      }
-    }
-    newText2 = newText2.replace(/\s+/g,' ').trim();
-
-    subjectis = nlp(subjectis).sentences().toPresentTense().out()
-    console.log(newText2)
-    if (newText2.includes('(past)')) {
-      newText2 = newText2.split("(past)")
-      if (newText2[0].trim()=='is' || newText2[0].trim()=='are' || newText2[0].trim()=='am' || newText2[0].trim()=='') {
-        newText2 = nlp(newText2[0]+newText2[1]).sentences().toPastTense().out()
-      } else {
-        newText2 = newText2[0]+'['+newText2[1]+' (in the past) ]'
-      }
-    }
-    if (newText2.includes('(future)')) {
-      newText2 = newText2.split("(future)")
-      if (nois==true) {
-        if (newText2[0].trim()=='is' || newText2[0].trim()=='are' || newText2[0].trim()=='am') {
-          // newText2 = nlp(newText2[1]).sentences().toFutureTense().out()
-          newText2 = newText2[0]+'['+newText2[1]+' (in the future) ]'
-        } else {
-          newText2 = newText2[0]+'['+newText2[1]+' (in the future) ]'
-        }
-      } else {
-        if (newText2[0].trim()=='is' || newText2[0].trim()=='are' || newText2[0].trim()=='am') {
-          //newText2 = nlp(newText2[0]+newText2[1]).sentences().toFutureTense().out()
-          newText2 = newText2[0]+'['+newText2[1]+' (in the future) ]'
-        } else {
-          newText2 = newText2[0]+'['+newText2[1]+' (in the future) ]'
-        }
-      }
-    }
-    if (newText2.includes('to trying')) {
-      newText2 = newText2.replace("to trying",'to try')
-    }
-    console.log(newText2)
 
     console.log(newText1)
-    postbasesEnglish.push(rootEnglish)
+    console.log(newText2)
     console.log(postbasesEnglish)
+    console.log(englishEnding)
+    console.log(newText3)
+    // let rootEnglish = ''
+    // let adder = ''
+    // if (currentPostbases.length>0) {
+    //   currentPostbases.forEach((p) => {
+    //     adder = ''
+    //     if ((p == 21 || p == 22 || p == 23 || p == 24 || p == 25 || p == 26)) {
+    //       hasDesire = true
+    //       if (currentPostbases[currentPostbases.length-1] != p) {
+    //         adder = postbases[p].englishModifierPlural(adder)+' ';
+    //       } else if (mood == 'interrogative' && moodSpecific != 'who' || mood[0] == 'c') {
+    //         console.log('hit')
+    //         adder = postbases[p].englishModifierPlural(adder)+' ';
+    //         does = 'does'
+    //       } else {
+    //         adder = postbases[p].englishModifier(adder)+' ';
+    //       }
+    //     } else {
+    //       adder = postbases[p].englishModifier(adder)+' ';
+    //     }
+    //     postbasesEnglish.push(adder)
+    //   })
+    //   postbasesEnglish = postbasesEnglish.reverse()
+    //   adder = postbasesEnglish.join(' ')
+    //   if (adder == ' (past) ') {
+    //     if (nois) {
+    //       newText2 = nlp(new_adj).sentences().toPastTense().out()
+    //       rootEnglish = nlp(new_adj).sentences().toPastTense().out()
+    //     } else {
+    //       newText2 = new_adj
+    //       rootEnglish = new_adj
+    //     }
+        
+    //   } else if (adder == ' (future) ') {
+    //     if (moodSpecific == 'optative') {
+    //       newText2 = '['+new_adj+' (in the future) ]'
+    //     }
+    //     else if (nois) {
+    //       newText2 = nlp(new_adj).sentences().toFutureTense().out()
+    //     } else {
+    //       newText2 = nlp(new_adj).sentences().toFutureTense().out().replace('will','')
+    //     }
+        
+    //   } else if ([currentPostbases[currentPostbases.length-1]].some(r=> [21, 22, 24, 25].includes(r))) { 
+    //     newText2 = ' '+adder +' '+ be_adj
+    //     conditionalbe = ''
+    //     rootEnglish= be_adj
+    //   } else if ([currentPostbases[currentPostbases.length-1]].some(r=> [26].includes(r))) { 
+    //     newText2 = ' '+adder +' '+ being_adj
+    //     conditionalbe = ''
+    //     does = 'does'
+    //     rootEnglish= being_adj
+    //   } else if ([currentPostbases[currentPostbases.length-1]].some(r=> [23].includes(r))) { 
+    //     newText2 = ' '+adder +' '+ be_adj
+    //     conditionalbe = ''
+    //     does = 'does'
+    //     rootEnglish= be_adj
+    //   } else if (currentPostbases.some(r=> [2, 3, 4, 8, 9, 10, 16, 17, 18, 16, 29].includes(r))) {
+    //     addis = true
+    //     newText2 = ' '+adder +' '+ be_adj
+    //     rootEnglish= be_adj
+    //   } else {
+    //     addis = true
+    //     newText2 = ' '+adder +' '+ new_adj
+    //     rootEnglish= new_adj
+    //   }
+    //   if (currentPostbases[currentPostbases.length-1] == 5) {
+    //     tense = 'past'
+    //   } else if (currentPostbases[currentPostbases.length-1] == 7 || currentPostbases[currentPostbases.length-1] == 8 || currentPostbases[currentPostbases.length-1] == 9) {
+    //     tense = 'future'
+    //   }
+    // } else {
+    //   newText2 = new_adj
+    //   rootEnglish= new_adj
+    // }
+    // // console.log(newText2)
+    // // console.log(tense)
+    // // console.log(nois)
+    // let postbasesEnding = ''
+    // let subject1 = getsubjectis(tense, people, person, does)
+    // if (this.state.properties.includes('momentary')) {
+    //   does = 'had'
+    // }
+    // subjectis = getsubjectis(tense, people, person, does)
+    // postbasesEnding = subjectis
+    // if (nois==true) {
+    //   postbasesEnding = ''
+    // }
+
+
+    // if (mood == 'interrogative') {
+    //   if (moodSpecific == 'who') {
+    //     newText1 = 'who '+subject1
+    //     newText2 = 'who '+postbasesEnding+' '+newText2
+    //   } else if (moodSpecific == 'when did (past)') {
+    //     tense = 'past'
+    //     subjectis = getsubjectis(tense,people, person,does)
+    //     newText1 = 'when '+subjectis
+    //     newText2 = newText2
+    //   } else if (moodSpecific == 'when will (future)') {
+    //     newText1 = 'when will'
+    //     if (nois==true) {
+    //       newText2 = nlp(newText2).sentences().toFutureTense().out().replace('will','')
+    //     } else {
+    //       newText2 = 'be '+newText2
+    //     }        
+    //   } else {
+    //     newText1 = moodSpecific+' '+subjectis
+    //     newText2 = newText2           
+    //   }
+    // } else if (mood == 'optative') {
+    //   if (nois==true) {
+    //     if ([currentPostbases[currentPostbases.length-1]].some(r=> [21, 22, 23, 24, 25, 26].includes(r))) {
+    //       newText2 = newText2.replace('loves','love')
+    //       newText2 = newText2.replace('wants','want')
+    //       newText2 = newText2.replace('yearns','yearn')
+    //       newText2 = newText2.replace('enjoys','enjoy')
+    //       } else {
+    //       if (moodSpecific == 'You, stop!') {
+    //         newText2 = nlp(newText2).sentences().toPresentTense().out() // CHANGE TO GERUND FORM OF VERB
+    //       } else {
+    //         newText2 = 'be '+newText2
+    //       }
+    //     }
+    //   } else {
+    //     if ([currentPostbases[currentPostbases.length-1]].some(r=> [21, 22, 23, 24, 25, 26].includes(r))) {
+    //       newText2 = newText2.replace('loves','love')
+    //       newText2 = newText2.replace('wants','want')
+    //       newText2 = newText2.replace('yearns','yearn')
+    //       newText2 = newText2.replace('enjoys','enjoy')
+    //       } else {
+    //       if (moodSpecific == 'You, stop!') {
+    //         newText2 = 'being '+newText2
+    //       } else {
+    //         newText2 = 'be '+newText2
+    //       }
+    //     }
+    //   }  
+    //   if (moodSpecific == 'You, do not!') {
+    //     if (nois==true) {
+    //       if (person == '3' || person == '1') {
+    //         newText1 = 'let'
+    //         newText2 = 'not ' + nlp(newText2).sentences().toFutureTense().out().replace('will','')
+    //         newText3 = newText3+'!'
+    //       } else {
+    //         newText2 = ', do not '+nlp(newText2).sentences().toFutureTense().out().replace('will','')
+    //         newText3 = newText3+'!'
+    //       }
+    //     } else {
+    //       if (person == '3' || person == '1') {
+    //         newText1 = 'let'
+    //         newText2 = 'not ' + newText2
+    //         newText3 = newText3+'!'
+    //       } else {
+    //         newText2 = ', do not '+newText2
+    //         newText3 = newText3+'!'
+    //       }
+    //     }
+    //   } else if (moodSpecific == 'You, stop!') {
+    //     if (person == '3' || person == '1') {
+    //       newText1 = 'let'
+    //       newText2 = 'stop ' + newText2
+    //       newText3 = newText3+'!'
+    //     } else {
+    //       newText2 = ', stop '+newText2
+    //       newText3 = newText3+'!'
+    //     }
+    //   } else if (moodSpecific == 'do!'){
+    //     if (nois==true) {
+    //       if (person == '3' || person == '1') {
+    //         newText1 = 'let'
+    //         newText2 = nlp(newText2).sentences().toFutureTense().out().replace('will','')
+    //         newText3 = newText3+'!'
+    //       } else {
+    //         newText2 = ', '+nlp(newText2).sentences().toFutureTense().out().replace('will','')
+    //         newText3 = newText3+'!' 
+    //       } 
+    //     } else {
+    //       if (person == '3' || person == '1') {
+    //         newText1 = 'let'
+    //         newText2 = newText2
+    //         newText3 = newText3+'!'
+    //       } else {
+    //         newText2 = ', '+newText2
+    //         newText3 = newText3+'!'
+    //       }   
+    //     }
+    //   } else if (moodSpecific == 'do (in the future)!'){
+    //     if (nois==true) {
+    //       if (person == '3' || person == '1') {
+    //         newText1 = 'let'
+    //         newText2 = nlp(newText2).sentences().toFutureTense().out().replace('will','')
+    //         newText3 = newText3+' in the future!' 
+    //       } else {
+    //         newText2 = ', '+nlp(newText2).sentences().toFutureTense().out().replace('will','')  
+    //         newText3 = newText3+' in the future!' 
+    //       }
+    //     } else {
+    //       if (person == '3' || person == '1') {
+    //         newText1 = 'let'
+    //         newText2 = newText2
+    //         newText3 = newText3+' in the future!' 
+    //       } else {
+    //         newText2 = ', '+newText2   
+    //         newText3 = newText3+' in the future!' 
+    //       }  
+    //     }  
+    //   }
+    // } else if (mood == 'indicative') {
+    //   console.log(newText2)
+    //   console.log(subjectis)
+    //   console.log(tense)
+    //   console.log(does)
+    //   subjectis = getsubjectis(tense,people,person,does)
+    //   console.log(subjectis)
+    //   if (currentPostbases.length == 0) {
+    //     newText2 = subjectis+' '+newText2
+    //   } else if (addis) {
+    //     newText2 = subjectis+' '+newText2
+    //   } else if (hasDesire == true && does != 'does') {
+    //     newText2 = newText2
+    //   } else {
+    //     newText2 = subjectis+' '+newText2
+    //   }
+    // } else if (nounEnding != '') {
+    //   if (nois==true) {
+    //     newText2 = nounEnding + ' (to '+nlp(newText2).sentences().toFutureTense().out().replace('will','')+') '
+    //   } else {
+    //     if (nounEnding == 'the one who is' || nounEnding == 'one that customarily/capably is') {
+    //       newText2 = nounEnding + ' ('+ newText2 +') '
+    //     } else { 
+    //       newText2 = nounEnding + ' (being '+ newText2 +') '
+    //     }
+    //   }
+    // } else { //assuming connective
+    //   if (moodSpecific=='when (past)') {
+    //     if (nois==true) {
+    //       newText1 = moodSpecific
+    //       newText2 = newText2
+    //     } else {
+    //       tense = 'past'
+    //       subjectis = getsubjectis(tense,people, person, does)
+    //       newText1 = moodSpecific
+    //       newText2 = subjectis+' '+newText2  
+    //     }
+    //   } else if (moodSpecific=='when (future)') {
+    //     if (nois==true) {
+    //       newText1 = moodSpecific
+    //       newText2 = nlp(newText2).sentences().toPresentTense().out()
+    //     } else {
+    //       tense = 'future'
+    //       subjectis = getsubjectis(tense,people, person, does)
+    //       newText1 = moodSpecific
+    //       newText2 = subjectis+conditionalbe+newText2  
+    //     }  
+    //   } else {
+    //     newText1 = moodSpecific
+    //     newText2 = subjectis+' '+newText2       
+    //   }
+    // }
+    // newText2 = newText2.replace(/\s+/g,' ').trim();
+
+    // subjectis = nlp(subjectis).sentences().toPresentTense().out()
+    // console.log(newText2)
+    // if (newText2.includes('(past)')) {
+    //   newText2 = newText2.split("(past)")
+    //   if (newText2[0].trim()=='is' || newText2[0].trim()=='are' || newText2[0].trim()=='am' || newText2[0].trim()=='') {
+    //     newText2 = nlp(newText2[0]+newText2[1]).sentences().toPastTense().out()
+    //   } else {
+    //     newText2 = newText2[0]+'['+newText2[1]+' (in the past) ]'
+    //   }
+    // }
+    // if (newText2.includes('(future)')) {
+    //   newText2 = newText2.split("(future)")
+    //   if (nois==true) {
+    //     if (newText2[0].trim()=='is' || newText2[0].trim()=='are' || newText2[0].trim()=='am') {
+    //       // newText2 = nlp(newText2[1]).sentences().toFutureTense().out()
+    //       newText2 = newText2[0]+'['+newText2[1]+' (in the future) ]'
+    //     } else {
+    //       newText2 = newText2[0]+'['+newText2[1]+' (in the future) ]'
+    //     }
+    //   } else {
+    //     if (newText2[0].trim()=='is' || newText2[0].trim()=='are' || newText2[0].trim()=='am') {
+    //       //newText2 = nlp(newText2[0]+newText2[1]).sentences().toFutureTense().out()
+    //       newText2 = newText2[0]+'['+newText2[1]+' (in the future) ]'
+    //     } else {
+    //       newText2 = newText2[0]+'['+newText2[1]+' (in the future) ]'
+    //     }
+    //   }
+    // }
+    // if (newText2.includes('to trying')) {
+    //   newText2 = newText2.replace("to trying",'to try')
+    // }
+    // console.log(newText2)
+
+    // console.log(newText1)
+    // postbasesEnglish.push(rootEnglish)
+    // console.log(postbasesEnglish)
     
 
 
@@ -1015,6 +1075,8 @@ class YupikModifyVerb extends Component {
           text1: newText1,
           text2: newText2,
           text3: newText3,
+          postbasesEnglish: postbasesEnglish,
+          englishEnding: englishEnding,
           colorIndexes: response.data.indexes
         });
       });
@@ -1223,6 +1285,10 @@ class YupikModifyVerb extends Component {
                   <Dropdown inline options={dict1} onChange={this.setValue1.bind(this)} value={value1} />
                   {' '}
                   {this.state.text2}
+                  {' '}
+                  {this.state.postbasesEnglish.join(' ')}
+                  {' '}
+                  {this.state.englishEnding[0]}
                   {' '}
                   {this.state.objectExists ?
                   <Dropdown inline options={dict2} onChange={this.setValue2.bind(this)} value={value2} /> : ''}
