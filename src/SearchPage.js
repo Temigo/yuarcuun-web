@@ -95,7 +95,7 @@ class SearchPage extends Component {
     let displayWord = this.state.currentWord.yupik !== undefined;
     let wordsList = this.state.wordsList;
     if (this.state.onlyCommon) {
-      wordsList = wordsList.filter((word) => { return word['1'].properties.indexOf('common') > -1; });
+      wordsList = wordsList.filter((word) => { return Object.keys(word).some((key) => { return word[key].properties && word[key].properties.indexOf('common') > -1; }); });
     }
     return (
       <div>
@@ -131,7 +131,7 @@ class SearchPage extends Component {
           </Grid>
           <List divided selection>
             {displayList ? wordsList.map((word) => {
-              let isCommon = word['1'].properties.indexOf('common') > -1;
+              let isCommon = Object.keys(word).some((key) => { return word[key].properties && word[key].properties.indexOf('common') > -1; });
               return (
 
                 <List.Item key={word.yupik}>
