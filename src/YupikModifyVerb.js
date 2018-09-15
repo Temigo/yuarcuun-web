@@ -471,9 +471,9 @@ class YupikModifyVerb extends Component {
           firstpass = true
           currentPostbases.forEach((p) => {
             if (p == 5) {
-              englishEnding.push(gerund_new_adj+' (in the past)') 
+              englishEnding.push(gerund_new_adj+' (in the past)')
             } else if (p == 7 || p == 8 || p == 9) {
-              englishEnding.push(gerund_new_adj+' (in the future)') 
+              englishEnding.push(gerund_new_adj+' (in the future)')
               postbasesEnglish.push(postbases[p].englishModifier(''))
             } else if (firstpass) {
               if (unmodifyingPostbases.includes(p)) {
@@ -496,7 +496,7 @@ class YupikModifyVerb extends Component {
               } else {
                 postbasesEnglish.push(postbases[p].englishModifier(''))
               }
-              firstpass = false              
+              firstpass = false
             }
           })
           englishEnding.push(infinitive_new_adj)
@@ -518,7 +518,7 @@ class YupikModifyVerb extends Component {
       } else {
         newText2 = ', stop '
         newText3 = newText3+'!'
-      }      
+      }
     }
   }
 
@@ -1344,7 +1344,7 @@ class YupikModifyVerb extends Component {
             </Grid>
             }
 
-            <Accordion fluid exclusive={false}>
+            <Accordion fluid styled exclusive={false}>
               <Accordion.Title active={this.state.activeIndex === 0 || this.state.mood === 'interrogative'} index={0} onClick={this.handleClick}>
                 <Icon name='dropdown' />
                 Question form
@@ -1388,7 +1388,7 @@ class YupikModifyVerb extends Component {
                 {dependent.map((e) => {
                   return (
                     <Card>
-                    <Button onClick={this.setMood.bind(this,'optative', e.mood)} toggle active={this.state.moodSpecific === e.mood}>{e.text}</Button>
+                    <Button onClick={this.setMood.bind(this, e.group, e.mood)} toggle active={this.state.moodSpecific === e.mood}>{e.text}</Button>
                     </Card>
                   );
                 })}
@@ -1417,7 +1417,7 @@ class YupikModifyVerb extends Component {
             Postbases:
             </div>
 
-            <Accordion>
+            <Accordion styled >
               {postbaseButtons.map((group) => {
                 return (
                   <div>
@@ -1444,7 +1444,7 @@ class YupikModifyVerb extends Component {
 
 
             {this.state.mood == 'indicative' || this.state.mood == 'interrogative' ?
-            <Accordion>
+            <Accordion styled >
               <Accordion.Title active={this.state.activeIndex === enclitics[this.state.mood].activeIndex} index={enclitics[this.state.mood].activeIndex} onClick={this.handleClick}>
                 <Icon name='dropdown' />
                 Enclitics
