@@ -42,7 +42,7 @@ class YupikModifyLayout extends Component {
   constructor(props) {
     super(props);
     console.log('YupikModifyLayout props', props)
-    this.verb = this.props.match.url.includes('verb');
+    this.verb = this.props.location.pathname.includes('verb');
     this.state = {
       advancedMode: false,
       usageId: this.props.match.params.usage_id,
@@ -56,9 +56,9 @@ class YupikModifyLayout extends Component {
       possessiveButton: false,
       possessorPerson: 0,
       possessorPeople: 0,
-      value1: "",
+      value1: this.verb ? "" : "31-1(1)",
       value2: "",
-      value3: "",
+      value3: this.verb ? "" : "11(3)",
       value4: 1,
       id1: "",
       value1_text: "he",
@@ -72,6 +72,7 @@ class YupikModifyLayout extends Component {
       enclitic: '',
       alternateTense: '',
       nounEnding: '',
+      verbEnding: false,
       encliticExpression: '',
       tense: 'present',
       text1: "",
@@ -116,7 +117,7 @@ class YupikModifyLayout extends Component {
         currentWord: this.props.location.state.word,
         modifiedWord: this.props.location.state.word,
         entry: this.props.location.state.entry,
-        usage: this.props.location.state.entry.usage[this.props.match.params.usage_id][1],
+        usage: this.props.location.state.entry.usage[this.props.match.params.usage_id][this.verb ? 1 : 0],
         properties: this.props.location.state.entry.properties,
       };
       this.initialize()
@@ -155,7 +156,7 @@ class YupikModifyLayout extends Component {
           currentWord: response.data.yupik,
           modifiedWord: response.data.yupik,
           entry: response.data[this.props.match.params.entry_id],
-          usage: response.data[this.props.match.params.entry_id].usage[this.props.match.params.usage_id][1],
+          usage: response.data[this.props.match.params.entry_id].usage[this.props.match.params.usage_id][this.verb ? 1 : 0],
           properties: response.data[this.props.match.params.entry_id].properties,
         });
         this.initialize();
@@ -1603,6 +1604,7 @@ class YupikModifyLayout extends Component {
     // } else if (moodSpecific=='when (future)') {
     //   newText2 = nlp(newText2).sentences().toFutureTense().out()
     // }
+    console.log('new list', postbasesList);
     this.setState({postbasesList: postbasesList})
     let postbasesString = "";
     postbasesList.forEach((e) => {
@@ -1974,7 +1976,8 @@ class YupikModifyLayout extends Component {
             </Grid.Column>
           </Grid.Row>
 
-          {this.verb && this.state.nounEnding !== '' ?
+          {this.verb ?
+          (this.state.nounEnding !== '' ?
           <Grid.Row>
             <Grid.Column verticalAlign='middle' align='center'>
               <Header as='h4' align='center'>
@@ -2007,10 +2010,8 @@ class YupikModifyLayout extends Component {
               </Header>
             </Grid.Column>
           </Grid.Row>
-          }
-
-
-          {!this.verb ?
+          )
+          :
           <Grid.Row>
             <Grid.Column verticalAlign='middle' align='center'>
               <Header as='h4' align='center'>
@@ -2062,7 +2063,7 @@ class YupikModifyLayout extends Component {
               </Header>
             </Grid.Column>
           </Grid.Row>
-          :''}
+          }
 
           {this.verb && this.state.alternateTense != '' && this.state.mood == 'indicative' && this.state.currentPostbases.length == 0 ?
             <Grid.Row>
