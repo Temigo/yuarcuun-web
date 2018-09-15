@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Segment, Button, Header, Grid, Container, Dropdown, Divider, Menu, Accordion, Icon, Card } from 'semantic-ui-react';
 import './semantic/dist/semantic.min.css';
 import { Link } from 'react-router-dom';
+import { postbases } from './constants.js';
 
 class YupikModifyVerb extends Component {
   constructor(props) {
@@ -22,16 +23,16 @@ class YupikModifyVerb extends Component {
                 <Grid.Column>
                 <Card.Group itemsPerRow={3} stackable>
                   <Card>
-                    <Button toggle >Common postbase 1</Button>
+                    <Button onClick={(event) => this.props.setPostbase(5, event)} toggle active={this.props.currentPostbases.indexOf(5) >= 0}>{postbases[5].description}</Button>
                   </Card>
                   <Card>
-                    <Button toggle >Common postbase 2</Button>
+                    <Button onClick={(event) => this.props.setPostbase(7, event)} toggle active={this.props.currentPostbases.indexOf(7) >= 0}>{postbases[7].description}</Button>
                   </Card>
                   <Card>
-                    <Button toggle >Common postbase 3</Button>
+                    <Button onClick={(event) => this.props.setPostbase(21, event)} toggle active={this.props.currentPostbases.indexOf(21) >= 0}>{postbases[21].description}</Button>
                   </Card>
                   <Card>
-                    <Button toggle >Common postbase 4</Button>
+                    <Button onClick={(event) => this.props.setPostbase(27, event)} toggle active={this.props.currentPostbases.indexOf(27) >= 0}>{postbases[27].description}</Button>
                   </Card>
                 </Card.Group>
                 </Grid.Column>

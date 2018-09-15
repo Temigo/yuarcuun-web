@@ -2082,7 +2082,7 @@ class YupikModifyLayout extends Component {
         <Route exact path={`${this.props.match.path}/noun/phrase`} render={(props) => <YupikNounPhrase {...props} {...yupikAllPostbasesProps} />} />
         <Route exact path={`${this.props.match.path}/noun/combine`} render={(props) => <YupikNounCombine {...props} {...yupikAllPostbasesProps} />} />
 
-        <Route exact path={`${this.props.match.path}/verb`} render={(props) => <YupikModifyVerb {...props} advancedMode={this.state.advancedMode} />} />
+        <Route exact path={`${this.props.match.path}/verb`} render={(props) => <YupikModifyVerb {...props} advancedMode={this.state.advancedMode}  {...yupikAllPostbasesProps} />} />
         <Route exact path={`${this.props.match.path}/verb/all`} render={(props) => <YupikAllPostbases {...props} {...yupikAllPostbasesProps}/>} />
         <Route exact path={`${this.props.match.path}/verb/ending`} component={YupikEndingGroups} />
         <Route exact path={`${this.props.match.path}/verb/ending/:ending_group_id`} render={(props) => <YupikEnding {...props} {...yupikAllPostbasesProps}/>} />
