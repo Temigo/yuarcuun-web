@@ -25,7 +25,7 @@ class App extends Component {
       <Switch>
         <Route exact path='/' component={SearchPage} />
         <Route exact path='/about' component={About} />
-        <Route path='/:word/:usage_id/modify' component={YupikModifyLayout} />
+        <Route path='/:word/:entry_id/:usage_id/modify' component={YupikModifyLayout} />
         <Route exact path='/:word' component={YupikDetails} />
       </Switch>
     );

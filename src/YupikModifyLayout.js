@@ -39,12 +39,11 @@ class YupikModifyLayout extends Component {
     super(props);
     console.log('YupikModifyLayout props', props)
     this.state = {
-      currentWord: this.props.location.state.word,
       advancedMode: false,
       usageId: this.props.match.params.usage_id,
-      entry: this.props.location.state.entry,
-      usage: this.props.location.state.entry.usage[this.props.match.params.usage_id][1],
-      properties: this.props.location.state.entry.properties,
+      entry: undefined,
+      usage: undefined,
+      properties: undefined,
       people: 1,
       person: 3,
       objectPeople: 1,
@@ -82,30 +81,65 @@ class YupikModifyLayout extends Component {
       colorSeed: getRandomArbitrary(0, 100),
       //usage: "[he] is hunting <it>",
       currentPostbases: [],
-      modifiedWord: this.props.location.state.word,//props.word.yupik,
-      currentWord: this.props.location.state.word,//props.word.yupik,
+      modifiedWord: '',
+      currentWord: '',
       currentEnglish: "",//currentVerb,
       modifiedEnglish: "",//props.word.english,//new Inflectors(currentVerb),
       displayPostbases: false,
     };
+    this.getWord = this.getWord.bind(this);
+    this.processUsage=this.processUsage.bind(this);
+    this.modifyWord = this.modifyWord.bind(this);
+    this.initialize = this.initialize.bind(this);
 
+    if (props.location.state == undefined) { // from search page
+      let word = props.match.params.word;
+      this.getWord(word);
+    }
+    else {
+      this.state = {
+        ...this.state,
+        currentWord: this.props.location.state.word,
+        modifiedWord: this.props.location.state.word,
+        entry: this.props.location.state.entry,
+        usage: this.props.location.state.entry.usage[this.props.match.params.usage_id][1],
+        properties: this.props.location.state.entry.properties,
+      };
+      this.initialize()
+    }
+
+  }
+
+  initialize() {
     if (this.state.properties.includes('momentary')) {
       this.state.alternateTense = 'present'
       this.state.tense = 'past'
     } else if (this.state.properties.includes('not_momentary')) {
       this.state.alternateTense = 'recent past'
     }
-    this.processUsage=this.processUsage.bind(this);
     let new_state = this.processUsage(this.state.usage);
     this.state = {...this.state, ...new_state};
-    this.modifyWord = this.modifyWord.bind(this);
     if (this.state.objectExists) {
       this.state.postbasesList = ["+'(g)aa"]
     } else {
       this.state.postbasesList = ["+'(g/t)uq"]
     }
     this.modifyWord(this.state.person, this.state.people, this.state.objectPerson, this.state.objectPeople, this.state.mood, this.state.moodSpecific, this.state.nounEnding, this.state.currentWord, this.state.currentPostbases);
+  }
 
+  getWord(word) {
+    axios
+      .get(API_URL + "/word/" + word)
+      .then(response => {
+        this.setState({
+          currentWord: response.data.yupik,
+          modifiedWord: response.data.yupik,
+          entry: response.data[this.props.match.params.entry_id],
+          usage: response.data[this.props.match.params.entry_id].usage[this.props.match.params.usage_id][1],
+          properties: response.data[this.props.match.params.entry_id].properties,
+        });
+        this.initialize();
+      });
   }
 
   componentWillUpdate(newProps, newState) {
@@ -621,7 +655,7 @@ class YupikModifyLayout extends Component {
           } else {
             postbasesEnglish.push(postbases[p].englishModifier(''))
           }
-          firstpass = false 
+          firstpass = false
           if (p == 28) {
             postbase28 = true
           }
@@ -661,7 +695,7 @@ class YupikModifyLayout extends Component {
           } else {
             englishEnding.push(gerund_new_adj)
           }
-          
+
         } else {
           firstpass = true
           currentPostbases.forEach((p) => {
@@ -723,7 +757,7 @@ class YupikModifyLayout extends Component {
               postbasesEnglish.push(postbases[p].englishModifier(''))
             }
           })
-          englishEnding.push(new_adj)          
+          englishEnding.push(new_adj)
         } else {
           firstpass = true
           currentPostbases.forEach((p) => {
@@ -739,7 +773,7 @@ class YupikModifyLayout extends Component {
               postbase28 = true
             }
           })
-          englishEnding.push('be '+new_adj) 
+          englishEnding.push('be '+new_adj)
         }
       } else {
         englishEnding.push(getsubjectis(tense, people, person, '')+' '+new_adj)
@@ -756,7 +790,7 @@ class YupikModifyLayout extends Component {
               postbasesEnglish.push(postbases[p].englishModifier(''))
             }
           })
-          englishEnding.push(new_adj)          
+          englishEnding.push(new_adj)
         } else {
           firstpass = true
           currentPostbases.forEach((p) => {
@@ -772,7 +806,7 @@ class YupikModifyLayout extends Component {
               postbase28 = true
             }
           })
-          englishEnding.push('be '+gerund_new_adj) 
+          englishEnding.push('be '+gerund_new_adj)
         }
       } else {
         englishEnding.push(getsubjectis(tense, people, person, '')+' '+gerund_new_adj)
@@ -818,7 +852,7 @@ class YupikModifyLayout extends Component {
         newText1 = ''
         newText2 = ', '
         newText3 = newText3+'!'
-      } 
+      }
     } else if (moodSpecific == 'do (in the future)!') {
       if (person == '3' || person == '1') {
         newText1 = 'let'
@@ -846,35 +880,35 @@ class YupikModifyLayout extends Component {
         newText1 = 'when '+getsubjectis(tense,people,person,'does')
         newText2 = ''
         newText3 = ''
-      }     
+      }
     } else if (tense == 'past') {
       newText1 = ''
       newText2 = ''
-      newText3 = ''         
+      newText3 = ''
     } else if (moodSpecific == 'who') {
       newText1 = 'who '+getsubjectis(tense,people,person,'')
       newText2 = 'who'
-      newText3 = ''   
+      newText3 = ''
     // } else if (moodSpecific == 'at where') {
     //   newText1 = 'at where '+getsubjectis(tense,people,person,'does')
     //   newText2 = ''
-    //   newText3 = ''   
+    //   newText3 = ''
     // } else if (moodSpecific == 'from where') {
     //   newText1 = 'from where '+getsubjectis(tense,people,person,'does')
     //   newText2 = ''
-    //   newText3 = '' 
+    //   newText3 = ''
     // } else if (moodSpecific == 'toward where') {
     //   newText1 = 'toward where '+getsubjectis(tense,people,person,'does')
     //   newText2 = ''
-    //   newText3 = '' 
+    //   newText3 = ''
     // } else if (moodSpecific == 'why') {
     //   newText1 = 'why '+getsubjectis(tense,people,person,'does')
     //   newText2 = ''
-    //   newText3 = '' 
+    //   newText3 = ''
     // } else if (moodSpecific == 'how') {
     //   newText1 = 'how '+getsubjectis(tense,people,person,'does')
     //   newText2 = ''
-    //   newText3 = '' 
+    //   newText3 = ''
     } else if (mood == 'interrogative') {
       newText1 = interrogative.find((p)=> {return p.mood==moodSpecific}).text+' '+getsubjectis(tense,people,person,'does')
       newText2 = ''
@@ -892,7 +926,7 @@ class YupikModifyLayout extends Component {
     } else {
       newText1 = ''
       newText2 = ''
-      newText3 = ''      
+      newText3 = ''
     }
 
     console.log(nounEnding)
