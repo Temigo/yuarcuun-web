@@ -103,7 +103,7 @@ class SearchPage extends Component {
       <Grid.Row style={displayList ? {height: 'auto'} : {height: '90%'}}>
       <Grid.Column style={{ maxWidth: 800, padding: 10 }} textAlign='left'>
         <Header as='h1' dividing>
-          Yuarcuun
+          <Link to='/' style={{ color: 'black' }}>Yuarcuun</Link>
         </Header>
         <Container>
           <Grid stackable>

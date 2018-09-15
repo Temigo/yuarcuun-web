@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Segment, Button, Header, Grid, Container, Dropdown, Divider, Menu} from 'semantic-ui-react';
+import { Segment, Button, Header, Grid, Container, Dropdown, Divider, Menu, Accordion, Icon, Card } from 'semantic-ui-react';
 import './semantic/dist/semantic.min.css';
 import axios from 'axios';
 import nlp from 'compromise';
@@ -14,6 +14,7 @@ import { nounEndings, indicative_intransitive_endings,
   connective_consonantEnd_transitive_endings, connective_contemporative_intransitive_endings,
   connective_contemporative_transitive_endings, connective_conditional_intransitive_endings,
   connective_conditional_transitive_endings } from './constants_verbs.js';
+import { interrogative, optative, dependent, verb2noun, postbaseButtons, enclitics } from './modifyVerbOptions.js';
 import StickyMenu from './StickyMenu.js';
 import palette from 'google-palette';
 import shuffle from 'shuffle-array';
@@ -90,7 +91,7 @@ class YupikModifyVerb extends Component {
       this.state.postbasesList = ["+'(g/t)uq"]
     }
     this.modifyWord(this.state.person, this.state.people, this.state.objectPerson, this.state.objectPeople, this.state.mood, this.state.moodSpecific, this.state.nounEnding, this.state.currentWord, this.state.currentPostbases);
-
+    this.handleClick = this.handleClick.bind(this);
   }
 
   componentWillUpdate(newProps, newState) {
@@ -163,9 +164,9 @@ class YupikModifyVerb extends Component {
         } else {
           newState.mood = 'indicative'
           newState.moodSpecific = 'indicative'
-          this.setState({mood: 'indicative', moodSpecific: 'indicative'})          
+          this.setState({mood: 'indicative', moodSpecific: 'indicative'})
         }
-      } 
+      }
       this.modifyWord(newState.person, newState.people, newState.objectPerson, newState.objectPeople, newState.mood, newState.moodSpecific, newState.nounEnding, this.state.currentWord, this.state.currentPostbases);
     }
   }
@@ -410,7 +411,7 @@ class YupikModifyVerb extends Component {
           subjectis = 'was'
         } else {
           subjectis = 'were'
-        }      
+        }
       } else if (tense == 'future') {
         if (people == 1 && person == 1) {
           subjectis = 'will'
@@ -418,15 +419,15 @@ class YupikModifyVerb extends Component {
           subjectis = 'will'
         } else {
           subjectis = 'will'
-        }  
+        }
       }
       return subjectis
-  } 
+  }
     if (newText2.includes('is')) {
       new_str = newText2.split("is");
-      new_adj = new_str[1].trim()      
+      new_adj = new_str[1].trim()
     } else {
-      new_adj = newText2.trim()      
+      new_adj = newText2.trim()
       nois = true
     }
     be_adj = 'be '+new_adj
@@ -455,9 +456,9 @@ class YupikModifyVerb extends Component {
     console.log(new_adj)
     if (moodSpecific == 'You, stop!' || nounEnding == 'device for') {
       if (tense == 'past') {
-        englishEnding.push('(in the past)') 
+        englishEnding.push('(in the past)')
       } else if (tense == 'future') {
-        englishEnding.push('(in the future)') 
+        englishEnding.push('(in the future)')
       }
       if (currentPostbases.length>0) {
         firstpass = true
@@ -493,7 +494,7 @@ class YupikModifyVerb extends Component {
       } else {
         newText2 = ', stop '
         newText3 = '!'
-      }      
+      }
     }
   }
 
@@ -534,7 +535,7 @@ class YupikModifyVerb extends Component {
     //       newText2 = new_adj
     //       rootEnglish = new_adj
     //     }
-        
+
     //   } else if (adder == ' (future) ') {
     //     if (moodSpecific == 'optative') {
     //       newText2 = '['+new_adj+' (in the future) ]'
@@ -544,17 +545,17 @@ class YupikModifyVerb extends Component {
     //     } else {
     //       newText2 = nlp(new_adj).sentences().toFutureTense().out().replace('will','')
     //     }
-        
-    //   } else if ([currentPostbases[currentPostbases.length-1]].some(r=> [21, 22, 24, 25].includes(r))) { 
+
+    //   } else if ([currentPostbases[currentPostbases.length-1]].some(r=> [21, 22, 24, 25].includes(r))) {
     //     newText2 = ' '+adder +' '+ be_adj
     //     conditionalbe = ''
     //     rootEnglish= be_adj
-    //   } else if ([currentPostbases[currentPostbases.length-1]].some(r=> [26].includes(r))) { 
+    //   } else if ([currentPostbases[currentPostbases.length-1]].some(r=> [26].includes(r))) {
     //     newText2 = ' '+adder +' '+ being_adj
     //     conditionalbe = ''
     //     does = 'does'
     //     rootEnglish= being_adj
-    //   } else if ([currentPostbases[currentPostbases.length-1]].some(r=> [23].includes(r))) { 
+    //   } else if ([currentPostbases[currentPostbases.length-1]].some(r=> [23].includes(r))) {
     //     newText2 = ' '+adder +' '+ be_adj
     //     conditionalbe = ''
     //     does = 'does'
@@ -607,10 +608,10 @@ class YupikModifyVerb extends Component {
     //       newText2 = nlp(newText2).sentences().toFutureTense().out().replace('will','')
     //     } else {
     //       newText2 = 'be '+newText2
-    //     }        
+    //     }
     //   } else {
     //     newText1 = moodSpecific+' '+subjectis
-    //     newText2 = newText2           
+    //     newText2 = newText2
     //   }
     // } else if (mood == 'optative') {
     //   if (nois==true) {
@@ -639,7 +640,7 @@ class YupikModifyVerb extends Component {
     //         newText2 = 'be '+newText2
     //       }
     //     }
-    //   }  
+    //   }
     //   if (moodSpecific == 'You, do not!') {
     //     if (nois==true) {
     //       if (person == '3' || person == '1') {
@@ -677,8 +678,8 @@ class YupikModifyVerb extends Component {
     //         newText3 = newText3+'!'
     //       } else {
     //         newText2 = ', '+nlp(newText2).sentences().toFutureTense().out().replace('will','')
-    //         newText3 = newText3+'!' 
-    //       } 
+    //         newText3 = newText3+'!'
+    //       }
     //     } else {
     //       if (person == '3' || person == '1') {
     //         newText1 = 'let'
@@ -687,28 +688,28 @@ class YupikModifyVerb extends Component {
     //       } else {
     //         newText2 = ', '+newText2
     //         newText3 = newText3+'!'
-    //       }   
+    //       }
     //     }
     //   } else if (moodSpecific == 'do (in the future)!'){
     //     if (nois==true) {
     //       if (person == '3' || person == '1') {
     //         newText1 = 'let'
     //         newText2 = nlp(newText2).sentences().toFutureTense().out().replace('will','')
-    //         newText3 = newText3+' in the future!' 
+    //         newText3 = newText3+' in the future!'
     //       } else {
-    //         newText2 = ', '+nlp(newText2).sentences().toFutureTense().out().replace('will','')  
-    //         newText3 = newText3+' in the future!' 
+    //         newText2 = ', '+nlp(newText2).sentences().toFutureTense().out().replace('will','')
+    //         newText3 = newText3+' in the future!'
     //       }
     //     } else {
     //       if (person == '3' || person == '1') {
     //         newText1 = 'let'
     //         newText2 = newText2
-    //         newText3 = newText3+' in the future!' 
+    //         newText3 = newText3+' in the future!'
     //       } else {
-    //         newText2 = ', '+newText2   
-    //         newText3 = newText3+' in the future!' 
-    //       }  
-    //     }  
+    //         newText2 = ', '+newText2
+    //         newText3 = newText3+' in the future!'
+    //       }
+    //     }
     //   }
     // } else if (mood == 'indicative') {
     //   console.log(newText2)
@@ -732,7 +733,7 @@ class YupikModifyVerb extends Component {
     //   } else {
     //     if (nounEnding == 'the one who is' || nounEnding == 'one that customarily/capably is') {
     //       newText2 = nounEnding + ' ('+ newText2 +') '
-    //     } else { 
+    //     } else {
     //       newText2 = nounEnding + ' (being '+ newText2 +') '
     //     }
     //   }
@@ -745,7 +746,7 @@ class YupikModifyVerb extends Component {
     //       tense = 'past'
     //       subjectis = getsubjectis(tense,people, person, does)
     //       newText1 = moodSpecific
-    //       newText2 = subjectis+' '+newText2  
+    //       newText2 = subjectis+' '+newText2
     //     }
     //   } else if (moodSpecific=='when (future)') {
     //     if (nois==true) {
@@ -755,11 +756,11 @@ class YupikModifyVerb extends Component {
     //       tense = 'future'
     //       subjectis = getsubjectis(tense,people, person, does)
     //       newText1 = moodSpecific
-    //       newText2 = subjectis+conditionalbe+newText2  
-    //     }  
+    //       newText2 = subjectis+conditionalbe+newText2
+    //     }
     //   } else {
     //     newText1 = moodSpecific
-    //     newText2 = subjectis+' '+newText2       
+    //     newText2 = subjectis+' '+newText2
     //   }
     // }
     // newText2 = newText2.replace(/\s+/g,' ').trim();
@@ -800,7 +801,7 @@ class YupikModifyVerb extends Component {
     // console.log(newText1)
     // postbasesEnglish.push(rootEnglish)
     // console.log(postbasesEnglish)
-    
+
 
 
 
@@ -1083,6 +1084,14 @@ class YupikModifyVerb extends Component {
     }
 
 
+    handleClick(e, titleProps) {
+      const { index } = titleProps
+      const { activeIndex } = this.state
+      const newIndex = activeIndex === index ? -1 : index
+
+      this.setState({ activeIndex: newIndex })
+    }
+
       render() {
         var dict1 = [];
         var dict2 = [];
@@ -1156,7 +1165,7 @@ class YupikModifyVerb extends Component {
             dict1.push({id: options1[i].id,value: options1[i].value,text: options1[i].text,disabled:flag2});
           }
         }
-        console.log("YupikModifyVerb state: ", this.state);        
+        console.log("YupikModifyVerb state: ", this.state);
         const{value1}=this.state
         const{value2}=this.state
         const{value3}=this.state
@@ -1241,6 +1250,7 @@ class YupikModifyVerb extends Component {
             // </div>
 
 
+
         return (
           <div>
           <StickyMenu word={this.state.currentWord} goBack={this.props.history.goBack}/>
@@ -1310,218 +1320,125 @@ class YupikModifyVerb extends Component {
             </Grid>
             }
 
-            <Grid columns={4}>
-              <Grid.Column>
-                {this.state.mood == 'interrogative' ?
-                <Dropdown button open text='Question form'>
-                  <Dropdown.Menu>
-                    <Dropdown.Item color='red' onClick={this.setMood.bind(this,'interrogative','who')} active={this.state.moodSpecific=='who'}>who</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'interrogative','when did (past)')} active={this.state.moodSpecific=='when did (past)'}>when? (past)</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'interrogative','when will (future)')} active={this.state.moodSpecific=='when will (future)'}>when? (future)</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'interrogative','at where')} active={this.state.moodSpecific=='at where'}>at where?</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'interrogative','from where')} active={this.state.moodSpecific=='from where'}>from where?</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'interrogative','toward where')} active={this.state.moodSpecific=='toward where'}>toward where?</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'interrogative','why')} active={this.state.moodSpecific=='why'}>why?</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'interrogative','how')} active={this.state.moodSpecific=='how'}>how?</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-                :
-                <Dropdown button text='Question form'>
-                  <Dropdown.Menu>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'interrogative','who')} active={this.state.moodSpecific=='who'}>who</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'interrogative','when did (past)')} active={this.state.moodSpecific=='when did (past)'}>when? (past)</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'interrogative','when will (future)')} active={this.state.moodSpecific=='when will (future)'}>when? (future)</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'interrogative','at where')} active={this.state.moodSpecific=='at where'}>at where?</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'interrogative','from where')} active={this.state.moodSpecific=='from where'}>from where?</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'interrogative','toward where')} active={this.state.moodSpecific=='toward where'}>toward where?</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'interrogative','why')} active={this.state.moodSpecific=='why'}>why?</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'interrogative','how')} active={this.state.moodSpecific=='how'}>how?</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-                }                 
-              </Grid.Column>
-              <Grid.Column>
-                {this.state.mood == 'optative' ?
-                <Dropdown button open text='Make a command'>
-                  <Dropdown.Menu>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'optative','do!')} active={this.state.moodSpecific=='do!'}>do!</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'optative','do (in the future)!')} active={this.state.moodSpecific=='do (in the future)!'}>do (in the future)!</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'optative','You, do not!')} active={this.state.moodSpecific=='You, do not!'}>You, do not!</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'optative','You, stop!')} active={this.state.moodSpecific=='You, stop!'}>You, stop!</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-                :
-                <Dropdown button text='Make a command'>
-                  <Dropdown.Menu>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'optative','do!')} active={this.state.moodSpecific=='do!'}>do!</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'optative','do (in the future)!')} active={this.state.moodSpecific=='do (in the future)!'}>do (in the future)!</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'optative','You, do not!')} active={this.state.moodSpecific=='You, do not!'}>You, do not!</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'optative','You, stop!')} active={this.state.moodSpecific=='You, stop!'}>You, stop!</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-                }
-              </Grid.Column>
-              <Grid.Column>
-                {this.state.mood[0] == 'c' || this.state.mood[0] == 's'?
-                <Dropdown button open text='Dependent clause'>
-                  <Dropdown.Menu>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'connective_precessive','before')} active={this.state.moodSpecific=='before'}>precessive (before)</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'connective_consequential','because')} active={this.state.moodSpecific=='because'}>consequential (because)</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'connective_contingent','whenever')} active={this.state.moodSpecific=='whenever'}>contingent (whenever)</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'connective_concessive','although')} active={this.state.moodSpecific=='although'}>concessive (although)</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'connective_conditional','while')} active={this.state.moodSpecific=='while'}>conditional (while)</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'connective_first_contemporative','when (past)')} active={this.state.moodSpecific=='when (past)'}>1st_contem (when in the past)</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'connective_second_contemporative','when (future)')} active={this.state.moodSpecific=='when (future)'}>2nd_contem (when in the future)</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'subordinative','by or being that')} active={this.state.moodSpecific=='by or being that'}>subordinative (by or being that)</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-                :
-                <Dropdown button text='Dependent clause'>
-                  <Dropdown.Menu>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'connective_precessive','before')} active={this.state.moodSpecific=='before'}>precessive (before)</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'connective_consequential','because')} active={this.state.moodSpecific=='because'}>consequential (because)</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'connective_contingent','whenever')} active={this.state.moodSpecific=='whenever'}>contingent (whenever)</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'connective_concessive','although')} active={this.state.moodSpecific=='although'}>concessive (although)</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'connective_conditional','while')} active={this.state.moodSpecific=='while'}>conditional (while)</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'connective_first_contemporative','when (past)')} active={this.state.moodSpecific=='when (past)'}>1st_contem (when in the past)</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'connective_second_contemporative','when (future)')} active={this.state.moodSpecific=='when (future)'}>2nd_contem (when in the future)</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setMood.bind(this,'subordinative','by or being that')} active={this.state.moodSpecific=='by or being that'}>subordinative (by or being that)</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-                }                
-              </Grid.Column>
-              <Grid.Column>
-                {this.state.nounEnding != '' ?
-                <Dropdown button open text='Verb to noun'>
-                  <Dropdown.Menu>
-                    <Dropdown.Item onClick={this.setNounEnding.bind(this,'the one who is')} active={this.state.nounEnding=='the one who is'}>the one who is</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setNounEnding.bind(this,'device for')} active={this.state.nounEnding=='device for'}>device for</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setNounEnding.bind(this,'one that customarily/capably is')} active={this.state.nounEnding=='one that customarily/capably is'}>one that customarily/capably</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setNounEnding.bind(this,'how to/way of')} active={this.state.nounEnding=='how to/way of'}>how to/way of</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setNounEnding.bind(this,'one who is good at')} active={this.state.nounEnding=='one who is good at'}>one who is good at</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setNounEnding.bind(this,'act or state of')} active={this.state.nounEnding=='act or state of'}>act or state of</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-                :
-                <Dropdown  button text='Verb to noun'>
-                  <Dropdown.Menu>
-                    <Dropdown.Item onClick={this.setNounEnding.bind(this,'the one who is')} active={this.state.nounEnding=='the one who is'}>the one who is</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setNounEnding.bind(this,'device for')} active={this.state.nounEnding=='device for'}>device for</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setNounEnding.bind(this,'one that customarily/capably is')} active={this.state.nounEnding=='one that customarily/capably is'}>one that customarily/capably</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setNounEnding.bind(this,'how to/way of')} active={this.state.nounEnding=='how to/way of'}>how to/way of</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setNounEnding.bind(this,'one who is good at')} active={this.state.nounEnding=='one who is good at'}>one who is good at</Dropdown.Item>
-                    <Dropdown.Item onClick={this.setNounEnding.bind(this,'act or state of')} active={this.state.nounEnding=='act or state of'}>act or state of</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-                }
-              </Grid.Column>
-            </Grid>
+            <Accordion fluid exclusive={false}>
+              <Accordion.Title active={this.state.activeIndex === 0 || this.state.mood === 'interrogative'} index={0} onClick={this.handleClick}>
+                <Icon name='dropdown' />
+                Question form
+              </Accordion.Title>
+              <Accordion.Content active={this.state.activeIndex === 0 || this.state.mood === 'interrogative'}>
+                <Card.Group itemsPerRow={3} stackable>
+                {interrogative.map((e) => {
+                  return (
+                    <Card>
+                    <Button onClick={this.setMood.bind(this, e.group, e.mood)} toggle active={this.state.moodSpecific === e.mood}>{e.text}</Button>
+                    </Card>
+                  );
+                })}
+                </Card.Group>
+              </Accordion.Content>
+
+              <Accordion.Title active={this.state.activeIndex === 1 || this.state.mood === 'optative'} index={1} onClick={this.handleClick}>
+                <Icon name='dropdown' />
+                Make a command
+              </Accordion.Title>
+              <Accordion.Content active={this.state.activeIndex === 1 || this.state.mood === 'optative'}>
+                <Card.Group itemsPerRow={3} stackable>
+                {optative.map((e) => {
+                  return (
+                    <Card>
+                    <Button onClick={this.setMood.bind(this, e.group, e.mood)} toggle active={this.state.moodSpecific === e.mood}>{e.text}</Button>
+                    </Card>
+                  );
+                })}
+                </Card.Group>
+              </Accordion.Content>
+
+
+
+              <Accordion.Title active={this.state.activeIndex === 2 || this.state.mood[0] == 'c' || this.state.mood[0] == 's'} index={2} onClick={this.handleClick}>
+                <Icon name='dropdown' />
+                Dependent clause
+              </Accordion.Title>
+              <Accordion.Content active={this.state.activeIndex === 2 || this.state.mood[0] == 'c' || this.state.mood[0] == 's'}>
+                <Card.Group itemsPerRow={3} stackable>
+                {dependent.map((e) => {
+                  return (
+                    <Card>
+                    <Button onClick={this.setMood.bind(this,'optative', e.mood)} toggle active={this.state.moodSpecific === e.mood}>{e.text}</Button>
+                    </Card>
+                  );
+                })}
+                </Card.Group>
+              </Accordion.Content>
+
+              <Accordion.Title active={this.state.activeIndex === 3 || this.state.nounEnding != ''} index={3} onClick={this.handleClick}>
+                <Icon name='dropdown' />
+                Verb to noun
+              </Accordion.Title>
+              <Accordion.Content active={this.state.activeIndex === 3 || this.state.nounEnding != ''}>
+                <Card.Group itemsPerRow={3} stackable>
+                {verb2noun.map((e) => {
+                  return (
+                    <Card>
+                    <Button onClick={this.setNounEnding.bind(this, e.ending)} toggle active={this.state.nounEnding === e.ending}>{e.text}</Button>
+                    </Card>
+                  );
+                })}
+                </Card.Group>
+              </Accordion.Content>
+            </Accordion>
 
             <Divider />
             <div align="center">
             Postbases:
             </div>
 
-            <Button.Group inverted color='violet' vertical>
-              <Segment>
-                Maybe
-                <Button as='h4' toggle key={0} onClick={this.setPostbase.bind(this, 0)} disabled={(this.state.allowable_next_ids.indexOf(0) < 0)} active={this.state.currentPostbases.indexOf(0) >= 0}>{postbases[0].description}</Button>
-                <Button as='h4' toggle key={1} onClick={this.setPostbase.bind(this, 1)} disabled={(this.state.allowable_next_ids.indexOf(1) < 1)} active={this.state.currentPostbases.indexOf(1) >= 0}>{postbases[1].description}</Button>
-              </Segment>
-            </Button.Group>
+            <Accordion>
+              {postbaseButtons.map((group) => {
+                return (
+                  <div>
+                  <Accordion.Title active={this.state.activeIndex === group.activeIndex} index={group.activeIndex} onClick={this.handleClick}>
+                    <Icon name='dropdown' />
+                    {group.text}
+                  </Accordion.Title>
+                  <Accordion.Content active={this.state.activeIndex === group.activeIndex}>
+                    <Card.Group itemsPerRow={3} stackable>
+                    {group.indexes.map((e) => {
+                      return (
+                        <Card>
+                        <Button onClick={this.setPostbase.bind(this, e)} disabled={(this.state.allowable_next_ids.indexOf(e) < e)} toggle active={this.state.currentPostbases.indexOf(e) >= 0}>{postbases[e].description}</Button>
+                        </Card>
+                      );
+                    })}
+                    </Card.Group>
+                  </Accordion.Content>
+                  </div>
+                );
+              })}
+            </Accordion>
+            <Divider />
 
-            <Button.Group inverted color='violet' vertical>
-              <Segment>
-                Ability
-                <Button as='h4' toggle key={2} onClick={this.setPostbase.bind(this, 2)} disabled={(this.state.allowable_next_ids.indexOf(2) < 2)} active={this.state.currentPostbases.indexOf(2) >= 0}>{postbases[2].description}</Button>
-                <Button as='h4' toggle key={3} onClick={this.setPostbase.bind(this, 3)} disabled={(this.state.allowable_next_ids.indexOf(3) < 3)} active={this.state.currentPostbases.indexOf(3) >= 0}>{postbases[3].description}</Button>
-                <Button as='h4' toggle key={4} onClick={this.setPostbase.bind(this, 4)} disabled={(this.state.allowable_next_ids.indexOf(4) < 4)} active={this.state.currentPostbases.indexOf(4) >= 0}>{postbases[4].description}</Button>
-              </Segment>
-            </Button.Group>
 
-            <Button.Group inverted color='violet' vertical>
-              <Segment>
-                Time
-                <Button as='h4' toggle key={5} onClick={this.setPostbase.bind(this, 5)} disabled={(this.state.allowable_next_ids.indexOf(5) < 5)} active={this.state.currentPostbases.indexOf(5) >= 0}>{postbases[5].description}</Button>
-                <Button as='h4' toggle key={6} onClick={this.setPostbase.bind(this, 6)} disabled={(this.state.allowable_next_ids.indexOf(6) < 6)} active={this.state.currentPostbases.indexOf(6) >= 0}>{postbases[6].description}</Button>
-                <Button as='h4' toggle key={7} onClick={this.setPostbase.bind(this, 7)} disabled={(this.state.allowable_next_ids.indexOf(7) < 7)} active={this.state.currentPostbases.indexOf(7) >= 0}>{postbases[7].description}</Button>
-                <Button as='h4' toggle key={8} onClick={this.setPostbase.bind(this, 8)} disabled={(this.state.allowable_next_ids.indexOf(8) < 8)} active={this.state.currentPostbases.indexOf(8) >= 0}>{postbases[8].description}</Button>
-                <Button as='h4' toggle key={9} onClick={this.setPostbase.bind(this, 9)} disabled={(this.state.allowable_next_ids.indexOf(9) < 9)} active={this.state.currentPostbases.indexOf(9) >= 0}>{postbases[9].description}</Button>
-                <Button as='h4' toggle key={10} onClick={this.setPostbase.bind(this, 10)} disabled={(this.state.allowable_next_ids.indexOf(10) < 10)} active={this.state.currentPostbases.indexOf(10) >= 0}>{postbases[10].description}</Button>
-              </Segment>
-            </Button.Group>
-
-            <Button.Group inverted color='violet' vertical>
-              <Segment>
-                Habit/Frequency
-                <Button as='h4' toggle key={11} onClick={this.setPostbase.bind(this, 11)} disabled={(this.state.allowable_next_ids.indexOf(11) < 11)} active={this.state.currentPostbases.indexOf(11) >= 0}>{postbases[11].description}</Button>
-                <Button as='h4' toggle key={12} onClick={this.setPostbase.bind(this, 12)} disabled={(this.state.allowable_next_ids.indexOf(12) < 12)} active={this.state.currentPostbases.indexOf(12) >= 0}>{postbases[12].description}</Button>
-                <Button as='h4' toggle key={13} onClick={this.setPostbase.bind(this, 13)} disabled={(this.state.allowable_next_ids.indexOf(13) < 13)} active={this.state.currentPostbases.indexOf(13) >= 0}>{postbases[13].description}</Button>
-                <Button as='h4' toggle key={14} onClick={this.setPostbase.bind(this, 14)} disabled={(this.state.allowable_next_ids.indexOf(14) < 14)} active={this.state.currentPostbases.indexOf(14) >= 0}>{postbases[14].description}</Button>
-                <Button as='h4' toggle key={15} onClick={this.setPostbase.bind(this, 15)} disabled={(this.state.allowable_next_ids.indexOf(15) < 15)} active={this.state.currentPostbases.indexOf(15) >= 0}>{postbases[15].description}</Button>
-              </Segment>
-            </Button.Group>
-
-            <Button.Group inverted color='violet' vertical>
-              <Segment>
-                Trying
-                <Button as='h4' toggle key={16} onClick={this.setPostbase.bind(this, 16)} disabled={(this.state.allowable_next_ids.indexOf(16) < 16)} active={this.state.currentPostbases.indexOf(16) >= 0}>{postbases[16].description}</Button>
-                <Button as='h4' toggle key={17} onClick={this.setPostbase.bind(this, 17)} disabled={(this.state.allowable_next_ids.indexOf(17) < 17)} active={this.state.currentPostbases.indexOf(17) >= 0}>{postbases[17].description}</Button>
-                <Button as='h4' toggle key={18} onClick={this.setPostbase.bind(this, 18)} disabled={(this.state.allowable_next_ids.indexOf(18) < 18)} active={this.state.currentPostbases.indexOf(18) >= 0}>{postbases[18].description}</Button>
-              </Segment>
-            </Button.Group>
-
-            <Button.Group inverted color='violet' vertical>
-              <Segment>
-                Adjectival
-                <Button as='h4' toggle key={19} onClick={this.setPostbase.bind(this, 19)} disabled={(this.state.allowable_next_ids.indexOf(19) < 19)} active={this.state.currentPostbases.indexOf(19) >= 0}>{postbases[19].description}</Button>
-                <Button as='h4' toggle key={20} onClick={this.setPostbase.bind(this, 20)} disabled={(this.state.allowable_next_ids.indexOf(20) < 20)} active={this.state.currentPostbases.indexOf(20) >= 0}>{postbases[20].description}</Button>
-              </Segment>
-            </Button.Group>
-
-            <Button.Group inverted color='violet' vertical>
-              <Segment>
-                Desire
-                <Button as='h4' toggle key={21} onClick={this.setPostbase.bind(this, 21)} disabled={(this.state.allowable_next_ids.indexOf(21) < 21)} active={this.state.currentPostbases.indexOf(21) >= 0}>{postbases[21].description}</Button>
-                <Button as='h4' toggle key={22} onClick={this.setPostbase.bind(this, 22)} disabled={(this.state.allowable_next_ids.indexOf(22) < 22)} active={this.state.currentPostbases.indexOf(22) >= 0}>{postbases[22].description}</Button>
-                <Button as='h4' toggle key={23} onClick={this.setPostbase.bind(this, 23)} disabled={(this.state.allowable_next_ids.indexOf(23) < 23)} active={this.state.currentPostbases.indexOf(23) >= 0}>{postbases[23].description}</Button>
-                <Button as='h4' toggle key={24} onClick={this.setPostbase.bind(this, 24)} disabled={(this.state.allowable_next_ids.indexOf(24) < 24)} active={this.state.currentPostbases.indexOf(24) >= 0}>{postbases[24].description}</Button>
-                <Button as='h4' toggle key={25} onClick={this.setPostbase.bind(this, 25)} disabled={(this.state.allowable_next_ids.indexOf(25) < 25)} active={this.state.currentPostbases.indexOf(25) >= 0}>{postbases[25].description}</Button>
-                <Button as='h4' toggle key={26} onClick={this.setPostbase.bind(this, 26)} disabled={(this.state.allowable_next_ids.indexOf(26) < 26)} active={this.state.currentPostbases.indexOf(26) >= 0}>{postbases[26].description}</Button>
-              </Segment>
-            </Button.Group>
-
-            <Button.Group inverted color='violet' vertical>
-              <Segment>
-                Unlisted
-                <Button as='h4' toggle key={27} onClick={this.setPostbase.bind(this, 27)} disabled={(this.state.allowable_next_ids.indexOf(27) < 27)} active={this.state.currentPostbases.indexOf(27) >= 0}>{postbases[27].description}</Button>
-                <Button as='h4' toggle key={28} onClick={this.setPostbase.bind(this, 28)} disabled={(this.state.allowable_next_ids.indexOf(28) < 28)} active={this.state.currentPostbases.indexOf(28) >= 0}>{postbases[28].description}</Button>
-                <Button as='h4' toggle key={29} onClick={this.setPostbase.bind(this, 29)} disabled={(this.state.allowable_next_ids.indexOf(29) < 29)} active={this.state.currentPostbases.indexOf(29) >= 0}>{postbases[29].description}</Button>
-              </Segment>
-            </Button.Group>
-
-            {this.state.mood == 'indicative' ?
-            <Button.Group inverted color='violet' vertical>
-              <Segment>
+            {this.state.mood == 'indicative' || this.state.mood == 'interrogative' ?
+            <Accordion>
+              <Accordion.Title active={this.state.activeIndex === enclitics[this.state.mood].activeIndex} index={enclitics[this.state.mood].activeIndex} onClick={this.handleClick}>
+                <Icon name='dropdown' />
                 Enclitics
-                <Button as='h4' toggle onClick={this.setEnclitic.bind(this,'-qaa','(yes or no?)')} active={this.state.enclitic=='-qaa'}>Yes or no?</Button>
-                <Button as='h4' toggle onClick={this.setEnclitic.bind(this,'-wa','(indication of a complete thought)')} active={this.state.enclitic=='-wa'}>indication of a complete thought</Button>
-                <Button as='h4' toggle onClick={this.setEnclitic.bind(this,'-gguq','(one says)')} active={this.state.enclitic=='-gguq'}>one says</Button>
-                <Button as='h4' toggle onClick={this.setEnclitic.bind(this,'-llu','(also)')} active={this.state.enclitic=='-llu'}>and, also</Button>
-                <Button as='h4' toggle onClick={this.setEnclitic.bind(this,'ataam','(again)')} active={this.state.enclitic=='ataam'}>again</Button>
-              </Segment>
-            </Button.Group>
+              </Accordion.Title>
+              <Accordion.Content active={this.state.activeIndex === enclitics[this.state.mood].activeIndex}>
+                <Card.Group itemsPerRow={3} stackable>
+                {enclitics[this.state.mood].items.map((e) => {
+                    return (
+                      <Card>
+                      <Button onClick={this.setEnclitic.bind(this, e.ending, e.meaning)} toggle active={this.state.enclitic === e.ending}>{e.text}</Button>
+                      </Card>
+                    );
+                  })}
+                  </Card.Group>
+                </Accordion.Content>
+            </Accordion>
             :''}
 
-            {this.state.mood == 'interrogative' ?
-            <Button.Group inverted color='violet' vertical>
-              <Segment>
-                Enclitics
-                <Button as='h4' toggle onClick={this.setEnclitic.bind(this,'-kiq','(I wonder...)')} active={this.state.enclitic=='-kiq'}>I wonder...</Button>
-                <Button as='h4' toggle onClick={this.setEnclitic.bind(this,'-tanem','(emphasized)')} active={this.state.enclitic=='-tanem'}>Add emphasis</Button>
-              </Segment>
-            </Button.Group>
-            :''}
           </Container>
           </div>
         );
