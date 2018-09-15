@@ -374,7 +374,7 @@ class YupikModifyNoun extends Component {
         if (currentPostbases.length > 0 && verbEnding) {
           postbasesList = processPostbases(currentPostbases, base, nounPostbases)
           postbasesList = postbasesList.concat(indicative_intransitive_endings[person][people]);
-        } else if (currentPostbases.length > 0) {
+        } else if (currentPostbases.length > 0 && mood == 'absolutive') {
           let lastPostbase = currentPostbases[currentPostbases.length-1]
           let remainingPostbases = currentPostbases.slice(0,[currentPostbases.length-1])
           postbasesList = processPostbases(remainingPostbases, base, nounPostbases)

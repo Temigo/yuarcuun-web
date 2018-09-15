@@ -17,7 +17,6 @@ class YupikModifyVerb extends Component {
         return (
           <div>
 
-
             <Grid>
               <Grid.Row>
                 <Grid.Column>

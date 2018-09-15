@@ -59,6 +59,7 @@ export const postbases = [
     expression: '@~+yugnarqe\\',
     expression_conditional: '',
     conditional_rule: '',
+    priority: 1,
     tense:'',
     allowable_next_ids: [1,3,4]
   },
@@ -69,6 +70,7 @@ export const postbases = [
     expression: '-llini\\',
     expression_conditional: '',
     conditional_rule: '',
+    priority: 1,
     tense:'',
     allowable_next_ids: [1,3,4]
   },
@@ -78,6 +80,7 @@ export const postbases = [
     englishModifier: (english) => { return ' no longer able to' + english; },
     expression: '+(s)ciigali\\',
     expression_conditional: '',
+    priority: 1,
     conditional_rule: '',
     tense:'',
     allowable_next_ids: [1,3,4]
@@ -88,6 +91,7 @@ export const postbases = [
     englishModifier: (english) => { return ' not able to' + english; },
     expression: '+(s)ciigate\\',
     expression_conditional: '',
+    priority: 1,
     conditional_rule: '',
     tense:'',
     allowable_next_ids: [1,3,4]
@@ -108,6 +112,7 @@ export const postbases = [
     englishModifier: (english) => { return '' + english; },
     expression: '-llru\\',
     expression_conditional: '',
+    priority: 3,
     conditional_rule: '',
     tense:'past',
     allowable_next_ids: [1,3,4]
@@ -118,6 +123,7 @@ export const postbases = [
     englishModifier: (english) => { return ' not yet' + english; },
     expression: '-ksaite\\',
     expression_conditional: '',
+    priority: 1,
     conditional_rule: '',
     tense:'',
     allowable_next_ids: [1,3,4]
@@ -128,6 +134,7 @@ export const postbases = [
     englishModifier: (english) => { return ''+ english},
     expression: '+ciqe\\',
     expression_conditional: '@ciiqe\\',  // conditional te_ending
+    priority: 3,
     conditional_rule: 'attaching_to_te',  // defined later and if satisfied display expression_conditional
     tense:'future',
     allowable_next_ids: [0,1,2,3,4]
@@ -138,6 +145,7 @@ export const postbases = [
     englishModifier: (english) => { return ' not' +  english; },
     expression: '@~+ngaite\\',
     expression_conditional: '',
+    priority: 3,
     conditional_rule: '',
     tense:'future',
     allowable_next_ids: [1,3,4]
@@ -148,6 +156,7 @@ export const postbases = [
     englishModifier: (english) => { return ' will soon' + english; },
     expression: '@~+niarar\\',
     expression_conditional: '',
+    priority: 3,
     conditional_rule: '',
     tense:'future',
     allowable_next_ids: [1,3,4]
@@ -158,6 +167,7 @@ export const postbases = [
     englishModifier: (english) => { return ' about to' + english; },
     expression: '-qatar\\',
     expression_conditional: '',
+    priority: 1,
     conditional_rule: '',
     tense:'',
     allowable_next_ids: [1,3,4]
@@ -168,6 +178,7 @@ export const postbases = [
     englishModifier: (english) => { return ' repeatedly' + english; },
     expression: '-lar\\',
     expression_conditional: '',
+    priority: 1,
     conditional_rule: '',
     tense:'',
     allowable_next_ids: [1,3,4]
@@ -178,6 +189,7 @@ export const postbases = [
     englishModifier: (english) => { return ' (again)' + english; },
     expression: '-nqigte\\',
     expression_conditional: '',
+    priority: 1,
     conditional_rule: '',
     tense:'',
     allowable_next_ids: [1,3,4]
@@ -188,6 +200,7 @@ export const postbases = [
     englishModifier: (english) => { return ' almost' + english; },
     expression: '@~+yarpiar\\',
     expression_conditional: '',
+    priority: 1,
     conditional_rule: '',
     tense:'',
     allowable_next_ids: [1,3,4]
@@ -198,6 +211,7 @@ export const postbases = [
     englishModifier: (english) => { return ' never' + english; },
     expression: '@~-yuite\\',
     expression_conditional: '',
+    priority: 1,
     conditional_rule: '',
     tense:'',
     allowable_next_ids: [1,3,4]
@@ -208,6 +222,7 @@ export const postbases = [
     englishModifier: (english) => { return ' no longer' + english; },
     expression: '-nrir\\',
     expression_conditional: '',
+    priority: 1,
     conditional_rule: '',
     tense:'',
     allowable_next_ids: [1,3,4]
@@ -218,6 +233,7 @@ export const postbases = [
     englishModifier: (english) => { return ' trying (unsuccessfully) to' + english; },
     expression: '@~+yaaqe\\',
     expression_conditional: '',
+    priority: 1,
     conditional_rule: '',
     tense:'',
     allowable_next_ids: [1,3,4]
@@ -228,6 +244,7 @@ export const postbases = [
     englishModifier: (english) => { return ' trying despite difficulties to' + english; },
     expression: '-qcaar(ar)\\',
     expression_conditional: '',
+    priority: 1,
     conditional_rule: '',
     tense:'',
     allowable_next_ids: [1,3,4]
@@ -238,6 +255,7 @@ export const postbases = [
     englishModifier: (english) => { return ' trying to' + english; },
     expression: '-ngnaqe\\',
     expression_conditional: '',
+    priority: 1,
     conditional_rule: '',
     tense:'',
     allowable_next_ids: [1,3,4]
@@ -248,6 +266,7 @@ export const postbases = [
     englishModifier: (english) => { return ' excessively' + english; },
     expression: '-ssiyaag\\',
     expression_conditional: '',
+    priority: 1,
     conditional_rule: '',
     tense:'',
     allowable_next_ids: [1,3,4]
@@ -258,6 +277,7 @@ export const postbases = [
     englishModifier: (english) => { return ' (being more or better at)' + english; },
     expression: '-nru\\',
     expression_conditional: '',
+    priority: 1,
     conditional_rule: '',
     tense:'',
     allowable_next_ids: [1,3,4]
@@ -270,6 +290,7 @@ export const postbases = [
     englishModifierGerund: (english) => { return ' loving to' + english; },
     expression: '@~+yunqe4\\',
     expression_conditional: '',
+    priority: 1,
     conditional_rule: '',
     tense:'',
     allowable_next_ids: [1,3,4]
@@ -282,6 +303,7 @@ export const postbases = [
     englishModifierGerund: (english) => { return ' no longer wanting to' + english; },
     expression: '@~+yuumiir(ar)te\\',
     expression_conditional: '',
+    priority: 1,
     conditional_rule: '',
     tense:'',
     allowable_next_ids: [1,3,4]
@@ -294,6 +316,7 @@ export const postbases = [
     englishModifierGerund: (english) => { return ' not caring to' + english; },
     expression: '@~+yuumite\\',
     expression_conditional: '',
+    priority: 1,
     conditional_rule: '',
     tense:'',
     allowable_next_ids: [1,3,4]
@@ -306,6 +329,7 @@ export const postbases = [
     englishModifierGerund: (english) => { return ' yearning to' + english; },
     expression: '@~+yuumir\\',
     expression_conditional: '',
+    priority: 1,
     conditional_rule: '',
     tense:'',
     allowable_next_ids: [1,3,4]
@@ -318,6 +342,7 @@ export const postbases = [
     englishModifierGerund: (english) => { return ' wanting to' + english; },
     expression: '@~+yug\\',
     expression_conditional: '',
+    priority: 1,
     conditional_rule: '',
     tense:'',
     allowable_next_ids: [1,3,4]
@@ -330,6 +355,7 @@ export const postbases = [
     englishModifierGerund: (english) => { return ' enjoying' + english; },
     expression: '@~+yugar\\',
     expression_conditional: '',
+    priority: 1,
     conditional_rule: '',
     tense:'',
     allowable_next_ids: [1,3,4]
@@ -340,6 +366,7 @@ export const postbases = [
     englishModifier: (english) => { return ' not' + english; },
     expression: '-nrite\\',
     expression_conditional: '',
+    priority: 1,
     conditional_rule: '',
     tense:'',
     allowable_next_ids: [1,3,4]
@@ -360,6 +387,7 @@ export const postbases = [
     englishModifier: (english) => { return ' in the process of' + english; },
     expression: '@~+yartur\\',
     expression_conditional: '',
+    priority: 1,
     conditional_rule: '',
     tense:'',
     allowable_next_ids: [1,3,4]
@@ -370,6 +398,7 @@ export const postbases = [
     englishModifier: (english) => { return ' definitely not going to' + english; },
     expression: '@~+yugnairute\\',
     expression_conditional: '',
+    priority: 1,
     conditional_rule: '',
     tense:'',
     allowable_next_ids: [0,1,3,4], // only refers to the postbases, not the endings
