@@ -1,21 +1,53 @@
 import React, { Component } from 'react';
 import './semantic/dist/semantic.min.css';
-import YupikModifyNoun from './YupikModifyNoun.js';
-import YupikModifyVerb from './YupikModifyVerb.js';
-import { List } from 'semantic-ui-react';
+import { List, Segment, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 class YupikEndingGroups extends Component {
   render() {
     return (
-      <div>
-        <List celled selection size='huge'>
-          <List.Item><Link to={`${this.props.match.url}/0`}>Question form</Link></List.Item>
-          <List.Item><Link to={`${this.props.match.url}/1`}>Make a command</Link></List.Item>
-          <List.Item><Link to={`${this.props.match.url}/2`}>Dependent clause</Link></List.Item>
-          <List.Item><Link to={`${this.props.match.url}/3`}>Verb to noun</Link></List.Item>
+      <Segment>
+        <List divided selection size='huge'>
+          <List.Item as={Link} to={`${this.props.match.url}/0`}>
+            <List.Content floated='right'>
+              <Icon color='teal' name='chevron right' />
+            </List.Content>
+            <Icon circular name='help' />
+            <List.Content verticalAlign='middle'>
+              Question form
+
+            </List.Content>
+
+          </List.Item>
+          <List.Item as={Link} to={`${this.props.match.url}/1`}>
+            <List.Content floated='right'>
+              <Icon color='teal' name='chevron right' />
+            </List.Content>
+            <Icon circular name='talk' />
+            <List.Content verticalAlign='middle'>
+              Make a command
+            </List.Content>
+          </List.Item>
+          <List.Item as={Link} to={`${this.props.match.url}/2`}>
+            <List.Content floated='right'>
+              <Icon color='teal' name='chevron right' />
+            </List.Content>
+            <Icon circular name='time' />
+            <List.Content verticalAlign='middle'>
+              Dependent clause
+            </List.Content>
+          </List.Item>
+          <List.Item as={Link} to={`${this.props.match.url}/3`}>
+            <List.Content floated='right'>
+              <Icon color='teal' name='chevron right' />
+            </List.Content>
+            <Icon circular name='clone' />
+            <List.Content verticalAlign='middle'>
+              Verb to noun
+            </List.Content>
+          </List.Item>
         </List>
-      </div>
+      </Segment>
     );
   }
 }

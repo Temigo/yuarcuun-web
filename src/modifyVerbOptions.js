@@ -135,14 +135,14 @@ export const verb2noun = [
 ];
 
 export const postbaseButtons = [
-  {text: 'Maybe', indexes: [0, 1], activeIndex: 4},
-  {text: 'Ability', indexes: [2, 3, 4], activeIndex: 5},
-  {text: 'Time', indexes: [5, 6, 7, 8, 9, 10], activeIndex: 6},
-  {text: 'Habit/Frequency', indexes: [11, 12, 13, 14, 15], activeIndex: 7},
-  {text: 'Trying', indexes: [16, 17, 18], activeIndex: 8},
-  {text: 'Adjectival', indexes: [19, 20], activeIndex: 9},
-  {text: 'Desire', indexes: [21, 22, 23, 24, 25, 26], activeIndex: 10},
-  {text: 'Unlisted', indexes: [27, 28, 29], activeIndex: 11},
+  {text: 'Maybe', indexes: [0, 1], activeIndex: 4, icon: 'thermometer half'},
+  {text: 'Ability', indexes: [2, 3, 4], activeIndex: 5, icon: 'football ball'},
+  {text: 'Time', indexes: [5, 6, 7, 8, 9, 10], activeIndex: 6, icon: 'time'},
+  {text: 'Habit/Frequency', indexes: [11, 12, 13, 14, 15], activeIndex: 7, icon: 'hourglass end'},
+  {text: 'Trying', indexes: [16, 17, 18], activeIndex: 8, icon: 'cubes'},
+  {text: 'Adjectival', indexes: [19, 20], activeIndex: 9, icon: 'thumbs up'},
+  {text: 'Desire', indexes: [21, 22, 23, 24, 25, 26], activeIndex: 10, icon: 'child'},
+  {text: 'Unlisted', indexes: [27, 28, 29], activeIndex: 11, icon: 'plus'},
 ];
 
 export const enclitics= {
