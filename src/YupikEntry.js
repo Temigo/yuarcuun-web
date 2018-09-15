@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Segment, List, Header, Label, Grid } from 'semantic-ui-react';
+import { Segment, List, Header, Label, Grid , Icon} from 'semantic-ui-react';
 import './semantic/dist/semantic.min.css';
 import { Link } from 'react-router-dom';
 import {withRouter} from 'react-router';
@@ -28,8 +28,37 @@ class YupikEntry extends Component {
       });
     }
   }
+  fontUsage(word) {
+    let new_state = {};
+    let text1 = ''
+    let sub = ''
+    let text2 = ''
+    let obj = ''
+    let text3 = ''
 
+    let res = word
+    var rx1 = /\[([^\]]+)]/; 
+    var rx2 = /<([^\]]+)>/; 
+    let subject = word.match(rx1);
+    let object = word.match(rx2);
+    if (subject !== null) {
+      res = res.split(rx1);
+      text1 = res[0]
+      sub = res[1]
+      text2 = res[2]
+      res = res[2];
+    }
+    if (object !== null) {
+      res = res.split(rx2);
+      text2 = res[0]
+      obj = res[1]
+      text3 = res[2]
+    }
+    return [text1, sub, text2, obj, text3]
+  }
   render() {
+
+
     return (
       <Segment style={{fontSize:'1em'}}>
       <Grid>
@@ -55,10 +84,19 @@ class YupikEntry extends Component {
             <List ordered selection celled>
             {this.state.entry.usage.map((usage, index) => {
               return (
-                <List.Item key={usage} style={{fontStyle:'italic'}}>
+                <List.Item key={usage} style={{fontStyle:'italic'} }>
+                  <List.Content floated='right'>
+                    <Icon size='large' name='angle right' />
+                  </List.Content>
                 <Link  to={{pathname: '/' + this.state.word + '/' + index + '/modify', state: { entry: this.state.entry, word: this.state.word }}}>
                   <List.Header>{usage[0]}</List.Header>
-                  <List.Description>{usage[1]}</List.Description>
+                  <List.Description>
+                  {this.fontUsage(usage[1])[0]}
+                  <b>{this.fontUsage(usage[1])[1]}</b>
+                  {this.fontUsage(usage[1])[2]}
+                  <b> {this.fontUsage(usage[1])[3]}</b>
+                  {this.fontUsage(usage[1])[4]}
+                  </List.Description>
                 </Link>
                 </List.Item>
                );

@@ -65,7 +65,7 @@ export const postbases = [
   {
     id: 1,
     description: 'is evidently (without being observed)',
-    englishModifier: (english) => { return ' evidently (without being observed)' + english; },
+    englishModifier: (english) => { return ' evidently' + english; },
     expression: '-llini\\',
     expression_conditional: '',
     conditional_rule: '',
@@ -105,7 +105,7 @@ export const postbases = [
   {
     id: 5,
     description: 'past tense',
-    englishModifier: (english) => { return ' (past)' + english; },
+    englishModifier: (english) => { return '' + english; },
     expression: '-llru\\',
     expression_conditional: '',
     conditional_rule: '',
@@ -125,7 +125,7 @@ export const postbases = [
   {
     id: 7,
     description: 'future tense',
-    englishModifier: (english) => { return ' (future)'+ english},
+    englishModifier: (english) => { return ''+ english},
     expression: '+ciqe\\',
     expression_conditional: '@ciiqe\\',  // conditional te_ending
     conditional_rule: 'attaching_to_te',  // defined later and if satisfied display expression_conditional
@@ -135,7 +135,7 @@ export const postbases = [
   {
     id: 8,
     description: '(will not in the future)',
-    englishModifier: (english) => { return ' (future) not' +  english; },
+    englishModifier: (english) => { return ' not' +  english; },
     expression: '@~+ngaite\\',
     expression_conditional: '',
     conditional_rule: '',
@@ -145,7 +145,7 @@ export const postbases = [
   {
     id: 9,
     description: 'will soon',
-    englishModifier: (english) => { return ' (future) soon' + english; },
+    englishModifier: (english) => { return ' will soon' + english; },
     expression: '@~+niarar\\',
     expression_conditional: '',
     conditional_rule: '',
@@ -254,8 +254,8 @@ export const postbases = [
   },
   {
     id: 20,
-    description: '(more or better in comparison)',
-    englishModifier: (english) => { return ' (more or better in comparison)' + english; },
+    description: 'to be more or better at',
+    englishModifier: (english) => { return ' (being more or better at)' + english; },
     expression: '-nru\\',
     expression_conditional: '',
     conditional_rule: '',
@@ -267,6 +267,7 @@ export const postbases = [
     description: 'loves to',
     englishModifier: (english) => { return ' loves to' + english; },
     englishModifierPlural: (english) => { return ' love to' + english; },
+    englishModifierGerund: (english) => { return ' loving to' + english; },
     expression: '@~+yunqe4\\',
     expression_conditional: '',
     conditional_rule: '',
@@ -278,6 +279,7 @@ export const postbases = [
     description: 'no longer wants to',
     englishModifier: (english) => { return ' no longer wants to' + english; },
     englishModifierPlural: (english) => { return ' no longer want to' + english; },
+    englishModifierGerund: (english) => { return ' no longer wanting to' + english; },
     expression: '@~+yuumiir(ar)te\\',
     expression_conditional: '',
     conditional_rule: '',
@@ -289,6 +291,7 @@ export const postbases = [
     description: 'not care to',
     englishModifier: (english) => { return ' not care to' + english; },
     englishModifierPlural: (english) => { return ' not care to' + english; },
+    englishModifierGerund: (english) => { return ' not caring to' + english; },
     expression: '@~+yuumite\\',
     expression_conditional: '',
     conditional_rule: '',
@@ -300,6 +303,7 @@ export const postbases = [
     description: 'yearn to',
     englishModifier: (english) => { return ' yearns to' + english; },
     englishModifierPlural: (english) => { return ' yearn to' + english; },
+    englishModifierGerund: (english) => { return ' yearning to' + english; },
     expression: '@~+yuumir\\',
     expression_conditional: '',
     conditional_rule: '',
@@ -311,6 +315,7 @@ export const postbases = [
     description: 'want to, tend to',
     englishModifier: (english) => { return ' wants to' + english; },
     englishModifierPlural: (english) => { return ' want to' + english; },
+    englishModifierGerund: (english) => { return ' wanting to' + english; },
     expression: '@~+yug\\',
     expression_conditional: '',
     conditional_rule: '',
@@ -322,6 +327,7 @@ export const postbases = [
     description: 'to enjoy doing',
     englishModifier: (english) => { return ' enjoys' + english; },
     englishModifierPlural: (english) => { return ' enjoy' + english; },
+    englishModifierGerund: (english) => { return ' enjoying' + english; },
     expression: '@~+yugar\\',
     expression_conditional: '',
     conditional_rule: '',

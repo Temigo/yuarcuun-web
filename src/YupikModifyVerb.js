@@ -453,6 +453,7 @@ class YupikModifyVerb extends Component {
     let infinitive_new_adj = test.replace(originalverb,verbtenses.Infinitive)
     let firstpass = true
     let englishEnding = []
+    let unmodifyingPostbases = [11, 0, 1, 12, 6, 13, 14, 15, 19, 20, 27]
     console.log(new_adj)
     if (moodSpecific == 'You, stop!' || nounEnding == 'device for') {
       if (tense == 'past') {
@@ -461,22 +462,45 @@ class YupikModifyVerb extends Component {
         englishEnding.push('(in the future)')
       }
       if (currentPostbases.length>0) {
-        firstpass = true
-        currentPostbases.forEach((p) => {
-          if (firstpass) {
-            if (p > 1 && p < 5) {
-              postbasesEnglish.push('being'+postbases[p].englishModifier(''))
-            } else {
-              postbasesEnglish.push(postbases[p].englishModifier(''))
-            }
-            firstpass = false
-          } else if (p > 1 && p < 5 || p > 15 && p < 19 ) {
-            postbasesEnglish.push('be'+postbases[p].englishModifier(''))
-          } else {
+        if (currentPostbases.every(r=> unmodifyingPostbases.indexOf(r) >= 0)) {
+          currentPostbases.forEach((p) => {
             postbasesEnglish.push(postbases[p].englishModifier(''))
-          }
-        })
-        englishEnding.push('be '+gerund_new_adj)
+          })
+          englishEnding.push(gerund_new_adj)
+        } else {
+          firstpass = true
+          currentPostbases.forEach((p) => {
+            if (p == 5) {
+              englishEnding.push(gerund_new_adj+' (in the past)') 
+            } else if (p == 7 || p == 8 || p == 9) {
+              englishEnding.push(gerund_new_adj+' (in the future)') 
+              postbasesEnglish.push(postbases[p].englishModifier(''))
+            } else if (firstpass) {
+              if (unmodifyingPostbases.includes(p)) {
+                postbasesEnglish.push(postbases[p].englishModifier(''))
+              } else {
+                if (p > 1 && p < 5 || p == 10 || p == 15) {
+                  postbasesEnglish.push('being'+postbases[p].englishModifier(''))
+                } else if (p > 20 && p < 27) {
+                  postbasesEnglish.push(postbases[p].englishModifierGerund(''))
+                } else {
+                  postbasesEnglish.push(postbases[p].englishModifier(''))
+                }
+                firstpass = false
+              }
+            } else {
+              if (p > 1 && p < 5 || p == 10 || p == 15) {
+                postbasesEnglish.push('be'+postbases[p].englishModifier(''))
+              } else if (p > 20 && p < 27) {
+                postbasesEnglish.push(postbases[p].englishModifierPlural(''))
+              } else {
+                postbasesEnglish.push(postbases[p].englishModifier(''))
+              }
+              firstpass = false              
+            }
+          })
+          englishEnding.push(infinitive_new_adj)
+        }
       } else {
         if (this.state.properties.includes('adjectival')) {
           englishEnding.push('being '+new_adj)
@@ -490,11 +514,11 @@ class YupikModifyVerb extends Component {
       if (person == '3' || person == '1') {
         newText1 = 'let'
         newText2 = 'stop '
-        newText3 = '!'
+        newText3 = newText3+'!'
       } else {
         newText2 = ', stop '
-        newText3 = '!'
-      }
+        newText3 = newText3+'!'
+      }      
     }
   }
 
