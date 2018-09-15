@@ -37,8 +37,8 @@ class YupikEntry extends Component {
     let text3 = ''
 
     let res = word
-    var rx1 = /\[([^\]]+)]/; 
-    var rx2 = /<([^\]]+)>/; 
+    var rx1 = /\[([^\]]+)]/;
+    var rx2 = /<([^\]]+)>/;
     let subject = word.match(rx1);
     let object = word.match(rx2);
     if (subject !== null) {
@@ -88,7 +88,7 @@ class YupikEntry extends Component {
                   <List.Content floated='right'>
                     <Icon size='large' name='angle right' />
                   </List.Content>
-                <Link  to={{pathname: '/' + this.state.word + '/' + index + '/modify', state: { entry: this.state.entry, word: this.state.word }}}>
+                <Link  to={{pathname: '/' + this.state.word + '/' + index + '/modify/' + (this.state.entry.descriptor[0].includes('verb') ? 'verb' : 'noun'), state: { entry: this.state.entry, word: this.state.word }}}>
                   <List.Header>{usage[0]}</List.Header>
                   <List.Description>
                   {this.fontUsage(usage[1])[0]}

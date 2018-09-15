@@ -4,9 +4,21 @@ import './semantic/dist/semantic.min.css';
 import { API_URL } from './App.js';
 
 class StickyMenu extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      switchMode: false,
+    };
+  }
+
+  switchMode(event, data) {
+    this.setState({ switchMode: !this.state.switchMode });
+    this.props.switchMode(event, data);
+  }
+
   speak(event, data) {
-      let audio = new Audio(API_URL + "/tts/" + this.props.word.replace('-', ''));
-      audio.play();
+    let audio = new Audio(API_URL + "/tts/" + this.props.word.replace('-', ''));
+    audio.play();
   }
 
   render() {
@@ -23,7 +35,10 @@ class StickyMenu extends Component {
         </Header>
         </Menu.Item>
         <Menu.Item>
-          <Icon name='volume up' color='teal' size='big' onClick={this.speak.bind(this)} />
+              <Icon name='volume up' color='teal' size='big' onClick={this.speak.bind(this)} />
+              {this.props.switchMode !== undefined ?
+                <Icon circular name='cogs' color='teal' size='big' inverted={this.state.switchMode} onClick={this.switchMode.bind(this)}/>
+              : ''}
         </Menu.Item>
       </Menu>
     );
