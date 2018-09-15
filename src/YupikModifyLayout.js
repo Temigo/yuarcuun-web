@@ -81,8 +81,8 @@ class YupikModifyLayout extends Component {
       colorSeed: getRandomArbitrary(0, 100),
       //usage: "[he] is hunting <it>",
       currentPostbases: [],
-      modifiedWord: '',
-      currentWord: '',
+      modifiedWord: '',//props.word.yupik,
+      currentWord: '',//props.word.yupik,
       currentEnglish: "",//currentVerb,
       modifiedEnglish: "",//props.word.english,//new Inflectors(currentVerb),
       displayPostbases: false,
@@ -91,8 +91,7 @@ class YupikModifyLayout extends Component {
     this.processUsage=this.processUsage.bind(this);
     this.modifyWord = this.modifyWord.bind(this);
     this.initialize = this.initialize.bind(this);
-
-    if (props.location.state == undefined) { // from search page
+     if (props.location.state == undefined) { // from search page
       let word = props.match.params.word;
       this.getWord(word);
     }
@@ -107,7 +106,6 @@ class YupikModifyLayout extends Component {
       };
       this.initialize()
     }
-
   }
 
   initialize() {
@@ -497,6 +495,7 @@ class YupikModifyLayout extends Component {
     // // console.log(nlp('be happy').sentences().toPastTense().out())
     // console.log(newText1)
     // console.log(newText2)
+
     var postbasesEnglish = []
     let test = new_adj
     let originalverb = nlp(test).verbs().out().split(' ')[0]
@@ -655,7 +654,7 @@ class YupikModifyLayout extends Component {
           } else {
             postbasesEnglish.push(postbases[p].englishModifier(''))
           }
-          firstpass = false
+          firstpass = false 
           if (p == 28) {
             postbase28 = true
           }
@@ -695,7 +694,7 @@ class YupikModifyLayout extends Component {
           } else {
             englishEnding.push(gerund_new_adj)
           }
-
+          
         } else {
           firstpass = true
           currentPostbases.forEach((p) => {
@@ -757,7 +756,7 @@ class YupikModifyLayout extends Component {
               postbasesEnglish.push(postbases[p].englishModifier(''))
             }
           })
-          englishEnding.push(new_adj)
+          englishEnding.push(new_adj)          
         } else {
           firstpass = true
           currentPostbases.forEach((p) => {
@@ -773,7 +772,7 @@ class YupikModifyLayout extends Component {
               postbase28 = true
             }
           })
-          englishEnding.push('be '+new_adj)
+          englishEnding.push('be '+new_adj) 
         }
       } else {
         englishEnding.push(getsubjectis(tense, people, person, '')+' '+new_adj)
@@ -790,7 +789,7 @@ class YupikModifyLayout extends Component {
               postbasesEnglish.push(postbases[p].englishModifier(''))
             }
           })
-          englishEnding.push(new_adj)
+          englishEnding.push(new_adj)          
         } else {
           firstpass = true
           currentPostbases.forEach((p) => {
@@ -806,7 +805,7 @@ class YupikModifyLayout extends Component {
               postbase28 = true
             }
           })
-          englishEnding.push('be '+gerund_new_adj)
+          englishEnding.push('be '+gerund_new_adj) 
         }
       } else {
         englishEnding.push(getsubjectis(tense, people, person, '')+' '+gerund_new_adj)
@@ -852,7 +851,7 @@ class YupikModifyLayout extends Component {
         newText1 = ''
         newText2 = ', '
         newText3 = newText3+'!'
-      }
+      } 
     } else if (moodSpecific == 'do (in the future)!') {
       if (person == '3' || person == '1') {
         newText1 = 'let'
@@ -880,35 +879,35 @@ class YupikModifyLayout extends Component {
         newText1 = 'when '+getsubjectis(tense,people,person,'does')
         newText2 = ''
         newText3 = ''
-      }
+      }     
     } else if (tense == 'past') {
       newText1 = ''
       newText2 = ''
-      newText3 = ''
+      newText3 = ''         
     } else if (moodSpecific == 'who') {
       newText1 = 'who '+getsubjectis(tense,people,person,'')
       newText2 = 'who'
-      newText3 = ''
+      newText3 = ''   
     // } else if (moodSpecific == 'at where') {
     //   newText1 = 'at where '+getsubjectis(tense,people,person,'does')
     //   newText2 = ''
-    //   newText3 = ''
+    //   newText3 = ''   
     // } else if (moodSpecific == 'from where') {
     //   newText1 = 'from where '+getsubjectis(tense,people,person,'does')
     //   newText2 = ''
-    //   newText3 = ''
+    //   newText3 = '' 
     // } else if (moodSpecific == 'toward where') {
     //   newText1 = 'toward where '+getsubjectis(tense,people,person,'does')
     //   newText2 = ''
-    //   newText3 = ''
+    //   newText3 = '' 
     // } else if (moodSpecific == 'why') {
     //   newText1 = 'why '+getsubjectis(tense,people,person,'does')
     //   newText2 = ''
-    //   newText3 = ''
+    //   newText3 = '' 
     // } else if (moodSpecific == 'how') {
     //   newText1 = 'how '+getsubjectis(tense,people,person,'does')
     //   newText2 = ''
-    //   newText3 = ''
+    //   newText3 = '' 
     } else if (mood == 'interrogative') {
       newText1 = interrogative.find((p)=> {return p.mood==moodSpecific}).text+' '+getsubjectis(tense,people,person,'does')
       newText2 = ''
@@ -926,7 +925,7 @@ class YupikModifyLayout extends Component {
     } else {
       newText1 = ''
       newText2 = ''
-      newText3 = ''
+      newText3 = ''      
     }
 
     console.log(nounEnding)
@@ -935,7 +934,7 @@ class YupikModifyLayout extends Component {
     console.log(englishEnding)
     console.log(newText3)
 
-    currentPostbases = currentPostbases.reverse()
+    // currentPostbases = currentPostbases.reverse()
     // let rootEnglish = ''
     // let adder = ''
     // if (currentPostbases.length>0) {
@@ -1600,14 +1599,25 @@ class YupikModifyLayout extends Component {
     const{value2}=this.state
     const{value3}=this.state
     const{id1}=this.state
+    console.log(this.state.postbasesList)
+    let countEndingPostbase = this.state.postbasesList.length-this.state.currentPostbases.length
     let postbasesDisplay = (
       <span>
       <span style={{color: this.state.colorsList[0]}}>{this.state.currentWord}</span>
-      {this.state.postbasesList.map((p, i) => {
-        return <span style={{color: this.state.colorsList[i+1]}}>{' ' + p}</span>;
+      {this.state.postbasesList.slice(0,this.state.postbasesList.length-countEndingPostbase).map((p, i) => {
+        console.log(i)
+        console.log(this.state.postbasesList.length)
+        console.log(countEndingPostbase)
+        return <span style={{color: this.state.colorsList[this.state.postbasesList.length-1-i]}}>{' ' + p}</span>;
       })}
+      {this.state.postbasesList.slice(this.state.postbasesList.length-countEndingPostbase,this.state.postbasesList.length+1).map((p, i) => {
+        return <span style={{color: this.state.colorsList[1]}}>{' ' + p}</span>;
+      })}      
       </span>
     );
+    if (this.state.currentPostbases.length == 0) {
+      console.log('no postbases')
+    }
     let wordDisplay = (
       <span>
       {this.state.colorIndexes.map((index, i) => {
@@ -1669,15 +1679,17 @@ class YupikModifyLayout extends Component {
           <Grid.Row>
             <Grid.Column verticalAlign='middle' align='center'>
               <Header as='h4' align='center'>
-                {this.state.text1}
+                <span style={{color: this.state.colorsList[1]}}>{this.state.text1}</span>
                 {' '}
                 <Dropdown inline options={dict1} onChange={this.setValue1.bind(this)} value={value1} />
                 {' '}
                 {this.state.text2}
                 {' '}
-                {this.state.postbasesEnglish.join(' ')}
+                {this.state.postbasesEnglish.reverse().map((p, i) => {
+                return <span style={{color: this.state.colorsList[i+2]}}>{' ' + p}</span>;
+                })}                
                 {' '}
-                {this.state.englishEnding[0]}
+                <span style={{color: this.state.colorsList[0]}}>{this.state.englishEnding[0]}</span>                
                 {' '}
                 {this.state.objectExists ?
                 <Dropdown inline options={dict2} onChange={this.setValue2.bind(this)} value={value2} /> : ''}
