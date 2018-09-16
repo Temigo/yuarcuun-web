@@ -1,28 +1,29 @@
 import React, { Component } from 'react';
 import './semantic/dist/semantic.min.css';
-import { Grid, Header, Dropdown } from 'semantic-ui-react';
+import { Container, Grid, Header, Dropdown, List } from 'semantic-ui-react';
+import { Route } from 'react-router-dom';
+import {withRouter} from 'react-router';
+
+import palette from 'google-palette';
+import shuffle from 'shuffle-array';
+import axios from 'axios';
+import nlp from 'compromise';
+import { API_URL } from './App.js';
+
 import YupikModify from './YupikModify.js';
 import YupikModifyNoun from './YupikModifyNoun.js';
 import YupikModifyVerb from './YupikModifyVerb.js';
 import StickyMenu from './StickyMenu.js';
-import {withRouter} from 'react-router';
 import YupikEnding from './YupikEnding.js';
-import { Route } from 'react-router-dom';
 import YupikEndingGroups from './YupikEndingGroups.js';
 import YupikPostbaseGroups from './YupikPostbaseGroups.js';
 import YupikPostbase from './YupikPostbase.js';
-import { Container } from 'semantic-ui-react';
 import YupikAllPostbases from './YupikAllPostbases.js';
 import YupikAllNounPostbases from './YupikAllNounPostbases.js';
 import YupikNounDescriptors from './YupikNounDescriptors.js';
 import YupikNounPhrase from './YupikNounPhrase.js';
 import YupikNounCombine from './YupikNounCombine.js';
 import { options1, options2, options3, postbases, nounPostbases } from './constants.js';
-import palette from 'google-palette';
-import shuffle from 'shuffle-array';
-import axios from 'axios';
-import nlp from 'compromise';
-import { API_URL } from './App.js';
 import { interrogative, optative, dependent, verb2noun, postbaseButtons, enclitics } from './modifyVerbOptions.js';
 import { nounEndings, indicative_intransitive_endings,
   indicative_transitive_endings, interrogative_intransitive_endings,
@@ -33,6 +34,7 @@ import { nounEndings, indicative_intransitive_endings,
   connective_consonantEnd_transitive_endings, connective_contemporative_intransitive_endings,
   connective_contemporative_transitive_endings, connective_conditional_intransitive_endings,
   connective_conditional_transitive_endings,  absolutive_endings, localis_endings, relative_endings, ablative_endings, terminalis_endings, vialis_endings, equalis_endings } from './constants_verbs.js';
+import Chip from './Chip.js';
 
 function getRandomArbitrary(min, max) {
     return Math.floor(Math.random() * (max - min) + min);
@@ -2075,6 +2077,18 @@ class YupikModifyLayout extends Component {
             </Grid.Row>
             : ''
           }
+
+          <Grid.Row textAlign='center'>
+            <Grid.Column>
+              <List horizontal>
+                {this.state.currentPostbases.map((index) =>
+                  <List.Item onClick={(event) => this.setPostbase(index, event)}>
+                    <Chip text={postbases.find((p) => p.id == index).description} />
+                  </List.Item>
+                )}
+              </List>
+            </Grid.Column>
+          </Grid.Row>
 
         </Grid>
         <Route exact path={`${this.props.match.path}/noun`} component={YupikModifyNoun} />
