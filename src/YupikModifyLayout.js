@@ -79,9 +79,9 @@ class YupikModifyLayout extends Component {
       tense: 'present',
       text1: "",
       text2: "",
-      adjectivesEnglish: '',
-      nounEndingEnglish: '',
-      verbEndingEnglish: '',
+      adjectivesEnglish: [],
+      nounEndingEnglish: [],
+      verbEndingEnglish: [],
       mood: this.verb ? "indicative" : "absolutive",
       moodSpecific: this.verb ? "indicative" : "absolutive",
       postbasesEnglish: [],
@@ -2019,46 +2019,48 @@ class YupikModifyLayout extends Component {
               <Header as='h4' align='center'>
 
                 {(this.state.verbEnding ?
-                  <Dropdown inline options={dict1} onChange={this.setValue1.bind(this)} value={value1} /> :
+                  <span style={{color: this.state.colorsList[this.state.postbasesList.length]}}>
+                  <Dropdown inline options={dict1} onChange={this.setValue1.bind(this)} value={value1} /> 
+                  </span>:
                   ''
                 )}
                 {' '}
                 {(this.state.possessiveButton == 1 ?
-                  <Dropdown inline options={dict3} onChange={this.setValue3.bind(this)} value={value3} /> :
+                  <span style={{color: this.state.colorsList[this.state.adjectivesEnglish.length+1]}}>
+                  <Dropdown inline options={dict3} onChange={this.setValue3.bind(this)} value={value3} /> 
+                  </span>:
                   ''
                 )}
 
                 {this.state.verbEndingEnglish != '' ?
-                <text> {this.state.verbEndingEnglish} </text>
+                <span style={{color: this.state.colorsList[this.state.adjectivesEnglish.length+1]}}>{this.state.verbEndingEnglish}</span>
                 :
                 ''
                 }
-                {this.state.adjectivesEnglish != '' ?
-                <text> {this.state.adjectivesEnglish.join(', ')} </text>
-                :
-                ''
-                }
+                {this.state.adjectivesEnglish.reverse().map((p, i) => {
+                return <span style={{color: this.state.colorsList[i+1]}}>{' ' + p}</span>;
+                })}
                 {' '}
-                {this.state.text2}
+                <span style={{color: this.state.colorsList[0]}}>{this.state.text2}</span>
                 {' '}
                 {this.state.nounEndingEnglish != '' ?
-                <text> ({this.state.nounEndingEnglish}) </text>
+                <span style={{color: this.state.colorsList[this.state.adjectivesEnglish.length+1]}}>({this.state.nounEndingEnglish})</span>
                 :
                 ''
                 }
                 {' '}
                 {this.state.verbEnding== false && this.state.value4 == 1 ?
-                '(one of them)'
+                ''
                 :
                 ''
                 }
                 {this.state.verbEnding== false && this.state.value4 == 2 ?
-                '(two of them)'
+                <span style={{color: this.state.colorsList[this.state.adjectivesEnglish.length+1]}}>(two of them)</span>
                 :
                 ''
                 }
                 {this.state.verbEnding== false && this.state.value4 == 3 ?
-                '(three of them)'
+                <span style={{color: this.state.colorsList[this.state.adjectivesEnglish.length+1]}}>(three of them)</span>
                 :
                 ''
                 }
