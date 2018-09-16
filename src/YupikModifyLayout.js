@@ -2016,8 +2016,9 @@ class YupikModifyLayout extends Component {
       <Container attached style={{ paddingTop: '6em' }}>
       <Visibility
         onTopPassed={() => {console.log('top passed!'); this.setState({ headerFixed: true }); }}
+        onTopPassedReverse={() => {console.log('top reverse passed!'); this.setState({ headerFixed: false }); }}
         once={false}
-        offset={[120, 0]}
+        offset={[120, 120]}
       >
         <Grid style={this.state.headerFixed ? fixedStyle : {top: '1em'}}>
           {this.state.advancedMode ?
@@ -2145,6 +2146,7 @@ class YupikModifyLayout extends Component {
             : ''
           }
 
+          {this.state.currentPostbases.length > 0 ?
           <Grid.Row textAlign='center'>
             <Grid.Column>
               <List horizontal>
@@ -2160,6 +2162,7 @@ class YupikModifyLayout extends Component {
               </List>
             </Grid.Column>
           </Grid.Row>
+          : ''}
 
         </Grid>
         </Visibility>
@@ -2168,7 +2171,7 @@ class YupikModifyLayout extends Component {
           onTopVisibleReverse={() => {console.log('top visible!'); this.setState({ headerFixed: false }); }}
           offset={this.state.headerFixed ? [100, 0] : [100, 0]}
         >
-        <div style={this.state.headerFixed ? {paddingTop: '10em'} : {paddingTop: '1em'}}>
+        <div style={this.state.headerFixed ? {paddingTop: '12em'} : {paddingTop: '1.5em'}}>
         <Route exact path={`${this.props.match.path}/noun`} component={YupikModifyNoun} />
         <Route exact path={`${this.props.match.path}/noun/all`} render={(props) => <YupikAllNounPostbases {...props} {...yupikAllPostbasesProps} />} />
         <Route exact path={`${this.props.match.path}/noun/descriptors`} render={(props) => <YupikNounDescriptors {...props} {...yupikAllPostbasesProps} />} />

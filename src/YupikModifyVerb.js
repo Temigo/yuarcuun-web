@@ -38,7 +38,7 @@ class YupikModifyVerb extends Component {
                 </Grid.Column>
               </Grid.Row>
             </Grid>
-          <div>
+          <div style={{marginTop: '1em'}}>
           {this.props.advancedMode ?
           <Link to={`${this.props.match.url}/all`}>
           <Button primary fluid attached='bottom' icon >
