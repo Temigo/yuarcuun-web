@@ -154,7 +154,7 @@ class SearchPage extends Component {
             <Container textAlign='left'>
               <Divider fluid />
               <List horizontal bulleted>
-                <List.Item> © Yugtun by Christopher W. Liu</List.Item>
+                <List.Item> © Yuarcuun </List.Item>
                 <List.Item> <Link to='/about'>About</Link> </List.Item>
                 <List.Item> contact@yugtun.com</List.Item>
               </List>
