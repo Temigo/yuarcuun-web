@@ -134,6 +134,7 @@ class YupikModifyLayout extends Component {
       this.state.alternateTense = 'recent past'
     }
     let new_state = this.processUsage(this.state.usage);
+    console.log('processed')
     this.state = {...this.state, ...new_state};
     if (this.state.objectExists) {
       this.state.postbasesList = ["+'(g)aa"]
@@ -534,6 +535,8 @@ class YupikModifyLayout extends Component {
     let newText1 = ''
     let newText2 = this.state.originalText2
     let newText3 = this.state.originalText3
+    console.log('original', newText2, newText3)
+    //if (this.state.originalText2 == '' && this.state.originalText3 == '') { return; }
     let new_str = ''
     let new_adj = ''
     let be_adj = ''
@@ -615,7 +618,7 @@ class YupikModifyLayout extends Component {
     // // console.log(nlp('be happy').sentences().toPastTense().out())
     // console.log(newText1)
     // console.log(newText2)
-
+    console.log(new_adj);
     var postbasesEnglish = []
     let test = new_adj
     let originalverb = nlp(test).verbs().out().split(' ')[0]
@@ -1822,6 +1825,12 @@ class YupikModifyLayout extends Component {
 
   switchMode(event, data) {
     this.setState({ advancedMode: !this.state.advancedMode });
+    if (this.state.advancedMode) {
+      this.props.history.push(this.verb ? `${this.props.match.url}/verb` : `${this.props.match.url}/noun`);
+    }
+    else {
+      this.props.history.push(this.verb ? `${this.props.match.url}/verb/all` : `${this.props.match.url}/noun/all`);
+    }
   }
 
   render() {
@@ -2020,14 +2029,14 @@ class YupikModifyLayout extends Component {
 
                 {(this.state.verbEnding ?
                   <span style={{color: this.state.colorsList[this.state.postbasesList.length]}}>
-                  <Dropdown inline options={dict1} onChange={this.setValue1.bind(this)} value={value1} /> 
+                  <Dropdown inline options={dict1} onChange={this.setValue1.bind(this)} value={value1} />
                   </span>:
                   ''
                 )}
                 {' '}
                 {(this.state.possessiveButton == 1 ?
                   <span style={{color: this.state.colorsList[this.state.adjectivesEnglish.length+1]}}>
-                  <Dropdown inline options={dict3} onChange={this.setValue3.bind(this)} value={value3} /> 
+                  <Dropdown inline options={dict3} onChange={this.setValue3.bind(this)} value={value3} />
                   </span>:
                   ''
                 )}
