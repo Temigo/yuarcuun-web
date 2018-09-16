@@ -1736,6 +1736,7 @@ class YupikModifyLayout extends Component {
           }
         }
         console.log(postbasesList)
+        // currentPostbases = currentPostbases.reverse()
 
         // if (mood == 'indicative') {
         //   postbasesList = processPostbases(currentPostbases, base, nounPostbases)
@@ -1916,36 +1917,72 @@ class YupikModifyLayout extends Component {
     const{id1}=this.state
     console.log(this.state.postbasesList)
     let countEndingPostbase = this.state.postbasesList.length-this.state.currentPostbases.length
-    let postbasesDisplay = (
-      <span>
-      <span style={{color: this.state.colorsList[0]}}>{this.state.currentWord}</span>
-      {this.state.postbasesList.slice(0,this.state.postbasesList.length-countEndingPostbase).map((p, i) => {
-        console.log(i)
-        console.log(this.state.postbasesList.length)
-        console.log(countEndingPostbase)
-        return <span style={{color: this.state.colorsList[this.state.postbasesList.length-1-i]}}>{' ' + p}</span>;
-      })}
-      {this.state.postbasesList.slice(this.state.postbasesList.length-countEndingPostbase,this.state.postbasesList.length+1).map((p, i) => {
-        return <span style={{color: this.state.colorsList[1]}}>{' ' + p}</span>;
-      })}
-      </span>
-    );
-    if (this.state.currentPostbases.length == 0) {
-      console.log('no postbases')
+    let postbasesDisplay = ''
+    let wordDisplay = ''
+    if (this.verb || this.state.verbEnding || this.state.possessiveButton == 1) {
+      postbasesDisplay = (
+        <span>
+        <span style={{color: this.state.colorsList[0]}}>{this.state.currentWord}</span>
+        {this.state.postbasesList.slice(0,this.state.postbasesList.length-countEndingPostbase).map((p, i) => {
+          console.log(i)
+          console.log(this.state.postbasesList.length)
+          console.log(countEndingPostbase)
+          return <span style={{color: this.state.colorsList[this.state.postbasesList.length-1-i]}}>{' ' + p}</span>;
+        })}
+        {this.state.postbasesList.slice(this.state.postbasesList.length-countEndingPostbase,this.state.postbasesList.length+1).map((p, i) => {
+          return <span style={{color: this.state.colorsList[2+i]}}>{' ' + p}</span>;
+        })}
+        </span>
+      );
+      if (this.state.currentPostbases.length == 0) {
+        console.log('no postbases')
+      }
+      wordDisplay = (
+        <span>
+        {this.state.colorIndexes.map((index, i) => {
+          let c = this.state.colorsList[i];
+          if (i < this.state.colorIndexes.length-1) {
+            return <span style={{color: c}}>{this.state.modifiedWord.substring(this.state.colorIndexes[i], this.state.colorIndexes[i+1])}</span>;
+          }
+          else {
+            return <span style={{color: c}}>{this.state.modifiedWord.substring(this.state.colorIndexes[i])}</span>;
+          }
+        })}
+        </span>
+      );      
+    } else {
+      postbasesDisplay = (
+        <span>
+        <span style={{color: this.state.colorsList[0]}}>{this.state.currentWord}</span>
+        {this.state.postbasesList.slice(0,this.state.postbasesList.length-countEndingPostbase).map((p, i) => {
+          console.log(i)
+          console.log(this.state.postbasesList.length)
+          console.log(countEndingPostbase)
+          return <span style={{color: this.state.colorsList[this.state.postbasesList.length-1-i]}}>{' ' + p}</span>;
+        })}
+        {this.state.postbasesList.slice(this.state.postbasesList.length-countEndingPostbase,this.state.postbasesList.length+1).map((p, i) => {
+          return <span style={{color: this.state.colorsList[2+i]}}>{' ' + p}</span>;
+        })}
+        </span>
+      );
+      if (this.state.currentPostbases.length == 0) {
+        console.log('no postbases')
+      }
+      wordDisplay = (
+        <span>
+        {this.state.colorIndexes.map((index, i) => {
+          let c = this.state.colorsList[i];
+          if (i < this.state.colorIndexes.length-1) {
+            return <span style={{color: c}}>{this.state.modifiedWord.substring(this.state.colorIndexes[i], this.state.colorIndexes[i+1])}</span>;
+          }
+          else {
+            return <span style={{color: c}}>{this.state.modifiedWord.substring(this.state.colorIndexes[i])}</span>;
+          }
+        })}
+        </span>
+      );      
     }
-    let wordDisplay = (
-      <span>
-      {this.state.colorIndexes.map((index, i) => {
-        let c = this.state.colorsList[i];
-        if (i < this.state.colorIndexes.length-1) {
-          return <span style={{color: c}}>{this.state.modifiedWord.substring(this.state.colorIndexes[i], this.state.colorIndexes[i+1])}</span>;
-        }
-        else {
-          return <span style={{color: c}}>{this.state.modifiedWord.substring(this.state.colorIndexes[i])}</span>;
-        }
-      })}
-      </span>
-    );
+
 
     let yupikAllPostbasesProps = {
       'mood': this.state.mood,
@@ -2094,7 +2131,11 @@ class YupikModifyLayout extends Component {
               <List horizontal>
                 {this.state.currentPostbases.map((index) =>
                   <List.Item onClick={(event) => this.setPostbase(index, event)}>
-                    <Chip text={postbases.find((p) => p.id == index).description} />
+                    {this.verb ?
+                      <Chip color={this.state.colorsList[(this.state.currentPostbases.find((p) => p == index))+1]} text={postbases.find((p) => p.id == index).description} />
+                    :
+                      <Chip color={this.state.colorsList[(this.state.currentPostbases.find((p) => p == index))+1]} text={nounPostbases.find((p) => p.id == index).description} />
+                    }
                   </List.Item>
                 )}
               </List>

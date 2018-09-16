@@ -5,7 +5,7 @@ import { Label, Icon } from 'semantic-ui-react';
 class Chip extends Component {
   render() {
     return (
-      <Label horizontal as='a'>{this.props.text}<Icon name='delete' /></Label>
+      <Label style={{backgroundColor:this.props.color, color:'white'}} horizontal as='a'>{this.props.text}<Icon name='delete' /></Label>
     );
   }
 }
