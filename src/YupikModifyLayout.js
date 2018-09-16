@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './semantic/dist/semantic.min.css';
-import { Container, Grid, Header, Dropdown, List } from 'semantic-ui-react';
+import { Container, Grid, Header, Dropdown, List, Visibility } from 'semantic-ui-react';
 import { Route } from 'react-router-dom';
 import {withRouter} from 'react-router';
 
@@ -46,6 +46,7 @@ class YupikModifyLayout extends Component {
     console.log('YupikModifyLayout props', props)
     this.verb = this.props.location.pathname.includes('verb');
     this.state = {
+      headerFixed: false,
       advancedMode: false,
       usageId: this.props.match.params.usage_id,
       entry: undefined,
@@ -1949,7 +1950,7 @@ class YupikModifyLayout extends Component {
           }
         })}
         </span>
-      );      
+      );
     } else {
       postbasesDisplay = (
         <span>
@@ -1980,7 +1981,7 @@ class YupikModifyLayout extends Component {
           }
         })}
         </span>
-      );      
+      );
     }
 
 
@@ -2000,11 +2001,25 @@ class YupikModifyLayout extends Component {
       'setValue4': this.setValue4.bind(this),
       'setPossessiveButton': this.setPossessiveButton.bind(this),
     };
+    let fixedStyle = {
+      position: 'fixed',
+      margin: 'auto',
+      top: '5.9em',
+      zIndex: 100,
+      backgroundColor: 'white',
+      width: '92%',
+      //borderBottom: '1px solid black',
+    };
     return (
       <div>
       <StickyMenu word={this.state.currentWord} goBack={this.props.history.goBack} switchMode={this.switchMode.bind(this)} />
-      <Container attached style={{ marginTop: '6em' }}>
-        <Grid>
+      <Container attached style={{ paddingTop: '6em' }}>
+      <Visibility
+        onTopPassed={() => {console.log('top passed!'); this.setState({ headerFixed: true }); }}
+        once={false}
+        offset={[120, 0]}
+      >
+        <Grid style={this.state.headerFixed ? fixedStyle : {top: '1em'}}>
           {this.state.advancedMode ?
           <Grid.Row>
             <Grid.Column verticalAlign='middle' align='center'>
@@ -2012,7 +2027,9 @@ class YupikModifyLayout extends Component {
             </Grid.Column>
           </Grid.Row>
           : ''}
+
           <Grid.Row>
+
             <Grid.Column verticalAlign='middle' align='center'>
               <Header textAlign='center' as='h1'>
               {this.state.encliticExpression == '(again)' ? 'ataam '
@@ -2022,7 +2039,9 @@ class YupikModifyLayout extends Component {
               :''}
               </Header>
             </Grid.Column>
+
           </Grid.Row>
+
 
           {this.verb ?
           (this.state.nounEnding !== '' ?
@@ -2143,6 +2162,13 @@ class YupikModifyLayout extends Component {
           </Grid.Row>
 
         </Grid>
+        </Visibility>
+
+        <Visibility
+          onTopVisibleReverse={() => {console.log('top visible!'); this.setState({ headerFixed: false }); }}
+          offset={this.state.headerFixed ? [100, 0] : [100, 0]}
+        >
+        <div style={this.state.headerFixed ? {paddingTop: '10em'} : {paddingTop: '1em'}}>
         <Route exact path={`${this.props.match.path}/noun`} component={YupikModifyNoun} />
         <Route exact path={`${this.props.match.path}/noun/all`} render={(props) => <YupikAllNounPostbases {...props} {...yupikAllPostbasesProps} />} />
         <Route exact path={`${this.props.match.path}/noun/descriptors`} render={(props) => <YupikNounDescriptors {...props} {...yupikAllPostbasesProps} />} />
@@ -2155,6 +2181,8 @@ class YupikModifyLayout extends Component {
         <Route exact path={`${this.props.match.path}/verb/ending/:ending_group_id`} render={(props) => <YupikEnding {...props} {...yupikAllPostbasesProps}/>} />
         <Route exact path={`${this.props.match.path}/verb/ending/:ending_group_id/postbase`} component={YupikPostbaseGroups} />
         <Route exact path={`${this.props.match.path}/verb/ending/:ending_group_id/postbase/:postbase_group_id`} render={(props) => <YupikPostbase {...props} {...yupikAllPostbasesProps}/>} />
+        </div>
+        </Visibility>
       </Container>
       </div>
     );
