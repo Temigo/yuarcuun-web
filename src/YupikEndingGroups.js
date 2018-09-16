@@ -46,6 +46,15 @@ class YupikEndingGroups extends Component {
               Verb to noun
             </List.Content>
           </List.Item>
+          <List.Item as={Link} to={`${this.props.match.url}/4/postbase`}>
+            <List.Content floated='right'>
+              <Icon color='teal' name='chevron right' />
+            </List.Content>
+            <Icon circular name='map signs' />
+            <List.Content verticalAlign='middle'>
+              Other
+            </List.Content>
+          </List.Item>
         </List>
       </Segment>
     );
