@@ -29,6 +29,9 @@ class YupikEntry extends Component {
     }
   }
   fontUsage(word) {
+    if (this.state.entry.descriptor == 'noun') {
+      return ['(root form)','','','','']
+    }
     let new_state = {};
     let text1 = ''
     let sub = ''
@@ -51,10 +54,10 @@ class YupikEntry extends Component {
     if (object !== null) {
       res = res.split(rx2);
       text2 = res[0]
-      obj = res[1]
+      obj = '('+res[1]+')'
       text3 = res[2]
     }
-    return [text1, sub, text2, obj, text3]
+    return [text1, '('+sub+')', text2, obj, text3]
   }
   render() {
 
@@ -80,13 +83,13 @@ class YupikEntry extends Component {
         {this.state.entry.usage.length > 0 ? (
           <Grid.Row>
             <Grid.Column>
-            <Header as='h2'> Main Usage</Header>
+            <Header as='h2'>Add Postbases</Header>
             <List ordered selection celled>
             {this.state.entry.usage.map((usage, index) => {
               return (
                 <List.Item key={usage} style={{fontStyle:'italic'} }>
                   <List.Content floated='right'>
-                    <Icon size='large' name='angle right' />
+                    <Icon size='big' name='angle right' />
                   </List.Content>
                 <Link  to={{pathname: '/' + this.state.word + '/' + this.props.entryNumber + '/'+ index + '/modify/' + (this.state.entry.descriptor[0].includes('verb') ? 'verb' : 'noun'), state: { entry: this.state.entry, word: this.state.word }}}>
                   <List.Header>{usage[0]}</List.Header>

@@ -6,13 +6,13 @@ export const interrogative = [
   },
   {
     group: 'interrogative',
-    mood: 'when did (past)',
-    text: 'when? (past)',
+    mood: 'when (in past)',
+    text: 'when (in past)',
   },
   {
     group: 'interrogative',
-    mood: 'when will (future)',
-    text: 'when? (future)',
+    mood: 'when (in future)',
+    text: 'when (in future)',
   },
   {
     group: 'interrogative',
@@ -68,42 +68,42 @@ export const dependent = [
   {
     group: 'connective_precessive',
     mood: 'before',
-    text: 'precessive (before)',
+    text: 'before',
   },
   {
     group: 'connective_consequential',
     mood: 'because',
-    text: 'consequential (because)',
+    text: 'because',
   },
   {
     group: 'connective_contingent',
     mood: 'whenever',
-    text: 'contingent (whenever)',
+    text: 'whenever',
   },
   {
     group: 'connective_concessive',
     mood: 'although',
-    text: 'concessive (although)',
+    text: 'although',
   },
   {
     group: 'connective_conditional',
-    mood: 'while',
-    text: 'conditional (while)',
+    mood: 'if',
+    text: 'if',
   },
   {
     group: 'connective_first_contemporative',
     mood: 'when (past)',
-    text: '1st_contem (when in the past)',
+    text: 'when',
   },
   {
     group: 'connective_second_contemporative',
     mood: 'when (future)',
-    text: '2nd_contem (when in the future)',
+    text: 'when',
   },
   {
     group: 'subordinative',
     mood: 'by or being that',
-    text: 'subordinative (by or being that)',
+    text: 'by or being that',
   }
 ];
 
@@ -118,7 +118,7 @@ export const verb2noun = [
   },
   {
     ending: 'one that customarily/capably is',
-    text: 'one that customarily/capably',
+    text: 'one that customarily/capably is',
   },
   {
     ending: 'how to/way of',
