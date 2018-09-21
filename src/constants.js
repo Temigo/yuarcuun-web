@@ -61,7 +61,7 @@ export const postbases = [
     conditional_rule: '',
     priority: 1,
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
   },
   {
     id: 1,
@@ -72,7 +72,7 @@ export const postbases = [
     conditional_rule: '',
     priority: 1,
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
   },
   {
     id: 2,
@@ -83,7 +83,7 @@ export const postbases = [
     priority: 1,
     conditional_rule: '',
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
   },
   {
     id: 3,
@@ -94,7 +94,7 @@ export const postbases = [
     priority: 1,
     conditional_rule: '',
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
   },
   {
     id: 4,
@@ -104,7 +104,7 @@ export const postbases = [
     expression_conditional: '',
     conditional_rule: '',
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
   },
   {
     id: 5,
@@ -115,7 +115,7 @@ export const postbases = [
     priority: 3,
     conditional_rule: '',
     tense:'past',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
   },
   {
     id: 6,
@@ -126,7 +126,7 @@ export const postbases = [
     priority: 1,
     conditional_rule: '',
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
   },
   {
     id: 7,
@@ -137,18 +137,18 @@ export const postbases = [
     priority: 3,
     conditional_rule: 'attaching_to_te',  // defined later and if satisfied display expression_conditional
     tense:'future',
-    allowable_next_ids: [0,1,2,3,4]
+    allowable_next_ids: [0,1,2,3,4,6,7,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
   },
   {
     id: 8,
-    description: '(will not in the future)',
+    description: 'will not',
     englishModifier: (english) => { return ' not' +  english; },
     expression: '@~+ngaite\\',
     expression_conditional: '',
     priority: 3,
     conditional_rule: '',
     tense:'future',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,6,8,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
   },
   {
     id: 9,
@@ -159,7 +159,7 @@ export const postbases = [
     priority: 3,
     conditional_rule: '',
     tense:'future',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,6,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
   },
   {
     id: 10,
@@ -170,7 +170,7 @@ export const postbases = [
     priority: 1,
     conditional_rule: '',
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
   },
   {
     id: 11,
@@ -181,18 +181,18 @@ export const postbases = [
     priority: 1,
     conditional_rule: '',
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
   },
   {
     id: 12,
-    description: 'to __ again',
+    description: 'doing it again',
     englishModifier: (english) => { return ' (again)' + english; },
     expression: '-nqigte\\',
     expression_conditional: '',
     priority: 1,
     conditional_rule: '',
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
   },
   {
     id: 13,
@@ -203,7 +203,7 @@ export const postbases = [
     priority: 1,
     conditional_rule: '',
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
   },
   {
     id: 14,
@@ -214,7 +214,7 @@ export const postbases = [
     priority: 1,
     conditional_rule: '',
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
   },
   {
     id: 15,
@@ -225,7 +225,7 @@ export const postbases = [
     priority: 1,
     conditional_rule: '',
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
   },
   {
     id: 16,
@@ -238,7 +238,7 @@ export const postbases = [
     priority: 1,
     conditional_rule: '',
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
   },
   {
     id: 17,
@@ -251,7 +251,7 @@ export const postbases = [
     priority: 1,
     conditional_rule: '',
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
   },
   {
     id: 18,
@@ -264,7 +264,7 @@ export const postbases = [
     priority: 1,
     conditional_rule: '',
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
   },
   {
     id: 19,
@@ -275,7 +275,7 @@ export const postbases = [
     priority: 1,
     conditional_rule: '',
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
   },
   {
     id: 20,
@@ -286,7 +286,7 @@ export const postbases = [
     priority: 1,
     conditional_rule: '',
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
   },
   {
     id: 21,
@@ -299,7 +299,7 @@ export const postbases = [
     priority: 1,
     conditional_rule: '',
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
   },
   {
     id: 22,
@@ -312,7 +312,7 @@ export const postbases = [
     priority: 1,
     conditional_rule: '',
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
   },
   {
     id: 23,
@@ -325,11 +325,11 @@ export const postbases = [
     priority: 1,
     conditional_rule: '',
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
   },
   {
     id: 24,
-    description: 'yearn to',
+    description: 'yearns to',
     englishModifier: (english) => { return ' yearns to' + english; },
     englishModifierInfinitive: (english) => { return ' yearn to' + english; },
     englishModifierGerund: (english) => { return ' yearning to' + english; },
@@ -338,11 +338,11 @@ export const postbases = [
     priority: 1,
     conditional_rule: '',
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
   },
   {
     id: 25,
-    description: 'want to, tend to',
+    description: 'wants to',
     englishModifier: (english) => { return ' wants to' + english; },
     englishModifierInfinitive: (english) => { return ' want to' + english; },
     englishModifierGerund: (english) => { return ' wanting to' + english; },
@@ -351,11 +351,11 @@ export const postbases = [
     priority: 1,
     conditional_rule: '',
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
   },
   {
     id: 26,
-    description: 'to enjoy doing',
+    description: 'enjoys doing',
     englishModifier: (english) => { return ' enjoying' + english; },
     englishModifierInfinitive: (english) => { return ' enjoy' + english; },
     englishModifierGerund: (english) => { return ' enjoying' + english; },
@@ -364,7 +364,7 @@ export const postbases = [
     priority: 1,
     conditional_rule: '',
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
   },
   {
     id: 27,
@@ -375,7 +375,7 @@ export const postbases = [
     priority: 1,
     conditional_rule: '',
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
   },
   // {
   //   id: 28,
@@ -385,7 +385,7 @@ export const postbases = [
   //   expression_conditional: '',
   //   conditional_rule: '',
   //   tense:'',
-  //   allowable_next_ids: [1,3,4]
+  //   allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
   // },
   {
     id: 28,
@@ -396,7 +396,7 @@ export const postbases = [
     priority: 1,
     conditional_rule: '',
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
   },
   {
     id: 29,
@@ -422,7 +422,7 @@ export const nounPostbases = [
     conditional_rule: '',
     priority:4,
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
   },
   {
     id: 1,
@@ -435,7 +435,7 @@ export const nounPostbases = [
     conditional_rule: '',
     priority:4,
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
   },
   {
     id: 2,
@@ -448,7 +448,7 @@ export const nounPostbases = [
     conditional_rule: '',
     priority:4,
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
   },
   {
     id: 3,
@@ -461,7 +461,7 @@ export const nounPostbases = [
     conditional_rule: '',
     priority:4,
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
   },
   {
     id: 4,
@@ -474,7 +474,7 @@ export const nounPostbases = [
     conditional_rule: '',
     priority:4,
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
   },
   {
     id: 5,
@@ -487,7 +487,7 @@ export const nounPostbases = [
     conditional_rule: '',
     priority:4,
     tense:'past',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
   },
   {
     id: 6,
@@ -500,7 +500,7 @@ export const nounPostbases = [
     conditional_rule: '',
     priority:4,
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
   },
   {
     id: 7,
@@ -526,7 +526,7 @@ export const nounPostbases = [
     conditional_rule: '',
     priority:2,
     tense:'noun_end',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
   },
   {
     id: 9,
@@ -539,7 +539,7 @@ export const nounPostbases = [
     conditional_rule: '',
     priority:2,
     tense:'noun_end',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
   },
   {
     id: 10,
@@ -552,7 +552,7 @@ export const nounPostbases = [
     conditional_rule: '',
     priority:2,
     tense:'noun_end',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
   },
   {
     id: 11,
@@ -563,7 +563,7 @@ export const nounPostbases = [
     conditional_rule: '',
     priority:1,
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
   },
   {
     id: 12,
@@ -574,7 +574,7 @@ export const nounPostbases = [
     conditional_rule: '',
     priority:1,
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
   },
   {
     id: 13,
@@ -585,7 +585,7 @@ export const nounPostbases = [
     conditional_rule: '',
     priority:1,
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
   },
   {
     id: 14,
@@ -596,7 +596,7 @@ export const nounPostbases = [
     conditional_rule: '',
     priority:1,
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
   },
   {
     id: 15,
@@ -607,7 +607,7 @@ export const nounPostbases = [
     conditional_rule: '',
     priority:1,
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
   },
   {
     id: 16,
@@ -618,7 +618,7 @@ export const nounPostbases = [
     conditional_rule: '',
     priority:1,
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
   },
   {
     id: 17,
@@ -629,7 +629,7 @@ export const nounPostbases = [
     conditional_rule: '',
     priority:1,
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
   },
   {
     id: 18,
@@ -640,7 +640,7 @@ export const nounPostbases = [
     conditional_rule: '',
     priority:1,
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
   },
   {
     id: 19,
@@ -651,7 +651,7 @@ export const nounPostbases = [
     conditional_rule: '',
     priority:1,
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
   },
   {
     id: 20,
@@ -662,7 +662,7 @@ export const nounPostbases = [
     conditional_rule: '',
     priority:1,
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
   },
   {
     id: 21,
@@ -673,6 +673,6 @@ export const nounPostbases = [
     conditional_rule: '',
     priority:1,
     tense:'',
-    allowable_next_ids: [1,3,4]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
   }
 ];

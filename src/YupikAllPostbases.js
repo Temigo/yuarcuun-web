@@ -27,7 +27,7 @@ class YupikAllPostbases extends Component {
       <Accordion fluid styled exclusive={false}>
         <Accordion.Title active={this.state.activeIndex === 0 || this.props.mood === 'interrogative'} index={0} onClick={this.handleClick}>
           <Icon name='dropdown' />
-          Question form
+          Question forms
         </Accordion.Title>
         <Accordion.Content active={this.state.activeIndex === 0 || this.props.mood === 'interrogative'}>
           <Card.Group itemsPerRow={3} stackable>
@@ -38,6 +38,9 @@ class YupikAllPostbases extends Component {
               </Card>
             );
           })}
+          <Card>
+            <Button onClick={() => this.props.setEnclitic('-qaa', '(yes or no?)')} toggle active={this.props.enclitic === '-qaa'}>Yes or no?</Button>
+          </Card>
           </Card.Group>
         </Accordion.Content>
 
@@ -59,7 +62,7 @@ class YupikAllPostbases extends Component {
 
         <Accordion.Title active={this.state.activeIndex === 2 || this.props.mood[0] == 'c' || this.props.mood[0] == 's'} index={2} onClick={this.handleClick}>
           <Icon name='dropdown' />
-          Dependent clause
+          Connective endings
         </Accordion.Title>
         <Accordion.Content active={this.state.activeIndex === 2 || this.props.mood[0] == 'c' || this.props.mood[0] == 's'}>
           <Card.Group itemsPerRow={3} stackable>
@@ -75,7 +78,7 @@ class YupikAllPostbases extends Component {
 
         <Accordion.Title active={this.state.activeIndex === 3 || this.props.nounEnding != ''} index={3} onClick={this.handleClick}>
           <Icon name='dropdown' />
-          Verb to noun
+          Noun forms
         </Accordion.Title>
         <Accordion.Content active={this.state.activeIndex === 3 || this.props.nounEnding != ''}>
           <Card.Group itemsPerRow={3} stackable>
@@ -94,7 +97,8 @@ class YupikAllPostbases extends Component {
       <div align="center">
       Postbases:
       </div>
-
+      <Button content='Standard' basic fluid onClick={(event) => this.props.setPostbase(27, event)} toggle active={this.props.currentPostbases.indexOf(27) >= 0}>{postbases[27].description}</Button>
+<Divider />
       <Accordion styled >
         {postbaseButtons.map((group) => {
           return (

@@ -29,7 +29,7 @@ class YupikModifyVerb extends Component {
                     <Button onClick={(event) => this.props.setPostbase(7, event)} toggle active={this.props.currentPostbases.indexOf(7) >= 0}>{postbases[7].description}</Button>
                   </Card>
                   <Card>
-                    <Button onClick={(event) => this.props.setPostbase(21, event)} toggle active={this.props.currentPostbases.indexOf(21) >= 0}>{postbases[21].description}</Button>
+                    <Button onClick={(event) => this.props.setPostbase(25, event)} toggle active={this.props.currentPostbases.indexOf(25) >= 0}>{postbases[25].description}</Button>
                   </Card>
                   <Card>
                     <Button onClick={(event) => this.props.setPostbase(27, event)} toggle active={this.props.currentPostbases.indexOf(27) >= 0}>{postbases[27].description}</Button>

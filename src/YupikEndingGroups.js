@@ -34,7 +34,7 @@ class YupikEndingGroups extends Component {
             </List.Content>
             <Icon circular name='time' />
             <List.Content verticalAlign='middle'>
-              Dependent clause
+              Connective endings
             </List.Content>
           </List.Item>
           <List.Item as={Link} to={`${this.props.match.url}/3`}>
@@ -43,7 +43,7 @@ class YupikEndingGroups extends Component {
             </List.Content>
             <Icon circular name='clone' />
             <List.Content verticalAlign='middle'>
-              Verb to noun
+               Noun forms
             </List.Content>
           </List.Item>
           <List.Item as={Link} to={`${this.props.match.url}/4/postbase`}>

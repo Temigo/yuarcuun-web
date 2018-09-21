@@ -135,14 +135,13 @@ export const verb2noun = [
 ];
 
 export const postbaseButtons = [
+  {text: 'Time', indexes: [5, 7, 6, 8, 9, 10], activeIndex: 6, icon: 'time'},
+  {text: 'Desire', indexes: [25,21, 24,  26, 22, 23], activeIndex: 10, icon: 'child'},
+  {text: 'Ability', indexes: [4, 3, 2], activeIndex: 5, icon: 'football ball'},
+  {text: 'Trying', indexes: [18, 16, 17], activeIndex: 8, icon: 'cubes'},
+  {text: 'Habit/Frequency', indexes: [11, 12, 13, 14, 15, 29, 28], activeIndex: 7, icon: 'hourglass end'},
   {text: 'Maybe', indexes: [0, 1], activeIndex: 4, icon: 'thermometer half'},
-  {text: 'Ability', indexes: [2, 3, 4], activeIndex: 5, icon: 'football ball'},
-  {text: 'Time', indexes: [5, 6, 7, 8, 9, 10], activeIndex: 6, icon: 'time'},
-  {text: 'Habit/Frequency', indexes: [11, 12, 13, 14, 15], activeIndex: 7, icon: 'hourglass end'},
-  {text: 'Trying', indexes: [16, 17, 18], activeIndex: 8, icon: 'cubes'},
-  {text: 'Adjectival', indexes: [19, 20], activeIndex: 9, icon: 'thumbs up'},
-  {text: 'Desire', indexes: [21, 22, 23, 24, 25, 26], activeIndex: 10, icon: 'child'},
-  {text: 'Unlisted', indexes: [27, 28, 29], activeIndex: 11, icon: 'plus'},
+  {text: 'Comparison', indexes: [19, 20], activeIndex: 9, icon: 'thumbs up'}
 ];
 
 export const enclitics= {

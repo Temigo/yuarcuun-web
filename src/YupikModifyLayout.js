@@ -424,10 +424,10 @@ class YupikModifyLayout extends Component {
       if (currentPostbases.length === 0) {
         this.setState({allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]})
       } else if (currentPostbases.length === 1) {
-        this.setState({allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]})
-        //this.setState({allowable_next_ids: postbases[currentPostbases[0]].allowable_next_ids})
+        // this.setState({allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]})
+        this.setState({allowable_next_ids: postbases[currentPostbases[0]].allowable_next_ids})
       } else {
-        this.setState({allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]})
+        this.setState({allowable_next_ids: postbases[currentPostbases[0]].allowable_next_ids})
       }
             this.modifyWord(this.state.person, this.state.people, this.state.objectPerson, this.state.objectPeople, this.state.mood, this.state.moodSpecific, this.state.nounEnding, this.state.currentWord, currentPostbases);
     }
@@ -464,10 +464,10 @@ class YupikModifyLayout extends Component {
       if (currentPostbases.length === 0) {
         this.setState({allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]})
       } else if (currentPostbases.length === 1) {
-        this.setState({allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]})
-        //this.setState({allowable_next_ids: postbases[currentPostbases[0]].allowable_next_ids})
+        // this.setState({allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]})
+        this.setState({allowable_next_ids: postbases[currentPostbases[0]].allowable_next_ids})
       } else {
-        this.setState({allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]})
+        this.setState({allowable_next_ids: postbases[currentPostbases[0]].allowable_next_ids})
       }
       this.modifyWord(this.state.person, this.state.people, this.state.possessorPerson, this.state.possessorPeople, this.state.mood, this.state.moodSpecific, this.state.nounEnding, verbEnding,this.state.value4, this.state.currentWord, currentPostbases);
     }
@@ -1806,6 +1806,10 @@ class YupikModifyLayout extends Component {
               {wordDisplay}
               {this.state.enclitic !== '' && this.state.encliticExpression !== '(again)' ? this.state.enclitic
               :''}
+              <span style={{color: this.state.colorsList[2]}}>
+              {this.state.mood === 'interrogative' ? '?' :''}
+              </span>
+              
               </Header>
             </Grid.Column>
 
