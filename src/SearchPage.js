@@ -17,7 +17,7 @@ class SearchPage extends Component {
       wordsList: [],
       search: props.location.state == undefined ? '' : props.location.state.search,
       currentWord: {},
-      onlyCommon: false,
+      onlyCommon: true,
       startingSearch: true,
     }
     this.onChangeSearch = this.onChangeSearch.bind(this);
@@ -110,7 +110,7 @@ class SearchPage extends Component {
             <Grid.Row >
               <Grid.Column style={{ flex: 1 }}>
               <Input
-                placeholder='Search...'
+                placeholder='Search by word...'
                 icon='search'
                 iconPosition='left'
                 size='huge'

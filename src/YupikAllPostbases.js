@@ -34,7 +34,7 @@ class YupikAllPostbases extends Component {
           {interrogative.map((e) => {
             return (
               <Card>
-              <Button onClick={() => this.props.setMood(e.group, e.mood)} toggle active={this.props.moodSpecific === e.mood}>{e.text}</Button>
+              <Button onClick={() => this.props.setMood(e.group, e.text)} toggle active={this.props.moodSpecific === e.mood}>{e.mood}</Button>
               </Card>
             );
           })}
@@ -50,7 +50,7 @@ class YupikAllPostbases extends Component {
           {optative.map((e) => {
             return (
               <Card>
-              <Button onClick={() => this.props.setMood(e.group, e.mood)} toggle active={this.props.moodSpecific === e.mood}>{e.text}</Button>
+              <Button onClick={() => this.props.setMood(e.group, e.mood)} toggle active={this.props.moodSpecific === e.mood}>{e.mood}</Button>
               </Card>
             );
           })}
@@ -66,7 +66,7 @@ class YupikAllPostbases extends Component {
           {dependent.map((e) => {
             return (
               <Card>
-              <Button onClick={() => this.props.setMood(e.group, e.mood)} toggle active={this.props.moodSpecific === e.mood}>{e.text}</Button>
+              <Button onClick={() => this.props.setMood(e.group, e.mood)} toggle active={this.props.moodSpecific === e.mood}>{e.mood}</Button>
               </Card>
             );
           })}

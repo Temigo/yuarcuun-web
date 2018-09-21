@@ -10,8 +10,8 @@ class YupikPostbase extends Component {
   render() {
     let group_id = this.props.match.params.postbase_group_id;
     //console.log(postbaseButtons, group_id);
-    postbaseButtons.forEach((p) => { console.log(p, p.activeIndex, p.activeIndex == group_id, p.activeIndex == parseInt(group_id)); })
-    console.log(postbaseButtons.filter((p) => { p.activeIndex == parseInt(group_id) }))
+    // postbaseButtons.forEach((p) => { console.log(p, p.activeIndex, p.activeIndex == group_id, p.activeIndex == parseInt(group_id)); })
+    // console.log(postbaseButtons.filter((p) => { p.activeIndex == parseInt(group_id) }))
     let group = postbaseButtons.find((p) => { return p.activeIndex == group_id });
     return (
       <Card.Group stackable itemsPerRow={3}>
