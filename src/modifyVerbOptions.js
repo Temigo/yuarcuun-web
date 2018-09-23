@@ -136,7 +136,7 @@ export const verb2noun = [
 
 export const postbaseButtons = [
   {text: 'Time', indexes: [5, 7, 6, 8, 9, 10], activeIndex: 6, icon: 'time'},
-  {text: 'Desire', indexes: [25,21, 24,  26, 22, 23], activeIndex: 10, icon: 'child'},
+  {text: 'Desire', indexes: [25,21, 24,  22, 23], activeIndex: 10, icon: 'child'},
   {text: 'Ability', indexes: [4, 3, 2], activeIndex: 5, icon: 'football ball'},
   {text: 'Trying', indexes: [18, 16, 17], activeIndex: 8, icon: 'cubes'},
   {text: 'Habit/Frequency', indexes: [11, 12, 13, 14, 15, 29, 28], activeIndex: 7, icon: 'hourglass end'},

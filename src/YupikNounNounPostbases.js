@@ -9,7 +9,7 @@ class YupikNounNounPostbases extends Component {
       <Card key='adjectival'>
         <Card.Content>
           <Card.Header>
-          Noun -> Noun Postbases (Adjectival)
+          Adjectives
           </Card.Header>
         </Card.Content>
         <Card.Content>
@@ -27,7 +27,7 @@ class YupikNounNounPostbases extends Component {
       <Card key='endings' color='violet'>
         <Card.Content>
           <Card.Header>
-          Noun -> Noun Postbases (Endings)
+          Number of objects
           </Card.Header>
         </Card.Content>
         <Card.Content>

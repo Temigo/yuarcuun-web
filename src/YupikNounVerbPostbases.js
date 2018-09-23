@@ -9,7 +9,7 @@ class YupikNounVerbPostbases extends Component {
       <Card color='violet' fluid>
         <Card.Content>
           <Card.Header>
-          Noun -> Verb Postbases (Endings)
+          Verb forms
           </Card.Header>
         </Card.Content>
         <Card.Content>
