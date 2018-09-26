@@ -97,7 +97,7 @@ class YupikAllPostbases extends Component {
       <div align="center">
       Postbases:
       </div>
-      <Button content='Standard' basic fluid onClick={(event) => this.props.setPostbase(27, event)} toggle active={this.props.currentPostbases.indexOf(27) >= 0}>{postbases[27].description}</Button>
+      <Button content='Standard' basic fluid onClick={(event) => this.props.setPostbase(27, event)} toggle disabled={this.props.allowable_next_ids.indexOf(27) >= 0} active={this.props.currentPostbases.indexOf(27) >= 0}>{postbases[27].description}</Button>
 <Divider />
       <Accordion styled >
         {postbaseButtons.map((group) => {
@@ -112,7 +112,7 @@ class YupikAllPostbases extends Component {
               {group.indexes.map((e) => {
                 return (
                   <Card>
-                  <Button onClick={(event) => this.props.setPostbase(e, event)} disabled={(this.props.allowable_next_ids.indexOf(e) < e)} toggle active={this.props.currentPostbases.indexOf(e) >= 0}>{postbases[e].description}</Button>
+                  <Button onClick={(event) => this.props.setPostbase(e, event)} disabled={(this.props.allowable_next_ids.indexOf(e) >= 0)} toggle active={this.props.currentPostbases.indexOf(e) >= 0}>{postbases[e].description}</Button>
                   </Card>
                 );
               })}

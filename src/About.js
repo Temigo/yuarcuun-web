@@ -10,6 +10,14 @@ class About extends Component {
         <Divider />
         
 Waqaa!
+<p> quyavikanka elitnauristet ayaprun elitnaurvigmi, aanaka maklak, maurluqa narull’aq, apa’urluqa upay’aq, alqaqa cungass’aq, ilanka-llu tamalkuita. 
+</p>
+<p> una yuarcuun yugtun qantulinek ciulistengqellruuq. computer science-aakun maaggun nutarat 
+</p>
+<p> ayuqunrilngutun elicungcaur ellimaksailan computer-aanun caliapellruapuk 
+</p>
+<p> nutaranek cayarakun yugtun qaneryaramta elitnaurcuutii pilingnaqapuk. wiinga egalaaruunga, mamterillermiunguunga, yugnikekngaqa-llu laura, france-amiunguuq, wangkuk pilillruapuk una yuarcuun.
+</p>
 
 <p> Yuarcuun is a Yup'ik-led group with a mission to revitalize Eskimo/Inuit languages using computer science tools. 
 

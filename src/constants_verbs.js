@@ -33,9 +33,9 @@ export const absolutive_endings = {
       3: '-teng'
     }
   },
-  2: {
+  3: {
     0: {
-      0: '%:(e)k'
+      0: '%:(e)t'
     },
     1: {
       1: '%:(e)nka',
@@ -58,9 +58,9 @@ export const absolutive_endings = {
       3: '-teng'
     }
   },
-  3: {
+  2: {
     0: {
-      0: '%:(e)t'
+      0: '%:(e)k'
     },
     1: {
       1: '%:(e)gka',

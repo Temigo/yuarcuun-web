@@ -23,7 +23,7 @@ class YupikPostbase extends Component {
                 this.props.setPostbase(e, event)
               } }
               toggle
-              disabled={(this.props.allowable_next_ids.indexOf(e) < e)}
+              disabled={(this.props.allowable_next_ids.indexOf(e) >= 0)}
               active={this.props.currentPostbases.indexOf(e) >= 0}
               >
               {postbases[e].description}
