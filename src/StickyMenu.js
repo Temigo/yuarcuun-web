@@ -8,12 +8,18 @@ class StickyMenu extends Component {
     super(props);
     this.state = {
       switchMode: false,
+      allPostbasesMode: false,
     };
   }
 
   switchMode(event, data) {
     this.setState({ switchMode: !this.state.switchMode });
     this.props.switchMode(event, data);
+  }
+
+  allPostbasesMode(event, data) {
+    this.setState({ allPostbasesMode: !this.state.allPostbasesMode });
+    this.props.allPostbasesMode(event, data);
   }
 
   speak(event, data) {
@@ -39,6 +45,7 @@ class StickyMenu extends Component {
               {this.props.switchMode !== undefined ?
                 <Icon circular name='cogs' color='teal' size='large' inverted={this.state.switchMode} onClick={this.switchMode.bind(this)}/>
               : ''}
+              <Icon name='world' color='red' size='large' inverted={this.state.allPostbasesMode} onClick={this.allPostbasesMode.bind(this)}/>
         </Menu.Item>
       </Menu>
     );

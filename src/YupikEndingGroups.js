@@ -52,7 +52,7 @@ class YupikEndingGroups extends Component {
             </List.Content>
             <Icon circular name='map signs' />
             <List.Content verticalAlign='middle'>
-              Other
+              Postbases Only
             </List.Content>
           </List.Item>
         </List>

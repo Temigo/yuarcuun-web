@@ -17,7 +17,7 @@ class SearchPage extends Component {
       wordsList: [],
       search: props.location.state == undefined ? '' : props.location.state.search,
       currentWord: {},
-      onlyCommon: true,
+      onlyCommon: false,
       startingSearch: true,
     }
     this.onChangeSearch = this.onChangeSearch.bind(this);
@@ -121,7 +121,7 @@ class SearchPage extends Component {
               <Grid.Column floated='right' style={{ flex: '0 0 11em' }}>
                 <Label
                   as='a'
-                  content='Common only'
+                  content='Show Only Common'
                   color='teal'
                   basic={!this.state.onlyCommon}
                   onClick={() => { this.setState({ onlyCommon: !this.state.onlyCommon }); }}

@@ -23,10 +23,10 @@ class YupikModifyVerb extends Component {
                 <Grid.Column>
                 <Card.Group itemsPerRow={3} stackable>
                   <Card>
-                    <Button onClick={(event) => this.props.setPostbase(5, event)} toggle active={this.props.currentPostbases.indexOf(5) >= 0}>{postbases[5].description}</Button>
+                    <Button onClick={(event) => this.props.setPostbase(5, event)} toggle disabled={this.props.currentPostbases.indexOf(7)>=0} active={this.props.currentPostbases.indexOf(5) >= 0}>{postbases[5].description}</Button>
                   </Card>
                   <Card>
-                    <Button onClick={(event) => this.props.setPostbase(7, event)} toggle active={this.props.currentPostbases.indexOf(7) >= 0}>{postbases[7].description}</Button>
+                    <Button onClick={(event) => this.props.setPostbase(7, event)} toggle disabled={this.props.currentPostbases.indexOf(5)>=0} active={this.props.currentPostbases.indexOf(7) >= 0}>{postbases[7].description}</Button>
                   </Card>
                   <Card>
                     <Button onClick={(event) => this.props.setPostbase(25, event)} toggle active={this.props.currentPostbases.indexOf(25) >= 0}>{postbases[25].description}</Button>

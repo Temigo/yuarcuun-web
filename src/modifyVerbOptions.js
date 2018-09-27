@@ -67,42 +67,42 @@ export const optative = [
 export const dependent = [
   {
     group: 'connective_precessive',
-    mood: 'before',
+    mood: 'before...',
     text: 'before',
   },
   {
     group: 'connective_consequential',
-    mood: 'because',
+    mood: 'because...',
     text: 'because',
   },
   {
     group: 'connective_contingent',
-    mood: 'whenever',
+    mood: 'whenever...',
     text: 'whenever',
   },
   {
     group: 'connective_concessive',
-    mood: 'although',
+    mood: 'although...',
     text: 'although',
   },
   {
     group: 'connective_conditional',
-    mood: 'if',
+    mood: 'if...',
     text: 'if',
   },
   {
     group: 'connective_first_contemporative',
-    mood: 'when (past)',
+    mood: 'when (past)...',
     text: 'when',
   },
   {
     group: 'connective_second_contemporative',
-    mood: 'when (future)',
+    mood: 'when (future)...',
     text: 'when',
   },
   {
     group: 'subordinative',
-    mood: 'by or being that',
+    mood: 'by or being that...',
     text: 'by or being that',
   }
 ];

@@ -18,18 +18,22 @@ class YupikEnding extends Component {
           {options[group_id].map((e) => {
             return (
               <Card>
-              <Button
-                onClick={() => {
-                  (group_id === 3 ? this.props.setNounEnding(e.ending) : this.props.setMood(e.group, e.mood));
-                  this.props.history.push(`${this.props.match.url}/postbase`);
-                } }
-                toggle
-                active={(group_id === 3) ? this.props.nounEnding === e.ending : this.props.moodSpecific === e.mood}
-                >
-                {e.text}
-              </Button>
+              {(group_id == 3) ? 
+                <Button onClick={() => this.props.setNounEnding(e.ending)} toggle active={this.props.nounEnding === e.ending}>{e.text}</Button> 
+                :
+                <Button
+                  onClick={() => {
+                    (group_id === 3 ? this.props.setNounEnding(e.ending) : this.props.setMood(e.group, e.mood));
+                    this.props.history.push(`${this.props.match.url}/postbase`);
+                  }}
+                  toggle
+                  active={(group_id === 3) ? this.props.nounEnding === e.ending : this.props.moodSpecific === e.mood}
+                  >
+                  {e.mood}
+                </Button>
+              }
               </Card>
-            );
+            );              
           })}
         </Card.Group>
       </div>
