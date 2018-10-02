@@ -531,7 +531,7 @@ export const nounPostbases = [
   {
     id: 9,
     description: 'N and other',
-    englishModifier: (english) => { return 'and another' + english; },
+    englishModifier: (english) => { return 'and another - only applies to people or animals' + english; },
     expression_end: ':(e)nkuk',
     expression_postbase: ':(e)nkug\\',
     expression_conditional_end: '',
@@ -544,7 +544,7 @@ export const nounPostbases = [
   {
     id: 10,
     description: 'N and others',
-    englishModifier: (english) => { return 'and others' + english; },
+    englishModifier: (english) => { return 'and others - only applies to people or animals' + english; },
     expression_end: ':(e)nkut',
     expression_postbase: ':(e)nkur\\',
     expression_conditional_end: '',

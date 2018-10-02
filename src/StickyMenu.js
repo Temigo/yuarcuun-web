@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Icon, Button, Menu } from 'semantic-ui-react';
+import { Header, Icon, Button, Menu, Checkbox } from 'semantic-ui-react';
 import './semantic/dist/semantic.min.css';
 import { API_URL } from './App.js';
 
@@ -26,6 +26,12 @@ class StickyMenu extends Component {
     let audio = new Audio(API_URL + "/tts/" + this.props.word.replace('-', ''));
     audio.play();
   }
+// <Icon circular name='cogs' color='teal' size='large' inverted={this.state.switchMode} onClick={this.switchMode.bind(this)}/>
+// <Icon name='volume up' color='teal' size='big' onClick={this.speak.bind(this)} />
+
+
+// This will enable all postbases mode  
+//<Icon name='world' color='red' size='large' inverted={this.state.allPostbasesMode} onClick={this.allPostbasesMode.bind(this)}/>
 
   render() {
     return (
@@ -34,6 +40,12 @@ class StickyMenu extends Component {
           <Button primary icon circular onClick={this.props.goBack} floated='left'>
             <Icon name='chevron left' />
           </Button>
+          {this.props.switchMode !== undefined ?
+          <Button icon circular onClick={this.props.goBack}>
+            <Icon name='search' />
+          </Button>
+          : ''}
+
           </Menu.Item>
           <Menu.Item>
         <Header as='h1' textAlign='center'>
@@ -41,11 +53,9 @@ class StickyMenu extends Component {
         </Header>
         </Menu.Item>
         <Menu.Item>
-              <Icon name='volume up' color='teal' size='big' onClick={this.speak.bind(this)} />
               {this.props.switchMode !== undefined ?
-                <Icon circular name='cogs' color='teal' size='large' inverted={this.state.switchMode} onClick={this.switchMode.bind(this)}/>
+                <Checkbox toggle onClick={this.switchMode.bind(this)} />
               : ''}
-              <Icon name='world' color='red' size='large' inverted={this.state.allPostbasesMode} onClick={this.allPostbasesMode.bind(this)}/>
         </Menu.Item>
       </Menu>
     );

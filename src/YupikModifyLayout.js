@@ -255,7 +255,7 @@ class YupikModifyLayout extends Component {
       if (newState.people != this.state.people || newState.value4 != this.state.value4 || newState.person != this.state.person || newState.possessorPerson != this.state.possessorPerson || newState.possessorPeople != this.state.possessorPeople || newState.mood != this.state.mood || newState.nounEnding != this.state.nounEnding || newState.verbEnding != this.state.verbEnding) {
         if (newState.nounEnding !== this.state.nounEnding) {
           if (newState.nounEnding !== '') {
-            if (newState.nounEnding == 'and others' || newState.nounEnding == 'and another') {
+            if (newState.nounEnding == 'and others - only applies to people or animals' || newState.nounEnding == 'and another - only applies to people or animals') {
               this.state.value4 = 1
               newState.value4 = 1
             } else if (newState.nounEnding == 'just a little') {
@@ -574,7 +574,7 @@ class YupikModifyLayout extends Component {
           this.setState({ mood: 'absolutive'})
           moodEnding = 'absolutive'
         }
-        if (nounEnding == 'and others' || nounEnding == 'and another') {
+        if (nounEnding == 'and others - only applies to people or animals' || nounEnding == 'and another - only applies to people or animals') {
           this.setState({ value4: 1})
           value4 = 1
         } else if (nounEnding == 'just a little') {
@@ -1974,6 +1974,16 @@ class YupikModifyLayout extends Component {
       backgroundColor: 'white',
       width: '92%',
       //borderBottom: '1px solid black',
+
+
+          //       {this.state.advancedMode ?  //REMOVED FOR NOW
+          // <Grid.Row>
+          //   <Grid.Column verticalAlign='middle' align='center'>
+          //     {postbasesDisplay}
+          //   </Grid.Column>
+          // </Grid.Row>
+          // : ''}
+
     };
     return (
       <div>
@@ -1986,13 +1996,6 @@ class YupikModifyLayout extends Component {
         offset={[120, 120]}
       >
         <Grid style={this.state.headerFixed ? fixedStyle : {top: '1em'}}>
-          {this.state.advancedMode ?
-          <Grid.Row>
-            <Grid.Column verticalAlign='middle' align='center'>
-              {postbasesDisplay}
-            </Grid.Column>
-          </Grid.Row>
-          : ''}
 
           <Grid.Row>
 
@@ -2008,7 +2011,7 @@ class YupikModifyLayout extends Component {
               :''}
               <span style={{color: this.state.colorsList[2]}}>
               {this.state.mood === 'interrogative' ? '?' :''}
-              <Icon name='volume up' color='black' size='small' onClick={this.speak.bind(this)} />  
+              <Icon floated='right' name='volume up' color='black' size='small' onClick={this.speak.bind(this)} />  
               </span>
               </Header>
                           
@@ -2144,12 +2147,12 @@ class YupikModifyLayout extends Component {
                 :
                 ''
                 }
-                {this.state.verbEnding== false && this.state.value4 == 2 ?
+                {this.state.verbEnding== false && this.state.value4 == 2 && this.state.nounEnding !== 'many of them'?
                 <span style={{color: this.state.colorsList[2]}}>(two of them)</span>
                 :
                 ''
                 }
-                {this.state.verbEnding== false && this.state.value4 == 3 ?
+                {this.state.verbEnding== false && this.state.value4 == 3 && this.state.nounEnding !== 'many of them'?
                 <span style={{color: this.state.colorsList[2]}}>(three of them)</span>
                 :
                 ''
