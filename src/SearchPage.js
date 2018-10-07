@@ -7,6 +7,9 @@ import './semantic/dist/semantic.min.css';
 import { Link } from 'react-router-dom';
 import { API_URL } from './App.js';
 
+// Cache dictionary
+let dictionary = [];
+
 class SearchPage extends Component {
   constructor(props) {
     super(props);
@@ -31,32 +34,24 @@ class SearchPage extends Component {
   }
 
   componentDidMount() {
-    /*axios
-      .get(API_URL + "/verb/all")
-      .then(response => {
-        response.data.forEach((word) => {
-          word['rootForm'] = 'verb';
-          this.index.addDoc(word);
+    if (dictionary.length == 0) {
+      axios
+        .get(API_URL + "/word/all")
+        .then(response => {
+          response.data.forEach((word) => {
+            this.index.addDoc(word);
+          });
+          this.setState({ dictionary: response.data });
+          dictionary = response.data;
+          console.log('Fetched dictionary');
         });
-        this.setState({ dictionaryVerbs: response.data });
+    }
+    else {
+      dictionary.forEach((word) => {
+        this.index.addDoc(word);
       });
-    axios
-      .get(API_URL + "/noun/all")
-      .then(response => {
-        response.data.forEach((word) => {
-          word['rootForm'] = 'noun';
-          this.index.addDoc(word);
-        });
-        this.setState({ dictionaryNouns: response.data });
-      });*/
-    axios
-      .get(API_URL + "/word/all")
-      .then(response => {
-        response.data.forEach((word) => {
-          this.index.addDoc(word);
-        });
-        this.setState({ dictionary: response.data });
-      });
+      this.setState({ dictionary: dictionary });
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
