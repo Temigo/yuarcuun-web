@@ -54,10 +54,10 @@ class YupikEntry extends Component {
     if (object !== null) {
       res = res.split(rx2);
       text2 = res[0]
-      obj = '('+res[1]+')'
+      obj = res[1]
       text3 = res[2]
     }
-    return [text1, '('+sub+')', text2, obj, text3]
+    return [text1, sub, text2, obj, text3]
   }
   render() {
 
@@ -67,10 +67,10 @@ class YupikEntry extends Component {
       <Grid>
         <Grid.Row>
           <Grid.Column>
+          <Header as='h2'>Definition</Header>
           {this.state.entry.descriptor.map((descriptor) => {
             return <Label color='blue' horizontal key={descriptor}>{descriptor.toUpperCase()}</Label>;
           })}
-
           {this.state.displayEntryNumber === true ?  //if multiple entries
             <span><span style={{ fontWeight: 'bold' }}>{this.state.entryNumber} </span>   {this.state.entry.definition}</span>
             :
@@ -95,9 +95,9 @@ class YupikEntry extends Component {
                   <List.Header>{usage[0]}</List.Header>
                   <List.Description>
                   {this.fontUsage(usage[1])[0]}
-                  <b>{this.fontUsage(usage[1])[1]}</b>
+                  <span style={{color: '#cc6600'}}> <b>{this.fontUsage(usage[1])[1]} </b></span>
                   {this.fontUsage(usage[1])[2]}
-                  <b> {this.fontUsage(usage[1])[3]}</b>
+                  <span style={{color: '#cc6600'}}> <b>{this.fontUsage(usage[1])[3]} </b></span>
                   {this.fontUsage(usage[1])[4]}
                   </List.Description>
                 </Link>

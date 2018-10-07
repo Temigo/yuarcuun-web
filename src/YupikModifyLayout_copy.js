@@ -1142,13 +1142,13 @@ class YupikModifyLayout extends Component {
         newText1 = ''
         newText2 = ', '+newText2
       }
-    } else if (moodSpecific == 'when (future)...') {
+    } else if (moodSpecific == 'when (future)') {
       newText1 = 'when'
       newText1after = ''
       newText2 = ''
-      newText2after = 'will '+getsubjectis('future',people,person,'be')
+      newText2after = 'will '+getsubjectis(tense,people,person,'be')
       newText3 = newText3
-    } else if (moodSpecific == 'when (past)...') {
+    } else if (moodSpecific == 'when (past)') {
       newText1 = 'when '
       newText1after = ''
       newText2 = ''
@@ -1831,12 +1831,12 @@ class YupikModifyLayout extends Component {
     if (this.verb || !(this.state.verbEnding)) {
       postbasesDisplay = (
         <span>
-        <span >{this.state.currentWord}</span>
+        <span style={{color: this.state.colorsList[0]}}>{this.state.currentWord}</span>
         {this.state.postbasesList.slice(0,this.state.postbasesList.length-countEndingPostbase).map((p, i) => {
           return <span style={{color: this.state.colorsList[2+this.state.postbasesList.length-countEndingPostbase-i]}}>{' ' + p}</span>;
         })}
         {this.state.postbasesList.slice(this.state.postbasesList.length-countEndingPostbase).map((p, i) => {
-          return <span style={{color: '#cc6600'}}>{' ' + p}</span>; // change to 2-i for other color
+          return <span style={{color: this.state.colorsList[2]}}>{' ' + p}</span>; // change to 2-i for other color
         })}
         </span>
       );
@@ -1847,11 +1847,11 @@ class YupikModifyLayout extends Component {
         <span>
         {this.state.colorIndexes.map((index, i) => {
           if (i == 0) {
-            return <span >{this.state.modifiedWord.substring(this.state.colorIndexes[i], this.state.colorIndexes[i+1])}</span>;
+            return <span style={{color: this.state.colorsList[0]}}>{this.state.modifiedWord.substring(this.state.colorIndexes[i], this.state.colorIndexes[i+1])}</span>;
           } else if (i < this.state.colorIndexes.length-countEndingPostbase) {
             return <span style={{color: this.state.colorsList[2+this.state.colorIndexes.length-countEndingPostbase-i]}}>{this.state.modifiedWord.substring(this.state.colorIndexes[i], this.state.colorIndexes[i+1])}</span>;
           } else if (i == this.state.colorIndexes.length-countEndingPostbase) {
-            return <span style={{color: '#cc6600'}}>{this.state.modifiedWord.substring(this.state.colorIndexes[i])}</span>;
+            return <span style={{color: this.state.colorsList[2]}}>{this.state.modifiedWord.substring(this.state.colorIndexes[i])}</span>;
           }
         })}
         </span>
@@ -1865,12 +1865,12 @@ class YupikModifyLayout extends Component {
         //  : 
         //  }
         <span>
-        <span >{this.state.currentWord}</span>
+        <span style={{color: this.state.colorsList[0]}}>{this.state.currentWord}</span>
         {this.state.postbasesList.slice(0,this.state.postbasesList.length-countEndingPostbase-1).map((p, i) => {
           return <span style={{color: this.state.colorsList[2+this.state.postbasesList.length-countEndingPostbase-i]}}>{' ' + p}</span>;
         })}
         {this.state.postbasesList.slice(this.state.postbasesList.length-countEndingPostbase-1).map((p, i) => {
-          return <span style={{color: '#cc6600'}}>{' ' + p}</span>;
+          return <span style={{color: this.state.colorsList[2]}}>{' ' + p}</span>;
         })}
         </span>
       );
@@ -1881,11 +1881,11 @@ class YupikModifyLayout extends Component {
         <span>
         {this.state.colorIndexes.map((index, i) => {
           if (i == 0) {
-            return <span >{this.state.modifiedWord.substring(this.state.colorIndexes[i], this.state.colorIndexes[i+1])}</span>;
+            return <span style={{color: this.state.colorsList[0]}}>{this.state.modifiedWord.substring(this.state.colorIndexes[i], this.state.colorIndexes[i+1])}</span>;
           } else if (i < this.state.colorIndexes.length-countEndingPostbase-1) {
             return <span style={{color: this.state.colorsList[2+this.state.colorIndexes.length-countEndingPostbase-i]}}>{this.state.modifiedWord.substring(this.state.colorIndexes[i], this.state.colorIndexes[i+1])}</span>;
           } else if (i == this.state.colorIndexes.length-countEndingPostbase-1) {
-            return <span style={{color: '#cc6600'}}>{this.state.modifiedWord.substring(this.state.colorIndexes[i])}</span>;
+            return <span style={{color: this.state.colorsList[2]}}>{this.state.modifiedWord.substring(this.state.colorIndexes[i])}</span>;
           }
         })}
         </span>
@@ -1894,7 +1894,7 @@ class YupikModifyLayout extends Component {
 
 //       postbasesDisplay = (
 //         <span>
-//         <span >{this.state.currentWord}</span>
+//         <span style={{color: this.state.colorsList[0]}}>{this.state.currentWord}</span>
 //         {this.state.postbasesList.slice(0,this.state.postbasesList.length-countEndingPostbase).map((p, i) => {
 //           // console.log(i)
 //           // console.log(this.state.postbasesList.length)
@@ -1923,8 +1923,6 @@ class YupikModifyLayout extends Component {
 //         </span>
 //       );
 // {color: 'black'}
-
-//this.state.colorsList[2] changed to '#cc6600'
 
     // console.log(this.state.postbasesEnglish)
     // console.log(this.state.currentPostbases)
@@ -2006,15 +2004,14 @@ class YupikModifyLayout extends Component {
               {this.state.encliticExpression == '(again)' ? 'ataam '
               :''}
               {this.state.addedWord !== '' ? 
-              <span style={{color: '#cc6600'}}>{this.state.addedWord}</span>
+              <span style={{color: this.state.colorsList[2]}}>{this.state.addedWord}</span>
               :''}
               {wordDisplay}
               {this.state.enclitic !== '' && this.state.encliticExpression !== '(again)' ? this.state.enclitic
               :''}
-              <span style={{color: '#cc6600'}}>
+              <span style={{color: this.state.colorsList[2]}}>
               {this.state.mood === 'interrogative' ? '?' :''}
-              {' '}
-              <Icon name='volume up' color='black' size='small' onClick={this.speak.bind(this)} />  
+              <Icon floated='right' name='volume up' color='black' size='small' onClick={this.speak.bind(this)} />  
               </span>
               </Header>
                           
@@ -2028,7 +2025,7 @@ class YupikModifyLayout extends Component {
           <Grid.Row>
             <Grid.Column verticalAlign='middle' align='center'>
               <Header as='h4' align='center'>
-                <span style={{color: '#cc6600'}}>{this.state.text2}</span>
+                <span style={{color: this.state.colorsList[2]}}>{this.state.text2}</span>
                 {' '}
                 {this.state.text2after}
                 {' '}
@@ -2036,14 +2033,14 @@ class YupikModifyLayout extends Component {
                 return <span style={{color: this.state.colorsList[3+i]}}>{' ' + p}</span>;
                 })}
                 {' '}
-                <span >{this.state.englishEnding[0]}</span>
+                <span style={{color: this.state.colorsList[0]}}>{this.state.englishEnding[0]}</span>
                 {' '}
                 {this.state.text3}
                 {' '}
                 {timeIndex !== '' ? 
                   <span style={{color: this.state.colorsList[3+timeIndex]}}>{this.state.text3tense}</span>
                   :
-                  <span style={{color: '#cc6600'}}>{this.state.text3tense}</span>
+                  <span style={{color: this.state.colorsList[2]}}>{this.state.text3tense}</span>
                 }
               </Header>
             </Grid.Column>
@@ -2053,7 +2050,7 @@ class YupikModifyLayout extends Component {
             <Grid.Column verticalAlign='middle' align='center'>
               <Header as='h4' align='center'>
                 {' '}
-                <span style={{color: '#cc6600'}}>{this.state.text1}</span>
+                <span style={{color: this.state.colorsList[2]}}>{this.state.text1}</span>
                 {' '}
                 {timeIndex !== '' ? 
                   <span style={{color: this.state.colorsList[3+timeIndex]}}>{this.state.text1after}</span>
@@ -2061,11 +2058,11 @@ class YupikModifyLayout extends Component {
                   this.state.text1after
                 }
                 {' '}
-                <span style={{color: '#cc6600'}}>
+                <span style={{color: this.state.colorsList[2]}}>
                 <Dropdown inline options={dict1} onChange={this.setValue1.bind(this)} value={value1} />
                 </span>
                 {' '}
-                <span style={{color: '#cc6600'}}>{this.state.text2}</span>
+                <span style={{color: this.state.colorsList[2]}}>{this.state.text2}</span>
                 {' '}
                 {timeIndex !== '' ? 
                   <span style={{color: this.state.colorsList[3+timeIndex]}}>{this.state.text2after}</span>
@@ -2077,18 +2074,18 @@ class YupikModifyLayout extends Component {
                 return <span style={{color: this.state.colorsList[3+i]}}>{' ' + p}</span>;
                 })}
                 {' '}
-                <span >{this.state.englishEnding[0]}</span>
+                <span style={{color: this.state.colorsList[0]}}>{this.state.englishEnding[0]}</span>
                 {' '}
 
                 {this.state.objectExists && this.state.moodSpecific !== 'who'  ?
-                <span style={{color: '#cc6600'}}>
+                <span style={{color: this.state.colorsList[2]}}>
                 <Dropdown inline options={dict2} onChange={this.setValue2.bind(this)} value={value2} />
                 </span>
                 : 
                 ''
                 }
                 {this.state.objectExists && this.state.moodSpecific === 'who'  ?
-                <span style={{color: '#cc6600'}}>
+                <span style={{color: this.state.colorsList[2]}}>
                 (<Dropdown inline options={dict2} onChange={this.setValue2.bind(this)} value={value2} />)
                 </span>
                 : 
@@ -2100,7 +2097,7 @@ class YupikModifyLayout extends Component {
                 {timeIndex !== '' ? 
                   <span style={{color: this.state.colorsList[3+timeIndex]}}>{this.state.text3tense}</span>
                   :
-                  <span style={{color: '#cc6600'}}>{this.state.text3tense}</span>
+                  <span style={{color: this.state.colorsList[2]}}>{this.state.text3tense}</span>
                 }
                 
                 {this.state.encliticExpression !== '' ? this.state.encliticExpression :''}
@@ -2115,21 +2112,21 @@ class YupikModifyLayout extends Component {
               <Header as='h4' align='center'>
 
                 {(this.state.verbEnding ?
-                  <span style={{color: '#cc6600'}}>
+                  <span style={{color: this.state.colorsList[2]}}>
                   <Dropdown inline options={dict1} onChange={this.setValue1.bind(this)} value={value1} />
                   </span>:
                   ''
                 )}
                 {' '}
                 {(this.state.possessiveButton == 1 ?
-                  <span style={{color: '#cc6600'}}>
+                  <span style={{color: this.state.colorsList[2]}}>
                   <Dropdown inline options={dict3} onChange={this.setValue3.bind(this)} value={value3} />
                   </span>:
                   ''
                 )}
 
                 {this.state.verbEndingEnglish != '' ?
-                <span style={{color: '#cc6600'}}>{this.state.verbEndingEnglish}</span>
+                <span style={{color: this.state.colorsList[2]}}>{this.state.verbEndingEnglish}</span>
                 :
                 ''
                 }
@@ -2137,7 +2134,7 @@ class YupikModifyLayout extends Component {
                 return <span style={{color: this.state.colorsList[3+i+nounEndingcounter-verbEndingcounter]}}>{' ' + p}</span>;
                 })}
                 {' '}
-                <span >{this.state.text2}</span>
+                <span style={{color: this.state.colorsList[0]}}>{this.state.text2}</span>
                 {' '}
                 {this.state.nounEndingEnglish != '' ?
                 <span style={{color: this.state.colorsList[3-verbEndingcounter]}}>({this.state.nounEndingEnglish})</span>
@@ -2151,12 +2148,12 @@ class YupikModifyLayout extends Component {
                 ''
                 }
                 {this.state.verbEnding== false && this.state.value4 == 2 && this.state.nounEnding !== 'many of them'?
-                <span style={{color: '#cc6600'}}>(two of them)</span>
+                <span style={{color: this.state.colorsList[2]}}>(two of them)</span>
                 :
                 ''
                 }
                 {this.state.verbEnding== false && this.state.value4 == 3 && this.state.nounEnding !== 'many of them'?
-                <span style={{color: '#cc6600'}}>(three of them)</span>
+                <span style={{color: this.state.colorsList[2]}}>(three of them)</span>
                 :
                 ''
                 }
@@ -2166,7 +2163,7 @@ class YupikModifyLayout extends Component {
           }
 
 
-          {this.state.currentPostbases.length > 0 || (this.verb && this.state.mood != 'indicative') || (this.verb == false && this.state.mood != 'absolutive') || this.state.possessiveButton === 1 ?
+          {this.state.currentPostbases.length > 0 || (this.verb && this.state.mood != 'indicative') || (this.verb == false && this.state.mood != 'absolutive') ?
           <Grid.Row textAlign='center'>
             <Grid.Column>
               <List horizontal>
@@ -2188,13 +2185,14 @@ class YupikModifyLayout extends Component {
                 :
                 ''
                 }
-                {this.state.possessiveButton === 1 ?
-                  <List.Item onClick={(event) => this.setPossessiveButton(1, event)}>
-                    <Chip  text={'possessive'} />
+                {this.state.mood == 'interrogative' || this.state.mood == 'optative'?
+                  <List.Item onClick={(event) => this.setMoodVerb(this.state.mood, this.state.moodSpecific, event)}>
+                    <Chip  text={this.state.moodSpecific} />
                   </List.Item>
                   :
                   ''
                 }
+
                 { this.state.mood == 'connective_precessive' || this.state.mood == 'connective_consequential' || this.state.mood == 'connective_contingent' || this.state.mood == 'connective_concessive' || this.state.mood == 'connective_conditional' || this.state.mood == 'connective_first_contemporative' || this.state.mood == 'connective_second_contemporative' || this.state.mood == 'subordinative' ?
                   <List.Item onClick={(event) => this.setMoodVerb(this.state.mood, this.state.moodSpecific, event)}>
                     <Chip  text={this.state.moodSpecific} />

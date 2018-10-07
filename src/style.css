@@ -26,3 +26,6 @@ div#root {
 .ui .list .list > .item, .ui .list > .item, ol.ui.list li, ul.ui.list li {
   line-height: 1.5em;
 }
+
+.ui.dropdown 
+{ font-size: 16.5px; } 

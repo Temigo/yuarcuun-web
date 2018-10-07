@@ -400,8 +400,8 @@ export const postbases = [
   },
   {
     id: 29,
-    description: 'definitely not going to',
-    englishModifier: (english) => { return ' definitely not going to' + english; },
+    description: 'definitely no longer going to',
+    englishModifier: (english) => { return ' definitely no longer going to' + english; },
     expression: '@~+yugnairute\\',
     expression_conditional: '',
     priority: 1,

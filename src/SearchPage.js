@@ -121,7 +121,7 @@ class SearchPage extends Component {
               <Grid.Column floated='right' style={{ flex: '0 0 11em' }}>
                 <Label
                   as='a'
-                  content='Show Only Common'
+                  content='Common Words Only'
                   color='teal'
                   basic={!this.state.onlyCommon}
                   onClick={() => { this.setState({ onlyCommon: !this.state.onlyCommon }); }}

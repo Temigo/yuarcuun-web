@@ -26,7 +26,7 @@ class StickyMenu extends Component {
     let audio = new Audio(API_URL + "/tts/" + this.props.word.replace('-', ''));
     audio.play();
   }
-// <Icon circular name='cogs' color='teal' size='large' inverted={this.state.switchMode} onClick={this.switchMode.bind(this)}/>
+// <Icon circular name='list' color='teal' size='large' inverted={this.state.switchMode} onClick={this.switchMode.bind(this)}/>
 // <Icon name='volume up' color='teal' size='big' onClick={this.speak.bind(this)} />
 
 
@@ -54,7 +54,7 @@ class StickyMenu extends Component {
         </Menu.Item>
         <Menu.Item>
               {this.props.switchMode !== undefined ?
-                <Checkbox toggle onClick={this.switchMode.bind(this)} />
+                <Icon circular name='list' color='blue' size='large' inverted={this.state.switchMode} onClick={this.switchMode.bind(this)}/>
               : ''}
         </Menu.Item>
       </Menu>
