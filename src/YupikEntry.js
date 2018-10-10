@@ -39,7 +39,7 @@ class YupikEntry extends Component {
     let obj = ''
     let text3 = ''
 
-    let res = word
+    let res = word.replace(/\^/g,"")
     var rx1 = /\[([^\]]+)]/;
     var rx2 = /<([^\]]+)>/;
     let subject = word.match(rx1);
@@ -95,9 +95,9 @@ class YupikEntry extends Component {
                   <List.Header>{usage[0]}</List.Header>
                   <List.Description>
                   {this.fontUsage(usage[1])[0]}
-                  <span style={{color: '#cc6600'}}> <b>{this.fontUsage(usage[1])[1]} </b></span>
+                  <span style={{color: '#852828'}}> <b>{this.fontUsage(usage[1])[1]} </b></span>
                   {this.fontUsage(usage[1])[2]}
-                  <span style={{color: '#cc6600'}}> <b>{this.fontUsage(usage[1])[3]} </b></span>
+                  <span style={{color: '#852828'}}> <b>{this.fontUsage(usage[1])[3]} </b></span>
                   {this.fontUsage(usage[1])[4]}
                   </List.Description>
                 </Link>

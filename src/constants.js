@@ -623,7 +623,7 @@ export const nounPostbases = [
   {
     id: 17,
     description: 'to have',
-    englishModifier: (english) => { return 'the place has' + english; },
+    englishModifier: (english) => { return '' + english; },
     expression_postbase: '-ngqerr\\',
     expression_conditional_postbase: '',
     conditional_rule: '',
@@ -633,8 +633,8 @@ export const nounPostbases = [
   },
   {
     id: 18,
-    description: 'for there not to be',
-    englishModifier: (english) => { return 'the place has no' + english; },
+    description: 'the place does not have',
+    englishModifier: (english) => { return '(location) does not have' + english; },
     expression_postbase: '+taite\\',
     expression_conditional_postbase: '',
     conditional_rule: '',
@@ -644,8 +644,8 @@ export const nounPostbases = [
   },
   {
     id: 19,
-    description: 'for there to be',
-    englishModifier: (english) => { return 'for there to be' + english; },
+    description: 'the place has',
+    englishModifier: (english) => { return '(location) has' + english; },
     expression_postbase: '+ta6qe5\\',
     expression_conditional_postbase: '',
     conditional_rule: '',
