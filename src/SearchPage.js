@@ -6,9 +6,20 @@ import './App.css';
 import './semantic/dist/semantic.min.css';
 import { Link } from 'react-router-dom';
 import { API_URL } from './App.js';
+import Fuse from 'fuse.js';
 
 // Cache dictionary
 let dictionary = [];
+let options = {
+  keys: ['yupik', 'english'],
+  minMatchCharLength: 5,
+  // includeScore: true,
+  distance: 0,
+  shouldSort: true,
+  tokenize: true,
+  threshold: 0.2,
+};
+let fuse = new Fuse([], options);
 
 class SearchPage extends Component {
   constructor(props) {
@@ -26,11 +37,11 @@ class SearchPage extends Component {
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.selectWord = this.selectWord.bind(this);
 
-    this.index = elasticlunr(function () {
-      this.addField('english');
-      this.addField('yupik');
-      this.setRef("yupik");
-    });
+    // this.index = elasticlunr(function () {
+    //   this.addField('english');
+    //   this.addField('yupik');
+    //   this.setRef("yupik");
+    // });
   }
 
   componentDidMount() {
@@ -38,18 +49,20 @@ class SearchPage extends Component {
       axios
         .get(API_URL + "/word/all")
         .then(response => {
-          response.data.forEach((word) => {
-            this.index.addDoc(word);
-          });
-          this.setState({ dictionary: response.data });
+          // response.data.forEach((word) => {
+          //   this.index.addDoc({ ...word, yupik: word.yupik.slice(0, -1) });
+          // });
+
           dictionary = response.data;
+          fuse.setCollection(dictionary);
           console.log('Fetched dictionary');
+          this.setState({ dictionary: dictionary });
         });
     }
     else {
-      dictionary.forEach((word) => {
-        this.index.addDoc(word);
-      });
+      // dictionary.forEach((word) => {
+      //   this.index.addDoc(word);
+      // });
       this.setState({ dictionary: dictionary });
     }
   }
@@ -63,13 +76,23 @@ class SearchPage extends Component {
   onChangeSearch(event, data) {
     let newStartingSearch = event == undefined;
     let new_search = data.value;
-    if (new_search.length >= 2) {
+    if (new_search.length >= 4) {
       // Search
-      let results = this.index.search(new_search);
-      let wordsList = results.map((e) => {
-        return this.index.documentStore.getDoc(e.ref);
-      });
-      this.setState({ startingSearch: newStartingSearch, wordsList: wordsList.sort((w1, w2) => { return (w1.yupik > w2.yupik) ? 1 : ((w1.yupik < w2.yupik) ? -1 : 0); }), search: new_search });
+      // let results = this.index.search(new_search.concat(" ", new_search.slice(0, -2)));
+      // let results = this.index.search(new_search, { expand: true });
+      // let wordsList = results.map((e) => {
+      //   return this.index.documentStore.getDoc(e.ref);
+      // });
+      let wordsList = fuse.search(new_search);
+      // if (results[0].score > results[results.length-1].score) {
+      //   results = results.reverse();
+      // }
+      // console.log(results);
+      // // console.log(results.sort((x, y) => { return (x.score > y.score) ? -1 : ((x.score < y.score) ? 1 : 0); }));
+      // let wordsList = results.map((e) => { return e.item; });
+      // console.log(wordsList);
+      // this.setState({ startingSearch: newStartingSearch, wordsList: wordsList.sort((w1, w2) => { return (w1.yupik > w2.yupik) ? 1 : ((w1.yupik < w2.yupik) ? -1 : 0); }), search: new_search });
+      this.setState({ startingSearch: newStartingSearch, wordsList: wordsList, search: new_search });
     }
     else {
       this.setState({ startingSearch: newStartingSearch, search: new_search });

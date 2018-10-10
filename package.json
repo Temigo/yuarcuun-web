@@ -10,6 +10,7 @@
     "axios": "^0.18.0",
     "compromise": "^11.9.1",
     "elasticlunr": "^0.9.5",
+    "fuse.js": "^3.2.1",
     "google-palette": "^1.1.0",
     "react": "^16.3.1",
     "react-dom": "^16.3.1",
