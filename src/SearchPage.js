@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import elasticlunr from 'elasticlunr';
-import { Container, Header, Divider, Grid, Input, List, Label, Checkbox } from 'semantic-ui-react';
+import { Container, Header, Divider, Grid, Input, List, Label, Checkbox, Icon } from 'semantic-ui-react';
 import './App.css';
 import './semantic/dist/semantic.min.css';
 import { Link } from 'react-router-dom';
@@ -84,6 +84,10 @@ class SearchPage extends Component {
     this.setState({ currentWord: {} });
   }
 
+  handleRef = (c) => {
+    this.inputRef = c;
+  }
+
   render() {
     console.log("SearchPage state: ", this.state);
     let displayList = this.state.search.length >= 2 && this.state.wordsList.length > 0;
@@ -107,6 +111,7 @@ class SearchPage extends Component {
             <Grid.Row >
               <Grid.Column style={{ flex: 1 }}>
               <Input
+                ref={this.handleRef}
                 placeholder='Search by word...'
                 icon='search'
                 iconPosition='left'
@@ -114,6 +119,9 @@ class SearchPage extends Component {
                 onChange={this.onChangeSearch}
                 value={this.state.search}
                 fluid transparent />
+              </Grid.Column>
+              <Grid.Column floated='right'>
+                <Icon link name='close' onClick={() => { this.inputRef.focus(); this.setState({search: '', startingSearch: false});}}/>
               </Grid.Column>
             </Grid.Row>
             {displayCommonOption ?
