@@ -7,6 +7,7 @@ import './semantic/dist/semantic.min.css';
 import { Link } from 'react-router-dom';
 import { API_URL } from './App.js';
 import Fuse from 'fuse.js';
+import now from 'performance-now';
 
 // Cache dictionary
 let dictionary = [];
@@ -16,8 +17,8 @@ let options = {
   // includeScore: true,
   distance: 0,
   shouldSort: true,
-  tokenize: true,
-  threshold: 0.2,
+  // tokenize: true, // super slow!! 6x slower
+  threshold: 0.4,
 };
 let fuse = new Fuse([], options);
 
@@ -63,6 +64,7 @@ class SearchPage extends Component {
       // dictionary.forEach((word) => {
       //   this.index.addDoc(word);
       // });
+      fuse.setCollection(dictionary);
       this.setState({ dictionary: dictionary });
     }
   }
@@ -74,8 +76,10 @@ class SearchPage extends Component {
   }
 
   onChangeSearch(event, data) {
+    console.log('start search');
     let newStartingSearch = event == undefined;
     let new_search = data.value;
+
     if (new_search.length >= 4) {
       // Search
       // let results = this.index.search(new_search.concat(" ", new_search.slice(0, -2)));
@@ -83,7 +87,16 @@ class SearchPage extends Component {
       // let wordsList = results.map((e) => {
       //   return this.index.documentStore.getDoc(e.ref);
       // });
+      let start = now();
       let wordsList = fuse.search(new_search);
+      let end = now();
+      // if (this.state.search !== undefined && this.state.search.length >= 1) {
+      //   let shortest_search = (new_search.length < this.state.search.length) ? new_search : this.state.search;
+      //   if (new_search.substring(0, shortest_search.length) == this.state.search.substring(0, shortest_search.length)) {
+      //     fuse.setCollection(wordsList);
+      //   }
+      // }
+      console.log('done! in ', (end-start).toFixed(3), 'ms');
       // if (results[0].score > results[results.length-1].score) {
       //   results = results.reverse();
       // }
@@ -109,7 +122,7 @@ class SearchPage extends Component {
 
   render() {
     console.log("SearchPage state: ", this.state);
-    let displayList = this.state.search.length >= 2 && this.state.wordsList.length > 0;
+    let displayList = this.state.search.length >= 4 && this.state.wordsList.length > 0;
     let displayWord = this.state.currentWord.yupik !== undefined;
     let wordsList = this.state.wordsList;
     if (this.state.onlyCommon) {
