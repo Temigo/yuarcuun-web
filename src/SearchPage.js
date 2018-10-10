@@ -89,9 +89,11 @@ class SearchPage extends Component {
     let displayList = this.state.search.length >= 2 && this.state.wordsList.length > 0;
     let displayWord = this.state.currentWord.yupik !== undefined;
     let wordsList = this.state.wordsList;
+    let isCommonList = wordsList.map((word) => { return Object.keys(word).some((key) => { return word[key].properties && word[key].properties.indexOf('common') > -1; }); });
     if (this.state.onlyCommon) {
-      wordsList = wordsList.filter((word) => { return Object.keys(word).some((key) => { return word[key].properties && word[key].properties.indexOf('common') > -1; }); });
+      wordsList = wordsList.filter((word, i) => { return isCommonList[i]; });
     }
+    let displayCommonOption = wordsList.some((word, i) => { return isCommonList[i]; }) && wordsList.some((word, i) => { return !isCommonList[i]; });
     return (
       <div>
       <Grid textAlign='center' style={{ height: '100%' }} verticalAlign={(displayList || !this.state.startingSearch) ? 'top' : 'middle'}>
@@ -113,16 +115,20 @@ class SearchPage extends Component {
                 value={this.state.search}
                 fluid transparent />
               </Grid.Column>
-              <Grid.Column floated='right' style={{ flex: '0 0 11em' }}>
+            </Grid.Row>
+            {displayCommonOption ?
+            <Grid.Row>
+              <Grid.Column floated='right' style={{ flex: '0 0 17em' }}>
                 <Label
                   as='a'
-                  content='Common Words Only'
+                  content='Show Common Words Only'
                   color='teal'
                   basic={!this.state.onlyCommon}
                   onClick={() => { this.setState({ onlyCommon: !this.state.onlyCommon }); }}
                   />
               </Grid.Column>
             </Grid.Row>
+            : ''}
           </Grid>
           <List divided selection>
             {displayList ? wordsList.map((word) => {
