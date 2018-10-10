@@ -899,10 +899,19 @@ class YupikModifyLayout extends Component {
     if (newText2.includes('is ')) {
       new_str = newText2.split("is ");
       new_adj = new_str[1].trim()
+    } else if (newText2.includes('was ')) {
+      new_str = newText2.split("was ");
+      new_adj = new_str[1].trim()
+      tense = 'past'
     } else if (newText2.includes('has ')) {
       new_str = newText2.split("has ");
       new_adj = new_str[1].trim()
       does = 'has'
+    } else if (newText2.includes('had ')) {
+      new_str = newText2.split("had ");
+      new_adj = new_str[1].trim()
+      does = 'has'
+      tense = 'past'
     } else {
       new_adj = newText2.trim()
       nois = true
@@ -982,159 +991,186 @@ class YupikModifyLayout extends Component {
         }
       }
     }
-
-    if (currentPostbases.length == 0) {
-      if (endingMood == 'infinitive') {
-        englishEnding.push(infinitive_new_adj)
-      } else {
-        englishEnding.push(gerund_new_adj)
-      }        
-    }
-
-    if (moodSpecific == 'You, stop!' || nounEnding !== '') {
-      endingMood = 'g'
-      if (currentPostbases.includes(5)) {
-        newText3tense = ' (in the past)'
-        tense = 'past'
-      } else if ([7,8,9].some(r=> currentPostbases.includes(r))) {
-        newText3tense = ' (in the future)'
-        tense = 'future'
+    if (does == 'has') {
+      if (currentPostbases.length == 0) {
+        englishEnding.push(new_adj)      
       }
-      if (currentPostbases.length>0) {
-        firstP = currentPostbases[0]
-        if (place.concat(A,F,G,H).includes(firstP)) {
-          postbasesEnglish.push('being'+postbases[firstP].englishModifier(''))
-        } else if (C.includes(firstP)) {
-          postbasesEnglish.push(postbases[firstP].englishModifierGerund(''))
-        } else {
-          postbasesEnglish.push(postbases[firstP].englishModifier(''))
+      if (moodSpecific == 'You, stop!' || nounEnding !== '') {
+        endingMood = 'g'
+        if (currentPostbases.includes(5)) {
+          newText3tense = ' (in the past)'
+          tense = 'past'
+        } else if ([7,8,9].some(r=> currentPostbases.includes(r))) {
+          newText3tense = ' (in the future)'
+          tense = 'future'
         }
-        if (currentPostbases.length == 1) {
-          if (place.concat(A,B,C).includes(firstP)) {
-            pushEnding('i',people,person,'',0)
-          } else {
-            pushEnding('g',people,person,'',0)
-          }          
-        }
-      }
-    } else if (mood == 'optative') {
-      newText2 = 'be'
-      if (moodSpecific == 'do (in the future)!') {
-        newText3tense = ' (in the future)'
-      }
-      endingMood = 'i'
-      if (currentPostbases.includes(5)) {
-        newText3tense = ' (in the past)'
-        tense = 'past'
-      } else if ([7,8,9].some(r=> currentPostbases.includes(r))) {
-        newText3tense = ' (in the future)'
-        tense = 'future'
-      }
-      if (currentPostbases.length>0) {
-        firstP = currentPostbases[0]
-        if (place.concat(B,C,D).includes(firstP)) {
-          postbasesEnglish.push(postbases[firstP].englishModifierGerund(''))
-        } else {
-          postbasesEnglish.push(postbases[firstP].englishModifier(''))
-        }
-        if (currentPostbases.length == 1) {
-          if (place.concat(A,B,C).includes(firstP)) {
-            pushEnding('i',people,person,'',0)
-          } else {
-            pushEnding('g',people,person,'',0)
-          }          
-        }
-      }
-    } else {
-      endingMood = 'g'
-      if (currentPostbases.includes(5)) {
-        tense = 'past'
-      } else if ([7,8,9].some(r=> currentPostbases.includes(r))) {
-        tense = 'future'
-      }
-      if (currentPostbases.length>0) {
-        firstP = currentPostbases[0]
-        if (place.concat(B,C,D).includes(firstP)) {
-          if (firstP == 23) {
-            does = 'does'
-            postbasesEnglish.push(postbases[firstP].englishModifierInfinitive(''))
-          } else {
+        if (currentPostbases.length>0) {
+          firstP = currentPostbases[0]
+          if (place.concat(A,F,G,H).includes(firstP)) {
+            postbasesEnglish.push('being'+postbases[firstP].englishModifier(''))
+          } else if (C.includes(firstP)) {
             postbasesEnglish.push(postbases[firstP].englishModifierGerund(''))
-          }
-        } else {
-          postbasesEnglish.push(postbases[firstP].englishModifier(''))
-        }
-        if (currentPostbases.length == 1) {
-          if (place.concat(A,B,C).includes(firstP)) {
-            pushEnding('i',people,person,'',0)
           } else {
-            pushEnding('g',people,person,'',0)
-          }          
+            postbasesEnglish.push(postbases[firstP].englishModifier(''))
+          }
+          if (currentPostbases.length == 1) {
+            if (place.concat(A,B,C).includes(firstP)) {
+              pushEnding('i',people,person,'',0)
+            } else {
+              pushEnding('g',people,person,'',0)
+            }          
+          }
+        }
+      } else if (mood == 'optative') {
+        newText2 = 'be'
+        if (moodSpecific == 'do (in the future)!') {
+          newText3tense = ' (in the future)'
+        }
+        endingMood = 'i'
+        if (currentPostbases.includes(5)) {
+          newText3tense = ' (in the past)'
+          tense = 'past'
+        } else if ([7,8,9].some(r=> currentPostbases.includes(r))) {
+          newText3tense = ' (in the future)'
+          tense = 'future'
+        }
+        if (currentPostbases.length>0) {
+          firstP = currentPostbases[0]
+          if (place.concat(B,C,D).includes(firstP)) {
+            postbasesEnglish.push(postbases[firstP].englishModifierGerund(''))
+          } else {
+            postbasesEnglish.push(postbases[firstP].englishModifier(''))
+          }
+          if (currentPostbases.length == 1) {
+            if (place.concat(A,B,C).includes(firstP)) {
+              pushEnding('i',people,person,'',0)
+            } else {
+              pushEnding('g',people,person,'',0)
+            }          
+          }
+        }
+      } else {
+        endingMood = 'g'
+        if (currentPostbases.includes(5)) {
+          tense = 'past'
+        } else if ([7,8,9].some(r=> currentPostbases.includes(r))) {
+          tense = 'future'
+        }
+        if (currentPostbases.length>0) {
+          firstP = currentPostbases[0]
+          if (place.concat(B,C,D).includes(firstP)) {
+            if (firstP == 23) {
+              does = 'does'
+              postbasesEnglish.push(postbases[firstP].englishModifierInfinitive(''))
+            } else {
+              postbasesEnglish.push(postbases[firstP].englishModifierGerund(''))
+            }
+          } else {
+            postbasesEnglish.push(postbases[firstP].englishModifier(''))
+          }
+          if (currentPostbases.length == 1) {
+            if (place.concat(A,B,C).includes(firstP)) {
+              pushEnding('i',people,person,'',0)
+            } else {
+              pushEnding('g',people,person,'',0)
+            }          
+          }
         }
       }
-    }
-       if (currentPostbases.length>1) {
-          endingMood = moodIndex[currentPostbases[0]]
-          currentPostbases.forEach((s,i) => {
-            if (i !== currentPostbases.length-1) {
-              nextIndexPostbase = postbases[currentPostbases[i+1]].id
-              // console.log(postbases[nextIndexPostbase].id)
-              if (place.concat(B,C,D).includes(nextIndexPostbase)) {
-                if (endingMood == 'i') {
+         if (currentPostbases.length>1) {
+            endingMood = moodIndex[currentPostbases[0]]
+            currentPostbases.forEach((s,i) => {
+              if (i !== currentPostbases.length-1) {
+                nextIndexPostbase = postbases[currentPostbases[i+1]].id
+                // console.log(postbases[nextIndexPostbase].id)
+                if (place.concat(B,C,D).includes(nextIndexPostbase)) {
+                  if (endingMood == 'i') {
+                    if (place.concat(A,B,C).includes(s) && A.includes(nextIndexPostbase)) {
+                      postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierInfinitive(''))
+                      pushEnding('i',people,person,'',i)
+                    } else if (place.concat(A,B,C).includes(s) && place.concat(F,G).includes(nextIndexPostbase)) {
+                      postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierInfinitive(''))
+                      pushEnding('g',people,person,'',i)
+                    } else if (place.concat(D,E,F).includes(s) && A.includes(nextIndexPostbase)) {
+                      if (endingMood == 'g') {
+                        postbasesEnglish.push('being'+postbases[nextIndexPostbase].englishModifierInfinitive(''))
+                      } else {
+                        postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierInfinitive(''))
+                      }
+                      pushEnding('i',people,person,'',i)
+                    } else if (place.concat(D,E,F).includes(s) && place.concat(F,G).includes(nextIndexPostbase)) {
+                      if (endingMood == 'g') {
+                        postbasesEnglish.push('being'+postbases[nextIndexPostbase].englishModifierInfinitive(''))
+                      } else {
+                        postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierInfinitive(''))
+                      }
+                      pushEnding('g',people,person,'',i)
+                    } else {
+                      postbasesEnglish.push(postbases[nextIndexPostbase].englishModifierInfinitive(''))
+                      if (nextIndexPostbase == 26 || nextIndexPostbase == 28) {
+                        pushEnding('g',people,person,'',i)
+                      } else if (place.concat(A,B,C).includes(nextIndexPostbase)) { 
+                        pushEnding('i',people,person,'',i)
+                      } else {
+                        pushEnding(endingMood,people,person,'',i)
+                      }
+                    }                     
+                  } else { //gerund
+                    if (place.concat(A,B,C).includes(s) && A.includes(nextIndexPostbase)) {
+                      postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierGerund(''))
+                      pushEnding('i',people,person,'',i)
+                    } else if (place.concat(A,B,C).includes(s) && place.concat(F,G).includes(nextIndexPostbase)) {
+                      console.log('called?')
+                      postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierGerund(''))
+                      pushEnding('g',people,person,'',i)
+                    } else if (place.concat(D,E,F).includes(s) &&  A.includes(nextIndexPostbase)) {
+                      if (endingMood == 'g') {
+                        postbasesEnglish.push('being'+postbases[nextIndexPostbase].englishModifierGerund(''))
+                      } else {
+                        postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierGerund(''))
+                      }
+                      pushEnding('i',people,person,'',i)
+                    } else if (place.concat(D,E,F).includes(s) && place.concat(F,G).includes(nextIndexPostbase)) {
+                      if (endingMood == 'g') {
+                        postbasesEnglish.push('being'+postbases[nextIndexPostbase].englishModifierGerund(''))
+                      } else {
+                        postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierGerund(''))
+                      }
+                      pushEnding('g',people,person,'',i)
+                    } else {
+                      postbasesEnglish.push(postbases[nextIndexPostbase].englishModifierGerund(''))
+                      if (nextIndexPostbase == 26 || nextIndexPostbase == 28) {
+                        pushEnding('g',people,person,'',i)
+                      } else if (place.concat(A,B,C).includes(nextIndexPostbase)) { 
+                        pushEnding('i',people,person,'',i)
+                      } else {
+                        pushEnding(endingMood,people,person,'',i)
+                      }
+                    }        
+                  }
+                } else {
                   if (place.concat(A,B,C).includes(s) && A.includes(nextIndexPostbase)) {
-                    postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierInfinitive(''))
+                    postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifier(''))
                     pushEnding('i',people,person,'',i)
                   } else if (place.concat(A,B,C).includes(s) && place.concat(F,G).includes(nextIndexPostbase)) {
-                    postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierInfinitive(''))
+                    postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifier(''))
                     pushEnding('g',people,person,'',i)
                   } else if (place.concat(D,E,F).includes(s) && A.includes(nextIndexPostbase)) {
                     if (endingMood == 'g') {
-                      postbasesEnglish.push('being'+postbases[nextIndexPostbase].englishModifierInfinitive(''))
+                      postbasesEnglish.push('being'+postbases[nextIndexPostbase].englishModifier(''))
                     } else {
-                      postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierInfinitive(''))
+                      postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifier(''))
                     }
                     pushEnding('i',people,person,'',i)
                   } else if (place.concat(D,E,F).includes(s) && place.concat(F,G).includes(nextIndexPostbase)) {
                     if (endingMood == 'g') {
-                      postbasesEnglish.push('being'+postbases[nextIndexPostbase].englishModifierInfinitive(''))
+                      postbasesEnglish.push('being'+postbases[nextIndexPostbase].englishModifier(''))
                     } else {
-                      postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierInfinitive(''))
+                      postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifier(''))
                     }
                     pushEnding('g',people,person,'',i)
                   } else {
-                    postbasesEnglish.push(postbases[nextIndexPostbase].englishModifierInfinitive(''))
-                    if (nextIndexPostbase == 26 || nextIndexPostbase == 28) {
-                      pushEnding('g',people,person,'',i)
-                    } else if (place.concat(A,B,C).includes(nextIndexPostbase)) { 
-                      pushEnding('i',people,person,'',i)
-                    } else {
-                      pushEnding(endingMood,people,person,'',i)
-                    }
-                  }                     
-                } else { //gerund
-                  if (place.concat(A,B,C).includes(s) && A.includes(nextIndexPostbase)) {
-                    postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierGerund(''))
-                    pushEnding('i',people,person,'',i)
-                  } else if (place.concat(A,B,C).includes(s) && place.concat(F,G).includes(nextIndexPostbase)) {
-                    console.log('called?')
-                    postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierGerund(''))
-                    pushEnding('g',people,person,'',i)
-                  } else if (place.concat(D,E,F).includes(s) &&  A.includes(nextIndexPostbase)) {
-                    if (endingMood == 'g') {
-                      postbasesEnglish.push('being'+postbases[nextIndexPostbase].englishModifierGerund(''))
-                    } else {
-                      postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierGerund(''))
-                    }
-                    pushEnding('i',people,person,'',i)
-                  } else if (place.concat(D,E,F).includes(s) && place.concat(F,G).includes(nextIndexPostbase)) {
-                    if (endingMood == 'g') {
-                      postbasesEnglish.push('being'+postbases[nextIndexPostbase].englishModifierGerund(''))
-                    } else {
-                      postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierGerund(''))
-                    }
-                    pushEnding('g',people,person,'',i)
-                  } else {
-                    postbasesEnglish.push(postbases[nextIndexPostbase].englishModifierGerund(''))
+                    postbasesEnglish.push(postbases[nextIndexPostbase].englishModifier(''))
                     if (nextIndexPostbase == 26 || nextIndexPostbase == 28) {
                       pushEnding('g',people,person,'',i)
                     } else if (place.concat(A,B,C).includes(nextIndexPostbase)) { 
@@ -1144,148 +1180,416 @@ class YupikModifyLayout extends Component {
                     }
                   }        
                 }
-              } else {
-                if (place.concat(A,B,C).includes(s) && A.includes(nextIndexPostbase)) {
-                  postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifier(''))
-                  pushEnding('i',people,person,'',i)
-                } else if (place.concat(A,B,C).includes(s) && place.concat(F,G).includes(nextIndexPostbase)) {
-                  postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifier(''))
-                  pushEnding('g',people,person,'',i)
-                } else if (place.concat(D,E,F).includes(s) && A.includes(nextIndexPostbase)) {
-                  if (endingMood == 'g') {
-                    postbasesEnglish.push('being'+postbases[nextIndexPostbase].englishModifier(''))
-                  } else {
-                    postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifier(''))
-                  }
-                  pushEnding('i',people,person,'',i)
-                } else if (place.concat(D,E,F).includes(s) && place.concat(F,G).includes(nextIndexPostbase)) {
-                  if (endingMood == 'g') {
-                    postbasesEnglish.push('being'+postbases[nextIndexPostbase].englishModifier(''))
-                  } else {
-                    postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifier(''))
-                  }
-                  pushEnding('g',people,person,'',i)
-                } else {
-                  postbasesEnglish.push(postbases[nextIndexPostbase].englishModifier(''))
-                  if (nextIndexPostbase == 26 || nextIndexPostbase == 28) {
-                    pushEnding('g',people,person,'',i)
-                  } else if (place.concat(A,B,C).includes(nextIndexPostbase)) { 
-                    pushEnding('i',people,person,'',i)
-                  } else {
-                    pushEnding(endingMood,people,person,'',i)
-                  }
-                }        
+                if (place.concat(E,G).includes(nextIndexPostbase) == false ) {
+                  endingMood = moodIndex[nextIndexPostbase]
+                  console.log(endingMood)
+                  console.log(postbases[nextIndexPostbase].description)
+                }
               }
-              if (place.concat(E,G).includes(nextIndexPostbase) == false ) {
-                endingMood = moodIndex[nextIndexPostbase]
-                console.log(endingMood)
-                console.log(postbases[nextIndexPostbase].description)
-              }
-            }
-          })     
-      } 
-    
+            })     
+        } 
+      
 
-    if (moodSpecific == 'You, stop!') {
-      if (person == '3' || person == '1') {
-        newText1 = 'let'
-        newText2 = 'stop '
-        // newText3 = newText3+'!'
+      if (moodSpecific == 'You, stop!') {
+        if (person == '3' || person == '1') {
+          newText1 = 'let'
+          newText2 = 'stop '
+          // newText3 = newText3+'!'
+        } else {
+          newText1 = ''
+          newText2 = ', stop '
+          // newText3 = newText3+'!'
+        }
+      } else if (moodSpecific == 'You, do not!') {
+        newText1after = ''
+        newText2after = ''
+        if (person == '3' || person == '1') {
+          newText1 = 'let'
+          newText2 = 'not '+newText2
+          // newText3 = newText3+'!'
+        } else {
+          newText1 = ''
+          newText2 = ', do not '+newText2
+          // newText3 = newText3+'!'
+        }
+      } else if (moodSpecific == 'do!'){
+        newText1after = ''
+        newText2after = ''
+        if (person == '3' || person == '1') {
+          newText1 = 'let'
+          newText2 = newText2+''
+          // newText3 = newText3+'!'
+        } else {
+          newText1 = ''
+          newText2 = ', '+newText2
+          // newText3 = newText3+'!'  for optative render it'll look like newText2 + object + newText3 + newText3tense + '!'
+        }
+      } else if (moodSpecific == 'do (in the future)!') {
+        newText1after = ''
+        newText2after = ''
+        if (person == '3' || person == '1') {
+          newText1 = 'let'
+          newText2 = newText2+''
+        } else {
+          newText1 = ''
+          newText2 = ', '+newText2
+        }
+      } else if (moodSpecific == 'when (future)...') {
+        newText1 = 'when'
+        newText1after = ''
+        newText2 = ''
+        newText2after = 'will '+getsubjectis('future',people,person,'be')
+      } else if (moodSpecific == 'when (past)...') {
+        newText1 = 'when '
+        newText1after = ''
+        newText2 = ''
+        newText2after = getsubjectis('past',people,person,does)
+      } else if (moodSpecific == 'who' && this.state.objectExists) {
+        newText1 = 'whom '+getsubjectis(tense,people,person,'prewho')
+        newText1after = ''
+        newText2 = ''
+        newText2after = ''
+        newText3 = newText3+'?'        
+      } else if (moodSpecific == 'who') {
+        newText1 = 'who '+getsubjectis(tense,people,person,'prewho')
+        newText1after = ''
+        newText2 = ' who '
+        newText2after = getsubjectis(tense,people,person,does)
+        newText3 = newText3+'?'
+      } else if (mood == 'interrogative') {
+        if (moodSpecific == 'when (in past)') {
+          tense = 'past'
+        } else if (moodSpecific == 'when (in future)') {
+          tense = 'future'
+        }
+        console.log(moodSpecific)
+        newText1 = interrogative.find((p)=> {return p.mood==moodSpecific}).text
+        newText1after = getsubjectis(tense,people,person,does)
+        newText2 = ''
+        newText2after = getsubjectis(tense,people,person,'be')
+        newText3 = newText3+'?'
+      } else if (mood == 'connective_precessive' || mood == 'connective_consequential' || mood == 'connective_contingent' || mood == 'connective_concessive' || mood == 'connective_conditional' || mood == 'connective_first_contemporative' || mood == 'connective_second_contemporative' || mood == 'subordinative') {
+        newText1 = dependent.find((p)=> {return p.mood==moodSpecific}).text
+        newText1after = ''
+        newText2 = ''
+        newText2after = getsubjectis(tense,people,person,does)+getsubjectis(tense,people,person,'be')
+      } else if (nounEnding !== '') {
+        newText1 = ''
+        newText1after = ''
+        newText2 = verb2noun.find((p)=> {return p.ending==nounEnding}).text
+        newText2after = ' ('
+        newText3 = newText3+')'
       } else {
         newText1 = ''
-        newText2 = ', stop '
-        // newText3 = newText3+'!'
+        newText1after = ''
+        newText2 = ''
+        newText2after = getsubjectis(tense,people,person,does)+getsubjectis(tense,people,person,'be')
       }
-    } else if (moodSpecific == 'You, do not!') {
-      newText1after = ''
-      newText2after = ''
-      if (person == '3' || person == '1') {
-        newText1 = 'let'
-        newText2 = 'not '+newText2
-        // newText3 = newText3+'!'
-      } else {
-        newText1 = ''
-        newText2 = ', do not '+newText2
-        // newText3 = newText3+'!'
-      }
-    } else if (moodSpecific == 'do!'){
-      newText1after = ''
-      newText2after = ''
-      if (person == '3' || person == '1') {
-        newText1 = 'let'
-        newText2 = newText2+''
-        // newText3 = newText3+'!'
-      } else {
-        newText1 = ''
-        newText2 = ', '+newText2
-        // newText3 = newText3+'!'  for optative render it'll look like newText2 + object + newText3 + newText3tense + '!'
-      }
-    } else if (moodSpecific == 'do (in the future)!') {
-      newText1after = ''
-      newText2after = ''
-      if (person == '3' || person == '1') {
-        newText1 = 'let'
-        newText2 = newText2+''
-      } else {
-        newText1 = ''
-        newText2 = ', '+newText2
-      }
-    } else if (moodSpecific == 'when (future)...') {
-      newText1 = 'when'
-      newText1after = ''
-      newText2 = ''
-      newText2after = 'will '+getsubjectis('future',people,person,'be')
-    } else if (moodSpecific == 'when (past)...') {
-      newText1 = 'when '
-      newText1after = ''
-      newText2 = ''
-      newText2after = getsubjectis('past',people,person,does)
-    } else if (moodSpecific == 'who' && this.state.objectExists) {
-      newText1 = 'whom '+getsubjectis(tense,people,person,'prewho')
-      newText1after = ''
-      newText2 = ''
-      newText2after = ''
-      newText3 = newText3+'?'        
-    } else if (moodSpecific == 'who') {
-      newText1 = 'who '+getsubjectis(tense,people,person,'prewho')
-      newText1after = ''
-      newText2 = ' who '
-      newText2after = getsubjectis(tense,people,person,does)
-      newText3 = newText3+'?'
-    } else if (mood == 'interrogative') {
-      if (moodSpecific == 'when (in past)') {
-        tense = 'past'
-      } else if (moodSpecific == 'when (in future)') {
-        tense = 'future'
-      }
-      console.log(moodSpecific)
-      newText1 = interrogative.find((p)=> {return p.mood==moodSpecific}).text
-      newText1after = getsubjectis(tense,people,person,does)
-      newText2 = ''
-      newText2after = getsubjectis(tense,people,person,'be')
-      newText3 = newText3+'?'
-    } else if (mood == 'connective_precessive' || mood == 'connective_consequential' || mood == 'connective_contingent' || mood == 'connective_concessive' || mood == 'connective_conditional' || mood == 'connective_first_contemporative' || mood == 'connective_second_contemporative' || mood == 'subordinative') {
-      newText1 = dependent.find((p)=> {return p.mood==moodSpecific}).text
-      newText1after = ''
-      newText2 = ''
-      newText2after = getsubjectis(tense,people,person,does)+getsubjectis(tense,people,person,'be')
-    } else if (nounEnding !== '') {
-      newText1 = ''
-      newText1after = ''
-      newText2 = verb2noun.find((p)=> {return p.ending==nounEnding}).text
-      newText2after = ' ('
-      newText3 = newText3+')'
+      currentPostbases = currentPostbases.reverse()
+      console.log(newText1+newText2+postbasesEnglish.join(' ')+' '+englishEnding.join(' ')+newText3)
     } else {
-      newText1 = ''
-      newText1after = ''
-      newText2 = ''
-      newText2after = getsubjectis(tense,people,person,does)+getsubjectis(tense,people,person,'be')
-    }
-    currentPostbases = currentPostbases.reverse()
-    console.log(newText1+newText2+postbasesEnglish.join(' ')+' '+englishEnding.join(' ')+newText3)
+      if (currentPostbases.length == 0) {
+        if (endingMood == 'infinitive') {
+          englishEnding.push(infinitive_new_adj)
+        } else {
+          englishEnding.push(gerund_new_adj)
+        }        
+      }
 
-    //   }
-    // }
+      if (moodSpecific == 'You, stop!' || nounEnding !== '') {
+        endingMood = 'g'
+        if (currentPostbases.includes(5)) {
+          newText3tense = ' (in the past)'
+          tense = 'past'
+        } else if ([7,8,9].some(r=> currentPostbases.includes(r))) {
+          newText3tense = ' (in the future)'
+          tense = 'future'
+        }
+        if (currentPostbases.length>0) {
+          firstP = currentPostbases[0]
+          if (place.concat(A,F,G,H).includes(firstP)) {
+            postbasesEnglish.push('being'+postbases[firstP].englishModifier(''))
+          } else if (C.includes(firstP)) {
+            postbasesEnglish.push(postbases[firstP].englishModifierGerund(''))
+          } else {
+            postbasesEnglish.push(postbases[firstP].englishModifier(''))
+          }
+          if (currentPostbases.length == 1) {
+            if (place.concat(A,B,C).includes(firstP)) {
+              pushEnding('i',people,person,'',0)
+            } else {
+              pushEnding('g',people,person,'',0)
+            }          
+          }
+        }
+      } else if (mood == 'optative') {
+        newText2 = 'be'
+        if (moodSpecific == 'do (in the future)!') {
+          newText3tense = ' (in the future)'
+        }
+        endingMood = 'i'
+        if (currentPostbases.includes(5)) {
+          newText3tense = ' (in the past)'
+          tense = 'past'
+        } else if ([7,8,9].some(r=> currentPostbases.includes(r))) {
+          newText3tense = ' (in the future)'
+          tense = 'future'
+        }
+        if (currentPostbases.length>0) {
+          firstP = currentPostbases[0]
+          if (place.concat(B,C,D).includes(firstP)) {
+            postbasesEnglish.push(postbases[firstP].englishModifierGerund(''))
+          } else {
+            postbasesEnglish.push(postbases[firstP].englishModifier(''))
+          }
+          if (currentPostbases.length == 1) {
+            if (place.concat(A,B,C).includes(firstP)) {
+              pushEnding('i',people,person,'',0)
+            } else {
+              pushEnding('g',people,person,'',0)
+            }          
+          }
+        }
+      } else {
+        endingMood = 'g'
+        if (currentPostbases.includes(5)) {
+          tense = 'past'
+        } else if ([7,8,9].some(r=> currentPostbases.includes(r))) {
+          tense = 'future'
+        }
+        if (currentPostbases.length>0) {
+          firstP = currentPostbases[0]
+          if (place.concat(B,C,D).includes(firstP)) {
+            if (firstP == 23) {
+              does = 'does'
+              postbasesEnglish.push(postbases[firstP].englishModifierInfinitive(''))
+            } else {
+              postbasesEnglish.push(postbases[firstP].englishModifierGerund(''))
+            }
+          } else {
+            postbasesEnglish.push(postbases[firstP].englishModifier(''))
+          }
+          if (currentPostbases.length == 1) {
+            if (place.concat(A,B,C).includes(firstP)) {
+              pushEnding('i',people,person,'',0)
+            } else {
+              pushEnding('g',people,person,'',0)
+            }          
+          }
+        }
+      }
+         if (currentPostbases.length>1) {
+            endingMood = moodIndex[currentPostbases[0]]
+            currentPostbases.forEach((s,i) => {
+              if (i !== currentPostbases.length-1) {
+                nextIndexPostbase = postbases[currentPostbases[i+1]].id
+                // console.log(postbases[nextIndexPostbase].id)
+                if (place.concat(B,C,D).includes(nextIndexPostbase)) {
+                  if (endingMood == 'i') {
+                    if (place.concat(A,B,C).includes(s) && A.includes(nextIndexPostbase)) {
+                      postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierInfinitive(''))
+                      pushEnding('i',people,person,'',i)
+                    } else if (place.concat(A,B,C).includes(s) && place.concat(F,G).includes(nextIndexPostbase)) {
+                      postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierInfinitive(''))
+                      pushEnding('g',people,person,'',i)
+                    } else if (place.concat(D,E,F).includes(s) && A.includes(nextIndexPostbase)) {
+                      if (endingMood == 'g') {
+                        postbasesEnglish.push('being'+postbases[nextIndexPostbase].englishModifierInfinitive(''))
+                      } else {
+                        postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierInfinitive(''))
+                      }
+                      pushEnding('i',people,person,'',i)
+                    } else if (place.concat(D,E,F).includes(s) && place.concat(F,G).includes(nextIndexPostbase)) {
+                      if (endingMood == 'g') {
+                        postbasesEnglish.push('being'+postbases[nextIndexPostbase].englishModifierInfinitive(''))
+                      } else {
+                        postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierInfinitive(''))
+                      }
+                      pushEnding('g',people,person,'',i)
+                    } else {
+                      postbasesEnglish.push(postbases[nextIndexPostbase].englishModifierInfinitive(''))
+                      if (nextIndexPostbase == 26 || nextIndexPostbase == 28) {
+                        pushEnding('g',people,person,'',i)
+                      } else if (place.concat(A,B,C).includes(nextIndexPostbase)) { 
+                        pushEnding('i',people,person,'',i)
+                      } else {
+                        pushEnding(endingMood,people,person,'',i)
+                      }
+                    }                     
+                  } else { //gerund
+                    if (place.concat(A,B,C).includes(s) && A.includes(nextIndexPostbase)) {
+                      postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierGerund(''))
+                      pushEnding('i',people,person,'',i)
+                    } else if (place.concat(A,B,C).includes(s) && place.concat(F,G).includes(nextIndexPostbase)) {
+                      console.log('called?')
+                      postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierGerund(''))
+                      pushEnding('g',people,person,'',i)
+                    } else if (place.concat(D,E,F).includes(s) &&  A.includes(nextIndexPostbase)) {
+                      if (endingMood == 'g') {
+                        postbasesEnglish.push('being'+postbases[nextIndexPostbase].englishModifierGerund(''))
+                      } else {
+                        postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierGerund(''))
+                      }
+                      pushEnding('i',people,person,'',i)
+                    } else if (place.concat(D,E,F).includes(s) && place.concat(F,G).includes(nextIndexPostbase)) {
+                      if (endingMood == 'g') {
+                        postbasesEnglish.push('being'+postbases[nextIndexPostbase].englishModifierGerund(''))
+                      } else {
+                        postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierGerund(''))
+                      }
+                      pushEnding('g',people,person,'',i)
+                    } else {
+                      postbasesEnglish.push(postbases[nextIndexPostbase].englishModifierGerund(''))
+                      if (nextIndexPostbase == 26 || nextIndexPostbase == 28) {
+                        pushEnding('g',people,person,'',i)
+                      } else if (place.concat(A,B,C).includes(nextIndexPostbase)) { 
+                        pushEnding('i',people,person,'',i)
+                      } else {
+                        pushEnding(endingMood,people,person,'',i)
+                      }
+                    }        
+                  }
+                } else {
+                  if (place.concat(A,B,C).includes(s) && A.includes(nextIndexPostbase)) {
+                    postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifier(''))
+                    pushEnding('i',people,person,'',i)
+                  } else if (place.concat(A,B,C).includes(s) && place.concat(F,G).includes(nextIndexPostbase)) {
+                    postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifier(''))
+                    pushEnding('g',people,person,'',i)
+                  } else if (place.concat(D,E,F).includes(s) && A.includes(nextIndexPostbase)) {
+                    if (endingMood == 'g') {
+                      postbasesEnglish.push('being'+postbases[nextIndexPostbase].englishModifier(''))
+                    } else {
+                      postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifier(''))
+                    }
+                    pushEnding('i',people,person,'',i)
+                  } else if (place.concat(D,E,F).includes(s) && place.concat(F,G).includes(nextIndexPostbase)) {
+                    if (endingMood == 'g') {
+                      postbasesEnglish.push('being'+postbases[nextIndexPostbase].englishModifier(''))
+                    } else {
+                      postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifier(''))
+                    }
+                    pushEnding('g',people,person,'',i)
+                  } else {
+                    postbasesEnglish.push(postbases[nextIndexPostbase].englishModifier(''))
+                    if (nextIndexPostbase == 26 || nextIndexPostbase == 28) {
+                      pushEnding('g',people,person,'',i)
+                    } else if (place.concat(A,B,C).includes(nextIndexPostbase)) { 
+                      pushEnding('i',people,person,'',i)
+                    } else {
+                      pushEnding(endingMood,people,person,'',i)
+                    }
+                  }        
+                }
+                if (place.concat(E,G).includes(nextIndexPostbase) == false ) {
+                  endingMood = moodIndex[nextIndexPostbase]
+                  console.log(endingMood)
+                  console.log(postbases[nextIndexPostbase].description)
+                }
+              }
+            })     
+        } 
+      
+
+      if (moodSpecific == 'You, stop!') {
+        if (person == '3' || person == '1') {
+          newText1 = 'let'
+          newText2 = 'stop '
+          // newText3 = newText3+'!'
+        } else {
+          newText1 = ''
+          newText2 = ', stop '
+          // newText3 = newText3+'!'
+        }
+      } else if (moodSpecific == 'You, do not!') {
+        newText1after = ''
+        newText2after = ''
+        if (person == '3' || person == '1') {
+          newText1 = 'let'
+          newText2 = 'not '+newText2
+          // newText3 = newText3+'!'
+        } else {
+          newText1 = ''
+          newText2 = ', do not '+newText2
+          // newText3 = newText3+'!'
+        }
+      } else if (moodSpecific == 'do!'){
+        newText1after = ''
+        newText2after = ''
+        if (person == '3' || person == '1') {
+          newText1 = 'let'
+          newText2 = newText2+''
+          // newText3 = newText3+'!'
+        } else {
+          newText1 = ''
+          newText2 = ', '+newText2
+          // newText3 = newText3+'!'  for optative render it'll look like newText2 + object + newText3 + newText3tense + '!'
+        }
+      } else if (moodSpecific == 'do (in the future)!') {
+        newText1after = ''
+        newText2after = ''
+        if (person == '3' || person == '1') {
+          newText1 = 'let'
+          newText2 = newText2+''
+        } else {
+          newText1 = ''
+          newText2 = ', '+newText2
+        }
+      } else if (moodSpecific == 'when (future)...') {
+        newText1 = 'when'
+        newText1after = ''
+        newText2 = ''
+        newText2after = 'will '+getsubjectis('future',people,person,'be')
+      } else if (moodSpecific == 'when (past)...') {
+        newText1 = 'when '
+        newText1after = ''
+        newText2 = ''
+        newText2after = getsubjectis('past',people,person,does)
+      } else if (moodSpecific == 'who' && this.state.objectExists) {
+        newText1 = 'whom '+getsubjectis(tense,people,person,'prewho')
+        newText1after = ''
+        newText2 = ''
+        newText2after = ''
+        newText3 = newText3+'?'        
+      } else if (moodSpecific == 'who') {
+        newText1 = 'who '+getsubjectis(tense,people,person,'prewho')
+        newText1after = ''
+        newText2 = ' who '
+        newText2after = getsubjectis(tense,people,person,does)
+        newText3 = newText3+'?'
+      } else if (mood == 'interrogative') {
+        if (moodSpecific == 'when (in past)') {
+          tense = 'past'
+        } else if (moodSpecific == 'when (in future)') {
+          tense = 'future'
+        }
+        console.log(moodSpecific)
+        newText1 = interrogative.find((p)=> {return p.mood==moodSpecific}).text
+        newText1after = getsubjectis(tense,people,person,does)
+        newText2 = ''
+        newText2after = getsubjectis(tense,people,person,'be')
+        newText3 = newText3+'?'
+      } else if (mood == 'connective_precessive' || mood == 'connective_consequential' || mood == 'connective_contingent' || mood == 'connective_concessive' || mood == 'connective_conditional' || mood == 'connective_first_contemporative' || mood == 'connective_second_contemporative' || mood == 'subordinative') {
+        newText1 = dependent.find((p)=> {return p.mood==moodSpecific}).text
+        newText1after = ''
+        newText2 = ''
+        newText2after = getsubjectis(tense,people,person,does)+getsubjectis(tense,people,person,'be')
+      } else if (nounEnding !== '') {
+        newText1 = ''
+        newText1after = ''
+        newText2 = verb2noun.find((p)=> {return p.ending==nounEnding}).text
+        newText2after = ' ('
+        newText3 = newText3+')'
+      } else {
+        newText1 = ''
+        newText1after = ''
+        newText2 = ''
+        newText2after = getsubjectis(tense,people,person,does)+getsubjectis(tense,people,person,'be')
+      }
+      currentPostbases = currentPostbases.reverse()
+      console.log(newText1+newText2+postbasesEnglish.join(' ')+' '+englishEnding.join(' ')+newText3)
+    }
+
   
  
 
