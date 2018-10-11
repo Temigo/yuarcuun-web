@@ -209,7 +209,7 @@ export const postbases = [
     id: 14,
     description: 'never',
     englishModifier: (english) => { return ' never' + english; },
-    expression: '@~-yuite\\',
+    expression: '@-~yuite\\',
     expression_conditional: '',
     priority: 1,
     conditional_rule: '',
