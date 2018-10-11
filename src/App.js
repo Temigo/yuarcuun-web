@@ -16,7 +16,7 @@ import YupikEndingGroups from './YupikEndingGroups.js';
 import YupikPostbaseGroups from './YupikPostbaseGroups.js';
 import YupikPostbase from './YupikPostbase.js';
 
-export const API_URL = "http://yugtun-api.herokuapp.com";
+export const API_URL = "https://yugtun-api.herokuapp.com";
 // export const API_URL = "http://localhost:5000";
 
 class App extends Component {
