@@ -141,12 +141,27 @@ class SearchPage extends Component {
           <List divided selection>
             {displayList ? wordsList.map((word) => {
               let isCommon = Object.keys(word).some((key) => { return word[key].properties && word[key].properties.indexOf('common') > -1; });
+              let isHBC = Object.keys(word).some((key) => { return word[key].properties && word[key].properties.indexOf('HBC') > -1; });
+              let isNoun = Object.keys(word).some((key) => { return word[key].descriptor && word[key].descriptor.indexOf('noun') > -1; });
+              let isVerb = Object.keys(word).some((key) => { return word[key].descriptor && word[key].descriptor.indexOf('verb') > -1; });
+              let isParticle = Object.keys(word).some((key) => { return word[key].descriptor && word[key].descriptor.indexOf('particle') > -1; });
+              let isExpression = Object.keys(word).some((key) => { return word[key].descriptor && word[key].descriptor.indexOf('Common Expression') > -1; });
               return (
 
                 <List.Item key={word.yupik}>
                 <Link to={{pathname: '/' + word.yupik, state: { word: word, search: this.state.search, wordsList: this.state.wordsList }}}>
                   <List.Content>
-                    <List.Header>{word.yupik} <span style={{ 'margin-left': '10px' }}>{isCommon ? <Label size='mini' color='teal'>COMMON</Label> : ''}</span></List.Header>
+                    <List.Header>
+                      {word.yupik}
+                      <span style={{ 'margin-left': '10px' }}>
+                        {isCommon ? <Label size='mini' color='teal'>COMMON</Label> : ''}
+                        {isHBC ? <Label size='mini' color='orange'>HBC DIALECT</Label> : ''}
+                        {isNoun ? <Label size='mini' color='grey'>NOUN</Label> : ''}
+                        {isVerb ? <Label size='mini' color='brown'>VERB</Label> : ''}
+                        {isParticle ? <Label size='mini' color='red'>PARTICLE</Label> : ''}
+                        {isExpression ? <Label size='mini' color='green'>EXPRESSION</Label> : ''}
+                      </span>
+                    </List.Header>
                     <List.Description>{word.english}</List.Description>
                   </List.Content>
                 </Link>
