@@ -176,7 +176,7 @@ class YupikModifyLayout extends Component {
   componentWillUpdate(newProps, newState) {
     // console.log('newState', newState, this.state)
     if (this.verb) {
-      if (newState.value1 != this.state.value1 || newState.people != this.state.people || newState.person != this.state.person || newState.objectPerson != this.state.objectPerson || newState.objectPeople != this.state.objectPeople || newState.moodSpecific != this.state.moodSpecific || newState.nounEnding != this.state.nounEnding) {
+      if (newState.encliticExpression != this.state.encliticExpression || newState.value1 != this.state.value1 || newState.people != this.state.people || newState.person != this.state.person || newState.objectPerson != this.state.objectPerson || newState.objectPeople != this.state.objectPeople || newState.moodSpecific != this.state.moodSpecific || newState.nounEnding != this.state.nounEnding) {
         if (newState.mood != this.state.mood) {
           newState.nounEnding = ''
           this.state.nounEnding = ''
@@ -184,7 +184,7 @@ class YupikModifyLayout extends Component {
           newState.encliticExpression = ''
           this.state.enclitic = ''
           this.state.encliticExpression = ''
-          if (newState.mood == 'indicative' || newState.mood == 'interrogative' || newState.mood == 'optative') {
+          if (newState.mood == 'indicative' || newState.mood == 'interrogative') {
             if (this.state.value1[0] == '4') {  // if 4th person subject, switch to 3rd person singular
               this.setState({people: 1, person: 3, value1: '31-1(1)'})
               newState.person = 3
@@ -228,7 +228,10 @@ class YupikModifyLayout extends Component {
               newState.objectPerson = 3
               newState.objectPeople = 1
             }
-          } else if (newState.mood == 'optative') {
+          } 
+        }
+        if (newState.mood != this.state.mood) {
+          if (newState.mood == 'optative') {
             this.setState({people: 1, person: 2, value1: '21(2)'})
             newState.person = 2
             newState.people = 1
@@ -237,19 +240,12 @@ class YupikModifyLayout extends Component {
               newState.objectPerson = 3
               newState.objectPeople = 1              
             }
+          } else {
+            let str = this.state.value1
+            str = str.substring(0, str.length - 2)+ '1)';
+            this.setState({value1:str}) 
           }
         }
-        // if (newState.mood != this.state.mood) {
-        //   if (newState.mood == 'optative') {
-        //     this.setState({people: 1, person: 2, value1: '21(2)'})
-        //     newState.person = 2
-        //     newState.people = 1
-        //   } else {
-        //     let str = this.state.value1
-        //     str = str.substring(0, str.length - 2)+ '1)';
-        //     this.setState({value1:str}) 
-        //   }
-        // }
         if (newState.nounEnding != this.state.nounEnding) {
           if (newState.nounEnding != '') {
             newState.mood = 'nounEnding'
@@ -540,7 +536,7 @@ class YupikModifyLayout extends Component {
         new_state = {
           ...new_state,
           value2_text: "his",
-          value: "31-1(3)",
+          value2: "31-1(3)",
           objectPeople: 1,
           objectPerson: 3,
           possessiveObject: true,
@@ -842,6 +838,7 @@ class YupikModifyLayout extends Component {
   setEnclitic(enclitic, encliticExpression, event, data) {
     this.setState({ enclitic: (this.state.enclitic == enclitic) ? '' : enclitic })
     this.setState({ encliticExpression: (this.state.enclitic == enclitic) ? '' : encliticExpression })
+    this.setState({ mood: 'indicative', moodSpecific:'indicative'});
   }
 
   setNounEnding(ending, event, data) {
