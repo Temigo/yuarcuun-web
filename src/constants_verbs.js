@@ -1,10 +1,11 @@
 export const nounEndings = {
   'the one who is': '-lria',
   'device for': '+cuun',
-  'one that customarily/capably is': '-tuli',
+  'one that often or capably is': '-tuli',
   'how to/way of': '@~+yaraq',
   'one who is good at': '@~-yuli',
-  'act or state of': '-lleq '
+  'act or state of': '-lleq ',
+  'place for': '@~+vik'
 };
 
 export const absolutive_endings = {
