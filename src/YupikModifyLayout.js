@@ -187,7 +187,7 @@ class YupikModifyLayout extends Component {
           newState.encliticExpression = ''
           this.state.enclitic = ''
           this.state.encliticExpression = ''
-          } 
+          }
           if (newState.mood == 'indicative' || newState.mood == 'interrogative') {
             if (newState.value1[0] == '4') {  // if 4th person subject, switch to 3rd person singular
               this.setState({people: 1, person: 3, value1: '31-1(1)'})
@@ -218,7 +218,7 @@ class YupikModifyLayout extends Component {
             let str = newState.value1
             str = str.substring(0, str.length - 2)+ '1)';
             this.setState({value1:str})
-            newState.value1 = str         
+            newState.value1 = str
           } else if (newState.mood == 'subordinative') {
             if (this.state.value1[0] == '3') { //if 3rd person subject, switch to 4th person singular
               this.setState({people: 1, person: 4, value1: '41(1)'})
@@ -242,14 +242,14 @@ class YupikModifyLayout extends Component {
             if (this.state.value2[0] == '2') { //if 2nd person object, use 3rd person singular instead
               this.setState({objectPeople: 1, objectPerson: 3, value2: '31-1(2)'})
               newState.objectPerson = 3
-              newState.objectPeople = 1              
+              newState.objectPeople = 1
             }
           } else {
             let str = this.state.value1
             str = str.substring(0, str.length - 2)+ '1)';
-            this.setState({value1:str}) 
+            this.setState({value1:str})
           }
-        } 
+        }
         if (newState.moodSpecific == 'when (future)...' || newState.moodSpecific == 'when (past)...') {
           let array = this.state.currentPostbases
           for(var i = array.length-1; i >= 0; i--) {
@@ -486,7 +486,7 @@ class YupikModifyLayout extends Component {
           text3: res[2],
           originalText3: res[2],
         }
-      } else if (res[1] === 'her*') { 
+      } else if (res[1] === 'her*') {
         new_state = {
           ...new_state,
           value2_text: "her",
@@ -499,7 +499,7 @@ class YupikModifyLayout extends Component {
           text3: res[2],
           originalText3: res[2],
         }
-      } else if (res[1] === 'them') { 
+      } else if (res[1] === 'them') {
         new_state = {
           ...new_state,
           value2_text: "them all (3+)",
@@ -621,14 +621,14 @@ class YupikModifyLayout extends Component {
           this.state.currentPostbases.forEach((i, index) => {
             allowable.splice(allowable.indexOf(this.state.currentPostbases[index]),1)
           })
-            
+
         }
       }
       if (this.state.moodSpecific == 'when (future)...' || this.state.moodSpecific == 'when (past)...') {
         allowable.push(5)
         allowable.push(7)
       }
-      this.setState({allowable_next_ids: allowable})   
+      this.setState({allowable_next_ids: allowable})
       this.modifyWord(this.state.person, this.state.people, this.state.objectPerson, this.state.objectPeople, this.state.mood, this.state.moodSpecific, this.state.nounEnding, this.state.value1, this.state.currentWord, this.state.currentPostbases);
     } else {
       let allremaining = [0,1,2,3,4,5,6]
@@ -646,7 +646,7 @@ class YupikModifyLayout extends Component {
         } else if (this.state.currentPostbases.length === 2) {
           if (this.state.currentPostbases[0] < 7) {
             allremaining.splice(allremaining.indexOf(this.state.currentPostbases[1]),1)
-            allremaining.splice(allremaining.indexOf(this.state.currentPostbases[0]),1)   
+            allremaining.splice(allremaining.indexOf(this.state.currentPostbases[0]),1)
             this.setState({allowable_next_ids: allremaining})
           } else {
             this.setState({allowable_next_ids: nounPostbases[this.state.currentPostbases[1]].allowable_next_ids})
@@ -660,11 +660,11 @@ class YupikModifyLayout extends Component {
             })
             // allremaining.splice(allremaining.indexOf(this.state.currentPostbases[2]),1)
             // allremaining.splice(allremaining.indexOf(this.state.currentPostbases[1]),1)
-            console.log(allremaining)  
-            this.setState({allowable_next_ids: allremaining})      
+            console.log(allremaining)
+            this.setState({allowable_next_ids: allremaining})
         }
       }
-      this.modifyWord(this.state.person, this.state.people, this.state.objectPerson, this.state.objectPeople, this.state.mood, this.state.moodSpecific, this.state.nounEnding, this.state.value1, this.state.currentWord, this.state.currentPostbases);      
+      this.modifyWord(this.state.person, this.state.people, this.state.objectPerson, this.state.objectPeople, this.state.mood, this.state.moodSpecific, this.state.nounEnding, this.state.value1, this.state.currentWord, this.state.currentPostbases);
     }
   }
   setPostbase(postbase_id, event, data) {
@@ -706,7 +706,7 @@ class YupikModifyLayout extends Component {
 
           currentPostbases.forEach((i, index) => {
             allowable.splice(allowable.indexOf(currentPostbases[index]),1)
-          }) 
+          })
         }
       }
       if (this.state.moodSpecific == 'when (future)...' || this.state.moodSpecific == 'when (past)...') {
@@ -740,7 +740,7 @@ class YupikModifyLayout extends Component {
         if (verbEnding) {
           currentPostbases.shift()
           this.setState({ verbEnding: false})
-          verbEnding = false          
+          verbEnding = false
         } else if (this.state.mood != 'absolutive') {
           this.setState({ mood: 'absolutive'})
           moodEnding = 'absolutive'
@@ -800,7 +800,7 @@ class YupikModifyLayout extends Component {
         } else if (currentPostbases.length === 2) {
           if (currentPostbases[0] < 7) {
             allremaining.splice(allremaining.indexOf(currentPostbases[1]),1)
-            allremaining.splice(allremaining.indexOf(currentPostbases[0]),1)   
+            allremaining.splice(allremaining.indexOf(currentPostbases[0]),1)
             this.setState({allowable_next_ids: allremaining})
           } else {
             this.setState({allowable_next_ids: nounPostbases[currentPostbases[1]].allowable_next_ids})
@@ -811,13 +811,13 @@ class YupikModifyLayout extends Component {
                 allremaining.splice(allremaining.indexOf(currentPostbases[index]),1)
               }
             })
-            this.setState({allowable_next_ids: allremaining})      
+            this.setState({allowable_next_ids: allremaining})
         }
       }
     this.modifyWord(this.state.person, this.state.people, this.state.possessorPerson, this.state.possessorPeople, moodEnding, this.state.moodSpecific, nounEnding, verbEnding, value4, this.state.currentWord, currentPostbases);
   }
 }
-  
+
 
   setMoodVerb(newMood, moodSpecific, event, data) {
     this.setState({ mood: (this.state.moodSpecific == moodSpecific) ? 'indicative' : newMood });
@@ -909,7 +909,7 @@ class YupikModifyLayout extends Component {
 //         // if (j != o) {
 //         //   currentPostbases.push(postbases[o].id)
 //         // }
-        
+
 //         // console.log(currentPostbases)
 
 //     if (currentPostbases.length == 1) {
@@ -917,7 +917,7 @@ class YupikModifyLayout extends Component {
 //     } else {
 // console.log('--------------------------------------------'+j+postbases[currentPostbases[0]].description+' '+postbases[currentPostbases[1]].description)
 //     }
-    
+
     currentPostbases = currentPostbases.reverse()
     newEnglish =  this.state.currentEnglish;
     newText1 = ''
@@ -974,7 +974,7 @@ class YupikModifyLayout extends Component {
           subjectis = 'is'
         } else {
           subjectis = 'are'
-        }        
+        }
       } else if (tenseN == 'present') {
         if (peopleN == 1 && personN == 1) {
           subjectis = 'am'
@@ -1029,7 +1029,7 @@ class YupikModifyLayout extends Component {
     let infinitive_new_adj = ''
     if (this.state.properties.includes('adjectival')) {
       gerund_new_adj = new_adj
-      infinitive_new_adj = 'be '+new_adj    
+      infinitive_new_adj = 'be '+new_adj
     } else if (originalverb) {
       if (originalverb == 'being') {
         gerund_new_adj = test.replace(originalverb,'')
@@ -1042,7 +1042,7 @@ class YupikModifyLayout extends Component {
       }
     } else {
       gerund_new_adj = new_adj
-      infinitive_new_adj = 'be '+new_adj   
+      infinitive_new_adj = 'be '+new_adj
     }
     let firstpass = true
     console.log(gerund_new_adj)
@@ -1095,7 +1095,7 @@ class YupikModifyLayout extends Component {
           englishEnding.push(infinitive_new_adj)
         } else {
           englishEnding.push(gerund_new_adj)
-        }        
+        }
       }
 
       if (moodSpecific == 'You, stop!' || nounEnding !== '') {
@@ -1121,7 +1121,7 @@ class YupikModifyLayout extends Component {
               pushEnding('i',people,person,'',0)
             } else {
               pushEnding('g',people,person,'',0)
-            }          
+            }
           }
         }
       } else if (mood == 'optative') {
@@ -1149,7 +1149,7 @@ class YupikModifyLayout extends Component {
               pushEnding('i',people,person,'',0)
             } else {
               pushEnding('g',people,person,'',0)
-            }          
+            }
           }
         }
       } else {
@@ -1176,7 +1176,7 @@ class YupikModifyLayout extends Component {
               pushEnding('i',people,person,'',0)
             } else {
               pushEnding('g',people,person,'',0)
-            }          
+            }
           }
         }
       }
@@ -1212,12 +1212,12 @@ class YupikModifyLayout extends Component {
                       postbasesEnglish.push(postbases[nextIndexPostbase].englishModifierInfinitive(''))
                       if (nextIndexPostbase == 26 || nextIndexPostbase == 28) {
                         pushEnding('g',people,person,'',i)
-                      } else if (place.concat(A,B,C).includes(nextIndexPostbase)) { 
+                      } else if (place.concat(A,B,C).includes(nextIndexPostbase)) {
                         pushEnding('i',people,person,'',i)
                       } else {
                         pushEnding(endingMood,people,person,'',i)
                       }
-                    }                     
+                    }
                   } else { //gerund
                     if (place.concat(A,B,C).includes(s) && A.includes(nextIndexPostbase)) {
                       postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierGerund(''))
@@ -1244,12 +1244,12 @@ class YupikModifyLayout extends Component {
                       postbasesEnglish.push(postbases[nextIndexPostbase].englishModifierGerund(''))
                       if (nextIndexPostbase == 26 || nextIndexPostbase == 28) {
                         pushEnding('g',people,person,'',i)
-                      } else if (place.concat(A,B,C).includes(nextIndexPostbase)) { 
+                      } else if (place.concat(A,B,C).includes(nextIndexPostbase)) {
                         pushEnding('i',people,person,'',i)
                       } else {
                         pushEnding(endingMood,people,person,'',i)
                       }
-                    }        
+                    }
                   }
                 } else {
                   if (place.concat(A,B,C).includes(s) && A.includes(nextIndexPostbase)) {
@@ -1276,12 +1276,12 @@ class YupikModifyLayout extends Component {
                     postbasesEnglish.push(postbases[nextIndexPostbase].englishModifier(''))
                     if (nextIndexPostbase == 26 || nextIndexPostbase == 28) {
                       pushEnding('g',people,person,'',i)
-                    } else if (place.concat(A,B,C).includes(nextIndexPostbase)) { 
+                    } else if (place.concat(A,B,C).includes(nextIndexPostbase)) {
                       pushEnding('i',people,person,'',i)
                     } else {
                       pushEnding(endingMood,people,person,'',i)
                     }
-                  }        
+                  }
                 }
                 if (place.concat(E,G).includes(nextIndexPostbase) == false ) {
                   endingMood = moodIndex[nextIndexPostbase]
@@ -1289,8 +1289,8 @@ class YupikModifyLayout extends Component {
                   console.log(postbases[nextIndexPostbase].description)
                 }
               }
-            })     
-        } 
+            })
+        }
       let adjectivalbeing = ''
       if (this.state.properties.includes('adjectival')) {
         adjectivalbeing = ' being'
@@ -1354,7 +1354,7 @@ class YupikModifyLayout extends Component {
         newText1after = ''
         newText2 = ''
         newText2after = ''
-        newText3 = newText3+'?'        
+        newText3 = newText3+'?'
       } else if (moodSpecific == 'who') {
         newText1 = 'who '+getsubjectis(tense,people,person,'prewho')
         newText1after = ''
@@ -1394,8 +1394,8 @@ class YupikModifyLayout extends Component {
       console.log(newText1+newText2+postbasesEnglish.join(' ')+' '+englishEnding.join(' ')+newText3)
     }
 
-  
- 
+
+
 
     let postbasesList = [];
     let base = word;
@@ -1984,7 +1984,7 @@ class YupikModifyLayout extends Component {
       if (this.verb === false) {
         if (options1[i].value[0]!=4) { //subject 4th person not allowed
           dict1.push({id: options1[i].id,value: options1[i].value,text: options1[i].text,disabled:flag2});
-        } 
+        }
         if ((this.state.value1[0]=='1' && options2[i].value[0]=='1') || (this.state.value1[0]=='2' && options2[i].value[0]=='2') || (this.state.value1[0]=='4' && options2[i].value[0]=='4')) { //process options2 and options3 first
           flag1 = true
         }
@@ -2052,11 +2052,11 @@ class YupikModifyLayout extends Component {
           }
           if (options1[i].value[0]!=4) { //subject 4th person not allowed
             dict1.push({id: options1[i].id,value: options1[i].value,text: options1[i].text,disabled:flag2});
-          }          
+          }
         } else {
           if (options1[i].value[0]!=4) { //subject 4th person not allowed
             dict1.push({id: options1[i].id,value: options1[i].value,text: options1[i].text,disabled:flag2});
-          }             
+          }
         }
       } else { //all connective moods
         if ((this.state.value1[0]=='1' && options2[i].value[0]=='1') || (this.state.value1[0]=='2' && options2[i].value[0]=='2') || (this.state.value1[0]=='4' && options2[i].value[0]=='4')) { //process options2 and options3 first
@@ -2092,7 +2092,7 @@ class YupikModifyLayout extends Component {
 
     // if (this.state.possessiveButton == 1) {
     //   if (this.state.currentPostbases > 0) {
-    //     if (this.state.currentPostbases[0] > 6) { 
+    //     if (this.state.currentPostbases[0] > 6) {
     //       nounType = 'possessive_nounending'
     //     } else {
     //       nounType = 'possessive'
@@ -2107,7 +2107,7 @@ class YupikModifyLayout extends Component {
     //       nounType = 'verbendingnounending'
     //     } else {
     //       nounType = 'verbendingonly'
-    //     }        
+    //     }
     //   } else {
     //     nounType = 'verbendingonly'
     //   }
@@ -2145,7 +2145,7 @@ class YupikModifyLayout extends Component {
         // updatedPostbasesList.push(this.state.postbasesList[this.state.postbasesList.length-2])
         // updatedPostbasesList.push(this.state.postbasesList[this.state.postbasesList.length-1])
     // console.log(nounType)
-    
+
     if (this.verb || !(this.state.verbEnding)) {
       postbasesDisplay = (
         <span>
@@ -2176,11 +2176,11 @@ class YupikModifyLayout extends Component {
       );
     } else {
       postbasesDisplay = (
-          // {this.state.currentPostbases[0] > 15 ? 
+          // {this.state.currentPostbases[0] > 15 ?
         //   {this.state.currentPostbases
 
         //   }
-        //  : 
+        //  :
         //  }
         <span>
         <span >{this.state.currentWord}</span>
@@ -2285,6 +2285,7 @@ class YupikModifyLayout extends Component {
       'setEnclitic': this.setEnclitic.bind(this),
       'setValue4': this.setValue4.bind(this),
       'setPossessiveButton': this.setPossessiveButton.bind(this),
+      'enclitic': this.state.enclitic
     };
     let fixedStyle = {
       position: 'fixed',
@@ -2323,7 +2324,7 @@ class YupikModifyLayout extends Component {
               <Header textAlign='center' as='h1'>
               {this.state.encliticExpression == '(again)' ? 'ataam '
               :''}
-              {this.state.addedWord !== '' ? 
+              {this.state.addedWord !== '' ?
               <span style={{color: '#852828'}}>{this.state.addedWord}</span>
               :''}
               {wordDisplay}
@@ -2332,10 +2333,10 @@ class YupikModifyLayout extends Component {
               <span style={{color: '#852828'}}>
               {this.state.mood === 'interrogative' ? '?' :''}
               {' '}
-              <Icon name='volume up' color='black' size='small' onClick={this.speak.bind(this)} />  
+              <Icon name='volume up' color='black' size='small' onClick={this.speak.bind(this)} />
               </span>
               </Header>
-                          
+
             </Grid.Column>
 
           </Grid.Row>
@@ -2358,7 +2359,7 @@ class YupikModifyLayout extends Component {
                 {' '}
                 {this.state.text3}
                 {' '}
-                {timeIndex !== '' ? 
+                {timeIndex !== '' ?
                   <span style={{color: this.state.colorsList[3+timeIndex]}}>{this.state.text3tense}</span>
                   :
                   <span style={{color: '#852828'}}>{this.state.text3tense}</span>
@@ -2373,7 +2374,7 @@ class YupikModifyLayout extends Component {
                 {' '}
                 <span style={{color: '#852828'}}>{this.state.text1}</span>
                 {' '}
-                {timeIndex !== '' ? 
+                {timeIndex !== '' ?
                   <span style={{color: this.state.colorsList[3+timeIndex]}}>{this.state.text1after}</span>
                   :
                   this.state.text1after
@@ -2385,7 +2386,7 @@ class YupikModifyLayout extends Component {
                 {' '}
                 <span style={{color: '#852828'}}>{this.state.text2}</span>
                 {' '}
-                {timeIndex !== '' ? 
+                {timeIndex !== '' ?
                   <span style={{color: this.state.colorsList[3+timeIndex]}}>{this.state.text2after}</span>
                   :
                   this.state.text2after
@@ -2402,25 +2403,25 @@ class YupikModifyLayout extends Component {
                 <span style={{color: '#852828',background: '#e0e0e0', paddingLeft:2, paddingRight:0, paddingTop:5, paddingBottom:5, borderRadius:5, borderWidth: 1, borderColor: '#fff'}}>
                 <Dropdown inline options={dict2} onChange={this.setValue2.bind(this)} value={value2} />
                 </span>
-                : 
+                :
                 ''
                 }
                 {this.state.objectExists && this.state.moodSpecific === 'who'  ?
                 <span style={{color: '#852828'}}>
                 (<Dropdown inline options={dict2} onChange={this.setValue2.bind(this)} value={value2} />)
                 </span>
-                : 
+                :
                 ''
                 }
                 {' '}
                 {this.state.text3}
                 {' '}
-                {timeIndex !== '' ? 
+                {timeIndex !== '' ?
                   <span style={{color: this.state.colorsList[3+timeIndex]}}>{this.state.text3tense}</span>
                   :
                   <span style={{color: '#852828'}}>{this.state.text3tense}</span>
                 }
-                
+
                 {this.state.encliticExpression !== '' ? this.state.encliticExpression :''}
                 {this.state.mood === 'optative' ? '!' :''}
               </Header>

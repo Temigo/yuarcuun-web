@@ -23,7 +23,7 @@ class YupikAllPostbases extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{ marginBottom: '2em' }}>
       <Accordion fluid styled exclusive={false}>
         <Accordion.Title active={this.state.activeIndex === 0 || this.props.mood === 'interrogative'} index={0} onClick={this.handleClick}>
           <Icon name='dropdown' />

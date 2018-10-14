@@ -5,7 +5,9 @@
   "devDependencies": {
     "performance-now": "^2.1.0",
     "react-scripts": "1.1.4",
-    "semantic-ui": "^2.3.1"
+    "semantic-ui": "^2.3.1",
+    "source-map-explorer": "^1.6.0",
+    "webpack-bundle-analyzer": "^3.0.2"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -24,6 +26,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "analyze": "source-map-explorer build/static/js/main.*"
   }
 }
