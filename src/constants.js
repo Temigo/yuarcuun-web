@@ -137,7 +137,7 @@ export const postbases = [
     priority: 3,
     conditional_rule: 'attaching_to_te',  // defined later and if satisfied display expression_conditional
     tense:'future',
-    allowable_next_ids: [0,1,10]
+    allowable_next_ids: [0,1,5,10]
   },
   {
     id: 8,

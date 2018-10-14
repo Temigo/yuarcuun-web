@@ -23,7 +23,7 @@ class YupikAllPostbases extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{ marginBottom: '2em' }}>
       <Accordion fluid styled exclusive={false}>
         <Accordion.Title active={this.state.activeIndex === 0 || this.props.mood === 'interrogative'} index={0} onClick={this.handleClick}>
           <Icon name='dropdown' />
@@ -31,6 +31,9 @@ class YupikAllPostbases extends Component {
         </Accordion.Title>
         <Accordion.Content active={this.state.activeIndex === 0 || this.props.mood === 'interrogative'}>
           <Card.Group itemsPerRow={3} stackable>
+          <Card>
+            <Button onClick={() => this.props.setEnclitic('-qaa', '(yes or no?)')} toggle active={this.props.enclitic === '-qaa'}>Yes or no?</Button>
+          </Card>
           {interrogative.map((e) => {
             return (
               <Card>
@@ -38,9 +41,6 @@ class YupikAllPostbases extends Component {
               </Card>
             );
           })}
-          <Card>
-            <Button onClick={() => this.props.setEnclitic('-qaa', '(yes or no?)')} toggle active={this.props.enclitic === '-qaa'}>Yes or no?</Button>
-          </Card>
           </Card.Group>
         </Accordion.Content>
 

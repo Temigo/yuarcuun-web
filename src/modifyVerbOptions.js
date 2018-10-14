@@ -113,12 +113,16 @@ export const verb2noun = [
     text: 'the one who is',
   },
   {
+    ending: 'place for',
+    text: 'place for'
+  },
+  {
     ending: 'device for',
     text: 'device for',
   },
   {
-    ending: 'one that customarily/capably is',
-    text: 'one that customarily/capably is',
+    ending: 'one that often or capably is',
+    text: 'one that often or capably is',
   },
   {
     ending: 'how to/way of',
