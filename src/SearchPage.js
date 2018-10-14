@@ -6,9 +6,21 @@ import './App.css';
 import './semantic/dist/semantic.min.css';
 import { Link } from 'react-router-dom';
 import { API_URL } from './App.js';
+import Fuse from 'fuse.js';
+import now from 'performance-now';
 
 // Cache dictionary
 let dictionary = [];
+let options = {
+  keys: ['yupik', 'english'],
+  minMatchCharLength: 5,
+  // includeScore: true,
+  distance: 0,
+  shouldSort: true,
+  // tokenize: true, // super slow!! 6x slower
+  threshold: 0.4,
+};
+let fuse = new Fuse([], options);
 
 class SearchPage extends Component {
   constructor(props) {
@@ -26,11 +38,11 @@ class SearchPage extends Component {
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.selectWord = this.selectWord.bind(this);
 
-    this.index = elasticlunr(function () {
-      this.addField('english');
-      this.addField('yupik');
-      this.setRef("yupik");
-    });
+    // this.index = elasticlunr(function () {
+    //   this.addField('english');
+    //   this.addField('yupik');
+    //   this.setRef("yupik");
+    // });
   }
 
   componentDidMount() {
@@ -38,18 +50,21 @@ class SearchPage extends Component {
       axios
         .get(API_URL + "/word/all")
         .then(response => {
-          response.data.forEach((word) => {
-            this.index.addDoc(word);
-          });
-          this.setState({ dictionary: response.data });
+          // response.data.forEach((word) => {
+          //   this.index.addDoc({ ...word, yupik: word.yupik.slice(0, -1) });
+          // });
+
           dictionary = response.data;
+          fuse.setCollection(dictionary);
           console.log('Fetched dictionary');
+          this.setState({ dictionary: dictionary });
         });
     }
     else {
-      dictionary.forEach((word) => {
-        this.index.addDoc(word);
-      });
+      // dictionary.forEach((word) => {
+      //   this.index.addDoc(word);
+      // });
+      fuse.setCollection(dictionary);
       this.setState({ dictionary: dictionary });
     }
   }
@@ -61,15 +76,36 @@ class SearchPage extends Component {
   }
 
   onChangeSearch(event, data) {
+    console.log('start search');
     let newStartingSearch = event == undefined;
     let new_search = data.value;
-    if (new_search.length >= 2) {
+
+    if (new_search.length >= 4) {
       // Search
-      let results = this.index.search(new_search);
-      let wordsList = results.map((e) => {
-        return this.index.documentStore.getDoc(e.ref);
-      });
-      this.setState({ startingSearch: newStartingSearch, wordsList: wordsList.sort((w1, w2) => { return (w1.yupik > w2.yupik) ? 1 : ((w1.yupik < w2.yupik) ? -1 : 0); }), search: new_search });
+      // let results = this.index.search(new_search.concat(" ", new_search.slice(0, -2)));
+      // let results = this.index.search(new_search, { expand: true });
+      // let wordsList = results.map((e) => {
+      //   return this.index.documentStore.getDoc(e.ref);
+      // });
+      let start = now();
+      let wordsList = fuse.search(new_search);
+      let end = now();
+      // if (this.state.search !== undefined && this.state.search.length >= 1) {
+      //   let shortest_search = (new_search.length < this.state.search.length) ? new_search : this.state.search;
+      //   if (new_search.substring(0, shortest_search.length) == this.state.search.substring(0, shortest_search.length)) {
+      //     fuse.setCollection(wordsList);
+      //   }
+      // }
+      console.log('done! in ', (end-start).toFixed(3), 'ms');
+      // if (results[0].score > results[results.length-1].score) {
+      //   results = results.reverse();
+      // }
+      // console.log(results);
+      // // console.log(results.sort((x, y) => { return (x.score > y.score) ? -1 : ((x.score < y.score) ? 1 : 0); }));
+      // let wordsList = results.map((e) => { return e.item; });
+      // console.log(wordsList);
+      // this.setState({ startingSearch: newStartingSearch, wordsList: wordsList.sort((w1, w2) => { return (w1.yupik > w2.yupik) ? 1 : ((w1.yupik < w2.yupik) ? -1 : 0); }), search: new_search });
+      this.setState({ startingSearch: newStartingSearch, wordsList: wordsList, search: new_search });
     }
     else {
       this.setState({ startingSearch: newStartingSearch, search: new_search });
@@ -90,7 +126,7 @@ class SearchPage extends Component {
 
   render() {
     console.log("SearchPage state: ", this.state);
-    let displayList = this.state.search.length >= 2 && this.state.wordsList.length > 0;
+    let displayList = this.state.search.length >= 4 && this.state.wordsList.length > 0;
     let displayWord = this.state.currentWord.yupik !== undefined;
     let wordsList = this.state.wordsList;
     let isCommonList = wordsList.map((word) => { return Object.keys(word).some((key) => { return word[key].properties && word[key].properties.indexOf('common') > -1; }); });
