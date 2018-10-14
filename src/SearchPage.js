@@ -120,7 +120,7 @@ class SearchPage extends Component {
                 value={this.state.search}
                 fluid transparent />
               </Grid.Column>
-              <Grid.Column floated='right'>
+              <Grid.Column floated='right' style={{ flex: '0 0 2em' }}>
                 <Icon link name='close' onClick={() => { this.inputRef.focus(); this.setState({search: '', startingSearch: false});}}/>
               </Grid.Column>
             </Grid.Row>
