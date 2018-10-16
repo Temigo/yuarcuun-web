@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import elasticlunr from 'elasticlunr';
-import { Container, Header, Divider, Grid, Input, List, Label, Checkbox, Icon } from 'semantic-ui-react';
+import { Container, Header, Divider, Grid, Input, List, Label, Checkbox, Icon, Loader, Dimmer } from 'semantic-ui-react';
 import './App.css';
 import './semantic/dist/semantic.min.css';
 import { Link } from 'react-router-dom';
@@ -134,8 +134,14 @@ class SearchPage extends Component {
       wordsList = wordsList.filter((word, i) => { return isCommonList[i]; });
     }
     let displayCommonOption = wordsList.some((word, i) => { return isCommonList[i]; }) && wordsList.some((word, i) => { return !isCommonList[i]; });
+    console.log(this.state.dictionary === []);
     return (
       <div>
+      <Dimmer active={this.state.dictionary.length === 0}>
+        <Loader size='massive'>
+          Yugtun is loading...
+        </Loader>
+      </Dimmer>
       <Grid textAlign='center' style={{ height: '100%' }} verticalAlign={(displayList || !this.state.startingSearch) ? 'top' : 'middle'}>
       <Grid.Row style={displayList ? {height: 'auto'} : {height: '90%'}}>
       <Grid.Column style={{ maxWidth: 800, padding: 10 }} textAlign='left'>
