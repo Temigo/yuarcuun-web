@@ -602,7 +602,8 @@ class YupikModifyLayout extends Component {
 
   speak(event, data) {
     let audio = new Audio(API_URL + "/tts/" + this.state.modifiedWord.replace('*',''));
-    audio.play();
+    console.log(audio);
+    audio.play().then(() => { console.log('done'); });
   }
 
   allPostbasesMode(event,data) {
@@ -2333,7 +2334,8 @@ class YupikModifyLayout extends Component {
               <span style={{color: '#852828'}}>
               {this.state.mood === 'interrogative' ? '?' :''}
               {' '}
-              <Icon name='volume up' color='black' size='small' onClick={this.speak.bind(this)} />
+
+              <Icon name='volume up' color='black' size='small' onClick={this.speak.bind(this)} link />
               <Icon inverted name='exclamation circle' color='grey' size='small' />
               </span>
               </Header>
