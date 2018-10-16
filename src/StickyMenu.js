@@ -54,7 +54,7 @@ class StickyMenu extends Component {
         </Menu.Item>
         <Menu.Item>
               {this.props.switchMode !== undefined ?
-                <Icon circular name='list' color='blue' size='large' inverted={this.state.switchMode} onClick={this.switchMode.bind(this)}/>
+                <Button circular size='small' active={this.state.switchMode} onClick={this.switchMode.bind(this)}>All Options</Button>
               : ''}
         </Menu.Item>
       </Menu>

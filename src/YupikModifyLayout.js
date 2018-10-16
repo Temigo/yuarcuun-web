@@ -2334,6 +2334,7 @@ class YupikModifyLayout extends Component {
               {this.state.mood === 'interrogative' ? '?' :''}
               {' '}
               <Icon name='volume up' color='black' size='small' onClick={this.speak.bind(this)} />
+              <Icon inverted name='exclamation circle' color='grey' size='small' />
               </span>
               </Header>
 
