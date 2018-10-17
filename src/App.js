@@ -20,8 +20,13 @@ export const API_URL = "https://yugtun-api.herokuapp.com";
 // export const API_URL = "http://localhost:5000";
 
 class Verification extends Component {
+  componentDidMount() {
+    this.link.click();
+  }
   render() {
-    return <p>loaderio-a0a6b59c23ca05a56ff044a189dd143a</p>;
+    return (
+      <a ref={input => this.link = input} href={process.env.PUBLIC_URL + '/loaderio-a0a6b59c23ca05a56ff044a189dd143a.txt'}>here</a>
+    );
   }
 }
 
