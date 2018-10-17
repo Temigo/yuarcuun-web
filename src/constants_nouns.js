@@ -74,7 +74,7 @@ export const absolutive_endings = {
     },
     3: {
       1: ':(6)i',
-      2: '-kek',
+      2: '+kek',
       3: ':(6)it'
     },
     4: {

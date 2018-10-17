@@ -13,12 +13,15 @@ import now from 'performance-now';
 let dictionary = [];
 let options = {
   keys: ['yupik', 'english'],
-  minMatchCharLength: 5,
+  minMatchCharLength: 3,
   // includeScore: true,
-  distance: 0,
+  distance: 10,
+  location: 2,
   shouldSort: true,
-  // tokenize: true, // super slow!! 6x slower
+  //tokenize: true, // super slow!! 6x slower
+  // matchAllTokens: true,
   threshold: 0.4,
+  findAllMatches: true,
 };
 let fuse = new Fuse([], options);
 
