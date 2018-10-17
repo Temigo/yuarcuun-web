@@ -2577,9 +2577,9 @@ class YupikModifyLayout extends Component {
 
         <Route exact path={`${this.props.match.path}/verb`} render={(props) => <YupikModifyVerb {...props} advancedMode={this.state.advancedMode}  {...yupikAllPostbasesProps} />} />
         <Route exact path={`${this.props.match.path}/verb/all`} render={(props) => <YupikAllPostbases {...props} {...yupikAllPostbasesProps}/>} />
-        <Route exact path={`${this.props.match.path}/verb/ending`} component={YupikEndingGroups} />
+        <Route exact path={`${this.props.match.path}/verb/ending`} render={(props) => <YupikEndingGroups {...props} {...yupikAllPostbasesProps}/>} />
         <Route exact path={`${this.props.match.path}/verb/ending/:ending_group_id`} render={(props) => <YupikEnding {...props} {...yupikAllPostbasesProps}/>} />
-        <Route exact path={`${this.props.match.path}/verb/ending/:ending_group_id/postbase`} component={YupikPostbaseGroups} />
+        <Route exact path={`${this.props.match.path}/verb/ending/:ending_group_id/postbase`} render={(props) => <YupikPostbaseGroups {...props} {...yupikAllPostbasesProps}/>} />
         <Route exact path={`${this.props.match.path}/verb/ending/:ending_group_id/postbase/:postbase_group_id`} render={(props) => <YupikPostbase {...props} {...yupikAllPostbasesProps}/>} />
         </div>
         </Visibility>
