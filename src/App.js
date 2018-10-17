@@ -25,7 +25,7 @@ class Verification extends Component {
   }
   render() {
     return (
-      <a ref={input => this.link = input} href={process.env.PUBLIC_URL + '/loaderio-a0a6b59c23ca05a56ff044a189dd143a.txt'}>here</a>
+      <a ref={input => this.link = input} href={API_URL + '/loaderio-a0a6b59c23ca05a56ff044a189dd143a'}>here</a>
     );
   }
 }
