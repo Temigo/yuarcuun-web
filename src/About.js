@@ -9,16 +9,6 @@ class About extends Component {
         <Header as='h1'>About the Yuarcuun Initiative</Header>
         <Divider />
         
-Waqaa!
-<p> quyavikanka elitnauristet ayaprun elitnaurvigmi, aanaka maklak, maurluqa narull’aq, apa’urluqa upay’aq, alqaqa cungass’aq, ilanka-llu tamalkuita. 
-</p>
-<p> una yuarcuun yugtun qantulinek ciulistengqellruuq. computer science-aakun maaggun nutarat 
-</p>
-<p> ayuqunrilngutun elicungcaur ellimaksailan computer-aanun caliapellruapuk 
-</p>
-<p> nutaranek cayarakun yugtun qaneryaramta elitnaurcuutii pilingnaqapuk. wiinga egalaaruunga, mamterillermiunguunga, yugnikekngaqa-llu laura, france-amiunguuq, wangkuk pilillruapuk una yuarcuun.
-</p>
-
 <p> Yuarcuun is a Yup'ik-led group with a mission to revitalize Eskimo/Inuit languages using computer science tools. 
 
 Current contributors are Christopher Egalaaq Liu, from Mamterilleq (Bethel, Alaska) and <a href="http://temigo.github.io/">Laura Domine</a>, from Paris.
@@ -33,14 +23,23 @@ The Yuarcuun Initiative has received financial sponsorship to support a couple o
 <ul>
 <li>Bethel Native Corporation</li>
 <li>Bering Straits Native Corporation</li>
-<li>Alaska Federation of Natives</li>
 <li>Donlin Gold</li>
+<li>Calista Corporation</li>
+<li>Alaska Federation of Natives</li>
 <li>Alaska Native Heritage Center (Non-profit Sponsor)</li>
 </ul>
 
 <p>Yuarcuun has many on-going plans over the next year. Please contact us at contact@yugtun.com for questions about our projects or to be involved with any new projects on Eskimo/Inuit/Aleut languages.</p>
 
 <p> Quyana cakneq! </p>
+
+<i>
+<p> A note from Egalaaq </p>
+<p> Quyavikanka elitnauristet Ayaprun Elitnaurvigmi, aanaka Maklak, maurluqa Narull'aq, apa'urluqa Upay'aq, alqaqa Cungass'aq, ilanka-llu tamalkuita. 
+</p>
+<p> Una yuarcuun Yugtun qantulinek ciulistengqellruuq. Computer science-aakun maaggun nutarat ayuqunrilngutun elicungcaur ellimaksailan computer-aanun caliapellruapuk. Nutaranek cayarakun yugtun qaneryaramta elitnaurcuutii pilingnaqapuk. Quyana naaqiluten.
+</p>
+</i>
 
 
 

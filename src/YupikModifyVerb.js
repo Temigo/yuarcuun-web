@@ -7,13 +7,13 @@ import { postbases } from './constants.js';
 class YupikModifyVerb extends Component {
   constructor(props) {
     super(props);
-    console.log("YupikModifyVerb props: ", props);
+    // console.log("YupikModifyVerb props: ", props);
 
   }
 
 
       render() {
-        console.log("YupikModifyVerb state: ", this.state);
+        // console.log("YupikModifyVerb state: ", this.state);
 
         return (
           <div>

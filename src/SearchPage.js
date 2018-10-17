@@ -149,7 +149,7 @@ class SearchPage extends Component {
       <Grid.Row style={displayList ? {height: 'auto'} : {height: '90%'}}>
       <Grid.Column style={{ maxWidth: 800, padding: 10 }} textAlign='left'>
         <Header as='h1' dividing>
-          <Link to='/' style={{ color: 'black' }}>Yuarcuun</Link>
+          <Link to='/' style={{ color: 'black' }}>Yugtun</Link>
         </Header>
         <Container>
           <Grid stackable>
@@ -222,10 +222,11 @@ class SearchPage extends Component {
           <Grid.Column>
             <Container textAlign='left'>
               <Divider fluid />
+              <List> <i> This website is still being improved. If you notice a mistake, please help us out by reporting the issue. Quyana. </i></List>
               <List horizontal bulleted>
-                <List.Item> © Yuarcuun </List.Item>
+                <List.Item> © Yuarcuun Initiative </List.Item>
                 <List.Item> <Link to='/about'>About</Link> </List.Item>
-                <List.Item> contact@yugtun.com</List.Item>
+                <List.Item> yuarcuun@gmail.com</List.Item>
               </List>
             </Container>
           </Grid.Column>

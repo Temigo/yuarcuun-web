@@ -154,7 +154,7 @@ export const enclitics= {
     activeIndex: 30,
     items: [
       {
-        ending: '-qaa',
+        ending: '-qaa?',
         meaning: '(yes or no?)',
         text: 'Yes or no?',
       },
