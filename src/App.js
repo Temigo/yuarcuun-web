@@ -35,7 +35,7 @@ class App extends Component {
     return (
       <Switch>
         <Route exact path='/' component={SearchPage} />
-        <Route exact path='/loaderio-a0a6b59c23ca05a56ff044a189dd143a.txt' component={Verification} />
+        <Route exact path='/loaderio-a0a6b59c23ca05a56ff044a189dd143a' component={Verification} />
         <Route exact path='/about' component={About} />
         <Route path='/:word/:entry_id/:usage_id/modify' component={YupikModifyLayout} />
         <Route exact path='/:word' component={YupikDetails} />
