@@ -162,8 +162,8 @@ class SearchPage extends Component {
       <Grid.Row style={displayList ? {height: 'auto'} : {height: '80%'}}>
       <Grid.Column style={{ maxWidth: 800, padding: 10 }} textAlign='left'>
         <Header as='h1' dividing>
-          <Image style={{'font-size':64}} src="https://drive.google.com/uc?id=1mGUzlKjE20jdZtzn0N3di2Fx_sG7BV40"/>
-          <Link to='/' style={{ color: 'black' }}>Yugtun</Link>
+          <Image style={{'font-size': '1.5em'}} src="https://drive.google.com/uc?id=1mGUzlKjE20jdZtzn0N3di2Fx_sG7BV40"/>
+          <Link to='/' style={{ color: 'black', verticalAlign: 'bottom' }}>Yugtun</Link>
         </Header>
         <Container ref={this.search_container} className='search_container'>
           <Grid stackable>
