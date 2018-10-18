@@ -232,7 +232,7 @@ class SearchPage extends Component {
         </Container>
         </Grid.Column>
         </Grid.Row>
-        <Grid.Row verticalAlign='bottom' style={{height: '20%'}}>
+        <Grid.Row verticalAlign='bottom' style={{height: '10%'}}>
           <Grid.Column>
             <Container textAlign='left'>
               <Divider fluid />
