@@ -29,7 +29,7 @@ The Yuarcuun Initiative has received financial sponsorship to support a couple o
 <li>Alaska Native Heritage Center (Non-profit Sponsor)</li>
 </ul>
 
-<p>Yuarcuun has many on-going plans over the next year. Please contact us at contact@yugtun.com for questions about our projects or to be involved with any new projects on Eskimo/Inuit/Aleut languages.</p>
+<p>Yuarcuun has many on-going plans over the next year. Please contact us at yuarcuun @ gmail dot com for questions about our projects or to be involved with any new projects on Eskimo/Inuit/Aleut languages.</p>
 
 <p> Quyana cakneq! </p>
 

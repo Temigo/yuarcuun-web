@@ -164,6 +164,7 @@ class SearchPage extends Component {
         <Header as='h1' dividing>
           <Image style={{'font-size': '1.5em'}} src="https://s3.amazonaws.com/yugtun-static/static/logo_final_1.jpg"/>
           <Link to='/' style={{ color: 'black', verticalAlign: 'bottom' }}>Yugtun</Link>
+          <a href='https://www.youtube.com/watch?v=9M65ptotL0A&t' style={{float: 'right', verticalAlign: 'bottom', lineHeight: '180px'}}>Watch the tutorial!</a>
         </Header>
         <Container ref={this.search_container} className='search_container'>
           <Grid stackable>
