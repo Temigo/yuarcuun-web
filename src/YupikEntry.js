@@ -187,6 +187,7 @@ class YupikEntry extends Component {
 
       <a href="https://goo.gl/forms/be5L5cgSQmCJeVDl1" target="_blank">
         <Icon inverted name='exclamation circle' color='grey' size='large' />
+        <span style={{color:'grey'}}>Report a mistake</span>
       </a>
 
       </Grid>

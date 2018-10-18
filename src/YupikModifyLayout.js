@@ -1430,7 +1430,25 @@ class YupikModifyLayout extends Component {
 
     if (nounEnding != '') {
       postbasesList = processPostbases(currentPostbases, base, postbases)
-      postbasesList = postbasesList.concat([nounEndings[nounEnding]]);
+      if (nounEnding == 'device for') {
+        if (currentPostbases.length == 0) {
+          if (base[base.length-2]=='a' || base[base.length-2]=='e' || base[base.length-2]=='i' || base[base.length-2]=='u') {
+            postbasesList = postbasesList.concat('+3uun')
+          } else {
+            postbasesList = postbasesList.concat('+cuun')
+          }
+        } else {
+          console.log(postbasesList[postbasesList.length-1])
+          console.log(postbasesList[postbasesList.length-1].length-2)
+          if (postbasesList[postbasesList.length-1][postbasesList[postbasesList.length-1].length-2] =='a' || postbasesList[postbasesList.length-1][postbasesList[postbasesList.length-1].length-2]=='e' || postbasesList[postbasesList.length-1][postbasesList[postbasesList.length-1].length-2]=='i' || postbasesList[postbasesList.length-1][postbasesList[postbasesList.length-1].length-2]=='u') {
+            postbasesList = postbasesList.concat('+3uun')
+          } else {
+            postbasesList = postbasesList.concat('+cuun')
+          }
+        }
+      } else {
+        postbasesList = postbasesList.concat([nounEndings[nounEnding]]);
+      }
     } else {
     if (this.state.objectExists) {
       if (mood == 'indicative') {
