@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import elasticlunr from 'elasticlunr';
-import { Container, Header, Divider, Grid, Input, List, Label, Checkbox, Icon, Loader, Dimmer } from 'semantic-ui-react';
+import { Container, Header, Divider, Grid, Input, List, Label, Checkbox, Icon, Loader, Dimmer, Image } from 'semantic-ui-react';
 import './App.css';
 import './semantic/dist/semantic.min.css';
 import { Link } from 'react-router-dom';
@@ -76,6 +76,11 @@ class SearchPage extends Component {
     if (prevState.dictionary.length != this.state.dictionary.length) {
       this.onChangeSearch(undefined, {value: this.state.search});
     }
+    if (this.state.search.length >= 4 && this.state.wordsList.length > 0) {
+      if(navigator.userAgent.match(/(iPhone|iPod|iPad)/i)) {
+        console.log('hi')
+      }
+    }
   }
 
   onChangeSearch(event, data) {
@@ -136,8 +141,8 @@ class SearchPage extends Component {
     if (this.state.onlyCommon) {
       wordsList = wordsList.filter((word, i) => { return isCommonList[i]; });
     }
-    let displayCommonOption = wordsList.some((word, i) => { return isCommonList[i]; }) && wordsList.some((word, i) => { return !isCommonList[i]; });
-    console.log(this.state.dictionary === []);
+    let displayCommonOption = this.state.onlyCommon || (wordsList.some((word, i) => { return isCommonList[i]; }) && wordsList.some((word, i) => { return !isCommonList[i]; }));
+    console.log(displayList);
     return (
       <div>
       <Dimmer active={this.state.dictionary.length === 0}>
@@ -145,11 +150,12 @@ class SearchPage extends Component {
           Yugtun is loading...
         </Loader>
       </Dimmer>
-      <Grid textAlign='center' style={{ height: '100%' }} verticalAlign={(displayList || !this.state.startingSearch) ? 'top' : 'middle'}>
-      <Grid.Row style={displayList ? {height: 'auto'} : {height: '90%'}}>
+      <Grid textAlign='center' style={{ height: '100%', display: 'inline-block' }} verticalAlign={(displayList || !this.state.startingSearch) ? 'top' : 'middle'}>
+      <Grid.Row style={displayList ? {height: 'auto'} : {height: '80%'}}>
       <Grid.Column style={{ maxWidth: 800, padding: 10 }} textAlign='left'>
         <Header as='h1' dividing>
-          <Link to='/' style={{ color: 'black' }}>Yuarcuun</Link>
+          <Image style={{'font-size':64}} src="https://drive.google.com/uc?id=1mGUzlKjE20jdZtzn0N3di2Fx_sG7BV40"/>
+          <Link to='/' style={{ color: 'black' }}>Yugtun</Link>
         </Header>
         <Container>
           <Grid stackable>
@@ -222,10 +228,11 @@ class SearchPage extends Component {
           <Grid.Column>
             <Container textAlign='left'>
               <Divider fluid />
+              <List> <i> This website is still being improved. If you notice a mistake, please help us out by reporting the issue. Quyana. </i></List>
               <List horizontal bulleted>
-                <List.Item> © Yuarcuun </List.Item>
+                <List.Item> © Yuarcuun Initiative </List.Item>
                 <List.Item> <Link to='/about'>About</Link> </List.Item>
-                <List.Item> contact@yugtun.com</List.Item>
+                <List.Item> yuarcuun@gmail.com</List.Item>
               </List>
             </Container>
           </Grid.Column>

@@ -30,7 +30,7 @@ class StickyMenu extends Component {
 // <Icon name='volume up' color='teal' size='big' onClick={this.speak.bind(this)} />
 
 
-// This will enable all postbases mode  
+// This will enable all postbases mode
 //<Icon name='world' color='red' size='large' inverted={this.state.allPostbasesMode} onClick={this.allPostbasesMode.bind(this)}/>
 
   render() {
@@ -41,7 +41,7 @@ class StickyMenu extends Component {
             <Icon name='chevron left' />
           </Button>
           {this.props.switchMode !== undefined ?
-          <Button icon circular onClick={this.props.goBack}>
+          <Button icon circular onClick={() => {this.props.history.push('/')}} style={{marginLeft: '10px' }}>
             <Icon name='search' />
           </Button>
           : ''}
