@@ -76,6 +76,11 @@ class SearchPage extends Component {
     if (prevState.dictionary.length != this.state.dictionary.length) {
       this.onChangeSearch(undefined, {value: this.state.search});
     }
+    if (this.state.search.length >= 4 && this.state.wordsList.length > 0) {
+      if(navigator.userAgent.match(/(iPhone|iPod|iPad)/i)) {
+        console.log('hi')
+      }
+    }
   }
 
   onChangeSearch(event, data) {
@@ -137,7 +142,7 @@ class SearchPage extends Component {
       wordsList = wordsList.filter((word, i) => { return isCommonList[i]; });
     }
     let displayCommonOption = this.state.onlyCommon || (wordsList.some((word, i) => { return isCommonList[i]; }) && wordsList.some((word, i) => { return !isCommonList[i]; }));
-    console.log(this.state.dictionary === []);
+    console.log(displayList);
     return (
       <div>
       <Dimmer active={this.state.dictionary.length === 0}>
@@ -145,8 +150,8 @@ class SearchPage extends Component {
           Yugtun is loading...
         </Loader>
       </Dimmer>
-      <Grid textAlign='center' style={{ height: '100%' }} verticalAlign={(displayList || !this.state.startingSearch) ? 'top' : 'middle'}>
-      <Grid.Row style={displayList ? {height: 'auto'} : {height: '90%'}}>
+      <Grid textAlign='center' style={{ height: '100%', display: 'inline-block' }} verticalAlign={(displayList || !this.state.startingSearch) ? 'top' : 'middle'}>
+      <Grid.Row style={displayList ? {height: 'auto'} : {height: '80%'}}>
       <Grid.Column style={{ maxWidth: 800, padding: 10 }} textAlign='left'>
         <Header as='h1' dividing>
           <Image style={{'font-size':64}} src="https://drive.google.com/uc?id=1mGUzlKjE20jdZtzn0N3di2Fx_sG7BV40"/>
