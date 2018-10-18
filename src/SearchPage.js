@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import axios from 'axios';
 import elasticlunr from 'elasticlunr';
 import { Container, Header, Divider, Grid, Input, List, Label, Checkbox, Icon, Loader, Dimmer, Image } from 'semantic-ui-react';
@@ -40,7 +41,8 @@ class SearchPage extends Component {
     }
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.selectWord = this.selectWord.bind(this);
-
+    this.search_container = React.createRef();
+    console.log(this.search_container)
     // this.index = elasticlunr(function () {
     //   this.addField('english');
     //   this.addField('yupik');
@@ -79,7 +81,12 @@ class SearchPage extends Component {
     if (prevState.startingSearch && !this.state.startingSearch) {
       console.log('hi')
       if(navigator.userAgent.match(/(iPhone|iPod|iPad)/i)) {
-        window.scrollTo(0, 0);
+        console.log(this.search_container);
+        let elts = ReactDOM.findDOMNode(this).getElementsByClassName('search_container');
+        if (elts.length > 0) {
+          elts[0].scrollIntoView();
+        }
+        //window.scrollTo(0, 0);
       }
     }
   }
@@ -158,7 +165,7 @@ class SearchPage extends Component {
           <Image style={{'font-size':64}} src="https://drive.google.com/uc?id=1mGUzlKjE20jdZtzn0N3di2Fx_sG7BV40"/>
           <Link to='/' style={{ color: 'black' }}>Yugtun</Link>
         </Header>
-        <Container>
+        <Container ref={this.search_container} className='search_container'>
           <Grid stackable>
             <Grid.Row >
               <Grid.Column style={{ flex: 1 }}>
