@@ -179,7 +179,7 @@ export const localis_endings = {
     2: {
       1: '+(t)veni',
       2: '+(t)vetegni',
-      3: '+(t)ve7eni'
+      3: '+(t)vece7i'
     },
     3: {
       1: ':(6)ani',
@@ -204,7 +204,7 @@ export const localis_endings = {
     2: {
       1: '%:(e)gpeni',
       2: '%:(e)gpetegni',
-      3: '%:(e)gpe7eni'
+      3: '%:(e)gpece7i'
     },
     3: {
       1: '%:(e)gkeni',
@@ -229,7 +229,7 @@ export const localis_endings = {
     2: {
       1: '+(t)veni',
       2: '+(t)vetegni',
-      3: '+(t)ve7eni'
+      3: '+(t)vece7i'
     },
     3: {
       1: ':(6)ini',
@@ -257,7 +257,7 @@ export const ablative_endings = {
     2: {
       1: '+(t)venek',
       2: '+(t)vetegnek',
-      3: '+(t)ve7enek'
+      3: '+(t)vece7ek'
     },
     3: {
       1: ':(6)anek',
@@ -282,7 +282,7 @@ export const ablative_endings = {
     2: {
       1: '%:(e)gpenek',
       2: '%:(e)gpetegnek',
-      3: '%:(e)gpe7enek'
+      3: '%:(e)gpece7ek'
     },
     3: {
       1: '%:(e)gkenek',
@@ -307,7 +307,7 @@ export const ablative_endings = {
     2: {
       1: '+(t)venek',
       2: '+(t)vetegnek',
-      3: '+(t)ve7enek'
+      3: '+(t)vece7ek'
     },
     3: {
       1: ':(6)inek',
@@ -335,7 +335,7 @@ export const terminalis_endings = {
     2: {
       1: '+(t)venun',
       2: '+(t)vetegnun',
-      3: '+(t)ve7enun'
+      3: '+(t)vece7un'
     },
     3: {
       1: ':(6)anun',
@@ -360,7 +360,7 @@ export const terminalis_endings = {
     2: {
       1: '%:(e)gpenun',
       2: '%:(e)gpetegnun',
-      3: '%:(e)gpe7enun'
+      3: '%:(e)gpece7un'
     },
     3: {
       1: '%:(e)gkenun',
@@ -385,7 +385,7 @@ export const terminalis_endings = {
     2: {
       1: '+(t)venun',
       2: '+(t)vetegnun',
-      3: '+(t)ve7enun'
+      3: '+(t)vece7un'
     },
     3: {
       1: ':(6)inun',
@@ -412,13 +412,13 @@ export const vialis_endings = {
     },
     2: {
       1: '+(t)vegun', //also include -vkun
-      2: '+(t)vecetgun', //-vcetgun
-      3: '+(t)vetegnegun' //-vtegnegun
+      2: '+(t)vetegnegun', //-vcetgun
+      3: '+(t)vecetgun' //-vtegnegun
     },
     3: {
       1: ':(6)akun',
       2: ':(6)agnegun',
-      3: ':(6)atgnun'
+      3: ':(6)atgun'
     },
     4: {
       1: '-mikun',
@@ -431,7 +431,7 @@ export const vialis_endings = {
       0: '%:(e)gnegun'
     },
     1: {
-      1: '%:(e)gkemkun',
+      1: '%:(e)gemkun',
       2: '%:(e)gmegnegun',
       3: '%:(e)gemteggun'
     },
@@ -739,7 +739,7 @@ export const indicative_transitive_endings = {
 export const interrogative_intransitive_endings = {
   1: { // 1st person
     1: '~+(t)sia',
-    2: '@~+ce8uk',
+    2: '@~+ce7uk',
     3: '@~+ceta',
   },
   2: {
@@ -1430,7 +1430,7 @@ export const connective_transitive_endings = {
         3:'+(t)vciki',
       },
       4: {
-        1:'+(t)vce8i',
+        1:'+(t)vce7i',
         2:'+(t)vcetek',
         3:'+(t)vceteng',
       }
@@ -1728,7 +1728,7 @@ export const connective_consonantEnd_transitive_endings = {
         3:'+(t)veciki',
       },
       4: {
-        1:'+(t)vece8i',
+        1:'+(t)vece7i',
         2:'+(t)vecetek',
         3:'+(t)veceteng',
       }
@@ -1876,12 +1876,12 @@ export const connective_contemporative_intransitive_endings = {
   1: {
     1: '-mni',
     2: '-megni',
-    3: '-mte8i',
+    3: '-mte7i',
   },
   2: {
     1: '+(t)veni',
     2: '+(t)vetegni',
-    3: '+(t)vece8i',
+    3: '+(t)vece7i',
   },
   3: {
     1: ':ani',
@@ -2026,7 +2026,7 @@ export const connective_contemporative_transitive_endings = {
         3:'+(t)veciki',
       },
       4: {
-        1:'+(t)vece8i',
+        1:'+(t)vece7i',
         2:'+(t)vecetek',
         3:'+(t)veceteng',
       }
@@ -2324,7 +2324,7 @@ export const connective_conditional_transitive_endings = {
         3:'+(t)vciki',
       },
       4: {
-        1:'+(t)vce8i',
+        1:'+(t)vce7i',
         2:'+(t)vcetek',
         3:'+(t)vceteng',
       }
