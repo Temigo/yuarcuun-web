@@ -162,7 +162,7 @@ class SearchPage extends Component {
       <Grid.Row style={displayList ? {height: 'auto'} : {height: '80%'}}>
       <Grid.Column style={{ maxWidth: 800, padding: 10 }} textAlign='left'>
         <Header as='h1' dividing>
-          <Image style={{'font-size': '1.5em'}} src="https://drive.google.com/uc?id=1mGUzlKjE20jdZtzn0N3di2Fx_sG7BV40"/>
+          <Image style={{'font-size': '1.5em'}} src="https://s3.amazonaws.com/yugtun-static/static/logo_final_1.jpg"/>
           <Link to='/' style={{ color: 'black', verticalAlign: 'bottom' }}>Yugtun</Link>
         </Header>
         <Container ref={this.search_container} className='search_container'>
@@ -236,11 +236,11 @@ class SearchPage extends Component {
           <Grid.Column>
             <Container textAlign='left'>
               <Divider fluid />
-              <List> <i> This website is still being improved. If you notice a mistake, please help us out by reporting the issue. Quyana. </i></List>
+              <List> <i> This website is still being improved, please let us know of any issues. Quyana. </i></List>
               <List horizontal bulleted>
                 <List.Item> © Yuarcuun </List.Item>
                 <List.Item> <Link to='/about'>About</Link> </List.Item>
-                <List.Item> yuarcuun@gmail.com</List.Item>
+                <List.Item> <a href='mailto:yuarcuun@gmail.com'>Contact</a> </List.Item>
               </List>
             </Container>
           </Grid.Column>
