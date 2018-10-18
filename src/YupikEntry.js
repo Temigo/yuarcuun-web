@@ -185,6 +185,10 @@ class YupikEntry extends Component {
         </Grid.Row>
       ) : ''}
 
+      <a href="https://goo.gl/forms/be5L5cgSQmCJeVDl1" target="_blank">
+        <Icon inverted name='exclamation circle' color='grey' size='large' />
+      </a>
+
       </Grid>
       </Segment>
     );

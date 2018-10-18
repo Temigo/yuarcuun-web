@@ -1986,10 +1986,10 @@ class YupikModifyLayout extends Component {
         if (options1[i].value[0]!=4) { //subject 4th person not allowed
           dict1.push({id: options1[i].id,value: options1[i].value,text: options1[i].text,disabled:flag2});
         }
-        if ((this.state.value1[0]=='1' && options2[i].value[0]=='1') || (this.state.value1[0]=='2' && options2[i].value[0]=='2') || (this.state.value1[0]=='4' && options2[i].value[0]=='4')) { //process options2 and options3 first
-          flag1 = true
-        }
-        dict3.push({id: options3[i].id,value: options3[i].value,text: options3[i].text,disabled:flag1});
+        // if ((this.state.value1[0]=='1' && options2[i].value[0]=='1') || (this.state.value1[0]=='2' && options2[i].value[0]=='2') || (this.state.value1[0]=='4' && options2[i].value[0]=='4')) { //process options2 and options3 first
+        //   flag1 = true
+        // }
+        dict3.push({id: options3[i].id,value: options3[i].value,text: options3[i].text});
       } else if (this.state.mood == 'indicative' || this.state.mood == 'subordinative') {
         if (this.state.value1[0]=='1' && options2[i].value[0]=='1' || this.state.value1[0]=='2' && options2[i].value[0]=='2') { //process options2 and options3 first
           flag1 = true
@@ -2339,7 +2339,9 @@ class YupikModifyLayout extends Component {
               :
               ''
               }
-              <Icon inverted name='exclamation circle' color='grey' size='small' />
+              <a href="https://goo.gl/forms/be5L5cgSQmCJeVDl1" target="_blank">
+              <Icon inverted name='exclamation circle' color='grey' size='small'/>
+              </a>
               </span>
               </Header>
 
@@ -2481,7 +2483,7 @@ class YupikModifyLayout extends Component {
                 ''
                 }
                 {this.state.verbEnding== false && this.state.value4 == 3 && this.state.nounEnding !== 'many of them'?
-                <span style={{color: '#852828'}}>(three of them)</span>
+                <span style={{color: '#852828'}}>(three or more)</span>
                 :
                 ''
                 }
@@ -2549,17 +2551,17 @@ class YupikModifyLayout extends Component {
                     }
                   </List.Item>
                 )}
+      {this.state.advancedMode === true && this.state.allPostbasesMode === false && this.verb && this.state.currentPostbases.length > 0 ?
+        <List.Item><List.Icon circular name='lock' onClick={this.allPostbasesMode.bind(this)}/></List.Item>
+        :
+        ''
+      }
+      {this.state.advancedMode === true && this.state.allPostbasesMode === true && this.verb && this.state.currentPostbases.length > 0 ?
+        <List.Item><List.Icon circular name='lock open' onClick={this.allPostbasesMode.bind(this)}/></List.Item>
+        :
+        ''
+      }
               </List>
-                {this.state.advancedMode === true && this.state.allPostbasesMode === false && this.verb && this.state.currentPostbases.length > 0 ?
-                  <div><Icon circular name='lock' size='large' onClick={this.allPostbasesMode.bind(this)}/></div>
-                  :
-                  ''
-                }
-                {this.state.advancedMode === true && this.state.allPostbasesMode === true && this.verb && this.state.currentPostbases.length > 0 ?
-                  <div><Icon circular name='lock open' size='large' onClick={this.allPostbasesMode.bind(this)}/></div>
-                  :
-                  ''
-                }
             </Grid.Column>
           </Grid.Row>
           : ''}
