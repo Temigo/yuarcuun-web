@@ -238,7 +238,7 @@ class SearchPage extends Component {
               <Divider fluid />
               <List> <i> This website is still being improved. If you notice a mistake, please help us out by reporting the issue. Quyana. </i></List>
               <List horizontal bulleted>
-                <List.Item> © Yuarcuun Initiative </List.Item>
+                <List.Item> © Yuarcuun </List.Item>
                 <List.Item> <Link to='/about'>About</Link> </List.Item>
                 <List.Item> yuarcuun@gmail.com</List.Item>
               </List>
