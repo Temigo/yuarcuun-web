@@ -136,7 +136,7 @@ class SearchPage extends Component {
     if (this.state.onlyCommon) {
       wordsList = wordsList.filter((word, i) => { return isCommonList[i]; });
     }
-    let displayCommonOption = wordsList.some((word, i) => { return isCommonList[i]; }) && wordsList.some((word, i) => { return !isCommonList[i]; });
+    let displayCommonOption = this.state.onlyCommon || (wordsList.some((word, i) => { return isCommonList[i]; }) && wordsList.some((word, i) => { return !isCommonList[i]; }));
     console.log(this.state.dictionary === []);
     return (
       <div>
