@@ -8,7 +8,8 @@ import ScrollToTop from './scrollToTop.js';
 import createHistory from 'history/createBrowserHistory';
 import ReactGA from 'react-ga';
 
-ReactGA.initialize('UA-127737321-1');
+// Uncomment this for deployment
+// ReactGA.initialize('UA-127737321-1');
 
 const history = createHistory();
 //FIXME how to exclude localhost?
