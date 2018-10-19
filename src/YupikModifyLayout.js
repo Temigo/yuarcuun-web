@@ -999,7 +999,12 @@ class YupikModifyLayout extends Component {
   }
     if (newText2.includes('is ')) {
       new_str = newText2.split("is ");
-      new_adj = new_str[1].trim()
+      console.log(new_str)
+      if (new_str.length == 2) {
+        new_adj = new_str[1].trim()
+      } else if (new_str.length == 3) {
+        new_adj = new_str[1]+'is '+new_str[2]
+      }
     } else if (newText2.includes('was ')) {
       new_str = newText2.split("was ");
       new_adj = new_str[1].trim()

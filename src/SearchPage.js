@@ -9,6 +9,8 @@ import { Link } from 'react-router-dom';
 import { API_URL } from './App.js';
 import Fuse from 'fuse.js';
 import now from 'performance-now';
+import ReactGA from 'react-ga';
+import GitHubForkRibbon from 'react-github-fork-ribbon';
 
 // Cache dictionary
 let dictionary = [];
@@ -51,6 +53,7 @@ class SearchPage extends Component {
   }
 
   componentDidMount() {
+    let start = now();
     if (dictionary.length == 0) {
       axios
         .get(API_URL + "/word/all")
@@ -58,7 +61,13 @@ class SearchPage extends Component {
           // response.data.forEach((word) => {
           //   this.index.addDoc({ ...word, yupik: word.yupik.slice(0, -1) });
           // });
-
+          let end = now();
+          ReactGA.timing({
+            category: 'Loading',
+            variable: 'dictionary',
+            value: (end-start).toFixed(3),
+            label: 'Dictionary loading'
+          });
           dictionary = response.data;
           fuse.setCollection(dictionary);
           console.log('Fetched dictionary');
@@ -103,6 +112,11 @@ class SearchPage extends Component {
       // let wordsList = results.map((e) => {
       //   return this.index.documentStore.getDoc(e.ref);
       // });
+      ReactGA.event({
+        category: 'User',
+        action: 'Search word',
+        label: new_search
+      });
       let start = now();
       let wordsList = fuse.search(new_search);
       let end = now();
@@ -113,6 +127,12 @@ class SearchPage extends Component {
       //   }
       // }
       console.log('done! in ', (end-start).toFixed(3), 'ms');
+      ReactGA.timing({
+        category: 'Search',
+        variable: 'fuse.search',
+        value: (end-start).toFixed(3),
+        label:'Fuse.js search duration'
+      });
       // if (results[0].score > results[results.length-1].score) {
       //   results = results.reverse();
       // }
@@ -159,6 +179,7 @@ class SearchPage extends Component {
         </Loader>
       </Dimmer>
       <Grid textAlign='center' style={{ height: '100%' }} verticalAlign={(displayList || !this.state.startingSearch) ? 'top' : 'middle'}>
+      <GitHubForkRibbon href='https://www.youtube.com/watch?v=9M65ptotL0A&t' target='_blank' position='right' color='orange'>Watch Tutorial</GitHubForkRibbon>
       <Grid.Row style={displayList ? {height: 'auto'} : {height: '80%'}}>
       <Grid.Column style={{ maxWidth: 800, padding: 10 }} textAlign='left'>
         <Header as='h1' dividing>
@@ -241,8 +262,6 @@ class SearchPage extends Component {
                 <List.Item> © Yuarcuun </List.Item>
                 <List.Item> <Link to='/about'>About</Link> </List.Item>
                 <List.Item> <a href='mailto:yuarcuun@gmail.com'>Contact</a> </List.Item>
-                <List.Item> <b><a href='https://www.youtube.com/watch?v=9M65ptotL0A&t' target='_blank' style={{color: 'blue'}}>Watch the tutorial!</a></b></List.Item>
-
               </List>
             </Container>
           </Grid.Column>
