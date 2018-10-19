@@ -163,6 +163,7 @@ class SearchPage extends Component {
   render() {
     console.log("SearchPage state: ", this.state);
     let displayList = this.state.search.length >= 4 && this.state.wordsList.length > 0;
+    let emptyList = this.state.search.length >= 4 && this.state.wordsList.length == 0;
     let displayWord = this.state.currentWord.yupik !== undefined;
     let wordsList = this.state.wordsList;
     let isCommonList = wordsList.map((word) => { return Object.keys(word).some((key) => { return word[key].properties && word[key].properties.indexOf('common') > -1; }); });
@@ -250,6 +251,7 @@ class SearchPage extends Component {
               );
             }) : ''}
           </List>
+          {emptyList ? <p><i>aren, no results...</i></p> : ''}
         </Container>
         </Grid.Column>
         </Grid.Row>
