@@ -260,10 +260,12 @@ class YupikModifyLayout extends Component {
             }
           }
           this.setState({currentPostbases:array})
-          this.setState({allowable_next_ids:[5,6,7,8,9,10]})
-        } else {
-          this.setState({allowable_next_ids:[]})
-        }
+          var array3 = [5,6,7,8,9,10].concat(this.state.allowable_next_ids);
+          array3 = array3.sort().filter(function(item, pos, ary) {
+            return !pos || item != ary[pos - 1];
+          })
+          this.setState({allowable_next_ids:array3})
+        } 
         this.modifyWord(newState.person, newState.people, newState.objectPerson, newState.objectPeople, newState.mood, newState.moodSpecific, newState.nounEnding, newState.value1, this.state.currentWord, this.state.currentPostbases);
       }
     }
@@ -2622,12 +2624,12 @@ class YupikModifyLayout extends Component {
                     }
                   </List.Item>
                 )}
-      {this.state.advancedMode === true && this.state.allPostbasesMode === false && this.verb && this.state.currentPostbases.length > 0 ?
+      {this.state.allPostbasesMode === false && this.verb && this.state.currentPostbases.length > 0 ?
         <List.Item><List.Icon circular name='lock' onClick={this.allPostbasesMode.bind(this)}/></List.Item>
         :
         ''
       }
-      {this.state.advancedMode === true && this.state.allPostbasesMode === true && this.verb && this.state.currentPostbases.length > 0 ?
+      {this.state.allPostbasesMode === true && this.verb && this.state.currentPostbases.length > 0 ?
         <List.Item><List.Icon circular name='lock open' onClick={this.allPostbasesMode.bind(this)}/></List.Item>
         :
         ''
