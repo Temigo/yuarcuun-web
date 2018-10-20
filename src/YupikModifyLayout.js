@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './semantic/dist/semantic.min.css';
-import { Container, Grid, Header, Dropdown, List, Visibility, Icon } from 'semantic-ui-react';
+import { Container, Grid, Header, Dropdown, List, Visibility, Icon, Loader } from 'semantic-ui-react';
 import { Route } from 'react-router-dom';
 import {withRouter} from 'react-router';
 
@@ -46,6 +46,8 @@ class YupikModifyLayout extends Component {
     console.log('YupikModifyLayout props', props)
     this.verb = this.props.location.pathname.includes('verb');
     this.state = {
+      canTTS: true, // whether TTS is available for this word
+      loadingTTS: false, // whether we are loading the TTS for this word
       headerFixed: false,
       advancedMode: false,
       usageId: this.props.match.params.usage_id,
@@ -258,9 +260,11 @@ class YupikModifyLayout extends Component {
             }
           }
           this.setState({currentPostbases:array})
-          this.setState({allowable_next_ids:[5,6,7,8,9,10]})
-        } else {
-          this.setState({allowable_next_ids:[]})
+          var array3 = [5,6,7,8,9,10].concat(this.state.allowable_next_ids);
+          array3 = array3.sort().filter(function(item, pos, ary) {
+            return !pos || item != ary[pos - 1];
+          })
+          this.setState({allowable_next_ids:array3})
         }
         this.modifyWord(newState.person, newState.people, newState.objectPerson, newState.objectPeople, newState.mood, newState.moodSpecific, newState.nounEnding, newState.value1, this.state.currentWord, this.state.currentPostbases);
       }
@@ -603,7 +607,14 @@ class YupikModifyLayout extends Component {
   speak(event, data) {
     let audio = new Audio(API_URL + "/tts/" + this.state.modifiedWord.replace('*',''));
     console.log(audio);
-    audio.play().then(() => { console.log('done'); });
+    this.setState({loadingTTS: true});
+    audio.play().then((e) => {
+      console.log('TTS done', e);
+      this.setState({loadingTTS: false})
+    }, (error) => {
+      this.setState({loadingTTS: false, canTTS: false});
+    }
+    );
   }
 
   allPostbasesMode(event,data) {
@@ -876,6 +887,11 @@ class YupikModifyLayout extends Component {
 //   {
 //     group: 'subordinative',
 //     mood: 'by or being that',
+
+    // Restore TTS option if it was disabled for previous word
+    if (!this.state.canTTS) {
+      this.setState({canTTS: true});
+    }
     let newText1 = ''
     let newText2 = this.state.originalText2
     let newText1after = ''
@@ -1847,6 +1863,14 @@ class YupikModifyLayout extends Component {
       //   };
       //   return postbasesList
       // };
+
+      let isvowel = (l) => {
+        if (l == 'a' || l == 'e' || l == 'i' || l == 'u') {
+          return true
+        } else {
+          return false
+        }
+      }
       let returnEnding = (value4, possessorPerson, possessorPeople, mood) => {
         if (mood == 'absolutive') {
           return [absolutive_endings[value4][possessorPerson][possessorPeople]]
@@ -1859,7 +1883,21 @@ class YupikModifyLayout extends Component {
         } else if (mood == 'equalis') {
           return [equalis_endings[value4][possessorPerson][possessorPeople]]
         } else if (mood == 'vialis') {
-          return [vialis_endings[value4][possessorPerson][possessorPeople]]
+          if (value4 == 1 && possessorPerson == 2 && possessorPeople == 1 && postbasesList.length > 1) {
+            if (isvowel(postbasesList[postbasesList.length-1][postbasesList[postbasesList.length-1].length-2])) {
+              return ['-vkun']
+            } else {
+              return [vialis_endings[value4][possessorPerson][possessorPeople]]
+            }
+          } else if (value4 == 1 && possessorPerson == 2 && possessorPeople == 1 && postbasesList.length == 0) {
+            if (isvowel(this.state.currentWord[this.state.currentWord.length-1])) {
+              return ['-vkun']
+            } else {
+              return [vialis_endings[value4][possessorPerson][possessorPeople]]
+            }
+          } else {
+            return [vialis_endings[value4][possessorPerson][possessorPeople]]
+          }
         } else if (mood == 'ablative') {
           return [ablative_endings[value4][possessorPerson][possessorPeople]]
         }
@@ -2317,7 +2355,10 @@ class YupikModifyLayout extends Component {
       top: '5.9em',
       zIndex: 100,
       backgroundColor: 'white',
-      width: '92%',
+      left: 0,
+      right: 0,
+      width: '100%'
+      //width: '92%',
       //borderBottom: '1px solid black',
 
 
@@ -2333,12 +2374,12 @@ class YupikModifyLayout extends Component {
     return (
       <div>
       <StickyMenu word={this.state.currentWord} goBack={this.props.history.goBack} switchMode={this.switchMode.bind(this)} allPostbasesMode={this.allPostbasesMode.bind(this)} {...this.props} />
-      <Container attached style={{ paddingTop: '6em' }}>
+      <Container attached style={{ paddingTop: '8em' }}>
       <Visibility
         onTopPassed={() => {console.log('top passed!'); this.setState({ headerFixed: true }); }}
         onTopPassedReverse={() => {console.log('top reverse passed!'); this.setState({ headerFixed: false }); }}
         once={false}
-        offset={[120, 120]}
+        offset={[150, 150]}
       >
         <Grid style={this.state.headerFixed ? fixedStyle : {top: '1em'}}>
 
@@ -2358,7 +2399,18 @@ class YupikModifyLayout extends Component {
               {this.state.mood === 'interrogative' ? '?' :''}
               {' '}
               {this.verb || this.state.currentPostbases.length == 0 && this.state.mood == 'absolutive' && this.state.value4 == 1 && this.state.possessiveButton == 0 ?
-              <Icon name='volume up' color='black' size='small' onClick={this.speak.bind(this)} link />
+              (this.state.loadingTTS ?
+                <Loader inline active />
+                :
+                (this.state.canTTS ?
+                  <Icon name='volume up' color='black' size='small' onClick={this.speak.bind(this)} link />
+                  :
+                  <Icon.Group>
+                    <Icon name='ban' color='grey' />
+                    <Icon name='volume up' color='black' size='tiny' />
+                  </Icon.Group>
+                )
+              )
               :
               ''
               }
@@ -2412,7 +2464,7 @@ class YupikModifyLayout extends Component {
                 }
                 {' '}
                 <span style={{color: '#852828',background: '#e0e0e0', paddingLeft:2, paddingRight:0, paddingTop:5, paddingBottom:5, borderRadius:5, borderWidth: 1, borderColor: '#fff'}}>
-                <Dropdown inline options={dict1} onChange={this.setValue1.bind(this)} value={value1} />
+                <Dropdown inline scrolling options={dict1} onChange={this.setValue1.bind(this)} value={value1} />
                 </span>
                 {' '}
                 <span style={{color: '#852828'}}>{this.state.text2}</span>
@@ -2432,14 +2484,14 @@ class YupikModifyLayout extends Component {
 
                 {this.state.objectExists && this.state.moodSpecific !== 'who'  ?
                 <span style={{color: '#852828',background: '#e0e0e0', paddingLeft:2, paddingRight:0, paddingTop:5, paddingBottom:5, borderRadius:5, borderWidth: 1, borderColor: '#fff'}}>
-                <Dropdown inline options={dict2} onChange={this.setValue2.bind(this)} value={value2} />
+                <Dropdown inline scrolling options={dict2} onChange={this.setValue2.bind(this)} value={value2} />
                 </span>
                 :
                 ''
                 }
                 {this.state.objectExists && this.state.moodSpecific === 'who'  ?
                 <span style={{color: '#852828'}}>
-                (<Dropdown inline options={dict2} onChange={this.setValue2.bind(this)} value={value2} />)
+                (<Dropdown inline scrolling options={dict2} onChange={this.setValue2.bind(this)} value={value2} />)
                 </span>
                 :
                 ''
@@ -2466,14 +2518,14 @@ class YupikModifyLayout extends Component {
 
                 {(this.state.verbEnding ?
                   <span style={{color: '#852828'}}>
-                  <Dropdown style={{color: '#852828',background: '#e0e0e0', paddingLeft:2, paddingRight:0, paddingTop:5, paddingBottom:5, borderRadius:5, borderWidth: 1, borderColor: '#fff'}} inline options={dict1} onChange={this.setValue1.bind(this)} value={value1} />
+                  <Dropdown scrolling style={{color: '#852828',background: '#e0e0e0', paddingLeft:2, paddingRight:0, paddingTop:5, paddingBottom:5, borderRadius:5, borderWidth: 1, borderColor: '#fff'}} inline options={dict1} onChange={this.setValue1.bind(this)} value={value1} />
                   </span>:
                   ''
                 )}
                 {' '}
                 {(this.state.possessiveButton == 1 ?
                   <span style={{color: '#852828'}}>
-                  <Dropdown style={{color: '#852828',background: '#e0e0e0', paddingLeft:2, paddingRight:0, paddingTop:5, paddingBottom:5, borderRadius:5, borderWidth: 1, borderColor: '#fff'}} inline options={dict3} onChange={this.setValue3.bind(this)} value={value3} />
+                  <Dropdown scrolling style={{color: '#852828',background: '#e0e0e0', paddingLeft:2, paddingRight:0, paddingTop:5, paddingBottom:5, borderRadius:5, borderWidth: 1, borderColor: '#fff'}} inline options={dict3} onChange={this.setValue3.bind(this)} value={value3} />
                   </span>:
                   ''
                 )}
@@ -2525,10 +2577,11 @@ class YupikModifyLayout extends Component {
             </Grid.Row>
             : ''
           }
-          {this.state.currentPostbases.length > 0 || (this.verb && this.state.mood != 'indicative') || (this.verb == false && this.state.mood != 'absolutive') || this.state.possessiveButton === 1 || this.state.enclitic !== '' ?
           <Grid.Row textAlign='center'>
             <Grid.Column>
-              <List horizontal>
+
+          {this.state.currentPostbases.length > 0 || (this.verb && this.state.mood != 'indicative') || (this.verb == false && this.state.mood != 'absolutive') || this.state.possessiveButton === 1 || this.state.enclitic !== '' ?
+                <List horizontal>
                 {this.state.mood !== 'absolutive' && this.verb == false ?
                   <List.Item onClick={(event) => this.setMoodNoun(this.state.mood, event)}>
                     <Chip  text={this.state.mood} />
@@ -2574,27 +2627,26 @@ class YupikModifyLayout extends Component {
                     }
                   </List.Item>
                 )}
-      {this.state.advancedMode === true && this.state.allPostbasesMode === false && this.verb && this.state.currentPostbases.length > 0 ?
+      {this.state.allPostbasesMode === false && this.verb && this.state.currentPostbases.length > 0 ?
         <List.Item><List.Icon circular name='lock' onClick={this.allPostbasesMode.bind(this)}/></List.Item>
         :
         ''
       }
-      {this.state.advancedMode === true && this.state.allPostbasesMode === true && this.verb && this.state.currentPostbases.length > 0 ?
+      {this.state.allPostbasesMode === true && this.verb && this.state.currentPostbases.length > 0 ?
         <List.Item><List.Icon circular name='lock open' onClick={this.allPostbasesMode.bind(this)}/></List.Item>
         :
         ''
       }
-              </List>
+      </List>
+          : ''}
             </Grid.Column>
           </Grid.Row>
-          : ''}
-
         </Grid>
         </Visibility>
 
         <Visibility
           onTopVisibleReverse={() => {console.log('top visible!'); this.setState({ headerFixed: false }); }}
-          offset={this.state.headerFixed ? [100, 0] : [100, 0]}
+          offset={this.state.headerFixed ? [300, 0] : [300, 0]}
         >
         <div style={this.state.headerFixed ? {paddingTop: '12em'} : {paddingTop: '1.5em'}}>
         <Route exact path={`${this.props.match.path}/noun`} component={YupikModifyNoun} />

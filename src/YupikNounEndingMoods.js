@@ -102,9 +102,6 @@ class YupikNounEndingMoods extends Component {
                   object of a comparison
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === 5}>
-                  <p>
-                  placeholder  
-                  </p>
                 </Accordion.Content>
 
                 <Accordion.Title active={activeIndex === 6} index={6} onClick={this.handleClick}>
@@ -112,9 +109,7 @@ class YupikNounEndingMoods extends Component {
                   with postbase @5+paa/~vaa and enclitic =lli in exclamations
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === 6}>
-                  <p>
-                  placeholder
-                  </p>
+
                 </Accordion.Content>
 
                 <Accordion.Title active={activeIndex === 7} index={7} onClick={this.handleClick}>
@@ -122,9 +117,7 @@ class YupikNounEndingMoods extends Component {
                   formal vocative
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === 7}>
-                  <p>
-                  placeholder
-                  </p>
+
                 </Accordion.Content>
 
               </Accordion>
@@ -160,9 +153,7 @@ class YupikNounEndingMoods extends Component {
                   specifying information about a noun within a verb
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === 10}>
-                  <p>
-                  placeholder
-                  </p>
+
                 </Accordion.Content>
 
                 <Accordion.Title active={activeIndex === 11} index={11} onClick={this.handleClick}>
@@ -170,9 +161,7 @@ class YupikNounEndingMoods extends Component {
                   secondary object especially with verbs of speaking and giving
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === 11}>
-                  <p>
-                  placeholder
-                  </p>
+
                 </Accordion.Content>
 
                 <Accordion.Title active={activeIndex === 12} index={12} onClick={this.handleClick}>
@@ -180,9 +169,7 @@ class YupikNounEndingMoods extends Component {
                   instrument (only in some dialects)
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === 12}>
-                  <p>
-                  placeholder
-                  </p>
+
                 </Accordion.Content>
 
               </Accordion>
@@ -198,9 +185,7 @@ class YupikNounEndingMoods extends Component {
                   route
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === 13}>
-                  <p>
-                  placeholder
-                  </p>
+
                 </Accordion.Content>
 
                 <Accordion.Title active={activeIndex === 14} index={14} onClick={this.handleClick}>
@@ -208,9 +193,7 @@ class YupikNounEndingMoods extends Component {
                   instrument
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === 14}>
-                  <p>
-                  placeholder
-                  </p>
+
                 </Accordion.Content>
 
                 <Accordion.Title active={activeIndex === 15} index={15} onClick={this.handleClick}>
@@ -218,9 +201,7 @@ class YupikNounEndingMoods extends Component {
                   part of a whole
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === 15}>
-                  <p>
-                  placeholder
-                  </p>
+
                 </Accordion.Content>
               </Accordion>
             :
@@ -235,9 +216,7 @@ class YupikNounEndingMoods extends Component {
                   route
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === 16}>
-                  <p>
-                  placeholder
-                  </p>
+
                 </Accordion.Content>
 
                 <Accordion.Title active={activeIndex === 17} index={17} onClick={this.handleClick}>
@@ -245,9 +224,7 @@ class YupikNounEndingMoods extends Component {
                   instrument
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === 17}>
-                  <p>
-                  placeholder
-                  </p>
+
                 </Accordion.Content>
 
                 <Accordion.Title active={activeIndex === 18} index={18} onClick={this.handleClick}>
@@ -255,9 +232,7 @@ class YupikNounEndingMoods extends Component {
                   part of a whole
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === 18}>
-                  <p>
-                  placeholder
-                  </p>
+
                 </Accordion.Content>
               </Accordion>
             :
@@ -272,9 +247,7 @@ class YupikNounEndingMoods extends Component {
                   comparison
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === 19}>
-                  <p>
-                  placeholder
-                  </p>
+
                 </Accordion.Content>
 
                 <Accordion.Title active={activeIndex === 20} index={20} onClick={this.handleClick}>
@@ -282,9 +255,7 @@ class YupikNounEndingMoods extends Component {
                   language specific
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === 20}>
-                  <p>
-                  placeholder
-                  </p>
+
                 </Accordion.Content>
 
                 <Accordion.Title active={activeIndex === 21} index={21} onClick={this.handleClick}>
@@ -292,9 +263,7 @@ class YupikNounEndingMoods extends Component {
                   price specification
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === 21}>
-                  <p>
-                  placeholder
-                  </p>
+
                 </Accordion.Content>
               </Accordion>
             :
