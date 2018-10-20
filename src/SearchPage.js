@@ -184,7 +184,7 @@ class SearchPage extends Component {
       <Grid.Row style={displayList ? {height: 'auto'} : {height: '80%'}}>
       <Grid.Column style={{ maxWidth: 800, padding: 10 }} textAlign='left'>
         <Header as='h1' dividing>
-          <Image style={{'font-size': '1.5em'}} src="https://s3.amazonaws.com/yugtun-static/static/logo_final_1.jpg"/>
+          <Image style={{'fontSize': '1.5em'}} src="https://s3.amazonaws.com/yugtun-static/static/logo_final_1.jpg"/>
           <Link to='/' style={{ color: 'black', verticalAlign: 'bottom' }}>Yugtun</Link>
         </Header>
         <Container ref={this.search_container} className='search_container'>
@@ -234,7 +234,7 @@ class SearchPage extends Component {
                   <List.Content>
                     <List.Header>
                       {word.yupik}
-                      <span style={{ 'margin-left': '10px' }}>
+                      <span style={{ 'marginLeft': '10px' }}>
                         {isCommon ? <Label size='mini' color='teal'>COMMON</Label> : ''}
                         {isHBC ? <Label size='mini' color='orange'>HBC DIALECT</Label> : ''}
                         {isNoun ? <Label size='mini' color='grey'>NOUN</Label> : ''}

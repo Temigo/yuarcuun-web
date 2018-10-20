@@ -265,7 +265,7 @@ class YupikModifyLayout extends Component {
             return !pos || item != ary[pos - 1];
           })
           this.setState({allowable_next_ids:array3})
-        } 
+        }
         this.modifyWord(newState.person, newState.people, newState.objectPerson, newState.objectPeople, newState.mood, newState.moodSpecific, newState.nounEnding, newState.value1, this.state.currentWord, this.state.currentPostbases);
       }
     }
@@ -2356,6 +2356,8 @@ class YupikModifyLayout extends Component {
       zIndex: 100,
       backgroundColor: 'white',
       left: 0,
+      right: 0,
+      width: '100%'
       //width: '92%',
       //borderBottom: '1px solid black',
 
@@ -2372,12 +2374,12 @@ class YupikModifyLayout extends Component {
     return (
       <div>
       <StickyMenu word={this.state.currentWord} goBack={this.props.history.goBack} switchMode={this.switchMode.bind(this)} allPostbasesMode={this.allPostbasesMode.bind(this)} {...this.props} />
-      <Container attached style={{ paddingTop: '6em' }}>
+      <Container attached style={{ paddingTop: '8em' }}>
       <Visibility
         onTopPassed={() => {console.log('top passed!'); this.setState({ headerFixed: true }); }}
         onTopPassedReverse={() => {console.log('top reverse passed!'); this.setState({ headerFixed: false }); }}
         once={false}
-        offset={[120, 120]}
+        offset={[150, 150]}
       >
         <Grid style={this.state.headerFixed ? fixedStyle : {top: '1em'}}>
 
@@ -2575,10 +2577,11 @@ class YupikModifyLayout extends Component {
             </Grid.Row>
             : ''
           }
-          {this.state.currentPostbases.length > 0 || (this.verb && this.state.mood != 'indicative') || (this.verb == false && this.state.mood != 'absolutive') || this.state.possessiveButton === 1 || this.state.enclitic !== '' ?
           <Grid.Row textAlign='center'>
             <Grid.Column>
-              <List horizontal>
+
+          {this.state.currentPostbases.length > 0 || (this.verb && this.state.mood != 'indicative') || (this.verb == false && this.state.mood != 'absolutive') || this.state.possessiveButton === 1 || this.state.enclitic !== '' ?
+                <List horizontal>
                 {this.state.mood !== 'absolutive' && this.verb == false ?
                   <List.Item onClick={(event) => this.setMoodNoun(this.state.mood, event)}>
                     <Chip  text={this.state.mood} />
@@ -2634,17 +2637,16 @@ class YupikModifyLayout extends Component {
         :
         ''
       }
-              </List>
+      </List>
+          : ''}
             </Grid.Column>
           </Grid.Row>
-          : ''}
-
         </Grid>
         </Visibility>
 
         <Visibility
           onTopVisibleReverse={() => {console.log('top visible!'); this.setState({ headerFixed: false }); }}
-          offset={this.state.headerFixed ? [100, 0] : [100, 0]}
+          offset={this.state.headerFixed ? [300, 0] : [300, 0]}
         >
         <div style={this.state.headerFixed ? {paddingTop: '12em'} : {paddingTop: '1.5em'}}>
         <Route exact path={`${this.props.match.path}/noun`} component={YupikModifyNoun} />
