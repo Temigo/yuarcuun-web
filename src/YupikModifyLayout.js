@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './semantic/dist/semantic.min.css';
-import { Container, Grid, Header, Dropdown, List, Visibility, Icon } from 'semantic-ui-react';
+import { Container, Grid, Header, Dropdown, List, Visibility, Icon, Loader } from 'semantic-ui-react';
 import { Route } from 'react-router-dom';
 import {withRouter} from 'react-router';
 
@@ -46,6 +46,8 @@ class YupikModifyLayout extends Component {
     console.log('YupikModifyLayout props', props)
     this.verb = this.props.location.pathname.includes('verb');
     this.state = {
+      canTTS: true, // whether TTS is available for this word
+      loadingTTS: false, // whether we are loading the TTS for this word
       headerFixed: false,
       advancedMode: false,
       usageId: this.props.match.params.usage_id,
@@ -603,7 +605,14 @@ class YupikModifyLayout extends Component {
   speak(event, data) {
     let audio = new Audio(API_URL + "/tts/" + this.state.modifiedWord.replace('*',''));
     console.log(audio);
-    audio.play().then(() => { console.log('done'); });
+    this.setState({loadingTTS: true});
+    audio.play().then((e) => {
+      console.log('TTS done', e);
+      this.setState({loadingTTS: false})
+    }, (error) => {
+      this.setState({loadingTTS: false, canTTS: false});
+    }
+    );
   }
 
   allPostbasesMode(event,data) {
@@ -876,6 +885,11 @@ class YupikModifyLayout extends Component {
 //   {
 //     group: 'subordinative',
 //     mood: 'by or being that',
+
+    // Restore TTS option if it was disabled for previous word
+    if (!this.state.canTTS) {
+      this.setState({canTTS: true});
+    }
     let newText1 = ''
     let newText2 = this.state.originalText2
     let newText1after = ''
@@ -2358,7 +2372,18 @@ class YupikModifyLayout extends Component {
               {this.state.mood === 'interrogative' ? '?' :''}
               {' '}
               {this.verb || this.state.currentPostbases.length == 0 && this.state.mood == 'absolutive' && this.state.value4 == 1 && this.state.possessiveButton == 0 ?
-              <Icon name='volume up' color='black' size='small' onClick={this.speak.bind(this)} link />
+              (this.state.loadingTTS ?
+                <Loader inline active />
+                :
+                (this.state.canTTS ?
+                  <Icon name='volume up' color='black' size='small' onClick={this.speak.bind(this)} link />
+                  :
+                  <Icon.Group>
+                    <Icon name='ban' color='grey' />
+                    <Icon name='volume up' color='black' size='tiny' />
+                  </Icon.Group>
+                )
+              )
               :
               ''
               }
