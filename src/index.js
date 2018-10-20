@@ -9,7 +9,7 @@ import createHistory from 'history/createBrowserHistory';
 import ReactGA from 'react-ga';
 
 // Uncomment this for deployment
-// ReactGA.initialize('UA-127737321-1');
+ReactGA.initialize('UA-127737321-1');
 
 const history = createHistory();
 //FIXME how to exclude localhost?
