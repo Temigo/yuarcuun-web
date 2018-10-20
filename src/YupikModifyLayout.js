@@ -2353,7 +2353,8 @@ class YupikModifyLayout extends Component {
       top: '5.9em',
       zIndex: 100,
       backgroundColor: 'white',
-      width: '92%',
+      left: 0,
+      //width: '92%',
       //borderBottom: '1px solid black',
 
 
