@@ -1861,6 +1861,14 @@ class YupikModifyLayout extends Component {
       //   };
       //   return postbasesList
       // };
+
+      let isvowel = (l) => {
+        if (l == 'a' || l == 'e' || l == 'i' || l == 'u') {
+          return true
+        } else {
+          return false
+        }
+      }
       let returnEnding = (value4, possessorPerson, possessorPeople, mood) => {
         if (mood == 'absolutive') {
           return [absolutive_endings[value4][possessorPerson][possessorPeople]]
@@ -1873,7 +1881,21 @@ class YupikModifyLayout extends Component {
         } else if (mood == 'equalis') {
           return [equalis_endings[value4][possessorPerson][possessorPeople]]
         } else if (mood == 'vialis') {
-          return [vialis_endings[value4][possessorPerson][possessorPeople]]
+          if (value4 == 1 && possessorPerson == 2 && possessorPeople == 1 && postbasesList.length > 1) {
+            if (isvowel(postbasesList[postbasesList.length-1][postbasesList[postbasesList.length-1].length-2])) {
+              return ['-vkun']
+            } else {
+              return [vialis_endings[value4][possessorPerson][possessorPeople]]
+            }
+          } else if (value4 == 1 && possessorPerson == 2 && possessorPeople == 1 && postbasesList.length == 0) {
+            if (isvowel(this.state.currentWord[this.state.currentWord.length-1])) {
+              return ['-vkun']
+            } else {
+              return [vialis_endings[value4][possessorPerson][possessorPeople]]
+            }
+          } else {
+            return [vialis_endings[value4][possessorPerson][possessorPeople]]
+          }
         } else if (mood == 'ablative') {
           return [ablative_endings[value4][possessorPerson][possessorPeople]]
         }
@@ -2437,7 +2459,7 @@ class YupikModifyLayout extends Component {
                 }
                 {' '}
                 <span style={{color: '#852828',background: '#e0e0e0', paddingLeft:2, paddingRight:0, paddingTop:5, paddingBottom:5, borderRadius:5, borderWidth: 1, borderColor: '#fff'}}>
-                <Dropdown inline options={dict1} onChange={this.setValue1.bind(this)} value={value1} />
+                <Dropdown inline scrolling options={dict1} onChange={this.setValue1.bind(this)} value={value1} />
                 </span>
                 {' '}
                 <span style={{color: '#852828'}}>{this.state.text2}</span>
@@ -2457,14 +2479,14 @@ class YupikModifyLayout extends Component {
 
                 {this.state.objectExists && this.state.moodSpecific !== 'who'  ?
                 <span style={{color: '#852828',background: '#e0e0e0', paddingLeft:2, paddingRight:0, paddingTop:5, paddingBottom:5, borderRadius:5, borderWidth: 1, borderColor: '#fff'}}>
-                <Dropdown inline options={dict2} onChange={this.setValue2.bind(this)} value={value2} />
+                <Dropdown inline scrolling options={dict2} onChange={this.setValue2.bind(this)} value={value2} />
                 </span>
                 :
                 ''
                 }
                 {this.state.objectExists && this.state.moodSpecific === 'who'  ?
                 <span style={{color: '#852828'}}>
-                (<Dropdown inline options={dict2} onChange={this.setValue2.bind(this)} value={value2} />)
+                (<Dropdown inline scrolling options={dict2} onChange={this.setValue2.bind(this)} value={value2} />)
                 </span>
                 :
                 ''
@@ -2491,14 +2513,14 @@ class YupikModifyLayout extends Component {
 
                 {(this.state.verbEnding ?
                   <span style={{color: '#852828'}}>
-                  <Dropdown style={{color: '#852828',background: '#e0e0e0', paddingLeft:2, paddingRight:0, paddingTop:5, paddingBottom:5, borderRadius:5, borderWidth: 1, borderColor: '#fff'}} inline options={dict1} onChange={this.setValue1.bind(this)} value={value1} />
+                  <Dropdown scrolling style={{color: '#852828',background: '#e0e0e0', paddingLeft:2, paddingRight:0, paddingTop:5, paddingBottom:5, borderRadius:5, borderWidth: 1, borderColor: '#fff'}} inline options={dict1} onChange={this.setValue1.bind(this)} value={value1} />
                   </span>:
                   ''
                 )}
                 {' '}
                 {(this.state.possessiveButton == 1 ?
                   <span style={{color: '#852828'}}>
-                  <Dropdown style={{color: '#852828',background: '#e0e0e0', paddingLeft:2, paddingRight:0, paddingTop:5, paddingBottom:5, borderRadius:5, borderWidth: 1, borderColor: '#fff'}} inline options={dict3} onChange={this.setValue3.bind(this)} value={value3} />
+                  <Dropdown scrolling style={{color: '#852828',background: '#e0e0e0', paddingLeft:2, paddingRight:0, paddingTop:5, paddingBottom:5, borderRadius:5, borderWidth: 1, borderColor: '#fff'}} inline options={dict3} onChange={this.setValue3.bind(this)} value={value3} />
                   </span>:
                   ''
                 )}
