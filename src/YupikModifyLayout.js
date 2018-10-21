@@ -631,7 +631,14 @@ class YupikModifyLayout extends Component {
   }
 
   speak(event, data) {
-    let audio = new Audio(API_URL + "/tts/" + this.state.modifiedWord.replace('*',''));
+    let addedbeginning = ''
+    let addedending = ''
+    if (this.state.mood == 'interrogative') {
+      addedbeginning = this.state.addedWord+this.state.enclitic+'#'
+    } else {
+      addedending = this.state.enclitic
+    }
+    let audio = new Audio(API_URL + "/tts/" + addedbeginning + this.state.modifiedWord.replace('*','') + addedending);
     console.log(audio);
     this.setState({loadingTTS: true});
     audio.play().then((e) => {
@@ -866,7 +873,9 @@ class YupikModifyLayout extends Component {
   setEnclitic(enclitic, encliticExpression, event, data) {
     this.setState({ enclitic: (this.state.enclitic == enclitic) ? '' : enclitic })
     this.setState({ encliticExpression: (this.state.enclitic == enclitic) ? '' : encliticExpression })
-    this.setState({ mood: 'indicative', moodSpecific:'indicative'});
+    if (this.state.mood !== 'interrogative') {
+      this.setState({ mood: 'indicative', moodSpecific:'indicative'});
+    }
   }
 
   setNounEnding(ending, event, data) {
@@ -1664,36 +1673,36 @@ class YupikModifyLayout extends Component {
     let added_word = ''
     if (moodSpecific=='who' && this.state.objectExists) {
       if (objectPeople == 1) {
-        added_word='kina '
+        added_word='kina'
       } else if (objectPeople == 2) {
-        added_word='kinkuk '
+        added_word='kinkuk'
       } else {
-        added_word='kinkut '
+        added_word='kinkut'
       }
     } else if (moodSpecific=='who') {
       if (people == 1) {
-        added_word='kina '
+        added_word='kina'
       } else if (people == 2) {
-        added_word='kinkuk '
+        added_word='kinkuk'
       } else {
-        added_word='kinkut '
+        added_word='kinkut'
       }
     } else if (moodSpecific=='when (in past)') {
-      added_word='qangvaq '
+      added_word='qangvaq'
       // newText2 = nlp(newText2).sentences().toPastTense().out()
     } else if (moodSpecific=='when (in future)') {
-      added_word='qaku '
+      added_word='qaku'
       // newText2 = nlp(newText2).sentences().toFutureTense().out()
     } else if (moodSpecific=='at where') {
-      added_word='nani '
+      added_word='nani'
     } else if (moodSpecific=='from where') {
-      added_word='naken '
+      added_word='naken'
     } else if (moodSpecific=='toward where') {
-      added_word='natmun '
+      added_word='natmun'
     } else if (moodSpecific=='why') {
-      added_word='ciin '
+      added_word='ciin'
     } else if (moodSpecific=='how') {
-      added_word='qaillun '
+      added_word='qaillun'
     } else {
       added_word=''
     }
@@ -2409,14 +2418,16 @@ class YupikModifyLayout extends Component {
               {this.state.addedWord !== '' ?
               <span style={{color: '#852828'}}>{this.state.addedWord}</span>
               :''}
+              {this.state.enclitic !== '' && this.state.mood === 'interrogative' ? this.state.enclitic
+              :''}
+              {' '}
               {wordDisplay}
-              {this.state.enclitic !== '' && this.state.encliticExpression !== '(again)' ? this.state.enclitic
+              {this.state.enclitic !== '' && this.state.encliticExpression !== '(again)' && this.state.mood === 'indicative' ? this.state.enclitic
               :''}
               </span>
               <span style={{color: '#852828'}}>
               {this.state.mood === 'interrogative' ? '?' :''}
-
-              {' '}
+              {''}
               {this.verb || this.state.currentPostbases.length == 0 && this.state.mood == 'absolutive' && this.state.value4 == 1 && this.state.possessiveButton == 0 ?
               (this.state.loadingTTS ?
                 <Loader inline active />
