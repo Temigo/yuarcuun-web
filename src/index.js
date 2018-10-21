@@ -14,7 +14,6 @@ import ReactGA from 'react-ga';
 const history = createHistory();
 //FIXME how to exclude localhost?
 history.listen(location => {
-  console.log(location);
 	ReactGA.set({ page: location.pathname })
 	ReactGA.pageview(location.pathname)
 });

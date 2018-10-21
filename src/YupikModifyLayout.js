@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './semantic/dist/semantic.min.css';
-import { Container, Grid, Header, Dropdown, List, Visibility, Icon, Loader } from 'semantic-ui-react';
+import { Container, Grid, Header, Dropdown, List, Visibility, Icon, Loader, Label } from 'semantic-ui-react';
 import { Route } from 'react-router-dom';
 import {withRouter} from 'react-router';
 
@@ -133,6 +133,11 @@ class YupikModifyLayout extends Component {
       };
       this.initialize()
     }
+  }
+
+  setDisplayPostbases(event, data) {
+    event.preventDefault();
+    this.setState({displayPostbases: !this.state.displayPostbases});
   }
 
   initialize() {
@@ -2238,12 +2243,6 @@ class YupikModifyLayout extends Component {
       );
     } else {
       postbasesDisplay = (
-          // {this.state.currentPostbases[0] > 15 ?
-        //   {this.state.currentPostbases
-
-        //   }
-        //  :
-        //  }
         <span>
         <span >{this.state.currentWord}</span>
         {this.state.postbasesList.slice(0,this.state.postbasesList.length-countEndingPostbase-1).map((p, i) => {
@@ -2254,9 +2253,7 @@ class YupikModifyLayout extends Component {
         })}
         </span>
       );
-      if (this.state.currentPostbases.length == 0) {
-        console.log('no postbases')
-      }
+
       wordDisplay = (
         <span>
         {this.state.colorIndexes.map((index, i) => {
@@ -2371,10 +2368,11 @@ class YupikModifyLayout extends Component {
           // : ''}
 
     };
+    console.log(this.state.displayPostbases);
     return (
       <div>
       <StickyMenu word={this.state.currentWord} goBack={this.props.history.goBack} switchMode={this.switchMode.bind(this)} allPostbasesMode={this.allPostbasesMode.bind(this)} {...this.props} />
-      <Container attached style={{ paddingTop: '8em' }}>
+      <Container attached style={{ paddingTop: '8em' }} onClick={() => {if (this.state.displayPostbases) { this.setState({displayPostbases: false}); }}}>
       <Visibility
         onTopPassed={() => {console.log('top passed!'); this.setState({ headerFixed: true }); }}
         onTopPassedReverse={() => {console.log('top reverse passed!'); this.setState({ headerFixed: false }); }}
@@ -2382,11 +2380,20 @@ class YupikModifyLayout extends Component {
         offset={[150, 150]}
       >
         <Grid style={this.state.headerFixed ? fixedStyle : {top: '1em'}}>
+          {this.state.displayPostbases ?
+          <Grid.Row style={{padding: 0}}>
+            <Grid.Column align='center'>
+              <Header as='h5'>
+              {postbasesDisplay}
+              </Header>
+            </Grid.Column>
+          </Grid.Row>
+          : ''}
 
           <Grid.Row>
-
             <Grid.Column verticalAlign='middle' align='center'>
               <Header textAlign='center' as='h1'>
+              <span onClick={this.setDisplayPostbases.bind(this)} style={{cursor: 'pointer', backgroundColor: (this.state.displayPostbases ? '#b3c3db' : 'white')}}>
               {this.state.encliticExpression == '(again)' ? 'ataam '
               :''}
               {this.state.addedWord !== '' ?
@@ -2395,8 +2402,10 @@ class YupikModifyLayout extends Component {
               {wordDisplay}
               {this.state.enclitic !== '' && this.state.encliticExpression !== '(again)' ? this.state.enclitic
               :''}
+              </span>
               <span style={{color: '#852828'}}>
               {this.state.mood === 'interrogative' ? '?' :''}
+
               {' '}
               {this.verb || this.state.currentPostbases.length == 0 && this.state.mood == 'absolutive' && this.state.value4 == 1 && this.state.possessiveButton == 0 ?
               (this.state.loadingTTS ?
@@ -2648,7 +2657,7 @@ class YupikModifyLayout extends Component {
           onTopVisibleReverse={() => {console.log('top visible!'); this.setState({ headerFixed: false }); }}
           offset={this.state.headerFixed ? [300, 0] : [300, 0]}
         >
-        <div style={this.state.headerFixed ? {paddingTop: '12em'} : {paddingTop: '1.5em'}}>
+        <div style={this.state.headerFixed ? {paddingTop: (this.state.displayPostbases ? '15em' : '12em')} : {paddingTop: '1.5em'}}>
         <Route exact path={`${this.props.match.path}/noun`} component={YupikModifyNoun} />
         <Route exact path={`${this.props.match.path}/noun/all`} render={(props) => <YupikAllNounPostbases {...props} {...yupikAllPostbasesProps} />} />
         <Route exact path={`${this.props.match.path}/noun/descriptors`} render={(props) => <YupikNounDescriptors {...props} {...yupikAllPostbasesProps} />} />
