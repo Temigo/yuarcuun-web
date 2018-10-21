@@ -58,7 +58,7 @@ class YupikDetails extends Component {
     let numEntries = Object.keys(this.state.fullWord).filter((entryNumber) => { return entryNumber !== 'english' && entryNumber !== 'yupik'; }).length;
     return (
       <div>
-      <StickyMenu word={this.state.currentWord} goBack={() => { this.props.history.push({pathname: '/', state: this.props.location.state }) }} {...this.props} />
+      <StickyMenu word={this.state.currentWord} goBack={() => { this.props.history.push({pathname: '/', state: this.props.location.state }) }} displaySimple {...this.props} />
 
       <Container text style={{ marginTop: '5em'}}>
 

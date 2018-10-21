@@ -35,6 +35,8 @@ import { nounEndings, indicative_intransitive_endings,
   connective_contemporative_transitive_endings, connective_conditional_intransitive_endings,
   connective_conditional_transitive_endings,  absolutive_endings, localis_endings, relative_endings, ablative_endings, terminalis_endings, vialis_endings, equalis_endings } from './constants_verbs.js';
 import Chip from './Chip.js';
+import { connect } from "react-redux";
+import { toggleAllPostbases } from './redux/actions';
 
 function getRandomArbitrary(min, max) {
     return Math.floor(Math.random() * (max - min) + min);
@@ -49,7 +51,6 @@ class YupikModifyLayout extends Component {
       canTTS: true, // whether TTS is available for this word
       loadingTTS: false, // whether we are loading the TTS for this word
       headerFixed: false,
-      advancedMode: false,
       usageId: this.props.match.params.usage_id,
       entry: undefined,
       usage: undefined,
@@ -72,8 +73,8 @@ class YupikModifyLayout extends Component {
       addedWord: "",
       value1_text: "he",
       value2_text: "it",
-      allPostbasesMode: false,
       value3_text: "",
+      allPostbasesMode: false, // whether the number of postbases is unlocked
       completeSentence: "",
       allowable_next_ids: [],
       possessiveSubject: false,
@@ -118,6 +119,8 @@ class YupikModifyLayout extends Component {
     this.modifyWord = this.verb ? this.modifyWordVerb : this.modifyWordNoun;
     this.setMood = this.verb ? this.setMoodVerb : this.setMoodNoun;
     this.initialize = this.initialize.bind(this);
+    this.switchMode = this.switchMode.bind(this);
+
      if (props.location.state == undefined) { // from search page
       let word = props.match.params.word;
       this.getWord(word);
@@ -133,6 +136,10 @@ class YupikModifyLayout extends Component {
       };
       this.initialize()
     }
+  }
+
+  componentDidMount() {
+    this.switchMode();
   }
 
   setDisplayPostbases(event, data) {
@@ -623,12 +630,10 @@ class YupikModifyLayout extends Component {
   }
 
   allPostbasesMode(event,data) {
-    this.setState({allPostbasesMode: !this.state.allPostbasesMode})
+    this.setState({allPostbasesMode: !this.state.allPostbasesMode});
     let allowable = []
     if (this.verb) { //this could be sent to another function since it is repeated in setPostbase
-      if (!this.state.allPostbasesMode) {
-        // pass
-      } else {
+      if (this.state.allPostbasesMode) {
         if (this.state.currentPostbases.length === 0) {
           // pass
         } else if (this.state.currentPostbases.length === 1) {
@@ -685,7 +690,6 @@ class YupikModifyLayout extends Component {
     }
   }
   setPostbase(postbase_id, event, data) {
-    // console.log(postbase_id, event, data)
     event.preventDefault();
     let index = this.state.currentPostbases.indexOf(postbase_id);
     let currentPostbases = this.state.currentPostbases;
@@ -696,19 +700,8 @@ class YupikModifyLayout extends Component {
       }
       else {
         currentPostbases.push(postbase_id);
-        // let newGroup = true;
-        // currentPostbases.forEach((id) => {
-        //   console.log( postbases[id].group !== postbases[postbase_id].group);
-        //   newGroup = newGroup && postbases[id].group !== postbases[postbase_id].group;
-        // });
-        // if (newGroup) {
-        //   currentPostbases.push(postbase_id);
-        // }
       }
-      // console.log(currentPostbases)
-      if (this.state.allPostbasesMode) {
-        //pass
-      } else {
+      if (!this.state.allPostbasesMode) {
         if (currentPostbases.length === 0) {
           //pass
         } else if (currentPostbases.length === 1) {
@@ -716,11 +709,6 @@ class YupikModifyLayout extends Component {
           allowable = postbases[currentPostbases[0]].allowable_next_ids
         } else {
           allowable = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29]
-          // allremaining.splice(allremaining.indexOf(currentPostbases[0]),1)
-          // allremaining.splice(allremaining.indexOf(currentPostbases[1]),1)
-          // console.log(allremaining)
-          // this.setState({allowable_next_ids: allremaining}) //postbases[currentPostbases[0]].allowable_next_ids
-
           currentPostbases.forEach((i, index) => {
             allowable.splice(allowable.indexOf(currentPostbases[index]),1)
           })
@@ -802,7 +790,6 @@ class YupikModifyLayout extends Component {
       currentPostbases = currentPostbases.sort((p1, p2) => {
         return (nounPostbases[p1].priority > nounPostbases[p2].priority) ? 1 : ((nounPostbases[p1].priority < nounPostbases[p2].priority) ? -1 : 0);
       });
-      // console.log(currentPostbases)
       if (this.state.allPostbasesMode) {
         this.setState({allowable_next_ids: []})
       } else {
@@ -2029,9 +2016,9 @@ class YupikModifyLayout extends Component {
 
 
 
-  switchMode(event, data) {
-    this.setState({ advancedMode: !this.state.advancedMode });
-    if (this.state.advancedMode) {
+  switchMode() {
+    console.log('switchMode', this.props.advancedMode);
+    if (!this.props.advancedMode) {
       this.props.history.push(this.verb ? `${this.props.match.url}/verb` : `${this.props.match.url}/noun`);
     }
     else {
@@ -2039,9 +2026,14 @@ class YupikModifyLayout extends Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.advancedMode !== this.props.advancedMode) {
+      this.switchMode();
+    }
+  }
+
   render() {
-    console.log(this.state)
-    //       {React.cloneElement(this.props.children, { advancedMode: this.state.advancedMode })}
+    console.log('YupikModifyLayout state', this.state)
     var dict1 = [];
     var dict2 = [];
     var dict3 = [];
@@ -2355,23 +2347,10 @@ class YupikModifyLayout extends Component {
       left: 0,
       right: 0,
       width: '100%'
-      //width: '92%',
-      //borderBottom: '1px solid black',
-
-
-          //       {this.state.advancedMode ?  //REMOVED FOR NOW
-          // <Grid.Row>
-          //   <Grid.Column verticalAlign='middle' align='center'>
-          //     {postbasesDisplay}
-          //   </Grid.Column>
-          // </Grid.Row>
-          // : ''}
-
     };
-    console.log(this.state.displayPostbases);
     return (
       <div>
-      <StickyMenu word={this.state.currentWord} goBack={this.props.history.goBack} switchMode={this.switchMode.bind(this)} allPostbasesMode={this.allPostbasesMode.bind(this)} {...this.props} />
+      <StickyMenu displaySimple={false} word={this.state.currentWord} goBack={this.props.history.goBack} switchMode={this.switchMode} {...this.props} />
       <Container attached style={{ paddingTop: '8em' }} onClick={() => {if (this.state.displayPostbases) { this.setState({displayPostbases: false}); }}}>
       <Visibility
         onTopPassed={() => {console.log('top passed!'); this.setState({ headerFixed: true }); }}
@@ -2664,7 +2643,7 @@ class YupikModifyLayout extends Component {
         <Route exact path={`${this.props.match.path}/noun/phrase`} render={(props) => <YupikNounPhrase {...props} {...yupikAllPostbasesProps} />} />
         <Route exact path={`${this.props.match.path}/noun/combine`} render={(props) => <YupikNounCombine {...props} {...yupikAllPostbasesProps} />} />
 
-        <Route exact path={`${this.props.match.path}/verb`} render={(props) => <YupikModifyVerb {...props} advancedMode={this.state.advancedMode}  {...yupikAllPostbasesProps} />} />
+        <Route exact path={`${this.props.match.path}/verb`} render={(props) => <YupikModifyVerb {...props} advancedMode={this.props.advancedMode}  {...yupikAllPostbasesProps} />} />
         <Route exact path={`${this.props.match.path}/verb/all`} render={(props) => <YupikAllPostbases {...props} {...yupikAllPostbasesProps}/>} />
         <Route exact path={`${this.props.match.path}/verb/ending`} render={(props) => <YupikEndingGroups {...props} {...yupikAllPostbasesProps}/>} />
         <Route exact path={`${this.props.match.path}/verb/ending/:ending_group_id`} render={(props) => <YupikEnding {...props} {...yupikAllPostbasesProps}/>} />
@@ -2678,4 +2657,7 @@ class YupikModifyLayout extends Component {
   }
 }
 
-export default withRouter(YupikModifyLayout);
+const mapStateToProps = state => {
+  return { advancedMode: state.allPostbases.allPostbasesMode };
+};
+export default connect(mapStateToProps, { toggleAllPostbases })(withRouter(YupikModifyLayout));

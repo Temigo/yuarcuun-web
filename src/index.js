@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
+import { Provider } from "react-redux";
+import store from "./redux/store";
+
 import { Router } from 'react-router-dom';
 import ScrollToTop from './scrollToTop.js';
 import createHistory from 'history/createBrowserHistory';
@@ -20,11 +23,13 @@ history.listen(location => {
 
 const supportsHistory = 'pushState' in window.history;
 ReactDOM.render(
+	<Provider store={store}>
   <Router forceRefresh={!supportsHistory} keyLength={20} history={history}>
     <ScrollToTop>
       <App />
     </ScrollToTop>
-  </Router>,
+  </Router>
+	</Provider>,
   document.getElementById('root')
 );
 registerServiceWorker();
