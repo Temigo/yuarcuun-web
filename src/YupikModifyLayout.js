@@ -257,15 +257,29 @@ class YupikModifyLayout extends Component {
             this.setState({value1:str})
           }
         }
-        if (newState.moodSpecific == 'when (future)...' || newState.moodSpecific == 'when (past)...' || newState.mood == 'optative') {
+        if (newState.moodSpecific == 'when (future)...' || newState.moodSpecific == 'when (past)...' || newState.mood == 'optative' || newState.moodSpecific == 'before...') {
           let array = this.state.currentPostbases
           for(var i = array.length-1; i >= 0; i--) {
-            if(array[i] === 5 || array[i] === 6 || array[i] === 7 || array[i] === 8 || array[i] === 9 || array[i] === 10) {
+            if(array[i] === 5 || array[i] === 6 || array[i] === 7 || array[i] === 8 || array[i] === 9 || array[i] === 22) {
                array.splice(i, 1);
             }
           }
           this.setState({currentPostbases:array})
-          var array3 = [5,6,7,8,9,10].concat(this.state.allowable_next_ids);
+          var array3 = [5,6,7,8,9,22].concat(this.state.allowable_next_ids);
+          array3 = array3.sort().filter(function(item, pos, ary) {
+            return !pos || item != ary[pos - 1];
+          })
+          this.setState({allowable_next_ids:array3})
+        }
+        if (newState.mood !== 'indicative') {
+          let array = this.state.currentPostbases
+          for(var i = array.length-1; i >= 0; i--) {
+            if(array[i] === 0) {
+               array.splice(i, 1);
+            }
+          }
+          this.setState({currentPostbases:array})
+          var array3 = [0].concat(this.state.allowable_next_ids);
           array3 = array3.sort().filter(function(item, pos, ary) {
             return !pos || item != ary[pos - 1];
           })
@@ -641,9 +655,13 @@ class YupikModifyLayout extends Component {
 
         }
       }
-      if (this.state.moodSpecific == 'when (future)...' || this.state.moodSpecific == 'when (past)...') {
+      if (this.state.moodSpecific == 'when (future)...' || this.state.moodSpecific == 'when (past)...' || this.state.moodSpecific == 'before...') {
         allowable.push(5)
+        allowable.push(6)
         allowable.push(7)
+        allowable.push(8)
+        allowable.push(9)
+        allowable.push(22)
       }
       this.setState({allowable_next_ids: allowable})
       this.modifyWord(this.state.person, this.state.people, this.state.objectPerson, this.state.objectPeople, this.state.mood, this.state.moodSpecific, this.state.nounEnding, this.state.value1, this.state.currentWord, this.state.currentPostbases);
@@ -705,6 +723,19 @@ class YupikModifyLayout extends Component {
         //   currentPostbases.push(postbase_id);
         // }
       }
+      if (this.state.moodSpecific == 'when (future)...' || this.state.moodSpecific == 'when (past)...' || this.state.moodSpecific == 'before...') {
+        allowable.push(5)
+        allowable.push(6)
+        allowable.push(7)
+        allowable.push(8)
+        allowable.push(9)
+        allowable.push(22)
+      }
+      if (this.state.mood !== 'indicative') {
+        allowable.push(0)
+      } else {
+        allowable.splice(allowable.indexOf(0),1)
+      }
       // console.log(currentPostbases)
       if (this.state.allPostbasesMode) {
         //pass
@@ -713,7 +744,10 @@ class YupikModifyLayout extends Component {
           //pass
         } else if (currentPostbases.length === 1) {
           // this.setState({allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]})
-          allowable = postbases[currentPostbases[0]].allowable_next_ids
+          var array3 = (postbases[currentPostbases[0]].allowable_next_ids).concat(this.state.allowable_next_ids);
+          allowable = array3.sort().filter(function(item, pos, ary) {
+            return !pos || item != ary[pos - 1];
+          })          
         } else {
           allowable = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29]
           // allremaining.splice(allremaining.indexOf(currentPostbases[0]),1)
@@ -725,10 +759,6 @@ class YupikModifyLayout extends Component {
             allowable.splice(allowable.indexOf(currentPostbases[index]),1)
           })
         }
-      }
-      if (this.state.moodSpecific == 'when (future)...' || this.state.moodSpecific == 'when (past)...') {
-        allowable.push(5)
-        allowable.push(7)
       }
       // console.log(allowable)
       this.setState({allowable_next_ids: allowable})
@@ -1508,7 +1538,7 @@ class YupikModifyLayout extends Component {
         postbasesList = postbasesList.concat([connective_consonantEnd_transitive_endings[person][people][objectPerson][objectPeople]]);
       } else if (mood == 'connective_conditional') {
         postbasesList = processPostbases(currentPostbases, base, postbases)
-        postbasesList = postbasesList.concat(['@-~ku-\\'])
+        postbasesList = postbasesList.concat(['@~-ku\\'])
         postbasesList = postbasesList.concat([connective_conditional_transitive_endings[person][people][objectPerson][objectPeople]]);
       } else if (mood == 'connective_first_contemporative') {
         postbasesList = processPostbases(currentPostbases, base, postbases)
@@ -1571,7 +1601,7 @@ class YupikModifyLayout extends Component {
         postbasesList = postbasesList.concat([connective_consonantEnd_intransitive_endings[person][people]]);
       } else if (mood == 'connective_conditional') {
         postbasesList = processPostbases(currentPostbases, base, postbases)
-        postbasesList = postbasesList.concat(['@-~ku\\'])
+        postbasesList = postbasesList.concat(['@~-ku\\'])
         postbasesList = postbasesList.concat([connective_conditional_intransitive_endings[person][people]]);
       } else if (mood == 'connective_first_contemporative') {
         postbasesList = processPostbases(currentPostbases, base, postbases)
