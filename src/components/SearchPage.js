@@ -1,12 +1,13 @@
+import '../App.css';
+import '../semantic/dist/semantic.min.css';
+
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 import elasticlunr from 'elasticlunr';
 import { Container, Header, Divider, Grid, Input, List, Label, Checkbox, Icon, Loader, Dimmer, Image } from 'semantic-ui-react';
-import './App.css';
-import './semantic/dist/semantic.min.css';
 import { Link } from 'react-router-dom';
-import { API_URL } from './App.js';
+import { API_URL } from '../App.js';
 import Fuse from 'fuse.js';
 import now from 'performance-now';
 import ReactGA from 'react-ga';

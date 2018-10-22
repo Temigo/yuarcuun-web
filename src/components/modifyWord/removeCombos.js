@@ -1,4 +1,4 @@
-import { options1, options2, options3 } from './constants.js';
+import { options1, options2, options3 } from '../constants/constants.js';
 
 export const removeCombos = (dict1, dict2, dict3, verb, value1, value2, mood, possessiveObject, objectExists) => {
   for (var i = 0; i < 14; i++) { // this portion of the code is meant to remove options that are not possible in subject/object combos

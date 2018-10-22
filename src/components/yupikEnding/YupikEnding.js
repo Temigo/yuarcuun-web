@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import './semantic/dist/semantic.min.css';
-import { interrogative, optative, dependent, verb2noun } from './modifyVerbOptions.js';
+import '../../semantic/dist/semantic.min.css';
+import { interrogative, optative, dependent, verb2noun } from '../modifyWord/modifyVerbOptions.js';
 import { Card, Button } from 'semantic-ui-react';
 
 class YupikEnding extends Component {
@@ -18,8 +18,8 @@ class YupikEnding extends Component {
           {options[group_id].map((e) => {
             return (
               <Card>
-              {(group_id == 3) ? 
-                <Button onClick={() => this.props.setNounEnding(e.ending)} toggle active={this.props.nounEnding === e.ending}>{e.text}</Button> 
+              {(group_id == 3) ?
+                <Button onClick={() => this.props.setNounEnding(e.ending)} toggle active={this.props.nounEnding === e.ending}>{e.text}</Button>
                 :
                 <Button
                   onClick={() => {
@@ -33,7 +33,7 @@ class YupikEnding extends Component {
                 </Button>
               }
               </Card>
-            );              
+            );
           })}
         </Card.Group>
       </div>

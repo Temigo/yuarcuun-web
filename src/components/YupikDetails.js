@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Container } from 'semantic-ui-react';
-import './semantic/dist/semantic.min.css';
+import '../semantic/dist/semantic.min.css';
 import axios from 'axios';
-import { API_URL } from './App.js';
+import { API_URL } from '../App.js';
 import YupikEntry from './YupikEntry.js';
 import {withRouter} from 'react-router';
-import StickyMenu from './StickyMenu.js';
+import StickyMenu from './common/StickyMenu.js';
 
 class YupikDetails extends Component {
   constructor(props) {

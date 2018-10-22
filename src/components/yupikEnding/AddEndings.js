@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Container, Header, Image, Divider, Grid, Icon, Input, List, Button, Segment}  from 'semantic-ui-react';
-import './semantic/dist/semantic.min.css';
+import '../../semantic/dist/semantic.min.css';
 import axios from 'axios';
 import nlp from 'compromise';
-import { API_URL } from './App.js';
+import { API_URL } from '../../App.js';
 import { Link } from 'react-router-dom';
 
 const postbases = [
@@ -107,7 +107,7 @@ class AddEndings extends Component {
         2: '',
         3: '',
       },
-      1: { // 1st person 
+      1: { // 1st person
         0: '',
         1: '+\'(g/t)u:6a', // I
         2: '+\'(g/t)ukuk', // you
@@ -271,7 +271,7 @@ class AddEndings extends Component {
           1: {
             0:'',
             1:'', //not allowed
-            2:'', 
+            2:'',
             3:'',
           },
           2: {
@@ -638,11 +638,11 @@ class AddEndings extends Component {
         <Container textAlign='center'>
           <Button circular color='blue' icon='volume up' />
         </Container>
-        
+
         <Divider />
         <div class="ui grid">
           <div class="four wide centered column">
-          {(this.state.person == 1 && this.state.people == 1) ? 'I' 
+          {(this.state.person == 1 && this.state.people == 1) ? 'I'
           :(this.state.person == 1 && this.state.people == 2) ? 'We (two)'
           :(this.state.person == 1 && this.state.people == 3) ? 'We (3+)'
           :(this.state.person == 2 && this.state.people == 1) ? 'You'
@@ -655,7 +655,7 @@ class AddEndings extends Component {
           </div>
           <div class="eight wide centered column">{this.state.entry.definition}</div>
           <div class="four wide centered column">
-          {(this.state.objectPerson == 1 && this.state.objectPeople == 1) ? 'me' 
+          {(this.state.objectPerson == 1 && this.state.objectPeople == 1) ? 'me'
           :(this.state.objectPerson == 1 && this.state.objectPeople == 2) ? 'us two'
           :(this.state.objectPerson == 1 && this.state.objectPeople == 3) ? 'us (3+)'
           :(this.state.objectPerson == 2 && this.state.objectPeople == 1) ? 'you'
@@ -707,7 +707,7 @@ class AddEndings extends Component {
         </Container>
       </Container>
 
-    
+
     );
   }
 }

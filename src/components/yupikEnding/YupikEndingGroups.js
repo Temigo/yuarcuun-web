@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './semantic/dist/semantic.min.css';
+import '../../semantic/dist/semantic.min.css';
 import { List, Segment, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 

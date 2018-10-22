@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import './semantic/dist/semantic.min.css';
-import YupikModifyNoun from './YupikModifyNoun.js';
-import YupikModifyVerb from './YupikModifyVerb.js';
+import '../../semantic/dist/semantic.min.css';
+import YupikModifyNoun from '../yupikModify/YupikModifyNoun.js';
+import YupikModifyVerb from '../yupikModify/YupikModifyVerb.js';
 import { Card, Button } from 'semantic-ui-react';
-import { postbaseButtons, enclitics } from './modifyVerbOptions.js';
-import { postbases } from './constants.js';
+import { postbaseButtons, enclitics } from '../modifyWord/modifyVerbOptions.js';
+import { postbases } from '../constants/constants.js';
 
 class YupikPostbase extends Component {
   render() {

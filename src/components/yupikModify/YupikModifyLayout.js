@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './semantic/dist/semantic.min.css';
+import '../../semantic/dist/semantic.min.css';
 import { Container, Grid, Header, Dropdown, List, Visibility, Icon, Loader, Label } from 'semantic-ui-react';
 import { Route } from 'react-router-dom';
 import {withRouter} from 'react-router';
@@ -8,23 +8,23 @@ import palette from 'google-palette';
 import shuffle from 'shuffle-array';
 import axios from 'axios';
 import nlp from 'compromise';
-import { API_URL } from './App.js';
+import { API_URL } from '../../App.js';
 
 import YupikModify from './YupikModify.js';
 import YupikModifyNoun from './YupikModifyNoun.js';
 import YupikModifyVerb from './YupikModifyVerb.js';
-import StickyMenu from './StickyMenu.js';
-import YupikEnding from './YupikEnding.js';
-import YupikEndingGroups from './YupikEndingGroups.js';
-import YupikPostbaseGroups from './YupikPostbaseGroups.js';
-import YupikPostbase from './YupikPostbase.js';
-import YupikAllPostbases from './YupikAllPostbases.js';
-import YupikAllNounPostbases from './YupikAllNounPostbases.js';
-import YupikNounDescriptors from './YupikNounDescriptors.js';
-import YupikNounPhrase from './YupikNounPhrase.js';
-import YupikNounCombine from './YupikNounCombine.js';
-import { postbases, nounPostbases } from './constants.js';
-import { interrogative, optative, dependent, verb2noun, postbaseButtons, enclitics } from './modifyVerbOptions.js';
+import StickyMenu from '../common/StickyMenu.js';
+import YupikEnding from '../yupikEnding/YupikEnding.js';
+import YupikEndingGroups from '../yupikEnding/YupikEndingGroups.js';
+import YupikPostbaseGroups from '../yupikPostbase/YupikPostbaseGroups.js';
+import YupikPostbase from '../yupikPostbase/YupikPostbase.js';
+import YupikAllPostbases from '../yupikPostbase/YupikAllPostbases.js';
+import YupikAllNounPostbases from '../yupikNoun/YupikAllNounPostbases.js';
+import YupikNounDescriptors from '../yupikNoun/YupikNounDescriptors.js';
+import YupikNounPhrase from '../yupikNoun/YupikNounPhrase.js';
+import YupikNounCombine from '../yupikNoun/YupikNounCombine.js';
+import { postbases, nounPostbases } from '../constants/constants.js';
+import { interrogative, optative, dependent, verb2noun, postbaseButtons, enclitics } from '../modifyWord/modifyVerbOptions.js';
 import { nounEndings, indicative_intransitive_endings,
   indicative_transitive_endings, interrogative_intransitive_endings,
   interrogative_transitive_endings, optative_intransitive_endings,
@@ -33,14 +33,14 @@ import { nounEndings, indicative_intransitive_endings,
   connective_transitive_endings, connective_consonantEnd_intransitive_endings,
   connective_consonantEnd_transitive_endings, connective_contemporative_intransitive_endings,
   connective_contemporative_transitive_endings, connective_conditional_intransitive_endings,
-  connective_conditional_transitive_endings } from './constants_verbs.js';
-import Chip from './Chip.js';
+  connective_conditional_transitive_endings } from '../constants/constants_verbs.js';
+import Chip from '../common/Chip.js';
 import { connect } from "react-redux";
-import { toggleAllPostbases } from './redux/actions';
-import { pronounEnding, addedWord, getsubjectis as getsubjectis_verb, processPostbases as processPostbases_verb, pushEnding as pushEnding_verb } from './ModifyWordVerb.js';
-import { processPostbases as processPostbases_noun, getsubjectis as getsubjectis_noun, isvowel, returnEnding } from './ModifyWordNoun.js';
-import { processUsage } from './processUsage.js';
-import { removeCombos } from './removeCombos.js';
+import { toggleAllPostbases } from '../../redux/actions';
+import { pronounEnding, addedWord, getsubjectis as getsubjectis_verb, processPostbases as processPostbases_verb, pushEnding as pushEnding_verb } from '../modifyWord/ModifyWordVerb.js';
+import { processPostbases as processPostbases_noun, getsubjectis as getsubjectis_noun, isvowel, returnEnding } from '../modifyWord/ModifyWordNoun.js';
+import { processUsage } from '../modifyWord/processUsage.js';
+import { removeCombos } from '../modifyWord/removeCombos.js';
 
 function getRandomArbitrary(min, max) {
     return Math.floor(Math.random() * (max - min) + min);

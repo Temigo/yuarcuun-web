@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Header, Icon, Button, Menu } from 'semantic-ui-react';
-import './semantic/dist/semantic.min.css';
-import { API_URL } from './App.js';
+import '../../semantic/dist/semantic.min.css';
+import { API_URL } from '../../App.js';
 import { connect } from "react-redux";
-import { toggleAllPostbases } from './redux/actions';
+import { toggleAllPostbases } from '../../redux/actions';
 
 class StickyMenu extends Component {
   switchMode(event, data) {

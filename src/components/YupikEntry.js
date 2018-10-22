@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Segment, List, Header, Label, Grid , Icon} from 'semantic-ui-react';
-import './semantic/dist/semantic.min.css';
+import '../semantic/dist/semantic.min.css';
 import { Link } from 'react-router-dom';
 import {withRouter} from 'react-router';
 

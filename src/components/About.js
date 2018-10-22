@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Header, Button, Icon, Divider } from 'semantic-ui-react';
-import './semantic/dist/semantic.min.css';
+import '../semantic/dist/semantic.min.css';
 
 class About extends Component {
   render() {
@@ -8,8 +8,8 @@ class About extends Component {
       <Container>
         <Header as='h1'>About the Yuarcuun Initiative</Header>
         <Divider />
-        
-<p> Yuarcuun is a Yup'ik-led group with a mission to revitalize Eskimo/Inuit languages using computer science tools. 
+
+<p> Yuarcuun is a Yup'ik-led group with a mission to revitalize Eskimo/Inuit languages using computer science tools.
 
 Current contributors are Christopher Egalaaq Liu, from Mamterilleq (Bethel, Alaska) and <a href="http://temigo.github.io/">Laura Domine</a>, from Paris.
 </p>
@@ -35,7 +35,7 @@ The Yuarcuun Initiative has received financial sponsorship to support a couple o
 
 <i>
 <p> A note from Egalaaq </p>
-<p> Quyavikanka elitnauristet Ayaprun Elitnaurvigmi, aanaka Maklak, maurluqa Narull'aq, apa'urluqa Upay'aq, alqaqa Cungass'aq, ilanka-llu tamalkuita. 
+<p> Quyavikanka elitnauristet Ayaprun Elitnaurvigmi, aanaka Maklak, maurluqa Narull'aq, apa'urluqa Upay'aq, alqaqa Cungass'aq, ilanka-llu tamalkuita.
 </p>
 <p> Una yuarcuun Yugtun qantulinek ciulistengqellruuq. Computer science-aakun maaggun nutarat ayuqunrilngutun elicungcaur ellimaksailan computer-aanun caliapellruapuk. Nutaranek cayarakun yugtun qaneryaramta elitnaurcuutii pilingnaqapuk. Quyana naaqiluten.
 </p>

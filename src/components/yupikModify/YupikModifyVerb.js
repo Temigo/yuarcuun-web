@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Segment, Button, Header, Grid, Container, Dropdown, Divider, Menu, Accordion, Icon, Card } from 'semantic-ui-react';
-import './semantic/dist/semantic.min.css';
+import '../../semantic/dist/semantic.min.css';
 import { Link } from 'react-router-dom';
-import { postbases } from './constants.js';
+import { postbases } from '../constants/constants.js';
 
 class YupikModifyVerb extends Component {
   constructor(props) {

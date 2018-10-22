@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './semantic/dist/semantic.min.css';
+import '../../semantic/dist/semantic.min.css';
 import { Segment, Button, Card } from 'semantic-ui-react';
 
 class YupikNounPossessor extends Component {

@@ -1,4 +1,4 @@
-import { absolutive_endings, localis_endings, relative_endings, ablative_endings, terminalis_endings, vialis_endings, equalis_endings } from './constants_verbs.js';
+import { absolutive_endings, localis_endings, relative_endings, ablative_endings, terminalis_endings, vialis_endings, equalis_endings } from '../constants/constants_verbs.js';
 
 export const processPostbases = (currentPostbases, base, nounPostbases) => {
   return currentPostbases.map((p) => {
