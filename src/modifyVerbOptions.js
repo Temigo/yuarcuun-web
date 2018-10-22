@@ -172,12 +172,12 @@ export const enclitics= {
         ending: '-llu',
         meaning: '(also)',
         text: 'and, also',
-      },
-      {
-        ending: 'ataam',
-        meaning: '(again)',
-        text: 'again',
       }
+      // {
+      //   ending: 'ataam',
+      //   meaning: '(again)',
+      //   text: 'again',
+      // }
     ]
   },
   'interrogative': {

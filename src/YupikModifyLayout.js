@@ -426,7 +426,7 @@ class YupikModifyLayout extends Component {
     let addedbeginning = ''
     let addedending = ''
     if (this.state.mood == 'interrogative') {
-      addedbeginning = this.state.addedWord+this.state.enclitic+'#'
+      addedbeginning = this.state.addedWord+this.state.enclitic+'^'
     } else {
       addedending = this.state.enclitic
     }
@@ -1572,8 +1572,6 @@ class YupikModifyLayout extends Component {
             <Grid.Column verticalAlign='middle' align='center'>
               <Header textAlign='center' as='h1'>
               <span onClick={this.setDisplayPostbases.bind(this)} style={{cursor: 'pointer', backgroundColor: (this.state.displayPostbases ? '#b3c3db' : 'white')}}>
-              {this.state.encliticExpression == '(again)' ? 'ataam '
-              :''}
               {this.state.addedWord !== '' ?
               <span style={{color: '#852828'}}>{this.state.addedWord}</span>
               :''}
