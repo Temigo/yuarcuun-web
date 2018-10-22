@@ -4,17 +4,10 @@ import { Switch, Route } from 'react-router-dom';
 import './semantic/dist/semantic.min.css';
 import './style.css';
 
-import SearchPage from './SearchPage.js';
-import YupikDetails from './YupikDetails.js';
-import YupikModify from './YupikModify.js';
-import About from './About.js';
-import YupikModifyLayout from './YupikModifyLayout.js';
-import YupikEnding from './YupikEnding.js';
-import YupikModifyNoun from './YupikModifyNoun.js';
-import YupikModifyVerb from './YupikModifyVerb.js';
-import YupikEndingGroups from './YupikEndingGroups.js';
-import YupikPostbaseGroups from './YupikPostbaseGroups.js';
-import YupikPostbase from './YupikPostbase.js';
+import SearchPage from './components/SearchPage.js';
+import YupikDetails from './components/YupikDetails.js';
+import About from './components/About.js';
+import YupikModifyLayout from './components/yupikModify/YupikModifyLayout.js';
 
 export const API_URL = "https://yugtun-api.herokuapp.com";
 // export const API_URL = "http://localhost:5000";
