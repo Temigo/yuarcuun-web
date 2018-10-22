@@ -23,7 +23,7 @@ import YupikAllNounPostbases from './YupikAllNounPostbases.js';
 import YupikNounDescriptors from './YupikNounDescriptors.js';
 import YupikNounPhrase from './YupikNounPhrase.js';
 import YupikNounCombine from './YupikNounCombine.js';
-import { options1, options2, options3, postbases, nounPostbases } from './constants.js';
+import { postbases, nounPostbases } from './constants.js';
 import { interrogative, optative, dependent, verb2noun, postbaseButtons, enclitics } from './modifyVerbOptions.js';
 import { nounEndings, indicative_intransitive_endings,
   indicative_transitive_endings, interrogative_intransitive_endings,
@@ -33,10 +33,14 @@ import { nounEndings, indicative_intransitive_endings,
   connective_transitive_endings, connective_consonantEnd_intransitive_endings,
   connective_consonantEnd_transitive_endings, connective_contemporative_intransitive_endings,
   connective_contemporative_transitive_endings, connective_conditional_intransitive_endings,
-  connective_conditional_transitive_endings,  absolutive_endings, localis_endings, relative_endings, ablative_endings, terminalis_endings, vialis_endings, equalis_endings } from './constants_verbs.js';
+  connective_conditional_transitive_endings } from './constants_verbs.js';
 import Chip from './Chip.js';
 import { connect } from "react-redux";
 import { toggleAllPostbases } from './redux/actions';
+import { pronounEnding, addedWord, getsubjectis as getsubjectis_verb, processPostbases as processPostbases_verb, pushEnding as pushEnding_verb } from './ModifyWordVerb.js';
+import { processPostbases as processPostbases_noun, getsubjectis as getsubjectis_noun, isvowel, returnEnding } from './ModifyWordNoun.js';
+import { processUsage } from './processUsage.js';
+import { removeCombos } from './removeCombos.js';
 
 function getRandomArbitrary(min, max) {
     return Math.floor(Math.random() * (max - min) + min);
@@ -113,7 +117,6 @@ class YupikModifyLayout extends Component {
       displayPostbases: false,
     };
     this.getWord = this.getWord.bind(this);
-    this.processUsage=this.processUsage.bind(this);
     this.modifyWordVerb = this.modifyWordVerb.bind(this);
     this.modifyWordNoun = this.modifyWordNoun.bind(this);
     this.modifyWord = this.verb ? this.modifyWordVerb : this.modifyWordNoun;
@@ -142,6 +145,22 @@ class YupikModifyLayout extends Component {
     this.switchMode();
   }
 
+  switchMode() {
+    console.log('switchMode', this.props.advancedMode);
+    if (!this.props.advancedMode) {
+      this.props.history.push(this.verb ? `${this.props.match.url}/verb` : `${this.props.match.url}/noun`);
+    }
+    else {
+      this.props.history.push(this.verb ? `${this.props.match.url}/verb/all` : `${this.props.match.url}/noun/all`);
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.advancedMode !== this.props.advancedMode) {
+      this.switchMode();
+    }
+  }
+
   setDisplayPostbases(event, data) {
     event.preventDefault();
     this.setState({displayPostbases: !this.state.displayPostbases});
@@ -154,7 +173,7 @@ class YupikModifyLayout extends Component {
     } else if (this.state.properties.includes('not_momentary')) {
       this.state.alternateTense = 'recent past'
     }
-    let new_state = this.processUsage(this.state.usage);
+    let new_state = processUsage(this.state.usage);
     console.log('processed')
     this.state = {...this.state, ...new_state};
     if (this.state.objectExists) {
@@ -188,7 +207,6 @@ class YupikModifyLayout extends Component {
   }
 
   componentWillUpdate(newProps, newState) {
-    // console.log('newState', newState, this.state)
     if (this.verb) {
       if (newState.encliticExpression != this.state.encliticExpression || newState.value1 != this.state.value1 || newState.people != this.state.people || newState.person != this.state.person || newState.objectPerson != this.state.objectPerson || newState.objectPeople != this.state.objectPeople || newState.moodSpecific != this.state.moodSpecific || newState.nounEnding != this.state.nounEnding) {
         if (newState.mood != this.state.mood) {
@@ -300,70 +318,57 @@ class YupikModifyLayout extends Component {
         if (newState.nounEnding !== this.state.nounEnding) {
           if (newState.nounEnding !== '') {
             if (newState.nounEnding == 'and others - only applies to people or animals' || newState.nounEnding == 'and another - only applies to people or animals') {
-              this.state.value4 = 1
+              this.setState({ value4: 1 });
               newState.value4 = 1
             } else if (newState.nounEnding == 'just a little') {
-              this.state.value4 = 1
+              this.setState({ value4: 1, nounEnding: 'just a little' });
               newState.value4 = 1
-              this.state.nounEnding = 'just a little'
             } else if (newState.nounEnding == 'many of them') {
-              this.state.value4 = 3
+              this.setState({ value4: 3, nounEnding: 'many of them' });
               newState.value4 = 3
-              this.state.nounEnding = 'many of them'
             }
-            this.state.possessorPeople = 0
+            this.setState({ possessorPeople: 0, possessorPerson: 0});
             newState.possessorPeople = 0
-            this.state.possessorPerson = 0
             newState.possessorPerson = 0
           }
         }
         if (newState.possessorPeople != this.state.possessorPeople) {
           if (newState.possessorPeople != 0) {
             if (newState.verbEnding || newState.nounEnding != '') {
-              this.state.currentPostbases.shift()
+              this.setState({ currentPostbases: this.state.currentPostbases.shift()})
             }
+            this.setState({ verbEnding: false, nounEnding: '' });
             newState.verbEnding = false
-            this.state.verbEnding = false
-            this.state.nounEnding = ''
             newState.nounEnding = ''
           }
         }
         if (newState.verbEnding != this.state.verbEnding) {
           if (newState.verbEnding == true) {
-            this.state.possessorPeople = 0
+            this.setState({ possessorPeople: 0, possessorPerson: 0 });
             newState.possessorPeople = 0
-            this.state.possessorPerson = 0
             newState.possessorPerson = 0
           }
         }
         if (newState.verbEndingEnglish == "the place does not have" || newState.verbEndingEnglish == "the place has") {
-          this.state.people = 1
+          this.setState({ people: 1, person: 3 });
           newState.people = 1
-          this.state.person = 3
           newState.person = 3
         }
         if (newState.mood != this.state.mood) {
           if (newState.mood !== 'absolutive') {
             if (newState.nounEnding !== '' || newState.verbEnding == true) {
-              this.state.currentPostbases.shift()
-              this.state.nounEnding = ''
+              this.setState({ currentPostbases: this.state.currentPostbases.shift(), nounEnding: '', verbEnding: false });
               newState.nounEnding = ''
-              this.state.verbEnding = false
               newState.verbEnding = false
             }
           }
         }
-        // if (newState.nounEndingEnglish.includes("and another") || newState.nounEndingEnglish.includes("and others")) {
-        //   this.state.value4 = 1
-        //   newState.value4 = 1
-        // }
         this.modifyWord(newState.person, newState.people, newState.possessorPerson, newState.possessorPeople, newState.mood, newState.moodSpecific, newState.nounEnding, newState.verbEnding, newState.value4, this.state.currentWord, this.state.currentPostbases);
       }
     }
   }
 
   setPeople(people, event, data) {
-    //console.log(this.state.people == people);
     this.setState({ people: (this.state.people == people) ? 0 : people });
   }
 
@@ -372,7 +377,6 @@ class YupikModifyLayout extends Component {
   }
 
   setObjectPeople(objectPeople, event, data) {
-    //console.log(this.state.objectPeople == objectPeople);
     this.setState({ objectPeople: (this.state.objectPeople == objectPeople) ? 0 : objectPeople });
   }
 
@@ -381,248 +385,36 @@ class YupikModifyLayout extends Component {
     this.setState({ objectPerson: (this.state.objectPerson == objectPerson) ? 0 : objectPerson });
   }
 
-  processUsage(usage, event, data) {
-    let new_state = {};
-    let res = usage;
-    var rx1 = /\[([^\]]+)]/; // regex to match [text]
-    var rx2 = /<([^\]]+)>/; // regex to match (text)
-    let subject = usage.match(rx1);
-    let object = usage.match(rx2);
-    if (subject !== null) {
-      res = res.split(rx1);
-      new_state = {...new_state, subjectExists: true};
-      if (res[1] == 'he') {
-        new_state = {
-          ...new_state,
-          value1: "31-1(1)",
-          people: 1,
-          person: 3,
-          text1: res[0]
-        }
-      } else if (res[1] == 'she') {
-        new_state = {
-          ...new_state,
-          value1: "31-2(1)",
-          people: 1,
-          person: 3,
-          text1: res[0]
-        }
-      } else if (res[1] == 'it') {
-        new_state = {
-          ...new_state,
-          value1: "31-3(1)",
-          people: 1,
-          person: 3,
-          text1: res[0]
-        }
-      } else if (res[1] == 'his') {
-        new_state = {
-          ...new_state,
-          value1: "31-1(3)",
-          people: 1,
-          person: 3,
-          text1: res[0],
-          possessiveSubject: true
-        }
-      } else if (res[1] == 'they') {
-        new_state = {
-          ...new_state,
-          value1: "33(1)",
-          people: 3,
-          person: 3,
-          text1: res[0]
-        }
-      } else if (res[1] == 'they2') {
-        new_state = {
-          ...new_state,
-          value1: "32(1)",
-          people: 2,
-          person: 3,
-          text1: res[0]
-        }
-      } else if (res[1] == 'he or it') {
-        new_state = {
-          ...new_state,
-          value1: "31-3(1)",
-          people: 1,
-          person: 3,
-          text1: res[0]
-        }
-      }
-      res = res[2];
-    }
-    if (object !== null) {
-      res = res.split(rx2);
-      // console.log(res)
-      new_state = {...new_state, objectExists: true};
-      if (res[1] === 'it') {
-        new_state = {
-          ...new_state,
-          value2_text: "it",
-          value2: "31-3(2)",
-          objectPeople: 1,
-          objectPerson: 3,
-          text2: res[0],
-          originalText2: res[0],
-          text3: res[2],
-          originalText3: res[2],
-        }
-      } else if (res[1] === 'her or it') {
-        new_state = {
-          ...new_state,
-          value2_text: "it",
-          value2: "31-3(2)",
-          objectPeople: 1,
-          objectPerson: 3,
-          text2: res[0],
-          originalText2: res[0],
-          text3: res[2],
-          originalText3: res[2],
-        }
-      } else if (res[1] === 'him or it') {
-        new_state = {
-          ...new_state,
-          value2_text: "it",
-          value2: "31-3(2)",
-          objectPeople: 1,
-          objectPerson: 3,
-          text2: res[0],
-          originalText2: res[0],
-          text3: res[2],
-          originalText3: res[2],
-        }
-      } else if (res[1] === 'them') {
-        new_state = {
-          ...new_state,
-          value2_text: "them all (3+)",
-          value2: "33(2)",
-          objectPeople: 3,
-          objectPerson: 3,
-          text2: res[0],
-          originalText2: res[0],
-          text3: res[2],
-          originalText3: res[2],
-        }
-      } else if (res[1] === 'him') {
-        new_state = {
-          ...new_state,
-          value2_text: "him",
-          value2: "31-1(2)",
-          objectPeople: 1,
-          objectPerson: 3,
-          possessiveObject: false,
-          text2: res[0],
-          originalText2: res[0],
-          text3: res[2],
-          originalText3: res[2],
-        }
-      } else if (res[1] === 'her*') {
-        new_state = {
-          ...new_state,
-          value2_text: "her",
-          value2: "31-2(2)",
-          objectPeople: 1,
-          objectPerson: 3,
-          possessiveObject: false,
-          text2: res[0],
-          originalText2: res[0],
-          text3: res[2],
-          originalText3: res[2],
-        }
-      } else if (res[1] === 'them') {
-        new_state = {
-          ...new_state,
-          value2_text: "them all (3+)",
-          value2: '33(2)',
-          objectPeople: 3,
-          objectPerson: 3,
-          possessiveObject: false,
-          text2: res[0],
-          originalText2: res[0],
-          text3: res[2],
-          originalText3: res[2],
-        }
-      } else if (res[1] === 'its') { //possessive
-        new_state = {
-          ...new_state,
-          value2_text: "its",
-          value2: "31-3(3)",
-          objectPeople: 1,
-          objectPerson: 3,
-          possessiveObject: true,
-          text2: res[1],
-          originalText2: res[0],
-          text3: res[2],
-          originalText3: res[2],
-        }
-      } else if (res[1] === 'his') { //possessive
-        new_state = {
-          ...new_state,
-          value2_text: "his",
-          value2: "31-1(3)",
-          objectPeople: 1,
-          objectPerson: 3,
-          possessiveObject: true,
-          text2: res[1],
-          originalText2: res[0],
-          text3: res[2],
-          originalText3: res[2],
-        }
-      } else if (res[1] === 'her') { //possessive
-        new_state = {
-          ...new_state,
-          value2_text: "her",
-          value2: "31-2(3)",
-          objectPeople: 1,
-          objectPerson: 3,
-          possessiveObject: true,
-          text2: res[1],
-          originalText2: res[0],
-          text3: res[2],
-          originalText3: res[2],
-        }
-      }
-    }
-    else {
-      new_state = {
-        ...new_state,
-        text2: res,
-        originalText2: res
-      }
-    }
-    // var res = usage.split("|");
-    // // need an error case in case it's not all available here
-    // this.state.text1 =res[0].trim()
-    // this.state.text2 =res[1].trim()
-    // this.state.text3 =res[2].trim()
-    // console.log('processUsage', new_state)
-    return new_state;
-  }
-
   setValue1(e, data) {
-    // console.log('setValue1', e)
-    // console.log('setValue1', data)
-    this.setState({ value1: data.value});
-    this.setState({ person: parseInt(data.value[0])});
-    this.setState({ people: parseInt(data.value[1])});
+    this.setState({
+      value1: data.value,
+      person: parseInt(data.value[0]),
+      people: parseInt(data.value[1])
+    });
   }
 
   setValue2(e, data) {
-    this.setState({ value2: data.value});
-    this.setState({ objectPerson: parseInt(data.value[0])});
-    this.setState({ objectPeople: parseInt(data.value[1])});
+    this.setState({
+      value2: data.value,
+      objectPerson: parseInt(data.value[0]),
+      objectPeople: parseInt(data.value[1])
+    });
   }
 
   setValue3(e, data) {
     if (this.verb) {
-      this.setState({ value3: data.value});
-      this.setState({ objectPerson: parseInt(data.value[0])});
-      this.setState({ objectPeople: parseInt(data.value[1])});
+      this.setState({
+        value3: data.value,
+        objectPerson: parseInt(data.value[0]),
+        objectPeople: parseInt(data.value[1])
+      });
     }
     else {
-      this.setState({ value3: data.value});
-      this.setState({ possessorPerson: parseInt(data.value[0])});
-      this.setState({ possessorPeople: parseInt(data.value[1])});
+      this.setState({
+        value3: data.value,
+        possessorPerson: parseInt(data.value[0]),
+        possessorPeople: parseInt(data.value[1])
+      });
     }
   }
 
@@ -639,10 +431,8 @@ class YupikModifyLayout extends Component {
       addedending = this.state.enclitic
     }
     let audio = new Audio(API_URL + "/tts/" + addedbeginning + this.state.modifiedWord.replace('*','') + addedending);
-    console.log(audio);
     this.setState({loadingTTS: true});
     audio.play().then((e) => {
-      console.log('TTS done', e);
       this.setState({loadingTTS: false})
     }, (error) => {
       this.setState({loadingTTS: false, canTTS: false});
@@ -699,21 +489,18 @@ class YupikModifyLayout extends Component {
             this.setState({allowable_next_ids: nounPostbases[this.state.currentPostbases[1]].allowable_next_ids})
           }
         } else {
-            // console.log(allremaining)
             this.state.currentPostbases.forEach((i, index) => {
               if (i < 7) {
                 allremaining.splice(allremaining.indexOf(this.state.currentPostbases[index]),1)
               }
             })
-            // allremaining.splice(allremaining.indexOf(this.state.currentPostbases[2]),1)
-            // allremaining.splice(allremaining.indexOf(this.state.currentPostbases[1]),1)
-            // console.log(allremaining)
             this.setState({allowable_next_ids: allremaining})
         }
       }
       this.modifyWord(this.state.person, this.state.people, this.state.objectPerson, this.state.objectPeople, this.state.mood, this.state.moodSpecific, this.state.nounEnding, this.state.value1, this.state.currentWord, this.state.currentPostbases);
     }
   }
+
   setPostbase(postbase_id, event, data) {
     event.preventDefault();
     let index = this.state.currentPostbases.indexOf(postbase_id);
@@ -739,7 +526,6 @@ class YupikModifyLayout extends Component {
       } else {
         allowable.splice(allowable.indexOf(0),1)
       }
-      // console.log(currentPostbases)
       if (!this.state.allPostbasesMode) {
         if (currentPostbases.length === 0) {
           //pass
@@ -860,7 +646,6 @@ class YupikModifyLayout extends Component {
   }
 }
 
-
   setMoodVerb(newMood, moodSpecific, event, data) {
     this.setState({ mood: (this.state.moodSpecific == moodSpecific) ? 'indicative' : newMood });
     this.setState({ moodSpecific: (this.state.moodSpecific == moodSpecific) ? 'indicative' : moodSpecific })
@@ -900,151 +685,27 @@ class YupikModifyLayout extends Component {
   }
 
   modifyWordVerb(person, people, objectPerson, objectPeople, mood, moodSpecific, nounEnding, value1, word, currentPostbases) {
-    // currentPostbases = currentPostbases.sort((p1, p2) => {
-    //   return (postbases[p1].priority > postbases[p2].priority) ? 1 : ((postbases[p1].priority < postbases[p2].priority) ? -1 : 0);
-    // });
-
-// ending: 'the one who is','device for', 'one that customarily/capably is', 'how to/way of', 'one who is good at', 'act or state of',
-
-// 'interrogative',
-//  'who','when (in past)', 'when (in future)','at where','from where','toward where','why',
-// 'optative',
-// 'do!','do (in the future)!', 'You, do not!', 'You, stop!',
-
-
-
-//     group: 'connective_precessive','connective_consequential','connective_contingent','connective_concessive','connective_conditional','connective_first_contemporative','connective_second_contemporative',
-//     mood: 'before','because','whenever', 'although','while','when (past)','when (future)',
-
-//   {
-//     group: 'subordinative',
-//     mood: 'by or being that',
-
     // Restore TTS option if it was disabled for previous word
     if (!this.state.canTTS) {
       this.setState({canTTS: true});
     }
+    let { originalText2: newText2, originalText3: newText3, currentEnglish: newEnglish, tense } = this.state;
     let newText1 = ''
-    let newText2 = this.state.originalText2
     let newText1after = ''
     let newText2after = ''
     let newText3tense = ''
-    let newText3 = this.state.originalText3
-    let newEnglish =  this.state.currentEnglish;
     let englishEnding = []
-
-    let moodSpecificLoop = ['who','when (in past)', 'when (in future)','at where','from where','toward where','why', 'do!','do (in the future)!', 'You, do not!', 'You, stop!','before','because','whenever', 'although','if','when (past)','when (future)','by or being that','','','','','','']
-    let moodLoop = ['interrogative','interrogative','interrogative','interrogative','interrogative','interrogative','interrogative','optative','optative','optative','optative','connective_precessive','connective_consequential','connective_contingent','connective_concessive','connective_conditional','connective_first_contemporative','connective_second_contemporative','subordinative','','','','','','']
-    let nounEndingLoop = ['','','','','','','','','','','','','','','','','','','','the one who is','device for', 'one that customarily/capably is', 'how to/way of', 'one who is good at', 'act or state of']
-    // console.log(moodSpecificLoop)
-    // console.log(moodLoop)
-
-//     for (let i = 0; i < moodSpecificLoop.length; i++) {
-//       for (let j = 0; j < 30; j++) {
-
-//   // if (i != 8) {
-//   //   newText1 = ''
-//   // } else {
-
-
-//         people = 1
-//         person = 3
-//         mood = moodLoop[i]
-//         moodSpecific = moodSpecificLoop[i]
-//         nounEnding = nounEndingLoop[i]
-//         currentPostbases = [postbases[j].id]
-//         // 0 2 6 8 9 10 12 14 16 18 20 21 26 27 28 29currentPostbases.forEach((s,i) => {
-//         // let o = 6
-//         // if (j != o) {
-//         //   currentPostbases.push(postbases[o].id)
-//         // }
-
-//         // console.log(currentPostbases)
-
-//     if (currentPostbases.length == 1) {
-// console.log('--------------------------------------------'+j+' '+postbases[currentPostbases[0]].description)
-//     } else {
-// console.log('--------------------------------------------'+j+postbases[currentPostbases[0]].description+' '+postbases[currentPostbases[1]].description)
-//     }
-
     currentPostbases = currentPostbases.reverse()
-    newEnglish =  this.state.currentEnglish;
-    newText1 = ''
-    newText2 = this.state.originalText2
-    newText3 = this.state.originalText3
     let new_str = ''
     let new_adj = ''
     let be_adj = ''
     let being_adj = ''
-    let tense = this.state.tense
-    let subjectis = ''
     let nois = false
     let does = ''
     if (this.state.alternateTense == 'present' && person == 1) {
       tense = 'present'
     }
-    let getsubjectis = (tenseN, peopleN, personN, doesN) => {
-      if (doesN=='does') {
-        if (peopleN == 1 && personN == 3) {
-          if (tenseN == 'past') {
-            subjectis = 'did'
-          } else if (tenseN == 'future') {
-            subjectis = 'will'
-          } else {
-            subjectis = 'does'
-          }
-        } else {
-          subjectis = 'do'
-        }
-      } else if (doesN=='had' && tenseN !='future') {
-        if (peopleN == 1 && personN == 3) {
-          subjectis = 'had'
-        } else {
-          subjectis = 'have'
-        }
-      } else if (doesN=='has') {
-        if (tenseN == 'future') {
-          subjectis = 'have'
-        } else if (tenseN == 'past') {
-          subjectis = 'had'
-        } else {
-          subjectis = 'has'
-        }
-      } else if (doesN == 'be') {
-        if (tenseN == 'future' && currentPostbases[0] !== 23) {
-          subjectis = ' be'
-        } else {
-          subjectis = ''
-        }
-      } else if (doesN == 'prewho') {
-        if (peopleN == 1 && person == 1) {
-          subjectis = 'am'
-        } else if (peopleN == 1 && personN == 3) {
-          subjectis = 'is'
-        } else {
-          subjectis = 'are'
-        }
-      } else if (tenseN == 'present') {
-        if (peopleN == 1 && personN == 1) {
-          subjectis = 'am'
-        } else if (peopleN == 1 && personN == 3) {
-          subjectis = 'is'
-        } else {
-          subjectis = 'are'
-        }
-      } else if (tenseN == 'past') {
-        if (peopleN == 1 && personN == 1) {
-          subjectis = 'was'
-        } else if (peopleN == 1 && personN == 3) {
-          subjectis = 'was'
-        } else {
-          subjectis = 'were'
-        }
-      } else if (tenseN == 'future') {
-        subjectis = 'will'
-      }
-      return subjectis
-  }
+
     if (newText2.includes('is ')) {
       new_str = newText2.split("is ");
       console.log(new_str)
@@ -1061,7 +722,7 @@ class YupikModifyLayout extends Component {
       new_adj = newText2.trim()
       nois = true
     }
-    // console.log(new_adj)
+
     be_adj = 'be '+new_adj
     being_adj = 'being '+new_adj
     let addis = false
@@ -1126,20 +787,8 @@ class YupikModifyLayout extends Component {
     // console.log(currentPostbases)
     currentPostbases = currentPostbases.reverse()
     // console.log(currentPostbases[0])
-    let pushEnding = (thisMood, people, person, subjectType, index) => {
-      subjectType = ''
-      // console.log(currentPostbases.length)
-      // console.log(index+1)
-      if (index == 0) {///FIX THIS!!!
-        if (thisMood=='i') {
-          englishEnding.push(subjectType + infinitive_new_adj)
-        } else if (thisMood =='g') {
-          englishEnding.push(subjectType + gerund_new_adj)
-        } else {
-          englishEnding.push(subjectType + new_adj)
-        }
-      }
-    }
+
+    let pushEnding = pushEnding_verb.bind(null, infinitive_new_adj, gerund_new_adj, new_adj, englishEnding);
     if (currentPostbases.length == 0 && mood == 'indicative' && !this.state.properties.includes('not_momentary')) {
        englishEnding.push(newText2)
        newText2 = ''
@@ -1172,9 +821,9 @@ class YupikModifyLayout extends Component {
           }
           if (currentPostbases.length == 1) {
             if (place.concat(A,B,C).includes(firstP)) {
-              pushEnding('i',people,person,'',0)
+              pushEnding('i', 0)
             } else {
-              pushEnding('g',people,person,'',0)
+              pushEnding('g', 0)
             }
           }
         }
@@ -1200,9 +849,9 @@ class YupikModifyLayout extends Component {
           }
           if (currentPostbases.length == 1) {
             if (place.concat(A,B,C).includes(firstP)) {
-              pushEnding('i',people,person,'',0)
+              pushEnding('i', 0)
             } else {
-              pushEnding('g',people,person,'',0)
+              pushEnding('g', 0)
             }
           }
         }
@@ -1227,9 +876,9 @@ class YupikModifyLayout extends Component {
           }
           if (currentPostbases.length == 1) {
             if (place.concat(A,B,C).includes(firstP)) {
-              pushEnding('i',people,person,'',0)
+              pushEnding('i', 0)
             } else {
-              pushEnding('g',people,person,'',0)
+              pushEnding('g', 0)
             }
           }
         }
@@ -1244,96 +893,96 @@ class YupikModifyLayout extends Component {
                   if (endingMood == 'i') {
                     if (place.concat(A,B,C).includes(s) && A.includes(nextIndexPostbase)) {
                       postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierInfinitive(''))
-                      pushEnding('i',people,person,'',i)
+                      pushEnding('i', i)
                     } else if (place.concat(A,B,C).includes(s) && place.concat(F,G).includes(nextIndexPostbase)) {
                       postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierInfinitive(''))
-                      pushEnding('g',people,person,'',i)
+                      pushEnding('g', i)
                     } else if (place.concat(D,E,F).includes(s) && A.includes(nextIndexPostbase)) {
                       if (endingMood == 'g') {
                         postbasesEnglish.push('being'+postbases[nextIndexPostbase].englishModifierInfinitive(''))
                       } else {
                         postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierInfinitive(''))
                       }
-                      pushEnding('i',people,person,'',i)
+                      pushEnding('i', i)
                     } else if (place.concat(D,E,F).includes(s) && place.concat(F,G).includes(nextIndexPostbase)) {
                       if (endingMood == 'g') {
                         postbasesEnglish.push('being'+postbases[nextIndexPostbase].englishModifierInfinitive(''))
                       } else {
                         postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierInfinitive(''))
                       }
-                      pushEnding('g',people,person,'',i)
+                      pushEnding('g', i)
                     } else {
                       postbasesEnglish.push(postbases[nextIndexPostbase].englishModifierInfinitive(''))
                       if (nextIndexPostbase == 26 || nextIndexPostbase == 28) {
-                        pushEnding('g',people,person,'',i)
+                        pushEnding('g', i)
                       } else if (place.concat(A,B,C).includes(nextIndexPostbase)) {
                         pushEnding('i',people,person,'',i)
                       } else {
-                        pushEnding(endingMood,people,person,'',i)
+                        pushEnding(endingMood, i)
                       }
                     }
                   } else { //gerund
                     if (place.concat(A,B,C).includes(s) && A.includes(nextIndexPostbase)) {
                       postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierGerund(''))
-                      pushEnding('i',people,person,'',i)
+                      pushEnding('i', i)
                     } else if (place.concat(A,B,C).includes(s) && place.concat(F,G).includes(nextIndexPostbase)) {
                       // console.log('called?')
                       postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierGerund(''))
-                      pushEnding('g',people,person,'',i)
+                      pushEnding('g', i)
                     } else if (place.concat(D,E,F).includes(s) &&  A.includes(nextIndexPostbase)) {
                       if (endingMood == 'g') {
                         postbasesEnglish.push('being'+postbases[nextIndexPostbase].englishModifierGerund(''))
                       } else {
                         postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierGerund(''))
                       }
-                      pushEnding('i',people,person,'',i)
+                      pushEnding('i', i)
                     } else if (place.concat(D,E,F).includes(s) && place.concat(F,G).includes(nextIndexPostbase)) {
                       if (endingMood == 'g') {
                         postbasesEnglish.push('being'+postbases[nextIndexPostbase].englishModifierGerund(''))
                       } else {
                         postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifierGerund(''))
                       }
-                      pushEnding('g',people,person,'',i)
+                      pushEnding('g', i)
                     } else {
                       postbasesEnglish.push(postbases[nextIndexPostbase].englishModifierGerund(''))
                       if (nextIndexPostbase == 26 || nextIndexPostbase == 28) {
-                        pushEnding('g',people,person,'',i)
+                        pushEnding('g', i)
                       } else if (place.concat(A,B,C).includes(nextIndexPostbase)) {
-                        pushEnding('i',people,person,'',i)
+                        pushEnding('i', i)
                       } else {
-                        pushEnding(endingMood,people,person,'',i)
+                        pushEnding(endingMood, i)
                       }
                     }
                   }
                 } else {
                   if (place.concat(A,B,C).includes(s) && A.includes(nextIndexPostbase)) {
                     postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifier(''))
-                    pushEnding('i',people,person,'',i)
+                    pushEnding('i', i)
                   } else if (place.concat(A,B,C).includes(s) && place.concat(F,G).includes(nextIndexPostbase)) {
                     postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifier(''))
-                    pushEnding('g',people,person,'',i)
+                    pushEnding('g', i)
                   } else if (place.concat(D,E,F).includes(s) && A.includes(nextIndexPostbase)) {
                     if (endingMood == 'g') {
                       postbasesEnglish.push('being'+postbases[nextIndexPostbase].englishModifier(''))
                     } else {
                       postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifier(''))
                     }
-                    pushEnding('i',people,person,'',i)
+                    pushEnding('i', i)
                   } else if (place.concat(D,E,F).includes(s) && place.concat(F,G).includes(nextIndexPostbase)) {
                     if (endingMood == 'g') {
                       postbasesEnglish.push('being'+postbases[nextIndexPostbase].englishModifier(''))
                     } else {
                       postbasesEnglish.push('be'+postbases[nextIndexPostbase].englishModifier(''))
                     }
-                    pushEnding('g',people,person,'',i)
+                    pushEnding('g', i)
                   } else {
                     postbasesEnglish.push(postbases[nextIndexPostbase].englishModifier(''))
                     if (nextIndexPostbase == 26 || nextIndexPostbase == 28) {
-                      pushEnding('g',people,person,'',i)
+                      pushEnding('g', i)
                     } else if (place.concat(A,B,C).includes(nextIndexPostbase)) {
-                      pushEnding('i',people,person,'',i)
+                      pushEnding('i', i)
                     } else {
-                      pushEnding(endingMood,people,person,'',i)
+                      pushEnding(endingMood, i)
                     }
                   }
                 }
@@ -1349,6 +998,7 @@ class YupikModifyLayout extends Component {
       if (this.state.properties.includes('adjectival')) {
         adjectivalbeing = ' being'
       }
+      let getsubjectis = getsubjectis_verb.bind(null, currentPostbases, person);
       if (moodSpecific == 'You, stop!') {
         if (person == '3' || person == '1') {
           newText1 = 'let'
@@ -1397,7 +1047,7 @@ class YupikModifyLayout extends Component {
         newText1 = 'when'
         newText1after = ''
         newText2 = ''
-        newText2after = 'will '+getsubjectis('future',people,person,'be')
+        newText2after = 'will '+getsubjectis('future',people,person,'be',)
       } else if (moodSpecific == 'when (past)...') {
         newText1 = 'when '
         newText1after = ''
@@ -1421,7 +1071,6 @@ class YupikModifyLayout extends Component {
         } else if (moodSpecific == 'when (in future)') {
           tense = 'future'
         }
-        // console.log(moodSpecific)
         newText1 = interrogative.find((p)=> {return p.mood==moodSpecific}).text
         newText1after = getsubjectis(tense,people,person,does)
         newText2 = ''
@@ -1445,44 +1094,13 @@ class YupikModifyLayout extends Component {
         newText2after = getsubjectis(tense,people,person,does)+getsubjectis(tense,people,person,'be')
       }
       currentPostbases = currentPostbases.reverse()
-      // console.log(newText1+newText2+postbasesEnglish.join(' ')+' '+englishEnding.join(' ')+newText3)
     }
-
-
-
 
     let postbasesList = [];
     let base = word;
 
-
-    let processPostbases = (currentPostbases, base, postbases) => {
-      postbasesList = currentPostbases.map((p,i) => {
-        if (postbases[p].conditional_rule == 'attaching_to_te') {
-          if (currentPostbases.length == 1 || currentPostbases.length == 0) {
-            base = word
-          } else {
-            if (i != 0) {
-              base = postbases[currentPostbases[i-1]].expression
-            } else {
-              base = word
-            }
-          }
-          if (base.slice(base.length-3,base.length-1)=='te') {
-            return postbases[p].expression_conditional
-          } else {
-            return postbases[p].expression
-          }
-        } else {
-          return postbases[p].expression
-        };
-      })
-      return postbasesList
-     };
-
-
-
+    postbasesList = processPostbases_verb(currentPostbases, base, postbases, word)
     if (nounEnding != '') {
-      postbasesList = processPostbases(currentPostbases, base, postbases)
       if (nounEnding == 'device for') {
         if (currentPostbases.length == 0) {
           if (base[base.length-2]=='a' || base[base.length-2]=='e' || base[base.length-2]=='i' || base[base.length-2]=='u') {
@@ -1505,28 +1123,21 @@ class YupikModifyLayout extends Component {
     } else {
     if (this.state.objectExists) {
       if (mood == 'indicative') {
-        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat([indicative_transitive_endings[person][people][objectPerson][objectPeople]]);
       } else if (mood == 'interrogative') {
-        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat([interrogative_transitive_endings[person][people][objectPerson][objectPeople]]);
       } else if (mood == 'subordinative') {
-        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat([subordinative_transitive_endings[person][people][objectPerson][objectPeople]]);
       } else if (mood == 'connective_precessive') {
-        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@~+(t)vaileg\\'])
         postbasesList = postbasesList.concat([connective_consonantEnd_transitive_endings[person][people][objectPerson][objectPeople]]);
       } else if (mood == 'connective_consequential') {
-        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@~:(6)a\\'])
         postbasesList = postbasesList.concat([connective_transitive_endings[person][people][objectPerson][objectPeople]]);
       } else if (mood == 'connective_contingent') {
-        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['+\'(g)aqa\\'])
         postbasesList = postbasesList.concat([connective_transitive_endings[person][people][objectPerson][objectPeople]]);
       } else if (mood == 'connective_concessive') {
-        postbasesList = processPostbases(currentPostbases, base, postbases)
         if (person == 2 || person == 1) {
           postbasesList = postbasesList.concat(['@-6rar\\'])
         } else {
@@ -1534,30 +1145,23 @@ class YupikModifyLayout extends Component {
         }
         postbasesList = postbasesList.concat([connective_consonantEnd_transitive_endings[person][people][objectPerson][objectPeople]]);
       } else if (mood == 'connective_conditional') {
-        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@~-ku\\'])
         postbasesList = postbasesList.concat([connective_conditional_transitive_endings[person][people][objectPerson][objectPeople]]);
       } else if (mood == 'connective_first_contemporative') {
-        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['-ller\\'])
         postbasesList = postbasesList.concat([connective_contemporative_transitive_endings[person][people][objectPerson][objectPeople]]);
       } else if (mood == 'connective_second_contemporative') {
-        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@:(6)inaner\\'])
         postbasesList = postbasesList.concat([connective_contemporative_transitive_endings[person][people][objectPerson][objectPeople]]);
       } else if (moodSpecific == 'do!') {
-        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat([optative_transitive_endings[person][people][objectPerson][objectPeople]]);
       } else if (moodSpecific == 'do (in the future)!') {
-        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@~-ki\\'])
         postbasesList = postbasesList.concat([optative_transitive_endings[person][people][objectPerson][objectPeople]]);
       } else if (moodSpecific == 'You, stop!') {
-        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@~+(t)viiqna\\'])
         postbasesList = postbasesList.concat([optative_transitive_endings[person][people][objectPerson][objectPeople]]);
       } else if (moodSpecific == 'You, do not!') {
-        postbasesList = processPostbases(currentPostbases, base, postbases)
         if (person == 2) {
           postbasesList = postbasesList.concat(['@~+yaquna\\'])
         } else {
@@ -1567,29 +1171,22 @@ class YupikModifyLayout extends Component {
       }
     } else {
       if (mood == 'indicative') {
-        postbasesList = processPostbases(currentPostbases, base, postbases)
         // console.log(indicative_intransitive_endings, person, people)
         postbasesList = postbasesList.concat([indicative_intransitive_endings[person][people]]);
     } else if (mood == 'interrogative') {
-        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat([interrogative_intransitive_endings[person][people]]);
     } else if (mood == 'subordinative') {
-        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat([subordinative_intransitive_endings[person][people]]);
       } else if (mood == 'connective_precessive') {
-        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@~+(t)vaileg\\'])
         postbasesList = postbasesList.concat([connective_consonantEnd_intransitive_endings[person][people]]);
       } else if (mood == 'connective_consequential') {
-        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@~:(6)a\\'])
         postbasesList = postbasesList.concat([connective_intransitive_endings[person][people]]);
       } else if (mood == 'connective_contingent') {
-        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['+\'(g)aqa\\'])
         postbasesList = postbasesList.concat([connective_intransitive_endings[person][people]]);
       } else if (mood == 'connective_concessive') {
-        postbasesList = processPostbases(currentPostbases, base, postbases)
         if (person == 2 || (person == 1 && people != 1)) {
           postbasesList = postbasesList.concat(['@-6rar\\'])
         } else {
@@ -1597,30 +1194,23 @@ class YupikModifyLayout extends Component {
         }
         postbasesList = postbasesList.concat([connective_consonantEnd_intransitive_endings[person][people]]);
       } else if (mood == 'connective_conditional') {
-        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@~-ku\\'])
         postbasesList = postbasesList.concat([connective_conditional_intransitive_endings[person][people]]);
       } else if (mood == 'connective_first_contemporative') {
-        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['-ller\\'])
         postbasesList = postbasesList.concat([connective_contemporative_intransitive_endings[person][people]]);
       } else if (mood == 'connective_second_contemporative') {
-        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@:(6)inaner\\'])
         postbasesList = postbasesList.concat([connective_contemporative_intransitive_endings[person][people]]);
       } else if (moodSpecific == 'do!') {
-        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat([optative_intransitive_endings[person][people]]);
       } else if (moodSpecific == 'do (in the future)!') {
-        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@~-ki\\'])
         postbasesList = postbasesList.concat([optative_intransitive_endings[person][people]]);
       } else if (moodSpecific == 'You, stop!') {
-        postbasesList = processPostbases(currentPostbases, base, postbases)
         postbasesList = postbasesList.concat(['@~+(t)viiqna\\'])
         postbasesList = postbasesList.concat([optative_intransitive_endings[person][people]]);
       } else if (moodSpecific == 'You, do not!') {
-        postbasesList = processPostbases(currentPostbases, base, postbases)
         if (person == 2) {
           postbasesList = postbasesList.concat(['@~+yaquna\\'])
         } else {
@@ -1631,644 +1221,248 @@ class YupikModifyLayout extends Component {
     }
   }
 
-    //post process  '+(t)vtek', => '+(t)vetek' if preceding postbase ends in consonant
+  //post process  '+(t)vtek', => '+(t)vetek' if preceding postbase ends in consonant
+  if (moodSpecific == 'do (in the future)!' && this.state.objectExists == false && person == 2 && people == 1) {
+    postbasesList[postbasesList.length-1] = '+na'
+  }
+  if (moodSpecific == 'do (in the future)!' && postbasesList[postbasesList.length-1] == '@+nga') {
+    postbasesList[postbasesList.length-1] = '@+a'
+  }
+  if (moodSpecific == 'You, do not!' && this.state.objectExists == false && person == 2 && people == 1) {
+    postbasesList[postbasesList.length-1] = '@+k'
+  } else if (moodSpecific == 'You, stop!' && this.state.objectExists == false && person == 2 && people == 1) {
+    postbasesList[postbasesList.length-1] = '@+k'
+  } else if (moodSpecific == 'You, do not!' && this.state.objectExists == true && person == 2 && people == 1 && objectPerson == 3 && objectPeople == 1 ) {
+    postbasesList[postbasesList.length-1] = '@+ku'
+  } else if (moodSpecific == 'You, stop!' && this.state.objectExists == true && person == 2 && people == 1 && objectPerson == 3 && objectPeople == 1 ) {
+    postbasesList[postbasesList.length-1] = '@+ku'
+  } else if (moodSpecific == 'You, do not!' && this.state.objectExists == true && person == 2 && people == 1 && objectPerson == 1 && objectPeople == 1 ) {
+    postbasesList[postbasesList.length-1] = '@+:(6)a'
+  }
+  if (postbasesList[postbasesList.length-1] == '+(t)vtek') {
+    let k = postbasesList[postbasesList.length-2]
+    k = k[k.length-2]
+    // console.log(k)
+    if (k != 'a' && k != 'e' && k != 'i' && k != 'u') {
+      postbasesList[postbasesList.length-1] = '+(t)vetek'
+    }
+  }
+  if (postbasesList[postbasesList.length-1] == '+(t)vci') {
+    let k = postbasesList[postbasesList.length-2]
+    k = k[k.length-2]
+    if (k != 'a' && k != 'e' && k != 'i' && k != 'u') {
+      postbasesList[postbasesList.length-1] = '+(t)veci'
+    }
+  }
+  let added_word = addedWord(moodSpecific, this.state.objectExists, objectPeople, people, )
+
+  this.setState({postbasesList: postbasesList})
+  let postbasesString = "";
+  postbasesList.forEach((e) => {
+    postbasesString = postbasesString + "&postbase=" + encodeURIComponent(e);
+  });
+  currentPostbases = currentPostbases.reverse()
 
 
-    if (moodSpecific == 'do (in the future)!' && this.state.objectExists == false && person == 2 && people == 1) {
-      postbasesList[postbasesList.length-1] = '+na'
-    }
-    if (moodSpecific == 'do (in the future)!' && postbasesList[postbasesList.length-1] == '@+nga') {
-      postbasesList[postbasesList.length-1] = '@+a'
-    }
-    if (moodSpecific == 'You, do not!' && this.state.objectExists == false && person == 2 && people == 1) {
-      postbasesList[postbasesList.length-1] = '@+k'
-    } else if (moodSpecific == 'You, stop!' && this.state.objectExists == false && person == 2 && people == 1) {
-      postbasesList[postbasesList.length-1] = '@+k'
-    } else if (moodSpecific == 'You, do not!' && this.state.objectExists == true && person == 2 && people == 1 && objectPerson == 3 && objectPeople == 1 ) {
-      postbasesList[postbasesList.length-1] = '@+ku'
-    } else if (moodSpecific == 'You, stop!' && this.state.objectExists == true && person == 2 && people == 1 && objectPerson == 3 && objectPeople == 1 ) {
-      postbasesList[postbasesList.length-1] = '@+ku'
-    } else if (moodSpecific == 'You, do not!' && this.state.objectExists == true && person == 2 && people == 1 && objectPerson == 1 && objectPeople == 1 ) {
-      postbasesList[postbasesList.length-1] = '@+:(6)a'
-      // console.log(postbasesList)
-      // const index = postbasesList.indexOf('@~+yaquna')
-      // postbasesList = postbasesList.splice(index,1)
-      // console.log(postbasesList)
-    }
-    if (postbasesList[postbasesList.length-1] == '+(t)vtek') {
-      let k = postbasesList[postbasesList.length-2]
-      k = k[k.length-2]
-      // console.log(k)
-      if (k != 'a' && k != 'e' && k != 'i' && k != 'u') {
-        postbasesList[postbasesList.length-1] = '+(t)vetek'
-      }
-    }
-    if (postbasesList[postbasesList.length-1] == '+(t)vci') {
-      let k = postbasesList[postbasesList.length-2]
-      k = k[k.length-2]
-      if (k != 'a' && k != 'e' && k != 'i' && k != 'u') {
-        postbasesList[postbasesList.length-1] = '+(t)veci'
-      }
-    }
-    let added_word = ''
-    if (moodSpecific=='who' && this.state.objectExists) {
-      if (objectPeople == 1) {
-        added_word='kina'
-      } else if (objectPeople == 2) {
-        added_word='kinkuk'
-      } else {
-        added_word='kinkut'
-      }
-    } else if (moodSpecific=='who') {
-      if (people == 1) {
-        added_word='kina'
-      } else if (people == 2) {
-        added_word='kinkuk'
-      } else {
-        added_word='kinkut'
-      }
-    } else if (moodSpecific=='when (in past)') {
-      added_word='qangvaq'
-      // newText2 = nlp(newText2).sentences().toPastTense().out()
-    } else if (moodSpecific=='when (in future)') {
-      added_word='qaku'
-      // newText2 = nlp(newText2).sentences().toFutureTense().out()
-    } else if (moodSpecific=='at where') {
-      added_word='nani'
-    } else if (moodSpecific=='from where') {
-      added_word='naken'
-    } else if (moodSpecific=='toward where') {
-      added_word='natmun'
-    } else if (moodSpecific=='why') {
-      added_word='ciin'
-    } else if (moodSpecific=='how') {
-      added_word='qaillun'
+  //process the ^himself^ ^his^ etc. cases
+  var betweencarrots = /\^([^\]]+)\^/; // regex to match (text)
+  let pronoun = newText3.match(betweencarrots);
+  let pronountype = ''
+  if (pronoun){
+    if (pronoun[0] === '^himself^' || pronoun[0] === '^herself^' || pronoun[0] === '^itself^') {
+      pronountype = 'self'
+    } else if (pronoun[0] === '^his^' || pronoun[0] === '^her^' || pronoun[0] === '^its^') {
+      pronountype = 'possessive'
     } else {
-      added_word=''
+      pronountype = 'asis'
     }
-    // } else if (moodSpecific=='when (past)') {
-    //   newText2 = nlp(newText2).sentences().toPastTense().out()
-    // } else if (moodSpecific=='when (future)') {
-    //   newText2 = nlp(newText2).sentences().toFutureTense().out()
-    // }
-    // console.log('new list', postbasesList);
+    if (pronountype == 'self' || pronountype == 'possessive') {
+      newText3=newText3.replace(pronoun[0],pronounEnding(value1, pronountype))
+    } else {
+      newText3=newText3.replace(pronoun[0],pronoun[1])
+    }
+  }
+
+  pronoun = englishEnding[0].match(betweencarrots);
+  if (pronoun){
+    if (pronoun[0] === '^himself^' || pronoun[0] === '^herself^' || pronoun[0] === '^itself^') {
+      pronountype = 'self'
+    } else if (pronoun[0] === '^his^' || pronoun[0] === '^her^' || pronoun[0] === '^its^') {
+      pronountype = 'possessive'
+    } else {
+      pronountype = 'asis'
+    }
+    if (pronountype == 'self' || pronountype == 'possessive') {
+      englishEnding[0]=englishEnding[0].replace(pronoun[0],pronounEnding(value1, pronountype))
+    } else {
+      englishEnding[0]=englishEnding[0].replace(pronoun[0],pronounEnding(value1, pronountype))
+    }
+  }
+
+  // it -> its
+  // it -> it
+  // it -> itself
+  // he -> himself
+  // he -> his
+  // she -> her
+  // she -> herself
+
+  axios
+    .get(API_URL + "/concat?root=" + word.replace('-', '') + postbasesString)
+    .then(response => {
+      // console.log(response.data);
+      this.setState({
+        addedWord: added_word,
+        modifiedWord: response.data.concat,
+        modifiedEnglish: newEnglish,
+        currentPostbases: currentPostbases,
+        text1after: newText1after,
+        text2after: newText2after,
+        text1: newText1,
+        text2: newText2,
+        text3: newText3,
+        text3tense: newText3tense,
+        postbasesEnglish: postbasesEnglish,
+        englishEnding: englishEnding,
+        colorIndexes: response.data.indexes
+      });
+    });
+  } // end of ModifyWordVerb
+
+  modifyWordNoun(person, people, possessorPerson, possessorPeople, mood, moodSpecific, nounEnding, verbEnding, value4, word, currentPostbases) {
+    if (value4 != 1 || possessorPeople != 0 || mood != 'absolutive' || verbEnding == true || nounEnding == true || currentPostbases.length > 0) {
+      word = this.state.usage
+    }
+    currentPostbases = currentPostbases.sort((p1, p2) => {
+      return (nounPostbases[p1].priority > nounPostbases[p2].priority) ? 1 : ((nounPostbases[p1].priority < nounPostbases[p2].priority) ? -1 : 0);
+    });
+
+    currentPostbases = currentPostbases.reverse()
+    let newEnglish =  this.state.entry.definition;
+    let newText1 = ''
+    let newText2 = this.state.entry.definition;
+    let newText3 = ''
+    let postbasesList = [];
+    let base = '';
+    if (currentPostbases.length == 1 || currentPostbases.length == 0) {
+      base = word
+    } else {
+      base = nounPostbases[currentPostbases[0]].expression_postbase
+    }
+
+    let processPostbases = processPostbases_noun;
+
+     let endingPostbase = []
+      if (possessorPerson > 0) {
+        postbasesList = processPostbases(currentPostbases, base, nounPostbases)
+        postbasesList = postbasesList.concat(returnEnding(postbasesList, value4,possessorPerson,possessorPeople,mood))
+      } else if (verbEnding) {
+        postbasesList = processPostbases(currentPostbases, base, nounPostbases)
+        postbasesList = postbasesList.concat(indicative_intransitive_endings[person][people]);
+      } else if (value4 != 1) {
+        postbasesList = processPostbases(currentPostbases, base, nounPostbases)
+        postbasesList = postbasesList.concat(returnEnding(postbasesList, value4,possessorPerson,possessorPeople,mood))
+      } else {
+        if (currentPostbases.length > 0 && verbEnding) {
+          postbasesList = processPostbases(currentPostbases, base, nounPostbases)
+          postbasesList = postbasesList.concat(indicative_intransitive_endings[person][people]);
+        } else if (currentPostbases.length > 0 && mood == 'absolutive') {
+          let lastPostbase = currentPostbases[currentPostbases.length-1]
+          let remainingPostbases = currentPostbases.slice(0,[currentPostbases.length-1])
+          postbasesList = processPostbases(remainingPostbases, base, nounPostbases)
+          postbasesList = postbasesList.concat(nounPostbases[lastPostbase].expression_end);  //make smarter
+        } else {
+          postbasesList = processPostbases(currentPostbases, base, nounPostbases)
+          postbasesList = postbasesList.concat(returnEnding(postbasesList, value4,possessorPerson,possessorPeople,mood))
+        }
+      }
+      let added_word = ''
+      let adder = ''
+      let adjectivesEnglish = []
+      let nounEndingEnglish = []
+      let verbEndingEnglish = []
+
+      let getsubjectis = getsubjectis_noun;
+      if (currentPostbases.length>0) {
+        currentPostbases.forEach((p) => {
+          adder = ''
+          if (p > -1 && p < 7) {
+            adjectivesEnglish.push(nounPostbases[p].englishModifier(adder));
+          } else if (p > 6 && p < 11) {
+            nounEndingEnglish.push(nounPostbases[p].englishModifier(adder));
+          } else if (p == 14 || p == 21 || p == 17) {
+            verbEndingEnglish.push(getsubjectis(true,people,person)+' '+nounPostbases[p].englishModifier(adder));
+          } else if (p == 18 || p == 19) {
+            verbEndingEnglish.push(nounPostbases[p].englishModifier(adder));
+            this.setState({value1: '31-3(1)', person: 3, people: 1});
+            person = 3;
+            people = 1;
+          } else {
+            verbEndingEnglish.push(getsubjectis(false,people,person)+' '+nounPostbases[p].englishModifier(adder));
+          }
+        })
+      }
+
     this.setState({postbasesList: postbasesList})
     let postbasesString = "";
     postbasesList.forEach((e) => {
       postbasesString = postbasesString + "&postbase=" + encodeURIComponent(e);
     });
-    // console.log(postbasesList)
-    // console.log(postbasesString)
     currentPostbases = currentPostbases.reverse()
-
-  let pronounEnding = (value1, pronountype) => {
-    if (pronountype == 'self') {
-      if (value1 === '31-1(1)') {
-        return 'himself'
-      } else if (value1 === '31-2(1)') {
-        return 'herself'
-      } else if (value1 === '31-3(1)') {
-        return 'itself'
-      } else if (value1 === '21(1)') {
-        return 'yourself'
-      } else if (value1 === '22(1)' || value1 === '23(1)') {
-        return 'yourselves'
-      } else if (value1 === "32(1)" || value1 === "33(1)") {
-        return 'themselves'
-      } else if (value1 === '11(1)') {
-        return 'myself'
-      } else if (value1 === '12(1)' || value1 === '13(1)') {
-        return 'ourselves'
-      }
-    } else if (pronountype == 'possessive') {
-      if (value1 === '31-1(1)') {
-        return 'his'
-      } else if (value1 === '31-2(1)') {
-        return 'her'
-      } else if (value1 === '31-3(1)') {
-        return 'its'
-      } else if (value1 === '21(1)') {
-        return 'your'
-      } else if (value1 === '22(1)' || value1 === '23(1)') {
-        return 'your'
-      } else if (value1 === "32(1)" || value1 === "33(1)") {
-        return 'their'
-      } else if (value1 === '11(1)') {
-        return 'my'
-      } else if (value1 === '12(1)' || value1 === '13(1)') {
-        return 'our'
-      }
-    } else if (pronountype == 'asis') {
-      if (value1 === '31-1(1)') {
-        return 'he'
-      } else if (value1 === '31-2(1)') {
-        return 'she'
-      } else if (value1 === '31-3(1)') {
-        return 'it'
-      } else if (value1 === '21(1)') {
-        return 'you'
-      } else if (value1 === '22(1)' || value1 === '23(1)') {
-        return 'you all'
-      } else if (value1 === "32(1)" || value1 === "33(1)") {
-        return 'they'
-      } else if (value1 === '11(1)') {
-        return 'I'
-      } else if (value1 === '12(1)' || value1 === '13(1)') {
-        return 'we'
-      }
-    }
-  }
-    //process the ^himself^ ^his^ etc. cases
-    var betweencarrots = /\^([^\]]+)\^/; // regex to match (text)
-    let pronoun = newText3.match(betweencarrots);
-    let pronountype = ''
-    if (pronoun){
-      if (pronoun[0] === '^himself^' || pronoun[0] === '^herself^' || pronoun[0] === '^itself^') {
-        pronountype = 'self'
-      } else if (pronoun[0] === '^his^' || pronoun[0] === '^her^' || pronoun[0] === '^its^') {
-        pronountype = 'possessive'
-      } else {
-        pronountype = 'asis'
-      }
-      if (pronountype == 'self' || pronountype == 'possessive') {
-        newText3=newText3.replace(pronoun[0],pronounEnding(value1, pronountype))
-      } else {
-        newText3=newText3.replace(pronoun[0],pronoun[1])
-      }
-    }
-
-    pronoun = englishEnding[0].match(betweencarrots);
-    if (pronoun){
-      if (pronoun[0] === '^himself^' || pronoun[0] === '^herself^' || pronoun[0] === '^itself^') {
-        pronountype = 'self'
-      } else if (pronoun[0] === '^his^' || pronoun[0] === '^her^' || pronoun[0] === '^its^') {
-        pronountype = 'possessive'
-      } else {
-        pronountype = 'asis'
-      }
-      if (pronountype == 'self' || pronountype == 'possessive') {
-        englishEnding[0]=englishEnding[0].replace(pronoun[0],pronounEnding(value1, pronountype))
-      } else {
-        englishEnding[0]=englishEnding[0].replace(pronoun[0],pronounEnding(value1, pronountype))
-      }
-    }
-
-// it -> its
-// it -> it
-// it -> itself
-// he -> himself
-// he -> his
-// she -> her
-// she -> herself
 
     axios
       .get(API_URL + "/concat?root=" + word.replace('-', '') + postbasesString)
       .then(response => {
-        // console.log(response.data);
         this.setState({
-          addedWord: added_word,
-          modifiedWord: response.data.concat,
+          modifiedWord: added_word + response.data.concat,
           modifiedEnglish: newEnglish,
           currentPostbases: currentPostbases,
-          text1after: newText1after,
-          text2after: newText2after,
           text1: newText1,
           text2: newText2,
           text3: newText3,
-          text3tense: newText3tense,
-          postbasesEnglish: postbasesEnglish,
-          englishEnding: englishEnding,
+          adjectivesEnglish: adjectivesEnglish,
+          nounEndingEnglish: nounEndingEnglish,
+          verbEndingEnglish: verbEndingEnglish,
           colorIndexes: response.data.indexes
         });
       });
-    }
-
-    modifyWordNoun(person, people, possessorPerson, possessorPeople, mood, moodSpecific, nounEnding, verbEnding, value4, word, currentPostbases) {
-      if (value4 != 1 || possessorPeople != 0 || mood != 'absolutive' || verbEnding == true || nounEnding == true || currentPostbases.length > 0) {
-        word = this.state.usage
-      }
-      currentPostbases = currentPostbases.sort((p1, p2) => {
-        return (nounPostbases[p1].priority > nounPostbases[p2].priority) ? 1 : ((nounPostbases[p1].priority < nounPostbases[p2].priority) ? -1 : 0);
-      });
-      // console.log(currentPostbases)
-
-      currentPostbases = currentPostbases.reverse()
-      let newEnglish =  this.state.entry.definition;
-      let newText1 = ''
-      let newText2 = this.state.entry.definition;
-      let newText3 = ''
-
-
-      let postbasesList = [];
-      let base = '';
-      if (currentPostbases.length == 1 || currentPostbases.length == 0) {
-        base = word
-      } else {
-        base = nounPostbases[currentPostbases[0]].expression_postbase
-      }
-
-      // console.log(currentPostbases)
-      let processPostbases = (currentPostbases, base, nounPostbases) => {
-        postbasesList = currentPostbases.map((p) => {
-          if (nounPostbases[p].conditional_rule == 'attaching_to_te') {
-            if (base.slice(base.length-3,base.length-1)=='te') {
-              return nounPostbases[p].expression_conditional_postbase
-            } else {
-              return nounPostbases[p].expression_postbase
-            }
-          } else {
-            return nounPostbases[p].expression_postbase
-          };
-        })
-        return postbasesList
-       };
-
-      // let processEndingPostbase = (currentPostbases, base, nounPostbases, endingPostbase) => {
-      //   if (nounPostbases[endingPostbase].conditional_rule == 'attaching_to_te') {
-      //     if (base.slice(base.length-3,base.length-1)=='te') {
-      //       postbasesList = postbasesList.concat(nounPostbases[endingPostbase].expression_conditional_end)
-      //     } else {
-      //       postbasesList = postbasesList.concat(nounPostbases[endingPostbase].expression_end)
-      //     }
-      //   } else {
-      //     return postbasesList = postbasesList.concat(nounPostbases[endingPostbase].expression_end)
-      //   };
-      //   return postbasesList
-      // };
-
-      let isvowel = (l) => {
-        if (l == 'a' || l == 'e' || l == 'i' || l == 'u') {
-          return true
-        } else {
-          return false
-        }
-      }
-      let returnEnding = (value4, possessorPerson, possessorPeople, mood) => {
-        if (mood == 'absolutive') {
-          return [absolutive_endings[value4][possessorPerson][possessorPeople]]
-        } else if (mood == 'localis') {
-          return [localis_endings[value4][possessorPerson][possessorPeople]]
-        } else if (mood == 'terminalis') {
-          return [terminalis_endings[value4][possessorPerson][possessorPeople]]
-        } else if (mood == 'relative') {
-          return [relative_endings[value4][possessorPerson][possessorPeople]]
-        } else if (mood == 'equalis') {
-          return [equalis_endings[value4][possessorPerson][possessorPeople]]
-        } else if (mood == 'vialis') {
-          if (value4 == 1 && possessorPerson == 2 && possessorPeople == 1 && postbasesList.length > 1) {
-            if (isvowel(postbasesList[postbasesList.length-1][postbasesList[postbasesList.length-1].length-2])) {
-              return ['-vkun']
-            } else {
-              return [vialis_endings[value4][possessorPerson][possessorPeople]]
-            }
-          } else if (value4 == 1 && possessorPerson == 2 && possessorPeople == 1 && postbasesList.length == 0) {
-            if (isvowel(this.state.currentWord[this.state.currentWord.length-1])) {
-              return ['-vkun']
-            } else {
-              return [vialis_endings[value4][possessorPerson][possessorPeople]]
-            }
-          } else {
-            return [vialis_endings[value4][possessorPerson][possessorPeople]]
-          }
-        } else if (mood == 'ablative') {
-          return [ablative_endings[value4][possessorPerson][possessorPeople]]
-        }
-      }
-
-       let endingPostbase = []
-        if (possessorPerson > 0) {
-          postbasesList = processPostbases(currentPostbases, base, nounPostbases)
-          postbasesList = postbasesList.concat(returnEnding(value4,possessorPerson,possessorPeople,mood))
-          // postbasesList = postbasesList.concat([absolutive_endings[value4][possessorPerson][possessorPeople]]);
-        } else if (verbEnding) {
-          postbasesList = processPostbases(currentPostbases, base, nounPostbases)
-          postbasesList = postbasesList.concat(indicative_intransitive_endings[person][people]);
-        } else if (value4 != 1) {
-          postbasesList = processPostbases(currentPostbases, base, nounPostbases)
-          postbasesList = postbasesList.concat(returnEnding(value4,possessorPerson,possessorPeople,mood))
-          // postbasesList = postbasesList.concat([absolutive_endings[value4][possessorPerson][possessorPeople]]);
-        } else {
-          if (currentPostbases.length > 0 && verbEnding) {
-            postbasesList = processPostbases(currentPostbases, base, nounPostbases)
-            postbasesList = postbasesList.concat(indicative_intransitive_endings[person][people]);
-          } else if (currentPostbases.length > 0 && mood == 'absolutive') {
-            let lastPostbase = currentPostbases[currentPostbases.length-1]
-            let remainingPostbases = currentPostbases.slice(0,[currentPostbases.length-1])
-            postbasesList = processPostbases(remainingPostbases, base, nounPostbases)
-            postbasesList = postbasesList.concat(nounPostbases[lastPostbase].expression_end);  //make smarter
-          } else {
-            postbasesList = processPostbases(currentPostbases, base, nounPostbases)
-            postbasesList = postbasesList.concat(returnEnding(value4,possessorPerson,possessorPeople,mood))
-            // postbasesList = postbasesList.concat([absolutive_endings[value4][possessorPerson][possessorPeople]]);
-          }
-        }
-        // console.log(postbasesList)
-        // currentPostbases = currentPostbases.reverse()
-
-        // if (mood == 'indicative') {
-        //   postbasesList = processPostbases(currentPostbases, base, nounPostbases)
-        //   console.log(postbasesList)
-        //   console.log(value4)
-        //   console.log(possessorPerson)
-        //   console.log(possessorPeople)
-        //   postbasesList = postbasesList.concat([absolutive_endings[value4][possessorPerson][possessorPeople]]);
-        // }
-        let added_word = ''
-        let adder = ''
-        let adjectivesEnglish = []
-        let nounEndingEnglish = []
-        let verbEndingEnglish = []
-        let subjectis = ''
-        // console.log(currentPostbases)
-
-        let getsubjectis = (does, people, person) => {
-          if (does) {
-            if (people == 1 && person == 3) {
-              subjectis = 'has'
-            } else {
-              subjectis = 'have'
-            }
-          } else {
-            if (people == 1 && person == 1) {
-              subjectis = 'am'
-            } else if (people == 1 && person == 3) {
-              subjectis = 'is'
-            } else {
-              subjectis = 'are'
-            }
-          }
-          return subjectis
-        }
-
-        if (currentPostbases.length>0) {
-          currentPostbases.forEach((p) => {
-            adder = ''
-            if (p > -1 && p < 7) {
-              adjectivesEnglish.push(nounPostbases[p].englishModifier(adder));
-            } else if (p > 6 && p < 11) {
-              nounEndingEnglish.push(nounPostbases[p].englishModifier(adder));
-            } else if (p == 14 || p == 21 || p == 17) {
-              verbEndingEnglish.push(getsubjectis(true,people,person)+' '+nounPostbases[p].englishModifier(adder));
-            } else if (p == 18 || p == 19) {
-              verbEndingEnglish.push(nounPostbases[p].englishModifier(adder));
-              this.setState({value1: '31-3(1)', person: 3, people: 1});
-              person = 3;
-              people = 1;
-            } else {
-              verbEndingEnglish.push(getsubjectis(false,people,person)+' '+nounPostbases[p].englishModifier(adder));
-            }
-          })
-        }
-
-        // console.log(adjectivesEnglish)
-        // console.log(nounEndingEnglish)
-        // console.log(verbEndingEnglish)
-
-
-
-      this.setState({postbasesList: postbasesList})
-      let postbasesString = "";
-      postbasesList.forEach((e) => {
-        postbasesString = postbasesString + "&postbase=" + encodeURIComponent(e);
-      });
-      // console.log(postbasesList)
-      // console.log(postbasesString)
-      currentPostbases = currentPostbases.reverse()
-
-      axios
-        .get(API_URL + "/concat?root=" + word.replace('-', '') + postbasesString)
-        .then(response => {
-          // console.log(response.data);
-          this.setState({
-            modifiedWord: added_word + response.data.concat,
-            modifiedEnglish: newEnglish,
-            currentPostbases: currentPostbases,
-            text1: newText1,
-            text2: newText2,
-            text3: newText3,
-            adjectivesEnglish: adjectivesEnglish,
-            nounEndingEnglish: nounEndingEnglish,
-            verbEndingEnglish: verbEndingEnglish,
-            colorIndexes: response.data.indexes
-          });
-        });
-      }
-
-
-
-  switchMode() {
-    console.log('switchMode', this.props.advancedMode);
-    if (!this.props.advancedMode) {
-      this.props.history.push(this.verb ? `${this.props.match.url}/verb` : `${this.props.match.url}/noun`);
-    }
-    else {
-      this.props.history.push(this.verb ? `${this.props.match.url}/verb/all` : `${this.props.match.url}/noun/all`);
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.advancedMode !== this.props.advancedMode) {
-      this.switchMode();
-    }
-  }
+    } // end of ModifyWordNoun
 
   render() {
     console.log('YupikModifyLayout state', this.state)
     var dict1 = [];
     var dict2 = [];
     var dict3 = [];
-    for (var i = 0; i < 14; i++) { // this portion of the code is meant to remove options that are not possible in subject/object combos
-      let flag1 = false;
-      let flag2 = false;
-      if (this.verb === false) {
-        if (options1[i].value[0]!=4) { //subject 4th person not allowed
-          dict1.push({id: options1[i].id,value: options1[i].value,text: options1[i].text,disabled:flag2});
-        }
-        // if ((this.state.value1[0]=='1' && options2[i].value[0]=='1') || (this.state.value1[0]=='2' && options2[i].value[0]=='2') || (this.state.value1[0]=='4' && options2[i].value[0]=='4')) { //process options2 and options3 first
-        //   flag1 = true
-        // }
-        dict3.push({id: options3[i].id,value: options3[i].value,text: options3[i].text});
-      } else if (this.state.mood == 'indicative' || this.state.mood == 'subordinative') {
-        if (this.state.value1[0]=='1' && options2[i].value[0]=='1' || this.state.value1[0]=='2' && options2[i].value[0]=='2') { //process options2 and options3 first
-          flag1 = true
-        }
-        if (options2[i].value[0]!=4) { //object 4th person not allowed
-          if (this.state.possessiveObject) {
-            dict2.push({id: options3[i].id,value: options3[i].value,text: options3[i].text,disabled:flag1});
-          } else {
-            dict2.push({id: options2[i].id,value: options2[i].value,text: options2[i].text,disabled:flag1});
-          }
-        }
-        if (this.state.value2[0]=='1' && options1[i].value[0]=='1' || this.state.value2[0]=='2' && options1[i].value[0]=='2') { //process options1 next
-          flag2 = true
-        }
-        if (this.state.mood == 'subordinative') {
-          if (options1[i].value[0]!=3) { //subject 3rd person not allowed
-            dict1.push({id: options1[i].id,value: options1[i].value,text: options1[i].text,disabled:flag2});
-          }
-        } else {
-          if (options1[i].value[0]!=4) { //subject 4th person not allowed
-            dict1.push({id: options1[i].id,value: options1[i].value,text: options1[i].text,disabled:flag2});
-          }
-        }
-      } else if (this.state.mood == 'optative') {
-        if (this.state.value1[0]=='1' && options2[i].value[0]=='1' || this.state.value1[0]=='2' && options2[i].value[0]=='2') { //process options2 and options3 first
-          flag1 = true
-        }
-        if (options2[i].value[0]!=4) { //object 4th person not allowed
-          if (this.state.possessiveObject) {
-            dict2.push({id: options3[i].id,value: options3[i].value,text: options3[i].text,disabled:flag1});
-          } else {
-            dict2.push({id: options2[i].id,value: options2[i].value,text: options2[i].text,disabled:flag1});
-          }
-        }
-        if (options3[i].value[0]!=4) { //object 4th person not allowed for possessive form
-          dict3.push({id: options3[i].id,value: options3[i].value,text: options3[i].text,disabled:flag1});
-        }
-        if (this.state.value2[0]=='1' && options1[i].value[0]=='1' || this.state.value2[0]=='2' && options1[i].value[0]=='2') { //process options1 next
-          flag2 = true
-        }
-        if (options1[i].value[0]!=4) { //subject 4th person not allowed
-          dict1.push({id: options2[i].id,value: options2[i].value,text: options2[i].text,disabled:flag2});
-        }
-      } else if (this.state.mood == 'interrogative') {
-        if (this.state.objectExists) {
-          if (this.state.value1[0]=='1' && options2[i].value[0]=='1' || this.state.value1[0]=='2' && options2[i].value[0]=='2'){ //process options2 and options3 first
-            flag1 = true
-          }
-          if (options2[i].value[0]!=4) { //object 4th person not allowed
-            if (this.state.possessiveObject) {
-              dict2.push({id: options3[i].id,value: options3[i].value,text: options3[i].text,disabled:flag1});
-            } else {
-              dict2.push({id: options2[i].id,value: options2[i].value,text: options2[i].text,disabled:flag1});
-            }
-          }
-          if (options3[i].value[0]!=4) { //object 4th person not allowed for possessive form
-            dict3.push({id: options3[i].id,value: options3[i].value,text: options3[i].text,disabled:flag1});
-          }
-          if ((this.state.value2[0]=='1' && options1[i].value[0]=='1' || this.state.value2[0]=='2' && options1[i].value[0]=='2') || options1[i].value[0]=='1')  { //process options1 next
-            flag2 = true
-          }
-          if (options1[i].value[0]!=4) { //subject 4th person not allowed
-            dict1.push({id: options1[i].id,value: options1[i].value,text: options1[i].text,disabled:flag2});
-          }
-        } else {
-          if (options1[i].value[0]!=4) { //subject 4th person not allowed
-            dict1.push({id: options1[i].id,value: options1[i].value,text: options1[i].text,disabled:flag2});
-          }
-        }
-      } else { //all connective moods
-        if ((this.state.value1[0]=='1' && options2[i].value[0]=='1') || (this.state.value1[0]=='2' && options2[i].value[0]=='2') || (this.state.value1[0]=='4' && options2[i].value[0]=='4')) { //process options2 and options3 first
-          flag1 = true
-        }
-        if (this.state.possessiveObject) {
-          dict2.push({id: options3[i].id,value: options3[i].value,text: options3[i].text,disabled:flag1});
-        } else {
-          dict2.push({id: options2[i].id,value: options2[i].value,text: options2[i].text,disabled:flag1});
-        }
-        dict3.push({id: options3[i].id,value: options3[i].value,text: options3[i].text,disabled:flag1});
-        if ((this.state.value2[0]=='1' && options1[i].value[0]=='1') || (this.state.value2[0]=='2' && options1[i].value[0]=='2') || (this.state.value2[0]=='4' && options1[i].value[0]=='4')) { //process options1 next
-          flag2 = true
-        }
-        dict1.push({id: options1[i].id,value: options1[i].value,text: options1[i].text,disabled:flag2});
-      }
-    }
+    const { verb, value1, value2, value3, id1, mood, possessiveObject, objectExists } = this.state;
+    removeCombos(dict1, dict2, dict3, verb, value1, value2, mood, possessiveObject, objectExists);
 
-
-    const{value1}=this.state
-    const{value2}=this.state
-    const{value3}=this.state
-    const{id1}=this.state
-    // console.log(this.state.postbasesList)
-    // console.log(this.state.currentPostbases)
-    // console.log(this.state.colorIndexes)
     let countEndingPostbase = this.state.postbasesList.length-this.state.currentPostbases.length
-    // console.log(countEndingPostbase)
     let postbasesDisplay = ''
     let wordDisplay = ''
     let updatedPostbasesList = []
     let nounType = ''
-
-    // if (this.state.possessiveButton == 1) {
-    //   if (this.state.currentPostbases > 0) {
-    //     if (this.state.currentPostbases[0] > 6) {
-    //       nounType = 'possessive_nounending'
-    //     } else {
-    //       nounType = 'possessive'
-    //     }
-    //   } else {
-    //     nounType = 'possessive_nounending'
-    //   }
-    // }
-    // if (this.state.verbEnding) {
-    //   if (this.state.currentPostbases > 1) {
-    //     if (this.state.currentPostbases[1] > 5) {
-    //       nounType = 'verbendingnounending'
-    //     } else {
-    //       nounType = 'verbendingonly'
-    //     }
-    //   } else {
-    //     nounType = 'verbendingonly'
-    //   }
-    // }
-    // if (this.state.currentPostbases.length > 0) {
-    //   if (this.state.currentPostbases[0] > 6) {
-    //     if (this.state.mood != 'absolutive') {
-    //       nounType = 'moodplusnounending'
-    //     } else {
-    //       if (this.state.value4 > 1) {
-    //         nounType = 'nounendingplural'
-    //       } else {
-    //         nounType = 'nounendingonly'
-    //       }
-    //     }
-    //   } else {
-    //     if (this.state.mood != 'absolutive') {
-    //       nounType = 'moodonly'
-    //     } else {
-    //       if (this.state.value4 > 1) {
-    //         nounType = 'pluralonly'
-    //       } else {
-    //         nounType = 'postbaseonly'
-    //       }
-    //     }
-    //   }
-    // } else {
-    //   if (this.state.mood != 'absolutive' || this.state.value4 != 1) {
-    //     nounType = 'moodorplural'
-    //   } else {
-    //     nounType = ''
-    //   }
-    // }
-
-        // updatedPostbasesList.push(this.state.postbasesList[this.state.postbasesList.length-2])
-        // updatedPostbasesList.push(this.state.postbasesList[this.state.postbasesList.length-1])
-    // console.log(nounType)
 
     if (this.verb || !(this.state.verbEnding)) {
       postbasesDisplay = (
         <span>
         <span >{this.state.currentWord}</span>
         {this.state.postbasesList.slice(0,this.state.postbasesList.length-countEndingPostbase).map((p, i) => {
-          return <span style={{color: this.state.colorsList[2+this.state.postbasesList.length-countEndingPostbase-i]}}>{' ' + p}</span>;
+          return <span key={i} style={{color: this.state.colorsList[2+this.state.postbasesList.length-countEndingPostbase-i]}}>{' ' + p}</span>;
         })}
         {this.state.postbasesList.slice(this.state.postbasesList.length-countEndingPostbase).map((p, i) => {
-          return <span style={{color: '#852828'}}>{' ' + p}</span>; // change to 2-i for other color
+          return <span key={i} style={{color: '#852828'}}>{' ' + p}</span>; // change to 2-i for other color
         })}
         </span>
       );
-      // if (this.state.currentPostbases.length == 0) {
-      //   console.log('no postbases')
-      // }
       wordDisplay = (
         <span>
         {this.state.colorIndexes.map((index, i) => {
           if (i == 0) {
-            return <span >{this.state.modifiedWord.substring(this.state.colorIndexes[i], this.state.colorIndexes[i+1])}</span>;
+            return <span key={i}>{this.state.modifiedWord.substring(this.state.colorIndexes[i], this.state.colorIndexes[i+1])}</span>;
           } else if (i < this.state.colorIndexes.length-countEndingPostbase) {
-            return <span style={{color: this.state.colorsList[2+this.state.colorIndexes.length-countEndingPostbase-i]}}>{this.state.modifiedWord.substring(this.state.colorIndexes[i], this.state.colorIndexes[i+1])}</span>;
+            return <span key={i} style={{color: this.state.colorsList[2+this.state.colorIndexes.length-countEndingPostbase-i]}}>{this.state.modifiedWord.substring(this.state.colorIndexes[i], this.state.colorIndexes[i+1])}</span>;
           } else if (i == this.state.colorIndexes.length-countEndingPostbase) {
-            return <span style={{color: '#852828'}}>{this.state.modifiedWord.substring(this.state.colorIndexes[i])}</span>;
+            return <span key={i} style={{color: '#852828'}}>{this.state.modifiedWord.substring(this.state.colorIndexes[i])}</span>;
           }
         })}
         </span>
@@ -2301,42 +1495,7 @@ class YupikModifyLayout extends Component {
       );
     }
 
-//       postbasesDisplay = (
-//         <span>
-//         <span >{this.state.currentWord}</span>
-//         {this.state.postbasesList.slice(0,this.state.postbasesList.length-countEndingPostbase).map((p, i) => {
-//           // console.log(i)
-//           // console.log(this.state.postbasesList.length)
-//           // console.log(countEndingPostbase)
-//           return <span style={{color: this.state.colorsList[this.state.postbasesList.length-1-i]}}>{' ' + p}</span>;
-//         })}
-//         {this.state.postbasesList.slice(this.state.postbasesList.length-countEndingPostbase,this.state.postbasesList.length+1).map((p, i) => {
-//           return <span style={{color: this.state.colorsList[2+i]}}>{' ' + p}</span>;
-//         })}
-//         </span>
-//       );
-//       if (this.state.currentPostbases.length == 0) {
-//         console.log('no postbases')
-//       }
-//       wordDisplay = (
-//         <span>
-//         {this.state.colorIndexes.map((index, i) => {
-//           let c = this.state.colorsList[i];
-//           if (i < this.state.colorIndexes.length-1) {
-//             return <span style={{color: c}}>{this.state.modifiedWord.substring(this.state.colorIndexes[i], this.state.colorIndexes[i+1])}</span>;
-//           }
-//           else {
-//             return <span style={{color: c}}>{this.state.modifiedWord.substring(this.state.colorIndexes[i])}</span>;
-//           }
-//         })}
-//         </span>
-//       );
-// {color: 'black'}
-
-//this.state.colorsList[2] changed to '#852828'
-
-    // console.log(this.state.postbasesEnglish)
-    // console.log(this.state.currentPostbases)
+    //this.state.colorsList[2] changed to '#852828'
 
     //MAKE MORE SUCCINCT, also assumes in the future only one time postbase at a time
     let timeIndex = ''
@@ -2391,7 +1550,7 @@ class YupikModifyLayout extends Component {
     return (
       <div>
       <StickyMenu displaySimple={false} word={this.state.currentWord} goBack={this.props.history.goBack} switchMode={this.switchMode} {...this.props} />
-      <Container attached style={{ paddingTop: '8em' }} onClick={() => {if (this.state.displayPostbases) { this.setState({displayPostbases: false}); }}}>
+      <Container attached='true' style={{ paddingTop: '8em' }} onClick={() => {if (this.state.displayPostbases) { this.setState({displayPostbases: false}); }}}>
       <Visibility
         onTopPassed={() => {console.log('top passed!'); this.setState({ headerFixed: true }); }}
         onTopPassedReverse={() => {console.log('top reverse passed!'); this.setState({ headerFixed: false }); }}

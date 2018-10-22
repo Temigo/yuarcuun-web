@@ -36,7 +36,7 @@ class YupikAllPostbases extends Component {
           </Card>
           {interrogative.map((e) => {
             return (
-              <Card>
+              <Card key={e.mood}>
               <Button onClick={() => this.props.setMood(e.group, e.text)} toggle active={this.props.moodSpecific === e.mood}>{e.mood}</Button>
               </Card>
             );
@@ -52,7 +52,7 @@ class YupikAllPostbases extends Component {
           <Card.Group itemsPerRow={3} stackable>
           {optative.map((e) => {
             return (
-              <Card>
+              <Card key={e.mood}>
               <Button onClick={() => this.props.setMood(e.group, e.mood)} toggle active={this.props.moodSpecific === e.mood}>{e.mood}</Button>
               </Card>
             );
@@ -68,7 +68,7 @@ class YupikAllPostbases extends Component {
           <Card.Group itemsPerRow={3} stackable>
           {dependent.map((e) => {
             return (
-              <Card>
+              <Card key={e.mood}>
               <Button onClick={() => this.props.setMood(e.group, e.mood)} toggle active={this.props.moodSpecific === e.mood}>{e.mood}</Button>
               </Card>
             );
@@ -84,7 +84,7 @@ class YupikAllPostbases extends Component {
           <Card.Group itemsPerRow={3} stackable>
           {verb2noun.map((e) => {
             return (
-              <Card>
+              <Card key={e.text}>
               <Button onClick={() => this.props.setNounEnding(e.ending)} toggle active={this.props.nounEnding === e.ending}>{e.text}</Button>
               </Card>
             );
@@ -101,7 +101,7 @@ class YupikAllPostbases extends Component {
       <Accordion styled >
         {postbaseButtons.map((group) => {
           return (
-            <div>
+            <div key={group.text}>
             <Accordion.Title active={this.state.activeIndex === group.activeIndex} index={group.activeIndex} onClick={this.handleClick}>
               <Icon name='dropdown' />
               {group.text}
@@ -110,7 +110,7 @@ class YupikAllPostbases extends Component {
               <Card.Group itemsPerRow={3} stackable>
               {group.indexes.map((e) => {
                 return (
-                  <Card>
+                  <Card key={e}>
                   <Button onClick={(event) => this.props.setPostbase(e, event)} disabled={(this.props.allowable_next_ids.indexOf(e) >= 0)} toggle active={this.props.currentPostbases.indexOf(e) >= 0}>{postbases[e].description}</Button>
                   </Card>
                 );
@@ -134,7 +134,7 @@ class YupikAllPostbases extends Component {
           <Card.Group itemsPerRow={3} stackable>
           {enclitics[this.props.mood].items.map((e) => {
               return (
-                <Card>
+                <Card key={e.text}>
                 <Button onClick={() => this.props.setEnclitic(e.ending, e.meaning)} toggle active={this.props.enclitic === e.ending}>{e.text}</Button>
                 </Card>
               );
