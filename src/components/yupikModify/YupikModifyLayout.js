@@ -176,10 +176,12 @@ class YupikModifyLayout extends Component {
     let new_state = processUsage(this.state.usage);
     console.log('processed')
     this.state = {...this.state, ...new_state};
-    if (this.state.objectExists) {
-      this.state.postbasesList = ["+'(g)aa"]
-    } else {
-      this.state.postbasesList = ["+'(g/t)uq"]
+    if (this.verb) {
+      if (this.state.objectExists) {
+        this.state.postbasesList = ["+'(g)aa"]
+      } else {
+        this.state.postbasesList = ["+'(g/t)uq"]
+      }      
     }
     if (this.verb) {
       this.modifyWord(this.state.person, this.state.people,
@@ -344,7 +346,7 @@ class YupikModifyLayout extends Component {
         if (newState.possessorPeople != this.state.possessorPeople) {
           if (newState.possessorPeople != 0) {
             if (newState.verbEnding || newState.nounEnding != '') {
-              this.setState({ currentPostbases: this.state.currentPostbases.shift()})
+              this.setState({ currentPostbases: this.state.currentPostbases.slice(1)})
             }
             this.setState({ verbEnding: false, nounEnding: '' });
             newState.verbEnding = false
@@ -366,7 +368,7 @@ class YupikModifyLayout extends Component {
         if (newState.mood != this.state.mood) {
           if (newState.mood !== 'absolutive') {
             if (newState.nounEnding !== '' || newState.verbEnding == true) {
-              this.setState({ currentPostbases: this.state.currentPostbases.shift(), nounEnding: '', verbEnding: false });
+              this.setState({ currentPostbases: this.state.currentPostbases.slice(1), nounEnding: '', verbEnding: false });
               newState.nounEnding = ''
               newState.verbEnding = false
             }
@@ -576,7 +578,7 @@ class YupikModifyLayout extends Component {
           }
         }
         if (verbEnding) {
-          currentPostbases.shift()
+          currentPostbases = currentPostbases.slice(1)
           this.setState({ verbEnding: false})
           verbEnding = false
         } else if (this.state.mood != 'absolutive') {
@@ -604,7 +606,7 @@ class YupikModifyLayout extends Component {
           }
         }
         if (nounEnding !== '') {
-          currentPostbases.shift()
+          currentPostbases = currentPostbases.slice(1)
           this.setState({ nounEnding: ''})
           nounEnding = ''
         } else if (this.state.mood != 'absolutive') {
@@ -1359,7 +1361,7 @@ class YupikModifyLayout extends Component {
     } else {
       base = nounPostbases[currentPostbases[0]].expression_postbase
     }
-
+    console.log(currentPostbases)
     let processPostbases = processPostbases_noun;
 
      let endingPostbase = []
@@ -1386,6 +1388,7 @@ class YupikModifyLayout extends Component {
           postbasesList = postbasesList.concat(returnEnding(postbasesList, value4,possessorPerson,possessorPeople,mood))
         }
       }
+      console.log(currentPostbases)
       let added_word = ''
       let adder = ''
       let adjectivesEnglish = []
@@ -1509,6 +1512,7 @@ class YupikModifyLayout extends Component {
 
     //MAKE MORE SUCCINCT, also assumes in the future only one time postbase at a time
     let timeIndex = ''
+    console.log(this.state.currentPostbases)
     if (this.state.currentPostbases.includes(5)) {
       timeIndex = this.state.currentPostbases.indexOf(5)
     } else if (this.state.currentPostbases.includes(7)) {
@@ -1585,9 +1589,8 @@ class YupikModifyLayout extends Component {
               {this.state.addedWord !== '' ?
               <span style={{color: '#852828'}}>{this.state.addedWord}</span>
               :''}
-              {this.state.enclitic !== '' && this.state.mood === 'interrogative' ? this.state.enclitic
-              :''}
-              {' '}
+              {this.state.enclitic !== '' && this.state.mood === 'interrogative' ? this.state.enclitic+' '
+              :' '}
               {wordDisplay}
               {this.state.enclitic !== '' && this.state.encliticExpression !== '(again)' && this.state.mood === 'indicative' ? this.state.enclitic
               :''}

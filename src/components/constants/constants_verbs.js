@@ -297,7 +297,7 @@ export const ablative_endings = {
   },
   3: {
     0: {
-      0: '%~ni'
+      0: '%~nek'
     },
     1: {
       1: '-mnek',
