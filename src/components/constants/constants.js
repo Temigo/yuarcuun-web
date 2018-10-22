@@ -320,7 +320,7 @@ export const postbases = [
     englishModifier: (english) => { return ' not care to' + english; },
     englishModifierInfinitive: (english) => { return ' not care to' + english; },
     englishModifierGerund: (english) => { return ' not caring to' + english; },
-    expression: '@~+yuumite\\',
+    expression: '@~+yuumiite\\',
     expression_conditional: '',
     priority: 1,
     conditional_rule: '',

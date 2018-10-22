@@ -828,7 +828,7 @@ export const interrogative_transitive_endings = {
     },
     2: {
       1: {
-        1:'@~+cetegenga',
+        1:'@~+cetegnga',
         2:'@~+cetegkuk',
         3:'@~+cetegkut',
       },
@@ -991,7 +991,7 @@ export const optative_transitive_endings = {
   2: {
     1: {
       1: {
-        1:'@+:(6)a',
+        1:'@+6a',
         2:'@+kuk',
         3:'@+kut',
       },
@@ -1044,7 +1044,7 @@ export const optative_transitive_endings = {
   3: {
     1: {
       1: {
-        1:'@~+linga',
+        1:'@~+lia',
         2:'@~+likuk',
         3:'@~+likut',
       },
@@ -1054,7 +1054,7 @@ export const optative_transitive_endings = {
         3:'@~+lici',
       },
       3: {
-        1:'@~+liku',
+        1:'@~+liu',
         2:'@~+likek',
         3:'@~+liki',
       },
@@ -1071,9 +1071,9 @@ export const optative_transitive_endings = {
         3:'@~+ligci',
       },
       3: {
-        1:'@~+ligtegu',
-        2:'@~+ligtegkek',
-        3:'@~+ligtegki',
+        1:'@~+lignegu',
+        2:'@~+ligkek',
+        3:'@~+ligki',
       },
     },
     3: {
@@ -1088,9 +1088,9 @@ export const optative_transitive_endings = {
         3:'@~+liceci',
       },
       3: {
-        1:'@~+lignegu',
-        2:'@~+ligkek',
-        3:'@~+ligki',
+        1:'@~+litgu',
+        2:'@~+litkek',
+        3:'@~+litki',
       }
     }
   }
@@ -1150,7 +1150,7 @@ export const subordinative_transitive_endings = {
         3:'@~+luki',
       },
     },
-    4: {
+    3: {
       1: {
         1:'',
         2:'',
@@ -1203,7 +1203,7 @@ export const subordinative_transitive_endings = {
         3:'@~+luki',
       },
     },
-    4: {
+    3: {
       1: {
         1:'@~+lua',
         2:'@~+lunuk',
@@ -1256,7 +1256,7 @@ export const subordinative_transitive_endings = {
         3:'@~+luki',
       },
     },
-    4: {
+    3: {
       1: {
         1:'@~+lua',
         2:'@~+lunuk',

@@ -310,6 +310,15 @@ class YupikModifyLayout extends Component {
           })
           this.setState({allowable_next_ids:array3})
         }
+        if (newState.encliticExpression !== this.state.encliticExpression) {
+        	if (newState.encliticExpression === '(yes or no?)' && newState.mood === 'interrogative') {
+        		newState.mood = 'indicative'
+        		this.state.mood = 'indicative'
+        		newState.moodSpecific = 'indicative'
+        		this.state.moodSpecific = 'indicative'
+        	}
+        }
+
         this.modifyWord(newState.person, newState.people, newState.objectPerson, newState.objectPeople, newState.mood, newState.moodSpecific, newState.nounEnding, newState.value1, this.state.currentWord, this.state.currentPostbases);
       }
     }
@@ -916,7 +925,7 @@ class YupikModifyLayout extends Component {
                       if (nextIndexPostbase == 26 || nextIndexPostbase == 28) {
                         pushEnding('g', i)
                       } else if (place.concat(A,B,C).includes(nextIndexPostbase)) {
-                        pushEnding('i',people,person,'',i)
+                        pushEnding('i',i)
                       } else {
                         pushEnding(endingMood, i)
                       }
@@ -986,6 +995,7 @@ class YupikModifyLayout extends Component {
                     }
                   }
                 }
+                console.log(englishEnding)
                 if (place.concat(E,G).includes(nextIndexPostbase) == false ) {
                   endingMood = moodIndex[nextIndexPostbase]
                   // console.log(endingMood)
@@ -1581,6 +1591,7 @@ class YupikModifyLayout extends Component {
               {wordDisplay}
               {this.state.enclitic !== '' && this.state.encliticExpression !== '(again)' && this.state.mood === 'indicative' ? this.state.enclitic
               :''}
+              {this.state.enclitic === '-qaa' ? '?' : ''}
               </span>
               <span style={{color: '#852828'}}>
               {this.state.mood === 'interrogative' ? '?' :''}
