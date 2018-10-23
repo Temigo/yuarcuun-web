@@ -23,7 +23,7 @@ import YupikAllNounPostbases from '../yupikNoun/YupikAllNounPostbases.js';
 import YupikNounDescriptors from '../yupikNoun/YupikNounDescriptors.js';
 import YupikNounPhrase from '../yupikNoun/YupikNounPhrase.js';
 import YupikNounCombine from '../yupikNoun/YupikNounCombine.js';
-import { postbases, nounPostbases } from '../constants/constants.js';
+import { postbases, nounPostbases, retrieveSubjectObject } from '../constants/constants.js';
 import { interrogative, optative, dependent, verb2noun, postbaseButtons, enclitics } from '../modifyWord/modifyVerbOptions.js';
 import { nounEndings, indicative_intransitive_endings,
   indicative_transitive_endings, interrogative_intransitive_endings,
@@ -90,6 +90,7 @@ class YupikModifyLayout extends Component {
       nounEnding: '',
       verbEnding: false,
       encliticExpression: '',
+      fullEnglish: '',
       tense: 'present',
       text1: "",
       text2: "",
@@ -1310,6 +1311,15 @@ class YupikModifyLayout extends Component {
       englishEnding[0]=englishEnding[0].replace(pronoun[0],pronounEnding(value1, pronountype))
     }
   }
+  let postbasesEnglishPhrase = postbasesEnglish.join(' ')
+  let SubjecT = retrieveSubjectObject[this.state.value1]
+  let ObjecT = retrieveSubjectObject[this.state.value2]
+  if (ObjecT) {
+    ObjecT = retrieveSubjectObject[this.state.value2]
+  } else {
+    ObjecT = ''
+  }
+  this.setState({fullEnglish: newText1+' '+newText1after+' '+SubjecT+' '+newText2+' '+newText2after+' '+postbasesEnglishPhrase+' '+englishEnding[0]+' '+ObjecT+' '+newText3+' '+newText3tense})
 
   // it -> its
   // it -> it
@@ -1460,7 +1470,7 @@ class YupikModifyLayout extends Component {
         <span>
         <span >{this.state.currentWord}</span>
         {this.state.postbasesList.slice(0,this.state.postbasesList.length-countEndingPostbase).map((p, i) => {
-          return <span key={i} style={{color: this.state.colorsList[2+this.state.postbasesList.length-countEndingPostbase-i]}}>{' ' + p}</span>;
+          return <span key={i} style={{color: this.state.colorsList[2+this.state.postbasesList.length-countEndingPostbase-i]}}>{' ' + p.replace('\\','-')}</span>;
         })}
         {this.state.postbasesList.slice(this.state.postbasesList.length-countEndingPostbase).map((p, i) => {
           return <span key={i} style={{color: '#852828'}}>{' ' + p}</span>; // change to 2-i for other color
@@ -1483,9 +1493,9 @@ class YupikModifyLayout extends Component {
     } else {
       postbasesDisplay = (
         <span>
-        <span >{this.state.currentWord}</span>
+        <span >{this.state.usage}</span>
         {this.state.postbasesList.slice(0,this.state.postbasesList.length-countEndingPostbase-1).map((p, i) => {
-          return <span style={{color: this.state.colorsList[2+this.state.postbasesList.length-countEndingPostbase-i]}}>{' ' + p}</span>;
+          return <span style={{color: this.state.colorsList[2+this.state.postbasesList.length-countEndingPostbase-i]}}>{' ' + p.replace('\\','-')}</span>;
         })}
         {this.state.postbasesList.slice(this.state.postbasesList.length-countEndingPostbase-1).map((p, i) => {
           return <span style={{color: '#852828'}}>{' ' + p}</span>;

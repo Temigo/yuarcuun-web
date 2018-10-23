@@ -51,6 +51,51 @@ export const options3 = [
   {id: 13, value: '43(3)', text:'their own (3+)'}
 ];
 
+export const retrieveSubjectObject = 
+  {'11(1)':'I',
+  '21(1)':'you',
+  '31-1(1)':'he',
+  '31-2(1)':'she',
+  '31-3(1)':'it',
+  '41(1)':'its own',
+  '12(1)':'the two of us',
+  '22(1)':'the two of you',
+  '32(1)':'the two of them',
+  '42(1)':'their own (two)',
+  '13(1)':'we all (3+)',
+  '23(1)':'you all (3+)',
+  '33(1)':'they all (3+)',
+  '43(1)':'their own (3+)',
+  '11(2)':'me',
+  '21(2)':'you',
+  '31-1(2)':'him',
+  '31-2(2)':'her',
+  '31-3(2)':'it',
+  '41(2)':'its own',
+  '12(2)':'the two of us',
+  '22(2)':'the two of you',
+  '32(2)':'the two of them',
+  '42(2)':'their own (two)',
+  '13(2)':'us all (3+)',
+  '23(2)':'you all (3+)',
+  '33(2)':'them all (3+)',
+  '43(2)':'their own (3+)',
+  '11(3)':'my',
+  '21(3)':'your',
+  '31-1(3)':'his',
+  '31-2(3)':'her',
+  '31-3(3)':'its',
+  '41(3)':'its own',
+  '12(3)':'our (two)',
+  '22(3)':'your (two)',
+  '32(3)':'their (two)',
+  '42(3)':'their own (two)',
+  '13(3)':'our (3+)',
+  '23(3)':'your (3+)',
+  '33(3)':'their (3+)',
+  '43(3)':'their own (3+)'}
+;
+
 export const postbases = [
   {
     id: 0,
