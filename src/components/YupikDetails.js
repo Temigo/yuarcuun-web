@@ -44,8 +44,9 @@ class YupikDetails extends Component {
   }
 
   render() {
-    console.log("YupikDetails state: ", this.state);
-    let numEntries = Object.keys(this.state.fullWord).filter((entryNumber) => { return entryNumber !== 'english' && entryNumber !== 'yupik'; }).length;
+    let numEntries = Object.keys(this.state.fullWord).filter((entryNumber) => {
+      return entryNumber !== 'english' && entryNumber !== 'yupik';
+    }).length;
     return (
       <div>
       <StickyMenu

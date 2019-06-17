@@ -146,7 +146,6 @@ class YupikModifyLayout extends Component {
   }
 
   switchMode() {
-    console.log('switchMode', this.props.advancedMode);
     if (!this.props.advancedMode) {
       this.props.history.push(this.verb ? `${this.props.match.url}/verb` : `${this.props.match.url}/noun`);
     }
@@ -1624,7 +1623,7 @@ class YupikModifyLayout extends Component {
               :
               ''
               }
-              <a href="https://goo.gl/forms/be5L5cgSQmCJeVDl1" target="_blank">
+              <a href="https://goo.gl/forms/be5L5cgSQmCJeVDl1" target="_blank" rel="noopener noreferrer">
               <Icon inverted name='exclamation circle' color='grey' size='small'/>
               </a>
               </span>

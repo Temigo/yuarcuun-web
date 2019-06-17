@@ -4,14 +4,14 @@ import '../semantic/dist/semantic.min.css';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import { Container, Header, Divider, Grid, Input, List, Label,
-  Icon, Loader, Dimmer, Image } from 'semantic-ui-react';
+import { Container, Header, Grid, Input, List, Label, Icon, Image } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import { API_URL } from '../App.js';
+import { API_URL, TUTORIAL_URL, ICON_URL } from '../App.js';
 import Fuse from 'fuse.js';
 import now from 'performance-now';
 import ReactGA from 'react-ga';
 import GitHubForkRibbon from 'react-github-fork-ribbon';
+import { YugtunLoader, YugtunFooter, WordItem } from './SearchPageHelpers.js';
 
 // Cache dictionary
 let dictionary = [];
@@ -83,13 +83,11 @@ class SearchPage extends Component {
         if (elts.length > 0) {
           elts[0].scrollIntoView();
         }
-        //window.scrollTo(0, 0);
       }
     }
   }
 
   onChangeSearch(event, data) {
-    console.log('start search');
     let newStartingSearch = event === undefined;
     let new_search = data.value;
 
@@ -133,24 +131,24 @@ class SearchPage extends Component {
     let displayList = this.state.search.length >= 4 && this.state.wordsList.length > 0;
     let emptyList = this.state.search.length >= 4 && this.state.wordsList.length === 0;
     let wordsList = this.state.wordsList;
-    let isCommonList = wordsList.map((word) => { return Object.keys(word).some((key) => { return word[key].properties && word[key].properties.indexOf('common') > -1; }); });
+    let isCommonList = wordsList.map((word) => {
+      return Object.keys(word).some((key) => {
+        return word[key].properties && word[key].properties.indexOf('common') > -1;
+      });
+    });
     if (this.state.onlyCommon) {
       wordsList = wordsList.filter((word, i) => { return isCommonList[i]; });
     }
     let displayCommonOption = this.state.onlyCommon || (wordsList.some((word, i) => { return isCommonList[i]; }) && wordsList.some((word, i) => { return !isCommonList[i]; }));
     return (
       <div>
-      <Dimmer active={this.state.dictionary.length === 0}>
-        <Loader size='massive'>
-          Yugtun is loading...
-        </Loader>
-      </Dimmer>
+      <YugtunLoader criteria={this.state.dictionary.length === 0} />
       <Grid textAlign='center' style={{ height: '100%' }} verticalAlign={(displayList || !this.state.startingSearch) ? 'top' : 'middle'}>
-      <GitHubForkRibbon href='https://www.youtube.com/watch?v=9M65ptotL0A&t' target='_blank' position='right' color='orange'>Watch Tutorial</GitHubForkRibbon>
+      <GitHubForkRibbon href={TUTORIAL_URL} target='_blank' position='right' color='orange'>Watch Tutorial</GitHubForkRibbon>
       <Grid.Row style={displayList ? {height: 'auto'} : {height: '80%'}}>
       <Grid.Column style={{ maxWidth: 800, padding: 10 }} textAlign='left'>
         <Header as='h1' dividing>
-          <Image style={{'fontSize': '1.5em'}} src="https://s3.amazonaws.com/yugtun-static/static/logo_final_1.jpg"/>
+          <Image style={{'fontSize': '1.5em'}} src={ICON_URL}/>
           <Link to='/' style={{ color: 'black', verticalAlign: 'bottom' }}>Yugtun</Link>
         </Header>
         <Container ref={this.search_container} className='search_container'>
@@ -186,36 +184,8 @@ class SearchPage extends Component {
             : ''}
           </Grid>
           <List divided selection>
-            {displayList ? wordsList.map((word) => {
-              let isCommon = Object.keys(word).some((key) => { return word[key].properties && word[key].properties.indexOf('common') > -1; });
-              let isHBC = Object.keys(word).some((key) => { return word[key].properties && word[key].properties.indexOf('HBC') > -1; });
-              let isNoun = Object.keys(word).some((key) => { return word[key].descriptor && word[key].descriptor.indexOf('noun') > -1; });
-              let isVerb = Object.keys(word).some((key) => { return word[key].descriptor && word[key].descriptor.indexOf('verb') > -1; });
-              let isParticle = Object.keys(word).some((key) => { return word[key].descriptor && word[key].descriptor.indexOf('particle') > -1; });
-              let isExpression = Object.keys(word).some((key) => { return word[key].descriptor && word[key].descriptor.indexOf('Common Expression') > -1; });
-              return (
-
-                <List.Item key={word.yupik}>
-                <Link to={{pathname: '/' + word.yupik, state: { word: word, search: this.state.search, wordsList: this.state.wordsList }}}>
-                  <List.Content>
-                    <List.Header>
-                      {word.yupik}
-                      <span style={{ 'marginLeft': '10px' }}>
-                        {isCommon ? <Label size='mini' color='teal'>COMMON</Label> : ''}
-                        {isHBC ? <Label size='mini' color='orange'>HBC DIALECT</Label> : ''}
-                        {isNoun ? <Label size='mini' color='grey'>NOUN</Label> : ''}
-                        {isVerb ? <Label size='mini' color='brown'>VERB</Label> : ''}
-                        {isParticle ? <Label size='mini' color='red'>PARTICLE</Label> : ''}
-                        {isExpression ? <Label size='mini' color='green'>EXPRESSION</Label> : ''}
-                      </span>
-                    </List.Header>
-                    <List.Description>{word.english}</List.Description>
-                  </List.Content>
-                </Link>
-                </List.Item>
-
-              );
-            }) : ''}
+            {displayList ? wordsList.map((word) => <WordItem key={word} word={word} search={this.state.search} wordsList={this.state.wordsList} />)
+            : ''}
           </List>
           {emptyList ? <p><i>aren, no results...</i></p> : ''}
         </Container>
@@ -223,15 +193,7 @@ class SearchPage extends Component {
         </Grid.Row>
         <Grid.Row verticalAlign='bottom'>
           <Grid.Column>
-            <Container textAlign='left'>
-              <Divider fluid />
-              <List> <i> This website is still being improved, please let us know of any issues. Quyana. </i></List>
-              <List horizontal bulleted>
-                <List.Item> © Yuarcuun </List.Item>
-                <List.Item> <Link to='/about'>About</Link> </List.Item>
-                <List.Item> <a href='mailto:yuarcuun@gmail.com'>Contact</a> </List.Item>
-              </List>
-            </Container>
+            <YugtunFooter />
           </Grid.Column>
         </Grid.Row>
       </Grid>

@@ -8,14 +8,12 @@ class YupikEntry extends Component {
   constructor(props) {
     super(props);
     console.log("YupikEntry props: ", props);
-
     this.state = {
       entry: props.entry,
       word: props.word,
       displayEntryNumber: props.displayEntryNumber,
       entryNumber: props.entryNumber
     };
-
   }
 
   componentDidUpdate(prevProps) {
@@ -32,7 +30,6 @@ class YupikEntry extends Component {
     if (this.state.entry.descriptor === 'noun') {
       return ['(root form)','','','','']
     }
-    let new_state = {};
     let text1 = ''
     let sub = ''
     let text2 = ''
@@ -59,6 +56,7 @@ class YupikEntry extends Component {
     }
     return [text1, sub, text2, obj, text3]
   }
+
   render() {
     return (
       <Segment style={{fontSize:'1em'}}>
@@ -182,7 +180,7 @@ class YupikEntry extends Component {
         </Grid.Row>
       ) : ''}
 
-      <a href="https://goo.gl/forms/be5L5cgSQmCJeVDl1" target="_blank">
+      <a href="https://goo.gl/forms/be5L5cgSQmCJeVDl1" target="_blank" rel="noopener noreferrer">
         <Icon inverted name='exclamation circle' color='grey' size='large' />
         <span style={{color:'grey'}}>Report a mistake</span>
       </a>

@@ -20,14 +20,19 @@ class YupikAllPostbases extends Component {
   }
 
   render() {
+    let question_forms = this.state.activeIndex === 0 || this.props.mood === 'interrogative';
+    let make_a_command = this.state.activeIndex === 1 || this.props.mood === 'optative';
+    let connective_endings = this.state.activeIndex === 2 || this.props.mood[0] === 'c' || this.props.mood[0] === 's';
+    let noun_forms = this.state.activeIndex === 3 || this.props.nounEnding !== '';
+    let is_enclitics = this.state.activeIndex === enclitics[this.props.mood].activeIndex;
     return (
       <div style={{ marginBottom: '2em' }}>
       <Accordion fluid styled exclusive={false}>
-        <Accordion.Title active={this.state.activeIndex === 0 || this.props.mood === 'interrogative'} index={0} onClick={this.handleClick}>
+        <Accordion.Title active={question_forms} index={0} onClick={this.handleClick}>
           <Icon name='dropdown' />
           Question forms
         </Accordion.Title>
-        <Accordion.Content active={this.state.activeIndex === 0 || this.props.mood === 'interrogative'}>
+        <Accordion.Content active={question_forms}>
           <Card.Group itemsPerRow={3} stackable>
           <Card>
             <Button onClick={() => this.props.setEnclitic('-qaa', '(yes or no?)')} toggle active={this.props.enclitic === '-qaa'}>Yes or no?</Button>
@@ -42,11 +47,11 @@ class YupikAllPostbases extends Component {
           </Card.Group>
         </Accordion.Content>
 
-        <Accordion.Title active={this.state.activeIndex === 1 || this.props.mood === 'optative'} index={1} onClick={this.handleClick}>
+        <Accordion.Title active={make_a_command} index={1} onClick={this.handleClick}>
           <Icon name='dropdown' />
           Make a command
         </Accordion.Title>
-        <Accordion.Content active={this.state.activeIndex === 1 || this.props.mood === 'optative'}>
+        <Accordion.Content active={make_a_command}>
           <Card.Group itemsPerRow={3} stackable>
           {optative.map((e) => {
             return (
@@ -58,11 +63,11 @@ class YupikAllPostbases extends Component {
           </Card.Group>
         </Accordion.Content>
 
-        <Accordion.Title active={this.state.activeIndex === 2 || this.props.mood[0] === 'c' || this.props.mood[0] === 's'} index={2} onClick={this.handleClick}>
+        <Accordion.Title active={connective_endings} index={2} onClick={this.handleClick}>
           <Icon name='dropdown' />
           Connective endings
         </Accordion.Title>
-        <Accordion.Content active={this.state.activeIndex === 2 || this.props.mood[0] === 'c' || this.props.mood[0] === 's'}>
+        <Accordion.Content active={connective_endings}>
           <Card.Group itemsPerRow={3} stackable>
           {dependent.map((e) => {
             return (
@@ -74,11 +79,11 @@ class YupikAllPostbases extends Component {
           </Card.Group>
         </Accordion.Content>
 
-        <Accordion.Title active={this.state.activeIndex === 3 || this.props.nounEnding !== ''} index={3} onClick={this.handleClick}>
+        <Accordion.Title active={noun_forms} index={3} onClick={this.handleClick}>
           <Icon name='dropdown' />
           Noun forms
         </Accordion.Title>
-        <Accordion.Content active={this.state.activeIndex === 3 || this.props.nounEnding !== ''}>
+        <Accordion.Content active={noun_forms}>
           <Card.Group itemsPerRow={3} stackable>
           {verb2noun.map((e) => {
             return (
@@ -95,7 +100,7 @@ class YupikAllPostbases extends Component {
       <div align="center">
       Postbases:
       </div>
-<Divider />
+      <Divider />
       <Accordion styled >
         {postbaseButtons.map((group) => {
           return (
@@ -124,11 +129,11 @@ class YupikAllPostbases extends Component {
 
       {this.props.mood === 'indicative' || this.props.mood === 'interrogative' ?
       <Accordion styled >
-        <Accordion.Title active={this.state.activeIndex === enclitics[this.props.mood].activeIndex} index={enclitics[this.props.mood].activeIndex} onClick={this.handleClick}>
+        <Accordion.Title active={is_enclitics} index={enclitics[this.props.mood].activeIndex} onClick={this.handleClick}>
           <Icon name='dropdown' />
           Enclitics
         </Accordion.Title>
-        <Accordion.Content active={this.state.activeIndex === enclitics[this.props.mood].activeIndex}>
+        <Accordion.Content active={is_enclitics}>
           <Card.Group itemsPerRow={3} stackable>
           {enclitics[this.props.mood].items.map((e) => {
               return (
