@@ -5,7 +5,8 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 import elasticlunr from 'elasticlunr';
-import { Container, Header, Divider, Grid, Input, List, Label, Checkbox, Icon, Loader, Dimmer, Image } from 'semantic-ui-react';
+import { Container, Header, Divider, Grid, Input, List, Label,
+  Checkbox, Icon, Loader, Dimmer, Image } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { API_URL } from '../App.js';
 import Fuse from 'fuse.js';
@@ -15,6 +16,7 @@ import GitHubForkRibbon from 'react-github-fork-ribbon';
 
 // Cache dictionary
 let dictionary = [];
+// Search options
 let options = {
   keys: ['yupik', 'english'],
   minMatchCharLength: 3,
@@ -45,12 +47,6 @@ class SearchPage extends Component {
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.selectWord = this.selectWord.bind(this);
     this.search_container = React.createRef();
-    console.log(this.search_container)
-    // this.index = elasticlunr(function () {
-    //   this.addField('english');
-    //   this.addField('yupik');
-    //   this.setRef("yupik");
-    // });
   }
 
   componentDidMount() {
@@ -59,9 +55,6 @@ class SearchPage extends Component {
       axios
         .get(API_URL + "/word/all")
         .then(response => {
-          // response.data.forEach((word) => {
-          //   this.index.addDoc({ ...word, yupik: word.yupik.slice(0, -1) });
-          // });
           let end = now();
           ReactGA.timing({
             category: 'Loading',
@@ -76,9 +69,6 @@ class SearchPage extends Component {
         });
     }
     else {
-      // dictionary.forEach((word) => {
-      //   this.index.addDoc(word);
-      // });
       fuse.setCollection(dictionary);
       this.setState({ dictionary: dictionary });
     }
@@ -89,9 +79,7 @@ class SearchPage extends Component {
       this.onChangeSearch(undefined, {value: this.state.search});
     }
     if (prevState.startingSearch && !this.state.startingSearch) {
-      console.log('hi')
       if(navigator.userAgent.match(/(iPhone|iPod|iPad)/i)) {
-        console.log(this.search_container);
         let elts = ReactDOM.findDOMNode(this).getElementsByClassName('search_container');
         if (elts.length > 0) {
           elts[0].scrollIntoView();
@@ -107,12 +95,6 @@ class SearchPage extends Component {
     let new_search = data.value;
 
     if (new_search.length >= 4) {
-      // Search
-      // let results = this.index.search(new_search.concat(" ", new_search.slice(0, -2)));
-      // let results = this.index.search(new_search, { expand: true });
-      // let wordsList = results.map((e) => {
-      //   return this.index.documentStore.getDoc(e.ref);
-      // });
       ReactGA.event({
         category: 'User',
         action: 'Search word',
@@ -121,12 +103,6 @@ class SearchPage extends Component {
       let start = now();
       let wordsList = fuse.search(new_search);
       let end = now();
-      // if (this.state.search !== undefined && this.state.search.length >= 1) {
-      //   let shortest_search = (new_search.length < this.state.search.length) ? new_search : this.state.search;
-      //   if (new_search.substring(0, shortest_search.length) == this.state.search.substring(0, shortest_search.length)) {
-      //     fuse.setCollection(wordsList);
-      //   }
-      // }
       console.log('done! in ', (end-start).toFixed(3), 'ms');
       ReactGA.timing({
         category: 'Search',
@@ -134,14 +110,6 @@ class SearchPage extends Component {
         value: (end-start).toFixed(3),
         label:'Fuse.js search duration'
       });
-      // if (results[0].score > results[results.length-1].score) {
-      //   results = results.reverse();
-      // }
-      // console.log(results);
-      // // console.log(results.sort((x, y) => { return (x.score > y.score) ? -1 : ((x.score < y.score) ? 1 : 0); }));
-      // let wordsList = results.map((e) => { return e.item; });
-      // console.log(wordsList);
-      // this.setState({ startingSearch: newStartingSearch, wordsList: wordsList.sort((w1, w2) => { return (w1.yupik > w2.yupik) ? 1 : ((w1.yupik < w2.yupik) ? -1 : 0); }), search: new_search });
       this.setState({ startingSearch: newStartingSearch, wordsList: wordsList, search: new_search });
     }
     else {
@@ -172,7 +140,6 @@ class SearchPage extends Component {
       wordsList = wordsList.filter((word, i) => { return isCommonList[i]; });
     }
     let displayCommonOption = this.state.onlyCommon || (wordsList.some((word, i) => { return isCommonList[i]; }) && wordsList.some((word, i) => { return !isCommonList[i]; }));
-    console.log(displayList);
     return (
       <div>
       <Dimmer active={this.state.dictionary.length === 0}>

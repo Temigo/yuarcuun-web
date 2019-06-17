@@ -60,8 +60,6 @@ class YupikEntry extends Component {
     return [text1, sub, text2, obj, text3]
   }
   render() {
-
-
     return (
       <Segment style={{fontSize:'1em'}}>
       <Grid>
@@ -78,7 +76,6 @@ class YupikEntry extends Component {
           }
           </Grid.Column>
         </Grid.Row>
-
 
         {this.state.entry.usage.length > 0 ? (
           <Grid.Row>
