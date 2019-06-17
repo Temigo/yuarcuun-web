@@ -9,8 +9,8 @@ import YupikDetails from './components/YupikDetails.js';
 import About from './components/About.js';
 import YupikModifyLayout from './components/yupikModify/YupikModifyLayout.js';
 
-// export const API_URL = "http://yuarcuun.herokuapp.com";
-export const API_URL = "http://localhost:5000";
+export const API_URL = "http://yugtun-api.herokuapp.com";
+//export const API_URL = "http://localhost:5000";
 
 class App extends Component {
   render() {
