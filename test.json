@@ -1,0 +1,694 @@
+[
+  {
+    "config": [
+      0
+    ],
+    "person": 3,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "indicative",
+    "moodSpecific": "indicative",
+    "postbasesList": [
+      "+'(g)aa"
+    ],
+    "enclitic": "-qaa",
+    "yupik": "pissuraa-qaa",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "",
+    "english": "he  is hunting it   (yes or no?)"
+  },
+  {
+    "config": [
+      1
+    ],
+    "person": 3,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "interrogative",
+    "moodSpecific": "who",
+    "postbasesList": [
+      "+'(g/t)a:gu"
+    ],
+    "enclitic": "",
+    "yupik": "kina pissurtau?",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "kina",
+    "english": "whom is  he   hunting it ?"
+  },
+  {
+    "config": [
+      2
+    ],
+    "person": 3,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "interrogative",
+    "moodSpecific": "when (in past)",
+    "postbasesList": [
+      "+'(g/t)a:gu"
+    ],
+    "enclitic": "",
+    "yupik": "qangvaq pissurtau?",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "qangvaq",
+    "english": "when (in past) was he   hunting it ?"
+  },
+  {
+    "config": [
+      3
+    ],
+    "person": 3,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "interrogative",
+    "moodSpecific": "when (in future)",
+    "postbasesList": [
+      "+'(g/t)a:gu"
+    ],
+    "enclitic": "",
+    "yupik": "qaku pissurtau?",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "qaku",
+    "english": "when (in future) will he   be hunting it ?"
+  },
+  {
+    "config": [
+      4
+    ],
+    "person": 3,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "interrogative",
+    "moodSpecific": "at where",
+    "postbasesList": [
+      "+'(g/t)a:gu"
+    ],
+    "enclitic": "",
+    "yupik": "nani pissurtau?",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "nani",
+    "english": "at where is he   hunting it ?"
+  },
+  {
+    "config": [
+      5
+    ],
+    "person": 3,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "interrogative",
+    "moodSpecific": "from where",
+    "postbasesList": [
+      "+'(g/t)a:gu"
+    ],
+    "enclitic": "",
+    "yupik": "naken pissurtau?",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "naken",
+    "english": "from where is he   hunting it ?"
+  },
+  {
+    "config": [
+      6
+    ],
+    "person": 3,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "interrogative",
+    "moodSpecific": "toward where",
+    "postbasesList": [
+      "+'(g/t)a:gu"
+    ],
+    "enclitic": "",
+    "yupik": "natmun pissurtau?",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "natmun",
+    "english": "toward where is he   hunting it ?"
+  },
+  {
+    "config": [
+      7
+    ],
+    "person": 3,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "interrogative",
+    "moodSpecific": "why",
+    "postbasesList": [
+      "+'(g/t)a:gu"
+    ],
+    "enclitic": "",
+    "yupik": "ciin pissurtau?",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "ciin",
+    "english": "why is he   hunting it ?"
+  },
+  {
+    "config": [
+      8
+    ],
+    "person": 3,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "interrogative",
+    "moodSpecific": "how",
+    "postbasesList": [
+      "+'(g/t)a:gu"
+    ],
+    "enclitic": "",
+    "yupik": "qaillun pissurtau?",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "qaillun",
+    "english": "how is he   hunting it ?"
+  },
+  {
+    "config": [
+      9
+    ],
+    "person": 2,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "optative",
+    "moodSpecific": "do!",
+    "postbasesList": [
+      "&"
+    ],
+    "enclitic": "",
+    "yupik": "pissuruu",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "",
+    "english": "you , be  hunting it    !"
+  },
+  {
+    "config": [
+      10
+    ],
+    "person": 2,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "optative",
+    "moodSpecific": "do (in the future)!",
+    "postbasesList": [
+      "@~-ki\\",
+      "&"
+    ],
+    "enclitic": "",
+    "yupik": "pissuqiu",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "",
+    "english": "you , be  hunting it   (in the future)  !"
+  },
+  {
+    "config": [
+      11
+    ],
+    "person": 2,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "optative",
+    "moodSpecific": "You, do not!",
+    "postbasesList": [
+      "@~+yaquna\\",
+      "@+ku"
+    ],
+    "enclitic": "",
+    "yupik": "pissuryaqunaku",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "",
+    "english": "you , do not be  hunting it    !"
+  },
+  {
+    "config": [
+      12
+    ],
+    "person": 2,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "optative",
+    "moodSpecific": "You, stop!",
+    "postbasesList": [
+      "@~+(t)viiqna\\",
+      "@+ku"
+    ],
+    "enclitic": "",
+    "yupik": "pissurpiiqnaku",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "",
+    "english": "you , stop  hunting it    !"
+  },
+  {
+    "config": [
+      13
+    ],
+    "person": 2,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "connective_precessive",
+    "moodSpecific": "before...",
+    "postbasesList": [
+      "@~+(t)vaileg\\",
+      "+(t)vegu"
+    ],
+    "enclitic": "",
+    "yupik": "pissurpailegpegu",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "",
+    "english": "before  you  are hunting it"
+  },
+  {
+    "config": [
+      14
+    ],
+    "person": 2,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "connective_consequential",
+    "moodSpecific": "because...",
+    "postbasesList": [
+      "@~:(6)a\\",
+      "+(t)vgu"
+    ],
+    "enclitic": "",
+    "yupik": "pissuavgu",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "",
+    "english": "because  you  are hunting it"
+  },
+  {
+    "config": [
+      15
+    ],
+    "person": 2,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "connective_contingent",
+    "moodSpecific": "whenever...",
+    "postbasesList": [
+      "+'(g)aqa\\",
+      "+(t)vgu"
+    ],
+    "enclitic": "",
+    "yupik": "pissuraqavgu",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "",
+    "english": "whenever  you  are hunting it"
+  },
+  {
+    "config": [
+      16
+    ],
+    "person": 2,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "connective_concessive",
+    "moodSpecific": "although...",
+    "postbasesList": [
+      "@-6rar\\",
+      "+(t)vegu"
+    ],
+    "enclitic": "",
+    "yupik": "pissungerpegu",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "",
+    "english": "although  you  are hunting it"
+  },
+  {
+    "config": [
+      17
+    ],
+    "person": 2,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "connective_conditional",
+    "moodSpecific": "if...",
+    "postbasesList": [
+      "@~-ku\\",
+      "+(t)vgu"
+    ],
+    "enclitic": "",
+    "yupik": "pissuquvgu",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "",
+    "english": "if  you  are hunting it"
+  },
+  {
+    "config": [
+      18
+    ],
+    "person": 2,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "connective_first_contemporative",
+    "moodSpecific": "when (past)...",
+    "postbasesList": [
+      "-ller\\",
+      "+(t)vegu"
+    ],
+    "enclitic": "",
+    "yupik": "pissullerpegu",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "",
+    "english": "when   you  were hunting it"
+  },
+  {
+    "config": [
+      19
+    ],
+    "person": 2,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "connective_second_contemporative",
+    "moodSpecific": "when (future)...",
+    "postbasesList": [
+      "@:(6)inaner\\",
+      "+(t)vegu"
+    ],
+    "enclitic": "",
+    "yupik": "pissuinanerpegu",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "",
+    "english": "when  you  will  be hunting it"
+  },
+  {
+    "config": [
+      20
+    ],
+    "person": 2,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "subordinative",
+    "moodSpecific": "by or being that...",
+    "postbasesList": [
+      "@~+luku"
+    ],
+    "enclitic": "",
+    "yupik": "pissurluku",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "",
+    "english": "by or being that  you  are hunting it"
+  },
+  {
+    "config": [
+      21
+    ],
+    "person": 2,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "nounEnding",
+    "moodSpecific": "nounEnding",
+    "postbasesList": [
+      "-lria"
+    ],
+    "enclitic": "",
+    "yupik": "pissulria",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "",
+    "english": "the one who is  ( hunting )"
+  },
+  {
+    "config": [
+      22
+    ],
+    "person": 2,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "nounEnding",
+    "moodSpecific": "nounEnding",
+    "postbasesList": [
+      "@~+vik"
+    ],
+    "enclitic": "",
+    "yupik": "pissurvik",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "",
+    "english": "place for  ( hunting )"
+  },
+  {
+    "config": [
+      23
+    ],
+    "person": 2,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "nounEnding",
+    "moodSpecific": "nounEnding",
+    "postbasesList": [
+      "+cuun"
+    ],
+    "enclitic": "",
+    "yupik": "pissurcuun",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "",
+    "english": "device for  ( hunting )"
+  },
+  {
+    "config": [
+      24
+    ],
+    "person": 2,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "nounEnding",
+    "moodSpecific": "nounEnding",
+    "postbasesList": [
+      "-tuli"
+    ],
+    "enclitic": "",
+    "yupik": "pissutuli",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "",
+    "english": "one that often or capably is  ( hunting )"
+  },
+  {
+    "config": [
+      25
+    ],
+    "person": 2,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "nounEnding",
+    "moodSpecific": "nounEnding",
+    "postbasesList": [
+      "@~+yaraq"
+    ],
+    "enclitic": "",
+    "yupik": "pissuryaraq",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "",
+    "english": "how to/way of  ( hunting )"
+  },
+  {
+    "config": [
+      26
+    ],
+    "person": 2,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "nounEnding",
+    "moodSpecific": "nounEnding",
+    "postbasesList": [
+      "@~-yuli"
+    ],
+    "enclitic": "",
+    "yupik": "pissuyuli",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "",
+    "english": "one who is good at  ( hunting )"
+  },
+  {
+    "config": [
+      27
+    ],
+    "person": 2,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "nounEnding",
+    "moodSpecific": "nounEnding",
+    "postbasesList": [
+      "-lleq "
+    ],
+    "enclitic": "",
+    "yupik": "pissulleq",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "",
+    "english": "act or state of  ( hunting )"
+  },
+  {
+    "config": [
+      28
+    ],
+    "person": 2,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "indicative",
+    "moodSpecific": "indicative",
+    "postbasesList": [
+      "-nrite\\",
+      "+'(g)an"
+    ],
+    "enclitic": "",
+    "yupik": "pissunritaan",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "",
+    "english": "you  are   not hunting it"
+  },
+  {
+    "config": [
+      29
+    ],
+    "person": 2,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "indicative",
+    "moodSpecific": "indicative",
+    "postbasesList": [
+      "@~+6aite\\",
+      "+'(g)an"
+    ],
+    "enclitic": "",
+    "yupik": "pissurngaitaan",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "",
+    "english": "you  will be   not hunting it"
+  },
+  {
+    "config": [],
+    "person": 2,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "indicative",
+    "moodSpecific": "indicative",
+    "postbasesList": [
+      "+'(g)an"
+    ],
+    "enclitic": "",
+    "yupik": "pissurngaitaan",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "",
+    "english": "you  will be   not hunting it"
+  }
+]
