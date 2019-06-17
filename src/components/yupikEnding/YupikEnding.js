@@ -18,7 +18,7 @@ class YupikEnding extends Component {
           {options[group_id].map((e) => {
             return (
               <Card>
-              {(group_id == 3) ?
+              {(group_id === 3) ?
                 <Button onClick={() => this.props.setNounEnding(e.ending)} toggle active={this.props.nounEnding === e.ending}>{e.text}</Button>
                 :
                 <Button

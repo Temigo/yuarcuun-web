@@ -4,9 +4,8 @@ import '../semantic/dist/semantic.min.css';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import elasticlunr from 'elasticlunr';
 import { Container, Header, Divider, Grid, Input, List, Label,
-  Checkbox, Icon, Loader, Dimmer, Image } from 'semantic-ui-react';
+  Icon, Loader, Dimmer, Image } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { API_URL } from '../App.js';
 import Fuse from 'fuse.js';
@@ -39,7 +38,7 @@ class SearchPage extends Component {
       dictionaryNouns: [],
       dictionaryVerbs: [],
       wordsList: [],
-      search: props.location.state == undefined ? '' : props.location.state.search,
+      search: props.location.state === undefined ? '' : props.location.state.search,
       currentWord: {},
       onlyCommon: false,
       startingSearch: true,
@@ -51,7 +50,7 @@ class SearchPage extends Component {
 
   componentDidMount() {
     let start = now();
-    if (dictionary.length == 0) {
+    if (dictionary.length === 0) {
       axios
         .get(API_URL + "/word/all")
         .then(response => {
@@ -75,7 +74,7 @@ class SearchPage extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.dictionary.length != this.state.dictionary.length) {
+    if (prevState.dictionary.length !== this.state.dictionary.length) {
       this.onChangeSearch(undefined, {value: this.state.search});
     }
     if (prevState.startingSearch && !this.state.startingSearch) {
@@ -91,7 +90,7 @@ class SearchPage extends Component {
 
   onChangeSearch(event, data) {
     console.log('start search');
-    let newStartingSearch = event == undefined;
+    let newStartingSearch = event === undefined;
     let new_search = data.value;
 
     if (new_search.length >= 4) {
@@ -132,8 +131,7 @@ class SearchPage extends Component {
   render() {
     console.log("SearchPage state: ", this.state);
     let displayList = this.state.search.length >= 4 && this.state.wordsList.length > 0;
-    let emptyList = this.state.search.length >= 4 && this.state.wordsList.length == 0;
-    let displayWord = this.state.currentWord.yupik !== undefined;
+    let emptyList = this.state.search.length >= 4 && this.state.wordsList.length === 0;
     let wordsList = this.state.wordsList;
     let isCommonList = wordsList.map((word) => { return Object.keys(word).some((key) => { return word[key].properties && word[key].properties.indexOf('common') > -1; }); });
     if (this.state.onlyCommon) {

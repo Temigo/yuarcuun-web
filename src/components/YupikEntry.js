@@ -29,7 +29,7 @@ class YupikEntry extends Component {
     }
   }
   fontUsage(word) {
-    if (this.state.entry.descriptor == 'noun') {
+    if (this.state.entry.descriptor === 'noun') {
       return ['(root form)','','','','']
     }
     let new_state = {};

@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import '../../semantic/dist/semantic.min.css';
-import YupikModifyNoun from '../yupikModify/YupikModifyNoun.js';
-import YupikModifyVerb from '../yupikModify/YupikModifyVerb.js';
 import { Accordion, Icon, Card, Button, Divider } from 'semantic-ui-react';
 import { interrogative, optative, dependent, verb2noun, postbaseButtons, enclitics } from '../modifyWord/modifyVerbOptions.js';
 import { postbases } from '../constants/constants.js';
@@ -60,11 +58,11 @@ class YupikAllPostbases extends Component {
           </Card.Group>
         </Accordion.Content>
 
-        <Accordion.Title active={this.state.activeIndex === 2 || this.props.mood[0] == 'c' || this.props.mood[0] == 's'} index={2} onClick={this.handleClick}>
+        <Accordion.Title active={this.state.activeIndex === 2 || this.props.mood[0] === 'c' || this.props.mood[0] === 's'} index={2} onClick={this.handleClick}>
           <Icon name='dropdown' />
           Connective endings
         </Accordion.Title>
-        <Accordion.Content active={this.state.activeIndex === 2 || this.props.mood[0] == 'c' || this.props.mood[0] == 's'}>
+        <Accordion.Content active={this.state.activeIndex === 2 || this.props.mood[0] === 'c' || this.props.mood[0] === 's'}>
           <Card.Group itemsPerRow={3} stackable>
           {dependent.map((e) => {
             return (
@@ -76,11 +74,11 @@ class YupikAllPostbases extends Component {
           </Card.Group>
         </Accordion.Content>
 
-        <Accordion.Title active={this.state.activeIndex === 3 || this.props.nounEnding != ''} index={3} onClick={this.handleClick}>
+        <Accordion.Title active={this.state.activeIndex === 3 || this.props.nounEnding !== ''} index={3} onClick={this.handleClick}>
           <Icon name='dropdown' />
           Noun forms
         </Accordion.Title>
-        <Accordion.Content active={this.state.activeIndex === 3 || this.props.nounEnding != ''}>
+        <Accordion.Content active={this.state.activeIndex === 3 || this.props.nounEnding !== ''}>
           <Card.Group itemsPerRow={3} stackable>
           {verb2noun.map((e) => {
             return (
@@ -124,7 +122,7 @@ class YupikAllPostbases extends Component {
       <Divider />
 
 
-      {this.props.mood == 'indicative' || this.props.mood == 'interrogative' ?
+      {this.props.mood === 'indicative' || this.props.mood === 'interrogative' ?
       <Accordion styled >
         <Accordion.Title active={this.state.activeIndex === enclitics[this.props.mood].activeIndex} index={enclitics[this.props.mood].activeIndex} onClick={this.handleClick}>
           <Icon name='dropdown' />

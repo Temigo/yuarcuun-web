@@ -12,8 +12,8 @@ class YupikDetails extends Component {
     super(props);
     console.log("YupikDetails props: ", props);
     this.state = {
-      search: props.location.state == undefined ? '' : props.location.state.search ,
-      wordsList: props.location.state == undefined ? [] : props.location.state.wordsList,
+      search: props.location.state === undefined ? '' : props.location.state.search ,
+      wordsList: props.location.state === undefined ? [] : props.location.state.wordsList,
       currentWord: "",
       modifiedWord: "",
       fullWord: "",
@@ -56,7 +56,7 @@ class YupikDetails extends Component {
       />
       <Container text style={{ marginTop: '5em'}}>
         {Object.keys(this.state.fullWord).map((entryNumber) => {
-          if (entryNumber == 'english' || entryNumber == 'yupik') {
+          if (entryNumber === 'english' || entryNumber === 'yupik') {
             return '';
           }
           else {
