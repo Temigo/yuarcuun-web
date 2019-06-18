@@ -9,16 +9,16 @@ import YupikDetails from './components/YupikDetails.js';
 import About from './components/About.js';
 import YupikModifyLayout from './components/yupikModify/YupikModifyLayout.js';
 
-// class Verification extends Component {
-//   componentDidMount() {
-//     this.link.click();
-//   }
-//   render() {
-//     return (
-//       <a ref={input => this.link = input} href={API_URL + '/loaderio-a0a6b59c23ca05a56ff044a189dd143a'}>here</a>
-//     );
-//   }
-// }
+class Verification extends Component {
+  componentDidMount() {
+    this.link.click();
+  }
+  render() {
+    return (
+      <a ref={input => this.link = input} href={API_URL + '/loaderio-a0a6b59c23ca05a56ff044a189dd143a'}>here</a>
+    );
+  }
+}
 
 export const API_URL = "https://yugtun-api.herokuapp.com";
 //export const API_URL = "http://localhost:5000";
