@@ -1,5 +1,5 @@
 export const pronounEnding = (value1, pronountype) => {
-  if (pronountype == 'self') {
+  if (pronountype === 'self') {
     if (value1 === '31-1(1)') {
       return 'himself'
     } else if (value1 === '31-2(1)') {
@@ -17,7 +17,7 @@ export const pronounEnding = (value1, pronountype) => {
     } else if (value1 === '12(1)' || value1 === '13(1)') {
       return 'ourselves'
     }
-  } else if (pronountype == 'possessive') {
+  } else if (pronountype === 'possessive') {
     if (value1 === '31-1(1)') {
       return 'his'
     } else if (value1 === '31-2(1)') {
@@ -35,7 +35,7 @@ export const pronounEnding = (value1, pronountype) => {
     } else if (value1 === '12(1)' || value1 === '13(1)') {
       return 'our'
     }
-  } else if (pronountype == 'asis') {
+  } else if (pronountype === 'asis') {
     if (value1 === '31-1(1)') {
       return 'he'
     } else if (value1 === '31-2(1)') {
@@ -58,11 +58,11 @@ export const pronounEnding = (value1, pronountype) => {
 
 export const getsubjectis = (currentPostbases, person, tenseN, peopleN, personN, doesN) => {
   let subjectis = '';
-  if (doesN=='does') {
-    if (peopleN == 1 && personN == 3) {
-      if (tenseN == 'past') {
+  if (doesN==='does') {
+    if (peopleN === 1 && personN === 3) {
+      if (tenseN === 'past') {
         subjectis = 'did'
-      } else if (tenseN == 'future') {
+      } else if (tenseN === 'future') {
         subjectis = 'will'
       } else {
         subjectis = 'does'
@@ -70,51 +70,51 @@ export const getsubjectis = (currentPostbases, person, tenseN, peopleN, personN,
     } else {
       subjectis = 'do'
     }
-  } else if (doesN=='had' && tenseN !='future') {
-    if (peopleN == 1 && personN == 3) {
+  } else if (doesN==='had' && tenseN !=='future') {
+    if (peopleN === 1 && personN === 3) {
       subjectis = 'had'
     } else {
       subjectis = 'have'
     }
-  } else if (doesN=='has') {
-    if (tenseN == 'future') {
+  } else if (doesN==='has') {
+    if (tenseN === 'future') {
       subjectis = 'have'
-    } else if (tenseN == 'past') {
+    } else if (tenseN === 'past') {
       subjectis = 'had'
     } else {
       subjectis = 'has'
     }
-  } else if (doesN == 'be') {
-    if (tenseN == 'future' && currentPostbases[0] !== 23) {
+  } else if (doesN === 'be') {
+    if (tenseN === 'future' && currentPostbases[0] !== 23) {
       subjectis = ' be'
     } else {
       subjectis = ''
     }
-  } else if (doesN == 'prewho') {
-    if (peopleN == 1 && person == 1) {
+  } else if (doesN === 'prewho') {
+    if (peopleN === 1 && person === 1) {
       subjectis = 'am'
-    } else if (peopleN == 1 && personN == 3) {
+    } else if (peopleN === 1 && personN === 3) {
       subjectis = 'is'
     } else {
       subjectis = 'are'
     }
-  } else if (tenseN == 'present') {
-    if (peopleN == 1 && personN == 1) {
+  } else if (tenseN === 'present') {
+    if (peopleN === 1 && personN === 1) {
       subjectis = 'am'
-    } else if (peopleN == 1 && personN == 3) {
+    } else if (peopleN === 1 && personN === 3) {
       subjectis = 'is'
     } else {
       subjectis = 'are'
     }
-  } else if (tenseN == 'past') {
-    if (peopleN == 1 && personN == 1) {
+  } else if (tenseN === 'past') {
+    if (peopleN === 1 && personN === 1) {
       subjectis = 'was'
-    } else if (peopleN == 1 && personN == 3) {
+    } else if (peopleN === 1 && personN === 3) {
       subjectis = 'was'
     } else {
       subjectis = 'were'
     }
-  } else if (tenseN == 'future') {
+  } else if (tenseN === 'future') {
     subjectis = 'will'
   }
   return subjectis
@@ -122,17 +122,17 @@ export const getsubjectis = (currentPostbases, person, tenseN, peopleN, personN,
 
 export const processPostbases = (currentPostbases, base, postbases, word) => {
   return currentPostbases.map((p,i) => {
-    if (postbases[p].conditional_rule == 'attaching_to_te') {
-      if (currentPostbases.length == 1 || currentPostbases.length == 0) {
+    if (postbases[p].conditional_rule === 'attaching_to_te') {
+      if (currentPostbases.length === 1 || currentPostbases.length === 0) {
         base = word
       } else {
-        if (i != 0) {
+        if (i !== 0) {
           base = postbases[currentPostbases[i-1]].expression
         } else {
           base = word
         }
       }
-      if (base.slice(base.length-3,base.length-1)=='te') {
+      if (base.slice(base.length-3,base.length-1)==='te') {
         return postbases[p].expression_conditional
       } else {
         return postbases[p].expression
@@ -144,10 +144,10 @@ export const processPostbases = (currentPostbases, base, postbases, word) => {
  };
 
 export const pushEnding = (infinitive_new_adj, gerund_new_adj, new_adj, englishEnding, thisMood, index) => {
- if (index == 0) {///FIX THIS!!!
-   if (thisMood=='i') {
+ if (index === 0) {///FIX THIS!!!
+   if (thisMood==='i') {
      englishEnding.push(infinitive_new_adj)
-   } else if (thisMood =='g') {
+   } else if (thisMood ==='g') {
      englishEnding.push(gerund_new_adj)
    } else {
      englishEnding.push(new_adj)
@@ -157,37 +157,37 @@ export const pushEnding = (infinitive_new_adj, gerund_new_adj, new_adj, englishE
 
 export const addedWord = (moodSpecific, objectExists, objectPeople, people) => {
   let added_word = '';
-  if (moodSpecific=='who' && objectExists) {
-    if (objectPeople == 1) {
+  if (moodSpecific==='who' && objectExists) {
+    if (objectPeople === 1) {
       added_word='kina'
-    } else if (objectPeople == 2) {
+    } else if (objectPeople === 2) {
       added_word='kinkuk'
     } else {
       added_word='kinkut'
     }
-  } else if (moodSpecific=='who') {
-    if (people == 1) {
+  } else if (moodSpecific==='who') {
+    if (people === 1) {
       added_word='kina'
-    } else if (people == 2) {
+    } else if (people === 2) {
       added_word='kinkuk'
     } else {
       added_word='kinkut'
     }
-  } else if (moodSpecific=='when (in past)') {
+  } else if (moodSpecific==='when (in past)') {
     added_word='qangvaq'
     // newText2 = nlp(newText2).sentences().toPastTense().out()
-  } else if (moodSpecific=='when (in future)') {
+  } else if (moodSpecific==='when (in future)') {
     added_word='qaku'
     // newText2 = nlp(newText2).sentences().toFutureTense().out()
-  } else if (moodSpecific=='at where') {
+  } else if (moodSpecific==='at where') {
     added_word='nani'
-  } else if (moodSpecific=='from where') {
+  } else if (moodSpecific==='from where') {
     added_word='naken'
-  } else if (moodSpecific=='toward where') {
+  } else if (moodSpecific==='toward where') {
     added_word='natmun'
-  } else if (moodSpecific=='why') {
+  } else if (moodSpecific==='why') {
     added_word='ciin'
-  } else if (moodSpecific=='how') {
+  } else if (moodSpecific==='how') {
     added_word='qaillun'
   } else {
     added_word=''

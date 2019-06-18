@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import '../../semantic/dist/semantic.min.css';
-import { Segment, Button, Card, Accordion, Icon} from 'semantic-ui-react';
-import { nounPostbases } from '../constants/constants.js';
+import { Button, Card, Accordion, Icon} from 'semantic-ui-react';
 
 class YupikNounEndingMoods extends Component {
   constructor(props) {
@@ -29,8 +28,8 @@ class YupikNounEndingMoods extends Component {
         </Card.Content>
         <Card.Content>
           <Card.Group>
-            <Card><Button onClick={this.props.setMood.bind(this,'absolutive')} active={this.props.mood=='absolutive'}>absolutive (default)</Button></Card>
-            {this.props.mood=='absolutive' ?
+            <Card><Button onClick={this.props.setMood.bind(this,'absolutive')} active={this.props.mood==='absolutive'}>absolutive (default)</Button></Card>
+            {this.props.mood==='absolutive' ?
               <Accordion>
                 Uses:
                 <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
@@ -56,8 +55,8 @@ class YupikNounEndingMoods extends Component {
             :
             ''
             }
-            <Card><Button onClick={this.props.setMood.bind(this,'relative')} active={this.props.mood=='relative'}>relative</Button></Card>
-            {this.props.mood=='relative' ?
+            <Card><Button onClick={this.props.setMood.bind(this,'relative')} active={this.props.mood==='relative'}>relative</Button></Card>
+            {this.props.mood==='relative' ?
               <Accordion>
                 Uses:
                 <Accordion.Title active={activeIndex === 2} index={2} onClick={this.handleClick}>
@@ -83,8 +82,8 @@ class YupikNounEndingMoods extends Component {
             :
             ''
             }
-            <Card><Button onClick={this.props.setMood.bind(this,'localis')} active={this.props.mood=='localis'}>localis</Button></Card>
-            {this.props.mood=='localis' ?
+            <Card><Button onClick={this.props.setMood.bind(this,'localis')} active={this.props.mood==='localis'}>localis</Button></Card>
+            {this.props.mood==='localis' ?
               <Accordion>
                 Uses:
                 <Accordion.Title active={activeIndex === 4} index={4} onClick={this.handleClick}>
@@ -124,8 +123,8 @@ class YupikNounEndingMoods extends Component {
             :
             ''
             }
-            <Card><Button onClick={this.props.setMood.bind(this,'ablative')} active={this.props.mood=='ablative'}>ablative</Button></Card>
-            {this.props.mood=='ablative' ?
+            <Card><Button onClick={this.props.setMood.bind(this,'ablative')} active={this.props.mood==='ablative'}>ablative</Button></Card>
+            {this.props.mood==='ablative' ?
               <Accordion>
                 Uses:
                 <Accordion.Title active={activeIndex === 8} index={8} onClick={this.handleClick}>
@@ -176,8 +175,8 @@ class YupikNounEndingMoods extends Component {
             :
             ''
             }
-            <Card><Button onClick={this.props.setMood.bind(this,'terminalis')} active={this.props.mood=='terminalis'}>terminalis</Button></Card>
-            {this.props.mood=='terminalis' ?
+            <Card><Button onClick={this.props.setMood.bind(this,'terminalis')} active={this.props.mood==='terminalis'}>terminalis</Button></Card>
+            {this.props.mood==='terminalis' ?
               <Accordion>
                 Uses:
                 <Accordion.Title active={activeIndex === 13} index={13} onClick={this.handleClick}>
@@ -207,8 +206,8 @@ class YupikNounEndingMoods extends Component {
             :
             ''
             }
-            <Card><Button onClick={this.props.setMood.bind(this,'vialis')} active={this.props.mood=='vialis'}>vialis</Button></Card>
-            {this.props.mood=='vialis' ?
+            <Card><Button onClick={this.props.setMood.bind(this,'vialis')} active={this.props.mood==='vialis'}>vialis</Button></Card>
+            {this.props.mood==='vialis' ?
               <Accordion>
                 Uses:
                 <Accordion.Title active={activeIndex === 16} index={16} onClick={this.handleClick}>
@@ -238,8 +237,8 @@ class YupikNounEndingMoods extends Component {
             :
             ''
             }
-            <Card><Button onClick={this.props.setMood.bind(this,'equalis')} active={this.props.mood=='equalis'}>equalis</Button></Card>
-            {this.props.mood=='equalis' ?
+            <Card><Button onClick={this.props.setMood.bind(this,'equalis')} active={this.props.mood==='equalis'}>equalis</Button></Card>
+            {this.props.mood==='equalis' ?
               <Accordion>
                 Uses:
                 <Accordion.Title active={activeIndex === 19} index={19} onClick={this.handleClick}>

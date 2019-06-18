@@ -16,7 +16,8 @@
     "clean": "dist/"
   },
   "permission": false,
-  "autoInstall": false,
+  "autoInstall": true,
   "rtl": false,
-  "version": "2.3.1"
+  "version": "2.4.2",
+  "components": ["reset", "site", "button", "container", "divider", "header", "icon", "image", "input", "label", "list", "loader", "segment", "menu", "grid", "card", "item", "accordion", "checkbox", "dimmer", "dropdown", "search", "visibility"]
 }

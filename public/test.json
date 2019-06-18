@@ -1,0 +1,88 @@
+[
+  {
+    "config": [
+      0
+    ],
+    "person": 3,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "indicative",
+    "moodSpecific": "indicative",
+    "postbasesList": [
+      "+'(g)aa"
+    ],
+    "enclitic": "-qaa",
+    "yupik": "pissuraa-qaa",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "",
+    "english": "he  is hunting it   (yes or no?)"
+  },
+  {
+    "config": [
+      1
+    ],
+    "person": 3,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "interrogative",
+    "moodSpecific": "who",
+    "postbasesList": [
+      "+'(g/t)a:gu"
+    ],
+    "enclitic": "",
+    "yupik": "kina pissurtau?",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "kina",
+    "english": "whom is  he   hunting it ?"
+  },
+  {
+    "config": [
+      2
+    ],
+    "person": 3,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "interrogative",
+    "moodSpecific": "when (in past)",
+    "postbasesList": [
+      "+'(g/t)a:gu"
+    ],
+    "enclitic": "",
+    "yupik": "qangvaq pissurtau?",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "qangvaq",
+    "english": "when (in past) was he   hunting it ?"
+  },
+  {
+    "config": [],
+    "person": 3,
+    "people": 1,
+    "objectPerson": 3,
+    "objectPeople": 1,
+    "mood": "indicative",
+    "moodSpecific": "indicative",
+    "postbasesList": [
+      "+'(g)aa"
+    ],
+    "enclitic": "",
+    "yupik": "pissuraa",
+    "properties": [
+      "not_momentary",
+      "common"
+    ],
+    "addedWord": "",
+    "english": "he  is hunting it"
+  }
+]
