@@ -1,3 +1,5 @@
+import nlp from 'compromise';
+
 export const options1 = [
   {id: 0, value: '11(1)', text:'I', otext:'me'},
   {id: 1, value: '21(1)', text:'you', otext:'you'},
@@ -49,7 +51,7 @@ export const options3 = [
   {id: 13, value: '43(3)', text:'their own (3+)'}
 ];
 
-export const retrieveSubjectObject =
+export const retrieveSubjectObject = 
   {'11(1)':'I',
   '21(1)':'you',
   '31-1(1)':'he',
@@ -553,7 +555,7 @@ export const nounPostbases = [
     expression_postbase: '-rugar\\',
     expression_conditional_end: '',
     expression_conditional_postbase: '',
-    conditional_rule: '',
+    conditional_rule: '', 
     priority:2,
     tense:'noun_end',
     allowable_next_ids: []

@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import { List, Icon } from 'semantic-ui-react';
+import { Segment, List, Icon } from 'semantic-ui-react';
 import '../../semantic/dist/semantic.min.css';
+import axios from 'axios';
+import nlp from 'compromise';
+import { API_URL } from '../../App.js';
 import { Link } from 'react-router-dom';
 
 class YupikModifyNoun extends Component {

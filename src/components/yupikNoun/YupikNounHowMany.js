@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../../semantic/dist/semantic.min.css';
-import { Button, Card } from 'semantic-ui-react';
+import { Segment, Button, Card } from 'semantic-ui-react';
 
 class YupikNounHowMany extends Component {
   render() {
@@ -13,11 +13,11 @@ class YupikNounHowMany extends Component {
         </Card.Content>
         <Card.Content>
           <Button.Group>
-            <Button toggle onClick={this.props.setValue4.bind(this,1)} active={this.props.value4===1}>1</Button>
+            <Button toggle onClick={this.props.setValue4.bind(this,1)} active={this.props.value4==1}>1</Button>
             <Button.Or />
-            <Button toggle onClick={this.props.setValue4.bind(this,2)} active={this.props.value4===2}>2</Button>
+            <Button toggle onClick={this.props.setValue4.bind(this,2)} active={this.props.value4==2}>2</Button>
             <Button.Or />
-            <Button toggle onClick={this.props.setValue4.bind(this,3)} active={this.props.value4===3}>3</Button>
+            <Button toggle onClick={this.props.setValue4.bind(this,3)} active={this.props.value4==3}>3</Button>
           </Button.Group>
         </Card.Content>
       </Card>

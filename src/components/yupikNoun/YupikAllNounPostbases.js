@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import '../../semantic/dist/semantic.min.css';
-import { Grid } from 'semantic-ui-react';
+import { Button, Segment, Grid } from 'semantic-ui-react';
 import YupikNounHowMany from './YupikNounHowMany.js';
 import YupikNounPossessor from './YupikNounPossessor.js';
 import YupikNounNounPostbases from './YupikNounNounPostbases.js';
 import YupikNounEndingMoods from './YupikNounEndingMoods.js';
 import YupikNounVerbPostbases from './YupikNounVerbPostbases.js';
+import { nounPostbases } from '../constants/constants.js';
 
 class YupikAllNounPostbases extends Component {
   render() {
@@ -13,7 +14,7 @@ class YupikAllNounPostbases extends Component {
       <Grid>
         <Grid.Row>
           <Grid.Column>
-            {this.props.verbEnding === false ? <YupikNounHowMany {...this.props} /> : ''}
+            {this.props.verbEnding== false ? <YupikNounHowMany {...this.props} /> : ''}
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>

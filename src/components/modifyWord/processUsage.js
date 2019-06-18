@@ -8,7 +8,7 @@ export const processUsage = (usage, event, data) => {
   if (subject !== null) {
     res = res.split(rx1);
     new_state = {...new_state, subjectExists: true};
-    if (res[1] === 'he') {
+    if (res[1] == 'he') {
       new_state = {
         ...new_state,
         value1: "31-1(1)",
@@ -16,7 +16,7 @@ export const processUsage = (usage, event, data) => {
         person: 3,
         text1: res[0]
       }
-    } else if (res[1] === 'she') {
+    } else if (res[1] == 'she') {
       new_state = {
         ...new_state,
         value1: "31-2(1)",
@@ -24,7 +24,7 @@ export const processUsage = (usage, event, data) => {
         person: 3,
         text1: res[0]
       }
-    } else if (res[1] === 'it') {
+    } else if (res[1] == 'it') {
       new_state = {
         ...new_state,
         value1: "31-3(1)",
@@ -32,7 +32,7 @@ export const processUsage = (usage, event, data) => {
         person: 3,
         text1: res[0]
       }
-    } else if (res[1] === 'his') {
+    } else if (res[1] == 'his') {
       new_state = {
         ...new_state,
         value1: "31-1(3)",
@@ -41,7 +41,7 @@ export const processUsage = (usage, event, data) => {
         text1: res[0],
         possessiveSubject: true
       }
-    } else if (res[1] === 'they') {
+    } else if (res[1] == 'they') {
       new_state = {
         ...new_state,
         value1: "33(1)",
@@ -49,7 +49,7 @@ export const processUsage = (usage, event, data) => {
         person: 3,
         text1: res[0]
       }
-    } else if (res[1] === 'they2') {
+    } else if (res[1] == 'they2') {
       new_state = {
         ...new_state,
         value1: "32(1)",
@@ -57,7 +57,7 @@ export const processUsage = (usage, event, data) => {
         person: 3,
         text1: res[0]
       }
-    } else if (res[1] === 'he or it') {
+    } else if (res[1] == 'he or it') {
       new_state = {
         ...new_state,
         value1: "31-3(1)",

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import '../../semantic/dist/semantic.min.css';
-import { postbaseButtons } from '../modifyWord/modifyVerbOptions.js';
+import YupikModifyNoun from '../yupikModify/YupikModifyNoun.js';
+import YupikModifyVerb from '../yupikModify/YupikModifyVerb.js';
+import { postbaseButtons, enclitics } from '../modifyWord/modifyVerbOptions.js';
 import { List, Segment, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 

@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import '../../semantic/dist/semantic.min.css';
+import YupikModifyNoun from '../yupikModify/YupikModifyNoun.js';
+import YupikModifyVerb from '../yupikModify/YupikModifyVerb.js';
 import { Card, Button } from 'semantic-ui-react';
-import { postbaseButtons } from '../modifyWord/modifyVerbOptions.js';
+import { postbaseButtons, enclitics } from '../modifyWord/modifyVerbOptions.js';
 import { postbases } from '../constants/constants.js';
 
 class YupikPostbase extends Component {
@@ -10,7 +12,7 @@ class YupikPostbase extends Component {
     //console.log(postbaseButtons, group_id);
     // postbaseButtons.forEach((p) => { console.log(p, p.activeIndex, p.activeIndex == group_id, p.activeIndex == parseInt(group_id)); })
     // console.log(postbaseButtons.filter((p) => { p.activeIndex == parseInt(group_id) }))
-    let group = postbaseButtons.find((p) => { return p.activeIndex === group_id });
+    let group = postbaseButtons.find((p) => { return p.activeIndex == group_id });
     return (
       <Card.Group stackable itemsPerRow={3}>
         {group.indexes.map((e) => {

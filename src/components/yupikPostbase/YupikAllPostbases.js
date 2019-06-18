@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import '../../semantic/dist/semantic.min.css';
+import YupikModifyNoun from '../yupikModify/YupikModifyNoun.js';
+import YupikModifyVerb from '../yupikModify/YupikModifyVerb.js';
 import { Accordion, Icon, Card, Button, Divider } from 'semantic-ui-react';
 import { interrogative, optative, dependent, verb2noun, postbaseButtons, enclitics } from '../modifyWord/modifyVerbOptions.js';
 import { postbases } from '../constants/constants.js';
@@ -127,7 +129,7 @@ class YupikAllPostbases extends Component {
       <Divider />
 
 
-      {this.props.mood === 'indicative' || this.props.mood === 'interrogative' ?
+      {this.props.mood == 'indicative' || this.props.mood == 'interrogative' ?
       <Accordion styled >
         <Accordion.Title active={is_enclitics} index={enclitics[this.props.mood].activeIndex} onClick={this.handleClick}>
           <Icon name='dropdown' />

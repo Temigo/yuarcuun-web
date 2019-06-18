@@ -38,7 +38,7 @@ class SearchPage extends Component {
       dictionaryNouns: [],
       dictionaryVerbs: [],
       wordsList: [],
-      search: props.location.state === undefined ? '' : props.location.state.search,
+      search: props.location.state == undefined ? '' : props.location.state.search,
       currentWord: {},
       onlyCommon: false,
       startingSearch: true,
@@ -50,7 +50,7 @@ class SearchPage extends Component {
 
   componentDidMount() {
     let start = now();
-    if (dictionary.length === 0) {
+    if (dictionary.length == 0) {
       axios
         .get(API_URL + "/word/all")
         .then(response => {
@@ -74,7 +74,7 @@ class SearchPage extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.dictionary.length !== this.state.dictionary.length) {
+    if (prevState.dictionary.length != this.state.dictionary.length) {
       this.onChangeSearch(undefined, {value: this.state.search});
     }
     if (prevState.startingSearch && !this.state.startingSearch) {
@@ -129,7 +129,8 @@ class SearchPage extends Component {
   render() {
     console.log("SearchPage state: ", this.state);
     let displayList = this.state.search.length >= 4 && this.state.wordsList.length > 0;
-    let emptyList = this.state.search.length >= 4 && this.state.wordsList.length === 0;
+    let emptyList = this.state.search.length >= 4 && this.state.wordsList.length == 0;
+    let displayWord = this.state.currentWord.yupik !== undefined;
     let wordsList = this.state.wordsList;
     let isCommonList = wordsList.map((word) => {
       return Object.keys(word).some((key) => {
