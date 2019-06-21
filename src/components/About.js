@@ -18,7 +18,7 @@ Current contributors are Christopher Egalaaq Liu, from Mamterilleq (Bethel, Alas
 
 
 <p>
-The Yuarcuun Initiative has received financial sponsorship to support a couple of ongoing projects. At the time this dictionary was implemented, the initiative was financially supported by the following entities:
+The Yuarcuun Initiative received financial sponsorship from the following entities to support the Yugtun dictionary website in 2018 (including future plans to develop a similar online dictionary for Inupiatun):
 </p>
 <ul>
 <li>Bethel Native Corporation</li>
@@ -26,10 +26,21 @@ The Yuarcuun Initiative has received financial sponsorship to support a couple o
 <li>Donlin Gold</li>
 <li>Calista Corporation</li>
 <li>Alaska Federation of Natives</li>
+<li>Sitnasuak Native Corporation</li>
 <li>Alaska Native Heritage Center (Non-profit Sponsor)</li>
 </ul>
 
-<p>Yuarcuun has many on-going plans over the next year. Please contact us at yuarcuun @ gmail dot com for questions about our projects or to be involved with any new projects on Eskimo/Inuit/Aleut languages.</p>
+
+<p>
+In addition, the following entities have contributed financially to support interactive educational Yugtun content (stay tuned):
+</p>
+<ul>
+<li>Lower Kuskokwim School District</li>
+<li>Bristol Bay Native Corporation Education Foundation</li>
+<li>Bethel Native Corporation (in-kind)</li>
+</ul>
+
+<p>Please contact us at yuarcuun @ gmail dot com for questions about our projects or to get involved.</p>
 
 <p> Quyana cakneq! </p>
 
