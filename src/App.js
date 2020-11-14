@@ -9,8 +9,8 @@ import YupikDetails from './components/YupikDetails.js';
 import About from './components/About.js';
 import YupikModifyLayout from './components/yupikModify/YupikModifyLayout.js';
 
-//export const API_URL = "https://yugtun-api.herokuapp.com";
-export const API_URL = "http://localhost:5000";
+export const API_URL = "https://yugtun-api.herokuapp.com";
+// export const API_URL = "http://localhost:5000";
 export const TUTORIAL_URL = 'https://www.youtube.com/watch?v=9M65ptotL0A&t';
 export const ICON_URL = "https://s3.amazonaws.com/yugtun-static/static/logo_final_1.jpg";
 

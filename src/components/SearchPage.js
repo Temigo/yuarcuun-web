@@ -38,11 +38,15 @@ class SearchPage extends Component {
       dictionaryNouns: [],
       dictionaryVerbs: [],
       wordsList: [],
+      yugtunAnalyzer: false,
       search: props.location.state === undefined ? '' : props.location.state.search,
       currentWord: {},
       onlyCommon: false,
       startingSearch: true,
+      parses:[],
+      smallestParse:[],
     }
+    this.getParse = this.getParse.bind(this);
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.selectWord = this.selectWord.bind(this);
     this.search_container = React.createRef();
@@ -87,7 +91,27 @@ class SearchPage extends Component {
     }
   }
 
+  getParse(word) {
+    axios
+      .get(API_URL + "/parse/" + word)
+      .then(response => {
+        console.log(response)
+         var lowest = 0;
+         var a = response.data.parses;
+         for (var i = 1; i < a.length; i++) {
+          if (a[i].length < a[lowest].length) 
+            lowest = i;
+         }
+        console.log(lowest)
+        this.setState({
+          parses: response.data.parses,
+          smallestParse: response.data.parses[lowest].split('-'),
+        });
+      });
+  }
+
   onChangeSearch(event, data) {
+    this.setState({yugtunAnalyzer:false})
     let newStartingSearch = event === undefined;
     let new_search = data.value;
 
@@ -131,6 +155,7 @@ class SearchPage extends Component {
     let displayList = this.state.search.length >= 4 && this.state.wordsList.length > 0;
     let emptyList = this.state.search.length >= 4 && this.state.wordsList.length === 0;
     let wordsList = this.state.wordsList;
+    console.log
     let isCommonList = wordsList.map((word) => {
       return Object.keys(word).some((key) => {
         return word[key].properties && word[key].properties.indexOf('common') > -1;
@@ -169,8 +194,20 @@ class SearchPage extends Component {
                 <Icon link name='close' onClick={() => { this.inputRef.focus(); this.setState({search: '', startingSearch: false});}}/>
               </Grid.Column>
             </Grid.Row>
-            {displayCommonOption ?
             <Grid.Row>
+              <Grid.Column floated='left' style={{ flex: '0 0 17em' }}>
+                <Label
+                  as='a'
+                  content='Yugtun Analyzer'
+                  color='orange'
+                  basic={!this.state.yugtunAnalyzer}
+                  onClick={() => { 
+                    this.setState({ yugtunAnalyzer: !this.state.yugtunAnalyzer }); 
+                    this.getParse(this.state.search)
+                  }}
+                  />
+              </Grid.Column>
+            {displayCommonOption && !this.state.yugtunAnalyzer ?
               <Grid.Column floated='right' style={{ flex: '0 0 17em' }}>
                 <Label
                   as='a'
@@ -180,14 +217,26 @@ class SearchPage extends Component {
                   onClick={() => { this.setState({ onlyCommon: !this.state.onlyCommon }); }}
                   />
               </Grid.Column>
-            </Grid.Row>
             : ''}
+            </Grid.Row>
           </Grid>
+          {this.state.yugtunAnalyzer ?
+            (this.state.smallestParse.map((i,index) => 
+              (index === 0 ?
+                <div>
+                <Link to={{pathname: (this.state.smallestParse[1].includes('[V') ? '/' + i + '-' : '/' + i), state: { word: i, search: this.state.search, wordsList: this.state.wordsList }}}>
+                  {this.state.smallestParse[1].includes('[V') ? i + '-' : i}
+                </Link>
+                </div>
+                :
+                <div>{i}</div>
+              )))
+            :
           <List divided selection>
             {displayList ? wordsList.map((word) => <WordItem key={word} word={word} search={this.state.search} wordsList={this.state.wordsList} />)
             : ''}
           </List>
-          {emptyList ? <p><i>aren, no results...</i></p> : ''}
+          }
         </Container>
         </Grid.Column>
         </Grid.Row>
