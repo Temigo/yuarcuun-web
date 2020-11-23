@@ -32,7 +32,7 @@ class YupikDetails extends Component {
 
   getWord(word) {
     axios
-      .get(API_URL + "/word/" + word)
+      .get(API_URL + "/word/" + encodeURIComponent(word))
       .then(response => {
         console.log(response.data);
         this.setState({

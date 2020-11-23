@@ -4,7 +4,7 @@ import '../semantic/dist/semantic.min.css';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import { Container, Header, Grid, Input, List, Label, Icon, Image } from 'semantic-ui-react';
+import { Container, Header, Grid, Input, List, Label, Icon, Image, Button, Accordion } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { API_URL, TUTORIAL_URL, ICON_URL } from '../App.js';
 import Fuse from 'fuse.js';
@@ -43,13 +43,16 @@ class SearchPage extends Component {
       currentWord: {},
       onlyCommon: false,
       startingSearch: true,
+      smallestParseIndex: -1,
       parses:[],
       smallestParse:[],
+      activeIndex:-1,
     }
     this.getParse = this.getParse.bind(this);
     this.onChangeSearch = this.onChangeSearch.bind(this);
     this.selectWord = this.selectWord.bind(this);
     this.search_container = React.createRef();
+    this.getEndings = this.getEndings.bind(this);
   }
 
   componentDidMount() {
@@ -105,9 +108,21 @@ class SearchPage extends Component {
         console.log(lowest)
         this.setState({
           parses: response.data.parses,
+          smallestParseIndex: lowest,
           smallestParse: response.data.parses[lowest].split('-'),
         });
       });
+  }
+
+  getEndings(word, mood) {
+    console.log("Word",word,encodeURIComponent(word))
+    axios
+      .get(API_URL + "/mood?underlying_form=" + encodeURIComponent(word) + "&mood=" + mood)
+      .then(response => {
+        console.log(response)
+
+        // this.setState({ modifiedWord: response.data.concat,}); 
+    });
   }
 
   onChangeSearch(event, data) {
@@ -155,7 +170,7 @@ class SearchPage extends Component {
     let displayList = this.state.search.length >= 4 && this.state.wordsList.length > 0;
     let emptyList = this.state.search.length >= 4 && this.state.wordsList.length === 0;
     let wordsList = this.state.wordsList;
-    console.log
+    const { activeIndex } = this.state
     let isCommonList = wordsList.map((word) => {
       return Object.keys(word).some((key) => {
         return word[key].properties && word[key].properties.indexOf('common') > -1;
@@ -227,6 +242,40 @@ class SearchPage extends Component {
                 <Link to={{pathname: (this.state.smallestParse[1].includes('[V') ? '/' + i + '-' : '/' + i), state: { word: i, search: this.state.search, wordsList: this.state.wordsList }}}>
                   {this.state.smallestParse[1].includes('[V') ? i + '-' : i}
                 </Link>
+                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Ind]');}}>{'see more'}</Button>
+                  <Accordion fluid styled>
+                    <Accordion.Title
+                      active={activeIndex === 0}
+                      index={0}
+                      onClick={this.handleClick}
+                    >
+                      <Icon name='dropdown' />
+                      What is a dog?
+                    </Accordion.Title>
+                    <Accordion.Content active={activeIndex === 0}>
+                      <p>
+                        A dog is a type of domesticated animal. Known for its loyalty and
+                        faithfulness, it can be found as a welcome guest in many households
+                        across the world.
+                      </p>
+                    </Accordion.Content>
+
+                    <Accordion.Title
+                      active={activeIndex === 1}
+                      index={1}
+                      onClick={this.handleClick}
+                    >
+                      <Icon name='dropdown' />
+                      What kinds of dogs are there?
+                    </Accordion.Title>
+                    <Accordion.Content active={activeIndex === 1}>
+                      <p>
+                        There are many breeds of dogs. Each breed varies in size and
+                        temperament. Owners often select a breed of dog that they find to be
+                        compatible with their own lifestyle and desires from a companion.
+                      </p>
+                    </Accordion.Content>
+                  </Accordion>             
                 </div>
                 :
                 <div>{i}</div>
