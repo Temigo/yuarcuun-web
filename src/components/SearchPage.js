@@ -242,7 +242,34 @@ class SearchPage extends Component {
                 <Link to={{pathname: (this.state.smallestParse[1].includes('[V') ? '/' + i + '-' : '/' + i), state: { word: i, search: this.state.search, wordsList: this.state.wordsList }}}>
                   {this.state.smallestParse[1].includes('[V') ? i + '-' : i}
                 </Link>
-                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Ind]');}}>{'see more'}</Button>
+
+                {this.state.parses[this.state.smallestParseIndex].includes("[V]") ?
+                  <div>
+                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Ind]');}}>{'Indicative'}</Button>
+                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Ptcp]');}}>{'Participial'}</Button>
+                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Opt]');}}>{'Optative'}</Button>
+                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Intrg]');}}>{'Interrogative'}</Button>
+                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Sbrd]');}}>{'Subordinative'}</Button>
+                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Prec]');}}>{'Precessive'}</Button>
+                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Cnsq]');}}>{'Consequential'}</Button>
+                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Cont]');}}>{'Contingent'}</Button>
+                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Conc]');}}>{'Concessive'}</Button>
+                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Cond]');}}>{'Conditional'}</Button>
+                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[CtmpI]');}}>{'Contemporative 1'}</Button>
+                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[CtmpII]');}}>{'Contemporative 2'}</Button>
+                  </div>
+                  :
+                  <div>
+                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Abs]');}}>{'Absolutive'}</Button>
+                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Rel]');}}>{'Relative'}</Button>
+                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Abl_Mod]');}}>{'Abl Modalis'}</Button>
+                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Loc]');}}>{'Localis'}</Button>
+                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Ter]');}}>{'Terminalis'}</Button>
+                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Via]');}}>{'Vialis'}</Button>
+                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Equ]');}}>{'Equalis'}</Button>
+                  </div>
+              	}
+
                   <Accordion fluid styled>
                     <Accordion.Title
                       active={activeIndex === 0}
@@ -250,7 +277,7 @@ class SearchPage extends Component {
                       onClick={this.handleClick}
                     >
                       <Icon name='dropdown' />
-                      What is a dog?
+                      Indicative (Statement Form)
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 0}>
                       <p>
@@ -266,7 +293,7 @@ class SearchPage extends Component {
                       onClick={this.handleClick}
                     >
                       <Icon name='dropdown' />
-                      What kinds of dogs are there?
+                      Interrogative (Question Form)
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 1}>
                       <p>
