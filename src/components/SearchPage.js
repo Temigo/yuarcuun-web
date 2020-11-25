@@ -4,7 +4,7 @@ import '../semantic/dist/semantic.min.css';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import { Container, Header, Grid, Input, List, Label, Icon, Image, Button, Accordion, Table, Segment } from 'semantic-ui-react';
+import { Container, Header, Grid, Input, List, Label, Icon, Image, Button, Accordion, Table, Segment, Loader } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { API_URL, TUTORIAL_URL, ICON_URL } from '../App.js';
 import Fuse from 'fuse.js';
@@ -12,6 +12,7 @@ import now from 'performance-now';
 import ReactGA from 'react-ga';
 import GitHubForkRibbon from 'react-github-fork-ribbon';
 import { YugtunLoader, YugtunFooter, WordItem } from './SearchPageHelpers.js';
+import TableEntry1 from './TableEntry1.js';
 
 // Cache dictionary
 let dictionary = [];
@@ -46,7 +47,9 @@ class SearchPage extends Component {
       smallestParseIndex: -1,
       parses:[],
       smallestParse:[],
-      activeIndex:0,
+      activeIndex:-1,
+      loaderOn:true,
+      entries:undefined,
     }
     this.getParse = this.getParse.bind(this);
     this.onChangeSearch = this.onChangeSearch.bind(this);
@@ -105,12 +108,17 @@ class SearchPage extends Component {
           if (a[i].length < a[lowest].length) 
             lowest = i;
          }
-        console.log(lowest)
+        console.log(a)
         this.setState({
           parses: response.data.parses,
-          smallestParseIndex: lowest,
-          smallestParse: response.data.parses[lowest].split('-'),
-        });
+      	})
+
+        if (a.length > 0) {
+	       	this.setState({
+	          smallestParseIndex: lowest,
+	          smallestParse: response.data.parses[lowest].split('-'),
+	        });
+	    }
       });
   }
 
@@ -119,14 +127,13 @@ class SearchPage extends Component {
     axios
       .get(API_URL + "/mood?underlying_form=" + encodeURIComponent(word) + "&mood=" + mood)
       .then(response => {
-        console.log(response)
-
-        // this.setState({ modifiedWord: response.data.concat,}); 
+        this.setState({ entries: response.data.results,}); 
+        this.setState({ loaderOn: false})
     });
   }
 
   onChangeSearch(event, data) {
-    this.setState({yugtunAnalyzer:false})
+    this.setState({yugtunAnalyzer:false, entries:undefined, activeIndex:-1, loaderOn: true})
     let newStartingSearch = event === undefined;
     let new_search = data.value;
 
@@ -166,11 +173,24 @@ class SearchPage extends Component {
   }
 
     handleClick = (e, titleProps) => {
+    this.setState({ loaderOn: true,})
     const { index } = titleProps
     const { activeIndex } = this.state
     const newIndex = activeIndex === index ? -1 : index
-
-    this.setState({ activeIndex: newIndex })
+    let mood = ''
+    switch(index) {
+        case 0:
+        mood = "[Ind]"
+        break;
+        case 1:
+        mood = "[Ptcp]"
+        break;
+        default:
+        mood = "none"
+    }
+    console.log(mood)
+    this.getEndings(this.state.parses[this.state.smallestParseIndex],mood)
+    this.setState({activeIndex: newIndex })
   }
 
   render() {
@@ -243,6 +263,11 @@ class SearchPage extends Component {
             : ''}
             </Grid.Row>
           </Grid>
+          {this.state.yugtunAnalyzer && this.state.parses.length === 0 ?
+          	<div style={{fontStyle:'italic',marginTop:10}}>pisciigatuq... :(</div>
+          	:
+          	null
+          } 
           {this.state.yugtunAnalyzer ?
             (this.state.smallestParse.map((i,index) => 
               (index === 0 ?
@@ -288,225 +313,13 @@ class SearchPage extends Component {
                       Indicative (Statement Form)
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 0}>
-<div style={{fontStyle:'italic'}}>INTRANSITIVE</div>
-<Segment style={{overflow: 'auto'}}>
-  <Table unstackable celled>
-    <Table.Header>
-      <Table.Row>
-        <Table.HeaderCell style={{textDecoration:'underline'}}>Subject</Table.HeaderCell>
-        <Table.HeaderCell></Table.HeaderCell>
-      </Table.Row>
-    </Table.Header>
-    <Table.Body>
-      <Table.Row>
-        <Table.HeaderCell>he, she, it</Table.HeaderCell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutuq</Table.Cell>
-      </Table.Row>
-      <Table.Row>
-        <Table.HeaderCell>they (2)</Table.HeaderCell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutuk</Table.Cell>
-      </Table.Row>
-      <Table.Row>
-        <Table.HeaderCell>they all (3+)</Table.HeaderCell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutut</Table.Cell>
-      </Table.Row>
-      <Table.Row>
-        <Table.HeaderCell>I</Table.HeaderCell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutua</Table.Cell>
-      </Table.Row>
-      <Table.Row>
-        <Table.HeaderCell>we (2)</Table.HeaderCell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutukuk</Table.Cell>
-      </Table.Row>
-      <Table.Row>
-        <Table.HeaderCell>we all (3+)</Table.HeaderCell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutukut</Table.Cell>
-      </Table.Row>
-      <Table.Row>
-        <Table.HeaderCell>you</Table.HeaderCell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagututen</Table.Cell>
-      </Table.Row>
-      <Table.Row>
-        <Table.HeaderCell>you (2)</Table.HeaderCell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagututek</Table.Cell>
-      </Table.Row>
-      <Table.Row>
-        <Table.HeaderCell>you all (3+)</Table.HeaderCell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutuci</Table.Cell>
-      </Table.Row>
-    </Table.Body>
-  </Table>
-</Segment>
-
-<div style={{fontStyle:'italic'}}>TRANSITIVE</div>
-<Segment style={{overflow: 'auto'}}>
-  <Table unstackable celled>
-    <Table.Header>
-      <Table.Row>
-        <Table.HeaderCell></Table.HeaderCell>
-        <Table.HeaderCell style={{textDecoration:'underline',paddingLeft:10}}>Object</Table.HeaderCell>
-        <Table.HeaderCell style={{paddingLeft:10}}></Table.HeaderCell>
-        <Table.HeaderCell></Table.HeaderCell>
-        <Table.HeaderCell></Table.HeaderCell>
-        <Table.HeaderCell></Table.HeaderCell>
-        <Table.HeaderCell></Table.HeaderCell>
-        <Table.HeaderCell></Table.HeaderCell>
-        <Table.HeaderCell></Table.HeaderCell>
-        <Table.HeaderCell></Table.HeaderCell>
-      </Table.Row>
-      <Table.Row>
-        <Table.HeaderCell style={{textDecoration:'underline'}}>Subject</Table.HeaderCell>
-        <Table.HeaderCell style={{paddingLeft:10,fontStyle:'italic'}}>her, him, it </Table.HeaderCell>
-        <Table.HeaderCell style={{paddingLeft:10,fontStyle:'italic'}}>{"the\xa0two\xa0of\xa0them"}</Table.HeaderCell>
-        <Table.HeaderCell style={{paddingLeft:10,fontStyle:'italic'}}>them all (3+)</Table.HeaderCell>
-        <Table.HeaderCell style={{paddingLeft:10,fontStyle:'italic'}}>me</Table.HeaderCell>
-        <Table.HeaderCell style={{paddingLeft:10,fontStyle:'italic'}}>{"the\xa0two\xa0of\xa0us"}</Table.HeaderCell>
-        <Table.HeaderCell style={{paddingLeft:10,fontStyle:'italic'}}>us all (3+)</Table.HeaderCell>
-        <Table.HeaderCell style={{paddingLeft:10,fontStyle:'italic'}}>you</Table.HeaderCell>
-        <Table.HeaderCell style={{paddingLeft:10,fontStyle:'italic'}}>{"the\xa0two\xa0of\xa0you"}</Table.HeaderCell>
-        <Table.HeaderCell style={{paddingLeft:10,fontStyle:'italic'}}>you all (3+)</Table.HeaderCell>
-      </Table.Row>
-    </Table.Header>
-    <Table.Body>
-      <Table.Row>
-        <Table.HeaderCell>{"he,\xa0she,\xa0it"}</Table.HeaderCell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutaa</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutak</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutai</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutai</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutai</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutai</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutai</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutai</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutai</Table.Cell>
-      </Table.Row>
-      <Table.Row>
-        <Table.HeaderCell>they (2)</Table.HeaderCell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutaak</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutagkek</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutagket</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutagket</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutagket</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutagket</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutagket</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutagket</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutagket</Table.Cell>
-      </Table.Row>
-      <Table.Row>
-        <Table.HeaderCell>{"they\xa0all\xa0(3+)"}</Table.HeaderCell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutaat</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutakek</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutait</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutait</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutait</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutait</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutait</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutait</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutait</Table.Cell>
-      </Table.Row>
-    </Table.Body>
-  </Table>
-</Segment>
-<Segment style={{overflow: 'auto'}}>
-  <Table celled>
-    <Table.Header>
-      <Table.Row>
-        <Table.HeaderCell></Table.HeaderCell>
-        <Table.HeaderCell style={{textDecoration:'underline',paddingLeft:10}}>Object</Table.HeaderCell>
-        <Table.HeaderCell style={{paddingLeft:10}}></Table.HeaderCell>
-        <Table.HeaderCell></Table.HeaderCell>
-      </Table.Row>
-      <Table.Row>
-        <Table.HeaderCell style={{textDecoration:'underline',fontStyle:'italic'}}>Subject</Table.HeaderCell>
-        <Table.HeaderCell style={{paddingLeft:10}}>her, him, it </Table.HeaderCell>
-        <Table.HeaderCell style={{paddingLeft:10}}>{"the\xa0two\xa0of\xa0them"}</Table.HeaderCell>
-        <Table.HeaderCell style={{paddingLeft:10}}>them all (3+)</Table.HeaderCell>
-        <Table.HeaderCell style={{paddingLeft:10}}>you</Table.HeaderCell>
-        <Table.HeaderCell style={{paddingLeft:10}}>{"the\xa0two\xa0of\xa0you"}</Table.HeaderCell>
-        <Table.HeaderCell style={{paddingLeft:10}}>you all (3+)</Table.HeaderCell>
-      </Table.Row>
-    </Table.Header>
-    <Table.Body>
-      <Table.Row>
-        <Table.HeaderCell style={{fontStyle:'italic'}}>I</Table.HeaderCell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutaa</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutak</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutai</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutai</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutai</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutai</Table.Cell>
-      </Table.Row>
-      <Table.Row>
-        <Table.HeaderCell style={{fontStyle:'italic'}}>we (2)</Table.HeaderCell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutaak</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutagkek</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutagket</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutagket</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutagket</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutagket</Table.Cell>
-      </Table.Row>
-      <Table.Row>
-        <Table.HeaderCell style={{fontStyle:'italic'}}>{"we\xa0all\xa03+"}</Table.HeaderCell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutaat</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutakek</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutait</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutait</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutait</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutait</Table.Cell>
-      </Table.Row>
-    </Table.Body>
-  </Table>
-</Segment>
-<Segment style={{overflow: 'auto'}}>
-  <Table unstackable celled>
-    <Table.Header>
-      <Table.Row>
-        <Table.HeaderCell></Table.HeaderCell>
-        <Table.HeaderCell style={{textDecoration:'underline',paddingLeft:10,"color":"#7b0e0e"}}>Object</Table.HeaderCell>
-        <Table.HeaderCell style={{paddingLeft:10}}></Table.HeaderCell>
-        <Table.HeaderCell></Table.HeaderCell>
-      </Table.Row>
-      <Table.Row>
-        <Table.HeaderCell style={{textDecoration:'underline',color:"#002477"}}>Subject</Table.HeaderCell>
-        <Table.HeaderCell style={{paddingLeft:10,"color":"#7b0e0e"}}>her, him, it </Table.HeaderCell>
-        <Table.HeaderCell style={{paddingLeft:10,"color":"#7b0e0e"}}>{"the\xa0two\xa0of\xa0them"}</Table.HeaderCell>
-        <Table.HeaderCell style={{paddingLeft:10,"color":"#7b0e0e"}}>them all (3+)</Table.HeaderCell>
-        <Table.HeaderCell style={{paddingLeft:10,"color":"#7b0e0e"}}>me</Table.HeaderCell>
-        <Table.HeaderCell style={{paddingLeft:10,"color":"#7b0e0e"}}>{"the\xa0two\xa0of\xa0us"}</Table.HeaderCell>
-        <Table.HeaderCell style={{paddingLeft:10,"color":"#7b0e0e"}}>us all (3+)</Table.HeaderCell>
-      </Table.Row>
-    </Table.Header>
-    <Table.Body>
-      <Table.Row>
-        <Table.HeaderCell style={{color:"#002477"}}>you</Table.HeaderCell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutaa</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutak</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutai</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutai</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutai</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutai</Table.Cell>
-      </Table.Row>
-      <Table.Row>
-        <Table.HeaderCell style={{color:"#002477"}}>you (2)</Table.HeaderCell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutaak</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutagkek</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutagket</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutagket</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutagket</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutagket</Table.Cell>
-      </Table.Row>
-      <Table.Row>
-        <Table.HeaderCell style={{color:"#002477"}}>{"you\xa0all\xa0(3+)"}</Table.HeaderCell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutaat</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutakek</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutait</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutait</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutait</Table.Cell>
-        <Table.Cell style={{paddingLeft:10}}>nalluyagutait</Table.Cell>
-      </Table.Row>
-    </Table.Body>
-  </Table>
-</Segment>
+                      {this.state.loaderOn ? 
+                      	<Loader indeterminate />
+                      	:
+		              <TableEntry1
+		                entries={this.state.entries}
+		              />
+                      }
                     </Accordion.Content>
 
                     <Accordion.Title
@@ -515,14 +328,16 @@ class SearchPage extends Component {
                       onClick={this.handleClick}
                     >
                       <Icon name='dropdown' />
-                      Interrogative (Question Form)
+                      Participial
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 1}>
-                      <p>
-                        There are many breeds of dogs. Each breed varies in size and
-                        temperament. Owners often select a breed of dog that they find to be
-                        compatible with their own lifestyle and desires from a companion.
-                      </p>
+                      {this.state.loaderOn ? 
+                      	<Loader indeterminate />
+                      	:
+		              <TableEntry1
+		                entries={this.state.entries}
+		              />
+                      }
                     </Accordion.Content>
                   </Accordion>             
                 </div>
