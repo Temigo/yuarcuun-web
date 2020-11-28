@@ -12,7 +12,7 @@ import now from 'performance-now';
 import ReactGA from 'react-ga';
 import GitHubForkRibbon from 'react-github-fork-ribbon';
 import { YugtunLoader, YugtunFooter, WordItem } from './SearchPageHelpers.js';
-import TableEntry1 from './TableEntry1.js';
+import TableEntry from './TableEntry.js';
 
 // Cache dictionary
 let dictionary = [];
@@ -40,7 +40,7 @@ class SearchPage extends Component {
       dictionaryVerbs: [],
       wordsList: [],
       yugtunAnalyzer: false,
-      search: props.location.state === undefined ? '' : props.location.state.search,
+      search: props.location.state === undefined ? 'pissurtuq' : props.location.state.search,
       currentWord: {},
       onlyCommon: false,
       startingSearch: true,
@@ -183,14 +183,44 @@ class SearchPage extends Component {
         mood = "[Ind]"
         break;
         case 1:
+        mood = "[Intrg]"
+        break;
+        case 2:
+        mood = "[Opt]"
+        break;
+        case 3:
+        mood = "[Sbrd]"
+        break;
+        case 4:
         mood = "[Ptcp]"
+        break;
+        case 5:
+        mood = "[Prec]"
+        break;
+        case 6:
+        mood = "[Cnsq]"
+        break;
+        case 7:
+        mood = "[Cont]"
+        break;
+        case 8:
+        mood = "[Conc]"
+        break;
+        case 9:
+        mood = "[Cond]"
+        break;
+        case 10:
+        mood = "[CtmpI]"
+        break;
+        case 11:
+        mood = "[CtmpII]"
         break;
         default:
         mood = "none"
     }
     console.log(mood)
     this.getEndings(this.state.parses[this.state.smallestParseIndex],mood)
-    this.setState({activeIndex: newIndex })
+    this.setState({activeIndex: newIndex, mood: mood})
   }
 
   render() {
@@ -274,34 +304,17 @@ class SearchPage extends Component {
                 <div>
                 <Link to={{pathname: (this.state.smallestParse[1].includes('[V') ? '/' + i + '-' : '/' + i), state: { word: i, search: this.state.search, wordsList: this.state.wordsList }}}>
                   {this.state.smallestParse[1].includes('[V') ? i + '-' : i}
-                </Link>
-
-                {this.state.parses[this.state.smallestParseIndex].includes("[V]") ?
-                  <div>
-                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Ind]');}}>{'Indicative'}</Button>
-                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Ptcp]');}}>{'Participial'}</Button>
-                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Opt]');}}>{'Optative'}</Button>
-                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Intrg]');}}>{'Interrogative'}</Button>
-                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Sbrd]');}}>{'Subordinative'}</Button>
-                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Prec]');}}>{'Precessive'}</Button>
-                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Cnsq]');}}>{'Consequential'}</Button>
-                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Cont]');}}>{'Contingent'}</Button>
-                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Conc]');}}>{'Concessive'}</Button>
-                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Cond]');}}>{'Conditional'}</Button>
-                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[CtmpI]');}}>{'Contemporative 1'}</Button>
-                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[CtmpII]');}}>{'Contemporative 2'}</Button>
-                  </div>
-                  :
-                  <div>
-                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Abs]');}}>{'Absolutive'}</Button>
-                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Rel]');}}>{'Relative'}</Button>
-                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Abl_Mod]');}}>{'Abl Modalis'}</Button>
-                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Loc]');}}>{'Localis'}</Button>
-                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Ter]');}}>{'Terminalis'}</Button>
-                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Via]');}}>{'Vialis'}</Button>
-                  <Button onClick={()=>{this.getEndings(this.state.parses[this.state.smallestParseIndex],'[Equ]');}}>{'Equalis'}</Button>
-                  </div>
-              	}
+                </Link>         
+                </div>
+                :
+                <div>{i}</div>
+              )))
+            :
+          <List divided selection>
+            {displayList ? wordsList.map((word) => <WordItem key={word} word={word} search={this.state.search} wordsList={this.state.wordsList} />)
+            : ''}
+          </List>
+          }
 
                   <Accordion fluid styled>
                     <Accordion.Title
@@ -314,13 +327,15 @@ class SearchPage extends Component {
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 0}>
                       {this.state.loaderOn ? 
-                      	<Loader indeterminate />
-                      	:
-		              <TableEntry1
-		                entries={this.state.entries}
-		              />
+                        <Loader indeterminate />
+                        :
+                  <TableEntry
+                    entries={this.state.entries}
+                    mood={this.state.mood}                  
+                  />
                       }
                     </Accordion.Content>
+
 
                     <Accordion.Title
                       active={activeIndex === 1}
@@ -328,28 +343,211 @@ class SearchPage extends Component {
                       onClick={this.handleClick}
                     >
                       <Icon name='dropdown' />
-                      Participial
+                      Interrogative (Question Form)
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 1}>
                       {this.state.loaderOn ? 
-                      	<Loader indeterminate />
-                      	:
-		              <TableEntry1
-		                entries={this.state.entries}
-		              />
+                        <Loader indeterminate />
+                        :
+                  <TableEntry
+                    entries={this.state.entries}
+                    mood={this.state.mood}                
+                  />
                       }
                     </Accordion.Content>
-                  </Accordion>             
-                </div>
-                :
-                <div>{i}</div>
-              )))
-            :
-          <List divided selection>
-            {displayList ? wordsList.map((word) => <WordItem key={word} word={word} search={this.state.search} wordsList={this.state.wordsList} />)
-            : ''}
-          </List>
-          }
+
+
+                    <Accordion.Title
+                      active={activeIndex === 2}
+                      index={2}
+                      onClick={this.handleClick}
+                    >
+                      <Icon name='dropdown' />
+                      Optative (Command Form)
+                    </Accordion.Title>
+                    <Accordion.Content active={activeIndex === 2}>
+                      {this.state.loaderOn ? 
+                        <Loader indeterminate />
+                        :
+                  <TableEntry
+                    entries={this.state.entries}
+                    mood={this.state.mood}                
+                  />
+                      }
+                    </Accordion.Content>
+
+
+                    <Accordion.Title
+                      active={activeIndex === 3}
+                      index={3}
+                      onClick={this.handleClick}
+                    >
+                      <Icon name='dropdown' />
+                      Subordinative (Polite Command or -ing Form)
+                    </Accordion.Title>
+                    <Accordion.Content active={activeIndex === 3}>
+                      {this.state.loaderOn ? 
+                        <Loader indeterminate />
+                        :
+                  <TableEntry
+                    entries={this.state.entries}
+                    mood={this.state.mood}                
+                  />
+                      }
+                    </Accordion.Content>                    
+
+                    <Accordion.Title
+                      active={activeIndex === 4}
+                      index={4}
+                      onClick={this.handleClick}
+                    >
+                      <Icon name='dropdown' />
+                      Participial
+                    </Accordion.Title>
+                    <Accordion.Content active={activeIndex === 4}>
+                      {this.state.loaderOn ? 
+                        <Loader indeterminate />
+                        :
+                  <TableEntry
+                    entries={this.state.entries}
+                    mood={this.state.mood}
+                  />
+                      }
+                    </Accordion.Content>
+
+                    <Accordion.Title
+                      active={activeIndex === 5}
+                      index={5}
+                      onClick={this.handleClick}
+                    >
+                      <Icon name='dropdown' />
+                      Precessive (before)
+                    </Accordion.Title>
+                    <Accordion.Content active={activeIndex === 5}>
+                      {this.state.loaderOn ? 
+                        <Loader indeterminate />
+                        :
+                  <TableEntry
+                    entries={this.state.entries}
+                    mood={this.state.mood}
+                  />
+                      }
+                    </Accordion.Content>
+
+                    <Accordion.Title
+                      active={activeIndex === 6}
+                      index={6}
+                      onClick={this.handleClick}
+                    >
+                      <Icon name='dropdown' />
+                      Consequential (because)
+                    </Accordion.Title>
+                    <Accordion.Content active={activeIndex === 6}>
+                      {this.state.loaderOn ? 
+                        <Loader indeterminate />
+                        :
+                  <TableEntry
+                    entries={this.state.entries}
+                    mood={this.state.mood}
+                  />
+                      }
+                    </Accordion.Content>
+
+                    <Accordion.Title
+                      active={activeIndex === 7}
+                      index={7}
+                      onClick={this.handleClick}
+                    >
+                      <Icon name='dropdown' />
+                      Contigent (whenever)
+                    </Accordion.Title>
+                    <Accordion.Content active={activeIndex === 7}>
+                      {this.state.loaderOn ? 
+                        <Loader indeterminate />
+                        :
+                  <TableEntry
+                    entries={this.state.entries}
+                    mood={this.state.mood}
+                  />
+                      }
+                    </Accordion.Content>
+
+                    <Accordion.Title
+                      active={activeIndex === 8}
+                      index={8}
+                      onClick={this.handleClick}
+                    >
+                      <Icon name='dropdown' />
+                      Concessive (although, even though, even if)
+                    </Accordion.Title>
+                    <Accordion.Content active={activeIndex === 8}>
+                      {this.state.loaderOn ? 
+                        <Loader indeterminate />
+                        :
+                  <TableEntry
+                    entries={this.state.entries}
+                    mood={this.state.mood}
+                  />
+                      }
+                    </Accordion.Content>
+
+                    <Accordion.Title
+                      active={activeIndex === 9}
+                      index={9}
+                      onClick={this.handleClick}
+                    >
+                      <Icon name='dropdown' />
+                      Conditional (if, when in the future)
+                    </Accordion.Title>
+                    <Accordion.Content active={activeIndex === 9}>
+                      {this.state.loaderOn ? 
+                        <Loader indeterminate />
+                        :
+                  <TableEntry
+                    entries={this.state.entries}
+                    mood={this.state.mood}
+                  />
+                      }
+                    </Accordion.Content>
+
+                    <Accordion.Title
+                      active={activeIndex === 10}
+                      index={10}
+                      onClick={this.handleClick}
+                    >
+                      <Icon name='dropdown' />
+                      Contemporative 1 (when in the past)
+                    </Accordion.Title>
+                    <Accordion.Content active={activeIndex === 10}>
+                      {this.state.loaderOn ? 
+                        <Loader indeterminate />
+                        :
+                  <TableEntry
+                    entries={this.state.entries}
+                    mood={this.state.mood}
+                  />
+                      }
+                    </Accordion.Content>
+
+                    <Accordion.Title
+                      active={activeIndex === 11}
+                      index={11}
+                      onClick={this.handleClick}
+                    >
+                      <Icon name='dropdown' />
+                      Contemporative 2 (while)
+                    </Accordion.Title>
+                    <Accordion.Content active={activeIndex === 11}>
+                      {this.state.loaderOn ? 
+                        <Loader indeterminate />
+                        :
+                  <TableEntry
+                    entries={this.state.entries}
+                    mood={this.state.mood}
+                  />
+                      }
+                    </Accordion.Content>
+                  </Accordion>    
         </Container>
         </Grid.Column>
         </Grid.Row>
