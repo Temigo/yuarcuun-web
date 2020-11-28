@@ -40,16 +40,17 @@ class SearchPage extends Component {
       dictionaryVerbs: [],
       wordsList: [],
       yugtunAnalyzer: false,
-      search: props.location.state === undefined ? 'pissurtuq' : props.location.state.search,
+      search: props.location.state === undefined ? 'eluqruuyak' : props.location.state.search,
       currentWord: {},
       onlyCommon: false,
       startingSearch: true,
       smallestParseIndex: -1,
       parses:[],
-      smallestParse:[],
+      smallestParse:[[],[]],
       activeIndex:-1,
       loaderOn:true,
       entries:undefined,
+      seeMoreActive:false,
     }
     this.getParse = this.getParse.bind(this);
     this.onChangeSearch = this.onChangeSearch.bind(this);
@@ -133,7 +134,7 @@ class SearchPage extends Component {
   }
 
   onChangeSearch(event, data) {
-    this.setState({yugtunAnalyzer:false, entries:undefined, activeIndex:-1, loaderOn: true})
+    this.setState({yugtunAnalyzer:false, entries:undefined, activeIndex:-1, loaderOn: true, seeMoreActive:false})
     let newStartingSearch = event === undefined;
     let new_search = data.value;
 
@@ -214,6 +215,27 @@ class SearchPage extends Component {
         break;
         case 11:
         mood = "[CtmpII]"
+        break;
+        case 12:
+        mood = "[Abs]"
+        break;
+        case 13:
+        mood = "[Rel]"
+        break;
+        case 14:
+        mood = "[Abl_Mod]"
+        break;
+        case 15:
+        mood = "[Loc]"
+        break;
+        case 16:
+        mood = "[Ter]"
+        break;
+        case 17:
+        mood = "[Via]"
+        break;
+        case 18:
+        mood = "[Equ]"
         break;
         default:
         mood = "none"
@@ -299,23 +321,11 @@ class SearchPage extends Component {
           	null
           } 
           {this.state.yugtunAnalyzer ?
-            (this.state.smallestParse.map((i,index) => 
-              (index === 0 ?
-                <div>
-                <Link to={{pathname: (this.state.smallestParse[1].includes('[V') ? '/' + i + '-' : '/' + i), state: { word: i, search: this.state.search, wordsList: this.state.wordsList }}}>
-                  {this.state.smallestParse[1].includes('[V') ? i + '-' : i}
-                </Link>         
-                </div>
-                :
-                <div>{i}</div>
-              )))
-            :
-          <List divided selection>
-            {displayList ? wordsList.map((word) => <WordItem key={word} word={word} search={this.state.search} wordsList={this.state.wordsList} />)
-            : ''}
-          </List>
-          }
-
+            <div>
+            {this.state.smallestParse.map((i,index) => <div>{i}</div>)}
+            <Button onClick={()=>{this.setState({seeMoreActive:!this.state.seeMoreActive})}}>{!this.state.seeMoreActive ? "See More Endings" : "Close Endings"}</Button>
+            {this.state.seeMoreActive ?
+            (this.state.smallestParse[1].includes('[V') ?
                   <Accordion fluid styled>
                     <Accordion.Title
                       active={activeIndex === 0}
@@ -547,7 +557,157 @@ class SearchPage extends Component {
                   />
                       }
                     </Accordion.Content>
-                  </Accordion>    
+                  </Accordion> 
+
+                  :
+
+                  <Accordion fluid styled>
+                    <Accordion.Title
+                      active={activeIndex === 12}
+                      index={12}
+                      onClick={this.handleClick}
+                    >
+                      <Icon name='dropdown' />
+                      Absolutive
+                    </Accordion.Title>
+                    <Accordion.Content active={activeIndex === 12}>
+                      {this.state.loaderOn ? 
+                        <Loader indeterminate />
+                        :
+                  <TableEntry
+                    entries={this.state.entries}
+                    mood={this.state.mood}                
+                  />
+                      }
+                    </Accordion.Content>
+
+
+                    <Accordion.Title
+                      active={activeIndex === 13}
+                      index={13}
+                      onClick={this.handleClick}
+                    >
+                      <Icon name='dropdown' />
+                      Relative (Possessor)
+                    </Accordion.Title>
+                    <Accordion.Content active={activeIndex === 13}>
+                      {this.state.loaderOn ? 
+                        <Loader indeterminate />
+                        :
+                  <TableEntry
+                    entries={this.state.entries}
+                    mood={this.state.mood}                
+                  />
+                      }
+                    </Accordion.Content>                    
+
+                    <Accordion.Title
+                      active={activeIndex === 14}
+                      index={14}
+                      onClick={this.handleClick}
+                    >
+                      <Icon name='dropdown' />
+                      Ablative-Modalis (indirect object, from)
+                    </Accordion.Title>
+                    <Accordion.Content active={activeIndex === 14}>
+                      {this.state.loaderOn ? 
+                        <Loader indeterminate />
+                        :
+                  <TableEntry
+                    entries={this.state.entries}
+                    mood={this.state.mood}
+                  />
+                      }
+                    </Accordion.Content>
+
+                    <Accordion.Title
+                      active={activeIndex === 15}
+                      index={15}
+                      onClick={this.handleClick}
+                    >
+                      <Icon name='dropdown' />
+                      Localis (at)
+                    </Accordion.Title>
+                    <Accordion.Content active={activeIndex === 15}>
+                      {this.state.loaderOn ? 
+                        <Loader indeterminate />
+                        :
+                  <TableEntry
+                    entries={this.state.entries}
+                    mood={this.state.mood}
+                  />
+                      }
+                    </Accordion.Content>
+
+                    <Accordion.Title
+                      active={activeIndex === 16}
+                      index={16}
+                      onClick={this.handleClick}
+                    >
+                      <Icon name='dropdown' />
+                      Terminalis (toward)
+                    </Accordion.Title>
+                    <Accordion.Content active={activeIndex === 16}>
+                      {this.state.loaderOn ? 
+                        <Loader indeterminate />
+                        :
+                  <TableEntry
+                    entries={this.state.entries}
+                    mood={this.state.mood}
+                  />
+                      }
+                    </Accordion.Content>
+
+                    <Accordion.Title
+                      active={activeIndex === 17}
+                      index={17}
+                      onClick={this.handleClick}
+                    >
+                      <Icon name='dropdown' />
+                      Vialis (through, using)
+                    </Accordion.Title>
+                    <Accordion.Content active={activeIndex === 17}>
+                      {this.state.loaderOn ? 
+                        <Loader indeterminate />
+                        :
+                  <TableEntry
+                    entries={this.state.entries}
+                    mood={this.state.mood}
+                  />
+                      }
+                    </Accordion.Content>
+
+                    <Accordion.Title
+                      active={activeIndex === 18}
+                      index={18}
+                      onClick={this.handleClick}
+                    >
+                      <Icon name='dropdown' />
+                      Equalis (like, similar to)
+                    </Accordion.Title>
+                    <Accordion.Content active={activeIndex === 18}>
+                      {this.state.loaderOn ? 
+                        <Loader indeterminate />
+                        :
+                  <TableEntry
+                    entries={this.state.entries}
+                    mood={this.state.mood}
+                  />
+                      }
+                    </Accordion.Content>
+                  </Accordion> 
+                  )
+                :
+                null
+              }
+
+            </div>
+            :
+          <List divided selection>
+            {displayList ? wordsList.map((word) => <WordItem key={word} word={word} search={this.state.search} wordsList={this.state.wordsList} />)
+            : ''}
+          </List>
+          }
         </Container>
         </Grid.Column>
         </Grid.Row>

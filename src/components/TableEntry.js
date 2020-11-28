@@ -245,7 +245,99 @@ class TableEntry1 extends Component {
     "[P_2Du]",
     "[P_2Pl]",
     ]
+
+    let unpossessedNounIdentifiers = [
+    "[SgUnpd]",
+    "[DuUnpd]",
+    "[PlUnpd]",
+    ]
+    let possessedNumberOfNounIdentifiers = [
+    "[SgPosd]",
+    "[PlPosd]",
+    "[DuPosd]",
+    ]
+    let possessedNounIdentifiers = [
+    "[3SgPoss]",
+    "[3DuPoss]",
+    "[3PlPoss]",
+    "[1SgPoss]",
+    "[1DuPoss]",
+    "[1PlPoss]",
+    "[2SgPoss]",
+    "[2DuPoss]",
+    "[2PlPoss]",
+    "[4SgPoss]",
+    "[4DuPoss]",
+    "[4PlPoss]",
+    ]
+    let unpossessedNouns = [
+    "Singular",
+    "Dual",
+    "Plural",
+    ]
+    let possessedNouns = [
+    "his/her/its\xa0(other)",
+    "their\xa0(2)\xa0(other)",
+    "their\xa0(3+)\xa0(other)",
+    "my",
+    "our\xa0(2)",
+    "our\xa0(3+)",
+    "your\xa0(1)",
+    "your\xa0(2)",
+    "your\xa0(3+)",
+    "his/her/its\xa0own",
+    "their\xa0own\xa0(2)",
+    "their\xa0own\xa0(3+)",
+    ]
+
     return (
+    <div>
+    {this.state.mood === "[Abs]" || this.state.mood === "[Rel]" || this.state.mood === "[Abl_Mod]" || this.state.mood === "[Loc]" || this.state.mood === "[Ter]" || this.state.mood === "[Via]" || this.state.mood === "[Equ]" ?
+        <div>
+        <Segment style={{overflow: 'auto'}}>
+          <Table unstackable celled>
+            <Table.Body>
+                {unpossessedNounIdentifiers.map((i,index) => 
+                    <Table.Row>
+                      <Table.HeaderCell style={{color:"#002477"}}>{unpossessedNouns[index]}</Table.HeaderCell>
+                      <Table.Cell style={{paddingLeft:10}}>{e[i].join(",\n").replaceAll(">","")}</Table.Cell>
+                    </Table.Row>
+                )}
+            </Table.Body>
+          </Table>
+        </Segment>
+        <div>{"POSSESSED"}</div>
+        <Segment style={{overflow: 'auto'}}>
+          <Table celled>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell></Table.HeaderCell>
+                <Table.HeaderCell style={{textDecoration:'underline',paddingLeft:10,"color":"#7b0e0e"}}>number of noun</Table.HeaderCell>
+                <Table.HeaderCell style={{paddingLeft:10}}></Table.HeaderCell>
+                <Table.HeaderCell></Table.HeaderCell>
+              </Table.Row>
+              <Table.Row>
+                <Table.HeaderCell style={{textDecoration:'underline',color:"#002477"}}>possessor</Table.HeaderCell>
+                <Table.HeaderCell style={{paddingLeft:10,"color":"#7b0e0e"}}>{"singular (1)"}</Table.HeaderCell>
+                <Table.HeaderCell style={{paddingLeft:10,"color":"#7b0e0e"}}>{"dual (2)"}</Table.HeaderCell>
+                <Table.HeaderCell style={{paddingLeft:10,"color":"#7b0e0e"}}>{"plural (3+)"}</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+            {possessedNouns.map((l,lindex) => 
+              <Table.Row>
+                <Table.HeaderCell style={{color:"#002477"}}>{l}</Table.HeaderCell>
+                {possessedNumberOfNounIdentifiers.map((i,index) => 
+                <Table.Cell style={{paddingLeft:10}}>{e[possessedNounIdentifiers[lindex]+possessedNumberOfNounIdentifiers[index]].join(",\n").replaceAll(">","")}</Table.Cell>
+                )}
+              </Table.Row>
+            )}
+
+            </Table.Body>
+          </Table>
+        </Segment>
+        </div>
+    :
     <div>
     {this.state.mood === '[Opt]' ?
 	(intransitiveTitles.map((k,kindex) => 
@@ -881,10 +973,8 @@ class TableEntry1 extends Component {
     :
     null
 }
-
-
-
-
+    </div>
+    }
     </div>
     );
   }
