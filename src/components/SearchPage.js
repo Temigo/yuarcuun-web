@@ -431,7 +431,7 @@ class SearchPage extends Component {
                       onClick={this.handleClick}
                     >
                       <Icon name='dropdown' />
-                      Precessive (before)
+                      Precessive (before...)
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 5}>
                       {this.state.loaderOn ? 
@@ -450,7 +450,7 @@ class SearchPage extends Component {
                       onClick={this.handleClick}
                     >
                       <Icon name='dropdown' />
-                      Consequential (because)
+                      Consequential (because...)
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 6}>
                       {this.state.loaderOn ? 
@@ -469,7 +469,7 @@ class SearchPage extends Component {
                       onClick={this.handleClick}
                     >
                       <Icon name='dropdown' />
-                      Contigent (whenever)
+                      Contigent (whenever...)
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 7}>
                       {this.state.loaderOn ? 
@@ -488,7 +488,7 @@ class SearchPage extends Component {
                       onClick={this.handleClick}
                     >
                       <Icon name='dropdown' />
-                      Concessive (although, even though, even if)
+                      Concessive (although, even though, even if...)
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 8}>
                       {this.state.loaderOn ? 
@@ -507,7 +507,7 @@ class SearchPage extends Component {
                       onClick={this.handleClick}
                     >
                       <Icon name='dropdown' />
-                      Conditional (if, when in the future)
+                      Conditional (if, when in the future...)
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 9}>
                       {this.state.loaderOn ? 
@@ -526,7 +526,7 @@ class SearchPage extends Component {
                       onClick={this.handleClick}
                     >
                       <Icon name='dropdown' />
-                      Contemporative 1 (when in the past)
+                      Contemporative 1 (when in the past...)
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 10}>
                       {this.state.loaderOn ? 
@@ -545,7 +545,7 @@ class SearchPage extends Component {
                       onClick={this.handleClick}
                     >
                       <Icon name='dropdown' />
-                      Contemporative 2 (while)
+                      Contemporative 2 (while...)
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 11}>
                       {this.state.loaderOn ? 
@@ -588,7 +588,7 @@ class SearchPage extends Component {
                       onClick={this.handleClick}
                     >
                       <Icon name='dropdown' />
-                      Relative (Possessor)
+                      Relative
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 13}>
                       {this.state.loaderOn ? 
@@ -607,7 +607,7 @@ class SearchPage extends Component {
                       onClick={this.handleClick}
                     >
                       <Icon name='dropdown' />
-                      Ablative-Modalis (indirect object, from)
+                      Ablative-Modalis (indirect object, from...)
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 14}>
                       {this.state.loaderOn ? 
@@ -626,7 +626,7 @@ class SearchPage extends Component {
                       onClick={this.handleClick}
                     >
                       <Icon name='dropdown' />
-                      Localis (at)
+                      Localis (in, at...)
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 15}>
                       {this.state.loaderOn ? 
@@ -645,7 +645,7 @@ class SearchPage extends Component {
                       onClick={this.handleClick}
                     >
                       <Icon name='dropdown' />
-                      Terminalis (toward)
+                      Terminalis (toward...)
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 16}>
                       {this.state.loaderOn ? 
@@ -664,7 +664,7 @@ class SearchPage extends Component {
                       onClick={this.handleClick}
                     >
                       <Icon name='dropdown' />
-                      Vialis (through, using)
+                      Vialis (through, using...)
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 17}>
                       {this.state.loaderOn ? 
@@ -683,7 +683,7 @@ class SearchPage extends Component {
                       onClick={this.handleClick}
                     >
                       <Icon name='dropdown' />
-                      Equalis (like, similar to)
+                      Equalis (like, similar to...)
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 18}>
                       {this.state.loaderOn ? 

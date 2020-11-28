@@ -253,8 +253,8 @@ class TableEntry1 extends Component {
     ]
     let possessedNumberOfNounIdentifiers = [
     "[SgPosd]",
-    "[PlPosd]",
     "[DuPosd]",
+    "[PlPosd]",
     ]
     let possessedNounIdentifiers = [
     "[3SgPoss]",
