@@ -436,14 +436,6 @@ class TableEntry1 extends Component {
           <Table.Row>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell style={{textDecoration:'underline',paddingLeft:10,"color":"#7b0e0e"}}>Object</Table.HeaderCell>
-            <Table.HeaderCell style={{paddingLeft:10}}></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{textDecoration:'underline',color:"#002477"}}>Subject</Table.HeaderCell>
@@ -487,8 +479,6 @@ class TableEntry1 extends Component {
           <Table.Row>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell style={{textDecoration:'underline',paddingLeft:10,"color":"#7b0e0e"}}>Object</Table.HeaderCell>
-            <Table.HeaderCell style={{paddingLeft:10}}></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{textDecoration:'underline',color:"#002477"}}>Subject</Table.HeaderCell>
@@ -510,8 +500,6 @@ class TableEntry1 extends Component {
           <Table.Row>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell style={{textDecoration:'underline',paddingLeft:10,"color":"#7b0e0e"}}>Object</Table.HeaderCell>
-            <Table.HeaderCell style={{paddingLeft:10}}></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{textDecoration:'underline',color:"#002477"}}>Subject</Table.HeaderCell>
@@ -552,8 +540,6 @@ class TableEntry1 extends Component {
           <Table.Row>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell style={{textDecoration:'underline',paddingLeft:10,"color":"#7b0e0e"}}>Object</Table.HeaderCell>
-            <Table.HeaderCell style={{paddingLeft:10}}></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{textDecoration:'underline',color:"#002477"}}>Subject</Table.HeaderCell>
@@ -604,14 +590,6 @@ class TableEntry1 extends Component {
           <Table.Row>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell style={{textDecoration:'underline',paddingLeft:10,"color":"#7b0e0e"}}>Object</Table.HeaderCell>
-            <Table.HeaderCell style={{paddingLeft:10}}></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{textDecoration:'underline',color:"#002477"}}>Subject</Table.HeaderCell>
@@ -654,8 +632,6 @@ class TableEntry1 extends Component {
           <Table.Row>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell style={{textDecoration:'underline',paddingLeft:10,"color":"#7b0e0e"}}>Object</Table.HeaderCell>
-            <Table.HeaderCell style={{paddingLeft:10}}></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{textDecoration:'underline',color:"#002477"}}>Subject</Table.HeaderCell>
@@ -699,8 +675,6 @@ class TableEntry1 extends Component {
           <Table.Row>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell style={{textDecoration:'underline',paddingLeft:10,"color":"#7b0e0e"}}>Object</Table.HeaderCell>
-            <Table.HeaderCell style={{paddingLeft:10}}></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{textDecoration:'underline',color:"#002477"}}>Subject</Table.HeaderCell>
@@ -750,14 +724,6 @@ class TableEntry1 extends Component {
           <Table.Row>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell style={{textDecoration:'underline',paddingLeft:10,"color":"#7b0e0e"}}>Object</Table.HeaderCell>
-            <Table.HeaderCell style={{paddingLeft:10}}></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{textDecoration:'underline',color:"#002477"}}>Subject</Table.HeaderCell>
@@ -796,8 +762,6 @@ class TableEntry1 extends Component {
           <Table.Row>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell style={{textDecoration:'underline',paddingLeft:10,"color":"#7b0e0e"}}>Object</Table.HeaderCell>
-            <Table.HeaderCell style={{paddingLeft:10}}></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{textDecoration:'underline',color:"#002477"}}>Subject</Table.HeaderCell>
