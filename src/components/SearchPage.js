@@ -4,7 +4,7 @@ import '../semantic/dist/semantic.min.css';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import { Container, Header, Grid, Input, List, Label, Icon, Image, Button, Accordion, Table, Segment, Loader } from 'semantic-ui-react';
+import { Container, Header, Grid, Input, List, Label, Icon, Image, Button, Accordion, Table, Segment, Loader, Divider } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { API_URL, TUTORIAL_URL, ICON_URL } from '../App.js';
 import Fuse from 'fuse.js';
@@ -31,6 +31,97 @@ let options = {
 };
 let fuse = new Fuse([], options);
 
+let options1 = {
+  keys: ['yupik'],
+  // minMatchCharLength: 3,
+  // includeScore: true,
+  distance: 0,
+  // location: 2,
+  // shouldSort: true,
+  //tokenize: true, // super slow!! 6x slower
+  // matchAllTokens: true,
+  threshold: 0.0,
+  // findAllMatches: true,
+};
+let fuse1 = new Fuse([], options1);
+
+const endingToEnglishTerms = {
+  "[Ind]":"Indicative (Statement Form)",
+  "[Intrg]":"Interrogative (Question Form)",
+  "[Opt]":"Optative (Command Form)",
+  "[Sbrd]":"Subordinative (Polite Command or -ing Form)",
+  "[Ptcp]":"Participial",
+  "[Prec]":"Precessive (before...)",
+  "[Cnsq]":"Consequential (because...)",
+  "[Cont]":"Contigent (whenever...)",
+  "[Conc]":"Concessive (although, even though, even if...)",
+  "[Cond]":"Conditional (if, when in the future...)",
+  "[CtmpI]":"Contemporative 1 (when in the past...)",
+  "[CtmpII]":"Contemporative 2 (while...)",
+  "[Abs]":"Absolutive",
+  "[Rel]":"Relative",
+  "[Abl_Mod]":"Ablative-Modalis (indirect object, from...)",
+  "[Loc]":"Localis (in, at...)",
+  "[Ter]":"Terminalis (toward...)",
+  "[Via]":"Vialis (through, using...)",
+  "[Equ]":"Equalis (like, similar to...)",
+  "[S_3Sg]":"he,\xa0she,\xa0it",
+  "[S_3Du]":"they\xa0(2)",
+  "[S_3Pl]":"they\xa0all\xa0(3+)",
+  "[S_1Sg]":"I",
+  "[S_1Du]":"we\xa0(2)",
+  "[S_1Pl]":"we\xa0all\xa0(3+)",
+  "[S_2Sg]":"you",
+  "[S_2Du]":"you\xa0(2)",
+  "[S_2Pl]":"you\xa0all\xa0(3+)",
+  "[S_4Sg]":"he, she, it (itself)",
+  "[S_4Du]":"they (2) (themselves)",
+  "[S_4Pl]":"they all (3+) (themselves)",
+  "[A_3Sg]":"he,\xa0she,\xa0it",
+  "[A_3Du]":"they\xa0(2)",
+  "[A_3Pl]":"they\xa0all\xa0(3+)",
+  "[A_1Sg]":"I",
+  "[A_1Du]":"we\xa0(2)",
+  "[A_1Pl]":"we\xa0all\xa0(3+)",
+  "[A_2Sg]":"you",
+  "[A_2Du]":"you\xa0(2)",
+  "[A_2Pl]":"you\xa0all\xa0(3+)",
+  "[A_4Sg]":"he, she, it (itself)",
+  "[A_4Du]":"they (2) (themselves)",
+  "[A_4Pl]":"they all (3+) (themselves)",
+  "[P_3Sg]":"her,\xa0him,\xa0it\xa0(other)",
+  "[P_3Du]":"the\xa0two\xa0of\xa0them\xa0(others)",
+  "[P_3Pl]":"them\xa0all\xa0(3+)\xa0(others)",
+  "[P_1Sg]":"me",
+  "[P_1Du]":"the\xa0two\xa0of\xa0us",
+  "[P_1Pl]":"us\xa0all\xa0(3+)",
+  "[P_2Sg]":"you",
+  "[P_2Du]":"the\xa0two\xa0of\xa0you",
+  "[P_2Pl]":"you\xa0all\xa0(3+)",
+  "[P_4Sg]":"her,\xa0him,\xa0it\xa0(itself)",
+  "[P_4Du]":"the\xa0two\xa0of\xa0them\xa0(themselves)",
+  "[P_4Pl]":"them\xa0all\xa0(3+)\xa0(themselves)",
+  "[SgUnpd]":"singular (1)",
+  "[DuUnpd]":"dual (2)",
+  "[PlUnpd]":"plural (3+)",
+  "[SgPosd]":"one thing",
+  "[DuPosd]":"two things",
+  "[PlPosd]":"three or more things",
+  "[3SgPoss]":"his/her/its\xa0(other)",
+  "[3DuPoss]":"their\xa0(2)\xa0(other)",
+  "[3PlPoss]":"their\xa0(3+)\xa0(other)",
+  "[1SgPoss]":"my",
+  "[1DuPoss]":"our\xa0(2)",
+  "[1PlPoss]":"our\xa0(3+)",
+  "[2SgPoss]":"your\xa0(1)",
+  "[2DuPoss]":"your\xa0(2)",
+  "[2PlPoss]":"your\xa0(3+)",
+  "[4SgPoss]":"his/her/its\xa0own",
+  "[4DuPoss]":"their\xa0own\xa0(2)",
+  "[4PlPoss]":"their\xa0own\xa0(3+)",
+};
+
+
 class SearchPage extends Component {
   constructor(props) {
     super(props);
@@ -40,13 +131,15 @@ class SearchPage extends Component {
       dictionaryVerbs: [],
       wordsList: [],
       yugtunAnalyzer: false,
-      search: props.location.state === undefined ? 'eluqruuyak' : props.location.state.search,
+      search: props.location.state === undefined ? 'eluqruuyakaqa' : props.location.state.search,
       currentWord: {},
       onlyCommon: false,
       startingSearch: true,
-      smallestParseIndex: -1,
+      // smallestParseIndex: -1,
       parses:[],
-      smallestParse:[[],[]],
+      sortedParses:[],
+      currentTableOpen: -1,
+      // smallestParse:[[],[]],
       activeIndex:-1,
       loaderOn:true,
       entries:undefined,
@@ -76,6 +169,7 @@ class SearchPage extends Component {
           });
           dictionary = response.data;
           fuse.setCollection(dictionary);
+          fuse1.setCollection(dictionary);
           console.log('Fetched dictionary');
           this.setState({ dictionary: dictionary });
         });
@@ -104,25 +198,28 @@ class SearchPage extends Component {
     axios
       .get(API_URL + "/parse/" + word)
       .then(response => {
-        console.log(response)
-         var lowest = 0;
-         var a = response.data.parses;
-         for (var i = 1; i < a.length; i++) {
-          if (a[i].length < a[lowest].length) 
-            lowest = i;
-         }
-        console.log(a)
+        // console.log(response)
+        //  var lowest = 0;
+         // var a = response.data.parses;
+        //  for (var i = 1; i < a.length; i++) {
+        //   if (a[i].length < a[lowest].length) 
+        //     lowest = i;
+        //  }
+        // console.log(a)
+        let sortedParses = response.data.parses.sort(function(a,b){return a.length - b.length;}).slice(0, 5)
+        // console.log(sortedParses)
         this.setState({
           parses: response.data.parses,
+          sortedParses: sortedParses,
       	})
 
-        if (a.length > 0) {
-	       	this.setState({
-	          smallestParseIndex: lowest,
-	          smallestParse: response.data.parses[lowest].split('-'),
-	        });
+        // if (a.length > 0) {
+	       // 	this.setState({
+	       //    smallestParseIndex: lowest,
+	       //    smallestParse: response.data.parses[lowest].split('-'),
+	       //  });
           // this.getSegment(response.data.parses[lowest])
-	      }
+	      // }
       });
   }
 
@@ -138,7 +235,7 @@ class SearchPage extends Component {
   }
 
   getEndings(word, mood) {
-    console.log("Word",word,encodeURIComponent(word))
+    console.log("Word",word,mood)
     axios
       .get(API_URL + "/mood?underlying_form=" + encodeURIComponent(word) + "&mood=" + mood)
       .then(response => {
@@ -187,18 +284,76 @@ class SearchPage extends Component {
     this.inputRef = c;
   }
 
-    handleClick = (e, titleProps) => {
+  handleClick = (e, titleProps) => {
+    console.log(e,titleProps)
     this.setState({ loaderOn: true,})
-    const { index } = titleProps
+    const { index, currentIndex } = titleProps
     const { activeIndex } = this.state
     const newIndex = activeIndex === index ? -1 : index
     let mood = this.state.moods[index]
-    this.getEndings(this.state.parses[this.state.smallestParseIndex],mood)
+    this.getEndings(this.state.sortedParses[currentIndex],mood)
     this.setState({activeIndex: newIndex, mood: mood})
+  }
+
+
+endingToEnglish(ending) {
+  const tags = [...ending.matchAll(/\[.*?\]/g)];
+  var english1 = ""
+  var english2 = ""
+  var english3 = ""
+  if (ending.includes('[V]')) {
+    english1 += 'Verb Ending';
+    english2 += endingToEnglishTerms[tags[1]];
+    if (ending.includes('[Trns]')) {
+      english3 += endingToEnglishTerms[tags[tags.length-2]] + " to " + endingToEnglishTerms[tags[tags.length-1]];
+
+    } else if (ending.includes('[Intr]')) {
+      english3 += endingToEnglishTerms[tags[tags.length-1]];
+    }
+  } else if (ending.includes('[N]')) {
+    english1 += 'Noun Ending';
+    english2 += endingToEnglishTerms[tags[1]];
+    if (ending.includes('Poss')) {
+      english3 += endingToEnglishTerms[tags[tags.length-2]] + "\xa0" + endingToEnglishTerms[tags[tags.length-1]];
+    } else {
+      english3 += endingToEnglishTerms[tags[tags.length-1]];
+    }
+  }
+  return (
+  <div>
+  <div>{english1}</div>
+  <div>{english2}</div>
+  <div>{english3}</div>
+  </div>
+  )
+}
+
+  getLinks(index, parse) {
+    if (parse.length !== 1) {
+      if (index === 0) {
+        var base = parse[0];
+        var dictionaryForm = '';
+        if (parse[1].includes('[N')) {                      // if Noun base:
+          dictionaryForm = base.replace(/([aeiu])te\b/, "$1n");              // Vte -> n
+          dictionaryForm = dictionaryForm.replace(/([^\[])e\b/, "$1a")      // e -> a
+          dictionaryForm = dictionaryForm.replace(/g\b/, "k");      // g -> k
+          dictionaryForm = dictionaryForm.replace(/r(\*)?\b/, "q$1"); // r(*) -> q(*)
+        } else {
+          dictionaryForm = dictionaryForm+"-"
+        }
+        return dictionaryForm;          
+      } else if (index !== parse.length-1) {
+        return parse[index]
+      }
+    } else {
+      return parse[0].split("[P")[0]
+    }
+
   }
 
   render() {
     console.log("SearchPage state: ", this.state);
+    // console.log(fuse1.search("–a/–ar/–aa/+a/+aar[V→V]"))
     let displayList = this.state.search.length >= 4 && this.state.wordsList.length > 0;
     let emptyList = this.state.search.length >= 4 && this.state.wordsList.length === 0;
     let wordsList = this.state.wordsList;
@@ -214,6 +369,7 @@ class SearchPage extends Component {
     let displayCommonOption = this.state.onlyCommon || (wordsList.some((word, i) => { return isCommonList[i]; }) && wordsList.some((word, i) => { return !isCommonList[i]; }));
     const accordionTitlesVerbs = [
       "Indicative (Statement Form)",
+      "Interrogative (Question Form)",
       "Optative (Command Form)",
       "Subordinative (Polite Command or -ing Form)",
       "Participial",
@@ -296,17 +452,42 @@ class SearchPage extends Component {
           } 
           {this.state.yugtunAnalyzer ?
             <div>
-            <div style={{fontSize:18}}>{this.state.search}</div>
-            {this.state.smallestParse.map((i,index) => <div>{i}</div>)}
-            <Button onClick={()=>{this.setState({seeMoreActive:!this.state.seeMoreActive})}}>{!this.state.seeMoreActive ? "See More Endings" : "Close Endings"}</Button>
-            {this.state.seeMoreActive ?
-              (this.state.smallestParse[1].includes('[V') ?
+            {this.state.sortedParses.map((i,index)=>
+              <div>
+              <div style={{fontSize:18}}>{this.state.search}</div>
+              {i.split('-').map((q,qindex) => 
+                (qindex !== i.split('-').length-1 ?
+                  <div>
+                    {fuse1.search(this.getLinks(qindex,i.split('-'))).length !== 0 ?
+                      <div>
+                      <Link to={{pathname: this.getLinks(qindex,i.split('-')), state: { word: this.getLinks(qindex,i.split('-')), search: this.state.search, wordsList: this.state.wordsList }}}>
+                      <div>
+                      {q}
+                      </div>                  
+                      </Link>
+                      {fuse1.search(this.getLinks(qindex,i.split('-')))[0].english}
+                      </div>
+                      :
+                      <div>
+                      {q}
+                      </div>   
+                    }
+                  </div>
+                :
+                  (this.endingToEnglish(q))
+                )
+
+                )}
+            <Button onClick={()=>{this.setState({currentTableOpen:(this.state.currentTableOpen === index ? -1 : index), activeIndex:-1})}}>{"Try More Endings"}</Button>
+              {this.state.currentTableOpen === index ?
+                (this.state.sortedParses[index].includes('[V') ?
                   <Accordion fluid styled>
                     {accordionTitlesVerbs.map((p,pindex) =>
                       <div>
                         <Accordion.Title
                           active={activeIndex === pindex}
                           index={pindex}
+                          currentIndex={index}
                           onClick={this.handleClick}
                         >
                           <Icon name='dropdown' />
@@ -332,6 +513,7 @@ class SearchPage extends Component {
                         <Accordion.Title
                           active={activeIndex === pindex+12}
                           index={pindex+12}
+                          currentIndex={index}
                           onClick={this.handleClick}
                         >
                           <Icon name='dropdown' />
@@ -354,13 +536,15 @@ class SearchPage extends Component {
                 :
                 null
               }
-
+              <Divider />
+              </div>
+              )}
             </div>
             :
-          <List divided selection>
-            {displayList ? wordsList.map((word) => <WordItem key={word} word={word} search={this.state.search} wordsList={this.state.wordsList} />)
-            : ''}
-          </List>
+            <List divided selection>
+              {displayList ? wordsList.map((word) => <WordItem key={word} word={word} search={this.state.search} wordsList={this.state.wordsList} />)
+              : ''}
+            </List>
           }
         </Container>
         </Grid.Column>

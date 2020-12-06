@@ -4,7 +4,7 @@ import '../semantic/dist/semantic.min.css';
 import { Link } from 'react-router-dom';
 import {withRouter} from 'react-router';
 
-class TableEntry1 extends Component {
+class TableEntry extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -27,7 +27,7 @@ class TableEntry1 extends Component {
 
   render() {
     let e = this.state.entries;
-    console.log(this.state)
+    // console.log(this.state)
     let subjectsEnglishTerms = []
     let optativeIdentifiers = []
     let transitiveTitles = []
@@ -944,4 +944,4 @@ class TableEntry1 extends Component {
   }
 }
 
-export default withRouter(TableEntry1);
+export default withRouter(TableEntry);
