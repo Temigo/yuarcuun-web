@@ -122,6 +122,27 @@ const endingToEnglishTerms = {
   "[4PlPoss]":"their\xa0own\xa0(3+)",
 };
 
+const endingDescriptions = [
+"1) statements; 2) “yes-no” questions, usually with enclitic = qaa",
+"1) content questions; 2) exclamations with the postbase @5+pag- | ~vag-",
+"1) commands, requests, suggestions; 2) statements in narrative with the postbase 􏰝􏰥i- and a third person ending",
+"1) actions or states subordinate to that of the main verb and involving the same subject; 2) requests, commands, suggestions with a second person ending",
+"1) exclamations, usually with tang; 2) certain special constructions (see maaten and = wa)",
+"“before”",
+"“because”",
+"“whenever”",
+"“although, even though, even if” ",
+"“if, when (in the future)”",
+"“when (in the past)” ",
+"“while”",
+"1) subject of an intransitive verb; 2) object of a transitive verb",
+"1) subject of a transitive verb; 2) possessor; 3) “independent relative construction,” see section on roots in Generation Introduction, and Appendix 1, for further information",
+"1) place from which, time from which; 2) indefinite ob􏰑ect of an intransitive verb; 3) specifying information about a noun within a verb; 4) secondary object especially with verbs of speaking and giving; 5) instrument (only in some dialects)",
+"1) place at which, time at which; 2) object of a comparison; 3) with postbase @5 + paa | ~vaa and enclitic = lli in exclamations; 4) formal vocative",
+"1) place to which, time to which; 2) subject of an embedded verb",
+"1) route; 2) instrument; 3) part of a whole",
+"1) comparison; 2) language specification; 3) price specification",
+];
 
 class SearchPage extends Component {
   constructor(props) {
@@ -352,7 +373,7 @@ endingToEnglish(ending,index) {
           dictionaryForm = dictionaryForm.replace(/g\b/, "k");      // g -> k
           dictionaryForm = dictionaryForm.replace(/r(\*)?\b/, "q$1"); // r(*) -> q(*)
         } else {
-          dictionaryForm = dictionaryForm+"-"
+          dictionaryForm = base+"-"
         }
         return dictionaryForm;          
       } else if (index !== parse.length-1) {
@@ -428,7 +449,7 @@ endingToEnglish(ending,index) {
                 value={this.state.search}
                 fluid transparent />
               </Grid.Column>
-              <Grid.Column floated='right' style={{ flex: '0 0 9em' }}>
+              <Grid.Column floated='right' style={{ flex: '0 0 11em' }}>
                 <Label
                   as='a'
                   content='Yugtun Analyzer'
@@ -528,6 +549,7 @@ endingToEnglish(ending,index) {
                           {p}
                         </Accordion.Title>
                         <Accordion.Content active={activeIndex === pindex}>
+                        <div style={{'paddingBottom':15}}>{endingDescriptions[pindex]}</div>                        
                           {this.state.loaderOn ? 
                             <Loader indeterminate />
                             :
@@ -554,6 +576,7 @@ endingToEnglish(ending,index) {
                           {p}
                         </Accordion.Title>
                         <Accordion.Content active={activeIndex === pindex+12}>
+                        <div style={{'paddingBottom':15}}>{endingDescriptions[pindex]}</div>                                              
                           {this.state.loaderOn ? 
                             <Loader indeterminate />
                             :
