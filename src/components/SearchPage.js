@@ -13,6 +13,7 @@ import ReactGA from 'react-ga';
 import GitHubForkRibbon from 'react-github-fork-ribbon';
 import { YugtunLoader, YugtunFooter, WordItem } from './SearchPageHelpers.js';
 import TableEntry from './TableEntry.js';
+import {endingRules} from './constants/endingRules.js';
 
 // Cache dictionary
 let dictionary = [];
@@ -131,7 +132,7 @@ class SearchPage extends Component {
       dictionaryVerbs: [],
       wordsList: [],
       yugtunAnalyzer: false,
-      search: props.location.state === undefined ? 'eluqruuyakaqa' : props.location.state.search,
+      search: props.location.state === undefined ? 'piipiqa' : props.location.state.search,
       currentWord: {},
       onlyCommon: false,
       startingSearch: true,
@@ -140,6 +141,7 @@ class SearchPage extends Component {
       sortedParses:[],
       currentTableOpen: -1,
       // smallestParse:[[],[]],
+      segmentOutputList:[],
       activeIndex:-1,
       loaderOn:true,
       entries:undefined,
@@ -213,6 +215,13 @@ class SearchPage extends Component {
           sortedParses: sortedParses,
       	})
 
+        // let segmentOutputList = [];
+        // sortedParses.map((i,index)=>
+        //   this.getSegment(i)
+        //   )
+        // console.log(segmentOutputList)
+        
+
         // if (a.length > 0) {
 	       // 	this.setState({
 	       //    smallestParseIndex: lowest,
@@ -227,10 +236,11 @@ class SearchPage extends Component {
     axios
       .get(API_URL + "/segment/" + encodeURIComponent(word))
       .then(response => {
+        // return response.data.words[0]
         console.log(response)
-        this.setState({
-          segment: response.data.words[0],
-        })
+        // this.setState({
+          // segment: response.data.words[0],
+        // })
       });
   }
 
@@ -320,9 +330,10 @@ endingToEnglish(ending) {
     }
   }
   return (
-  <div>
-  <div>{english1}</div>
-  <div>{english2}</div>
+  <div style={{paddingTop:15}}>
+  <div style={{fontWeight:'bold'}}>{endingRules[ending].join(', ')}</div>
+  <div style={{fontStyle:'italic'}}>{english1}</div>
+  <div style={{fontStyle:'italic'}}>{english2}</div>
   <div>{english3}</div>
   </div>
   )
@@ -428,7 +439,7 @@ endingToEnglish(ending) {
                   basic={!this.state.yugtunAnalyzer}
                   onClick={() => { 
                     this.setState({ yugtunAnalyzer: !this.state.yugtunAnalyzer }); 
-                    this.getParse(this.state.search)
+                    this.getParse(this.state.search);
                   }}
                   />
               </Grid.Column>
@@ -451,24 +462,31 @@ endingToEnglish(ending) {
           	null
           } 
           {this.state.yugtunAnalyzer ?
-            <div>
+            <div style={{paddingTop:15}}>
             {this.state.sortedParses.map((i,index)=>
               <div>
+              <div style={{paddingBottom:10}}>
+              <Label circular color={'#E5E5E5'}>
+              {index+1}
+              </Label>
+              </div>
+
               <div style={{fontSize:18}}>{this.state.search}</div>
+
               {i.split('-').map((q,qindex) => 
                 (qindex !== i.split('-').length-1 ?
-                  <div>
+                  <div style={{paddingTop:15}}>
                     {fuse1.search(this.getLinks(qindex,i.split('-'))).length !== 0 ?
                       <div>
                       <Link to={{pathname: this.getLinks(qindex,i.split('-')), state: { word: this.getLinks(qindex,i.split('-')), search: this.state.search, wordsList: this.state.wordsList }}}>
-                      <div>
+                      <div style={{fontWeight:'bold'}}>
                       {q}
                       </div>                  
                       </Link>
                       {fuse1.search(this.getLinks(qindex,i.split('-')))[0].english}
                       </div>
                       :
-                      <div>
+                      <div style={{fontWeight:'bold'}}>
                       {q}
                       </div>   
                     }
@@ -478,7 +496,21 @@ endingToEnglish(ending) {
                 )
 
                 )}
-            <Button onClick={()=>{this.setState({currentTableOpen:(this.state.currentTableOpen === index ? -1 : index), activeIndex:-1})}}>{"Try More Endings"}</Button>
+            <div style={{paddingTop:15, paddingBottom:15, textAlign:'center'}}>
+            <Button basic color='blue' style={{fontFamily:'sans-serif'}} onClick={()=>{this.setState({currentTableOpen:(this.state.currentTableOpen === index ? -1 : index), activeIndex:-1})}}>
+            {this.state.currentTableOpen === index ?
+              <div>
+              {"See Less Endings"}
+              <Icon style={{paddingLeft:10}} name='chevron up' />
+              </div>
+              :
+              <div>
+              {"See More Endings"}
+              <Icon style={{paddingLeft:10}} name='chevron down' />
+              </div>
+            }            
+            </Button>
+            </div>
               {this.state.currentTableOpen === index ?
                 (this.state.sortedParses[index].includes('[V') ?
                   <Accordion fluid styled>
