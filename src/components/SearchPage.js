@@ -13,7 +13,7 @@ import ReactGA from 'react-ga';
 import GitHubForkRibbon from 'react-github-fork-ribbon';
 import { YugtunLoader, YugtunFooter, WordItem } from './SearchPageHelpers.js';
 import TableEntry from './TableEntry.js';
-import {endingRules} from './constants/endingRules.js';
+// import {endingRules} from './constants/endingRules.js';
 
 // Cache dictionary
 let dictionary = [];
@@ -138,10 +138,11 @@ class SearchPage extends Component {
       startingSearch: true,
       // smallestParseIndex: -1,
       parses:[],
-      sortedParses:[],
+      segments:[],
+      endingrule:[],
       currentTableOpen: -1,
       // smallestParse:[[],[]],
-      segmentOutputList:[],
+      // segmentOutputList:[],
       activeIndex:-1,
       loaderOn:true,
       entries:undefined,
@@ -208,11 +209,12 @@ class SearchPage extends Component {
         //     lowest = i;
         //  }
         // console.log(a)
-        let sortedParses = response.data.parses.sort(function(a,b){return a.length - b.length;}).slice(0, 5)
+        // let sortedParses = response.data.parses.sort(function(a,b){return a.length - b.length;}).slice(0, 5)
         // console.log(sortedParses)
         this.setState({
           parses: response.data.parses,
-          sortedParses: sortedParses,
+          segments: response.data.segments,
+          endingrule: response.data.endingrule,
       	})
 
         // let segmentOutputList = [];
@@ -301,12 +303,12 @@ class SearchPage extends Component {
     const { activeIndex } = this.state
     const newIndex = activeIndex === index ? -1 : index
     let mood = this.state.moods[index]
-    this.getEndings(this.state.sortedParses[currentIndex],mood)
+    this.getEndings(this.state.parses[currentIndex],mood)
     this.setState({activeIndex: newIndex, mood: mood})
   }
 
 
-endingToEnglish(ending) {
+endingToEnglish(ending,index) {
   const tags = [...ending.matchAll(/\[.*?\]/g)];
   var english1 = ""
   var english2 = ""
@@ -331,7 +333,7 @@ endingToEnglish(ending) {
   }
   return (
   <div style={{paddingTop:15}}>
-  <div style={{fontWeight:'bold'}}>{endingRules[ending].join(', ')}</div>
+  <div style={{fontWeight:'bold'}}>{this.state.endingrule[index]}</div>
   <div style={{fontStyle:'italic'}}>{english1}</div>
   <div style={{fontStyle:'italic'}}>{english2}</div>
   <div>{english3}</div>
@@ -426,12 +428,7 @@ endingToEnglish(ending) {
                 value={this.state.search}
                 fluid transparent />
               </Grid.Column>
-              <Grid.Column floated='right' style={{ flex: '0 0 2em' }}>
-                <Icon link name='close' onClick={() => { this.inputRef.focus(); this.setState({search: '', startingSearch: false});}}/>
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row>
-              <Grid.Column floated='left' style={{ flex: '0 0 17em' }}>
+              <Grid.Column floated='right' style={{ flex: '0 0 9em' }}>
                 <Label
                   as='a'
                   content='Yugtun Analyzer'
@@ -443,6 +440,11 @@ endingToEnglish(ending) {
                   }}
                   />
               </Grid.Column>
+              <Grid.Column floated='right' style={{ flex: '0 0 2em' }}>
+                <Icon link name='close' onClick={() => { this.inputRef.focus(); this.setState({search: '', startingSearch: false});}}/>
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row>
             {displayCommonOption && !this.state.yugtunAnalyzer ?
               <Grid.Column floated='right' style={{ flex: '0 0 17em' }}>
                 <Label
@@ -463,7 +465,7 @@ endingToEnglish(ending) {
           } 
           {this.state.yugtunAnalyzer ?
             <div style={{paddingTop:15}}>
-            {this.state.sortedParses.map((i,index)=>
+            {this.state.parses.map((i,index)=>
               <div>
               <div style={{paddingBottom:10}}>
               <Label circular color={'#E5E5E5'}>
@@ -471,7 +473,7 @@ endingToEnglish(ending) {
               </Label>
               </div>
 
-              <div style={{fontSize:18}}>{this.state.search}</div>
+              <div style={{fontSize:20}}>{this.state.segments[index][0].replaceAll('>','·')}</div>
 
               {i.split('-').map((q,qindex) => 
                 (qindex !== i.split('-').length-1 ?
@@ -492,7 +494,7 @@ endingToEnglish(ending) {
                     }
                   </div>
                 :
-                  (this.endingToEnglish(q))
+                  (this.endingToEnglish(q,index))
                 )
 
                 )}
@@ -512,7 +514,7 @@ endingToEnglish(ending) {
             </Button>
             </div>
               {this.state.currentTableOpen === index ?
-                (this.state.sortedParses[index].includes('[V') ?
+                (this.state.parses[index].includes('[V') ?
                   <Accordion fluid styled>
                     {accordionTitlesVerbs.map((p,pindex) =>
                       <div>
