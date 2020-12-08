@@ -14,6 +14,7 @@ class YupikDetails extends Component {
     this.state = {
       search: props.location.state === undefined ? '' : props.location.state.search ,
       wordsList: props.location.state === undefined ? [] : props.location.state.wordsList,
+      yugtunAnalyzer: props.location.state === undefined ? false : props.location.state.yugtunAnalyzer,
       currentWord: "",
       modifiedWord: "",
       fullWord: "",

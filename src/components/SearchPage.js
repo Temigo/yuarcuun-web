@@ -147,21 +147,27 @@ const endingDescriptions = [
 class SearchPage extends Component {
   constructor(props) {
     super(props);
+    console.log("SearchPage props: ", props);
     this.state = {
       dictionary: [],
       dictionaryNouns: [],
       dictionaryVerbs: [],
       wordsList: [],
-      yugtunAnalyzer: false,
-      search: props.location.state === undefined ? 'piipiqa' : props.location.state.search,
+      yugtunAnalyzer: props.location.state === undefined ? false : props.location.state.yugtunAnalyzer,
+      search: props.location.state === undefined ? '' : props.location.state.search,
       currentWord: {},
       onlyCommon: false,
       startingSearch: true,
       // smallestParseIndex: -1,
-      parses:[],
-      segments:[],
-      endingrule:[],
+      parses: props.location.state === undefined ? [] : props.location.state.parses,
+      segments: props.location.state === undefined ? [] : props.location.state.segments,
+      endingrule: props.location.state === undefined ? [] : props.location.state.endingrule,
+
+      // parses:[],
+      // segments:[],
+      // endingrule:[],
       currentTableOpen: -1,
+      getCall:false,
       // smallestParse:[[],[]],
       // segmentOutputList:[],
       activeIndex:-1,
@@ -208,6 +214,9 @@ class SearchPage extends Component {
     if (prevState.dictionary.length !== this.state.dictionary.length) {
       this.onChangeSearch(undefined, {value: this.state.search});
     }
+    if (prevState.search !== this.state.search) {
+    	this.setState({ yugtunAnalyzer:false, parses:[],segments:[],endingrule:[]})
+    }
     if (prevState.startingSearch && !this.state.startingSearch) {
       if(navigator.userAgent.match(/(iPhone|iPod|iPad)/i)) {
         let elts = ReactDOM.findDOMNode(this).getElementsByClassName('search_container');
@@ -236,6 +245,7 @@ class SearchPage extends Component {
           parses: response.data.parses,
           segments: response.data.segments,
           endingrule: response.data.endingrule,
+          getCall:false,
       	})
 
         // let segmentOutputList = [];
@@ -278,7 +288,7 @@ class SearchPage extends Component {
   }
 
   onChangeSearch(event, data) {
-    this.setState({yugtunAnalyzer:false, entries:undefined, activeIndex:-1, loaderOn: true, seeMoreActive:false})
+    this.setState({entries:undefined, activeIndex:-1, loaderOn: true, seeMoreActive:false,currentTableOpen: -1,})
     let newStartingSearch = event === undefined;
     let new_search = data.value;
 
@@ -456,8 +466,11 @@ endingToEnglish(ending,index) {
                   color='orange'
                   basic={!this.state.yugtunAnalyzer}
                   onClick={() => { 
-                    this.setState({ yugtunAnalyzer: !this.state.yugtunAnalyzer }); 
-                    this.getParse(this.state.search);
+                  	if (!this.state.yugtunAnalyzer && this.state.parses.length === 0) {this.setState({getCall:true})}
+                    this.setState({ yugtunAnalyzer: !this.state.yugtunAnalyzer}); 
+                	if (this.state.parses.length === 0) {
+                		this.getParse(this.state.search);
+                	}
                   }}
                   />
               </Grid.Column>
@@ -479,8 +492,16 @@ endingToEnglish(ending,index) {
             : ''}
             </Grid.Row>
           </Grid>
-          {this.state.yugtunAnalyzer && this.state.parses.length === 0 ?
-          	<div style={{fontStyle:'italic',marginTop:10}}>pisciigatuq... :(</div>
+          {this.state.getCall ?
+          	<div style={{paddingTop:15}}>
+          	<Loader active inline />
+          	</div>
+          	:
+          	null
+          }
+          
+          {this.state.yugtunAnalyzer && this.state.parses.length === 0 && !this.state.getCall ?
+          	<div style={{fontStyle:'italic',marginTop:10}}>pisciigatuq...</div>
           	:
           	null
           } 
@@ -501,7 +522,7 @@ endingToEnglish(ending,index) {
                   <div style={{paddingTop:15}}>
                     {fuse1.search(this.getLinks(qindex,i.split('-'))).length !== 0 ?
                       <div>
-                      <Link to={{pathname: this.getLinks(qindex,i.split('-')), state: { word: this.getLinks(qindex,i.split('-')), search: this.state.search, wordsList: this.state.wordsList }}}>
+                      <Link to={{pathname: this.getLinks(qindex,i.split('-')), state: { word: this.getLinks(qindex,i.split('-')), search: this.state.search, wordsList: this.state.wordsList, yugtunAnalyzer: this.state.yugtunAnalyzer, parses: this.state.parses, segments:this.state.segments,endingrule:this.state.endingrule }}}>
                       <div style={{fontWeight:'bold'}}>
                       {q}
                       </div>                  
@@ -551,7 +572,7 @@ endingToEnglish(ending,index) {
                         <Accordion.Content active={activeIndex === pindex}>
                         <div style={{'paddingBottom':15}}>{endingDescriptions[pindex]}</div>                        
                           {this.state.loaderOn ? 
-                            <Loader indeterminate />
+                            <Loader active inline />
                             :
                       <TableEntry
                         entries={this.state.entries}
@@ -578,7 +599,9 @@ endingToEnglish(ending,index) {
                         <Accordion.Content active={activeIndex === pindex+12}>
                         <div style={{'paddingBottom':15}}>{endingDescriptions[pindex]}</div>                                              
                           {this.state.loaderOn ? 
-                            <Loader indeterminate />
+                          	<div style={{'textAlign':'center'}}>
+                            <Loader active inline  />
+                            </div>
                             :
                       <TableEntry
                         entries={this.state.entries}

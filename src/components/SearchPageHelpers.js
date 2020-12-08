@@ -32,7 +32,7 @@ export const WordItem = (props) => {
   let isExpression = Object.keys(word).some((key) => { return word[key].descriptor && word[key].descriptor.indexOf('Common Expression') > -1; });
   return (
     <List.Item key={word.yupik}>
-    <Link to={{pathname: '/' + word.yupik, state: { word: word, search: props.search, wordsList: props.wordsList }}}>
+    <Link to={{pathname: '/' + word.yupik, state: { word: word, search: props.search, wordsList: props.wordsList, yugtunAnalyzer: false, parses: [], segments: [],endingrule: []}}}>
       <List.Content>
         <List.Header>
           {word.yupik}
