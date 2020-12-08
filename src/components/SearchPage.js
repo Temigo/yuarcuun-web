@@ -57,7 +57,7 @@ const endingToEnglishTerms = {
   "[Cont]":"Contigent (whenever...)",
   "[Conc]":"Concessive (although, even though, even if...)",
   "[Cond]":"Conditional (if, when in the future...)",
-  "[CtmpI]":"Contemporative 1 (when in the past...)",
+  "[CtmpI]":"Contemporative 1 (when in fthe past...)",
   "[CtmpII]":"Contemporative 2 (while...)",
   "[Abs]":"Absolutive",
   "[Rel]":"Relative",
@@ -338,6 +338,15 @@ class SearchPage extends Component {
     this.setState({activeIndex: newIndex, mood: mood})
   }
 
+onKeyPress = (e) => {
+  if(e.key === 'Enter'){
+    if (!this.state.yugtunAnalyzer && this.state.parses.length === 0) {this.setState({getCall:true})}
+    this.setState({ yugtunAnalyzer: !this.state.yugtunAnalyzer}); 
+    if (this.state.parses.length === 0) {
+      this.getParse(this.state.search);
+    }
+  }
+}
 
 endingToEnglish(ending,index) {
   const tags = [...ending.matchAll(/\[.*?\]/g)];
@@ -364,7 +373,7 @@ endingToEnglish(ending,index) {
   }
   return (
   <div style={{paddingTop:15}}>
-  <div style={{fontWeight:'bold'}}>{this.state.endingrule[index]}</div>
+  <div style={{fontWeight:'bold'}}>{this.state.endingrule[index].join(', ')}</div>
   <div style={{fontStyle:'italic'}}>{english1}</div>
   <div style={{fontStyle:'italic'}}>{english2}</div>
   <div>{english3}</div>
@@ -457,6 +466,7 @@ endingToEnglish(ending,index) {
                 size='huge'
                 onChange={this.onChangeSearch}
                 value={this.state.search}
+                onKeyPress={this.onKeyPress}
                 fluid transparent />
               </Grid.Column>
               <Grid.Column floated='right' style={{ flex: '0 0 11em' }}>
@@ -468,8 +478,8 @@ endingToEnglish(ending,index) {
                   onClick={() => { 
                   	if (!this.state.yugtunAnalyzer && this.state.parses.length === 0) {this.setState({getCall:true})}
                     this.setState({ yugtunAnalyzer: !this.state.yugtunAnalyzer}); 
-                	if (this.state.parses.length === 0) {
-                		this.getParse(this.state.search);
+                  	if (this.state.parses.length === 0) {
+                  		this.getParse(this.state.search);
                 	}
                   }}
                   />
