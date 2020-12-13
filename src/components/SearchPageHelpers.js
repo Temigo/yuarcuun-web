@@ -13,7 +13,6 @@ export const YugtunLoader = (props) => (
 export const YugtunFooter = (props) => (
   <Container textAlign='left'>
     <Divider fluid />
-    <List> <i> This website is still being improved, please let us know of any issues. Quyana. </i></List>
     <List horizontal bulleted>
       <List.Item> © Yuarcuun </List.Item>
       <List.Item> <Link to='/about'>About</Link> </List.Item>
