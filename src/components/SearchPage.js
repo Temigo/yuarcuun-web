@@ -296,6 +296,8 @@ class SearchPage extends Component {
     // this.setState({entries:undefined, activeIndex:-1, loaderOn: true, seeMoreActive:false,currentTableOpen: -1,})
     let newStartingSearch = event === undefined;
     let new_search = data.value;
+    console.log(new_search)
+    // if (data.value === undefined) {new_search = this.state.search}
 
     if (new_search.length >= 4 && !this.state.yugtunAnalyzer) {
       ReactGA.event({
@@ -354,7 +356,7 @@ onKeyPress = (e) => {
 }
 
 inputClicked(analyzer) {
-  this.setState({entries:undefined, activeIndex:-1, loaderOn: true, seeMoreActive:false,currentTableOpen: -1,})
+  this.setState({entries:undefined, activeIndex:-1, loaderOn: true, seeMoreActive:false,currentTableOpen: -1})
   if (analyzer) {
     this.setState({ 
       newSearchList: this.state.search.split(" "), 
@@ -365,7 +367,6 @@ inputClicked(analyzer) {
     }); 
     this.getParse(this.state.search.split(" ")[0].replace(/[^a-zA-Z\-̄͡͞ńḿ‘]/g, ""));                          
   } else {
-    this.onChangeSearch()
     this.inputRef.focus();
     this.setState({
       search: '', startingSearch: false
@@ -484,15 +485,15 @@ endingToEnglish(ending,index) {
         </Header>
                 <div style={{display:'flex',flexDirection:'row'}}>
                 <div style={{height:40,width:150,fontWeight:(!this.state.yugtunAnalyzer ? 'bold':'normal')}}>
-                <span onClick={() => {this.setState({ yugtunAnalyzer: false});}}>{'Dictionary'}</span>
+                <span onClick={() => {
+                  this.setState({ yugtunAnalyzer: false});
+                }}>{'Dictionary'}</span>
                 </div>  
                 <div
                 style={{height:40,width:150,fontWeight:(this.state.yugtunAnalyzer ? 'bold':'normal')}}
                 active={this.state.search.length > 0}
                 onClick={() => {
-
-                  this.setState({ yugtunAnalyzer: true}); 
-
+                  this.setState({ yugtunAnalyzer: true, parses:[],segments:[],endingrule:[],newSearchList:[],notFirstParse:false}); 
                 }}>
                 {'Word Analyzer'}
                 </div>   
