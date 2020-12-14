@@ -22,18 +22,18 @@ class YupikDetails extends Component {
     };
     this.getWord = this.getWord.bind(this);
     // Fetch more word informations from API
-    this.getWord(props.match.params.word);
+    this.getWord(decodeURI(props.match.params.word));
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.match.params.word !== this.props.match.params.word) {
-      this.getWord(this.props.match.params.word);
+      this.getWord(decodeURI(this.props.match.params.word));
     }
   }
 
   getWord(word) {
     axios
-      .get(API_URL + "/word/" + encodeURIComponent(word))
+      .get(API_URL + "/word/" + word)
       .then(response => {
         console.log(response.data);
         this.setState({

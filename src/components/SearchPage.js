@@ -168,6 +168,7 @@ class SearchPage extends Component {
       // endingrule:[],
       currentTableOpen: -1,
       getCall:false,
+      notFirstParse: false,
       // smallestParse:[[],[]],
       // segmentOutputList:[],
       searchWord:"",
@@ -185,6 +186,7 @@ class SearchPage extends Component {
     this.selectWord = this.selectWord.bind(this);
     this.search_container = React.createRef();
     this.getEndings = this.getEndings.bind(this);
+    this.inputClicked = this.inputClicked.bind(this);
   }
 
   componentDidMount() {
@@ -217,9 +219,9 @@ class SearchPage extends Component {
     if (prevState.dictionary.length !== this.state.dictionary.length) {
       this.onChangeSearch(undefined, {value: this.state.search});
     }
-    if (prevState.search !== this.state.search) {
-    	this.setState({ yugtunAnalyzer:false, parses:[],segments:[],endingrule:[]})
-    }
+    // if (prevState.search !== this.state.search) {
+    // 	this.setState({ yugtunAnalyzer:false, parses:[],segments:[],endingrule:[]})
+    // }
     if (prevState.startingSearch && !this.state.startingSearch) {
       if(navigator.userAgent.match(/(iPhone|iPod|iPad)/i)) {
         let elts = ReactDOM.findDOMNode(this).getElementsByClassName('search_container');
@@ -291,11 +293,11 @@ class SearchPage extends Component {
   }
 
   onChangeSearch(event, data) {
-    this.setState({entries:undefined, activeIndex:-1, loaderOn: true, seeMoreActive:false,currentTableOpen: -1,})
+    // this.setState({entries:undefined, activeIndex:-1, loaderOn: true, seeMoreActive:false,currentTableOpen: -1,})
     let newStartingSearch = event === undefined;
     let new_search = data.value;
 
-    if (new_search.length >= 4) {
+    if (new_search.length >= 4 && !this.state.yugtunAnalyzer) {
       ReactGA.event({
         category: 'User',
         action: 'Search word',
@@ -343,11 +345,31 @@ class SearchPage extends Component {
 
 onKeyPress = (e) => {
   if(e.key === 'Enter'){
-    if (!this.state.yugtunAnalyzer && this.state.parses.length === 0) {this.setState({getCall:true})}
-    this.setState({ yugtunAnalyzer: !this.state.yugtunAnalyzer}); 
-    if (this.state.parses.length === 0) {
-      this.getParse(this.state.search);
+    // if (!this.state.yugtunAnalyzer && this.state.parses.length === 0) {this.setState({getCall:true})}
+    // this.setState({ yugtunAnalyzer: !this.state.yugtunAnalyzer}); 
+    if (this.state.yugtunAnalyzer) {
+      this.inputClicked(true)
     }
+  }
+}
+
+inputClicked(analyzer) {
+  this.setState({entries:undefined, activeIndex:-1, loaderOn: true, seeMoreActive:false,currentTableOpen: -1,})
+  if (analyzer) {
+    this.setState({ 
+      newSearchList: this.state.search.split(" "), 
+      activeSentenceIndex: 0, 
+      searchWord: this.state.search.split(" ")[0].replace(/[^a-zA-Z\-̄͡͞ńḿ‘]/g, ""),
+      getCall:true,
+      notFirstParse:true,
+    }); 
+    this.getParse(this.state.search.split(" ")[0].replace(/[^a-zA-Z\-̄͡͞ńḿ‘]/g, ""));                          
+  } else {
+    this.onChangeSearch()
+    this.inputRef.focus();
+    this.setState({
+      search: '', startingSearch: false
+    });
   }
 }
 
@@ -456,10 +478,25 @@ endingToEnglish(ending,index) {
       <GitHubForkRibbon href={TUTORIAL_URL} target='_blank' position='right' color='orange'>Watch Tutorial</GitHubForkRibbon>
       <Grid.Row style={displayList ? {height: 'auto'} : {height: '80%'}}>
       <Grid.Column style={{ maxWidth: 800, padding: 10 }} textAlign='left'>
-        <Header as='h1' dividing>
+        <Header as='h1'>
           <Image style={{'fontSize': '1.5em'}} src={ICON_URL}/>
           <Link to='/' style={{ color: 'black', verticalAlign: 'bottom' }}>Yugtun</Link>
         </Header>
+                <div style={{display:'flex',flexDirection:'row'}}>
+                <div style={{height:40,width:150,fontWeight:(!this.state.yugtunAnalyzer ? 'bold':'normal')}}>
+                <span onClick={() => {this.setState({ yugtunAnalyzer: false});}}>{'Dictionary'}</span>
+                </div>  
+                <div
+                style={{height:40,width:150,fontWeight:(this.state.yugtunAnalyzer ? 'bold':'normal')}}
+                active={this.state.search.length > 0}
+                onClick={() => {
+
+                  this.setState({ yugtunAnalyzer: true}); 
+
+                }}>
+                {'Word Analyzer'}
+                </div>   
+                </div>     
         <Container ref={this.search_container} className='search_container'>
           <Grid stackable>
             <Grid.Row >
@@ -467,33 +504,19 @@ endingToEnglish(ending,index) {
               <Input
                 ref={this.handleRef}
                 placeholder='Search by word...'
-                icon='search'
-                iconPosition='left'
+                action={{ icon: (this.state.yugtunAnalyzer ? 'search' : 'close'), transparent:true,size:'huge', onClick: () => 
+                this.inputClicked(this.state.yugtunAnalyzer)
+                }}
+                // icon={<Icon name='search' onClick={console.log('hi')} link />}
+                iconPosition='right'
                 size='huge'
                 onChange={this.onChangeSearch}
                 value={this.state.search}
                 onKeyPress={this.onKeyPress}
-                fluid transparent />
+                fluid  />
               </Grid.Column>
-              <Grid.Column floated='right' style={{ flex: '0 0 11em' }}>
-                <Label
-                  as='a'
-                  content='Yugtun Analyzer'
-                  color='orange'
-                  basic={!this.state.yugtunAnalyzer}
-                  onClick={() => {
-                    this.setState({ newSearchList: this.state.search.split(" "), activeSentenceIndex: 0, searchWord: this.state.search.split(" ")[0].replace(/[^a-zA-Z\-̄͡͞ńḿ‘]/g, "")}); 
-                  	if (!this.state.yugtunAnalyzer && this.state.parses.length === 0) {this.setState({getCall:true})}
-                    this.setState({ yugtunAnalyzer: !this.state.yugtunAnalyzer}); 
-                  	if (this.state.parses.length === 0) {
-                  		this.getParse(this.state.search.split(" ")[0].replace(/[^a-zA-Z\-̄͡͞ńḿ‘]/g, ""));
-                	}
-                  }}
-                  />
-              </Grid.Column>
-              <Grid.Column floated='right' style={{ flex: '0 0 2em' }}>
-                <Icon link name='close' onClick={() => { this.inputRef.focus(); this.setState({search: '', startingSearch: false});}}/>
-              </Grid.Column>
+
+         
             </Grid.Row>
             <Grid.Row>
             {displayCommonOption && !this.state.yugtunAnalyzer ?
@@ -535,7 +558,7 @@ endingToEnglish(ending,index) {
           	null
           }
           
-          {this.state.yugtunAnalyzer && this.state.parses.length === 0 && !this.state.getCall ?
+          {this.state.yugtunAnalyzer && this.state.parses.length === 0 && !this.state.getCall && this.state.notFirstParse ?
             <div style={{paddingTop:20}}>
             <Divider />
           	<div style={{fontStyle:'italic',marginTop:10}}>No results. Pisciigatuq.</div>
@@ -562,14 +585,14 @@ endingToEnglish(ending,index) {
                     {fuse1.search(this.getLinks(qindex,i.split('-'))).length !== 0 ?
                       <div>
                       <Link to={{pathname: this.getLinks(qindex,i.split('-')), state: { word: this.getLinks(qindex,i.split('-')), search: this.state.search, wordsList: this.state.wordsList, yugtunAnalyzer: this.state.yugtunAnalyzer, parses: this.state.parses, segments:this.state.segments,endingrule:this.state.endingrule }}}>
-                      <div style={{fontWeight:'bold'}}>
+                      <div style={{fontWeight:'bold',fontFamily:'Lato',textDecoration:'underline'}}>
                       {q}
                       </div>                  
                       </Link>
                       {fuse1.search(this.getLinks(qindex,i.split('-')))[0].english}
                       </div>
                       :
-                      <div style={{fontWeight:'bold'}}>
+                      <div style={{fontWeight:'bold',fontFamily:'Lato',textDecoration:'underline'}}>
                       {q}
                       </div>   
                     }
@@ -662,6 +685,7 @@ endingToEnglish(ending,index) {
             <List divided selection>
               {displayList ? wordsList.map((word) => <WordItem key={word} word={word} search={this.state.search} wordsList={this.state.wordsList} />)
               : ''}
+              {emptyList ? <p><i>aren, no results...</i></p> : ''}
             </List>
           }        
         </Container>
