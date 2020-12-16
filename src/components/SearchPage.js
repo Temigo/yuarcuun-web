@@ -186,7 +186,7 @@ class SearchPage extends Component {
       // segmentOutputList:[],
       searchWord:"",
       activeSentenceIndex: 0,
-      newSearchList: [],
+      newSearchList: props.location.state === undefined ? [] : props.location.state.newSearchList,
       activeIndex:-1,
       loaderOn:true,
       entries:undefined,
@@ -613,7 +613,7 @@ endingToEnglish(ending,index) {
                   <div style={{paddingTop:15}}>
                     {this.getLinks(qindex,i.split('-')).length !== 0 ? //{fuse1.search(this.getLinks(qindex,i.split('-'))).length !== 0 ?
                       <div>
-                      <Link to={{pathname: this.getLinks(qindex,i.split('-')), state: { word: this.getLinks(qindex,i.split('-')), search: this.state.search, wordsList: this.state.wordsList, yugtunAnalyzer: this.state.yugtunAnalyzer, parses: this.state.parses, segments:this.state.segments,endingrule:this.state.endingrule }}}>
+                      <Link to={{pathname: this.getLinks(qindex,i.split('-')), state: { word: this.getLinks(qindex,i.split('-')), search: this.state.search, newSearchList: this.state.newSearchList, wordsList: this.state.wordsList, yugtunAnalyzer: this.state.yugtunAnalyzer, parses: this.state.parses, segments:this.state.segments,endingrule:this.state.endingrule }}}>
                       <div style={{fontWeight:'bold',fontFamily:'Lato',textDecoration:'underline'}}>
                       {q}
                       </div>                  
