@@ -53,7 +53,7 @@ let dictionary_dict = {};
 // fuzzysort search
 const optionsFuzzy = {
   keys: ['yupik', 'english'],
-  limit: 100, // don't return more results than you need!
+  limit: 50, // don't return more results than you need!
   threshold: -10000, // don't return bad results
 };
 
@@ -181,6 +181,7 @@ class SearchPage extends Component {
       currentTableOpen: -1,
       getCall:false,
       notFirstParse: false,
+      searchBarStuckTop: false,
       // smallestParse:[[],[]],
       // segmentOutputList:[],
       searchWord:"",
@@ -238,6 +239,9 @@ class SearchPage extends Component {
     // if (prevState.search !== this.state.search) {
     // 	this.setState({ yugtunAnalyzer:false, parses:[],segments:[],endingrule:[]})
     // }
+    if (prevState.search !== this.state.search) {
+    	this.setState({searchBarStuckTop:true});
+    }
     if (prevState.startingSearch && !this.state.startingSearch) {
       if(navigator.userAgent.match(/(iPhone|iPod|iPad)/i)) {
         let elts = ReactDOM.findDOMNode(this).getElementsByClassName('search_container');
@@ -460,8 +464,8 @@ endingToEnglish(ending,index) {
     // console.log("Fuzzysort_prepared: ",fuzzysort.go('pissur', dictionary_prepared, optionsFuzzy));
 
 
-    let displayList = this.state.search.length >= 4 && this.state.wordsList.length > 0;
-    let emptyList = this.state.search.length >= 4 && this.state.wordsList.length === 0;
+    let displayList = this.state.search.length >= 2 && this.state.wordsList.length > 0;
+    let emptyList = this.state.search.length >= 2 && this.state.wordsList.length === 0;
     let wordsList = this.state.wordsList;
     const { activeIndex } = this.state
     let isCommonList = wordsList.map((word) => {
@@ -500,7 +504,7 @@ endingToEnglish(ending,index) {
     return (
       <div>
       <YugtunLoader criteria={this.state.dictionary.length === 0} />
-      <Grid textAlign='center' style={{ height: '100%' }} verticalAlign={this.state.search.length > 0 ? 'top' : 'middle'}>
+      <Grid textAlign='center' style={{ height: '100%' }} verticalAlign={this.state.searchBarStuckTop ? 'top' : 'middle'}>
       <GitHubForkRibbon href={TUTORIAL_URL} target='_blank' position='right' color='orange'>Watch Tutorial</GitHubForkRibbon>
       <Grid.Row style={displayList ? {height: 'auto'} : {height: '80%'}}>
       <Grid.Column style={{ maxWidth: 800, padding: 10 }} textAlign='left'>
@@ -508,23 +512,24 @@ endingToEnglish(ending,index) {
           <Image style={{'fontSize': '1.5em'}} src={ICON_URL}/>
           <Link to='/' style={{ color: 'black', verticalAlign: 'bottom' }}>Yugtun</Link>
         </Header>
-                <div style={{display:'flex',flexDirection:'row'}}>
-                <div style={{height:40,width:150,fontWeight:(!this.state.yugtunAnalyzer ? 'bold':'normal')}}>
-                <span onClick={() => {
+        <Container ref={this.search_container} className='search_container'>
+          	<Grid stackable>
+                <Grid.Row style={{padding:0}}>
+                <div style={{display:'flex',justifyContent:'center',alignItems:'flex-end',fontSize:16,height:40,width:140,fontWeight:(!this.state.yugtunAnalyzer ? 'bold':'normal')}} onClick={() => {
                   this.setState({ yugtunAnalyzer: false});
-                }}>{'Dictionary'}</span>
+                }}>
+                {'Dictionary'}
                 </div>  
                 <div
-                style={{height:40,width:150,fontWeight:(this.state.yugtunAnalyzer ? 'bold':'normal')}}
+                style={{display:'flex',justifyContent:'center',alignItems:'flex-end',fontSize:16,height:40,width:200,}}
                 active={this.state.search.length > 0}
                 onClick={() => {
                   this.setState({ yugtunAnalyzer: true, parses:[],segments:[],endingrule:[],newSearchList:[],notFirstParse:false}); 
                 }}>
-                {'Word Analyzer'}
+                <span style={{fontWeight:(this.state.yugtunAnalyzer ? 'bold':'normal')}}>{'Word Analyzer'}</span>
+                <span style={{color:'#195fff',fontStyle:'italic'}}>{'\xa0\xa0new!'}</span>
                 </div>   
-                </div>     
-        <Container ref={this.search_container} className='search_container'>
-          <Grid stackable>
+                </Grid.Row>             
             <Grid.Row >
               <Grid.Column style={{ flex: 1 }}>
               <Input
@@ -541,8 +546,6 @@ endingToEnglish(ending,index) {
                 onKeyPress={this.onKeyPress}
                 fluid  />
               </Grid.Column>
-
-         
             </Grid.Row>
             <Grid.Row> 
             {displayCommonOption && !this.state.yugtunAnalyzer ?
@@ -558,7 +561,7 @@ endingToEnglish(ending,index) {
             : ''}
             </Grid.Row>
           </Grid>
-          {this.state.yugtunAnalyzer ?
+          {this.state.yugtunAnalyzer && this.state.search.length > 0 ?
             <div style={{fontSize:22,paddingTop:35}}>
             {this.state.newSearchList.map((i,index) => 
               <span onClick={()=>{
@@ -592,7 +595,7 @@ endingToEnglish(ending,index) {
           	:
           	null
           } 
-          {this.state.yugtunAnalyzer ?
+          {this.state.yugtunAnalyzer && this.state.search.length > 0 ?
             <div style={{paddingTop:20}}>
             {this.state.parses.map((i,index)=>
               <div>
