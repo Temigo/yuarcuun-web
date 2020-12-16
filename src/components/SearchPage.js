@@ -515,13 +515,13 @@ endingToEnglish(ending,index) {
         <Container ref={this.search_container} className='search_container'>
           	<Grid stackable>
                 <Grid.Row style={{padding:0}}>
-                <div style={{display:'flex',justifyContent:'center',alignItems:'flex-end',fontSize:16,height:40,width:140,fontWeight:(!this.state.yugtunAnalyzer ? 'bold':'normal')}} onClick={() => {
+                <div style={{display:'flex',justifyContent:'center',alignItems:'flex-end',fontSize:16,height:40,width:120,fontWeight:(!this.state.yugtunAnalyzer ? 'bold':'normal')}} onClick={() => {
                   this.setState({ yugtunAnalyzer: false});
                 }}>
                 {'Dictionary'}
                 </div>  
                 <div
-                style={{display:'flex',justifyContent:'center',alignItems:'flex-end',fontSize:16,height:40,width:200,}}
+                style={{display:'flex',justifyContent:'center',alignItems:'flex-end',fontSize:16,height:40,width:160,}}
                 active={this.state.search.length > 0}
                 onClick={() => {
                   this.setState({ yugtunAnalyzer: true, parses:[],segments:[],endingrule:[],newSearchList:[],notFirstParse:false}); 
@@ -547,7 +547,7 @@ endingToEnglish(ending,index) {
                 fluid  />
               </Grid.Column>
             </Grid.Row>
-            <Grid.Row> 
+            <Grid.Row style={{padding:0}}> 
             {displayCommonOption && !this.state.yugtunAnalyzer ?
               <Grid.Column floated='right' style={{ flex: '0 0 17em' }}>
                 <Label
@@ -562,7 +562,8 @@ endingToEnglish(ending,index) {
             </Grid.Row>
           </Grid>
           {this.state.yugtunAnalyzer && this.state.search.length > 0 ?
-            <div style={{fontSize:22,paddingTop:35}}>
+            <Segment vertical style={{fontSize:22,padding:0,marginTop:20,maxHeight:145,overflow: 'auto',borderBottom:0}}>
+            <div style={{display:'flex',flexWrap:'wrap'}}>
             {this.state.newSearchList.map((i,index) => 
               <span onClick={()=>{
                 this.setState({ 
@@ -572,9 +573,10 @@ endingToEnglish(ending,index) {
                   parses:[],segments:[],endingrule:[],entries:undefined, activeIndex:-1, loaderOn: true, seeMoreActive:false,currentTableOpen: -1,
                 });
                 this.getParse(this.state.newSearchList[index].replace(/[^a-zA-Z\-̄͡͞ńḿ‘]/g, ""));
-              }} style={{cursor:'pointer',marginRight:6,borderBottomColor: 'red',borderBottom: '1px solid black',borderBottomWidth:(this.state.activeSentenceIndex === index ? 2 : 1)}}>{i}</span>
+              }} style={{marginTop:10,paddingBottom:4,cursor:'pointer',marginRight:6,borderBottomColor: 'red',borderBottom: '1px solid #3e3e3e',borderBottomWidth:(this.state.activeSentenceIndex === index ? 3 : 1)}}>{i}</span>
             )}
             </div>
+            </Segment>
           :
           null
         }
