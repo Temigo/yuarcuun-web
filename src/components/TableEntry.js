@@ -294,7 +294,7 @@ class TableEntry extends Component {
     <div>
     {this.state.mood === "[Abs]" || this.state.mood === "[Rel]" || this.state.mood === "[Abl_Mod]" || this.state.mood === "[Loc]" || this.state.mood === "[Ter]" || this.state.mood === "[Via]" || this.state.mood === "[Equ]" ?
         <div>
-        <Segment style={{overflow: 'auto'}}>
+        <Segment style={{margin:0,overflow: 'auto'}}>
           <Table unstackable celled>
             <Table.Body>
                 {unpossessedNounIdentifiers.map((i,index) => 
@@ -307,7 +307,7 @@ class TableEntry extends Component {
           </Table>
         </Segment>
         <div>{"POSSESSED"}</div>
-        <Segment style={{overflow: 'auto'}}>
+        <Segment style={{margin:0,overflow: 'auto'}}>
           <Table celled>
             <Table.Header>
               <Table.Row>
@@ -342,8 +342,8 @@ class TableEntry extends Component {
     {this.state.mood === '[Opt]' ?
 	(intransitiveTitles.map((k,kindex) => 
     <div>
-    <div style={{fontStyle:'italic'}}>{k}</div>
-    <Segment style={{overflow: 'auto'}}>
+    <div style={{fontStyle:'italic',marginTop:20,marginBottom:10,fontWeight:'bold'}}>{k}</div>
+    <Segment style={{margin:0,overflow: 'auto'}}>
       <Table unstackable celled>
         <Table.Header>
           <Table.Row>
@@ -375,8 +375,8 @@ class TableEntry extends Component {
     :
     (this.state.mood === '[Prec]' || this.state.mood === "[Cnsq]" || this.state.mood === "[Cont]" || this.state.mood === "[Conc]" || this.state.mood === "[Cond]" || this.state.mood === "[CtmpI]" || this.state.mood === "[CtmpII]" ?
 	    <div>
-	    <div style={{fontStyle:'italic'}}>INTRANSITIVE</div>
-	    <Segment style={{overflow: 'auto'}}>
+	    <div style={{fontStyle:'italic',fontWeight:'bold',marginTop:10,marginBottom:10}}>INTRANSITIVE</div>
+	    <Segment style={{margin:0,overflow: 'auto'}}>
 	      <Table unstackable celled>
 	        <Table.Header>
 	          <Table.Row>
@@ -397,8 +397,8 @@ class TableEntry extends Component {
 	    </div>
 	:
 	    <div>
-	    <div style={{fontStyle:'italic'}}>INTRANSITIVE</div>
-	    <Segment style={{overflow: 'auto'}}>
+	    <div style={{fontStyle:'italic',fontWeight:'bold',marginTop:10,marginBottom:10}}>INTRANSITIVE</div>
+	    <Segment style={{margin:0,overflow: 'auto'}}>
 	      <Table unstackable celled>
 	        <Table.Header>
 	          <Table.Row>
@@ -429,8 +429,9 @@ class TableEntry extends Component {
 
     {this.state.mood === '[Ind]' || this.state.mood === '[Ptcp]' || this.state.mood === '[Intrg]' ?
     <div>
-    <div style={{fontStyle:'italic'}}>TRANSITIVE</div>
-    <Segment style={{overflow: 'auto'}}>
+    <div style={{fontStyle:'italic',fontWeight:'bold',marginTop:20,marginBottom:10}}>TRANSITIVE</div>
+    <div style={{fontStyle:'italic',marginTop:10,marginBottom:10}}>3rd Person Subject</div>
+    <Segment style={{margin:0,overflow: 'auto'}}>
       <Table unstackable celled>
         <Table.Header>
           <Table.Row>
@@ -472,8 +473,9 @@ class TableEntry extends Component {
         </Table.Body>
       </Table>
     </Segment>
+    <div style={{fontStyle:'italic',marginTop:10,marginBottom:10}}>1st Person Subject</div>
     {this.state.mood === "[Intrg]" ?
-    <Segment style={{overflow: 'auto'}}>
+    <Segment style={{margin:0,overflow: 'auto'}}>
       <Table celled>
         <Table.Header>
           <Table.Row>
@@ -494,7 +496,7 @@ class TableEntry extends Component {
       </Table>
     </Segment>
     :
-    <Segment style={{overflow: 'auto'}}>
+    <Segment style={{margin:0,overflow: 'auto'}}>
       <Table celled>
         <Table.Header>
           <Table.Row>
@@ -534,7 +536,8 @@ class TableEntry extends Component {
       </Table>
     </Segment>
 	}
-    <Segment style={{overflow: 'auto'}}>
+    <div style={{fontStyle:'italic',marginTop:10,marginBottom:10}}>2nd Person Subject</div>
+    <Segment style={{margin:0,overflow: 'auto'}}>
       <Table unstackable celled>
         <Table.Header>
           <Table.Row>
@@ -581,10 +584,11 @@ class TableEntry extends Component {
     {this.state.mood === '[Opt]' ?
     (optativeIdentifiers.map((k,index) =>
     <div>
-    <div style={{fontStyle:'italic'}}>{transitiveTitles[index]}</div>
+    <div style={{fontStyle:'italic',fontWeight:'bold',marginTop:20,marginBottom:10}}>{transitiveTitles[index]}</div>
     {index < 2 ?
     <div>
-    <Segment style={{overflow: 'auto'}}>
+    <div style={{fontStyle:'italic',marginTop:10,marginBottom:10}}>3rd Person Subject</div>
+    <Segment style={{margin:0,overflow: 'auto'}}>
       <Table unstackable celled>
         <Table.Header>
           <Table.Row>
@@ -626,7 +630,8 @@ class TableEntry extends Component {
         </Table.Body>
       </Table>
     </Segment>
-    <Segment style={{overflow: 'auto'}}>
+    <div style={{fontStyle:'italic',marginTop:10,marginBottom:10}}>1st Person Subject</div>
+    <Segment style={{margin:0,overflow: 'auto'}}>
       <Table celled>
         <Table.Header>
           <Table.Row>
@@ -669,7 +674,8 @@ class TableEntry extends Component {
         :
         null
     }
-    <Segment style={{overflow: 'auto'}}>
+    <div style={{fontStyle:'italic',marginTop:10,marginBottom:10}}>2nd Person Subject</div>
+    <Segment style={{margin:0,overflow: 'auto'}}>
       <Table unstackable celled>
         <Table.Header>
           <Table.Row>
@@ -717,8 +723,8 @@ class TableEntry extends Component {
 
     {this.state.mood === '[Sbrd]' ?
     <div>
-    <div style={{fontStyle:'italic'}}>TRANSITIVE</div>
-    <Segment style={{overflow: 'auto'}}>
+    <div style={{fontStyle:'italic',fontWeight:'bold',marginTop:20,marginBottom:10}}>TRANSITIVE</div>
+    <Segment style={{margin:0,overflow: 'auto'}}>
       <Table unstackable celled>
         <Table.Header>
           <Table.Row>
@@ -755,8 +761,9 @@ class TableEntry extends Component {
 
     {this.state.mood === '[Prec]' || this.state.mood === "[Cnsq]" || this.state.mood === "[Cont]" || this.state.mood === "[Conc]" || this.state.mood === "[Cond]" || this.state.mood === "[CtmpI]" || this.state.mood === "[CtmpII]" ?
     <div>
-    <div style={{fontStyle:'italic'}}>TRANSITIVE</div>
-    <Segment style={{overflow: 'auto'}}>
+    <div style={{fontStyle:'italic',fontWeight:'bold',marginTop:20,marginBottom:10}}>TRANSITIVE</div>
+    <div style={{fontStyle:'italic',marginTop:10,marginBottom:10}}>3rd Person Subject (other)</div>
+    <Segment style={{margin:0,overflow: 'auto'}}>
       <Table unstackable celled>
         <Table.Header>
           <Table.Row>
@@ -801,7 +808,8 @@ class TableEntry extends Component {
         </Table.Body>
       </Table>
     </Segment>
-    <Segment style={{overflow: 'auto'}}>
+    <div style={{fontStyle:'italic',marginTop:10,marginBottom:10}}>1st Person Subject</div>
+    <Segment style={{margin:0,overflow: 'auto'}}>
       <Table celled>
         <Table.Header>
           <Table.Row>
@@ -845,7 +853,8 @@ class TableEntry extends Component {
         </Table.Body>
       </Table>
     </Segment>
-    <Segment style={{overflow: 'auto'}}>
+    <div style={{fontStyle:'italic',marginTop:10,marginBottom:10}}>2nd Person Subject</div>
+    <Segment style={{margin:0,overflow: 'auto'}}>
       <Table unstackable celled>
         <Table.Header>
           <Table.Row>
@@ -889,7 +898,8 @@ class TableEntry extends Component {
         </Table.Body>
       </Table>
     </Segment>
-    <Segment style={{overflow: 'auto'}}>
+    <div style={{fontStyle:'italic',marginTop:10,marginBottom:10}}>3rd Person Reflexive Subject (itself)</div>
+    <Segment style={{margin:0,overflow: 'auto'}}>
       <Table unstackable celled>
         <Table.Header>
           <Table.Row>
