@@ -7,7 +7,8 @@ import axios from 'axios';
 import { Container, Header, Grid, Input, List, Label, Icon, Image, Button, Accordion, Table, Segment, Loader, Divider } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { API_URL, TUTORIAL_URL, ICON_URL } from '../App.js';
-import Fuse from 'fuse.js';
+// import Fuse from 'fuse.js';
+import fuzzysort from 'fuzzysort'
 import now from 'performance-now';
 import ReactGA from 'react-ga';
 import GitHubForkRibbon from 'react-github-fork-ribbon';
@@ -17,34 +18,45 @@ import TableEntry from './TableEntry.js';
 
 // Cache dictionary
 let dictionary = [];
-// Search options
-let options = {
-  keys: ['yupik', 'english'],
-  minMatchCharLength: 3,
-  // includeScore: true,
-  distance: 10,
-  location: 2,
-  shouldSort: true,
-  //tokenize: true, // super slow!! 6x slower
-  // matchAllTokens: true,
-  threshold: 0.4,
-  findAllMatches: true,
-};
-let fuse = new Fuse([], options);
+let dictionary_dict = {};
+// let dictionary_prepared = [];
 
-let options1 = {
-  keys: ['yupik'],
-  // minMatchCharLength: 3,
-  // includeScore: true,
-  distance: 0,
-  // location: 2,
-  // shouldSort: true,
-  //tokenize: true, // super slow!! 6x slower
-  // matchAllTokens: true,
-  threshold: 0.0,
-  // findAllMatches: true,
+// Search options
+// let options = {
+//   keys: ['yupik', 'english'],
+//   minMatchCharLength: 3,
+//   // includeScore: true,
+//   distance: 10,
+//   location: 2,
+//   shouldSort: true,
+//   //tokenize: true, // super slow!! 6x slower
+//   // matchAllTokens: true,
+//   threshold: 0.4,
+//   findAllMatches: true,
+// };
+// let fuse = new Fuse([], options);
+
+// let options1 = {
+//   keys: ['yupik'],
+//   // minMatchCharLength: 3,
+//   // includeScore: true,
+//   distance: 0,
+//   // location: 2,
+//   // shouldSort: true,
+//   //tokenize: true, // super slow!! 6x slower
+//   // matchAllTokens: true,
+//   threshold: 0.0,
+//   // findAllMatches: true,
+// };
+// let fuse1 = new Fuse([], options1);
+
+// fuzzysort search
+const optionsFuzzy = {
+  keys: ['yupik', 'english'],
+  limit: 100, // don't return more results than you need!
+  threshold: -10000, // don't return bad results
 };
-let fuse1 = new Fuse([], options1);
+
 
 const endingToEnglishTerms = {
   "[Ind]":"Indicative (Statement Form)",
@@ -203,14 +215,18 @@ class SearchPage extends Component {
             label: 'Dictionary loading'
           });
           dictionary = response.data;
-          fuse.setCollection(dictionary);
-          fuse1.setCollection(dictionary);
+          // fuse.setCollection(dictionary);
+          // fuse1.setCollection(dictionary);
           console.log('Fetched dictionary');
+
+          dictionary.forEach(entry => dictionary_dict[entry.yupik] = entry.english) // create dictionary_dict dictionary
+          // dictionary_prepared = fuzzysort.prepare(dictionary)
+
           this.setState({ dictionary: dictionary });
         });
     }
     else {
-      fuse.setCollection(dictionary);
+      // fuse.setCollection(dictionary);
       this.setState({ dictionary: dictionary });
     }
   }
@@ -299,27 +315,30 @@ class SearchPage extends Component {
     console.log(new_search)
     // if (data.value === undefined) {new_search = this.state.search}
 
-    if (new_search.length >= 4 && !this.state.yugtunAnalyzer) {
-      ReactGA.event({
-        category: 'User',
-        action: 'Search word',
-        label: new_search
-      });
-      let start = now();
-      let wordsList = fuse.search(new_search);
-      let end = now();
-      console.log('done! in ', (end-start).toFixed(3), 'ms');
-      ReactGA.timing({
-        category: 'Search',
-        variable: 'fuse.search',
-        value: (end-start).toFixed(3),
-        label:'Fuse.js search duration'
-      });
-      this.setState({ startingSearch: newStartingSearch, wordsList: wordsList, search: new_search });
-    }
-    else {
-      this.setState({ startingSearch: newStartingSearch, search: new_search });
-    }
+    let wordsList = fuzzysort.go(new_search, dictionary, optionsFuzzy).map(({ obj }) => (obj));
+    this.setState({ startingSearch: newStartingSearch, wordsList: wordsList, search: new_search });
+
+    // if (new_search.length >= 4 && !this.state.yugtunAnalyzer) {
+    //   ReactGA.event({
+    //     category: 'User',
+    //     action: 'Search word',
+    //     label: new_search
+    //   });
+    //   let start = now();
+    //   let wordsList = fuse.search(new_search);
+    //   let end = now();
+    //   console.log('done! in ', (end-start).toFixed(3), 'ms');
+    //   ReactGA.timing({
+    //     category: 'Search',
+    //     variable: 'fuse.search',
+    //     value: (end-start).toFixed(3),
+    //     label:'Fuse.js search duration'
+    //   });
+    //   this.setState({ startingSearch: newStartingSearch, wordsList: wordsList, search: new_search });
+    // }
+    // else {
+    //   this.setState({ startingSearch: newStartingSearch, search: new_search });
+    // }
   }
 
   selectWord(word, event) {
@@ -435,7 +454,12 @@ endingToEnglish(ending,index) {
 
   render() {
     console.log("SearchPage state: ", this.state);
-    // console.log(fuse1.search("–a/–ar/–aa/+a/+aar[V→V]"))
+    console.log("dictionary: ",dictionary_dict);
+    // console.log("fuse.js: ",fuse.search('pissur'))
+    console.log("Fuzzysort: ",fuzzysort.go('pissur', dictionary, optionsFuzzy));
+    // console.log("Fuzzysort_prepared: ",fuzzysort.go('pissur', dictionary_prepared, optionsFuzzy));
+
+
     let displayList = this.state.search.length >= 4 && this.state.wordsList.length > 0;
     let emptyList = this.state.search.length >= 4 && this.state.wordsList.length === 0;
     let wordsList = this.state.wordsList;
@@ -449,6 +473,7 @@ endingToEnglish(ending,index) {
       wordsList = wordsList.filter((word, i) => { return isCommonList[i]; });
     }
     let displayCommonOption = this.state.onlyCommon || (wordsList.some((word, i) => { return isCommonList[i]; }) && wordsList.some((word, i) => { return !isCommonList[i]; }));
+    
     const accordionTitlesVerbs = [
       "Indicative (Statement Form)",
       "Interrogative (Question Form)",
@@ -519,7 +544,7 @@ endingToEnglish(ending,index) {
 
          
             </Grid.Row>
-            <Grid.Row>
+            <Grid.Row> 
             {displayCommonOption && !this.state.yugtunAnalyzer ?
               <Grid.Column floated='right' style={{ flex: '0 0 17em' }}>
                 <Label
@@ -583,14 +608,15 @@ endingToEnglish(ending,index) {
               {i.split('-').map((q,qindex) => 
                 (qindex !== i.split('-').length-1 ?
                   <div style={{paddingTop:15}}>
-                    {fuse1.search(this.getLinks(qindex,i.split('-'))).length !== 0 ?
+                    {this.getLinks(qindex,i.split('-')).length !== 0 ? //{fuse1.search(this.getLinks(qindex,i.split('-'))).length !== 0 ?
                       <div>
                       <Link to={{pathname: this.getLinks(qindex,i.split('-')), state: { word: this.getLinks(qindex,i.split('-')), search: this.state.search, wordsList: this.state.wordsList, yugtunAnalyzer: this.state.yugtunAnalyzer, parses: this.state.parses, segments:this.state.segments,endingrule:this.state.endingrule }}}>
                       <div style={{fontWeight:'bold',fontFamily:'Lato',textDecoration:'underline'}}>
                       {q}
                       </div>                  
                       </Link>
-                      {fuse1.search(this.getLinks(qindex,i.split('-')))[0].english}
+                    {dictionary_dict[this.getLinks(qindex,i.split('-'))] // {fuse1.search(this.getLinks(qindex,i.split('-')))[0].english} 
+                    }
                       </div>
                       :
                       <div style={{fontWeight:'bold',fontFamily:'Lato',textDecoration:'underline'}}>
