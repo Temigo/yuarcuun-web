@@ -199,6 +199,7 @@ class SearchPage extends Component {
     this.selectWord = this.selectWord.bind(this);
     this.search_container = React.createRef();
     this.getEndings = this.getEndings.bind(this);
+    this.getLinks = this.getLinks.bind(this);
     this.inputClicked = this.inputClicked.bind(this);
   }
 
@@ -408,35 +409,38 @@ endingToEnglish(ending,index) {
     if (ending.includes('[Trns]')) {
       english3 += endingToEnglishTerms[tags[tags.length-2]] + " to " + endingToEnglishTerms[tags[tags.length-1]];
 
-    } else if (ending.includes('[Intr]')) {
-      english3 += endingToEnglishTerms[tags[tags.length-1]];
-    }
-  } else if (ending.includes('[N]')) {
-    english1 += 'Noun Ending';
-    english2 += endingToEnglishTerms[tags[1]];
-    if (ending.includes('Poss')) {
-      english3 += endingToEnglishTerms[tags[tags.length-2]] + "\xa0" + endingToEnglishTerms[tags[tags.length-1]];
-    } else {
-      english3 += endingToEnglishTerms[tags[tags.length-1]];
-    }
-  } else {
-    english1 += ending;
-    english2 += endingToEnglishTerms[tags[0]];
+      } else if (ending.includes('[Intr]')) {
+        english3 += endingToEnglishTerms[tags[tags.length-1]];
+      }
+    } else if (ending.includes('[N]')) {
+      english1 += 'Noun Ending';
+      english2 += endingToEnglishTerms[tags[1]];
+      if (ending.includes('Poss')) {
+        english3 += endingToEnglishTerms[tags[tags.length-2]] + "\xa0" + endingToEnglishTerms[tags[tags.length-1]];
+      } else {
+        english3 += endingToEnglishTerms[tags[tags.length-1]];
+      }
+    } else {
+      english1 += ending;
+      english2 += endingToEnglishTerms[tags[0]];
+    }
+    return (
+    <div style={{paddingTop:15}}>
+    <div style={{fontWeight:'bold'}}>{this.state.endingrule[index].join(', ')}</div>
+    <div style={{fontStyle:'italic'}}>{english1}</div>
+    <div style={{fontStyle:'italic'}}>{english2}</div>
+    <div>{english3}</div>
+    </div>
+    )
   }
-  return (
-  <div style={{paddingTop:15}}>
-  <div style={{fontWeight:'bold'}}>{this.state.endingrule[index].join(', ')}</div>
-  <div style={{fontStyle:'italic'}}>{english1}</div>
-  <div style={{fontStyle:'italic'}}>{english2}</div>
-  <div>{english3}</div>
-  </div>
-  )
-}
 
   getLinks(index, parse) {
-    if (parse.length !== 1) {
-      if (index === 0) {
+    if (index === 0) {            // if base
+      if (parse[index].includes("[P") !== null) {  // if particle
+        return parse[index].split("[P")[0]
+      } else {
         var base = parse[0];
+        base = base.split(/\[[^e]/)[0] // remove special tag
         var dictionaryForm = '';
         if (parse[1].includes('[N')) {                      // if Noun base:
           dictionaryForm = base.replace(/([aeiu])te\b/, "$1n");              // Vte -> n
@@ -444,16 +448,13 @@ endingToEnglish(ending,index) {
           dictionaryForm = dictionaryForm.replace(/g\b/, "k");      // g -> k
           dictionaryForm = dictionaryForm.replace(/r(\*)?\b/, "q$1"); // r(*) -> q(*)
         } else {
-          dictionaryForm = base+"-"
+          dictionaryForm = base+"-"       // if Verb base
         }
         return dictionaryForm;          
-      } else if (index !== parse.length-1) {
-        return parse[index]
       }
-    } else {
-      return parse[0].split("[P")[0]
     }
-
+    // else (["[N→N]","[N→V]","[V→V]","[V→N]","[Encl]"].some(v => parse[index].includes(v))) { //if postbase or enclitic
+    return parse[index];
   }
 
   render() {
@@ -463,6 +464,7 @@ endingToEnglish(ending,index) {
     console.log("Fuzzysort: ",fuzzysort.go('pissur', dictionary, optionsFuzzy));
     // console.log("Fuzzysort_prepared: ",fuzzysort.go('pissur', dictionary_prepared, optionsFuzzy));
 
+    // console.log("pissur-[V][Ind][Intr][S_3Sg]=qaa[Encl]".split(/[-=]/))
 
     let displayList = this.state.search.length >= 2 && this.state.wordsList.length > 0;
     let emptyList = this.state.search.length >= 2 && this.state.wordsList.length === 0;
@@ -610,18 +612,19 @@ endingToEnglish(ending,index) {
 
               <div style={{fontSize:20}}>{this.state.segments[index][0].replaceAll('>','·')}</div>
 
-              {i.split('-').map((q,qindex) => 
-                (qindex !== i.split('-').length-1 ?
+              {i.split(/[-=]/).map((q,qindex) => 
+                (q.includes("[V]") || q.includes("[N]") ?
+                  (this.endingToEnglish(q,index))
+                  :
                   <div style={{paddingTop:15}}>
-                    {this.getLinks(qindex,i.split('-')).length !== 0 ? //{fuse1.search(this.getLinks(qindex,i.split('-'))).length !== 0 ?
+                    {this.getLinks(qindex,i.split(/[-=]/)) in dictionary_dict ?
                       <div>
-                      <Link to={{pathname: this.getLinks(qindex,i.split('-')), state: { word: this.getLinks(qindex,i.split('-')), search: this.state.search, newSearchList: this.state.newSearchList, wordsList: this.state.wordsList, yugtunAnalyzer: this.state.yugtunAnalyzer, parses: this.state.parses, segments:this.state.segments,endingrule:this.state.endingrule }}}>
+                      <Link to={{pathname: this.getLinks(qindex,i.split(/[-=]/)), state: { word: this.getLinks(qindex,i.split(/[-=]/)), search: this.state.search, newSearchList: this.state.newSearchList, wordsList: this.state.wordsList, yugtunAnalyzer: this.state.yugtunAnalyzer, parses: this.state.parses, segments:this.state.segments,endingrule:this.state.endingrule }}}>
                       <div style={{fontWeight:'bold',fontFamily:'Lato',textDecoration:'underline'}}>
                       {q}
                       </div>                  
                       </Link>
-                    {dictionary_dict[this.getLinks(qindex,i.split('-'))] // {fuse1.search(this.getLinks(qindex,i.split('-')))[0].english} 
-                    }
+                      {dictionary_dict[this.getLinks(qindex,i.split(/[-=]/))]}
                       </div>
                       :
                       <div style={{fontWeight:'bold',fontFamily:'Lato',textDecoration:'underline'}}>
@@ -629,11 +632,7 @@ endingToEnglish(ending,index) {
                       </div>   
                     }
                   </div>
-                :
-                  (this.endingToEnglish(q,index))
-                )
-
-                )}
+                ))}
             <div style={{paddingTop:15, paddingBottom:15, textAlign:'center'}}>
             <Button basic color='blue' style={{fontFamily:'sans-serif'}} onClick={()=>{this.setState({currentTableOpen:(this.state.currentTableOpen === index ? -1 : index), activeIndex:-1})}}>
             {this.state.currentTableOpen === index ?
