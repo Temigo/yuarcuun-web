@@ -385,11 +385,11 @@ inputClicked(analyzer) {
     this.setState({ 
       newSearchList: this.state.search.split(" "), 
       activeSentenceIndex: 0, 
-      searchWord: this.state.search.split(" ")[0].replace(/[^a-zA-Z\-̄͡͞ńḿ‘]/g, ""),
+      searchWord: this.state.search.split(" ")[0].replace(/[^a-zA-Z\-̄͡͞ńḿ']/g, "").toLowerCase(),
       getCall:true,
       notFirstParse:true,
     }); 
-    this.getParse(this.state.search.split(" ")[0].replace(/[^a-zA-Z\-̄͡͞ńḿ‘]/g, ""));                          
+    this.getParse(this.state.search.split(" ")[0].replace(/[^a-zA-Z\-̄͡͞ńḿ']/g, "").toLowerCase());                          
   } else {
     this.inputRef.focus();
     this.setState({
@@ -436,12 +436,14 @@ endingToEnglish(ending,index) {
 
   getLinks(index, parse) {
     if (index === 0) {            // if base
-      if (parse[index].includes("[P") !== null) {  // if particle
+
+      if (parse[index].includes("[P")) {  // if particle
         return parse[index].split("[P")[0]
       } else {
         var base = parse[0];
         base = base.split(/\[[^e]/)[0] // remove special tag
         var dictionaryForm = '';
+        console.log("getLinks:",base,index,parse)
         if (parse[1].includes('[N')) {                      // if Noun base:
           dictionaryForm = base.replace(/([aeiu])te\b/, "$1n");              // Vte -> n
           dictionaryForm = dictionaryForm.replace(/([^\[])e\b/, "$1a")      // e -> a
@@ -464,7 +466,7 @@ endingToEnglish(ending,index) {
     console.log("Fuzzysort: ",fuzzysort.go('pissur', dictionary, optionsFuzzy));
     // console.log("Fuzzysort_prepared: ",fuzzysort.go('pissur', dictionary_prepared, optionsFuzzy));
 
-    // console.log("pissur-[V][Ind][Intr][S_3Sg]=qaa[Encl]".split(/[-=]/))
+    // console.log("pissur-[V][Ind][Intr][S_3Sg]=qaa[Encl]".split('-'))
 
     let displayList = this.state.search.length >= 2 && this.state.wordsList.length > 0;
     let emptyList = this.state.search.length >= 2 && this.state.wordsList.length === 0;
@@ -579,10 +581,10 @@ endingToEnglish(ending,index) {
                 this.setState({ 
                   getCall:true,
                   activeSentenceIndex: index, 
-                  searchWord: this.state.newSearchList[index].replace(/[^a-zA-Z\-̄͡͞ńḿ‘]/g, ""),
+                  searchWord: this.state.newSearchList[index].replace(/[^a-zA-Z\-̄͡͞ńḿ']/g, "").toLowerCase(),
                   parses:[],segments:[],endingrule:[],entries:undefined, activeIndex:-1, loaderOn: true, seeMoreActive:false,currentTableOpen: -1,
                 });
-                this.getParse(this.state.newSearchList[index].replace(/[^a-zA-Z\-̄͡͞ńḿ‘]/g, ""));
+                this.getParse(this.state.newSearchList[index].replace(/[^a-zA-Z\-̄͡͞ńḿ']/g, "").toLowerCase());
                 }
               }} style={{marginTop:10,paddingBottom:4,cursor:'pointer',marginRight:6,borderBottomColor: 'red',borderBottom: '1px solid #3e3e3e',borderBottomWidth:(this.state.activeSentenceIndex === index ? 3 : 1)}}>{i}</span>
             )}
@@ -621,19 +623,19 @@ endingToEnglish(ending,index) {
 
               <div style={{fontSize:20}}>{this.state.segments[index][0].replaceAll('>','·')}</div>
 
-              {i.split(/[-=]/).map((q,qindex) => 
+              {i.split('-').map((q,qindex) => 
                 (q.includes("[V]") || q.includes("[N]") ?
                   (this.endingToEnglish(q,index))
                   :
                   <div style={{paddingTop:15}}>
-                    {this.getLinks(qindex,i.split(/[-=]/)) in dictionary_dict ?
+                    {this.getLinks(qindex,i.split('-')) in dictionary_dict ?
                       <div>
-                      <Link to={{pathname: this.getLinks(qindex,i.split(/[-=]/)), state: { word: this.getLinks(qindex,i.split(/[-=]/)), search: this.state.search, newSearchList: this.state.newSearchList, wordsList: this.state.wordsList, yugtunAnalyzer: this.state.yugtunAnalyzer, parses: this.state.parses, segments:this.state.segments,endingrule:this.state.endingrule }}}>
+                      <Link to={{pathname: this.getLinks(qindex,i.split('-')), state: { word: this.getLinks(qindex,i.split('-')), search: this.state.search, newSearchList: this.state.newSearchList, wordsList: this.state.wordsList, yugtunAnalyzer: this.state.yugtunAnalyzer, parses: this.state.parses, segments:this.state.segments,endingrule:this.state.endingrule }}}>
                       <div style={{fontWeight:'bold',fontFamily:'Lato',textDecoration:'underline'}}>
                       {q}
                       </div>                  
                       </Link>
-                      {dictionary_dict[this.getLinks(qindex,i.split(/[-=]/))]}
+                      {dictionary_dict[this.getLinks(qindex,i.split('-'))]}
                       </div>
                       :
                       <div style={{fontWeight:'bold',fontFamily:'Lato',textDecoration:'underline'}}>
