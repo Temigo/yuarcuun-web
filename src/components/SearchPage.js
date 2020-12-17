@@ -506,8 +506,13 @@ endingToEnglish(ending,index) {
     return (
       <div>
       <YugtunLoader criteria={this.state.dictionary.length === 0} />
+      <div style={{display:'flex',justifyContent:'flex-end'}}>
+      <List horizontal divided>
+        <List.Item> <a style={{textDecoration:'underline',color:'#000000de'}} href={TUTORIAL_URL}>Tutorial</a> </List.Item>
+        <List.Item> <Link style={{textDecoration:'underline',color:'#000000de'}} to='/about'>About</Link> </List.Item>
+      </List>
+      </div>
       <Grid textAlign='center' style={{ height: '100%' }} verticalAlign={this.state.searchBarStuckTop ? 'top' : 'middle'}>
-      <GitHubForkRibbon href={TUTORIAL_URL} target='_blank' position='right' color='orange'>Watch Tutorial</GitHubForkRibbon>
       <Grid.Row style={displayList ? {height: 'auto'} : {height: '80%'}}>
       <Grid.Column style={{ maxWidth: 800, padding: 10 }} textAlign='left'>
         <Header as='h1'>
@@ -516,24 +521,26 @@ endingToEnglish(ending,index) {
         </Header>
         <Container ref={this.search_container} className='search_container'>
           	<Grid stackable>
-                <Grid.Row style={{padding:0}}>
-                <div style={{display:'flex',justifyContent:'center',alignItems:'flex-end',fontSize:16,height:40,width:120,fontWeight:(!this.state.yugtunAnalyzer ? 'bold':'normal')}} onClick={() => {
+                <Grid.Row style={{padding:0,height:45}}>
+                <div style={{display:'flex',justifyContent:'center',alignItems:'flex-end',fontSize:16,width:120,fontWeight:(!this.state.yugtunAnalyzer ? 'bold':'normal')}} onClick={() => {
                   this.setState({ yugtunAnalyzer: false});
                 }}>
                 {'Dictionary'}
                 </div>  
                 <div
-                style={{display:'flex',justifyContent:'center',alignItems:'flex-end',fontSize:16,height:40,width:160,}}
+                style={{display:'flex',justifyContent:'center',alignItems:'flex-end',fontSize:16,width:160,}}
                 active={this.state.search.length > 0}
                 onClick={() => {
-                  this.setState({ yugtunAnalyzer: true, parses:[],segments:[],endingrule:[],newSearchList:[],notFirstParse:false}); 
+                  if (!this.state.yugtunAnalyzer) {
+                  this.setState({ yugtunAnalyzer: true, parses:[],segments:[],endingrule:[],newSearchList:[],notFirstParse:false});                     
+                  }
                 }}>
                 <span style={{fontWeight:(this.state.yugtunAnalyzer ? 'bold':'normal')}}>{'Word Analyzer'}</span>
                 <span style={{color:'#195fff',fontStyle:'italic'}}>{'\xa0\xa0new!'}</span>
                 </div>   
                 </Grid.Row>             
             <Grid.Row >
-              <Grid.Column style={{ flex: 1 }}>
+              <Grid.Column style={{ flex: 1, paddingTop:0 }}>
               <Input
                 ref={this.handleRef}
                 placeholder='Search by word...'
@@ -568,6 +575,7 @@ endingToEnglish(ending,index) {
             <div style={{display:'flex',flexWrap:'wrap'}}>
             {this.state.newSearchList.map((i,index) => 
               <span onClick={()=>{
+                if (index !== this.state.activeSentenceIndex) {
                 this.setState({ 
                   getCall:true,
                   activeSentenceIndex: index, 
@@ -575,6 +583,7 @@ endingToEnglish(ending,index) {
                   parses:[],segments:[],endingrule:[],entries:undefined, activeIndex:-1, loaderOn: true, seeMoreActive:false,currentTableOpen: -1,
                 });
                 this.getParse(this.state.newSearchList[index].replace(/[^a-zA-Z\-̄͡͞ńḿ‘]/g, ""));
+                }
               }} style={{marginTop:10,paddingBottom:4,cursor:'pointer',marginRight:6,borderBottomColor: 'red',borderBottom: '1px solid #3e3e3e',borderBottomWidth:(this.state.activeSentenceIndex === index ? 3 : 1)}}>{i}</span>
             )}
             </div>
