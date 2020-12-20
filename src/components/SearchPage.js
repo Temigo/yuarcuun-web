@@ -443,7 +443,7 @@ endingToEnglish(ending,index) {
         var base = parse[0];
         base = base.split(/\[[^e]/)[0] // remove special tag
         var dictionaryForm = '';
-        console.log("getLinks:",base,index,parse)
+        // console.log("getLinks:",base,index,parse)
         if (parse[1].includes('[N')) {                      // if Noun base:
           dictionaryForm = base.replace(/([aeiu])te\b/, "$1n");              // Vte -> n
           dictionaryForm = dictionaryForm.replace(/([^\[])e\b/, "$1a")      // e -> a
@@ -508,7 +508,7 @@ endingToEnglish(ending,index) {
     return (
       <div>
       <YugtunLoader criteria={this.state.dictionary.length === 0} />
-      <div style={{display:'flex',justifyContent:'flex-end'}}>
+      <div style={{display:'flex',justifyContent:'flex-end',paddingBottom:5}}>
       <List horizontal divided>
         <List.Item> <a style={{textDecoration:'underline',color:'#000000de'}} href={TUTORIAL_URL}>Tutorial</a> </List.Item>
         <List.Item> <Link style={{textDecoration:'underline',color:'#000000de'}} to='/about'>About</Link> </List.Item>
@@ -519,7 +519,7 @@ endingToEnglish(ending,index) {
       <Grid.Column style={{ maxWidth: 800, padding: 10 }} textAlign='left'>
         <Header as='h1'>
           <Image style={{'fontSize': '1.5em'}} src={ICON_URL}/>
-          <Link to='/' style={{ color: 'black', verticalAlign: 'bottom' }}>Yugtun</Link>
+          <span to='/' style={{ color: 'black', verticalAlign: 'bottom' }}>Yugtun</span>
         </Header>
         <Container ref={this.search_container} className='search_container'>
           	<Grid stackable>
@@ -633,11 +633,13 @@ endingToEnglish(ending,index) {
                   <div style={{paddingTop:15}}>
                     {this.getLinks(qindex,i.split('-')) in dictionary_dict ?
                       <div>
-                      <Link to={{pathname: this.getLinks(qindex,i.split('-')), state: { word: this.getLinks(qindex,i.split('-')), search: this.state.search, newSearchList: this.state.newSearchList, wordsList: this.state.wordsList, yugtunAnalyzer: this.state.yugtunAnalyzer, parses: this.state.parses, segments:this.state.segments,endingrule:this.state.endingrule }}}>
                       <div style={{fontWeight:'bold',fontFamily:'Lato',textDecoration:'underline'}}>
+                      <Link to={{pathname: this.getLinks(qindex,i.split('-')), state: { word: this.getLinks(qindex,i.split('-')), search: this.state.search, newSearchList: this.state.newSearchList, wordsList: this.state.wordsList, yugtunAnalyzer: this.state.yugtunAnalyzer, parses: this.state.parses, segments:this.state.segments,endingrule:this.state.endingrule }}}>
+                      <span>
                       {q}
-                      </div>                  
+                      </span>
                       </Link>
+                      </div>                  
                       {dictionary_dict[this.getLinks(qindex,i.split('-'))]}
                       </div>
                       :
