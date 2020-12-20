@@ -159,7 +159,7 @@ const endingDescriptions = [
 class SearchPage extends Component {
   constructor(props) {
     super(props);
-    console.log("SearchPage props: ", props);
+    // console.log("SearchPage props: ", props);
     this.state = {
       dictionary: [],
       dictionaryNouns: [],
@@ -182,10 +182,12 @@ class SearchPage extends Component {
       getCall:false,
       notFirstParse: false,
       searchBarStuckTop: false,
+      // exampleSentenceSearch: false,
       // smallestParse:[[],[]],
       // segmentOutputList:[],
       searchWord:"",
       activeSentenceIndex: 0,
+      // exampleSentenceSearch: props.location.state === undefined ? false : props.location.state.exampleSentenceSearch,
       newSearchList: props.location.state === undefined ? [] : props.location.state.newSearchList,
       activeIndex:-1,
       loaderOn:true,
@@ -237,9 +239,6 @@ class SearchPage extends Component {
     if (prevState.dictionary.length !== this.state.dictionary.length) {
       this.onChangeSearch(undefined, {value: this.state.search});
     }
-    // if (prevState.search !== this.state.search) {
-    // 	this.setState({ yugtunAnalyzer:false, parses:[],segments:[],endingrule:[]})
-    // }
     if (prevState.search !== this.state.search) {
     	this.setState({searchBarStuckTop:true});
     }
@@ -461,9 +460,9 @@ endingToEnglish(ending,index) {
 
   render() {
     console.log("SearchPage state: ", this.state);
-    console.log("dictionary: ",dictionary_dict);
+    // console.log("dictionary: ",dictionary_dict);
     // console.log("fuse.js: ",fuse.search('pissur'))
-    console.log("Fuzzysort: ",fuzzysort.go('pissur', dictionary, optionsFuzzy));
+    // console.log("Fuzzysort: ",fuzzysort.go('pissur', dictionary, optionsFuzzy));
     // console.log("Fuzzysort_prepared: ",fuzzysort.go('pissur', dictionary_prepared, optionsFuzzy));
 
     // console.log("pissur-[V][Ind][Intr][S_3Sg]=qaa[Encl]".split('-'))
@@ -519,7 +518,7 @@ endingToEnglish(ending,index) {
       <Grid.Column style={{ maxWidth: 800, padding: 10 }} textAlign='left'>
         <Header as='h1'>
           <Image style={{'fontSize': '1.5em'}} src={ICON_URL}/>
-          <span to='/' style={{ color: 'black', verticalAlign: 'bottom' }}>Yugtun</span>
+          <span style={{ color: 'black', verticalAlign: 'bottom' }}>Yugtun</span>
         </Header>
         <Container ref={this.search_container} className='search_container'>
           	<Grid stackable>
@@ -679,7 +678,8 @@ endingToEnglish(ending,index) {
                           {p}
                         </Accordion.Title>
                         <Accordion.Content active={activeIndex === pindex}>
-                        <div style={{'paddingBottom':15}}>{endingDescriptions[pindex]}</div>                        
+                        <div style={{'paddingBottom':15}}>{endingDescriptions[pindex]}</div>   
+                        <div style={{fontStyle:'italic','paddingBottom':5}}>{"Note: Many verb bases can be intransitive-only, transitive-only, or only allow certain endings."}</div>                     
                           {this.state.loaderOn ? 
                             <Loader active inline />
                             :

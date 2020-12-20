@@ -131,7 +131,13 @@ class YupikEntry extends Component {
             {this.state.entry.example_sentence.map((sentence) => {
               return (
                 <List.Item key={sentence[0]}>
-                  <List.Header>{sentence[0]}</List.Header>
+                  <List.Header>
+                <Link to={{pathname:'/', state: { search: sentence[0], yugtunAnalyzer: false}}}>
+                  <span style={{textDecoration:'underline'}}>
+                  {sentence[0]}
+                  </span>
+                </Link>
+                  </List.Header>
                   <List.Description>{sentence[1]}</List.Description>
                 </List.Item>
                );

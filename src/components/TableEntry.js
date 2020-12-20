@@ -306,7 +306,7 @@ class TableEntry extends Component {
             </Table.Body>
           </Table>
         </Segment>
-        <div>{"POSSESSED"}</div>
+        <div style={{fontStyle:'italic',fontWeight:'bold',marginTop:10,marginBottom:10}}>{"POSSESSED"}</div>
         <Segment style={{margin:0,overflow: 'auto'}}>
           <Table celled>
             <Table.Header>
