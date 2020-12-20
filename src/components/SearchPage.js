@@ -4,7 +4,7 @@ import '../semantic/dist/semantic.min.css';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import { Container, Header, Grid, Input, List, Label, Icon, Image, Button, Accordion, Table, Segment, Loader, Divider } from 'semantic-ui-react';
+import { Container, Header, Grid, Input, List, Label, Icon, Image, Button, Accordion, Table, Segment, Loader, Divider, Tab } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { API_URL, TUTORIAL_URL, ICON_URL } from '../App.js';
 // import Fuse from 'fuse.js';
@@ -187,6 +187,7 @@ class SearchPage extends Component {
       // segmentOutputList:[],
       searchWord:"",
       activeSentenceIndex: 0,
+      activeTabIndex:0,
       // exampleSentenceSearch: props.location.state === undefined ? false : props.location.state.exampleSentenceSearch,
       newSearchList: props.location.state === undefined ? [] : props.location.state.newSearchList,
       activeIndex:-1,
@@ -369,10 +370,11 @@ class SearchPage extends Component {
   }
 
 onKeyPress = (e) => {
-  if(e.key === 'Enter'){
+  if(e.key === 'Enter' && (this.state.activeTabIndex === 0 || this.state.search !== this.state.searchWord)){
     // if (!this.state.yugtunAnalyzer && this.state.parses.length === 0) {this.setState({getCall:true})}
     // this.setState({ yugtunAnalyzer: !this.state.yugtunAnalyzer}); 
     // if (this.state.yugtunAnalyzer) {
+      this.setState({activeTabIndex:1})
       this.inputClicked(true)
     // }
   }
@@ -433,6 +435,17 @@ endingToEnglish(ending,index) {
     )
   }
 
+  handleTabChange = (e,data) => {
+    if (data.activeIndex === 0) {
+      this.setState({ yugtunAnalyzer: false, activeTabIndex:0})
+    } else {
+      if (!this.state.yugtunAnalyzer) {
+      this.setState({ yugtunAnalyzer: true, activeTabIndex:1, parses:[],segments:[],endingrule:[],newSearchList:[],notFirstParse:false});                     
+      this.inputClicked()
+      }
+    }
+  }
+
   getLinks(index, parse) {
     if (index === 0) {            // if base
 
@@ -480,7 +493,14 @@ endingToEnglish(ending,index) {
       wordsList = wordsList.filter((word, i) => { return isCommonList[i]; });
     }
     let displayCommonOption = this.state.onlyCommon || (wordsList.some((word, i) => { return isCommonList[i]; }) && wordsList.some((word, i) => { return !isCommonList[i]; }));
-    
+  const panes = [
+    {
+      menuItem: {content:'Dictionary',size:'massive'}
+    },
+    {
+      menuItem: 'Parser',
+    },
+  ]    
     const accordionTitlesVerbs = [
       "Indicative (Statement Form)",
       "Interrogative (Question Form)",
@@ -522,27 +542,9 @@ endingToEnglish(ending,index) {
         </Header>
         <Container ref={this.search_container} className='search_container'>
           	<Grid stackable>
-                <Grid.Row style={{padding:0,height:45}}>
-                <div style={{display:'flex',justifyContent:'center',alignItems:'flex-end',fontSize:16,width:130,fontWeight:(!this.state.yugtunAnalyzer ? 'bold':'normal')}}>
-                <span style={{cursor:'pointer'}} onClick={() => {
-                  this.setState({ yugtunAnalyzer: false});
-                }}>
-                {'Dictionary'}
-                </span>
-                </div>  
-                <div
-                style={{display:'flex',justifyContent:'center',alignItems:'flex-end',fontSize:16,width:120,}}
-                active={this.state.search.length > 0}
-                onClick={() => {
-                  if (!this.state.yugtunAnalyzer) {
-                  this.setState({ yugtunAnalyzer: true, parses:[],segments:[],endingrule:[],newSearchList:[],notFirstParse:false});                     
-                  this.inputClicked()
-                  }
-                }}>
-                <span style={{fontWeight:(this.state.yugtunAnalyzer ? 'bold':'normal'),cursor:'pointer'}}>{'Parser'}</span>
-                <span style={{color:'#195fff',fontStyle:'italic'}}>{'\xa0\xa0new!'}</span>
-                </div>   
-                </Grid.Row>             
+
+          <Tab style={{paddingTop:10}} activeIndex={this.state.activeTabIndex} menu={{ secondary: true, pointing: true, size:'huge' }} panes={panes} onTabChange={this.handleTabChange} />
+
             <Grid.Row >
               <Grid.Column style={{ flex: 1, paddingTop:0 }}>
               <Input
