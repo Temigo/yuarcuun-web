@@ -373,15 +373,15 @@ onKeyPress = (e) => {
   if(e.key === 'Enter'){
     // if (!this.state.yugtunAnalyzer && this.state.parses.length === 0) {this.setState({getCall:true})}
     // this.setState({ yugtunAnalyzer: !this.state.yugtunAnalyzer}); 
-    if (this.state.yugtunAnalyzer) {
+    // if (this.state.yugtunAnalyzer) {
       this.inputClicked(true)
-    }
+    // }
   }
 }
 
-inputClicked(analyzer) {
-  this.setState({entries:undefined, activeIndex:-1, loaderOn: true, seeMoreActive:false,currentTableOpen: -1})
-  if (analyzer) {
+inputClicked() {
+  this.setState({entries:undefined, activeIndex:-1, loaderOn: true, seeMoreActive:false,currentTableOpen: -1,yugtunAnalyzer:true})
+  if (this.state.search.length > 0) {
     this.setState({ 
       newSearchList: this.state.search.split(" "), 
       activeSentenceIndex: 0, 
@@ -390,12 +390,12 @@ inputClicked(analyzer) {
       notFirstParse:true,
     }); 
     this.getParse(this.state.search.split(" ")[0].replace(/[^a-zA-Z\-̄͡͞ńḿ']/g, "").toLowerCase());                          
-  } else {
-    this.inputRef.focus();
-    this.setState({
-      search: '', startingSearch: false
-    });
-  }
+  } 
+  //   this.inputRef.focus();
+  //   this.setState({
+  //     search: '', startingSearch: false
+  //   });
+  // }
 }
 
 endingToEnglish(ending,index) {
@@ -437,8 +437,8 @@ endingToEnglish(ending,index) {
   getLinks(index, parse) {
     if (index === 0) {            // if base
 
-      if (parse[index].includes("[P")) {  // if particle
-        return parse[index].split("[P")[0]
+      if ((parse[index].includes("[P") || parse[index].includes("[I")) && parse.length === 1) {  // if particle
+        return parse[index].split("[")[0]
       } else {
         var base = parse[0];
         base = base.split(/\[[^e]/)[0] // remove special tag
@@ -524,20 +524,23 @@ endingToEnglish(ending,index) {
         <Container ref={this.search_container} className='search_container'>
           	<Grid stackable>
                 <Grid.Row style={{padding:0,height:45}}>
-                <div style={{display:'flex',justifyContent:'center',alignItems:'flex-end',fontSize:16,width:120,fontWeight:(!this.state.yugtunAnalyzer ? 'bold':'normal')}} onClick={() => {
+                <div style={{display:'flex',justifyContent:'center',alignItems:'flex-end',fontSize:16,width:130,fontWeight:(!this.state.yugtunAnalyzer ? 'bold':'normal')}}>
+                <span style={{cursor:'pointer'}} onClick={() => {
                   this.setState({ yugtunAnalyzer: false});
                 }}>
                 {'Dictionary'}
+                </span>
                 </div>  
                 <div
-                style={{display:'flex',justifyContent:'center',alignItems:'flex-end',fontSize:16,width:160,}}
+                style={{display:'flex',justifyContent:'center',alignItems:'flex-end',fontSize:16,width:120,}}
                 active={this.state.search.length > 0}
                 onClick={() => {
                   if (!this.state.yugtunAnalyzer) {
                   this.setState({ yugtunAnalyzer: true, parses:[],segments:[],endingrule:[],newSearchList:[],notFirstParse:false});                     
+                  this.inputClicked()
                   }
                 }}>
-                <span style={{fontWeight:(this.state.yugtunAnalyzer ? 'bold':'normal')}}>{'Word Analyzer'}</span>
+                <span style={{fontWeight:(this.state.yugtunAnalyzer ? 'bold':'normal'),cursor:'pointer'}}>{'Parser'}</span>
                 <span style={{color:'#195fff',fontStyle:'italic'}}>{'\xa0\xa0new!'}</span>
                 </div>   
                 </Grid.Row>             
@@ -546,8 +549,8 @@ endingToEnglish(ending,index) {
               <Input
                 ref={this.handleRef}
                 placeholder='Search by word...'
-                action={{ icon: (this.state.yugtunAnalyzer ? 'search' : 'close'), transparent:true,size:'huge', onClick: () => 
-                this.inputClicked(this.state.yugtunAnalyzer)
+                action={{ icon: 'search', transparent:true,size:'huge', onClick: () => 
+                this.inputClicked()
                 }}
                 // icon={<Icon name='search' onClick={console.log('hi')} link />}
                 iconPosition='right'
@@ -727,7 +730,7 @@ endingToEnglish(ending,index) {
             <List divided selection>
               {displayList ? wordsList.map((word) => <WordItem key={word} word={word} search={this.state.search} wordsList={this.state.wordsList} />)
               : ''}
-              {emptyList ? <p><i>aren, no results...</i></p> : ''}
+              {emptyList ? <p><i>No base matches... try the Yugtun Parser...</i></p> : ''}
             </List>
           }        
         </Container>
