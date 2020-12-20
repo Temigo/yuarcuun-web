@@ -628,7 +628,7 @@ endingToEnglish(ending,index) {
               </Label>
               </div>
 
-              <div style={{fontSize:20}}>{this.state.segments[index][0].replaceAll('>','·')}</div>
+              <div style={{fontSize:20}}>{this.state.segments[index].replaceAll('>','·')}</div>
 
               {i.split('-').map((q,qindex) => 
                 (q.includes("[V]") || q.includes("[N]") ?
