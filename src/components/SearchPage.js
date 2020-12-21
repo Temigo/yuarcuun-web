@@ -591,8 +591,8 @@ endingToEnglish(ending,index) {
                 this.getParse(this.state.newSearchList[index].replace(/[^a-zA-Z\-̄͡͞ńḿ']/g, "").toLowerCase());
                 }
               }} style={{marginTop:10,paddingBottom:4,cursor:'pointer',marginRight:6,borderBottomColor: 'red',
-              borderBottom: (this.state.activeSentenceIndex === index ? '1px solid #3e3e3e': '1px solid #5a5a5a'),
-              color:(this.state.activeSentenceIndex === index ? '#3e3e3e':'#5a5a5a'),
+              borderBottom: (this.state.activeSentenceIndex === index ? '1px solid #000000': '1px solid #5a5a5a'),
+              color:(this.state.activeSentenceIndex === index ? '#000000':'#5a5a5a'),
               borderBottomWidth:(this.state.activeSentenceIndex === index ? 3 : 1)
 
             }}>{i}</span>
