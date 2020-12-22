@@ -487,7 +487,7 @@ endingToEnglish(ending,index) {
     // console.log("pissur-[V][Ind][Intr][S_3Sg]=qaa[Encl]".split('-'))
 
     let displayList = this.state.search.length >= 2 && this.state.wordsList.length > 0;
-    let emptyList = this.state.search.length >= 2 && this.state.wordsList.length === 0;
+    let emptyList = this.state.search.length >= 2 && this.state.wordsList.length === 0 && !this.state.yugtunAnalyzer;
     let wordsList = this.state.wordsList;
     const { activeIndex } = this.state
     let isCommonList = wordsList.map((word) => {
@@ -618,7 +618,7 @@ endingToEnglish(ending,index) {
           	:
           	null
           } 
-          {this.state.yugtunAnalyzer && (this.state.search.length > 0 || this.state.notFirstParse) ?
+          {this.state.yugtunAnalyzer && !this.state.getCall && (this.state.search.length > 0 || this.state.notFirstParse) ?
             <div style={{paddingTop:20}}>
             {this.state.parses.map((i,index)=>
               <div>
