@@ -318,7 +318,7 @@ class SearchPage extends Component {
     // this.setState({entries:undefined, activeIndex:-1, loaderOn: true, seeMoreActive:false,currentTableOpen: -1,})
     let newStartingSearch = event === undefined;
     let new_search = data.value;
-    console.log(new_search)
+    // console.log(new_search)
     // if (data.value === undefined) {new_search = this.state.search}
 
     let wordsList = fuzzysort.go(new_search, dictionary, optionsFuzzy).map(({ obj }) => (obj));
@@ -488,6 +488,7 @@ endingToEnglish(ending,index) {
 
     let displayList = this.state.search.length >= 2 && this.state.wordsList.length > 0;
     let emptyList = this.state.search.length >= 2 && this.state.wordsList.length === 0 && !this.state.yugtunAnalyzer;
+    let pressEnter = this.state.search.length > 0 && this.state.yugtunAnalyzer && this.state.newSearchList.length === 0;
     let wordsList = this.state.wordsList;
     const { activeIndex } = this.state
     let isCommonList = wordsList.map((word) => {
@@ -618,6 +619,7 @@ endingToEnglish(ending,index) {
           	:
           	null
           } 
+          {pressEnter ? <p><i>Press enter to parse.</i></p> : ''}
           {this.state.yugtunAnalyzer && !this.state.getCall && (this.state.search.length > 0 || this.state.notFirstParse) ?
             <div style={{paddingTop:20}}>
             {this.state.parses.map((i,index)=>
