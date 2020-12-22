@@ -528,20 +528,24 @@ endingToEnglish(ending,index) {
     return (
       <div>
       <YugtunLoader criteria={this.state.dictionary.length === 0} />
+      <Grid textAlign='center' style={{ height: window.innerHeight/1.5 }} verticalAlign={this.state.searchBarStuckTop ? 'top' : 'middle'}>
+      <Grid.Row style={{height:40,paddingBottom:0}}>
+      <Grid.Column>
       <div style={{display:'flex',justifyContent:'flex-end',paddingBottom:5}}>
       <List horizontal divided>
         <List.Item> <a style={{textDecoration:'underline',color:'#000000de'}} href={TUTORIAL_URL}>Tutorial</a> </List.Item>
         <List.Item> <Link style={{textDecoration:'underline',color:'#000000de'}} to='/about'>About</Link> </List.Item>
       </List>
       </div>
-      <Grid textAlign='center' style={{ height: '100%' }} verticalAlign={this.state.searchBarStuckTop ? 'top' : 'middle'}>
-      <Grid.Row style={displayList ? {height: 'auto'} : {height: '80%'}}>
+      </Grid.Column>
+      </Grid.Row>
+      <Grid.Row style={{paddingTop:0}}>
       <Grid.Column style={{ maxWidth: 800, padding: 10 }} textAlign='left'>
         <Header as='h1'>
           <Image style={{'fontSize': '1.5em'}} src={ICON_URL}/>
-          <span style={{ color: 'black', verticalAlign: 'bottom' }}>Yugtun</span>
+          <span style={{ color: 'black', verticalAlign: 'bottom'}}>Yugtun</span>
         </Header>
-        <Container ref={this.search_container} className='search_container'>
+        <Container style={{height: (this.state.searchBarStuckTop ? window.innerHeight+100 : null)}} ref={this.search_container} className='search_container'>
           	<Grid stackable>
 
           <Tab style={{paddingTop:10}} activeIndex={this.state.activeTabIndex} menu={{ secondary: true, pointing: true, size:'huge' }} panes={panes} onTabChange={this.handleTabChange} />
@@ -562,19 +566,6 @@ endingToEnglish(ending,index) {
                 onKeyPress={this.onKeyPress}
                 fluid  />
               </Grid.Column>
-            </Grid.Row>
-            <Grid.Row style={{padding:0}}> 
-            {displayCommonOption && !this.state.yugtunAnalyzer ?
-              <Grid.Column floated='right' style={{ flex: '0 0 17em' }}>
-                <Label
-                  as='a'
-                  content='Show Common Words Only'
-                  color='teal'
-                  basic={!this.state.onlyCommon}
-                  onClick={() => { this.setState({ onlyCommon: !this.state.onlyCommon }); }}
-                  />
-              </Grid.Column>
-            : ''}
             </Grid.Row>
           </Grid>
           {this.state.yugtunAnalyzer && (this.state.search.length > 0 || this.state.notFirstParse) ?
@@ -740,7 +731,8 @@ endingToEnglish(ending,index) {
             </div>
             :
             <List divided selection>
-              {displayList ? wordsList.map((word) => <WordItem key={word} word={word} search={this.state.search} wordsList={this.state.wordsList} />)
+              {displayList ? wordsList.map((word) => 
+              	<WordItem key={word} word={word} search={this.state.search} wordsList={this.state.wordsList} />)
               : ''}
               {emptyList ? <p><i>No base matches... try the Yugtun Parser...</i></p> : ''}
             </List>
