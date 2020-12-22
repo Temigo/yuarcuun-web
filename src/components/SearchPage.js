@@ -180,14 +180,21 @@ class SearchPage extends Component {
       // endingrule:[],
       currentTableOpen: -1,
       getCall:false,
-      notFirstParse: false,
-      searchBarStuckTop: false,
+      // notFirstParse: false,
+      // searchBarStuckTop: false,
+      searchBarStuckTop: props.location.state === undefined ? false : props.location.state.searchBarStuckTop,
+      notFirstParse: props.location.state === undefined ? false : props.location.state.notFirstParse,
+      searchWord: props.location.state === undefined ? "" : props.location.state.searchWord,
+      activeSentenceIndex: props.location.state === undefined ? 0 : props.location.state.activeSentenceIndex,
       // exampleSentenceSearch: false,
       // smallestParse:[[],[]],
       // segmentOutputList:[],
-      searchWord:"",
-      activeSentenceIndex: 0,
-      activeTabIndex:0,
+      // searchWord:"",
+      // activeSentenceIndex: 0,
+      // activeTabIndex:0,
+      updateSearchEntry: props.location.state === undefined ? false : props.location.state.updateSearchEntry,
+      activeTabIndex: props.location.state === undefined ? 0 : props.location.state.activeTabIndex,
+
       // exampleSentenceSearch: props.location.state === undefined ? false : props.location.state.exampleSentenceSearch,
       newSearchList: props.location.state === undefined ? [] : props.location.state.newSearchList,
       activeIndex:-1,
@@ -209,6 +216,10 @@ class SearchPage extends Component {
 
   componentDidMount() {
     let start = now();
+    if (this.state.updateSearchEntry) {
+      this.inputClicked();
+      this.setState({ updateSearchEntry: false });
+    }
     if (dictionary.length === 0) {
       axios
         .get(API_URL + "/word/all")
@@ -592,7 +603,7 @@ endingToEnglish(ending,index) {
               }} 
 			  onMouseEnter={()=> {this.setState({hover:index})}}
 			  onMouseLeave={()=> {this.setState({hover:-1})}}
-              style={{marginTop:10,paddingBottom:4,cursor:'pointer',marginRight:6,borderBottomColor: 'red',
+              style={{marginTop:10,paddingBottom:(this.state.activeSentenceIndex === index || this.state.hover === index ? 3 : 5),cursor:'pointer',marginRight:6,borderBottomColor: 'red',
               borderBottom: (this.state.activeSentenceIndex === index || this.state.hover === index ? '3px solid #000000DE': '1px solid #000000DE'),
               color:'#000000DE',
             }}>{i}</span>
@@ -641,7 +652,7 @@ endingToEnglish(ending,index) {
                     {this.getLinks(qindex,i.split('-')) in dictionary_dict ?
                       <div>
                       <div style={{fontWeight:'bold',fontFamily:'Lato',textDecoration:'underline'}}>
-                      <Link to={{pathname: this.getLinks(qindex,i.split('-')), state: { word: this.getLinks(qindex,i.split('-')), search: this.state.search, newSearchList: this.state.newSearchList, wordsList: this.state.wordsList, yugtunAnalyzer: this.state.yugtunAnalyzer, parses: this.state.parses, segments:this.state.segments,endingrule:this.state.endingrule }}}>
+                      <Link to={{pathname: this.getLinks(qindex,i.split('-')), state: { word: this.getLinks(qindex,i.split('-')), search: this.state.search, newSearchList: this.state.newSearchList, wordsList: this.state.wordsList, yugtunAnalyzer: this.state.yugtunAnalyzer, parses: this.state.parses, segments:this.state.segments,endingrule:this.state.endingrule, searchBarStuckTop: this.state.searchBarStuckTop, notFirstParse:this.state.notFirstParse, searchWord:this.state.searchWord, activeSentenceIndex:this.state.activeSentenceIndex, activeTabIndex: this.state.activeTabIndex }}}>
                       <span>
                       {q}
                       </span>
@@ -738,10 +749,10 @@ endingToEnglish(ending,index) {
             </div>
             :
             <List divided selection>
-              {displayList ? wordsList.map((word) => 
+              {displayList && !this.state.yugtunAnalyzer ? wordsList.map((word) => 
               	<WordItem key={word} word={word} search={this.state.search} wordsList={this.state.wordsList} />)
               : ''}
-              {emptyList ? <p><i>No base matches... try the Yugtun Parser...</i></p> : ''}
+              {emptyList && !this.state.yugtunAnalyzer ? <p><i>No base matches... try the Yugtun Parser...</i></p> : ''}
             </List>
           }        
         </Container>
