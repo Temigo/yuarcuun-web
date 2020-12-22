@@ -193,6 +193,7 @@ class SearchPage extends Component {
       activeIndex:-1,
       loaderOn:true,
       entries:undefined,
+      hover:-1,
       seeMoreActive:false,
       segment: "",
       moods: ["[Ind]","[Intrg]","[Opt]","[Sbrd]","[Ptcp]","[Prec]","[Cnsq]","[Cont]","[Conc]","[Cond]","[CtmpI]","[CtmpII]","[Abs]","[Rel]","[Abl_Mod]","[Loc]", "[Ter]","[Via]","[Equ]"],
@@ -500,7 +501,7 @@ endingToEnglish(ending,index) {
     {
       menuItem: 'Parser',
     },
-  ]    
+  ]
     const accordionTitlesVerbs = [
       "Indicative (Statement Form)",
       "Interrogative (Question Form)",
@@ -576,10 +577,11 @@ endingToEnglish(ending,index) {
             : ''}
             </Grid.Row>
           </Grid>
-          {this.state.yugtunAnalyzer && this.state.search.length > 0 ?
+          {this.state.yugtunAnalyzer && (this.state.search.length > 0 || this.state.notFirstParse) ?
             <Segment vertical style={{fontSize:22,padding:0,marginTop:20,maxHeight:145,overflow: 'auto',borderBottom:0}}>
             <div style={{display:'flex',flexWrap:'wrap'}}>
             {this.state.newSearchList.map((i,index) => 
+
               <span onClick={()=>{
                 if (index !== this.state.activeSentenceIndex) {
                 this.setState({ 
@@ -590,11 +592,12 @@ endingToEnglish(ending,index) {
                 });
                 this.getParse(this.state.newSearchList[index].replace(/[^a-zA-Z\-̄͡͞ńḿ']/g, "").toLowerCase());
                 }
-              }} style={{marginTop:10,paddingBottom:4,cursor:'pointer',marginRight:6,borderBottomColor: 'red',
-              borderBottom: (this.state.activeSentenceIndex === index ? '1px solid #000000': '1px solid #5a5a5a'),
-              color:(this.state.activeSentenceIndex === index ? '#000000':'#5a5a5a'),
-              borderBottomWidth:(this.state.activeSentenceIndex === index ? 3 : 1)
-
+              }} 
+			  onMouseEnter={()=> {this.setState({hover:index})}}
+			  onMouseLeave={()=> {this.setState({hover:-1})}}
+              style={{marginTop:10,paddingBottom:4,cursor:'pointer',marginRight:6,borderBottomColor: 'red',
+              borderBottom: (this.state.activeSentenceIndex === index || this.state.hover === index ? '3px solid #000000DE': '1px solid #000000DE'),
+              color:'#000000DE',
             }}>{i}</span>
             )}
             </div>
@@ -619,7 +622,7 @@ endingToEnglish(ending,index) {
           	:
           	null
           } 
-          {this.state.yugtunAnalyzer && this.state.search.length > 0 ?
+          {this.state.yugtunAnalyzer && (this.state.search.length > 0 || this.state.notFirstParse) ?
             <div style={{paddingTop:20}}>
             {this.state.parses.map((i,index)=>
               <div>
