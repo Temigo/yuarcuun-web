@@ -428,7 +428,7 @@ endingToEnglish(ending,index) {
     }
     return (
     <div style={{paddingTop:15}}>
-    <div style={{fontWeight:'bold'}}>{this.state.endingrule[index].join(', ')}</div>
+    <div style={{fontWeight:'bold'}}>{this.state.endingrule[index][1].join(', ')}</div>
     <div style={{fontStyle:'italic'}}>{english1}</div>
     <div style={{fontStyle:'italic'}}>{english2}</div>
     <div>{english3}</div>
@@ -450,8 +450,13 @@ endingToEnglish(ending,index) {
   getLinks(index, parse) {
     if (index === 0) {            // if base
 
-      if ((parse[index].includes("[P") || parse[index].includes("[I")) && parse.length === 1) {  // if particle
+      if ((parse[index].includes("[P") || parse[index].includes("[I")) && parse.length === 1) {  // if particle or ignorative
         return parse[index].split("[")[0]
+      } else if (parse[index].includes("[DemPro]") || parse[index].includes("[DemAdv]")) {
+        var dem = parse[index].replace("n[DemPro]","n'a")
+        dem = dem.replace("[DemPro]","na")
+        dem = dem.replace("[DemAdv]","(ni)")
+        return dem
       } else {
         var base = parse[0];
         base = base.split(/\[[^e]/)[0] // remove special tag
@@ -627,7 +632,7 @@ endingToEnglish(ending,index) {
               <div style={{fontSize:20}}>{this.state.segments[index].replaceAll('>','·')}</div>
 
               {i.split('-').map((q,qindex) => 
-                (q.includes("[V]") || q.includes("[N]") ?
+                (qindex === this.state.endingrule[index][0] ?
                   (this.endingToEnglish(q,index))
                   :
                   <div style={{paddingTop:15}}>
