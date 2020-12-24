@@ -392,17 +392,22 @@ onKeyPress = (e) => {
   }
 }
 
-inputClicked() {
+inputClicked(search) {
   this.setState({entries:undefined, activeIndex:-1, loaderOn: true, seeMoreActive:false,currentTableOpen: -1,yugtunAnalyzer:true})
-  if (this.state.search.length > 0) {
+  console.log(search)
+  if (search === undefined || search) {
+  	search = this.state.search
+  }
+  console.log(search)
+  if (search.length > 0) {
     this.setState({ 
-      newSearchList: this.state.search.split(" "), 
+      newSearchList: search.split(" "), 
       activeSentenceIndex: 0, 
-      searchWord: this.state.search.split(" ")[0].replace(/[^a-zA-Z\-̄͡͞ńḿ']/g, "").toLowerCase(),
+      searchWord: search.split(" ")[0].replace(/[^a-zA-Z\-̄͡͞ńḿ']/g, "").toLowerCase(),
       getCall:true,
       notFirstParse:true,
     }); 
-    this.getParse(this.state.search.split(" ")[0].replace(/[^a-zA-Z\-̄͡͞ńḿ']/g, "").toLowerCase());                          
+    this.getParse(search.split(" ")[0].replace(/[^a-zA-Z\-̄͡͞ńḿ']/g, "").toLowerCase());                          
   } 
   //   this.inputRef.focus();
   //   this.setState({
@@ -516,7 +521,7 @@ endingToEnglish(ending,index) {
       menuItem: {content:'Dictionary',size:'massive'}
     },
     {
-      menuItem: 'Parser',
+      menuItem: 'Yugtun to English',
     },
   ]
     const accordionTitlesVerbs = [
@@ -545,7 +550,7 @@ endingToEnglish(ending,index) {
     return (
       <div>
       <YugtunLoader criteria={this.state.dictionary.length === 0} />
-      <Grid textAlign='center' style={{ height: window.innerHeight/1.5 }} verticalAlign={this.state.searchBarStuckTop ? 'top' : 'middle'}>
+      <Grid textAlign='center' style={{ height: window.innerHeight/1.5 }} verticalAlign={this.state.searchBarStuckTop ? 'top' : 'top'}>
       <Grid.Row style={{height:40,paddingBottom:0}}>
       <Grid.Column>
       <div style={{display:'flex',justifyContent:'flex-end',paddingBottom:5}}>
@@ -571,7 +576,7 @@ endingToEnglish(ending,index) {
               <Grid.Column style={{ flex: 1, paddingTop:0 }}>
               <Input
                 ref={this.handleRef}
-                placeholder='Search by word...'
+                placeholder={this.state.yugtunAnalyzer ? 'Search multiple words...':'Search a word...'}
                 action={{ icon: 'search', transparent:true,size:'huge', onClick: () => 
                 this.inputClicked()
                 }}
@@ -749,9 +754,39 @@ endingToEnglish(ending,index) {
             </div>
             :
             <List divided selection>
-              {displayList && !this.state.yugtunAnalyzer ? wordsList.map((word) => 
+              {displayList && !this.state.yugtunAnalyzer ? 
+              	wordsList.map((word) => 
               	<WordItem key={word} word={word} search={this.state.search} wordsList={this.state.wordsList} />)
-              : ''}
+              : 
+              (this.state.search.length === 0 ?
+				<div style={{display:'flex',justifyContent:'center'}}>
+				<div style={{fontSize:'1.2rem',color:'#666',lineHeight:1.6,maxWidth:500}}>
+					<div style={{textDecoration:'underline',marginBottom:10,marginTop:15}}> Dictionary </div>
+					<div style={{marginBottom:10}}> Type any English word, Yugtun verb base, or Yugtun noun and the matching dictionary entries will show automatically. </div>
+					<div> examples: </div>
+					<div style={{marginBottom:25}}>
+					<span onClick={()=>{this.setState({search:'pissur',wordsList: fuzzysort.go('pissur', this.state.dictionary, optionsFuzzy).map(({ obj }) => (obj)),newStartingSearch:true})}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>pissur-</span>
+					<span>{', '}</span>
+					<span onClick={()=>{this.setState({search:'akutaq',wordsList: fuzzysort.go('akutaq', this.state.dictionary, optionsFuzzy).map(({ obj }) => (obj)),newStartingSearch:true})}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>akutaq</span>
+					<span>{', '}</span>
+					<span onClick={()=>{this.setState({search:'book',wordsList: fuzzysort.go('book', this.state.dictionary, optionsFuzzy).map(({ obj }) => (obj)),newStartingSearch:true})}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>book</span>
+					</div>
+					<div>
+					<div style={{textDecoration:'underline',marginBottom:10}}> Yugtun to English </div>
+					<div style={{marginBottom:10}}> Type any Yugtun word or sentence and press enter to see the meaning of each part of the word.  </div>
+					<div> examples: </div>
+					<div>
+					<span onClick={()=>{this.setState({search:"piipiqa popsicle-aamek ner'uq",yugtunAnalyzer: true, activeTabIndex:1, parses:[],segments:[],endingrule:[],newSearchList:[],notFirstParse:false}); this.inputClicked("piipiqa popsicle-aamek ner'uq")}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>piipiqa popsicle-aamek ner'uq</span>
+					<span>{', '}</span>
+					<span onClick={()=>{this.setState({search:"ellami-lli assirpaa",yugtunAnalyzer: true, activeTabIndex:1, parses:[],segments:[],endingrule:[],newSearchList:[],notFirstParse:false}); this.inputClicked("ellami-lli assirpaa")}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>ellami-lli assirpaa</span>
+					</div>
+					</div>
+				</div>
+				</div>
+				:
+				null
+				)
+}
               {emptyList && !this.state.yugtunAnalyzer ? <p><i>No base matches... try the Yugtun Parser...</i></p> : ''}
             </List>
           }        

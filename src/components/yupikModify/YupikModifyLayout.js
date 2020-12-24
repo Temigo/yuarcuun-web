@@ -1751,7 +1751,7 @@ class YupikModifyLayout extends Component {
                 <span >{this.state.text2}</span>
                 {' '}
                 {this.state.nounEndingEnglish !== '' ?
-                <span style={{color: this.state.colorsList[3-verbEndingcounter]}}>({this.state.nounEndingEnglish})</span>
+                <span style={{color: this.state.colorsList[3-verbEndingcounter]}}>{this.state.nounEndingEnglish}</span>
                 :
                 ''
                 }
