@@ -395,7 +395,7 @@ onKeyPress = (e) => {
 inputClicked(search) {
   this.setState({entries:undefined, activeIndex:-1, loaderOn: true, seeMoreActive:false,currentTableOpen: -1,yugtunAnalyzer:true})
   console.log(search)
-  if (search === undefined || search) {
+  if (search === undefined || search === true) {
   	search = this.state.search
   }
   console.log(search)
