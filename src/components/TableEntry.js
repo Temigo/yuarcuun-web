@@ -26,6 +26,7 @@ class TableEntry extends Component {
 
 
   render() {
+    console.log(this.state)
     let e = this.state.entries;
     // console.log(this.state)
     let subjectsEnglishTerms = []
@@ -154,6 +155,23 @@ class TableEntry extends Component {
     "they (2) (themselves)",
     "they all (3+) (themselves)",
     ]
+
+
+    let subjectsEnglishQuantQual = [
+    "it (him or her)",
+    "both of them",
+    "all of them",
+    "all of me",
+    "both of us",
+    "all of us",
+    "you",
+    "both of you",
+    "all of you",
+    "it (he or she)",
+    "both of them",
+    "all of them",
+    ]
+
 
     // console.log(subjectsEnglish)
     // objectsEnglish = [
@@ -290,6 +308,21 @@ class TableEntry extends Component {
     "their\xa0own\xa0(3+)",
     ]
 
+    let quantQual = [
+    "[P_3Sg]",
+    "[P_3Du]",
+    "[P_3Pl]",
+    "[S_1Sg]",
+    "[S_1Du]",
+    "[S_1Pl]",
+    "[S_2Sg]",
+    "[S_2Du]",
+    "[S_2Pl]",
+    "[S_4Sg]",
+    "[S_4Du]",
+    "[S_4Pl]",
+    ]
+
     return (
     <div>
     {this.state.mood === "[Abs]" || this.state.mood === "[Rel]" || this.state.mood === "[Abl_Mod]" || this.state.mood === "[Loc]" || this.state.mood === "[Ter]" || this.state.mood === "[Via]" || this.state.mood === "[Equ]" ?
@@ -396,34 +429,57 @@ class TableEntry extends Component {
 	    </Segment>
 	    </div>
 	:
-	    <div>
-	    <div style={{fontStyle:'italic',fontWeight:'bold',marginTop:10,marginBottom:10}}>INTRANSITIVE</div>
-	    <Segment style={{margin:0,overflow: 'auto'}}>
-	      <Table unstackable celled>
-	        <Table.Header>
-	          <Table.Row>
-	            <Table.HeaderCell style={{textDecoration:'underline',color:"#002477"}}>Subject</Table.HeaderCell>
-	            <Table.HeaderCell></Table.HeaderCell>
-	          </Table.Row>
-	        </Table.Header>
-	        <Table.Body>
-	            {subjectsEnglishTerms.map((i,index) => 
-	            	(this.state.mood === '[Sbrd]' ?
-		            <Table.Row>
-		              <Table.HeaderCell style={{color:"#002477"}}>{subjectsEnglishSbrd[index]}</Table.HeaderCell>
-		              <Table.Cell style={{paddingLeft:10}}>{e["[Intr]"+subjectsEnglishTermsSbrd[index]].join(",\n").replaceAll(">","")}</Table.Cell>
-		            </Table.Row>
-	            	:
-		            <Table.Row>
-		              <Table.HeaderCell style={{color:"#002477"}}>{subjectsEnglish[index]}</Table.HeaderCell>
-		              <Table.Cell style={{paddingLeft:10}}>{e["[Intr]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
-		            </Table.Row>
-	            )
-	            )}
-	        </Table.Body>
-	      </Table>
-	    </Segment>
-	    </div>
+        (this.state.mood === '%5BQuant_Qual%5D' ?
+        <div>
+        <Segment style={{margin:0,overflow: 'auto'}}>
+          <Table unstackable celled>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell style={{textDecoration:'underline',color:"#002477"}}>Subject</Table.HeaderCell>
+                <Table.HeaderCell></Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+                {quantQual.map((i,index) => 
+                    <Table.Row>
+                      <Table.HeaderCell style={{color:"#002477"}}>{subjectsEnglishQuantQual[index]}</Table.HeaderCell>
+                      <Table.Cell style={{paddingLeft:10}}>{e[i].join(",\n").replaceAll(">","")}</Table.Cell>
+                    </Table.Row>
+                )}
+            </Table.Body>
+          </Table>
+        </Segment>
+        </div>
+        :
+        <div>
+        <div style={{fontStyle:'italic',fontWeight:'bold',marginTop:10,marginBottom:10}}>INTRANSITIVE</div>
+        <Segment style={{margin:0,overflow: 'auto'}}>
+          <Table unstackable celled>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell style={{textDecoration:'underline',color:"#002477"}}>Subject</Table.HeaderCell>
+                <Table.HeaderCell></Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+                {subjectsEnglishTerms.map((i,index) => 
+                    (this.state.mood === '[Sbrd]' ?
+                    <Table.Row>
+                      <Table.HeaderCell style={{color:"#002477"}}>{subjectsEnglishSbrd[index]}</Table.HeaderCell>
+                      <Table.Cell style={{paddingLeft:10}}>{e["[Intr]"+subjectsEnglishTermsSbrd[index]].join(",\n").replaceAll(">","")}</Table.Cell>
+                    </Table.Row>
+                    :
+                    <Table.Row>
+                      <Table.HeaderCell style={{color:"#002477"}}>{subjectsEnglish[index]}</Table.HeaderCell>
+                      <Table.Cell style={{paddingLeft:10}}>{e["[Intr]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+                    </Table.Row>
+                )
+                )}
+            </Table.Body>
+          </Table>
+        </Segment>
+        </div>
+        )
 	)
 }
 
@@ -758,6 +814,8 @@ class TableEntry extends Component {
     :
     null
 }
+
+
 
     {this.state.mood === '[Prec]' || this.state.mood === "[Cnsq]" || this.state.mood === "[Cont]" || this.state.mood === "[Conc]" || this.state.mood === "[Cond]" || this.state.mood === "[CtmpI]" || this.state.mood === "[CtmpII]" ?
     <div>

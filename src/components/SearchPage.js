@@ -14,6 +14,7 @@ import ReactGA from 'react-ga';
 import GitHubForkRibbon from 'react-github-fork-ribbon';
 import { YugtunLoader, YugtunFooter, WordItem } from './SearchPageHelpers.js';
 import TableEntry from './TableEntry.js';
+import {demPro, perPro} from './constants/pronounEndings.js';
 // import {endingRules} from './constants/endingRules.js';
 
 // Cache dictionary
@@ -78,6 +79,7 @@ const endingToEnglishTerms = {
   "[Ter]":"Terminalis (toward...)",
   "[Via]":"Vialis (through, using...)",
   "[Equ]":"Equalis (like, similar to...)",
+  "[Quant_Qual]":"Quantifier/Qualifier Inflection",
   "[S_3Sg]":"he,\xa0she,\xa0it",
   "[S_3Du]":"they\xa0(2)",
   "[S_3Pl]":"they\xa0all\xa0(3+)",
@@ -203,7 +205,7 @@ class SearchPage extends Component {
       hover:-1,
       seeMoreActive:false,
       segment: "",
-      moods: ["[Ind]","[Intrg]","[Opt]","[Sbrd]","[Ptcp]","[Prec]","[Cnsq]","[Cont]","[Conc]","[Cond]","[CtmpI]","[CtmpII]","[Abs]","[Rel]","[Abl_Mod]","[Loc]", "[Ter]","[Via]","[Equ]"],
+      moods: ["[Ind]","[Intrg]","[Opt]","[Sbrd]","[Ptcp]","[Prec]","[Cnsq]","[Cont]","[Conc]","[Cond]","[CtmpI]","[CtmpII]","[Abs]","[Rel]","[Abl_Mod]","[Loc]", "[Ter]","[Via]","[Equ]","%5BQuant_Qual%5D","[PerPro]","[PerPro]","[PerPro]","[PerPro]","[PerPro]","[PerPro]","[PerPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]",],
     }
     this.getParse = this.getParse.bind(this);
     this.onChangeSearch = this.onChangeSearch.bind(this);
@@ -371,7 +373,7 @@ class SearchPage extends Component {
   }
 
   handleClick = (e, titleProps) => {
-    console.log(e,titleProps)
+    // console.log(e,titleProps)
     this.setState({ loaderOn: true,})
     const { index, currentIndex } = titleProps
     const { activeIndex } = this.state
@@ -379,6 +381,17 @@ class SearchPage extends Component {
     let mood = this.state.moods[index]
     this.getEndings(this.state.parses[currentIndex],mood)
     this.setState({activeIndex: newIndex, mood: mood})
+  }
+
+  handleClick2 = (e, titleProps) => {
+    // console.log(e,titleProps)
+    const { index, currentIndex } = titleProps
+    const { activeIndex } = this.state
+    const newIndex = activeIndex === index ? -1 : index
+    console.log(index)
+    let mood = this.state.moods[index]
+    // console.log(mood)
+    this.setState({loaderOn:false, entries: (mood === "[DemPro]" ? demPro: perPro), activeIndex: newIndex, mood: mood})
   }
 
 onKeyPress = (e) => {
@@ -394,7 +407,7 @@ onKeyPress = (e) => {
 
 inputClicked(search) {
   this.setState({entries:undefined, activeIndex:-1, loaderOn: true, seeMoreActive:false,currentTableOpen: -1,yugtunAnalyzer:true})
-  console.log(search)
+  // console.log(search)
   if (search === undefined || search === true) {
   	search = this.state.search
   }
@@ -421,6 +434,7 @@ endingToEnglish(ending,index) {
   var english1 = ""
   var english2 = ""
   var english3 = ""
+console.log(tags, ending)
   if (ending.includes('[V]')) {
     english1 += 'Verb Ending';
     english2 += endingToEnglishTerms[tags[1]];
@@ -438,9 +452,30 @@ endingToEnglish(ending,index) {
       } else {
         english3 += endingToEnglishTerms[tags[tags.length-1]];
       }
-    } else {
+    } else if (this.state.parses[index].includes('[D')) {
+      english1 += 'Demonstrative';
+      english2 += endingToEnglishTerms[tags[0]];
+      if (endingToEnglishTerms[tags[1]] !== undefined) {
+      	english3 += endingToEnglishTerms[tags[1]];      	
+      }
+    } else if (this.state.parses[index].includes('[P')) {
+      english1 += 'Personal Pronoun';
+      english2 += endingToEnglishTerms[tags[0]];
+      if (endingToEnglishTerms[tags[1]] !== undefined) {
+      	english3 += endingToEnglishTerms[tags[1]];      	
+      }
+    } else if (this.state.parses[index].includes('[Q')) {
+      english1 = '';
+      english2 += endingToEnglishTerms[tags[0]];
+      if (endingToEnglishTerms[tags[1]] !== undefined) {
+      	english3 += endingToEnglishTerms[tags[1]];      	
+      }
+    } else {
       english1 += ending;
       english2 += endingToEnglishTerms[tags[0]];
+      if (endingToEnglishTerms[tags[1]] !== undefined) {
+      	english3 += endingToEnglishTerms[tags[1]];      	
+      }	
     }
     return (
     <div style={{paddingTop:15}}>
@@ -465,7 +500,6 @@ endingToEnglish(ending,index) {
 
   getLinks(index, parse) {
     if (index === 0) {            // if base
-
       if ((parse[index].includes("[P") || parse[index].includes("[I")) && parse.length === 1) {  // if particle or ignorative
         return parse[index].split("[")[0]
       } else if (parse[index].includes("[DemPro]") || parse[index].includes("[DemAdv]")) {
@@ -547,6 +581,124 @@ endingToEnglish(ending,index) {
       "Vialis (through, using...)",
       "Equalis (like, similar to...)",
       ];
+    const accordionTitlesQuantQual = [
+      "Absolutive",
+      "Relative",
+      "Ablative-Modalis (indirect object, from...)",
+      "Localis (in, at...)",
+      "Terminalis (toward...)",
+      "Vialis (through, using...)",
+      "Equalis (like, similar to...)",
+      ];
+    const persPronounLabels = ["[Abs]","[Rel]","[Abl_Mod]","[Loc]","[Ter]","[Via]","[Equ]"];
+
+    let persPronounSubjects = [
+    "[3Sg]",
+    "[3Du]",
+    "[3Pl]",
+    "[1Sg]",
+    "[1Du]",
+    "[1Pl]",
+    "[2Sg]",
+    "[2Du]",
+    "[2Pl]",
+    "[4Sg]",
+    "[4Du]",
+    "[4Pl]",
+    ];
+    let persPronounsEnglish = [
+    "his/her/its\xa0(other)",
+    "their\xa0(2)\xa0(other)",
+    "their\xa0(3+)\xa0(other)",
+    "my",
+    "our\xa0(2)",
+    "our\xa0(3+)",
+    "your\xa0(1)",
+    "your\xa0(2)",
+    "your\xa0(3+)",
+    "his/her/its\xa0own",
+    "their\xa0own\xa0(2)",
+    "their\xa0own\xa0(3+)",
+    ]
+    let demPronounTitles = [
+    "over there or going away",
+    "across there",                                                
+    "up the slope",
+    "up above",
+    "inside, inland, or upriver",
+    "outside",
+    "down below or down the slope",
+    "downriver or near the exit",
+    "here, near speaker",
+    "there, near listener or in context",                                        
+    "coming this way",
+    ]
+    let demPronounSubjects = [
+	"[Abs][SgUnpd]",
+	"[Abs][DuUnpd]",
+	"[Abs][PlUnpd]",
+	"[Rel][SgUnpd]",
+	"[Rel][DuUnpd]",
+	"[Rel][PlUnpd]",
+	"[Abl_Mod][SgUnpd]",
+	"[Abl_Mod][DuUnpd]",
+	"[Abl_Mod][PlUnpd]",
+	"[Loc][SgUnpd]",
+	"[Loc][DuUnpd]",
+	"[Loc][PlUnpd]",
+	"[Ter][SgUnpd]",
+	"[Ter][DuUnpd]",
+	"[Ter][PlUnpd]",
+	"[Via][SgUnpd]",
+	"[Via][DuUnpd]",
+	"[Via][PlUnpd]",
+	"[Equ][SgUnpd]",
+	"[Equ][DuUnpd]",
+	"[Equ][PlUnpd]",
+	"[Voc][SgUnpd]",
+	"[Voc][DuUnpd]",
+	"[Voc][PlUnpd]",
+	"",
+	"[Loc]",
+	"[Ter]",
+	"[Sec_Ter]",
+	"[Abl]",
+	"[Via]",
+	"=i[Encl]",
+	]
+	let demPronounEnglish = [
+	"absolutive singular",
+	"absolutive dual",
+	"absolutive plural",
+	"relative singular",
+	"relative dual",
+	"relative plural",
+	"abl-modalis singular",
+	"abl-modalis dual",
+	"abl-modalis plural",
+	"localis singular",
+	"localis dual",
+	"localis plural",
+	"terminalis singular",
+	"terminalis dual",
+	"terminalis plural",
+	"vialis singular",
+	"vialis dual",
+	"vialis plural",
+	"equalis singular",
+	"equalis dual",
+	"equalis plural",
+	"vocative singular",
+	"vocative dual",
+	"vocative plural",
+	"",
+	"localis",
+	"terminalis",
+	"second terminalis",
+	"ablative",
+	"vialis",
+	"predicative",
+	]
     return (
       <div>
       <YugtunLoader criteria={this.state.dictionary.length === 0} />
@@ -717,34 +869,182 @@ endingToEnglish(ending,index) {
                       )}
                   </Accordion> 
                   :
-                  <Accordion fluid styled>
-                    {accordionTitlesNouns.map((p,pindex) =>
-                      <div>
-                        <Accordion.Title
-                          active={activeIndex === pindex+12}
-                          index={pindex+12}
-                          currentIndex={index}
-                          onClick={this.handleClick}
-                        >
-                          <Icon name='dropdown' />
-                          {p}
-                        </Accordion.Title>
-                        <Accordion.Content active={activeIndex === pindex+12}>
-                        <div style={{'paddingBottom':15}}>{endingDescriptions[pindex]}</div>                                              
-                          {this.state.loaderOn ? 
-                          	<div style={{'textAlign':'center'}}>
-                            <Loader active inline  />
-                            </div>
-                            :
-                      <TableEntry
-                        entries={this.state.entries}
-                        mood={this.state.mood}                  
-                      />
-                          }
-                        </Accordion.Content>
-                      </div>
-                      )}
-                  </Accordion> 
+                  (this.state.parses[index].includes('[N') ?
+	                  <Accordion fluid styled>
+	                    {accordionTitlesNouns.map((p,pindex) =>
+	                      <div>
+	                        <Accordion.Title
+	                          active={activeIndex === pindex+12}
+	                          index={pindex+12}
+	                          currentIndex={index}
+	                          onClick={this.handleClick}
+	                        >
+	                          <Icon name='dropdown' />
+	                          {p}
+	                        </Accordion.Title>
+	                        <Accordion.Content active={activeIndex === pindex+12}>
+	                        <div style={{'paddingBottom':15}}>{endingDescriptions[pindex]}</div>                                              
+	                          {this.state.loaderOn ? 
+	                          	<div style={{'textAlign':'center'}}>
+	                            <Loader active inline  />
+	                            </div>
+	                            :
+	                      <TableEntry
+	                        entries={this.state.entries}
+	                        mood={this.state.mood}                  
+	                      />
+	                          }
+	                        </Accordion.Content>
+	                      </div>
+	                      )}
+	                  </Accordion> 
+                  	:
+                  	(this.state.parses[index].includes('[Q') ?
+                  	  <Accordion fluid styled>
+	                      <div>
+	                        <Accordion.Title
+	                          active={activeIndex === 19}
+	                          index={19}
+	                          currentIndex={index}
+	                          onClick={this.handleClick}
+	                        >
+	                          <Icon name='dropdown' />
+	                          {'Quantifier/Qualifier Inflections'}
+	                        </Accordion.Title>
+	                        <Accordion.Content active={activeIndex === 19}>
+	                          {this.state.loaderOn ? 
+	                          	<div style={{'textAlign':'center'}}>
+	                            <Loader active inline  />
+	                            </div>
+	                            :
+	                      <TableEntry
+	                        entries={this.state.entries}
+	                        mood={this.state.mood}                  
+	                      />
+	                          }
+	                        </Accordion.Content>
+	                      </div>
+	                  </Accordion> 
+                  		:
+                  		(this.state.parses[index].includes('[P') ?
+		                  <Accordion fluid styled>
+		                    {accordionTitlesNouns.map((p,pindex) =>
+		                      <div>
+		                        <Accordion.Title
+		                          active={activeIndex === pindex+20}
+		                          index={pindex+20}
+		                          currentIndex={index}
+		                          onClick={this.handleClick2}
+		                        >
+		                          <Icon name='dropdown' />
+		                          {p}
+		                        </Accordion.Title>
+		                        <Accordion.Content active={activeIndex === pindex+20}>
+		                          {this.state.loaderOn ? 
+		                          	<div style={{'textAlign':'center'}}>
+		                            <Loader active inline  />
+		                            </div>
+		                            :
+							        <div>
+							        <Segment style={{margin:0,overflow: 'auto'}}>
+							          <Table unstackable celled>
+							            <Table.Header>
+							              <Table.Row>
+							                <Table.HeaderCell style={{textDecoration:'underline',color:"#002477"}}>Subject</Table.HeaderCell>
+							                <Table.HeaderCell></Table.HeaderCell>
+							              </Table.Row>
+							            </Table.Header>
+							            <Table.Body>
+							                {persPronounSubjects.map((i,index) => 
+							                    <Table.Row>
+							                      <Table.HeaderCell style={{color:"#002477"}}>{persPronounsEnglish[index]}</Table.HeaderCell>
+							                      <Table.Cell style={{paddingLeft:10}}>{this.state.entries[persPronounLabels[pindex]+i].join(",\n").replaceAll(">","")}</Table.Cell>
+							                    </Table.Row>
+							                )}
+							            </Table.Body>
+							          </Table>
+							        </Segment>
+							        </div>
+		                          }
+		                        </Accordion.Content>
+		                      </div>
+		                      )}
+		                  </Accordion> 
+                  			:
+		                  <Accordion fluid styled>
+		                    {demPronounTitles.map((p,pindex) =>
+		                      <div>
+		                        <Accordion.Title
+		                          active={activeIndex === pindex+27}
+		                          index={pindex+27}
+		                          currentIndex={index}
+		                          onClick={this.handleClick2}
+		                        >
+		                          <Icon name='dropdown' />
+		                          {p}
+		                        </Accordion.Title>
+		                        <Accordion.Content active={activeIndex === pindex+27}>
+		                          {this.state.loaderOn ? 
+		                          	<div style={{'textAlign':'center'}}>
+		                            <Loader active inline  />
+		                            </div>
+		                            :
+							        	<div>
+							        		  <div style={{fontStyle:'italic',marginTop:5,marginBottom:10}}>Extended: moving, long, or of large extent</div>
+							        		  <div style={{fontStyle:'italic',marginTop:10,marginBottom:10}}>Restricted: stationary, localized, visible</div>
+							        		  <div style={{fontStyle:'italic',marginTop:10,marginBottom:20}}>Obscured: stationary, indistinct or out of sight</div>							        	
+							        		<Segment style={{margin:0,overflow: 'auto'}}>	
+									          <Table unstackable celled>
+									            <Table.Header>
+									              <Table.Row>
+									                <Table.HeaderCell></Table.HeaderCell>
+									                <Table.HeaderCell style={{paddingLeft:10,"color":"#7b0e0e"}}>Extended</Table.HeaderCell>
+									                <Table.HeaderCell style={{paddingLeft:10,"color":"#7b0e0e"}}>Restricted</Table.HeaderCell>
+									                <Table.HeaderCell style={{paddingLeft:10,"color":"#7b0e0e"}}>Obscured</Table.HeaderCell>
+									              </Table.Row>
+									              <Table.Row>
+									                <Table.Cell style={{fontStyle:'italic'}}>pronoun forms:</Table.Cell>
+									              </Table.Row>									              
+									            </Table.Header>							        			                         
+									            <Table.Body>
+							                    	{demPronounSubjects.map((i,index) => 
+								                    	(index === 24 ? 
+										              <Table.Row>
+											                <Table.Cell style={{fontStyle:'italic'}}>adverb forms:</Table.Cell>
+										              </Table.Row>
+								                    		:
+										              <Table.Row>
+								                    	<Table.HeaderCell style={{color:"#002477"}}>{demPronounEnglish[index]}</Table.HeaderCell>
+								                    	{"extended" in this.state.entries[p] ? 
+								                    	<Table.Cell style={{paddingLeft:10}}>{this.state.entries[p]['extended'][i].join(",\n").replaceAll(">","")}</Table.Cell>
+								                    	:
+								                    	<Table.Cell style={{paddingLeft:10}}>{'-'}</Table.Cell>
+								                    	}
+								                    	{"restricted" in this.state.entries[p] ? 
+								                    	<Table.Cell style={{paddingLeft:10}}>{this.state.entries[p]['restricted'][i].join(",\n").replaceAll(">","")}</Table.Cell>
+								                    	:
+								                    	<Table.Cell style={{paddingLeft:10}}>{'-'}</Table.Cell>
+								                    	}
+								                    	{"obscured" in this.state.entries[p] ? 
+								                    	<Table.Cell style={{paddingLeft:10}}>{this.state.entries[p]['obscured'][i].join(",\n").replaceAll(">","")}</Table.Cell>
+								                    	:
+								                    	<Table.Cell style={{paddingLeft:10}}>{'-'}</Table.Cell>
+								                    	}	
+								                      </Table.Row>		
+								                    	)					                    									    
+							                    	)}
+									            </Table.Body>
+									          </Table>							            
+							        		</Segment>
+							        	</div>
+		                          }
+		                        </Accordion.Content>
+		                      </div>
+		                      )}
+		                  </Accordion> 
+                  			)
+                  		)
+                  	)
                   )
                 :
                 null
