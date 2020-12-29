@@ -512,6 +512,8 @@ console.log(tags, ending)
     if (index === 0) {            // if base
       if ((parse[index].includes("[P") || parse[index].includes("[I")) && parse.length === 1) {  // if particle or ignorative
         return parse[index].split("[")[0]
+      } else if (parse[index].includes("[PerPro]")) {
+        return parse[index].split("[")[0]
       } else if (parse[index].includes("[DemPro]") || parse[index].includes("[DemAdv]")) {
         var dem = parse[index].replace("n[DemPro]","n'a")
         dem = dem.replace("[DemPro]","na")
