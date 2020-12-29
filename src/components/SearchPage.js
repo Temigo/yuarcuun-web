@@ -134,6 +134,18 @@ const endingToEnglishTerms = {
   "[4SgPoss]":"his/her/its\xa0own",
   "[4DuPoss]":"their\xa0own\xa0(2)",
   "[4PlPoss]":"their\xa0own\xa0(3+)",
+  "[3Sg]":"it\xa0(other)",
+  "[3Du]":"them\xa0(2)\xa0(other)",
+  "[3Pl]":"them\xa0(3+)\xa0(other)",
+  "[1Sg]":"me",
+  "[1Du]":"us\xa0(2)",
+  "[1Pl]":"us\xa0(3+)",
+  "[2Sg]":"you\xa0(1)",
+  "[2Du]":"you\xa0(2)",
+  "[2Pl]":"you\xa0(3+)",
+  "[4Sg]":"itself",
+  "[4Du]":"themselves\xa0(2)",
+  "[4Pl]":"themselves\xa0(3+)",
 };
 
 const endingDescriptions = [
@@ -461,9 +473,7 @@ console.log(tags, ending)
     } else if (this.state.parses[index].includes('[P')) {
       english1 += 'Personal Pronoun';
       english2 += endingToEnglishTerms[tags[0]];
-      if (endingToEnglishTerms[tags[1]] !== undefined) {
-      	english3 += endingToEnglishTerms[tags[1]];      	
-      }
+      english3 += endingToEnglishTerms[tags[1]];      	
     } else if (this.state.parses[index].includes('[Q')) {
       english1 = '';
       english2 += endingToEnglishTerms[tags[0]];
@@ -607,18 +617,18 @@ console.log(tags, ending)
     "[4Pl]",
     ];
     let persPronounsEnglish = [
-    "his/her/its\xa0(other)",
-    "their\xa0(2)\xa0(other)",
-    "their\xa0(3+)\xa0(other)",
-    "my",
-    "our\xa0(2)",
-    "our\xa0(3+)",
-    "your\xa0(1)",
-    "your\xa0(2)",
-    "your\xa0(3+)",
-    "his/her/its\xa0own",
-    "their\xa0own\xa0(2)",
-    "their\xa0own\xa0(3+)",
+    "it\xa0(other)",
+    "them\xa0(2)\xa0(other)",
+    "them\xa0(3+)\xa0(other)",
+    "me",
+    "us\xa0(2)",
+    "us\xa0(3+)",
+    "you\xa0(1)",
+    "you\xa0(2)",
+    "you\xa0(3+)",
+    "itself",
+    "themselves\xa0(2)",
+    "themselves\xa0(3+)",
     ]
     let demPronounTitles = [
     "over there or going away",
