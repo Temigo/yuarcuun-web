@@ -1078,7 +1078,7 @@ endingToEnglish(ending,index) {
 				<div style={{display:'flex',justifyContent:'center'}}>
 				<div style={{fontSize:'1.2rem',color:'#666',lineHeight:1.6,maxWidth:500}}>
 					<div style={{textDecoration:'underline',marginBottom:10,marginTop:15}}> Dictionary </div>
-					<div style={{marginBottom:10}}> Type any English word, Yugtun verb base, or Yugtun noun and the matching dictionary entries will show automatically. </div>
+					<div style={{marginBottom:10}}> Type any English word, Yugtun verb base, or Yugtun noun and the matching dictionary base entries will show automatically. </div>
 					<div> examples: </div>
 					<div style={{marginBottom:25}}>
 					<span onClick={()=>{this.setState({search:'pissur',wordsList: fuzzysort.go('pissur', this.state.dictionary, optionsFuzzy).map(({ obj }) => (obj)),newStartingSearch:true})}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>pissur-</span>
