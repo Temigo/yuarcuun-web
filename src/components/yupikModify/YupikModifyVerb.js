@@ -44,6 +44,7 @@ class YupikModifyVerb extends Component {
       </Button>
       </Link>
       }
+      <div style={{textAlign:'center',paddingTop:'20px','fontStyle':'italic',color:'gray'}}> Note: iliitni alartuq - sometimes there are mistakes </div>
       </div>
       </div>
     );

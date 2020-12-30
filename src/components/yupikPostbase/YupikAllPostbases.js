@@ -24,9 +24,11 @@ class YupikAllPostbases extends Component {
     let make_a_command = this.state.activeIndex === 1 || this.props.mood === 'optative';
     let connective_endings = this.state.activeIndex === 2 || this.props.mood[0] === 'c' || this.props.mood[0] === 's';
     let noun_forms = this.state.activeIndex === 3 || this.props.nounEnding !== '';
-    let is_enclitics = this.state.activeIndex === enclitics[this.props.mood].activeIndex;
+    // let is_enclitics = true;
+    // console.log(enclitics)
+    // let is_enclitics = this.state.activeIndex === enclitics[this.props.mood].activeIndex;
     return (
-      <div style={{ marginBottom: '2em' }}>
+      <div style={{ paddingBottom: '2em' }}>
       <Accordion fluid styled exclusive={false}>
         <Accordion.Title active={question_forms} index={0} onClick={this.handleClick}>
           <Icon name='dropdown' />
@@ -128,12 +130,12 @@ class YupikAllPostbases extends Component {
 
 
       {this.props.mood === 'indicative' || this.props.mood === 'interrogative' ?
-      <Accordion styled >
-        <Accordion.Title active={is_enclitics} index={enclitics[this.props.mood].activeIndex} onClick={this.handleClick}>
+      <Accordion styled>
+        <Accordion.Title active={this.state.activeIndex === enclitics[this.props.mood].activeIndex} index={enclitics[this.props.mood].activeIndex} onClick={this.handleClick}>
           <Icon name='dropdown' />
           Enclitics
         </Accordion.Title>
-        <Accordion.Content active={is_enclitics}>
+        <Accordion.Content active={this.state.activeIndex === enclitics[this.props.mood].activeIndex}>
           <Card.Group itemsPerRow={3} stackable>
           {enclitics[this.props.mood].items.map((e) => {
               return (

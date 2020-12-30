@@ -446,7 +446,7 @@ endingToEnglish(ending,index) {
   var english1 = ""
   var english2 = ""
   var english3 = ""
-console.log(tags, ending)
+// console.log(tags, ending)
   if (ending.includes('[V]')) {
     english1 += 'Verb Ending';
     english2 += endingToEnglishTerms[tags[1]];
