@@ -103,7 +103,12 @@ class TableEntry extends Component {
 	    "[S_2Sg]",
 	    "[S_2Du]",
 	    "[S_2Pl]",
-    ]	
+    ]
+    let subjectOptativeTermsEnglish = [
+        "you (don't)",
+        "you 2 (don't)",
+        "you 3+ (don't)",
+    ]   	
     let subjectsEnglishTermsSbrd = [
 	    "[S_4Sg]",
 	    "[S_4Du]",
@@ -395,7 +400,7 @@ class TableEntry extends Component {
             :
             (subjectOptativeTerms.map((i,index) => 
             <Table.Row>
-              <Table.HeaderCell style={{color:"#002477"}}>{subjectsEnglish[index]}</Table.HeaderCell>
+              <Table.HeaderCell style={{color:"#002477"}}>{subjectOptativeTermsEnglish[index]}</Table.HeaderCell>
               <Table.Cell style={{paddingLeft:10}}>{e["[Intr]"+optativeIdentifiers[kindex]+i].join(",\n").replaceAll(">","")}</Table.Cell>
             </Table.Row>
             ))
