@@ -206,6 +206,7 @@ class SearchPage extends Component {
       // searchWord:"",
       // activeSentenceIndex: 0,
       // activeTabIndex:0,
+      showMoreEnding: false,
       updateSearchEntry: props.location.state === undefined ? false : props.location.state.updateSearchEntry,
       activeTabIndex: props.location.state === undefined ? 0 : props.location.state.activeTabIndex,
 
@@ -494,9 +495,15 @@ endingToEnglish(ending,index) {
     return (
     <div style={{paddingTop:15}}>
     <div style={{fontWeight:'bold'}}>{this.state.endingrule[index][1].join(', ')}</div>
+    <div>{english3}</div>
+    {this.state.showMoreEnding ?
+    <div>
     <div style={{fontStyle:'italic'}}>{english1}</div>
     <div style={{fontStyle:'italic'}}>{english2}</div>
-    <div>{english3}</div>
+    </div>
+    :
+    null
+	}
     </div>
     )
   }
@@ -513,9 +520,10 @@ endingToEnglish(ending,index) {
   }
 
   getLinks(index, parse) {
+  	console.log(parse)
     if (index === 0) {            // if base
       if ((parse[index].includes("[P") || parse[index].includes("[I")) && parse.length === 1) {  // if particle or ignorative
-        return parse[index].split("[")[0]
+        return parse[index].split("[")[0].replace('u͡g','ug');
       } else if (parse[index].includes("[PerPro]")) {
         return parse[index].split("[")[0]
       } else if (parse[index].includes("[DemPro]") || parse[index].includes("[DemAdv]")) {
@@ -533,11 +541,17 @@ endingToEnglish(ending,index) {
           dictionaryForm = dictionaryForm.replace(/([^\[])e\b/, "$1a")      // e -> a
           dictionaryForm = dictionaryForm.replace(/g\b/, "k");      // g -> k
           dictionaryForm = dictionaryForm.replace(/r(\*)?\b/, "q$1"); // r(*) -> q(*)
-        } else {
+        } else if (parse[1].includes('[V')) {
           dictionaryForm = base+"-"       // if Verb base
+        } else {
+          dictionaryForm = base
         }
         return dictionaryForm;          
       }
+    } else {
+		if (parse[index].includes("ete[N→V]")) {
+      		return "ete[N→V]"
+      	}
     }
     // else (["[N→N]","[N→V]","[V→V]","[V→N]","[Encl]"].some(v => parse[index].includes(v))) { //if postbase or enclitic
     return parse[index];
@@ -871,7 +885,7 @@ endingToEnglish(ending,index) {
                         </Accordion.Title>
                         <Accordion.Content active={activeIndex === pindex}>
                         <div style={{'paddingBottom':15}}>{endingDescriptions[pindex]}</div>   
-                        <div style={{fontStyle:'italic','paddingBottom':5}}>{"Note: Many verb bases can be intransitive-only, transitive-only, or only allow certain endings."}</div>                     
+                        <div style={{fontStyle:'italic','paddingBottom':5}}>{"Note: Many verb bases can be intransitive-only, transitive-only, or only allow certain endings. There are occasional mistakes."}</div>                     
                           {this.state.loaderOn ? 
                             <Loader active inline />
                             :
