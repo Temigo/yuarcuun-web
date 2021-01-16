@@ -423,7 +423,7 @@ onKeyPress = (e) => {
 }
 
 inputClicked(search) {
-  this.setState({entries:undefined, activeIndex:-1, loaderOn: true, seeMoreActive:false,currentTableOpen: -1,yugtunAnalyzer:true})
+  this.setState({entries:undefined, activeIndex:-1, loaderOn: true, seeMoreActive:false,currentTableOpen: -1,yugtunAnalyzer:true,showMoreEnding: false,})
   // console.log(search)
   if (search === undefined || search === true) {
   	search = this.state.search
@@ -500,18 +500,29 @@ endingToEnglish(ending,index) {
     <div style={{paddingTop:15}}>
     <div style={{fontWeight:'bold'}}>{this.state.endingrule[index][1].join(', ')}</div>
     <div>{english3}</div>
-    <div onClick={()=>this.setState({showMoreEnding:(this.state.moreIndex !== index || !this.state.showMoreEnding ? true : false),moreIndex:index})}style={{color:'#bdbdbd',fontWeight:'100',paddingTop:5}}>{'more'}<Icon style={{paddingLeft:5,fontSize:12}} name={this.state.showMoreEnding && index === this.state.moreIndex ? 'chevron up' : 'chevron down'} /></div>
+    <div onClick={()=>this.setState({showMoreEnding:(this.state.moreIndex !== index || !this.state.showMoreEnding ? true : false),moreIndex:index})}style={{color:'#bdbdbd',fontWeight:'100',paddingTop:5,paddingBottom:5}}>{'more'}<Icon style={{paddingLeft:5,fontSize:12}} name={this.state.showMoreEnding && index === this.state.moreIndex ? 'chevron up' : 'chevron down'} /></div>
 
     {this.state.showMoreEnding && index === this.state.moreIndex ?
-    <div>
+    <div style={{marginLeft:15}}>
 	    <div>{english2}</div>
 	    <div>{english1}</div>
+	    <Link to='/symbols'>
+	    <div style={{color:'#4183c4',fontWeight:'100',textDecoration:'underline',paddingTop:10}}>{'Caugat symbol-aat?'}</div>
+	    </Link> 
     </div>
     :
     null
 	}
     </div>
     )
+  }
+
+  resetAll = (e,data) => {
+  	this.setState({
+  		search:'',
+  		yugtunAnalyzer:false,
+  		activeTabIndex:0,
+  	})
   }
 
   handleTabChange = (e,data) => {
@@ -752,8 +763,8 @@ endingToEnglish(ending,index) {
       <Grid.Row style={{paddingTop:0}}>
       <Grid.Column style={{ maxWidth: 800, padding: 10 }} textAlign='left'>
         <Header as='h1'>
-          <Image style={{'fontSize': '1.5em'}} src={ICON_URL}/>
-          <span style={{ color: 'black', verticalAlign: 'bottom'}}>Yugtun</span>
+          <Image onClick={this.resetAll} style={{'fontSize': '1.5em',cursor:'pointer'}} src={ICON_URL}/>
+          <span onClick={this.resetAll} style={{ color: 'black', verticalAlign: 'bottom',cursor:'pointer'}}>Yugtun</span>
         </Header>
         <Container style={{height: (this.state.searchBarStuckTop ? window.innerHeight+100 : null)}} ref={this.search_container} className='search_container'>
           	<Grid stackable>
@@ -870,19 +881,23 @@ endingToEnglish(ending,index) {
                   </div>
                 ))}
             <div style={{paddingTop:15, paddingBottom:15, textAlign:'center'}}>
-            <Button basic color='blue' style={{fontFamily:'sans-serif'}} onClick={()=>{this.setState({currentTableOpen:(this.state.currentTableOpen === index ? -1 : index), activeIndex:-1})}}>
-            {this.state.currentTableOpen === index ?
-              <div>
-              {"See Less Endings"}
-              <Icon style={{paddingLeft:10}} name='chevron up' />
-              </div>
-              :
-              <div>
-              {"See More Endings"}
-              <Icon style={{paddingLeft:10}} name='chevron down' />
-              </div>
-            }            
-            </Button>
+            {this.state.parses[0].length===1 && this.state.parses[0].includes('[I') ?
+	            null
+	            :
+	            <Button basic color='blue' style={{fontFamily:'sans-serif'}} onClick={()=>{this.setState({currentTableOpen:(this.state.currentTableOpen === index ? -1 : index), activeIndex:-1})}}>
+	            {this.state.currentTableOpen === index ?
+	              <div>
+	              {"See Less Endings"}
+	              <Icon style={{paddingLeft:10}} name='chevron up' />
+	              </div>
+	              :
+	              <div>
+	              {"See More Endings"}
+	              <Icon style={{paddingLeft:10}} name='chevron down' />
+	              </div>
+	            }            
+	            </Button>
+        	}
             </div>
               {this.state.currentTableOpen === index ?
                 (this.state.parses[index].includes('[V') ?

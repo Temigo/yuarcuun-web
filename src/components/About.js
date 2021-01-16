@@ -12,7 +12,17 @@ class About extends Component {
   render() {
     return (
       <Container>
-        <Header as='h1'>About Us</Header>
+        <div style={{justifyContent:'space-between',display:'flex'}}>
+          <div>
+          <Button primary icon circular onClick={this.props.history.goBack}>
+            <Icon name='chevron left' />
+          </Button>
+          </div>
+          <div>
+          <Header as='h1'>About Us</Header>
+          </div>
+          <div style={{width:36}} />
+        </div>
         <Divider />
 
 <p> <i>Quyana tailuci!</i> </p>
@@ -48,14 +58,6 @@ null
 
 <p> <i> Quyana cakneq! </i> </p>
 
-
-
-
-
-
-        <Button primary icon circular onClick={this.props.history.goBack}>
-          <Icon name='chevron left' />
-        </Button>
       </Container>
     );
   }

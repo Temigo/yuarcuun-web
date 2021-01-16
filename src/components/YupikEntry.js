@@ -84,7 +84,7 @@ class YupikEntry extends Component {
               return (
                 <List.Item key={usage} style={{fontStyle:'italic'} }>
                   <List.Content floated='right'>
-                    <Icon size='big' name='angle right' />
+                    <Icon style={{paddingTop:8}} size='big' name='angle right' />
                   </List.Content>
                 <Link  to={{pathname: '/' + this.state.word + '/' + this.props.entryNumber + '/'+ index + '/modify/' + (this.state.entry.descriptor[0].includes('verb') ? 'verb' : 'noun'), state: { entry: this.state.entry, word: this.state.word }}}>
                   <List.Header>{usage[0]}</List.Header>
