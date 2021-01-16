@@ -104,9 +104,12 @@ const endingToEnglishTerms = {
   "[A_4Sg]":"he, she, it (itself)",
   "[A_4Du]":"they (2) (themselves)",
   "[A_4Pl]":"they all (3+) (themselves)",
-  "[P_3Sg]":"her,\xa0him,\xa0it\xa0(other)",
-  "[P_3Du]":"the\xa0two\xa0of\xa0them\xa0(others)",
-  "[P_3Pl]":"them\xa0all\xa0(3+)\xa0(others)",
+//   "[P_3Sg]":"her,\xa0him,\xa0it\xa0(other)",
+//   "[P_3Du]":"the\xa0two\xa0of\xa0them\xa0(others)",
+//   "[P_3Pl]":"them\xa0all\xa0(3+)\xa0(others)",
+  "[P_3Sg]":"another",
+  "[P_3Du]":"two others",
+  "[P_3Pl]":"3+ others",
   "[P_1Sg]":"me",
   "[P_1Du]":"the\xa0two\xa0of\xa0us",
   "[P_1Pl]":"us\xa0all\xa0(3+)",
@@ -207,6 +210,7 @@ class SearchPage extends Component {
       // activeSentenceIndex: 0,
       // activeTabIndex:0,
       showMoreEnding: false,
+      moreIndex:-1,
       updateSearchEntry: props.location.state === undefined ? false : props.location.state.updateSearchEntry,
       activeTabIndex: props.location.state === undefined ? 0 : props.location.state.activeTabIndex,
 
@@ -447,7 +451,7 @@ endingToEnglish(ending,index) {
   var english1 = ""
   var english2 = ""
   var english3 = ""
-// console.log(tags, ending)
+	console.log(this.state)
   if (ending.includes('[V]')) {
     english1 += 'Verb Ending';
     english2 += endingToEnglishTerms[tags[1]];
@@ -496,10 +500,12 @@ endingToEnglish(ending,index) {
     <div style={{paddingTop:15}}>
     <div style={{fontWeight:'bold'}}>{this.state.endingrule[index][1].join(', ')}</div>
     <div>{english3}</div>
-    {this.state.showMoreEnding ?
+    <div onClick={()=>this.setState({showMoreEnding:(this.state.moreIndex !== index || !this.state.showMoreEnding ? true : false),moreIndex:index})}style={{color:'#bdbdbd',fontWeight:'100',paddingTop:5}}>{'more'}<Icon style={{paddingLeft:5,fontSize:12}} name={this.state.showMoreEnding && index === this.state.moreIndex ? 'chevron up' : 'chevron down'} /></div>
+
+    {this.state.showMoreEnding && index === this.state.moreIndex ?
     <div>
-    <div style={{fontStyle:'italic'}}>{english1}</div>
-    <div style={{fontStyle:'italic'}}>{english2}</div>
+	    <div>{english2}</div>
+	    <div>{english1}</div>
     </div>
     :
     null
@@ -812,7 +818,7 @@ endingToEnglish(ending,index) {
           {this.state.yugtunAnalyzer && this.state.parses.length === 0 && !this.state.getCall && this.state.notFirstParse ?
             <div style={{paddingTop:20}}>
             <Divider />
-          	<div style={{fontStyle:'italic',marginTop:10}}>No results. Pisciigatuq.</div>
+          	<div style={{fontStyle:'italic',marginTop:10}}>No results. Pisciigatuq. Type a complete Yugtun word.</div>
             </div>
           	:
           	null
@@ -823,10 +829,19 @@ endingToEnglish(ending,index) {
             {this.state.parses.map((i,index)=>
               <div>
               <Divider />
+              <div style={{display:'flex',justifyContent:'space-between'}}>
               <div style={{paddingBottom:10}}>
               <Label circular color={'#E5E5E5'}>
               {index+1}
               </Label>
+              </div>
+              {index === 0 ?
+	              <div style={{fontSize:16,color:'#989898',fontStyle:'italic',fontWeight:'200'}}>
+	              {'Most Likely Result'}
+	              </div>
+	              :
+	              null
+	          }
               </div>
 
               <div style={{fontSize:20}}>{this.state.segments[index].replaceAll('>','·')}</div>
@@ -1103,7 +1118,7 @@ endingToEnglish(ending,index) {
 					</div>
 					<div>
 					<div style={{textDecoration:'underline',marginBottom:10}}> Yugtun to English </div>
-					<div style={{marginBottom:10}}> Type any Yugtun word or sentence and press enter to see the meaning of each part of the word.  </div>
+					<div style={{marginBottom:10}}> Type any complete Yugtun word or sentence and press enter to see the meaning of each part of the word.  </div>
 					<div> examples: </div>
 					<div>
 					<span onClick={()=>{this.setState({search:"piipiqa popsicle-aamek ner'uq",yugtunAnalyzer: true, activeTabIndex:1, parses:[],segments:[],endingrule:[],newSearchList:[],notFirstParse:false}); this.inputClicked("piipiqa popsicle-aamek ner'uq")}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>piipiqa popsicle-aamek ner'uq</span>
