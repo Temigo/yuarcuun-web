@@ -637,8 +637,8 @@ endingToEnglish(ending,index) {
           dictionaryForm = dictionaryForm.replace(/([^\[])e\b/, "$1a")      // e -> a
           dictionaryForm = dictionaryForm.replace(/g\b/, "k");      // g -> k
           dictionaryForm = dictionaryForm.replace(/r(\*)?\b/, "q$1"); // r(*) -> q(*)
-        } else if (parse[1].includes('[V')) {
-          dictionaryForm = base+"-"       // if Verb base
+        } else if (parse[1].includes('[V') || parse[1].includes('[Q')) {
+          dictionaryForm = base+"-"       // if Verb or Quant_Qual base
         } else {
           dictionaryForm = base
         }
