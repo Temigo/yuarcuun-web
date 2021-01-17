@@ -7,7 +7,7 @@ class Symbols extends Component {
     super(props);
     this.state = {
       show: false,
-      activeIndex: 0,
+      activeIndex: -1,
     }
   }
 
@@ -34,7 +34,7 @@ class Symbols extends Component {
           <div style={{width:36}} />
         </div>
         <Divider />
-<p><em>What are these symbols? Well they are a list of symbols .... From Yup&#39;ik Eskimo Dictionary Second Edition Vol. 2 of 2 </em></p>
+<p><em>What are these symbols?</em></p><p><em>They are mathematical rules that outline how to attach postbases and endings. You can find more information about them in "A Practical Grammar of the Central Alaskan Yup'ik Eskimo Language" by Steven A. Jacobson.</em></p>
 
 <p>The suffixation symbols are as follows:</p>
 
