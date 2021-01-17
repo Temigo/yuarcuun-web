@@ -152,7 +152,7 @@ const endingToEnglishTerms = {
 };
 
 const endingEnglishDescriptions = {
-  "[Ind]":"(is/are)",
+  "[Ind]":"(is/are/am)",
   "[Intrg]":"(question)",
   "[Opt]":"(do it!)",
   "[Sbrd]":"(please do, being)",
@@ -870,7 +870,7 @@ endingToEnglish(ending,index) {
           <Image onClick={this.resetAll} style={{'fontSize': '1.5em',cursor:'pointer'}} src={ICON_URL}/>
           <span onClick={this.resetAll} style={{ color: 'black', verticalAlign: 'bottom',cursor:'pointer'}}>Yugtun</span>
         </Header>
-        <Container style={{height: (this.state.searchBarStuckTop ? window.innerHeight+100 : null)}} ref={this.search_container} className='search_container'>
+        <Container style={{height: window.innerHeight+100}} ref={this.search_container} className='search_container'>
           	<Grid stackable>
 
           <Tab style={{paddingTop:10}} activeIndex={this.state.activeTabIndex} menu={{ secondary: true, pointing: true, size:'huge' }} panes={panes} onTabChange={this.handleTabChange} />
@@ -1226,18 +1226,23 @@ endingToEnglish(ending,index) {
               (this.state.search.length === 0 ?
 				<div style={{display:'flex',justifyContent:'center'}}>
 				<div style={{fontSize:'1.2rem',color:'#666',lineHeight:1.6,maxWidth:500}}>
+
+          {!this.state.yugtunAnalyzer ?
+          <div>
 					<div style={{textDecoration:'underline',marginBottom:10,marginTop:15}}> Dictionary </div>
 					<div style={{marginBottom:10}}> Type any English word, Yugtun verb base, or Yugtun noun and the matching dictionary base entries will show automatically. </div>
 					<div> examples: </div>
-					<div style={{marginBottom:25}}>
+					<div>
 					<span onClick={()=>{this.setState({search:'pissur',wordsList: fuzzysort.go('pissur', this.state.dictionary, optionsFuzzy).map(({ obj }) => (obj)),newStartingSearch:true})}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>pissur-</span>
 					<span>{', '}</span>
 					<span onClick={()=>{this.setState({search:'akutaq',wordsList: fuzzysort.go('akutaq', this.state.dictionary, optionsFuzzy).map(({ obj }) => (obj)),newStartingSearch:true})}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>akutaq</span>
 					<span>{', '}</span>
 					<span onClick={()=>{this.setState({search:'book',wordsList: fuzzysort.go('book', this.state.dictionary, optionsFuzzy).map(({ obj }) => (obj)),newStartingSearch:true})}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>book</span>
 					</div>
+          </div>
+          :
 					<div>
-					<div style={{textDecoration:'underline',marginBottom:10}}> Yugtun to English </div>
+					<div style={{textDecoration:'underline',marginBottom:10,marginTop:15}}> Yugtun to English </div>
 					<div style={{marginBottom:10}}> Type any complete Yugtun word or sentence and press enter to see the meaning of each part of the word.  </div>
 					<div> examples: </div>
 					<div>
@@ -1246,6 +1251,7 @@ endingToEnglish(ending,index) {
 					<span onClick={()=>{this.setState({search:"ellami-lli assirpaa",yugtunAnalyzer: true, activeTabIndex:1, parses:[],segments:[],endingrule:[],newSearchList:[],notFirstParse:false}); this.inputClicked("ellami-lli assirpaa")}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>ellami-lli assirpaa</span>
 					</div>
 					</div>
+        }
 				</div>
 				</div>
 				:
