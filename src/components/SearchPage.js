@@ -151,6 +151,29 @@ const endingToEnglishTerms = {
   "[4Pl]":"themselves\xa0(3+)",
 };
 
+const endingEnglishDescriptions = {
+  "[Ind]":"(is/are)",
+  "[Intrg]":"(question)",
+  "[Opt]":"(do it!)",
+  "[Sbrd]":"(please do, being)",
+  "[Ptcp]":"(the one being, special case)",
+  "[Prec]":"(before)",
+  "[Cnsq]":"(because)",
+  "[Cont]":"(whenever)",
+  "[Conc]":"(although, even if)",
+  "[Cond]":"(if, when in future)",
+  "[CtmpI]":"(when in past)",
+  "[CtmpII]":"(while)",
+  "[Abs]":"(the)",
+  "[Rel]":"(the)",
+  "[Abl_Mod]":"(a, some, from)",
+  "[Loc]":"(in, at)",
+  "[Ter]":"(toward)",
+  "[Via]":"(through, using)",
+  "[Equ]":"(like, similar to)",
+  "[Quant_Qual]":"Quantifier/Qualifier Inflection",
+}
+
 const endingDescriptions = [
 "1) statements; 2) “yes-no” questions, usually with enclitic =qaa",
 "1) content questions; 2) exclamations with the postbase @5+pag- | ~vag-",
@@ -172,6 +195,29 @@ const endingDescriptions = [
 "1) route; 2) instrument; 3) part of a whole",
 "1) comparison; 2) language specification; 3) price specification",
 ];
+
+const exampleSentences = [
+"Pissurtuq - It is hunting. Maqillruuk - They two took a steambath.",
+"Qangvaq ayallrua? - When did he go? Caqatarcit? - What will you do?",
+"Neri - Eat. Taisgu - You bring it here.",
+"Cukaluni - quickly it being. Qantan painqercaarluku - Your plate, lick it clean please",
+"Tang qavalria. - Look, it's sleeping. Maaten itertua anelria. - I came in; lo and behold, he went out.",
+"Ayagpailgan tunluku. - Before he leaves, give it to him.",
+"Ayaksaituq arenqiapakaan ellalluk. - He hasn’t gone because of this bad weather.",
+"Ner'aqami tamuanqegcaalartuq. - Whenever she eats she chews her food well.",
+"Pingraan ayagyugtua - Even though that's the case I want to go.",
+"Paallakuvet. If you fall forward. Anglirikuni - When he grows up.",
+"Akngirtuq atrallermini. - He got hurt when he was coming down.",
+"Ayainanermini. - While he was going.",
+"Kuv'uq saskaq. - It spilled (the glass). Pissullrua maqaruaq - It hunted the rabbit.",
+"Angutem quyavikaa - the man was thankful to her. Ciquyam pania - Ciquyaq's daughter",
+"Ner'uq akutamek - It is eating some akutaq. Elitnaurvigmek utertuq. - From the school, she's coming home. Kuuvviaryuucimnek aptuq. - He's asking about whether I am wanting coffee.",
+"Mermi. - In the water. Nunani. - In the lands.",
+"Kipusvigmun piyuaguq. To the store, he's walking.",
+"Angyakun ayagtut. - They are going by boat.",
+"Aatamegcetun yurartut. - They are dancing like they're father. Yugtun. - Like a Yuk.",
+];
+
 
 class SearchPage extends Component {
   constructor(props) {
@@ -451,10 +497,19 @@ endingToEnglish(ending,index) {
   var english1 = ""
   var english2 = ""
   var english3 = ""
-	console.log(this.state)
+  var english4 = ""
+  var before = true;
+	console.log(this.state,tags[1])
   if (ending.includes('[V]')) {
+    if (this.state.parses[index].includes('[Ind]') ||
+        this.state.parses[index].includes('[Intrg]') ||
+        this.state.parses[index].includes('[Opt]') ||
+        this.state.parses[index].includes('[Sbrd]')) {
+      before = false;
+    }
     english1 += 'Verb Ending';
     english2 += endingToEnglishTerms[tags[1]];
+    english4 += endingEnglishDescriptions[tags[1]];
     if (ending.includes('[Trns]')) {
 	  var subject = endingToEnglishTerms[tags[tags.length-2]]
 	  if (subject === undefined ) {
@@ -468,6 +523,7 @@ endingToEnglish(ending,index) {
     } else if (ending.includes('[N]')) {
       english1 += 'Noun Ending';
       english2 += endingToEnglishTerms[tags[1]];
+      english4 += endingEnglishDescriptions[tags[1]];
       if (ending.includes('Poss')) {
         english3 += endingToEnglishTerms[tags[tags.length-2]] + "\xa0" + endingToEnglishTerms[tags[tags.length-1]];
       } else {
@@ -476,22 +532,26 @@ endingToEnglish(ending,index) {
     } else if (this.state.parses[index].includes('[D')) {
       english1 += 'Demonstrative';
       english2 += endingToEnglishTerms[tags[0]];
+      english4 += endingEnglishDescriptions[tags[0]];
       if (endingToEnglishTerms[tags[1]] !== undefined) {
       	english3 += endingToEnglishTerms[tags[1]];      	
       }
     } else if (this.state.parses[index].includes('[P')) {
       english1 += 'Personal Pronoun';
       english2 += endingToEnglishTerms[tags[0]];
+      english4 += endingEnglishDescriptions[tags[0]];
       english3 += endingToEnglishTerms[tags[1]];      	
     } else if (this.state.parses[index].includes('[Q')) {
       english1 = '';
       english2 += endingToEnglishTerms[tags[0]];
+      english4 += endingEnglishDescriptions[tags[0]];
       if (endingToEnglishTerms[tags[1]] !== undefined) {
       	english3 += endingToEnglishTerms[tags[1]];      	
       }
     } else {
       english1 += ending;
       english2 += endingToEnglishTerms[tags[0]];
+      english4 += endingEnglishDescriptions[tags[0]];
       if (endingToEnglishTerms[tags[1]] !== undefined) {
       	english3 += endingToEnglishTerms[tags[1]];      	
       }	
@@ -499,8 +559,24 @@ endingToEnglish(ending,index) {
     return (
     <div style={{paddingTop:15}}>
     <div style={{fontWeight:'bold'}}>{this.state.endingrule[index][1].join(', ')}</div>
-    <div>{english3}</div>
-    <div onClick={()=>this.setState({showMoreEnding:(this.state.moreIndex !== index || !this.state.showMoreEnding ? true : false),moreIndex:index})}style={{color:'#bdbdbd',fontWeight:'100',paddingTop:5,paddingBottom:5}}>{'more'}<Icon style={{paddingLeft:5,fontSize:12}} name={this.state.showMoreEnding && index === this.state.moreIndex ? 'chevron up' : 'chevron down'} /></div>
+    <div>
+    {before ?
+    <span>
+    {english4+'\xa0'}
+    </span>
+    :
+    null
+    }
+    <span>{english3}</span>
+    {!before ?
+    <span>
+    {'\xa0'+english4}
+    </span>
+    :
+    null
+    }
+    </div>
+    <div onClick={()=>this.setState({showMoreEnding:(this.state.moreIndex !== index || !this.state.showMoreEnding ? true : false),moreIndex:index})}style={{color:'#bdbdbd',fontWeight:'100',paddingTop:5,paddingBottom:5,cursor:'pointer'}}>{'more'}<Icon style={{paddingLeft:5,fontSize:12}} name={this.state.showMoreEnding && index === this.state.moreIndex ? 'chevron up' : 'chevron down'} /></div>
 
     {this.state.showMoreEnding && index === this.state.moreIndex ?
     <div style={{marginLeft:15}}>
@@ -605,19 +681,47 @@ endingToEnglish(ending,index) {
       menuItem: 'Yugtun to English',
     },
   ]
+    // const accordionTitlesVerbs = [
+    //   "Indicative (it is...)",
+    //   "Interrogative (question)",
+    //   "Optative (do it...)",
+    //   "Subordinative (polite command or it being...)",
+    //   "Participial (the one being...)",
+    //   "Precessive (before...)",
+    //   "Consequential (because...)",
+    //   "Contigent (whenever...)",
+    //   "Concessive (although, even though, even if...)",
+    //   "Conditional (if, when in the future...)",
+    //   "Contemporative 1 (when in the past...)",
+    //   "Contemporative 2 (while...)",
+    //   ];
+    // const accordionTitlesVerbs = [
+    //   "it is... (indicative)",
+    //   "question (interrogative)",
+    //   "do it... (optative)",
+    //   "please do or it being...(subordinative))",
+    //   "exclamation or special case (participial)",
+    //   "before... (precessive)",
+    //   "because... (consequential)",
+    //   "whenever... (contingent)",
+    //   "although, even though, even if... (concessive)",
+    //   "if, when in the future... (conditional)",
+    //   "when in the past... (contemporative 1)",
+    //   "while... (contemporative 2)",
+    //   ];
     const accordionTitlesVerbs = [
-      "Indicative (Statement Form)",
-      "Interrogative (Question Form)",
-      "Optative (Command Form)",
-      "Subordinative (Polite Command or -ing Form)",
-      "Participial",
-      "Precessive (before...)",
-      "Consequential (because...)",
-      "Contigent (whenever...)",
-      "Concessive (although, even though, even if...)",
-      "Conditional (if, when in the future...)",
-      "Contemporative 1 (when in the past...)",
-      "Contemporative 2 (while...)",
+      "it is... (Indicative)",
+      "question (Interrogative)",
+      "do it... (Optative)",
+      "please do or it being... (Subordinative))",
+      "exclamation or special case (Participial)",
+      "before... (Precessive)",
+      "because... (Consequential)",
+      "whenever... (Contingent)",
+      "although, even though, even if... (Concessive)",
+      "if, when in the future... (Conditional)",
+      "when in the past... (Contemporative 1)",
+      "while... (Contemporative 2)",
       ];
     const accordionTitlesNouns = [
       "Absolutive",
@@ -915,6 +1019,7 @@ endingToEnglish(ending,index) {
                         </Accordion.Title>
                         <Accordion.Content active={activeIndex === pindex}>
                         <div style={{'paddingBottom':15}}>{endingDescriptions[pindex]}</div>   
+                        <div style={{'paddingBottom':15,fontStyle:'italic'}}>{"Examples: "+exampleSentences[pindex]}</div>   
                         <div style={{fontStyle:'italic','paddingBottom':5}}>{"Note: Many verb bases can be intransitive-only, transitive-only, or only allow certain endings. There are occasional mistakes."}</div>                     
                           {this.state.loaderOn ? 
                             <Loader active inline />
