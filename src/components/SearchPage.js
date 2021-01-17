@@ -613,7 +613,7 @@ endingToEnglish(ending,index) {
   }
 
   getLinks(index, parse) {
-  	console.log(parse)
+  	// console.log(parse)
     if (index === 0) {            // if base
       if ((parse[index].includes("[P") || parse[index].includes("[I")) && parse.length === 1) {  // if particle or ignorative
         return parse[index].split("[")[0].replace('u͡g','ug');
@@ -965,7 +965,7 @@ endingToEnglish(ending,index) {
               </Label>
               </div>
               {index === 0 ?
-	              <div style={{fontSize:16,color:'#989898',fontStyle:'italic',fontWeight:'200'}}>
+	              <div style={{fontSize:16,color:'#deb103',fontStyle:'italic',fontWeight:'300'}}>
 	              {'Most Likely Result'}
 	              </div>
 	              :
@@ -999,7 +999,7 @@ endingToEnglish(ending,index) {
                   </div>
                 ))}
             <div style={{paddingTop:15, paddingBottom:15, textAlign:'center'}}>
-            {this.state.parses[0].length===1 && this.state.parses[0].includes('[I') ?
+            {!this.state.parses[index].includes('-') && (this.state.parses[index].includes('[I') || this.state.parses[index].includes('[P')) ?
 	            null
 	            :
 	            <Button basic color='blue' style={{fontFamily:'sans-serif'}} onClick={()=>{this.setState({currentTableOpen:(this.state.currentTableOpen === index ? -1 : index), activeIndex:-1})}}>
