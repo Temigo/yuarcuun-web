@@ -458,11 +458,11 @@ class SearchPage extends Component {
   }
 
 onKeyPress = (e) => {
-  if(e.key === 'Enter' && (this.state.activeTabIndex === 0 || this.state.search !== this.state.searchWord)){
+  if(e.key === 'Enter') {//} && (this.state.activeTabIndex === 0 || this.state.search !== this.state.searchWord)){
     // if (!this.state.yugtunAnalyzer && this.state.parses.length === 0) {this.setState({getCall:true})}
     // this.setState({ yugtunAnalyzer: !this.state.yugtunAnalyzer}); 
     // if (this.state.yugtunAnalyzer) {
-      this.setState({activeTabIndex:1})
+      // this.setState({activeTabsIndex:1})
       this.inputClicked(true)
     // }
   }
@@ -603,12 +603,12 @@ endingToEnglish(ending,index) {
 
   handleTabChange = (e,data) => {
     if (data.activeIndex === 0) {
-      this.setState({ yugtunAnalyzer: false, activeTabIndex:0})
+      this.setState({ yugtunAnalyzer: false, activeTabIndex:0,parses:[],segments:[],endingrule:[],newSearchList:[],notFirstParse:false,search:""})
     } else {
-      if (!this.state.yugtunAnalyzer) {
-      this.setState({ yugtunAnalyzer: true, activeTabIndex:1, parses:[],segments:[],endingrule:[],newSearchList:[],notFirstParse:false});                     
-      this.inputClicked()
-      }
+      // if (!this.state.yugtunAnalyzer) {
+      this.setState({ yugtunAnalyzer: true, activeTabIndex:1, parses:[],segments:[],endingrule:[],newSearchList:[],notFirstParse:false,search:""});                     
+      // this.inputClicked()
+      // }
     }
   }
 
@@ -877,12 +877,11 @@ endingToEnglish(ending,index) {
 
             <Grid.Row >
               <Grid.Column style={{ flex: 1, paddingTop:0 }}>
+              {this.state.yugtunAnalyzer ?
               <Input
                 ref={this.handleRef}
-                placeholder={this.state.yugtunAnalyzer ? 'Search multiple words...':'Search a word...'}
-                action={{ icon: 'search', transparent:true,size:'huge', onClick: () => 
-                this.inputClicked()
-                }}
+                placeholder='Search multiple words...'
+                action={{ icon:'search', transparent:true,size:'huge', onClick: () => this.inputClicked()}}
                 // icon={<Icon name='search' onClick={console.log('hi')} link />}
                 iconPosition='right'
                 size='huge'
@@ -890,6 +889,21 @@ endingToEnglish(ending,index) {
                 value={this.state.search}
                 onKeyPress={this.onKeyPress}
                 fluid  />
+                :
+              <Input
+                ref={this.handleRef}
+                placeholder='Search a word...'
+                // action={{ icon: (this.state.yugtunAnalyzer ? 'search' : null), transparent:true,size:'huge', onClick: () => 
+                // {this.state.yugtunAnalyzer ? this.inputClicked() : null}
+                // }}
+                // icon={<Icon name='x' onClick={console.log('hi')} link />}
+                // iconPosition='right'
+                size='huge'
+                onChange={this.onChangeSearch}
+                value={this.state.search}
+                // onKeyPress={this.onKeyPress}
+                fluid  />                
+              }
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -938,7 +952,7 @@ endingToEnglish(ending,index) {
           	:
           	null
           } 
-          {pressEnter ? <p><i>Press enter to parse.</i></p> : ''}
+          {pressEnter ? <p><i>Press enter to parse. Must be complete Yugtun word(s).</i></p> : ''}
           {this.state.yugtunAnalyzer && !this.state.getCall && (this.state.search.length > 0 || this.state.notFirstParse) ?
             <div style={{paddingTop:20}}>
             {this.state.parses.map((i,index)=>
@@ -1258,7 +1272,7 @@ endingToEnglish(ending,index) {
 				null
 				)
 }
-              {emptyList && !this.state.yugtunAnalyzer ? <p><i>No base matches... try the Yugtun Parser...</i></p> : ''}
+              {emptyList && !this.state.yugtunAnalyzer ? <p><i>Aren, no matches... for English you can only search by word... for Yugtun try Yugtun to English mode...</i></p> : ''}
             </List>
           }        
         </Container>
