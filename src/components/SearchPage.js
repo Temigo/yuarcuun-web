@@ -499,7 +499,7 @@ endingToEnglish(ending,index) {
   var english3 = ""
   var english4 = ""
   var before = true;
-	console.log(this.state,tags[1])
+	// console.log(this.state,tags[1])
   if (ending.includes('[V]')) {
     if (this.state.parses[index].includes('[Ind]') ||
         this.state.parses[index].includes('[Intrg]') ||
@@ -596,8 +596,11 @@ endingToEnglish(ending,index) {
   resetAll = (e,data) => {
   	this.setState({
   		search:'',
-  		yugtunAnalyzer:false,
-  		activeTabIndex:0,
+      newSearchList:[],
+      parses:[],
+      segments:[],
+      searchWord:"",
+      notFirstParse:false,
   	})
   }
 
@@ -880,7 +883,7 @@ endingToEnglish(ending,index) {
               {this.state.yugtunAnalyzer ?
               <Input
                 ref={this.handleRef}
-                placeholder='Search multiple words...'
+                placeholder='Search by Yugtun...'
                 action={{ icon:'search', transparent:true,size:'huge', onClick: () => this.inputClicked()}}
                 // icon={<Icon name='search' onClick={console.log('hi')} link />}
                 iconPosition='right'
@@ -1244,7 +1247,7 @@ endingToEnglish(ending,index) {
           {!this.state.yugtunAnalyzer ?
           <div>
 					<div style={{textDecoration:'underline',marginBottom:10,marginTop:15}}> Dictionary </div>
-					<div style={{marginBottom:10}}> Type any English word, Yugtun verb base, or Yugtun noun and the matching dictionary base entries will show automatically. </div>
+					<div style={{marginBottom:10}}> Type any English word or Yugtun base and the matching dictionary entries will show automatically.</div>
 					<div> examples: </div>
 					<div>
 					<span onClick={()=>{this.setState({search:'pissur',wordsList: fuzzysort.go('pissur', this.state.dictionary, optionsFuzzy).map(({ obj }) => (obj)),newStartingSearch:true})}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>pissur-</span>
@@ -1252,7 +1255,9 @@ endingToEnglish(ending,index) {
 					<span onClick={()=>{this.setState({search:'akutaq',wordsList: fuzzysort.go('akutaq', this.state.dictionary, optionsFuzzy).map(({ obj }) => (obj)),newStartingSearch:true})}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>akutaq</span>
 					<span>{', '}</span>
 					<span onClick={()=>{this.setState({search:'book',wordsList: fuzzysort.go('book', this.state.dictionary, optionsFuzzy).map(({ obj }) => (obj)),newStartingSearch:true})}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>book</span>
-					</div>
+          <span>{', '}</span>
+          <span onClick={()=>{this.setState({search:'Christmas',wordsList: fuzzysort.go('Christmas', this.state.dictionary, optionsFuzzy).map(({ obj }) => (obj)),newStartingSearch:true})}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>Christmas</span>					
+          </div>
           </div>
           :
 					<div>
@@ -1260,6 +1265,8 @@ endingToEnglish(ending,index) {
 					<div style={{marginBottom:10}}> Type any complete Yugtun word or sentence and press enter to see the meaning of each part of the word.  </div>
 					<div> examples: </div>
 					<div>
+          <span onClick={()=>{this.setState({search:"elitnaurvigmi",yugtunAnalyzer: true, activeTabIndex:1, parses:[],segments:[],endingrule:[],newSearchList:[],notFirstParse:false}); this.inputClicked("elitnaurvigmi")}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>elitnaurvigmi</span>
+          <span>{', '}</span>
 					<span onClick={()=>{this.setState({search:"piipiqa popsicle-aamek ner'uq",yugtunAnalyzer: true, activeTabIndex:1, parses:[],segments:[],endingrule:[],newSearchList:[],notFirstParse:false}); this.inputClicked("piipiqa popsicle-aamek ner'uq")}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>piipiqa popsicle-aamek ner'uq</span>
 					<span>{', '}</span>
 					<span onClick={()=>{this.setState({search:"ellami-lli assirpaa",yugtunAnalyzer: true, activeTabIndex:1, parses:[],segments:[],endingrule:[],newSearchList:[],notFirstParse:false}); this.inputClicked("ellami-lli assirpaa")}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>ellami-lli assirpaa</span>
