@@ -1109,7 +1109,7 @@ endingToEnglish(ending,index) {
 	                  </Accordion> 
                   		:
                   		(this.state.parses[index].includes('[P') ?
-		                  <Accordion fluid styled>
+		                  <Accordion fluid styled> 
 		                    {accordionTitlesNouns.map((p,pindex) =>
 		                      <div>
 		                        <Accordion.Title
