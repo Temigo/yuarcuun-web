@@ -959,7 +959,7 @@ endingToEnglish(ending,index) {
 	          }
               </div>
 
-              <div style={{fontSize:20}}>{this.state.segments[index].replaceAll('>','·')}</div>
+              <div style={{fontSize:20}}>{this.state.segments[index].replace(/>/g,'·')}</div>
 
               {i.split('-').map((q,qindex) => 
                 (qindex === this.state.endingrule[index][0] ?
@@ -1123,7 +1123,7 @@ endingToEnglish(ending,index) {
 							                {persPronounSubjects.map((i,index) => 
 							                    <Table.Row>
 							                      <Table.HeaderCell style={{color:"#002477"}}>{persPronounsEnglish[index]}</Table.HeaderCell>
-							                      <Table.Cell style={{paddingLeft:10}}>{this.state.entries[persPronounLabels[pindex]+i].join(",\n").replaceAll(">","")}</Table.Cell>
+							                      <Table.Cell style={{paddingLeft:10}}>{this.state.entries[persPronounLabels[pindex]+i].join(",\n").replace(/>/g,'')}</Table.Cell>
 							                    </Table.Row>
 							                )}
 							            </Table.Body>
@@ -1181,17 +1181,17 @@ endingToEnglish(ending,index) {
 										              <Table.Row>
 								                    	<Table.HeaderCell style={{color:"#002477"}}>{demPronounEnglish[index]}</Table.HeaderCell>
 								                    	{"extended" in this.state.entries[p] ? 
-								                    	<Table.Cell style={{paddingLeft:10}}>{this.state.entries[p]['extended'][i].join(",\n").replaceAll(">","")}</Table.Cell>
+								                    	<Table.Cell style={{paddingLeft:10}}>{this.state.entries[p]['extended'][i].join(",\n").replace(/>/g,'')}</Table.Cell>
 								                    	:
 								                    	<Table.Cell style={{paddingLeft:10}}>{'-'}</Table.Cell>
 								                    	}
 								                    	{"restricted" in this.state.entries[p] ? 
-								                    	<Table.Cell style={{paddingLeft:10}}>{this.state.entries[p]['restricted'][i].join(",\n").replaceAll(">","")}</Table.Cell>
+								                    	<Table.Cell style={{paddingLeft:10}}>{this.state.entries[p]['restricted'][i].join(",\n").replace(/>/g,'')}</Table.Cell>
 								                    	:
 								                    	<Table.Cell style={{paddingLeft:10}}>{'-'}</Table.Cell>
 								                    	}
 								                    	{"obscured" in this.state.entries[p] ? 
-								                    	<Table.Cell style={{paddingLeft:10}}>{this.state.entries[p]['obscured'][i].join(",\n").replaceAll(">","")}</Table.Cell>
+								                    	<Table.Cell style={{paddingLeft:10}}>{this.state.entries[p]['obscured'][i].join(",\n").replace(/>/g,'')}</Table.Cell>
 								                    	:
 								                    	<Table.Cell style={{paddingLeft:10}}>{'-'}</Table.Cell>
 								                    	}	

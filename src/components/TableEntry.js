@@ -338,7 +338,7 @@ class TableEntry extends Component {
                 {unpossessedNounIdentifiers.map((i,index) => 
                     <Table.Row>
                       <Table.HeaderCell style={{color:"#002477"}}>{unpossessedNouns[index]}</Table.HeaderCell>
-                      <Table.Cell style={{paddingLeft:10}}>{e[i].join(",\n").replaceAll(">","")}</Table.Cell>
+                      <Table.Cell style={{paddingLeft:10}}>{e[i].join(",\n").replace(/>/g,'')}</Table.Cell>
                     </Table.Row>
                 )}
             </Table.Body>
@@ -366,7 +366,7 @@ class TableEntry extends Component {
               <Table.Row>
                 <Table.HeaderCell style={{color:"#002477"}}>{l}</Table.HeaderCell>
                 {possessedNumberOfNounIdentifiers.map((i,index) => 
-                <Table.Cell style={{paddingLeft:10}}>{e[possessedNounIdentifiers[lindex]+possessedNumberOfNounIdentifiers[index]].join(",\n").replaceAll(">","")}</Table.Cell>
+                <Table.Cell style={{paddingLeft:10}}>{e[possessedNounIdentifiers[lindex]+possessedNumberOfNounIdentifiers[index]].join(",\n").replace(/>/g,'')}</Table.Cell>
                 )}
               </Table.Row>
             )}
@@ -394,14 +394,14 @@ class TableEntry extends Component {
             (subjectsEnglishTerms.map((i,index) => 
             <Table.Row>
               <Table.HeaderCell style={{color:"#002477"}}>{subjectsEnglish[index]}</Table.HeaderCell>
-              <Table.Cell style={{paddingLeft:10}}>{e["[Intr]"+optativeIdentifiers[kindex]+i].join(",\n").replaceAll(">","")}</Table.Cell>
+              <Table.Cell style={{paddingLeft:10}}>{e["[Intr]"+optativeIdentifiers[kindex]+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             </Table.Row>
             ))
             :
             (subjectOptativeTerms.map((i,index) => 
             <Table.Row>
               <Table.HeaderCell style={{color:"#002477"}}>{subjectOptativeTermsEnglish[index]}</Table.HeaderCell>
-              <Table.Cell style={{paddingLeft:10}}>{e["[Intr]"+optativeIdentifiers[kindex]+i].join(",\n").replaceAll(">","")}</Table.Cell>
+              <Table.Cell style={{paddingLeft:10}}>{e["[Intr]"+optativeIdentifiers[kindex]+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             </Table.Row>
             ))
         }
@@ -426,7 +426,7 @@ class TableEntry extends Component {
 	            {subjectsEnglishTerms.map((i,index) => 
 		            <Table.Row>
 		              <Table.HeaderCell style={{color:"#002477"}}>{subjectsEnglishConnective[index]}</Table.HeaderCell>
-		              <Table.Cell style={{paddingLeft:10}}>{e["[Intr]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+		              <Table.Cell style={{paddingLeft:10}}>{e["[Intr]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
 		            </Table.Row>
 	            )}
 	        </Table.Body>
@@ -448,7 +448,7 @@ class TableEntry extends Component {
                 {quantQual.map((i,index) => 
                     <Table.Row>
                       <Table.HeaderCell style={{color:"#002477"}}>{subjectsEnglishQuantQual[index]}</Table.HeaderCell>
-                      <Table.Cell style={{paddingLeft:10}}>{e[i].join(",\n").replaceAll(">","")}</Table.Cell>
+                      <Table.Cell style={{paddingLeft:10}}>{e[i].join(",\n").replace(/>/g,'')}</Table.Cell>
                     </Table.Row>
                 )}
             </Table.Body>
@@ -471,12 +471,12 @@ class TableEntry extends Component {
                     (this.state.mood === '[Sbrd]' ?
                     <Table.Row>
                       <Table.HeaderCell style={{color:"#002477"}}>{subjectsEnglishSbrd[index]}</Table.HeaderCell>
-                      <Table.Cell style={{paddingLeft:10}}>{e["[Intr]"+subjectsEnglishTermsSbrd[index]].join(",\n").replaceAll(">","")}</Table.Cell>
+                      <Table.Cell style={{paddingLeft:10}}>{e["[Intr]"+subjectsEnglishTermsSbrd[index]].join(",\n").replace(/>/g,'')}</Table.Cell>
                     </Table.Row>
                     :
                     <Table.Row>
                       <Table.HeaderCell style={{color:"#002477"}}>{subjectsEnglish[index]}</Table.HeaderCell>
-                      <Table.Cell style={{paddingLeft:10}}>{e["[Intr]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+                      <Table.Cell style={{paddingLeft:10}}>{e["[Intr]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
                     </Table.Row>
                 )
                 )}
@@ -516,19 +516,19 @@ class TableEntry extends Component {
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"he,\xa0she,\xa0it"}</Table.HeaderCell>
             {objectsEnglish3.map((i,index) => 
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_3Sg]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_3Sg]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>they (2)</Table.HeaderCell>
             {objectsEnglish3.map((i,index) => 
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_3Du]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_3Du]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"they\xa0all\xa0(3+)"}</Table.HeaderCell>
             {objectsEnglish3.map((i,index) => 
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_3Pl]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_3Pl]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             )}
           </Table.Row>
         </Table.Body>
@@ -551,7 +551,7 @@ class TableEntry extends Component {
         <Table.Body>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477",width:80}}>I</Table.HeaderCell>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_1Sg][P_2Sg]"].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_1Sg][P_2Sg]"].join(",\n").replace(/>/g,'')}</Table.Cell>
           </Table.Row>
         </Table.Body>
       </Table>
@@ -578,19 +578,19 @@ class TableEntry extends Component {
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>I</Table.HeaderCell>
             {objectsEnglish1.map((i,index) => 
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_1Sg]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_1Sg]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>we (2)</Table.HeaderCell>
             {objectsEnglish1.map((i,index) => 
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_1Du]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_1Du]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"we\xa0all\xa03+"}</Table.HeaderCell>
             {objectsEnglish1.map((i,index) => 
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_1Pl]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_1Pl]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             )}
           </Table.Row>
         </Table.Body>
@@ -619,19 +619,19 @@ class TableEntry extends Component {
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>you</Table.HeaderCell>
             {objectsEnglish2.map((i,index) => 
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_2Sg]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_2Sg]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>you (2)</Table.HeaderCell>
             {objectsEnglish2.map((i,index) => 
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_2Du]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_2Du]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"you\xa0all\xa0(3+)"}</Table.HeaderCell>
             {objectsEnglish2.map((i,index) => 
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_2Pl]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_2Pl]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             )}
           </Table.Row>
         </Table.Body>
@@ -673,19 +673,19 @@ class TableEntry extends Component {
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"he,\xa0she,\xa0it"}</Table.HeaderCell>
             {objectsEnglish3.map((i,index) => 
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns]"+k+"[A_3Sg]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns]"+k+"[A_3Sg]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>they (2)</Table.HeaderCell>
             {objectsEnglish3.map((i,index) => 
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns]"+k+"[A_3Du]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns]"+k+"[A_3Du]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"they\xa0all\xa0(3+)"}</Table.HeaderCell>
             {objectsEnglish3.map((i,index) => 
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns]"+k+"[A_3Pl]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns]"+k+"[A_3Pl]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             )}
           </Table.Row>
         </Table.Body>
@@ -713,19 +713,19 @@ class TableEntry extends Component {
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>I</Table.HeaderCell>
             {objectsEnglish1.map((i,index) => 
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns]"+k+"[A_1Sg]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns]"+k+"[A_1Sg]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>we (2)</Table.HeaderCell>
             {objectsEnglish1.map((i,index) => 
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns]"+k+"[A_1Du]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns]"+k+"[A_1Du]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"we\xa0all\xa03+"}</Table.HeaderCell>
             {objectsEnglish1.map((i,index) => 
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns]"+k+"[A_1Pl]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns]"+k+"[A_1Pl]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             )}
           </Table.Row>
         </Table.Body>
@@ -757,19 +757,19 @@ class TableEntry extends Component {
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>you</Table.HeaderCell>
             {objectsEnglish2.map((i,index) => 
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns]"+k+"[A_2Sg]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns]"+k+"[A_2Sg]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>you (2)</Table.HeaderCell>
             {objectsEnglish2.map((i,index) => 
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns]"+k+"[A_2Du]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns]"+k+"[A_2Du]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"you\xa0all\xa0(3+)"}</Table.HeaderCell>
             {objectsEnglish2.map((i,index) => 
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns]"+k+"[A_2Pl]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns]"+k+"[A_2Pl]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             )}
           </Table.Row>
         </Table.Body>
@@ -809,7 +809,7 @@ class TableEntry extends Component {
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477",fontStyle:'italic'}}>{"all"}</Table.HeaderCell>
             {objectsEnglish3.map((i,index) => 
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             )}
           </Table.Row>
         </Table.Body>
@@ -853,19 +853,19 @@ class TableEntry extends Component {
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"he,\xa0she,\xa0it\xa0(other)"}</Table.HeaderCell>
             {objectsEnglishConnective3.map((i,index) => 
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_3Sg]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_3Sg]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>they (2) (others)</Table.HeaderCell>
             {objectsEnglishConnective3.map((i,index) => 
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_3Du]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_3Du]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"they\xa0all\xa0(3+)\xa0(others)"}</Table.HeaderCell>
             {objectsEnglishConnective3.map((i,index) => 
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_3Pl]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_3Pl]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             )}
           </Table.Row>
         </Table.Body>
@@ -898,19 +898,19 @@ class TableEntry extends Component {
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>I</Table.HeaderCell>
             {objectsEnglishConnective1.map((i,index) => 
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_1Sg]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_1Sg]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>we (2)</Table.HeaderCell>
             {objectsEnglishConnective1.map((i,index) => 
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_1Du]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_1Du]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"we\xa0all\xa03+"}</Table.HeaderCell>
             {objectsEnglishConnective1.map((i,index) => 
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_1Pl]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_1Pl]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             )}
           </Table.Row>
         </Table.Body>
@@ -943,19 +943,19 @@ class TableEntry extends Component {
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>you</Table.HeaderCell>
             {objectsEnglishConnective2.map((i,index) => 
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_2Sg]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_2Sg]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>you (2)</Table.HeaderCell>
             {objectsEnglishConnective2.map((i,index) => 
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_2Du]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_2Du]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"you\xa0all\xa0(3+)"}</Table.HeaderCell>
             {objectsEnglishConnective2.map((i,index) => 
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_2Pl]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_2Pl]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             )}
           </Table.Row>
         </Table.Body>
@@ -988,19 +988,19 @@ class TableEntry extends Component {
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"her,\xa0him,\xa0it\xa0(itself)"}</Table.HeaderCell>
             {objectsEnglishConnective4.map((i,index) => 
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_4Sg]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_4Sg]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"they\xa0(2)\xa0(themselves)"}</Table.HeaderCell>
             {objectsEnglishConnective4.map((i,index) => 
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_4Du]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_4Du]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"they\xa0all\xa0(3+)\xa0(themselves)"}</Table.HeaderCell>
             {objectsEnglishConnective4.map((i,index) => 
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_4Pl]"+i].join(",\n").replaceAll(">","")}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_4Pl]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
             )}
           </Table.Row>
         </Table.Body>
