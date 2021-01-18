@@ -684,20 +684,20 @@ endingToEnglish(ending,index) {
       menuItem: 'Yugtun to English',
     },
   ]
-    // const accordionTitlesVerbs = [
-    //   "Indicative (it is...)",
-    //   "Interrogative (question)",
-    //   "Optative (do it...)",
-    //   "Subordinative (polite command or it being...)",
-    //   "Participial (the one being...)",
-    //   "Precessive (before...)",
-    //   "Consequential (because...)",
-    //   "Contigent (whenever...)",
-    //   "Concessive (although, even though, even if...)",
-    //   "Conditional (if, when in the future...)",
-    //   "Contemporative 1 (when in the past...)",
-    //   "Contemporative 2 (while...)",
-    //   ];
+    const accordionTitlesVerbs = [
+      "Indicative (it is...)",
+      "Interrogative (question)",
+      "Optative (do it...)",
+      "Subordinative (please do or it being...)",
+      "Participial (exclamation or special case)",
+      "Precessive (before...)",
+      "Consequential (because...)",
+      "Contigent (whenever...)",
+      "Concessive (although, even though, even if...)",
+      "Conditional (if, when in the future...)",
+      "Contemporative 1 (when in the past...)",
+      "Contemporative 2 (while...)",
+      ];
     // const accordionTitlesVerbs = [
     //   "it is... (indicative)",
     //   "question (interrogative)",
@@ -712,37 +712,37 @@ endingToEnglish(ending,index) {
     //   "when in the past... (contemporative 1)",
     //   "while... (contemporative 2)",
     //   ];
-    const accordionTitlesVerbs = [
-      "it is... (Indicative)",
-      "question (Interrogative)",
-      "do it... (Optative)",
-      "please do or it being... (Subordinative))",
-      "exclamation or special case (Participial)",
-      "before... (Precessive)",
-      "because... (Consequential)",
-      "whenever... (Contingent)",
-      "although, even though, even if... (Concessive)",
-      "if, when in the future... (Conditional)",
-      "when in the past... (Contemporative 1)",
-      "while... (Contemporative 2)",
-      ];
+    // const accordionTitlesVerbs = [
+    //   "it is... (Indicative)",
+    //   "question (Interrogative)",
+    //   "do it... (Optative)",
+    //   "please do or it being... (Subordinative))",
+    //   "exclamation or special case (Participial)",
+    //   "before... (Precessive)",
+    //   "because... (Consequential)",
+    //   "whenever... (Contingent)",
+    //   "although, even though, even if... (Concessive)",
+    //   "if, when in the future... (Conditional)",
+    //   "when in the past... (Contemporative 1)",
+    //   "while... (Contemporative 2)",
+    //   ];
     const accordionTitlesNouns = [
-      "Absolutive",
-      "Relative",
-      "Ablative-Modalis (indirect object, from...)",
-      "Localis (in, at...)",
-      "Terminalis (toward...)",
-      "Vialis (through, using...)",
-      "Equalis (like, similar to...)",
+      "Absolutive (the)",
+      "Relative (the)",
+      "Ablative-Modalis (a, some, from)",
+      "Localis (in, at)",
+      "Terminalis (toward)",
+      "Vialis (through, using)",
+      "Equalis (like, similar to)",
       ];
     const accordionTitlesQuantQual = [
-      "Absolutive",
-      "Relative",
-      "Ablative-Modalis (indirect object, from...)",
-      "Localis (in, at...)",
-      "Terminalis (toward...)",
-      "Vialis (through, using...)",
-      "Equalis (like, similar to...)",
+      "Absolutive (the)",
+      "Relative (the possessor, owner)",
+      "Ablative-Modalis (a, some, from)",
+      "Localis (in, at)",
+      "Terminalis (toward)",
+      "Vialis (through, using)",
+      "Equalis (like, similar to)",
       ];
     const persPronounLabels = ["[Abs]","[Rel]","[Abl_Mod]","[Loc]","[Ter]","[Via]","[Equ]"];
 
@@ -1036,15 +1036,17 @@ endingToEnglish(ending,index) {
                         </Accordion.Title>
                         <Accordion.Content active={activeIndex === pindex}>
                         <div style={{'paddingBottom':15}}>{endingDescriptions[pindex]}</div>   
-                        <div style={{'paddingBottom':15,fontStyle:'italic'}}>{"Examples: "+exampleSentences[pindex]}</div>   
-                        <div style={{fontStyle:'italic','paddingBottom':5}}>{"Note: Many verb bases can be intransitive-only, transitive-only, or only allow certain endings. There are occasional mistakes."}</div>                     
+                        <div style={{'paddingBottom':10,fontStyle:'italic'}}>{"Examples: "+exampleSentences[pindex]}</div>   
                           {this.state.loaderOn ? 
                             <Loader active inline />
                             :
+                            <div>
                       <TableEntry
                         entries={this.state.entries}
                         mood={this.state.mood}                  
                       />
+                        <div style={{fontStyle:'italic','paddingTop':15,'paddingBottom':5}}>{"Note: Many verb bases can be intransitive-only, transitive-only, or only allow certain endings. There are occasional mistakes."}</div>      
+                        </div>                                        
                           }
                         </Accordion.Content>
                       </div>
@@ -1065,7 +1067,8 @@ endingToEnglish(ending,index) {
 	                          {p}
 	                        </Accordion.Title>
 	                        <Accordion.Content active={activeIndex === pindex+12}>
-	                        <div style={{'paddingBottom':15}}>{endingDescriptions[pindex]}</div>                                              
+	                        <div style={{'paddingBottom':15}}>{endingDescriptions[pindex+12]}</div>     
+                        	<div style={{'paddingBottom':15,fontStyle:'italic'}}>{"Examples: "+exampleSentences[pindex+12]}</div>   	                                                             
 	                          {this.state.loaderOn ? 
 	                          	<div style={{'textAlign':'center'}}>
 	                            <Loader active inline  />
