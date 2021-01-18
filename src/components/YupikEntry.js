@@ -78,13 +78,13 @@ class YupikEntry extends Component {
         {this.state.entry.usage.length > 0 ? (
           <Grid.Row>
             <Grid.Column>
-            <Header as='h2'>Add Postbases</Header>
+            <Header as='h2'>Usage</Header>
             <List ordered selection celled>
             {this.state.entry.usage.map((usage, index) => {
               return (
                 <List.Item key={usage} style={{fontStyle:'italic'} }>
                   <List.Content floated='right'>
-                    <Icon style={{paddingTop:8}} size='big' name='angle right' />
+                    <Icon style={{paddingTop:12}} size='large' name='pencil' />
                   </List.Content>
                 <Link  to={{pathname: '/' + this.state.word + '/' + this.props.entryNumber + '/'+ index + '/modify/' + (this.state.entry.descriptor[0].includes('verb') ? 'verb' : 'noun'), state: { entry: this.state.entry, word: this.state.word }}}>
                   <List.Header>{usage[0]}</List.Header>
@@ -153,7 +153,7 @@ class YupikEntry extends Component {
         <Grid.Row>
           <Grid.Column>
           <Header as='h2'> Related Words </Header>
-          <List bulleted horizontal size='large'>
+          <List bulleted horizontal size='large' style={{margin:0}}>
           {this.state.entry.related_words.map(function(related_words,index){
             return (
               <List.Item key={related_words}>

@@ -119,12 +119,12 @@ const endingToEnglishTerms = {
   "[P_4Sg]":"her,\xa0him,\xa0it\xa0(itself)",
   "[P_4Du]":"the\xa0two\xa0of\xa0them\xa0(themselves)",
   "[P_4Pl]":"them\xa0all\xa0(3+)\xa0(themselves)",
-  "[SgUnpd]":"singular (1)",
-  "[DuUnpd]":"dual (2)",
-  "[PlUnpd]":"plural (3+)",
-  "[SgPosd]":"one thing",
-  "[DuPosd]":"two things",
-  "[PlPosd]":"three or more things",
+  "[SgUnpd]":"the one",
+  "[DuUnpd]":"the two",
+  "[PlUnpd]":"the 3+",
+  "[SgPosd]":"one",
+  "[DuPosd]":"two",
+  "[PlPosd]":"three or more",
   "[3SgPoss]":"his/her/its\xa0(other)",
   "[3DuPoss]":"their\xa0(2)\xa0(other)",
   "[3PlPoss]":"their\xa0(3+)\xa0(other)",
@@ -152,7 +152,7 @@ const endingToEnglishTerms = {
 };
 
 const endingEnglishDescriptions = {
-  "[Ind]":"(is/are/am)",
+  "[Ind]":"(is, are, am)",
   "[Intrg]":"(question)",
   "[Opt]":"(do it!)",
   "[Sbrd]":"(please do, being)",
@@ -164,13 +164,13 @@ const endingEnglishDescriptions = {
   "[Cond]":"(if, when in future)",
   "[CtmpI]":"(when in past)",
   "[CtmpII]":"(while)",
-  "[Abs]":"(the)",
-  "[Rel]":"(the)",
-  "[Abl_Mod]":"(a, some, from)",
-  "[Loc]":"(in, at)",
-  "[Ter]":"(toward)",
-  "[Via]":"(through, using)",
-  "[Equ]":"(like, similar to)",
+  "[Abs]":"the",
+  "[Rel]":"the",
+  "[Abl_Mod]":"[a, some] from",
+  "[Loc]":"in or at",
+  "[Ter]":"toward",
+  "[Via]":"through or using",
+  "[Equ]":"like or similar to",
   "[Quant_Qual]":"Quantifier/Qualifier Inflection",
 }
 
@@ -492,7 +492,7 @@ inputClicked(search) {
   // }
 }
 
-endingToEnglish(ending,index) {
+endingToEnglish(ending,index,qindex) {
   const tags = [...ending.matchAll(/\[.*?\]/g)];
   var english1 = ""
   var english2 = ""
@@ -523,7 +523,11 @@ endingToEnglish(ending,index) {
     } else if (ending.includes('[N]')) {
       english1 += 'Noun Ending';
       english2 += endingToEnglishTerms[tags[1]];
-      english4 += endingEnglishDescriptions[tags[1]];
+  		if (ending.includes('[Abs]')) {
+  			english4 = ""
+  		} else {
+  			english4 += endingEnglishDescriptions[tags[1]];
+  		}      
       if (ending.includes('Poss')) {
         english3 += endingToEnglishTerms[tags[tags.length-2]] + "\xa0" + endingToEnglishTerms[tags[tags.length-1]];
       } else {
@@ -557,10 +561,10 @@ endingToEnglish(ending,index) {
       }	
     }
     return (
-    <div style={{paddingTop:15}}>
+    <div style={{paddingTop:15,paddingLeft:20*qindex}}>
     <div style={{fontWeight:'bold'}}>{this.state.endingrule[index][1].join(', ')}</div>
     <div>
-    {before ?
+    {before && english4.length !== 0 ?
     <span>
     {english4+'\xa0'}
     </span>
@@ -582,9 +586,7 @@ endingToEnglish(ending,index) {
     <div style={{marginLeft:15}}>
 	    <div>{english2}</div>
 	    <div>{english1}</div>
-	    <Link to='/symbols'>
-	    <div style={{color:'#4183c4',fontWeight:'100',textDecoration:'underline',paddingTop:10}}>{'Caugat symbol-aat?'}</div>
-	    </Link> 
+	    <div onClick={()=> window.open("http://www.yugtun.com/symbols")} style={{color:'#4183c4',fontWeight:'100',textDecoration:'underline',paddingTop:10, cursor:'pointer'}}>{'Caugat symbol-aat?'}</div>
     </div>
     :
     null
@@ -605,9 +607,10 @@ endingToEnglish(ending,index) {
   }
 
   handleTabChange = (e,data) => {
-    if (data.activeIndex === 0) {
+    // console.log(data.activeIndex, this.state.activeIndex)
+    if (data.activeIndex === 0 && this.state.activeTabIndex !== 0) {
       this.setState({ yugtunAnalyzer: false, activeTabIndex:0,parses:[],segments:[],endingrule:[],newSearchList:[],notFirstParse:false,search:""})
-    } else {
+    } else if (data.activeIndex === 1 && this.state.activeTabIndex !== 1) {
       // if (!this.state.yugtunAnalyzer) {
       this.setState({ yugtunAnalyzer: true, activeTabIndex:1, parses:[],segments:[],endingrule:[],newSearchList:[],notFirstParse:false,search:""});                     
       // this.inputClicked()
@@ -968,7 +971,7 @@ endingToEnglish(ending,index) {
               </Label>
               </div>
               {index === 0 ?
-	              <div style={{fontSize:16,color:'#deb103',fontStyle:'italic',fontWeight:'300'}}>
+	              <div style={{fontSize:16,color:'#deb103',fontWeight:'300'}}>
 	              {'Most Likely Result'}
 	              </div>
 	              :
@@ -980,9 +983,9 @@ endingToEnglish(ending,index) {
 
               {i.split('-').map((q,qindex) => 
                 (qindex === this.state.endingrule[index][0] ?
-                  (this.endingToEnglish(q,index))
+                  (this.endingToEnglish(q,index,qindex))
                   :
-                  <div style={{paddingTop:15}}>
+                  <div style={{paddingTop:15,paddingLeft:qindex*20}}>
                     {this.getLinks(qindex,i.split('-')) in dictionary_dict ?
                       <div>
                       <div style={{fontWeight:'bold',fontFamily:'Lato',textDecoration:'underline'}}>
@@ -1021,7 +1024,7 @@ endingToEnglish(ending,index) {
         	}
             </div>
               {this.state.currentTableOpen === index ?
-                (this.state.parses[index].includes('[V') ?
+                (this.state.parses[index].includes('[V]') ?
                   <Accordion fluid styled>
                     {accordionTitlesVerbs.map((p,pindex) =>
                       <div>
@@ -1053,7 +1056,7 @@ endingToEnglish(ending,index) {
                       )}
                   </Accordion> 
                   :
-                  (this.state.parses[index].includes('[N') ?
+                  (this.state.parses[index].includes('[N]') ?
 	                  <Accordion fluid styled>
 	                    {accordionTitlesNouns.map((p,pindex) =>
 	                      <div>
@@ -1251,7 +1254,7 @@ endingToEnglish(ending,index) {
           <div>
 					<div style={{textDecoration:'underline',marginBottom:10,marginTop:15}}> Dictionary </div>
 					<div style={{marginBottom:10}}> Type any English word or Yugtun base and the matching dictionary entries will show automatically.</div>
-					<div> examples: </div>
+					<div> Examples: </div>
 					<div>
 					<span onClick={()=>{this.setState({search:'pissur',wordsList: fuzzysort.go('pissur', this.state.dictionary, optionsFuzzy).map(({ obj }) => (obj)),newStartingSearch:true})}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>pissur-</span>
 					<span>{', '}</span>
@@ -1266,7 +1269,7 @@ endingToEnglish(ending,index) {
 					<div>
 					<div style={{textDecoration:'underline',marginBottom:10,marginTop:15}}> Yugtun to English </div>
 					<div style={{marginBottom:10}}> Type any complete Yugtun word or sentence and press enter to see the meaning of each part of the word.  </div>
-					<div> examples: </div>
+					<div> Examples: </div>
 					<div>
           <span onClick={()=>{this.setState({search:"elitnaurvigmi",yugtunAnalyzer: true, activeTabIndex:1, parses:[],segments:[],endingrule:[],newSearchList:[],notFirstParse:false}); this.inputClicked("elitnaurvigmi")}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>elitnaurvigmi</span>
           <span>{', '}</span>
@@ -1285,6 +1288,7 @@ endingToEnglish(ending,index) {
               {emptyList && !this.state.yugtunAnalyzer ? <p><i>Aren, no matches... for English you can only search by word... for Yugtun try Yugtun to English mode...</i></p> : ''}
             </List>
           }        
+        <div style={{padding:30}} />
         </Container>
         </Grid.Column>
         </Grid.Row>
