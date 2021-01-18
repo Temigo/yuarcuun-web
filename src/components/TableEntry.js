@@ -333,7 +333,7 @@ class TableEntry extends Component {
     {this.state.mood === "[Abs]" || this.state.mood === "[Rel]" || this.state.mood === "[Abl_Mod]" || this.state.mood === "[Loc]" || this.state.mood === "[Ter]" || this.state.mood === "[Via]" || this.state.mood === "[Equ]" ?
         <div>
         <Segment style={{margin:0,overflow: 'auto'}}>
-          <Table unstackable basic compact size="small" collapsing>
+          <Table unstackable basic compact collapsing>
             <Table.Body>
                 {unpossessedNounIdentifiers.map((i,index) =>
                     <Table.Row>
@@ -346,7 +346,7 @@ class TableEntry extends Component {
         </Segment>
         <div style={{fontStyle:'italic',fontWeight:'bold',marginTop:10,marginBottom:10}}>{"POSSESSED"}</div>
         <Segment style={{margin:0,overflow: 'auto'}}>
-          <Table basic compact size="small" collapsing>
+          <Table unstackable basic compact collapsing>
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell></Table.HeaderCell>
@@ -382,7 +382,7 @@ class TableEntry extends Component {
     <div>
     <div style={{fontStyle:'italic',marginTop:20,marginBottom:10,fontWeight:'bold'}}>{k}</div>
     <Segment style={{margin:0,overflow: 'auto'}}>
-      <Table unstackable celled>
+          <Table unstackable basic compact collapsing>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell style={{textDecoration:'underline',color:"#002477"}}>Subject</Table.HeaderCell>
@@ -415,7 +415,7 @@ class TableEntry extends Component {
 	    <div>
 	    <div style={{fontStyle:'italic',fontWeight:'bold',marginTop:10,marginBottom:10}}>INTRANSITIVE</div>
 	    <Segment style={{margin:0,overflow: 'auto'}}>
-	      <Table unstackable celled>
+          <Table unstackable basic compact collapsing>
 	        <Table.Header>
 	          <Table.Row>
 	            <Table.HeaderCell style={{textDecoration:'underline',color:"#002477"}}>Subject</Table.HeaderCell>
@@ -437,7 +437,7 @@ class TableEntry extends Component {
         (this.state.mood === '%5BQuant_Qual%5D' ?
         <div>
         <Segment style={{margin:0,overflow: 'auto'}}>
-          <Table unstackable celled>
+          <Table unstackable basic compact collapsing>
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell style={{textDecoration:'underline',color:"#002477"}}>Subject</Table.HeaderCell>
@@ -459,7 +459,7 @@ class TableEntry extends Component {
         <div>
         <div style={{fontStyle:'italic',fontWeight:'bold',marginTop:10,marginBottom:10}}>INTRANSITIVE</div>
         <Segment style={{margin:0,overflow: 'auto'}}>
-          <Table unstackable celled>
+          <Table unstackable basic compact collapsing>
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell style={{textDecoration:'underline',color:"#002477"}}>Subject</Table.HeaderCell>
@@ -493,11 +493,19 @@ class TableEntry extends Component {
     <div style={{fontStyle:'italic',fontWeight:'bold',marginTop:20,marginBottom:10}}>TRANSITIVE</div>
     <div style={{fontStyle:'italic',marginTop:10,marginBottom:10}}>3rd Person Subject</div>
     <Segment style={{margin:0,overflow: 'auto'}}>
-      <Table unstackable celled>
+          <Table unstackable basic compact collapsing>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell style={{textDecoration:'underline',paddingLeft:10,"color":"#7b0e0e"}}>Object</Table.HeaderCell>
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{textDecoration:'underline',color:"#002477"}}>Subject</Table.HeaderCell>
@@ -537,7 +545,7 @@ class TableEntry extends Component {
     <div style={{fontStyle:'italic',marginTop:10,marginBottom:10}}>1st Person Subject</div>
     {this.state.mood === "[Intrg]" ?
     <Segment style={{margin:0,overflow: 'auto'}}>
-      <Table celled>
+          <Table unstackable basic compact collapsing>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell></Table.HeaderCell>
@@ -558,11 +566,16 @@ class TableEntry extends Component {
     </Segment>
     :
     <Segment style={{margin:0,overflow: 'auto'}}>
-      <Table celled>
+          <Table unstackable basic compact collapsing>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell style={{textDecoration:'underline',paddingLeft:10,"color":"#7b0e0e"}}>Object</Table.HeaderCell>
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{textDecoration:'underline',color:"#002477"}}>Subject</Table.HeaderCell>
@@ -599,11 +612,16 @@ class TableEntry extends Component {
 	}
     <div style={{fontStyle:'italic',marginTop:10,marginBottom:10}}>2nd Person Subject</div>
     <Segment style={{margin:0,overflow: 'auto'}}>
-      <Table unstackable celled>
+          <Table unstackable basic compact collapsing>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell style={{textDecoration:'underline',paddingLeft:10,"color":"#7b0e0e"}}>Object</Table.HeaderCell>
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{textDecoration:'underline',color:"#002477"}}>Subject</Table.HeaderCell>
@@ -650,11 +668,19 @@ class TableEntry extends Component {
     <div>
     <div style={{fontStyle:'italic',marginTop:10,marginBottom:10}}>3rd Person Subject</div>
     <Segment style={{margin:0,overflow: 'auto'}}>
-      <Table unstackable celled>
+          <Table unstackable basic compact collapsing>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell style={{textDecoration:'underline',paddingLeft:10,"color":"#7b0e0e"}}>Object</Table.HeaderCell>
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{textDecoration:'underline',color:"#002477"}}>Subject</Table.HeaderCell>
@@ -693,11 +719,16 @@ class TableEntry extends Component {
     </Segment>
     <div style={{fontStyle:'italic',marginTop:10,marginBottom:10}}>1st Person Subject</div>
     <Segment style={{margin:0,overflow: 'auto'}}>
-      <Table celled>
+          <Table unstackable basic compact collapsing>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell style={{textDecoration:'underline',paddingLeft:10,"color":"#7b0e0e"}}>Object</Table.HeaderCell>
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{textDecoration:'underline',color:"#002477"}}>Subject</Table.HeaderCell>
@@ -737,11 +768,16 @@ class TableEntry extends Component {
     }
     <div style={{fontStyle:'italic',marginTop:10,marginBottom:10}}>2nd Person Subject</div>
     <Segment style={{margin:0,overflow: 'auto'}}>
-      <Table unstackable celled>
+          <Table unstackable basic compact collapsing>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell style={{textDecoration:'underline',paddingLeft:10,"color":"#7b0e0e"}}>Object</Table.HeaderCell>
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{textDecoration:'underline',color:"#002477"}}>Subject</Table.HeaderCell>
@@ -786,11 +822,19 @@ class TableEntry extends Component {
     <div>
     <div style={{fontStyle:'italic',fontWeight:'bold',marginTop:20,marginBottom:10}}>TRANSITIVE</div>
     <Segment style={{margin:0,overflow: 'auto'}}>
-      <Table unstackable celled>
+          <Table unstackable basic compact collapsing>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell style={{textDecoration:'underline',paddingLeft:10,"color":"#7b0e0e"}}>Object</Table.HeaderCell>
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{textDecoration:'underline',color:"#002477"}}>Subject</Table.HeaderCell>
@@ -827,11 +871,22 @@ class TableEntry extends Component {
     <div style={{fontStyle:'italic',fontWeight:'bold',marginTop:20,marginBottom:10}}>TRANSITIVE</div>
     <div style={{fontStyle:'italic',marginTop:10,marginBottom:10}}>3rd Person Subject (other)</div>
     <Segment style={{margin:0,overflow: 'auto'}}>
-      <Table unstackable celled>
+          <Table unstackable basic compact collapsing>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell style={{textDecoration:'underline',paddingLeft:10,"color":"#7b0e0e"}}>Object</Table.HeaderCell>
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{textDecoration:'underline',color:"#002477"}}>Subject</Table.HeaderCell>
@@ -873,13 +928,19 @@ class TableEntry extends Component {
     </Segment>
     <div style={{fontStyle:'italic',marginTop:10,marginBottom:10}}>1st Person Subject</div>
     <Segment style={{margin:0,overflow: 'auto'}}>
-      <Table celled>
+          <Table unstackable basic compact collapsing>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell style={{textDecoration:'underline',paddingLeft:10,"color":"#7b0e0e"}}>Object</Table.HeaderCell>
             <Table.HeaderCell style={{paddingLeft:10}}></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{textDecoration:'underline',color:"#002477"}}>Subject</Table.HeaderCell>
@@ -918,13 +979,19 @@ class TableEntry extends Component {
     </Segment>
     <div style={{fontStyle:'italic',marginTop:10,marginBottom:10}}>2nd Person Subject</div>
     <Segment style={{margin:0,overflow: 'auto'}}>
-      <Table unstackable celled>
+          <Table unstackable basic compact collapsing>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell style={{textDecoration:'underline',paddingLeft:10,"color":"#7b0e0e"}}>Object</Table.HeaderCell>
             <Table.HeaderCell style={{paddingLeft:10}}></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{textDecoration:'underline',color:"#002477"}}>Subject</Table.HeaderCell>
@@ -963,13 +1030,19 @@ class TableEntry extends Component {
     </Segment>
     <div style={{fontStyle:'italic',marginTop:10,marginBottom:10}}>3rd Person Reflexive Subject (itself)</div>
     <Segment style={{margin:0,overflow: 'auto'}}>
-      <Table unstackable celled>
+          <Table unstackable basic compact collapsing>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell style={{textDecoration:'underline',paddingLeft:10,"color":"#7b0e0e"}}>Object</Table.HeaderCell>
             <Table.HeaderCell style={{paddingLeft:10}}></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
+            <Table.HeaderCell />
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{textDecoration:'underline',color:"#002477"}}>Subject</Table.HeaderCell>

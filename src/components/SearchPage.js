@@ -876,7 +876,7 @@ endingToEnglish(ending,index,qindex) {
           <Image onClick={this.resetAll} style={{'fontSize': '1.5em',cursor:'pointer'}} src={ICON_URL}/>          
           <span onClick={this.resetAll} style={{ color: 'black', verticalAlign: 'bottom',cursor:'pointer'}}>Yugtun</span>
         </Header>
-        <Container ref={this.search_container} className='search_container'>
+        <Container style={{height: window.innerHeight}} ref={this.search_container} className='search_container'>
           	<Grid stackable>
 
           <Tab style={{paddingTop:10}} activeIndex={this.state.activeTabIndex} menu={{ secondary: true, pointing: true, size:'huge' }} panes={panes} onTabChange={this.handleTabChange} />
