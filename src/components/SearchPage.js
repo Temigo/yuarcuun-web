@@ -876,7 +876,7 @@ endingToEnglish(ending,index,qindex) {
           <Image onClick={this.resetAll} style={{'fontSize': '1.5em',cursor:'pointer'}} src={ICON_URL}/>          
           <span onClick={this.resetAll} style={{ color: 'black', verticalAlign: 'bottom',cursor:'pointer'}}>Yugtun</span>
         </Header>
-        <Container style={{height: window.innerHeight+100}} ref={this.search_container} className='search_container'>
+        <Container ref={this.search_container} className='search_container'>
           	<Grid stackable>
 
           <Tab style={{paddingTop:10}} activeIndex={this.state.activeTabIndex} menu={{ secondary: true, pointing: true, size:'huge' }} panes={panes} onTabChange={this.handleTabChange} />
@@ -1239,6 +1239,15 @@ endingToEnglish(ending,index,qindex) {
               }
               </div>
               )}
+        <div>
+        <Divider style={{paddingBottom:0}} />
+        <div style={{display:'flex',justifyContent:'space-evenly',alignItems:'center',height:60,paddingBottom:16}}>
+          <Image style={{height:'30px'}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+          <Image style={{height:'30px'}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+          <Image style={{height:'30px'}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+          <Image style={{height:'30px'}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+        </div>
+        </div>
             </div>
             :
             <List divided selection>
@@ -1285,10 +1294,7 @@ endingToEnglish(ending,index,qindex) {
 				null
 				)
 }
-              {emptyList && !this.state.yugtunAnalyzer ? <p><i>Aren, no matches... for English you can only search by word... for Yugtun try Yugtun to English mode...</i></p> : ''}
-            </List>
-          }        
-
+      {displayList && !this.state.yugtunAnalyzer ? 
         <div>
         <Divider style={{paddingBottom:0}} />
         <div style={{display:'flex',justifyContent:'space-evenly',alignItems:'center',height:60,paddingBottom:16}}>
@@ -1298,6 +1304,12 @@ endingToEnglish(ending,index,qindex) {
           <Image style={{height:'30px'}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
         </div>
         </div>
+        :
+        null
+      }
+              {emptyList && !this.state.yugtunAnalyzer ? <p><i>Aren, no matches... for English you can only search by word... for Yugtun try Yugtun to English mode...</i></p> : ''}
+            </List>
+          }        
         </Container>
         </Grid.Column>
         </Grid.Row>
