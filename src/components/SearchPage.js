@@ -1239,15 +1239,19 @@ endingToEnglish(ending,index,qindex) {
               }
               </div>
               )}
-        <div>
-        <Divider style={{paddingBottom:0}} />
-        <div style={{display:'flex',justifyContent:'space-evenly',alignItems:'center',height:60,paddingBottom:16}}>
-          <Image style={{height:'30px'}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
-          <Image style={{height:'30px'}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
-          <Image style={{height:'30px'}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
-          <Image style={{height:'30px'}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
-        </div>
-        </div>
+          {this.state.newSearchList.length !== 0 ?
+            <div>
+            <Divider style={{paddingBottom:0}} />
+            <div style={{display:'flex',justifyContent:'space-evenly',alignItems:'center',height:60,paddingBottom:16}}>
+              <Image style={{height:'30px',opacity:0.7}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+              <Image style={{height:'30px',opacity:0.7}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+              <Image style={{height:'30px',opacity:0.7}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+              <Image style={{height:'30px',opacity:0.7}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+            </div>
+            </div>
+            :
+            null
+          }
             </div>
             :
             <List divided selection>
@@ -1298,10 +1302,10 @@ endingToEnglish(ending,index,qindex) {
         <div>
         <Divider style={{paddingBottom:0}} />
         <div style={{display:'flex',justifyContent:'space-evenly',alignItems:'center',height:60,paddingBottom:16}}>
-          <Image style={{height:'30px'}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
-          <Image style={{height:'30px'}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
-          <Image style={{height:'30px'}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
-          <Image style={{height:'30px'}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+          <Image style={{height:'30px',opacity:0.7}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+          <Image style={{height:'30px',opacity:0.7}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+          <Image style={{height:'30px',opacity:0.7}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+          <Image style={{height:'30px',opacity:0.7}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
         </div>
         </div>
         :
