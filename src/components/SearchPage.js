@@ -873,7 +873,7 @@ endingToEnglish(ending,index,qindex) {
       <Grid.Row style={{paddingTop:0}}>
       <Grid.Column style={{ maxWidth: 800, padding: 10 }} textAlign='left'>
         <Header as='h1'>
-          <Image onClick={this.resetAll} style={{'fontSize': '1.5em',cursor:'pointer'}} src={ICON_URL}/>
+          <Image onClick={this.resetAll} style={{'fontSize': '1.5em',cursor:'pointer'}} src={ICON_URL}/>          
           <span onClick={this.resetAll} style={{ color: 'black', verticalAlign: 'bottom',cursor:'pointer'}}>Yugtun</span>
         </Header>
         <Container style={{height: window.innerHeight+100}} ref={this.search_container} className='search_container'>
@@ -1288,7 +1288,16 @@ endingToEnglish(ending,index,qindex) {
               {emptyList && !this.state.yugtunAnalyzer ? <p><i>Aren, no matches... for English you can only search by word... for Yugtun try Yugtun to English mode...</i></p> : ''}
             </List>
           }        
-        <div style={{padding:30}} />
+
+        <div>
+        <Divider style={{paddingBottom:0}} />
+        <div style={{display:'flex',justifyContent:'space-evenly',alignItems:'center',height:60,paddingBottom:16}}>
+          <Image style={{height:'30px'}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+          <Image style={{height:'30px'}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+          <Image style={{height:'30px'}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+          <Image style={{height:'30px'}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+        </div>
+        </div>
         </Container>
         </Grid.Column>
         </Grid.Row>
