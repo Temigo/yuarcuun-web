@@ -15,8 +15,9 @@ class YupikPostbaseGroups extends Component {
               <List.Content floated='right'>
                 <Icon color='teal' name='chevron right' />
               </List.Content>
-              <Icon circular name={group.icon} />
+
               <List.Content verticalAlign='middle'>
+                <Icon circular name={group.icon} />
                 {group.text}
               </List.Content>
             </List.Item>
