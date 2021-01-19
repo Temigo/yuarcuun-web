@@ -29,16 +29,19 @@ class Symbols extends Component {
           </Button>
           </div>
           <div>
-          <Header as='h1'>Caugat symbol-aat?</Header>
+          <Header as='h1'>Translation and Symbols</Header>
           </div>
           <div style={{width:36}} />
         </div>
         <Divider />
-<p><em>What are these symbols?</em></p><p><em>They are mathematical rules that outline how to attach postbases and endings. You can find more information about them in "A Practical Grammar of the Central Alaskan Yup'ik Eskimo Language" by Steven A. Jacobson.</em></p>
+<p><em>Mumigtellra? Its translation?</em></p>
+<p>Yugtun word order is often the reverse of English word order. Try reading the base English definitions in reverse to get a likely translation.</p>
+<p><em>Caugat symbol-aat? What are these symbols?</em></p><p>They are mathematical rules that outline how to attach postbases and endings. You can find more information about them in "A Practical Grammar of the Central Alaskan Yup'ik Eskimo Language" by Steven A. Jacobson.</p>
 
 <p>The suffixation symbols are as follows:</p>
 
 <Accordion>
+
   <Accordion.Title
     active={activeIndex === 0}
     index={0}
@@ -263,6 +266,22 @@ class Symbols extends Component {
   <Accordion.Content active={activeIndex === 14}>
   <p>Weak initial e: Some bases have an initial e that drops in some or all forms of the word. This is what Practical Grammar of ... Yup’ik calls ‘weak initial e’.48 A weak initial e should not be written in a form in which it is not heard lest a misrepresentation of the pronunciation of the word be given. For example, the word for ‘house’ has a weak initial e, which is dropped in such forms as nerpak, i.e., [nerpak] ‘big house’, and nen’i, i.e., [nen:i] ‘his own house’, which contrast with enerpak, i.e., [enerpak] ‘big bone’, and eneni, i.e., [enen:i] ‘his own bone’, from a base where the initial e is not weak.49 We know that the base for ‘house’ does have an initial e, albeit a weak initial e, because this e is preserved in forms of the word where the following consonant is in turn followed by a prime vowel, such as ena, i.e., [ena] ‘a house’, and enii, i.e., [en:i:] ‘his (another’s) house’. The case of a word that has dropped a weak initial e differs from the case of a word that has an inaudible initial e that must still be written. Compare the discussion above of weak initial e in the word for ‘house’ with the earlier discussion of the initial e of the base emute- ‘to seek medical aid’; in words based on emute-, the initial e, though inaudible, must be written for the sake of rhythmic length in the word. Weak initial e occurs on some bases that have e as their second vowel. For some bases that have a weak initial e in General Central Yup’ik (abbreviated GCY henceforth), HBC has an initial e that is not weak. In NUN, no initial e is weak.</p>
   </Accordion.Content>
+
+  <Accordion.Title
+    active={activeIndex === 15}
+    index={15}
+    onClick={this.handleClick}
+  >
+    <Icon name='dropdown' />
+    [N→V], [V→N], [N→N], [V→V],
+  </Accordion.Title>
+  <Accordion.Content active={activeIndex === 15}>
+  <p>[N→V] means it is a postbase that attaches to a noun base, changing it to a verb base.</p>
+  <p>[V→N] means it is a postbase that attaches to a verb base, changing it to a noun base.</p>
+  <p>[N→N] means it is a postbase that attaches to a noun base. It remains as a noun base.</p>
+  <p>[V→V] means it is a postbase that attaches to a verb base. It remains as a verb base.</p>
+  </Accordion.Content>
+
 
 </Accordion>
 

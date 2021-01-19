@@ -166,7 +166,7 @@ const endingEnglishDescriptions = {
   "[CtmpII]":"(while)",
   "[Abs]":"the",
   "[Rel]":"the",
-  "[Abl_Mod]":"[a, some] from",
+  "[Abl_Mod]":"[a, some, from]",
   "[Loc]":"in or at",
   "[Ter]":"toward",
   "[Via]":"through or using",
@@ -268,6 +268,7 @@ class SearchPage extends Component {
       hover:-1,
       seeMoreActive:false,
       segment: "",
+      possibleDefinition: ["","","","","","","","","",""],
       moods: ["[Ind]","[Intrg]","[Opt]","[Sbrd]","[Ptcp]","[Prec]","[Cnsq]","[Cont]","[Conc]","[Cond]","[CtmpI]","[CtmpII]","[Abs]","[Rel]","[Abl_Mod]","[Loc]", "[Ter]","[Via]","[Equ]","%5BQuant_Qual%5D","[PerPro]","[PerPro]","[PerPro]","[PerPro]","[PerPro]","[PerPro]","[PerPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]",],
     }
     this.getParse = this.getParse.bind(this);
@@ -560,6 +561,13 @@ endingToEnglish(ending,index,qindex) {
       	english3 += endingToEnglishTerms[tags[1]];      	
       }	
     }
+
+    // var possibleDefinition = this.state.possibleDefinition
+    // var entry = possibleDefinition[index]
+    // entry = entry + '\xa0' + english3
+    // possibleDefinition[index] = entry
+    // this.setState({possibleDefinition:possibleDefinition})
+
     return (
     <div style={{paddingTop:15,paddingLeft:20*qindex}}>
     <div style={{fontWeight:'bold'}}>{this.state.endingrule[index][1].join(', ')}</div>
@@ -586,7 +594,7 @@ endingToEnglish(ending,index,qindex) {
     <div style={{marginLeft:15}}>
 	    <div>{english2}</div>
 	    <div>{english1}</div>
-	    <div onClick={()=> window.open("http://www.yugtun.com/symbols")} style={{color:'#4183c4',fontWeight:'100',textDecoration:'underline',paddingTop:10, cursor:'pointer'}}>{'Caugat symbol-aat?'}</div>
+	    <div onClick={()=> window.open("http://www.yugtun.com/symbols")} style={{color:'#4183c4',fontWeight:'100',textDecoration:'underline',paddingTop:10, cursor:'pointer'}}>{'Translation and Symbols'}</div>
     </div>
     :
     null
@@ -622,7 +630,7 @@ endingToEnglish(ending,index,qindex) {
   	// console.log(parse)
     if (index === 0) {            // if base
       if ((parse[index].includes("[P") || parse[index].includes("[I")) && parse.length === 1) {  // if particle or ignorative
-        return parse[index].split("[")[0].replace('u͡g','ug');
+        return parse[index].split("[")[0];
       } else if (parse[index].includes("[PerPro]")) {
         return parse[index].split("[")[0]
       } else if (parse[index].includes("[DemPro]") || parse[index].includes("[DemAdv]")) {
