@@ -332,6 +332,14 @@ class SearchPage extends Component {
   }
 
   getParse(word) {
+    if (word === "") {
+      this.setState({
+          parses: [],
+          segments: [],
+          endingrule: [],
+          getCall:false,
+        })
+    } else {
     axios
       .get(API_URL + "/parse/" + word)
       .then(response => {
@@ -367,6 +375,7 @@ class SearchPage extends Component {
           // this.getSegment(response.data.parses[lowest])
 	      // }
       });
+    }
   }
 
   getSegment(word) {
