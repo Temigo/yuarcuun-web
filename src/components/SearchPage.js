@@ -966,7 +966,7 @@ endingToEnglish(ending,index,qindex) {
           	:
           	null
           } 
-          {pressEnter ? <p><i>Press enter to parse. Must be complete Yugtun word(s).</i></p> : ''}
+          {pressEnter ? <p><i>Press <b>Enter</b> to parse. Must be complete Yugtun word(s).</i></p> : ''}
           {this.state.yugtunAnalyzer && !this.state.getCall && (this.state.search.length > 0 || this.state.notFirstParse) ?
             <div style={{paddingTop:20}}>
             {this.state.parses.map((i,index)=>
@@ -1289,7 +1289,7 @@ endingToEnglish(ending,index,qindex) {
           :
 					<div>
 					<div style={{textDecoration:'underline',marginBottom:10,marginTop:15}}> Yugtun to English </div>
-					<div style={{marginBottom:10}}> Type any complete Yugtun word or sentence and press enter to see the meaning of each part of the word.  </div>
+					<div style={{marginBottom:10}}> Type any complete Yugtun word or sentence and press <b>Enter</b> to see the meaning of each part of the word.  </div>
 					<div> Examples: </div>
 					<div>
           <span onClick={()=>{this.setState({search:"elitnaurvigmi",yugtunAnalyzer: true, activeTabIndex:1, parses:[],segments:[],endingrule:[],newSearchList:[],notFirstParse:false}); this.inputClicked("elitnaurvigmi")}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>elitnaurvigmi</span>
