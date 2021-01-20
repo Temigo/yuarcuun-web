@@ -212,7 +212,7 @@ const exampleSentences = [
 "1) Saskaq kuv'uq. - The glass spilled. 2) Maqaruaq pissullrua. - He hunted the rabbit.",
 "1) Angutem quyavikaa. - The man was thankful to her. 2) Ciquyam pania cen̄irtuq. - Ciquyaq's daughter is visiting.",
 "1) Elitnaurvigmek utertuq. - She's coming home from the school. 2) Ner'uq akutamek. - She is eating some akutaq. 3) Nutaramek qayaliuq. - He is making a new kayak. 4) Aanama kuuvviaryuucimnek aptaanga. - My mother is asking me whether I want coffee.",
-"1) Mermi uitauq. - It is in the water. 2) Aatamni ugtunruunga. - I am taller than my dad. 3) Akertem̄i-lli puqlanirpaa! - How warm the sun is! 4) Elpet angutmi, niicugninga. - You man, listen to me.",
+"1) Mermi uitauq. - It is in the water. 2) Aatamni sugtunruunga. - I am taller than my dad. 3) Akertem̄i-lli puqlanirpaa! - How warm the sun is! 4) Elpet angutmi, niicugninga. - You man, listen to me.",
 "1) Kipusvigmun piyuaguq. To the store, he's walking. 2) Arnam neresqaa neqa taqukamun. - The woman asks/tells the bear to eat the fish.",
 "1) Tumyarakun ayallruuq. - He went by the path. 2) Angyakun ayagtut. - They are going by boat. 3) Qercuallruunga it'gamkun. - I got frostbitten on my feet.",
 "1) Aatamegcetun yurartut. - They are dancing like their father. 2) Una Yugtun cauga?. - What is this in Yup'ik? 3) Akingqertuq malrugtun. - It is two dollars.",
