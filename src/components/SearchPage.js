@@ -189,19 +189,19 @@ const endingDescriptions = [
 "“while”",
 "1) subject of an intransitive verb; 2) object of a transitive verb",
 "1) subject of a transitive verb; 2) possessor; 3) “independent relative construction,” see section on roots in Generation Introduction, and Appendix 1, for further information",
-"1) place from which, time from which; 2) indefinite ob􏰑ect of an intransitive verb; 3) specifying information about a noun within a verb; 4) secondary object especially with verbs of speaking and giving; 5) instrument (only in some dialects)",
-"1) place at which, time at which; 2) object of a comparison; 3) with postbase @5+paa | ~vaa and enclitic =lli in exclamations; 4) formal vocative",
+"1) place from which, time from which; 2) indefinite object of an intransitive verb; 3) specifying information about a noun within a verb; 4) secondary object especially with verbs of speaking and giving; 5) instrument (only in some dialects)",
+"1) place at which, time at which; 2) object of a comparison; 3) with postbase @+paa|~vaa and enclitic =lli in exclamations; 4) formal vocative",
 "1) place to which, time to which; 2) subject of an embedded verb",
 "1) route; 2) instrument; 3) part of a whole",
 "1) comparison; 2) language specification; 3) price specification",
 ];
 
 const exampleSentences = [
-"Pissurtuq - It is hunting. Maqillruuk - They two took a steambath.",
-"Qangvaq ayallrua? - When did he go? Caqatarcit? - What will you do?",
-"Neri - Eat. Taisgu - You bring it here.",
-"Cukaluni - quickly it being. Qantan painqercaarluku - Your plate, lick it clean please",
-"Tang qavalria. - Look, it's sleeping. Maaten itertua anelria. - I came in; lo and behold, he went out.",
+"1) Pissurtuq. - It is hunting. 2) Maqillruuk-qaa? - Did they two took a steambath?",
+"1) Qangvaq ayallrua? - When did he go? Caqatarcit? - What will you do? 2) Caperrnaqvagta. - How difficult it is.",
+"1) Neri. - Eat. Taisgu. - Bring it here. 2) Tan'gaurluq qanqili, 'Maurluuq!, naw'un iterciqsia?' - The boy said (literally: let the boy say), 'Grandmother!, through where will I get in?'",
+"1) Cukaluni aqvaqurtuq. - She is running quickly. 2) Qantan painqegcaarluku. - Lick your plate clean, please.",
+"1) Tang, qavalria. - Look, it's sleeping. 2) Maaten itertua anelria. - I came in; lo and behold, he went out.",
 "Ayagpailgan tunluku. - Before he leaves, give it to him.",
 "Ayaksaituq arenqiapakaan ellalluk. - He hasn’t gone because of this bad weather.",
 "Ner'aqami tamuanqegcaalartuq. - Whenever she eats she chews her food well.",
@@ -209,13 +209,13 @@ const exampleSentences = [
 "Paallakuvet. If you fall forward. Anglirikuni - When he grows up.",
 "Akngirtuq atrallermini. - He got hurt when he was coming down.",
 "Ayainanermini. - While he was going.",
-"Kuv'uq saskaq. - It spilled (the glass). Pissullrua maqaruaq - It hunted the rabbit.",
-"Angutem quyavikaa - the man was thankful to her. Ciquyam pania - Ciquyaq's daughter",
-"Ner'uq akutamek - It is eating some akutaq. Elitnaurvigmek utertuq. - From the school, she's coming home. Kuuvviaryuucimnek aptuq. - He's asking about whether I am wanting coffee.",
-"Mermi. - In the water. Nunani. - In the lands.",
-"Kipusvigmun piyuaguq. To the store, he's walking.",
-"Angyakun ayagtut. - They are going by boat.",
-"Aatamegcetun yurartut. - They are dancing like they're father. Yugtun. - Like a Yuk.",
+"1) Saskaq kuv'uq. - The glass spilled. 2) Maqaruaq pissullrua. - He hunted the rabbit.",
+"1) Angutem quyavikaa. - The man was thankful to her. 2) Ciquyam pania cen̄irtuq. - Ciquyaq's daughter is visiting.",
+"1) Elitnaurvigmek utertuq. - She's coming home from the school. 2) Ner'uq akutamek. - She is eating some akutaq. 3) Nutaramek qayaliuq. - He is making a new kayak. 4) Aanama kuuvviaryuucimnek aptaanga. - My mother is asking me whether I want coffee.",
+"1) Mermi uitauq. - It is in the water. 2) Aatamni ugtunruunga. - I am taller than my dad. 3) Akertem̄i-lli puqlanirpaa! - How warm the sun is! 4) Elpet angutmi, niicugninga. - You man, listen to me.",
+"1) Kipusvigmun piyuaguq. To the store, he's walking. 2) Arnam neresqaa neqa taqukamun. - The woman asks/tells the bear to eat the fish.",
+"1) Tumyarakun ayallruuq. - He went by the path. 2) Angyakun ayagtut. - They are going by boat. 3) Qercuallruunga it'gamkun. - I got frostbitten on my feet.",
+"1) Aatamegcetun yurartut. - They are dancing like their father. 2) Una Yugtun cauga?. - What is this in Yup'ik? 3) Akingqertuq malrugtun. - It is two dollars.",
 ];
 
 
@@ -630,7 +630,7 @@ endingToEnglish(ending,index,qindex) {
   	// console.log(parse)
     if (index === 0) {            // if base
       if ((parse[index].includes("[P") || parse[index].includes("[I")) && parse.length === 1) {  // if particle or ignorative
-        return parse[index].split("[")[0];
+        return parse[index].split("[")[0].replace(/(?<!^)=/g,"-");
       } else if (parse[index].includes("[PerPro]")) {
         return parse[index].split("[")[0]
       } else if (parse[index].includes("[DemPro]") || parse[index].includes("[DemAdv]")) {
@@ -653,7 +653,7 @@ endingToEnglish(ending,index,qindex) {
         } else {
           dictionaryForm = base
         }
-        return dictionaryForm;          
+        return dictionaryForm.replace(/(?<!^)=/g,"-");          
       }
     } else {
 		if (parse[index].includes("ete[N→V]")) {
