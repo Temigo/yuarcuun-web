@@ -639,7 +639,7 @@ endingToEnglish(ending,index,qindex) {
   	// console.log(parse)
     if (index === 0) {            // if base
       if ((parse[index].includes("[P") || parse[index].includes("[I")) && parse.length === 1) {  // if particle or ignorative
-        return parse[index].split("[")[0].replace(/(?<!^)=/g,"-");
+        return parse[index].split("[")[0].replace(/=/g,"-");
       } else if (parse[index].includes("[PerPro]")) {
         return parse[index].split("[")[0]
       } else if (parse[index].includes("[DemPro]") || parse[index].includes("[DemAdv]")) {
@@ -662,7 +662,7 @@ endingToEnglish(ending,index,qindex) {
         } else {
           dictionaryForm = base
         }
-        return dictionaryForm.replace(/(?<!^)=/g,"-");          
+        return dictionaryForm.replace(/=/g,"-");          
       }
     } else {
 		if (parse[index].includes("ete[N→V]")) {
