@@ -132,7 +132,7 @@ class YupikEntry extends Component {
               return (
                 <List.Item key={sentence[0]}>
                   <List.Header>
-                <Link to={{pathname:'/', state: {...this.props.location.state, updateSearchEntry:true, search: sentence[0]}}}>
+                <Link to={{pathname:'/', state: {...this.props.location.state, updateSearchEntry:true, search: sentence[0], activeTabIndex:1}}}>
                   <span style={{textDecoration:'underline'}}>
                   {sentence[0]}
                   </span>
