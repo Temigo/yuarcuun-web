@@ -54,7 +54,7 @@ We are proud to be a team of Yup'ik developers. Current contributors are Christo
 null
 }
 
-<p>For this new update (Dec 2020), we integrated a <a href="https://digital.lib.washington.edu/researchworks/bitstream/handle/1773/46496/Strunk_washington_0250O_22260.pdf?sequence=1&isAllowed=y">Yugtun morphological parser</a> created by Lonny Alaskuk Strunk. Please contact us at yuarcuun @ gmail dot com for questions about our projects or to discuss any new projects.</p>
+<p>For this new update (Jan 2021), we integrated a <a href="https://digital.lib.washington.edu/researchworks/bitstream/handle/1773/46496/Strunk_washington_0250O_22260.pdf?sequence=1&isAllowed=y">Yugtun morphological parser</a> created by Lonny Alaskuk Strunk. Please contact us at yuarcuun @ gmail dot com for questions about our projects or to discuss any new projects.</p>
 
 <p> <i> Quyana cakneq! </i> </p>
 
