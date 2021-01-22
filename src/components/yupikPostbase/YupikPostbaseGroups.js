@@ -13,7 +13,7 @@ class YupikPostbaseGroups extends Component {
           return (
             <List.Item as={Link} to={`${this.props.match.url}/${group.activeIndex}`}>
               <List.Content floated='right'>
-                <Icon color='teal' name='chevron right' />
+                <Icon style={{paddingTop:'10px'}} color='teal' name='chevron right' />
               </List.Content>
 
               <List.Content verticalAlign='middle'>

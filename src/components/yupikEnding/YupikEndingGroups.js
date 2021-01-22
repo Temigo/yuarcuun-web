@@ -10,7 +10,7 @@ class YupikEndingGroups extends Component {
         <List divided selection size='huge'>
           <List.Item as={Link} to={`${this.props.match.url}/0`}>
             <List.Content floated='right'>
-              <Icon color='teal' name='chevron right' />
+              <Icon style={{paddingTop:'10px'}} color='teal' name='chevron right' />
             </List.Content>
 
             <List.Content verticalAlign='middle'>
@@ -21,7 +21,7 @@ class YupikEndingGroups extends Component {
 
           <List.Item as={Link} to={`${this.props.match.url}/1`}>
             <List.Content floated='right'>
-              <Icon color='teal' name='chevron right' />
+              <Icon style={{paddingTop:'10px'}} color='teal' name='chevron right' />
             </List.Content>
 
             <List.Content verticalAlign='middle'>
@@ -32,7 +32,7 @@ class YupikEndingGroups extends Component {
 
           <List.Item as={Link} to={`${this.props.match.url}/2`}>
             <List.Content floated='right'>
-              <Icon color='teal' name='chevron right' />
+              <Icon style={{paddingTop:'10px'}} color='teal' name='chevron right' />
             </List.Content>
             <List.Content verticalAlign='middle'>
               <Icon circular name='time' />
@@ -42,7 +42,7 @@ class YupikEndingGroups extends Component {
 
           <List.Item as={Link} to={`${this.props.match.url}/3`}>
             <List.Content floated='right'>
-              <Icon color='teal' name='chevron right' />
+              <Icon style={{paddingTop:'10px'}} color='teal' name='chevron right' />
             </List.Content>
             <List.Content verticalAlign='middle'>
                <Icon circular name='clone' />
@@ -52,7 +52,7 @@ class YupikEndingGroups extends Component {
 
           <List.Item as={Link} to={`${this.props.match.url}/4/postbase`}>
             <List.Content floated='right'>
-              <Icon color='teal' name='chevron right' />
+              <Icon style={{paddingTop:'10px'}} color='teal' name='chevron right' />
             </List.Content>
             <List.Content verticalAlign='middle'>
               <Icon circular name='map signs' />
