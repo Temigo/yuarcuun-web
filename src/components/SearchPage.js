@@ -215,7 +215,7 @@ const exampleSentences = [
 "1) Mermi uitauq. - It is in the water. 2) Aatamni sugtunruunga. - I am taller than my dad. 3) Akertem̄i-lli puqlanirpaa! - How warm the sun is! 4) Elpet angutmi, niicugninga. - You man, listen to me.",
 "1) Kipusvigmun piyuaguq. - He's walking to the store. 2) Arnam neresqaa neqa taqukamun. - The woman asks/tells the bear to eat the fish.",
 "1) Tumyarakun ayallruuq. - He went by the path. 2) Angyakun ayagtut. - They are going by boat. 3) Qercuallruunga it'gamkun. - I got frostbitten on my feet.",
-"1) Aatamegcetun yurartut. - They are dancing like their father. 2) Una Yugtun cauga?. - What is this in Yup'ik? 3) Akingqertuq malrugtun. - It is two dollars.",
+"1) Aatamegcetun yurartut. - They are dancing like their father. 2) Una Yugtun cauga? - What is this in Yup'ik? 3) Akingqertuq malrugtun. - It is two dollars.",
 ];
 
 
@@ -1005,7 +1005,7 @@ endingToEnglish(ending,index,qindex) {
                   <div style={{paddingTop:15,paddingLeft:qindex*20}}>
                     {this.getLinks(qindex,i.split('-')) in dictionary_dict ?
                       <div>
-                      <div style={{fontWeight:'bold',fontFamily:'Lato',textDecoration:'underline'}}>
+                      <div style={{fontWeight:'bold',fontFamily:'Lato,Arial,Helvetica,sans-serif',textDecoration:'underline'}}>
                       <Link to={{pathname: this.getLinks(qindex,i.split('-')), state: { word: this.getLinks(qindex,i.split('-')), search: this.state.search, newSearchList: this.state.newSearchList, wordsList: this.state.wordsList, yugtunAnalyzer: this.state.yugtunAnalyzer, parses: this.state.parses, segments:this.state.segments,endingrule:this.state.endingrule, searchBarStuckTop: this.state.searchBarStuckTop, notFirstParse:this.state.notFirstParse, searchWord:this.state.searchWord, activeSentenceIndex:this.state.activeSentenceIndex, activeTabIndex: this.state.activeTabIndex }}}>
                       <span>
                       {q}
@@ -1015,7 +1015,7 @@ endingToEnglish(ending,index,qindex) {
                       {dictionary_dict[this.getLinks(qindex,i.split('-'))]}
                       </div>
                       :
-                      <div style={{fontWeight:'bold',fontFamily:'Lato',textDecoration:'underline'}}>
+                      <div style={{fontWeight:'bold',fontFamily:'Lato,Arial,Helvetica,sans-serif',textDecoration:'underline'}}>
                       {q}
                       </div>   
                     }

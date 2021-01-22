@@ -82,12 +82,12 @@ class YupikEntry extends Component {
             <List ordered selection celled>
             {this.state.entry.usage.map((usage, index) => {
               return (
-                <List.Item key={usage} style={{fontStyle:'italic'} }>
+                <List.Item key={usage} style={{fontStyle:'italic'}}>
                   <List.Content floated='right'>
                     <Icon style={{paddingTop:12}} size='large' name='pencil' />
                   </List.Content>
-                <Link  to={{pathname: '/' + this.state.word + '/' + this.props.entryNumber + '/'+ index + '/modify/' + (this.state.entry.descriptor[0].includes('verb') ? 'verb' : 'noun'), state: { entry: this.state.entry, word: this.state.word }}}>
-                  <List.Header>{usage[0]}</List.Header>
+                <Link to={{pathname: '/' + this.state.word + '/' + this.props.entryNumber + '/'+ index + '/modify/' + (this.state.entry.descriptor[0].includes('verb') ? 'verb' : 'noun'), state: { entry: this.state.entry, word: this.state.word }}}>
+                  <List.Header style={{fontFamily:'Lato,Arial,Helvetica,sans-serif'}}>{usage[0]}</List.Header>
                   <List.Description>
                   {this.fontUsage(usage[1])[0]}
                   <span style={{color: '#852828'}}> <b>{this.fontUsage(usage[1])[1]} </b></span>
@@ -112,7 +112,7 @@ class YupikEntry extends Component {
             <List bulleted horizontal size='large'>
             {this.state.entry.synonyms.map(function(synonym,index){
               return (
-                <List.Item key={synonym}>
+                <List.Item style={{fontFamily:'Lato,Arial,Helvetica,sans-serif'}} key={synonym}>
                   <Link style={{fontStyle:'italic'}} to={'/' + synonym}>{synonym}</Link>
                 </List.Item>
                );
@@ -156,7 +156,7 @@ class YupikEntry extends Component {
           <List bulleted horizontal size='large' style={{margin:0}}>
           {this.state.entry.related_words.map(function(related_words,index){
             return (
-              <List.Item key={related_words}>
+              <List.Item style={{fontFamily:'Lato,Arial,Helvetica,sans-serif'}} key={related_words}>
                 <Link style={{fontStyle:'italic'}} to={'/' + related_words}>{related_words}</Link>
               </List.Item>
              );

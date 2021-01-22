@@ -32,7 +32,7 @@ class StickyMenu extends Component {
 
           </Menu.Item>
           <Menu.Item>
-        <Header as='h1' textAlign='center'>
+        <Header style={{fontFamily:'Lato,Arial,Helvetica,sans-serif'}} as='h1' textAlign='center'>
           {this.props.word}
         </Header>
         </Menu.Item>

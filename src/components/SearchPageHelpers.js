@@ -33,7 +33,7 @@ export const WordItem = (props) => {
     <List.Item key={word.yupik}>
     <Link to={{pathname: '/' + word.yupik, state: { word: word, search: props.search, wordsList: props.wordsList, yugtunAnalyzer: false, parses: [], segments: [],endingrule: []}}}>
       <List.Content>
-        <List.Header>
+        <List.Header style={{fontFamily:'Lato,Arial,Helvetica,sans-serif'}}>
           {word.yupik}
           <span style={{ 'marginLeft': '10px' }}>
             {isCommon ? <Label size='mini' color='teal'>COMMON</Label> : ''}
