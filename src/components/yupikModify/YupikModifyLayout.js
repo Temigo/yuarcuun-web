@@ -696,6 +696,9 @@ class YupikModifyLayout extends Component {
 
   modifyWordVerb(person, people, objectPerson, objectPeople, mood, moodSpecific, nounEnding, value1, word, currentPostbases) {
     // Restore TTS option if it was disabled for previous word
+    console.log(word)
+    word = word.replace('\u{304}','').replace('\u0361','')
+    console.log(word)
     if (!this.state.canTTS) {
       this.setState({canTTS: true});
     }
@@ -1350,9 +1353,12 @@ class YupikModifyLayout extends Component {
   } // end of ModifyWordVerb
 
   modifyWordNoun(person, people, possessorPerson, possessorPeople, mood, moodSpecific, nounEnding, verbEnding, value4, word, currentPostbases) {
+    // console.log(word,word.includes('\u{304}'),word.replace('\u{304}',''))
+    // console.log(word)
     if (value4 !== 1 || possessorPeople !== 0 || mood !== 'absolutive' || verbEnding === true || nounEnding === true || currentPostbases.length > 0) {
       word = this.state.usage
     }
+    word = word.replace('\u{304}','').replace('\u0361','')
     currentPostbases = currentPostbases.sort((p1, p2) => {
       return (nounPostbases[p1].priority > nounPostbases[p2].priority) ? 1 : ((nounPostbases[p1].priority < nounPostbases[p2].priority) ? -1 : 0);
     });
