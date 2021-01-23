@@ -5,7 +5,7 @@
   "devDependencies": {
     "eslint": "^4.19.1",
     "performance-now": "^2.1.0",
-    "semantic-ui": "^2.3.1",
+    "semantic-ui": "2.3.1",
     "source-map-explorer": "^1.8.0",
     "webpack-bundle-analyzer": "^3.3.2"
   },
