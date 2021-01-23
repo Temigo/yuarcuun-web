@@ -1,6 +1,9 @@
 {
   "name": "yuarcuun-web",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "engines": {
+      "node": "10.x"
+  },
   "private": true,
   "devDependencies": {
     "eslint": "^4.19.1",
@@ -38,7 +41,7 @@
     "fuse.js": "^3.4.5",
     "fuzzysort": "^1.1.4",
     "google-palette": "^1.1.0",
-    "gulp": "^3.9.1",
+    "gulp": "3.9.1",
     "html-webpack-plugin": "2.29.0",
     "jest": "20.0.4",
     "object-assign": "4.1.1",
