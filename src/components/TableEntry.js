@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Segment, Table} from 'semantic-ui-react';
 import '../semantic/dist/semantic.min.css';
 import { Link } from 'react-router-dom';
 import {withRouter} from 'react-router';
 
-class TableEntry extends Component {
+class TableEntry extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
