@@ -579,8 +579,8 @@ endingToEnglish(ending,index,qindex) {
 
     return (
     <div style={{paddingTop:15,paddingLeft:20*qindex}}>
-    <div style={{fontWeight:'bold'}}>{this.state.endingrule[index][1].join(', ')}</div>
-    <div>
+    <div style={{fontWeight:'bold',fontSize:16,paddingBottom:'1px'}}>{this.state.endingrule[index][1].join(', ')}</div>
+    <div style={{fontSize:16}}>
     {before && english4.length !== 0 ?
     <span>
     {english4+'\xa0'}
@@ -597,10 +597,10 @@ endingToEnglish(ending,index,qindex) {
     null
     }
     </div>
-    <div onClick={()=>this.setState({showMoreEnding:(this.state.moreIndex !== index || !this.state.showMoreEnding ? true : false),moreIndex:index})}style={{color:'#bdbdbd',fontWeight:'100',paddingTop:5,paddingBottom:5,cursor:'pointer'}}>{'more'}<Icon style={{paddingLeft:5,fontSize:12}} name={this.state.showMoreEnding && index === this.state.moreIndex ? 'chevron up' : 'chevron down'} /></div>
+    <div onClick={()=>this.setState({showMoreEnding:(this.state.moreIndex !== index || !this.state.showMoreEnding ? true : false),moreIndex:index})}style={{color:'#bdbdbd',fontWeight:'100',paddingTop:10,paddingBottom:10,cursor:'pointer',fontSize:16}}>{'more'}<Icon style={{paddingLeft:5,fontSize:12}} name={this.state.showMoreEnding && index === this.state.moreIndex ? 'chevron up' : 'chevron down'} /></div>
 
     {this.state.showMoreEnding && index === this.state.moreIndex ?
-    <div style={{marginLeft:15}}>
+    <div style={{marginLeft:15,fontSize:16}}>
 	    <div>{english2}</div>
 	    <div>{english1}</div>
 	    <div onClick={()=> window.open("http://www.yugtun.com/symbols")} style={{color:'#4183c4',fontWeight:'100',textDecoration:'underline',paddingTop:10, cursor:'pointer'}}>{'Translation and Symbols'}</div>
@@ -996,16 +996,16 @@ endingToEnglish(ending,index,qindex) {
 	          }
               </div>
 
-              <div style={{fontSize:20}}>{this.state.segments[index].replace(/>/g,'·')}</div>
+              <div style={{fontSize:22}}>{this.state.segments[index].replace(/>/g,'·')}</div>
 
               {i.split('-').map((q,qindex) => 
                 (qindex === this.state.endingrule[index][0] ?
                   (this.endingToEnglish(q,index,qindex))
                   :
-                  <div style={{paddingTop:15,paddingLeft:qindex*20}}>
+                  <div style={{paddingTop:15,paddingLeft:qindex*20,fontSize:'16px'}}>
                     {this.getLinks(qindex,i.split('-')) in dictionary_dict ?
                       <div>
-                      <div style={{fontWeight:'bold',fontFamily:'Lato,Arial,Helvetica,sans-serif',textDecoration:'underline'}}>
+                      <div style={{fontWeight:'bold',fontFamily:'Lato,Arial,Helvetica,sans-serif',textDecoration:'underline',paddingBottom:'5px'}}>
                       <Link to={{pathname: this.getLinks(qindex,i.split('-')), state: { word: this.getLinks(qindex,i.split('-')), search: this.state.search, newSearchList: this.state.newSearchList, wordsList: this.state.wordsList, yugtunAnalyzer: this.state.yugtunAnalyzer, parses: this.state.parses, segments:this.state.segments,endingrule:this.state.endingrule, searchBarStuckTop: this.state.searchBarStuckTop, notFirstParse:this.state.notFirstParse, searchWord:this.state.searchWord, activeSentenceIndex:this.state.activeSentenceIndex, activeTabIndex: this.state.activeTabIndex }}}>
                       <span>
                       {q}
@@ -1025,7 +1025,7 @@ endingToEnglish(ending,index,qindex) {
             {!this.state.parses[index].includes('-') && (this.state.parses[index].includes('[I') || this.state.parses[index].includes('[P')) ?
 	            null
 	            :
-	            <Button basic color='blue' style={{fontFamily:'sans-serif'}} onClick={()=>{this.setState({currentTableOpen:(this.state.currentTableOpen === index ? -1 : index), activeIndex:-1})}}>
+	            <Button basic color='blue' style={{fontFamily:'sans-serif',fontSize:16}} onClick={()=>{this.setState({currentTableOpen:(this.state.currentTableOpen === index ? -1 : index), activeIndex:-1})}}>
 	            {this.state.currentTableOpen === index ?
 	              <div>
 	              {"See Less Endings"}
@@ -1042,7 +1042,7 @@ endingToEnglish(ending,index,qindex) {
             </div>
               {this.state.currentTableOpen === index ?
                 (this.state.parses[index].includes('[V]') ?
-                  <Accordion fluid styled>
+                  <Accordion style={{fontSize:16}} fluid styled>
                     {accordionTitlesVerbs.map((p,pindex) =>
                       <div>
                         <Accordion.Title
@@ -1074,7 +1074,7 @@ endingToEnglish(ending,index,qindex) {
                   </Accordion> 
                   :
                   (this.state.parses[index].includes('[N]') ?
-	                  <Accordion fluid styled>
+	                  <Accordion style={{fontSize:16}} fluid styled>
 	                    {accordionTitlesNouns.map((p,pindex) =>
 	                      <div>
 	                        <Accordion.Title
@@ -1105,7 +1105,7 @@ endingToEnglish(ending,index,qindex) {
 	                  </Accordion> 
                   	:
                   	(this.state.parses[index].includes('[Q') ?
-                  	  <Accordion fluid styled>
+                  	  <Accordion style={{fontSize:16}} fluid styled>
 	                      <div>
 	                        <Accordion.Title
 	                          active={activeIndex === 19}
@@ -1132,7 +1132,7 @@ endingToEnglish(ending,index,qindex) {
 	                  </Accordion> 
                   		:
                   		(this.state.parses[index].includes('[P') ?
-		                  <Accordion fluid styled> 
+		                  <Accordion style={{fontSize:16}} fluid styled> 
 		                    {accordionTitlesNouns.map((p,pindex) =>
 		                      <div>
 		                        <Accordion.Title
@@ -1176,7 +1176,7 @@ endingToEnglish(ending,index,qindex) {
 		                      )}
 		                  </Accordion> 
                   			:
-		                  <Accordion fluid styled>
+		                  <Accordion style={{fontSize:16}} fluid styled>
 		                    {demPronounTitles.map((p,pindex) =>
 		                      <div>
 		                        <Accordion.Title

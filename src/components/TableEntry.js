@@ -332,7 +332,7 @@ class TableEntry extends PureComponent {
     <div>
     {this.state.mood === "[Abs]" || this.state.mood === "[Rel]" || this.state.mood === "[Abl_Mod]" || this.state.mood === "[Loc]" || this.state.mood === "[Ter]" || this.state.mood === "[Via]" || this.state.mood === "[Equ]" ?
         <div>
-        <Segment style={{margin:0,overflow: 'auto'}}>
+        <Segment style={{margin:0,overflow: 'auto',fontSize:16}}>
           <Table unstackable basic compact collapsing>
             <Table.Body>
                 {unpossessedNounIdentifiers.map((i,index) =>
@@ -345,7 +345,7 @@ class TableEntry extends PureComponent {
           </Table>
         </Segment>
         <div style={{fontStyle:'italic',fontWeight:'bold',marginTop:10,marginBottom:10}}>{"POSSESSED"}</div>
-        <Segment style={{margin:0,overflow: 'auto'}}>
+        <Segment style={{margin:0,overflow: 'auto',fontSize:16}}>
           <Table unstackable basic compact collapsing>
             <Table.Header>
               <Table.Row>
@@ -381,7 +381,7 @@ class TableEntry extends PureComponent {
 	(intransitiveTitles.map((k,kindex) =>
     <div>
     <div style={{fontStyle:'italic',marginTop:20,marginBottom:10,fontWeight:'bold'}}>{k}</div>
-    <Segment style={{margin:0,overflow: 'auto'}}>
+    <Segment style={{margin:0,overflow: 'auto',fontSize:16}}>
           <Table unstackable basic compact collapsing>
         <Table.Header>
           <Table.Row>
@@ -414,7 +414,7 @@ class TableEntry extends PureComponent {
     (this.state.mood === '[Prec]' || this.state.mood === "[Cnsq]" || this.state.mood === "[Cont]" || this.state.mood === "[Conc]" || this.state.mood === "[Cond]" || this.state.mood === "[CtmpI]" || this.state.mood === "[CtmpII]" ?
 	    <div>
 	    <div style={{fontStyle:'italic',fontWeight:'bold',marginTop:10,marginBottom:10}}>INTRANSITIVE</div>
-	    <Segment style={{margin:0,overflow: 'auto'}}>
+	    <Segment style={{margin:0,overflow: 'auto',fontSize:16}}>
           <Table unstackable basic compact collapsing>
 	        <Table.Header>
 	          <Table.Row>
@@ -436,7 +436,7 @@ class TableEntry extends PureComponent {
 	:
         (this.state.mood === '%5BQuant_Qual%5D' ?
         <div>
-        <Segment style={{margin:0,overflow: 'auto'}}>
+        <Segment style={{margin:0,overflow: 'auto',fontSize:16}}>
           <Table unstackable basic compact collapsing>
             <Table.Header>
               <Table.Row>
@@ -458,7 +458,7 @@ class TableEntry extends PureComponent {
         :
         <div>
         <div style={{fontStyle:'italic',fontWeight:'bold',marginTop:10,marginBottom:10}}>INTRANSITIVE</div>
-        <Segment style={{margin:0,overflow: 'auto'}}>
+        <Segment style={{margin:0,overflow: 'auto',fontSize:16}}>
           <Table unstackable basic compact collapsing>
             <Table.Header>
               <Table.Row>
@@ -492,7 +492,7 @@ class TableEntry extends PureComponent {
     <div>
     <div style={{fontStyle:'italic',fontWeight:'bold',marginTop:20,marginBottom:10}}>TRANSITIVE</div>
     <div style={{fontStyle:'italic',marginTop:10,marginBottom:10}}>3rd Person Subject</div>
-    <Segment style={{margin:0,overflow: 'auto'}}>
+    <Segment style={{margin:0,overflow: 'auto',fontSize:16}}>
           <Table unstackable basic compact collapsing>
         <Table.Header>
           <Table.Row>
@@ -544,7 +544,7 @@ class TableEntry extends PureComponent {
     </Segment>
     <div style={{fontStyle:'italic',marginTop:10,marginBottom:10}}>1st Person Subject</div>
     {this.state.mood === "[Intrg]" ?
-    <Segment style={{margin:0,overflow: 'auto'}}>
+    <Segment style={{margin:0,overflow: 'auto',fontSize:16}}>
           <Table unstackable basic compact collapsing>
         <Table.Header>
           <Table.Row>
@@ -565,7 +565,7 @@ class TableEntry extends PureComponent {
       </Table>
     </Segment>
     :
-    <Segment style={{margin:0,overflow: 'auto'}}>
+    <Segment style={{margin:0,overflow: 'auto',fontSize:16}}>
           <Table unstackable basic compact collapsing>
         <Table.Header>
           <Table.Row>
@@ -611,7 +611,7 @@ class TableEntry extends PureComponent {
     </Segment>
 	}
     <div style={{fontStyle:'italic',marginTop:10,marginBottom:10}}>2nd Person Subject</div>
-    <Segment style={{margin:0,overflow: 'auto'}}>
+    <Segment style={{margin:0,overflow: 'auto',fontSize:16}}>
           <Table unstackable basic compact collapsing>
         <Table.Header>
           <Table.Row>
@@ -667,7 +667,7 @@ class TableEntry extends PureComponent {
     {index < 2 ?
     <div>
     <div style={{fontStyle:'italic',marginTop:10,marginBottom:10}}>3rd Person Subject</div>
-    <Segment style={{margin:0,overflow: 'auto'}}>
+    <Segment style={{margin:0,overflow: 'auto',fontSize:16}}>
           <Table unstackable basic compact collapsing>
         <Table.Header>
           <Table.Row>
@@ -718,7 +718,7 @@ class TableEntry extends PureComponent {
       </Table>
     </Segment>
     <div style={{fontStyle:'italic',marginTop:10,marginBottom:10}}>1st Person Subject</div>
-    <Segment style={{margin:0,overflow: 'auto'}}>
+    <Segment style={{margin:0,overflow: 'auto',fontSize:16}}>
           <Table unstackable basic compact collapsing>
         <Table.Header>
           <Table.Row>
@@ -767,7 +767,7 @@ class TableEntry extends PureComponent {
         null
     }
     <div style={{fontStyle:'italic',marginTop:10,marginBottom:10}}>2nd Person Subject</div>
-    <Segment style={{margin:0,overflow: 'auto'}}>
+    <Segment style={{margin:0,overflow: 'auto',fontSize:16}}>
           <Table unstackable basic compact collapsing>
         <Table.Header>
           <Table.Row>
@@ -821,7 +821,7 @@ class TableEntry extends PureComponent {
     {this.state.mood === '[Sbrd]' ?
     <div>
     <div style={{fontStyle:'italic',fontWeight:'bold',marginTop:20,marginBottom:10}}>TRANSITIVE</div>
-    <Segment style={{margin:0,overflow: 'auto'}}>
+    <Segment style={{margin:0,overflow: 'auto',fontSize:16}}>
           <Table unstackable basic compact collapsing>
         <Table.Header>
           <Table.Row>
@@ -870,7 +870,7 @@ class TableEntry extends PureComponent {
     <div>
     <div style={{fontStyle:'italic',fontWeight:'bold',marginTop:20,marginBottom:10}}>TRANSITIVE</div>
     <div style={{fontStyle:'italic',marginTop:10,marginBottom:10}}>3rd Person Subject (other)</div>
-    <Segment style={{margin:0,overflow: 'auto'}}>
+    <Segment style={{margin:0,overflow: 'auto',fontSize:16}}>
           <Table unstackable basic compact collapsing>
         <Table.Header>
           <Table.Row>
@@ -927,7 +927,7 @@ class TableEntry extends PureComponent {
       </Table>
     </Segment>
     <div style={{fontStyle:'italic',marginTop:10,marginBottom:10}}>1st Person Subject</div>
-    <Segment style={{margin:0,overflow: 'auto'}}>
+    <Segment style={{margin:0,overflow: 'auto',fontSize:16}}>
           <Table unstackable basic compact collapsing>
         <Table.Header>
           <Table.Row>
@@ -978,7 +978,7 @@ class TableEntry extends PureComponent {
       </Table>
     </Segment>
     <div style={{fontStyle:'italic',marginTop:10,marginBottom:10}}>2nd Person Subject</div>
-    <Segment style={{margin:0,overflow: 'auto'}}>
+    <Segment style={{margin:0,overflow: 'auto',fontSize:16}}>
           <Table unstackable basic compact collapsing>
         <Table.Header>
           <Table.Row>
@@ -1029,7 +1029,7 @@ class TableEntry extends PureComponent {
       </Table>
     </Segment>
     <div style={{fontStyle:'italic',marginTop:10,marginBottom:10}}>3rd Person Reflexive Subject (itself)</div>
-    <Segment style={{margin:0,overflow: 'auto'}}>
+    <Segment style={{margin:0,overflow: 'auto',fontSize:16}}>
           <Table unstackable basic compact collapsing>
         <Table.Header>
           <Table.Row>

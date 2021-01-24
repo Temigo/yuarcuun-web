@@ -33,9 +33,9 @@ export const WordItem = (props) => {
     <List.Item key={word.yupik}>
     <Link to={{pathname: '/' + word.yupik, state: { word: word, search: props.search, wordsList: props.wordsList, yugtunAnalyzer: false, parses: [], segments: [],endingrule: []}}}>
       <List.Content>
-        <List.Header style={{fontFamily:'Lato,Arial,Helvetica,sans-serif'}}>
+        <List.Header style={{fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'16px',paddingBottom:'4px'}}>
           {word.yupik}
-          <span style={{ 'marginLeft': '10px' }}>
+          <span style={{ 'marginLeft': '15px'}}>
             {isCommon ? <Label size='mini' color='teal'>COMMON</Label> : ''}
             {isHBC ? <Label size='mini' color='orange'>HBC DIALECT</Label> : ''}
             {isNoun ? <Label size='mini' color='grey'>NOUN</Label> : ''}
@@ -44,7 +44,7 @@ export const WordItem = (props) => {
             {isExpression ? <Label size='mini' color='green'>EXPRESSION</Label> : ''}
           </span>
         </List.Header>
-        <List.Description>{word.english}</List.Description>
+        <List.Description style={{fontSize:'16px',fontWeight:'400'}}>{word.english}</List.Description>
       </List.Content>
     </Link>
     </List.Item>
