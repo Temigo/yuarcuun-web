@@ -403,9 +403,10 @@ class SearchPage extends Component {
   onChangeSearch(event, data) {
     // this.setState({entries:undefined, activeIndex:-1, loaderOn: true, seeMoreActive:false,currentTableOpen: -1,})
     let newStartingSearch = event === undefined;
-    let new_search = data.value;
+    let new_search = data.value.replace("’","'");
     // console.log(new_search)
     // if (data.value === undefined) {new_search = this.state.search}
+
 
     let wordsList = fuzzysort.go(new_search, dictionary, optionsFuzzy).map(({ obj }) => (obj));
     this.setState({ startingSearch: newStartingSearch, wordsList: wordsList, search: new_search });
