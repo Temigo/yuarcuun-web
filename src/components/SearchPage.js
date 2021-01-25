@@ -882,7 +882,7 @@ endingToEnglish(ending,index,qindex) {
       <Grid.Column>
       <div style={{display:'flex',justifyContent:'flex-end',paddingBottom:5}}>
       <List horizontal divided>
-        <List.Item> <a style={{textDecoration:'underline',color:'#000000de'}} href={TUTORIAL_URL}>Tutorial</a> </List.Item>
+        <List.Item> <a style={{textDecoration:'underline',color:'#000000de'}} href={TUTORIAL_URL} target="_blank">Tutorial</a> </List.Item>
         <List.Item> <Link style={{textDecoration:'underline',color:'#000000de'}} to='/about'>About</Link> </List.Item>
       </List>
       </div>
