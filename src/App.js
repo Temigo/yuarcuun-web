@@ -7,6 +7,8 @@ import './style.css';
 import SearchPage from './components/SearchPage.js';
 import YupikDetails from './components/YupikDetails.js';
 import About from './components/About.js';
+import Support from './components/Support.js';
+import Privacy from './components/Privacy.js';
 import Symbols from './components/Symbols.js';
 import YupikModifyLayout from './components/yupikModify/YupikModifyLayout.js';
 
@@ -21,6 +23,8 @@ class App extends Component {
       <Switch>
         <Route exact path='/' component={SearchPage} />
         <Route exact path='/about' component={About} />
+        <Route exact path='/support' component={Support} />
+        <Route exact path='/privacy' component={Privacy} />
         <Route exact path='/symbols' component={Symbols} />
         <Route path='/:word/:entry_id/:usage_id/modify' component={YupikModifyLayout} />
         <Route exact path='/:word' component={YupikDetails} />
