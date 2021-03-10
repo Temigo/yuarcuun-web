@@ -5,7 +5,7 @@ export const removeCombos = (dict1, dict2, dict3, verb, value1, value2, mood, po
     let flag1 = false;
     let flag2 = false;
     if (verb === false) {
-      if (options1[i].value[0]!==4) { //subject 4th person not allowed
+      if (options1[i].value[0]!=='4') { //subject 4th person not allowed
         dict1.push({id: options1[i].id,value: options1[i].value,text: options1[i].text,disabled:flag2});
       }
       dict3.push({id: options3[i].id,value: options3[i].value,text: options3[i].text});
@@ -13,7 +13,7 @@ export const removeCombos = (dict1, dict2, dict3, verb, value1, value2, mood, po
       if (value1[0]==='1' && options2[i].value[0]==='1' || value1[0]==='2' && options2[i].value[0]==='2') { //process options2 and options3 first
         flag1 = true
       }
-      if (options2[i].value[0]!==4) { //object 4th person not allowed
+      if (options2[i].value[0]!=='4') { //object 4th person not allowed
         if (possessiveObject) {
           dict2.push({id: options3[i].id,value: options3[i].value,text: options3[i].text,disabled:flag1});
         } else {
@@ -24,11 +24,11 @@ export const removeCombos = (dict1, dict2, dict3, verb, value1, value2, mood, po
         flag2 = true
       }
       if (mood === 'subordinative') {
-        if (options1[i].value[0]!==3) { //subject 3rd person not allowed
+        if (options1[i].value[0]!=='3') { //subject 3rd person not allowed
           dict1.push({id: options1[i].id,value: options1[i].value,text: options1[i].text,disabled:flag2});
         }
       } else {
-        if (options1[i].value[0]!==4) { //subject 4th person not allowed
+        if (options1[i].value[0]!=='4') { //subject 4th person not allowed
           dict1.push({id: options1[i].id,value: options1[i].value,text: options1[i].text,disabled:flag2});
         }
       }
@@ -36,20 +36,20 @@ export const removeCombos = (dict1, dict2, dict3, verb, value1, value2, mood, po
       if (value1[0]==='1' && options2[i].value[0]==='1' || value1[0]==='2' && options2[i].value[0]==='2') { //process options2 and options3 first
         flag1 = true
       }
-      if (options2[i].value[0]!==4) { //object 4th person not allowed
+      if (options2[i].value[0]!=='4') { //object 4th person not allowed
         if (possessiveObject) {
           dict2.push({id: options3[i].id,value: options3[i].value,text: options3[i].text,disabled:flag1});
         } else {
           dict2.push({id: options2[i].id,value: options2[i].value,text: options2[i].text,disabled:flag1});
         }
       }
-      if (options3[i].value[0]!==4) { //object 4th person not allowed for possessive form
+      if (options3[i].value[0]!=='4') { //object 4th person not allowed for possessive form
         dict3.push({id: options3[i].id,value: options3[i].value,text: options3[i].text,disabled:flag1});
       }
       if (value2[0]==='1' && options1[i].value[0]==='1' || value2[0]==='2' && options1[i].value[0]==='2') { //process options1 next
         flag2 = true
       }
-      if (options1[i].value[0]!==4) { //subject 4th person not allowed
+      if (options1[i].value[0]!=='4') { //subject 4th person not allowed
         dict1.push({id: options2[i].id,value: options2[i].value,text: options2[i].text,disabled:flag2});
       }
     } else if (mood === 'interrogative') {
@@ -57,24 +57,24 @@ export const removeCombos = (dict1, dict2, dict3, verb, value1, value2, mood, po
         if (value1[0]==='1' && options2[i].value[0]==='1' || value1[0]==='2' && options2[i].value[0]==='2'){ //process options2 and options3 first
           flag1 = true
         }
-        if (options2[i].value[0]!==4) { //object 4th person not allowed
+        if (options2[i].value[0]!=='4') { //object 4th person not allowed
           if (possessiveObject) {
             dict2.push({id: options3[i].id,value: options3[i].value,text: options3[i].text,disabled:flag1});
           } else {
             dict2.push({id: options2[i].id,value: options2[i].value,text: options2[i].text,disabled:flag1});
           }
         }
-        if (options3[i].value[0]!==4) { //object 4th person not allowed for possessive form
+        if (options3[i].value[0]!=='4') { //object 4th person not allowed for possessive form
           dict3.push({id: options3[i].id,value: options3[i].value,text: options3[i].text,disabled:flag1});
         }
         if ((value2[0]==='1' && options1[i].value[0]==='1' || value2[0]==='2' && options1[i].value[0]==='2') || options1[i].value[0]==='1')  { //process options1 next
           flag2 = true
         }
-        if (options1[i].value[0]!==4) { //subject 4th person not allowed
+        if (options1[i].value[0]!=='4') { //subject 4th person not allowed
           dict1.push({id: options1[i].id,value: options1[i].value,text: options1[i].text,disabled:flag2});
         }
       } else {
-        if (options1[i].value[0]!==4) { //subject 4th person not allowed
+        if (options1[i].value[0]!=='4') { //subject 4th person not allowed
           dict1.push({id: options1[i].id,value: options1[i].value,text: options1[i].text,disabled:flag2});
         }
       }
