@@ -910,7 +910,7 @@ endingToEnglish(ending,index,qindex) {
     return (
       <div>
       <YugtunLoader criteria={this.state.dictionary.length === 0} />
-        <Menu fixed='top'inverted>
+        <Menu fixed='top' inverted>
           <Container>
             <Menu.Item onClick={()=>{this.setState({search:'',storyClicked:false})}} as='a' header>
               <Image style={{borderRadius:'2px',height:'30px',marginRight: '1.5em',}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/logo.jpg'}/>
@@ -943,7 +943,7 @@ endingToEnglish(ending,index,qindex) {
                   <i className='dropdown icon' />
                   <span className='text'>Physical & Mental Health</span>
                   <Dropdown.Menu>
-                    <Dropdown.Item onClick={()=>{this.retrieveStory(8)}}>Week 1: Aqumgaurpeknak</Dropdown.Item>
+                    <Dropdown.Item onClick={()=>{this.retrieveStory(8)}}>Week 1: Aqumgaurpek'nak</Dropdown.Item>
                     <Dropdown.Item onClick={()=>{this.retrieveStory(9)}}>Week 2: Ulu Mik'lengermi Akngirnarquq</Dropdown.Item>
                     <Dropdown.Item onClick={()=>{this.retrieveStory(10)}}>Week 3: Tatailnguq</Dropdown.Item>
                     <Dropdown.Item onClick={()=>{this.retrieveStory(11)}}>Week 4: Ayagina'ar - Prevention Video</Dropdown.Item>
@@ -986,7 +986,7 @@ endingToEnglish(ending,index,qindex) {
                     <Dropdown.Item onClick={()=>{this.retrieveStory(24)}}>Week 1: Yup'igtaat Ellangvikelput</Dropdown.Item>
                     <Dropdown.Item onClick={()=>{this.retrieveStory(25)}}>Week 2: C/Yuuyaraq</Dropdown.Item>
                     <Dropdown.Item onClick={()=>{this.retrieveStory(26)}}>Week 3: Nunam Qigciksaraa</Dropdown.Item>
-                    <Dropdown.Item onClick={()=>{this.retrieveStory(27)}}>Week 4: Nutemllarput</Dropdown.Item>
+                    <Dropdown.Item onClick={()=>{this.retrieveStory(27)}}>Week 4: Nutemllaput</Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown.Item>
                 <Dropdown.Item>
@@ -1121,7 +1121,7 @@ endingToEnglish(ending,index,qindex) {
                         {this.getLinks(qindex,i.split('-')) in dictionary_dict ?
                           <div>
                           <div style={{fontWeight:'bold',fontFamily:'Lato,Arial,Helvetica,sans-serif',textDecoration:'underline',paddingBottom:'5px'}}>
-                          <Link to={{pathname: this.getLinks(qindex,i.split('-')), state: { word: this.getLinks(qindex,i.split('-')), search: this.state.search, newSearchList: this.state.newSearchList, wordsList: this.state.wordsList, yugtunAnalyzer: this.state.yugtunAnalyzer, parses: this.state.parses, segments:this.state.segments,endingrule:this.state.endingrule, searchBarStuckTop: this.state.searchBarStuckTop, notFirstParse:this.state.notFirstParse, searchWord:this.state.searchWord, activeSentenceIndex:this.state.activeSentenceIndex, activeTabIndex: this.state.activeTabIndex }}}>
+                          <Link target="_blank" to={{pathname: this.getLinks(qindex,i.split('-')), state: { word: this.getLinks(qindex,i.split('-')), search: this.state.search, newSearchList: this.state.newSearchList, wordsList: this.state.wordsList, yugtunAnalyzer: this.state.yugtunAnalyzer, parses: this.state.parses, segments:this.state.segments,endingrule:this.state.endingrule, searchBarStuckTop: this.state.searchBarStuckTop, notFirstParse:this.state.notFirstParse, searchWord:this.state.searchWord, activeSentenceIndex:this.state.activeSentenceIndex, activeTabIndex: this.state.activeTabIndex }}}>
                           <span>
                           {q}
                           </span>
@@ -1176,7 +1176,7 @@ endingToEnglish(ending,index,qindex) {
             <List.Item>
               Physical & Mental Health
               <List.List>
-                <List.Item href='#' onClick={()=>{this.retrieveStory(8)}}>Week 1: Aqumgaurpeknak</List.Item>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(8)}}>Week 1: Aqumgaurpek'nak</List.Item>
                 <List.Item href='#' onClick={()=>{this.retrieveStory(9)}}>Week 2: Ulu Mik'lengermi Akngirnarquq</List.Item>
                 <List.Item href='#' onClick={()=>{this.retrieveStory(10)}}>Week 3: Tatailnguq</List.Item>
                 <List.Item href='#' onClick={()=>{this.retrieveStory(11)}}>Week 4: Ayagina'ar - Prevention Video</List.Item>
@@ -1215,7 +1215,7 @@ endingToEnglish(ending,index,qindex) {
                 <List.Item href='#' onClick={()=>{this.retrieveStory(24)}}>Week 1: Yup'igtaat Ellangvikelput</List.Item>
                 <List.Item href='#' onClick={()=>{this.retrieveStory(25)}}>Week 2: C/Yuuyaraq</List.Item>
                 <List.Item href='#' onClick={()=>{this.retrieveStory(26)}}>Week 3: Nunam Qigciksaraa</List.Item>
-                <List.Item href='#' onClick={()=>{this.retrieveStory(27)}}>Week 4: Nutemllarput</List.Item>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(27)}}>Week 4: Nutemllaput</List.Item>
               </List.List>
             </List.Item>
             <List.Item>

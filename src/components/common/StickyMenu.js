@@ -17,11 +17,13 @@ class StickyMenu extends Component {
   }
 
   render() {
-    console.log(this.props);
+    console.log(this.props.history);
+    console.log(this.props.history.location.state===undefined)
     return (
       <Menu borderless fixed='top' widths={3}>
           <Menu.Item>
-          <Button primary icon circular onClick={this.props.history.goBack} floated='left'>
+          <Button primary icon circular onClick={()=>{
+            (this.props.history.location.state===undefined ? this.props.history.push('/') : this.props.history.goBack())}} floated='left'>
             <Icon name='chevron left' />
           </Button>
           {this.props.displaySimple ? '' :
