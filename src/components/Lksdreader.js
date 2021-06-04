@@ -236,6 +236,7 @@ class SearchPage extends Component {
       currentWord: {},
       onlyCommon: false,
       startingSearch: true,
+      source:'',
       // smallestParseIndex: -1,
       parses: props.location.state === undefined ? [] : props.location.state.parses,
       segments: props.location.state === undefined ? [] : props.location.state.segments,
@@ -494,6 +495,7 @@ class SearchPage extends Component {
         search:search,
         video:items[1],
         audio:items[2],
+        source:items[3],
       }); 
       this.getParse(search.split(" ")[0].replace(/[^a-zA-Z\-̄͡͞ńḿ']/g, "").toLowerCase());                          
     } 
@@ -1009,18 +1011,24 @@ endingToEnglish(ending,index,qindex) {
           <div style={{display:'flex',flexDirection:'row'}}>
             <div style={{flex:2}}>
               {this.state.video.length > 0 ?
-                <video key={this.state.video} style={{marginTop:'30px',marginBottom:'30px'}} width='600' controls>
+                <div>
+                <video key={this.state.video} style={{marginTop:'30px',marginBottom:'20px'}} width='600' controls>
                   <source src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/'+this.state.video} type="video/mp4" />
                 </video>
+                <div style={{fontStyle:'italic',marginBottom:'5px'}}>{'Source: '+this.state.source}</div> 
+                </div>
                 :
                 (this.state.audio.length > 0 ?
                   <div style={{flex:1,marginTop:40}}>
                     <audio key={this.state.audio} controls>
                       <source src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/'+this.state.audio} type="audio/mpeg" />
                     </audio>
+                    <div style={{fontStyle:'italic'}}>{'Source: '+this.state.source}</div> 
                   </div>
                   :
-                  <div style={{marginTop:'35px',fontStyle:'italic'}}> Text Only </div>
+                  <div style={{marginTop:'35px',fontStyle:'italic'}}> 
+                  <div style={{fontStyle:'italic'}}>{'Source: '+this.state.source}</div> 
+                  </div>
                   )
               }
             </div>
@@ -1033,6 +1041,7 @@ endingToEnglish(ending,index,qindex) {
                 null
               }
             </div>
+
           </div>
           :
           null
@@ -1138,12 +1147,99 @@ endingToEnglish(ending,index,qindex) {
         </div>   
         </div>
         {!this.state.storyClicked ? 
+          <div>
           <div style={{marginTop:30,fontSize:20,lineHeight:1.3,fontStyle:'italic'}}> 
-            This interactive reader was created for the Yup'ik Conversation III course at the Lower Kuskokwim School District. It is designed for use on computer browsers. Use the Materials tab above.
+            This interactive reader was created for the Yup'ik Conversation III course at the Lower Kuskokwim School District. It is designed for use on computer browsers. You can also use the Materials tab above.
+          </div>
+          <div style={{marginTop:25,fontSize:20,fontWeight:'bold',textDecoration:'underline'}}>
+            Table of Contents:
+          </div>
+          <List bulleted style={{marginLeft:30}}>
+            <List.Item>
+              Processing Food & Prep
+              <List.List>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(0)}}>Week 1: Neqet Aklut-llu Auluklerkaat; Neqallret-gguq Akiinauyuut</List.Item>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(1)}}>Week 2: Tepet</List.Item>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(2)}}>Week 3: Yaqulegmek Uklilleq Nalugalria-llu</List.Item>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(3)}}>Week 4: Uquucillret</List.Item>
+              </List.List>
+            </List.Item>
+            <List.Item>
+              Celebrations & Ceremonies
+              <List.List>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(4)}}>Week 1: Yuralallrat</List.Item>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(5)}}>Week 2: Yuram Arulaciit Kangiit</List.Item>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(6)}}>Week 3: Arnaulriim Ciuniuryaraa Issurimuq</List.Item>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(7)}}>Week 4: Uqiqulleq</List.Item>
+              </List.List>
+            </List.Item>
+            <List.Item>
+              Physical & Mental Health
+              <List.List>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(8)}}>Week 1: Aqumgaurpeknak</List.Item>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(9)}}>Week 2: Ulu Mik'lengermi Akngirnarquq</List.Item>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(10)}}>Week 3: Tatailnguq</List.Item>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(11)}}>Week 4: Ayagina'ar - Prevention Video</List.Item>
+              </List.List>
+            </List.Item>
+            <List.Item>
+              Survival Skills
+              <List.List>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(12)}}>Week 1: Ayaruicaqunak</List.Item>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(13)}}>Week 2: Iqalluguat Negeqvam Taqellri Nallunailkutaugut</List.Item>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(14)}}>Week 3: Agevkarluni Qanikcamun</List.Item>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(15)}}>Week 4: Imarpigmi Augna Pilleq</List.Item>
+              </List.List>
+            </List.Item>
+            <List.Item>
+              Kinship/Family Relations
+              <List.List>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(16)}}>Week 1: Irniaput ayuqucirtuagaqluki piarkauyaaqelliniukut</List.Item>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(17)}}>Week 2: Tuqluuucaraq</List.Item>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(18)}}>Week 3: Ilakucaraq Atellgutkellriakun</List.Item>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(19)}}>Week 4: Asmuuriyunaituq</List.Item>
+              </List.List>
+            </List.Item>
+            <List.Item>
+              Yup'ik Lore
+              <List.List>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(20)}}>Week 1: Saanigem Alangrua</List.Item>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(21)}}>Week 2: Apanuugpak</List.Item>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(22)}}>Week 3: Cetugpak</List.Item>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(23)}}>Week 4: Uugnar Kaviaq-llu</List.Item>
+              </List.List>
+            </List.Item>
+            <List.Item>
+              Our Environment
+              <List.List>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(24)}}>Week 1: Yup'igtaat Ellangvikelput</List.Item>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(25)}}>Week 2: C/Yuuyaraq</List.Item>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(26)}}>Week 3: Nunam Qigciksaraa</List.Item>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(27)}}>Week 4: Nutemllarput</List.Item>
+              </List.List>
+            </List.Item>
+            <List.Item>
+              Seasonal Camps
+              <List.List>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(28)}}>Week 1: Up'nerkillerni</List.Item>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(29)}}>Week 2: Neqlilleq</List.Item>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(30)}}>Week 3: Uksuilleq</List.Item>
+                <List.Item href='#' onClick={()=>{this.retrieveStory(31)}}>Week 4: Uksillernun Uterrluteng Pilallrat</List.Item>
+              </List.List>
+            </List.Item>                                                                        
+          </List>
           </div>
           : 
           null
         } 
+        <div>
+        <div style={{display:'flex',justifyContent:'space-evenly',alignItems:'center',height:60,paddingBottom:16,marginTop:30}}>
+          <Image style={{height:'30px',opacity:0.7}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+          <Image style={{height:'30px',opacity:0.7}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+          <Image style={{height:'30px',opacity:0.7}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+          <Image style={{height:'30px',opacity:0.7}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+        </div>
+        </div>
         </Container>
         </Grid.Column>
         </Grid.Row>

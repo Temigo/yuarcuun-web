@@ -123,30 +123,30 @@ export default function StoriesRetrieved(counter) {
     'UksillernunUterrlutengPilallrat.mp3',
     ]
    let citation = [
-    `Content: from Erinaput Unguvaniartut, p 15; p. 107`,
+    `Erinaput Unguvaniartut, pg. 15; pg. 107`,
     `Andrew, Frank - Caqutet/Uquucillret, From Paitarkiutenka: My Legacy to You, pg. 150`,
-    `YouTube: Yaqulegmek Uklilleq Nalugalria-llu. Suulillra Piiyuuk Qungurkaq-Shields-aam`,
+    `YouTube. Yaqulegmek Uklilleq Nalugalria-llu. Suulillra Piiyuuk Qungurkaq-Shields-aam`,
     `Paitarkiutenka pg. 82-84`,
 
-    `Ik'atiim, Julia K Paul, qalarucillra elitnauranun. Apyutaitnek-llu nalqigulluki yuraryaramek. (p 159-161)`,
-    `Theresa John, Arulacit kangiit, Video 3, Yuuyaraq Personal Life Skills`,
+    `Ik'atiim, Julia K Paul, qalarucillra elitnauranun. Apyutaitnek-llu nalqigulluki yuraryaramek. (pg. 159-161)`,
+    `Theresa John, Arulacit Kangiit, Video 3, Yuuyaraq Personal Life Skills`,
     `By Clara Agartak and Billy Lincoln (Translated from Boundaries & Passages: Rule and Ritual in Yup'ik Eskimo Oral Tradition by A. Fienup-Riordan)`,
-    `Uqiqulleq (from: Cali Allat Naaqerkat, by LKSD Curriculum, pg. 40)`,
+    `Uqiqulleq from Cali Allat Naaqerkat, by LKSD Curriculum, pg. 40)`,
 
-    `Tarr'aq. Kuinerraq. Health I, Unit 1, Lesson 3, p. 29`,
-    `Yuuyaraq Health 2, Unit 1, Lesson 1, p. 127 (41) Paul John, April 2001:56-58`,
-    `H.S. Yuuyaraq Health II Readings (Unit 1), p. 121 (45) Frank Andrew, October 2001: 163`,
+    `Tarr'aq. Kuinerraq. Health I, Unit 1, Lesson 3, pg. 29`,
+    `Yuuyaraq Health 2, Unit 1, Lesson 1, pg. 127 (41) Paul John, April 2001:56-58`,
+    `H.S. Yuuyaraq Health II Readings (Unit 1), pg. 121 (45) Frank Andrew, October 2001: 163`,
     `Ayagina’ar - John Phillip, Prevention Video, Yuuyaraq Health 2, Unit 1 video`,
 
-    `John Phillip and Paul John, Ciulirnerunak Yuuyaqunak p. 162-167 adapted from Aarnarqellriit Uksuarmi Uksumi-llu`,
-    `Erinaput Unguvaniartut page 183`,
-    `Agevkarluni qanikcamun (Paul John, Taken from Ciulirnerunak Yuuyaqunak p 173-175)`,
-    `Imarpigmi augna pilleq, Ayagina’ar (Story of Yuralqiq by John Phillip, Taken from Yuuyaraq pp. 317-321)`,
+    `John Phillip and Paul John, Ciulirnerunak Yuuyaqunak pg. 162-167 adapted from Aarnarqellriit Uksuarmi Uksumi-llu`,
+    `Erinaput Unguvaniartut pg. 183`,
+    `Agevkarluni qanikcamun (Paul John, Taken from Ciulirnerunak Yuuyaqunak pg. 173-175)`,
+    `Imarpigmi augna pilleq, Ayagina’ar (Story of Yuralqiq by John Phillip, Taken from Yuuyaraq pg. 317-321)`,
 
-    `Qanruyuteput Iinruugut, p6`,
+    `Qanruyuteput Iinruugut, pg. 6`,
     `Paul and Martina John, Simeon Agnus, and Alice Rearden, June 11, 2000 (pg. 218) Adapted from Tuqluucaraq`,
-    `Reading from: Yuuyaraq Health I & II Readings pp. 67`,
-    `Content from: Qanemcitkarluni Tekitnarqerlartuq, pg. 336-340`,
+    `Yuuyaraq Health I & II Readings pg. 67`,
+    `Qanemcitkarluni Tekitnarqerlartuq, pg. 336-340`,
 
     `Minnie Carter-aam qanemcia Ekvicuarmium`,
     `Apanuugpak (Song and story by Joe Paul)`,
@@ -155,13 +155,13 @@ export default function StoriesRetrieved(counter) {
 
     `A Yupiaq Worldview by Dr. Oscar Kawagley`,
     `C/Yuuyaraq Pledge`,
-    `Respecting the Land p. 448 Qanruyuuteput Iinruugut (Joe Lomack)`,
+    `Respecting the Land pg. 448 Qanruyuuteput Iinruugut (Joe Lomack)`,
     `Nutemllarput (Our very own) Video by Paul John`,
 
-    `At Spring Camps. Paitarkiutenka by Miisaq Frank Andrew, Sr. pg 9`,
-    `Summer Fish Camp. Paitarkiutenka by Miisaq Frank Andrew, Sr. pg 11`,
-    `Fall Camp. Paitarkiutenka by Miisaq Frank Andrew, Sr. p 13`,
-    `Return to the Winter Village. Paitarkiutenka by Miisaq Frank Andrew, Sr. pg 15`,
+    `At Spring Camps. Paitarkiutenka by Miisaq Frank Andrew, Sr. pg. 9`,
+    `Summer Fish Camp. Paitarkiutenka by Miisaq Frank Andrew, Sr. pg. 11`,
+    `Fall Camp. Paitarkiutenka by Miisaq Frank Andrew, Sr. pg. 13`,
+    `Return to the Winter Village. Paitarkiutenka by Miisaq Frank Andrew, Sr. pg. 15`,
    ]
 
     return [stories[counter], video[counter], audio[counter], citation[counter]];
