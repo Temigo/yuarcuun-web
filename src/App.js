@@ -7,6 +7,7 @@ import './style.css';
 import SearchPage from './components/SearchPage.js';
 import YupikDetails from './components/YupikDetails.js';
 import About from './components/About.js';
+import Lksdreader from './components/Lksdreader.js';
 import Support from './components/Support.js';
 import Privacy from './components/Privacy.js';
 import Symbols from './components/Symbols.js';
@@ -23,6 +24,7 @@ class App extends Component {
       <Switch>
         <Route exact path='/' component={SearchPage} />
         <Route exact path='/about' component={About} />
+        <Route exact path='/lksdreader' component={Lksdreader} />
         <Route exact path='/support' component={Support} />
         <Route exact path='/privacy' component={Privacy} />
         <Route exact path='/symbols' component={Symbols} />
