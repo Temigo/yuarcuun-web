@@ -288,7 +288,7 @@ class SearchPage extends Component {
     }
     if (dictionary.length === 0) {
       axios
-        .get(API_URL + "/word/all")
+        .get(API_URL + "/word/all2021")
         .then(response => {
           let end = now();
           ReactGA.timing({
@@ -302,7 +302,7 @@ class SearchPage extends Component {
           // fuse1.setCollection(dictionary);
           console.log('Fetched dictionary');
 
-          dictionary.forEach(entry => dictionary_dict[entry.yupik] = entry.english) // create dictionary_dict dictionary
+          // dictionary.forEach(entry => dictionary_dict[entry.yupik] = entry.english) // create dictionary_dict dictionary
           // dictionary_prepared = fuzzysort.prepare(dictionary)
 
           this.setState({ dictionary: dictionary });
