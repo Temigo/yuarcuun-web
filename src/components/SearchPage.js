@@ -53,7 +53,7 @@ let dictionary_dict = {};
 
 // fuzzysort search
 const optionsFuzzy = {
-  keys: ['yupik', 'english'],
+  keys: ['definitionString', 'keyString'],
   limit: 50, // don't return more results than you need!
   threshold: -10000, // don't return bad results
 };
@@ -302,7 +302,7 @@ class SearchPage extends Component {
           // fuse1.setCollection(dictionary);
           console.log('Fetched dictionary');
 
-          // dictionary.forEach(entry => dictionary_dict[entry.yupik] = entry.english) // create dictionary_dict dictionary
+          dictionary.forEach(entry => dictionary_dict[entry.keyString] = entry.definitionString) // create dictionary_dict dictionary
           // dictionary_prepared = fuzzysort.prepare(dictionary)
 
           this.setState({ dictionary: dictionary });

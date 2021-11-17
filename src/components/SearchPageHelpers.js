@@ -22,29 +22,65 @@ export const YugtunFooter = (props) => (
 )
 
 export const WordItem = (props) => {
+  console.log(props.word)
   let word = props.word;
-  let isCommon = Object.keys(word).some((key) => { return word[key].properties && word[key].properties.indexOf('common') > -1; });
-  let isHBC = Object.keys(word).some((key) => { return word[key].properties && word[key].properties.indexOf('HBC') > -1; });
-  let isNoun = Object.keys(word).some((key) => { return word[key].descriptor && word[key].descriptor.indexOf('noun') > -1; });
-  let isVerb = Object.keys(word).some((key) => { return word[key].descriptor && word[key].descriptor.indexOf('verb') > -1; });
-  let isParticle = Object.keys(word).some((key) => { return word[key].descriptor && word[key].descriptor.indexOf('particle') > -1; });
-  let isExpression = Object.keys(word).some((key) => { return word[key].descriptor && word[key].descriptor.indexOf('Common Expression') > -1; });
+  let isNoun = props.word.pos.includes('noun');
+  let isVerb = props.word.pos.includes('verb');
+  let isParticle = props.word.pos.includes('particle');
+  let isExclamation = props.word.pos.includes('exclamation');
+  let isConjunction = props.word.pos.includes('conjunction');
+  let isAdverb = props.word.pos.includes('adverb');
+  let isPredicate = props.word.pos.includes('predicate');
+  let isDemonstrative = props.word.pos.includes('demonstrative');
+  let isInterjection = props.word.pos.includes('interjection');
+
+
+  let isPostbase = props.word.pos.includes('postbase');
+  let isEnclitic = props.word.pos.includes('enclitic');
+
+  // let isExpression = props.word.pos.includes('expression');
+  // let isCommon = props.word.pos.includes('grammar');
+  // let isHBC = props.word.pos.includes('Hooper Bay Chevak');
+
+
   return (
-    <List.Item key={word.yupik}>
-    <Link to={{pathname: '/' + word.yupik, state: { word: word, search: props.search, wordsList: props.wordsList, yugtunAnalyzer: false, parses: [], segments: [],endingrule: []}}}>
+    <List.Item key={word.keyString}>
+    <Link to={{pathname: '/' + word.keyString, state: { word: word, search: props.search, wordsList: props.wordsList, yugtunAnalyzer: false, parses: [], segments: [],endingrule: []}}}>
       <List.Content>
-        <List.Header style={{fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'16px',paddingBottom:'4px'}}>
-          {word.yupik}
+        <List.Header style={{display:'flex',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'16px',paddingBottom:'4px'}}>
+
+          {word.keySplit.map((w,index) => 
+              <span style={{'paddingRight':'3px'}}>
+              {w[0]}
+              {console.log(index, word.keySplit.length)}
+              {w[1][0].length !== 0 ?
+                  <Label style={{'marginLeft':'5px',marginRight:'5px'}} size='mini' color='white'>{w[1].join(', ')}</Label>
+                :
+                (index == word.keySplit.length-1 ?
+                  ''
+                  :
+                  ', '
+                )
+            }
+              </span>
+            )}
           <span style={{ 'marginLeft': '15px'}}>
-            {isCommon ? <Label size='mini' color='teal'>COMMON</Label> : ''}
-            {isHBC ? <Label size='mini' color='orange'>HBC DIALECT</Label> : ''}
             {isNoun ? <Label size='mini' color='grey'>NOUN</Label> : ''}
             {isVerb ? <Label size='mini' color='brown'>VERB</Label> : ''}
-            {isParticle ? <Label size='mini' color='red'>PARTICLE</Label> : ''}
-            {isExpression ? <Label size='mini' color='green'>EXPRESSION</Label> : ''}
+            {isParticle ? <Label size='mini' color='purple'>PARTICLE</Label> : ''}
+            {isExclamation ? <Label size='mini' color='red'>EXCLAMATION</Label> : ''}
+            {isConjunction ? <Label size='mini' color='teal'>CONJUNCTION</Label> : ''}
+            {isAdverb ? <Label size='mini' color='orange'>ADVERB</Label> : ''}
+            {isPredicate ? <Label size='mini' color='purple'>PREDICATE</Label> : ''}
+            {isDemonstrative ? <Label size='mini' color='yellow'>DEMONSTRATIVE</Label> : ''}
+            {isInterjection ? <Label size='mini' color='blue'>INTERJECTION</Label> : ''}
+
+            {isPostbase ? <Label size='mini' color='pink'>POSTBASE</Label> : ''}
+            {isEnclitic ? <Label size='mini' color='green'>ENCLITIC</Label> : ''}
+
           </span>
         </List.Header>
-        <List.Description style={{fontSize:'16px',fontWeight:'400'}}>{word.english}</List.Description>
+        <List.Description style={{fontSize:'16px',fontWeight:'400'}}>{word.definitionString}</List.Description>
       </List.Content>
     </Link>
     </List.Item>
