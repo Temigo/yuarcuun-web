@@ -13,8 +13,8 @@ import Privacy from './components/Privacy.js';
 import Symbols from './components/Symbols.js';
 import YupikModifyLayout from './components/yupikModify/YupikModifyLayout.js';
 
-export const API_URL = "https://yugtun-api.herokuapp.com";
-// export const API_URL = "http://localhost:5000";
+// export const API_URL = "https://yugtun-api.herokuapp.com";
+export const API_URL = "http://localhost:5000";
 export const TUTORIAL_URL = 'https://youtu.be/8xW36PYaZHo';
 export const ICON_URL = "https://s3.amazonaws.com/yugtun-static/static/logo_final_1.jpg";
 

@@ -33,21 +33,22 @@ class YupikDetails extends Component {
 
   getWord(word) {
     axios
-      .get(API_URL + "/word/" + encodeURIComponent(word))
+      .get(API_URL + "/word2021/" + encodeURIComponent(word))
       .then(response => {
-        console.log(response.data);
+        // console.log(response.data);
         this.setState({
-          currentWord: response.data.yupik,
-          modifiedWord: response.data.yupik,
+          currentWord: word,
+          modifiedWord: word,
           fullWord: response.data
         });
       });
   }
 
   render() {
-    let numEntries = Object.keys(this.state.fullWord).filter((entryNumber) => {
-      return entryNumber !== 'english' && entryNumber !== 'yupik';
-    }).length;
+    // console.log(this.state)
+    // let numEntries = Object.keys(this.state.fullWord).filter((entryNumber) => {
+    //   return entryNumber !== 'english' && entryNumber !== 'yupik';
+    // }).length;
     return (
       <div>
       <StickyMenu
@@ -57,22 +58,19 @@ class YupikDetails extends Component {
         {...this.props}
       />
       <Container text style={{ marginTop: '5em'}}>
-        {Object.keys(this.state.fullWord).map((entryNumber) => {
+{/*        {Object.keys(this.state.fullWord).map((entryNumber) => {
           if (entryNumber === 'english' || entryNumber === 'yupik') {
             return '';
           }
           else {
-            return (
+            return (*/}
               <YupikEntry
-                key={entryNumber}
-                entry={this.state.fullWord[entryNumber]}
+                entry={this.state.fullWord}
                 word={this.state.modifiedWord}
-                entryNumber={entryNumber}
-                displayEntryNumber={numEntries > 1}
               />
-            );
+{/*            );
           }
-        })}
+        })}*/}
       </Container>
       </div>
     );

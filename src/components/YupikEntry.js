@@ -11,8 +11,8 @@ class YupikEntry extends Component {
     this.state = {
       entry: props.entry,
       word: props.word,
-      displayEntryNumber: props.displayEntryNumber,
-      entryNumber: props.entryNumber
+      // displayEntryNumber: props.displayEntryNumber,
+      // entryNumber: props.entryNumber
     };
   }
 
@@ -21,8 +21,8 @@ class YupikEntry extends Component {
       this.setState({
         entry: this.props.entry,
         word: this.props.word,
-        displayEntryNumber: this.props.displayEntryNumber,
-        entryNumber: this.props.entryNumber
+        // displayEntryNumber: this.props.displayEntryNumber,
+        // entryNumber: this.props.entryNumber
       });
     }
   }
@@ -58,9 +58,11 @@ class YupikEntry extends Component {
   }
 
   render() {
+    console.log(this.state)
     return (
       <Segment style={{fontSize:'1em'}}>
       <Grid>
+
         <Grid.Row>
           <Grid.Column>
           <Header as='h2'>Definition</Header>
