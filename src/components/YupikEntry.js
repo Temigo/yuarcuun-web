@@ -3,6 +3,8 @@ import { Segment, List, Header, Label, Grid , Icon} from 'semantic-ui-react';
 import '../semantic/dist/semantic.min.css';
 import { Link } from 'react-router-dom';
 import {withRouter} from 'react-router';
+import { tagColors } from './SearchPageHelpers.js';
+
 
 class YupikEntry extends Component {
   constructor(props) {
@@ -67,6 +69,9 @@ class YupikEntry extends Component {
       <Grid.Row>
         <Grid.Column>
         <Header as='h2'>Definition</Header>
+          {this.state.entry.pos.map((descriptor) => {
+            return <Label color='blue' horizontal key={descriptor}>{descriptor.toUpperCase()}</Label>;
+          })}
           {this.state.entry.definition.map((entry,i) => {
             return <div>
             <span>{i+1+'. '+entry[0]}</span>
@@ -103,6 +108,34 @@ class YupikEntry extends Component {
             </div>;
           })}
 
+        <Header as='h2'>Usage</Header>
+          {this.state.entry.usagekeys.map((entry,i) => {
+            return <div>
+            <div style={{marginRight:'10px'}}>
+              {this.state.entry.usagekeys[i].map((e,k) => {
+                return e
+              })}
+            </div>
+            <div style={{marginRight:'10px'}}>
+              {this.state.entry.usagedefinitions[i].map((e,k) => {
+                return e
+              })}
+            </div>
+            </div>
+          })}
+
+
+        <Header as='h2'>Dialect</Header>
+          {this.state.entry.entryDialect.map((entry,i) => {
+            return <div><span>{entry}</span></div>
+          })}
+
+        <Header as='h2'>Additional Info Near Definition</Header>
+          {this.state.entry.additionalInfoNearDefinition.map((entry,i) => {
+            return <div><span>{entry}</span></div>
+          })}
+
+
         <Header as='h2'>Base Examples</Header>
             {this.state.entry.baseExamples.map((sentence) => {
               return (
@@ -119,6 +152,47 @@ class YupikEntry extends Component {
                );
             })
             }
+
+        <Header as='h2'>Additional Info</Header>
+          {this.state.entry.additionalInfo.map((entry,i) => {
+            return <div><span>{entry}</span></div>
+          })}
+
+        <Header as='h2'>cf.</Header>
+          {this.state.entry.cf.map((entry,i) => {
+            return <div><span>{entry}</span></div>
+          })}
+
+        <Header as='h2'>extra</Header>
+          {this.state.entry.extra.map((entry) => {
+            return <div><span>{entry}</span></div>
+          })}
+
+        <Header as='h2'>from language</Header>
+          {this.state.entry.fromLanguage.map((entry) => {
+            return <div><span>{entry}</span></div>
+          })}
+
+        <Header as='h2'>greater than</Header>
+          {this.state.entry.greaterthan.map((entry) => {
+            return <div><span>{entry}</span></div>
+          })}
+
+        <Header as='h2'>less than</Header>
+          {this.state.entry.lessthan.map((entry) => {
+            return <div><span>{entry}</span></div>
+          })}
+
+        <Header as='h2'>proto less than</Header>
+          {this.state.entry.protolessthan.map((entry) => {
+            return <div><span>{entry}</span></div>
+          })}
+
+        <Header as='h2'>equal</Header>
+          {this.state.entry.equal.map((entry) => {
+            return <div><span>{entry}</span></div>
+          })}
+
         </Grid.Column>
       </Grid.Row>
       :

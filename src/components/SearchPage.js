@@ -12,7 +12,7 @@ import fuzzysort from 'fuzzysort'
 import now from 'performance-now';
 import ReactGA from 'react-ga';
 import GitHubForkRibbon from 'react-github-fork-ribbon';
-import { YugtunLoader, YugtunFooter, WordItem } from './SearchPageHelpers.js';
+import { YugtunLoader, YugtunFooter, WordItem, tagColors } from './SearchPageHelpers.js';
 import TableEntry from './TableEntry.js';
 import {demPro, perPro} from './constants/pronounEndings.js';
 // import {endingRules} from './constants/endingRules.js';

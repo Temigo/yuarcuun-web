@@ -21,6 +21,38 @@ export const YugtunFooter = (props) => (
   </Container>
 )
 
+export const tagColors = (props) => {
+  let isNoun = props.word.pos.includes('noun');
+  let isVerb = props.word.pos.includes('verb');
+  let isParticle = props.word.pos.includes('particle');
+  let isExclamation = props.word.pos.includes('exclamation');
+  let isConjunction = props.word.pos.includes('conjunction');
+  let isAdverb = props.word.pos.includes('adverb');
+  let isPredicate = props.word.pos.includes('predicate');
+  let isDemonstrative = props.word.pos.includes('demonstrative');
+  let isInterjection = props.word.pos.includes('interjection');
+  let isPostbase = props.word.pos.includes('postbase');
+  let isEnclitic = props.word.pos.includes('enclitic');
+
+  return (
+      <span style={{ 'marginLeft': '15px'}}>  
+        {isNoun ? <Label size='mini' style={{backgroundColor:'#7F90B0',color:'white'}}>NOUN</Label> : ''}
+        {isVerb ? <Label size='mini' style={{backgroundColor:'#B07F7F',color:'white'}}>VERB</Label> : ''}
+        {isParticle ? <Label size='mini'>PARTICLE</Label> : ''}
+        {isExclamation ? <Label size='mini'>EXCLAMATION</Label> : ''}
+        {isConjunction ? <Label size='mini'>CONJUNCTION</Label> : ''}
+        {isAdverb ? <Label size='mini'>ADVERB</Label> : ''}
+        {isPredicate ? <Label size='mini'>PREDICATE</Label> : ''}
+        {isDemonstrative ? <Label size='mini'>DEMONSTRATIVE</Label> : ''}
+        {isInterjection ? <Label size='mini'>INTERJECTION</Label> : ''}
+
+        {isPostbase ? <Label size='mini' style={{backgroundColor:'#d56ea8',color:'white'}}>POSTBASE</Label> : ''}
+        {isEnclitic ? <Label size='mini' style={{backgroundColor:'#60bf76',color:'white'}}>ENCLITIC</Label> : ''}
+      </span>
+    )
+}
+
+
 export const WordItem = (props) => {
   console.log(props.word)
   let word = props.word;
@@ -65,19 +97,19 @@ export const WordItem = (props) => {
             }
               </span>
             )}
-          <span style={{ 'marginLeft': '15px'}}>
-            {isNoun ? <Label size='mini' color='grey'>NOUN</Label> : ''}
-            {isVerb ? <Label size='mini' color='brown'>VERB</Label> : ''}
-            {isParticle ? <Label size='mini' color='purple'>PARTICLE</Label> : ''}
-            {isExclamation ? <Label size='mini' color='red'>EXCLAMATION</Label> : ''}
-            {isConjunction ? <Label size='mini' color='teal'>CONJUNCTION</Label> : ''}
-            {isAdverb ? <Label size='mini' color='orange'>ADVERB</Label> : ''}
-            {isPredicate ? <Label size='mini' color='purple'>PREDICATE</Label> : ''}
-            {isDemonstrative ? <Label size='mini' color='yellow'>DEMONSTRATIVE</Label> : ''}
-            {isInterjection ? <Label size='mini' color='blue'>INTERJECTION</Label> : ''}
+          <span style={{ 'marginLeft': '15px'}}>  
+            {isNoun ? <Label size='mini' style={{backgroundColor:'#7F90B0',color:'white'}}>NOUN</Label> : ''}
+            {isVerb ? <Label size='mini' style={{backgroundColor:'#B07F7F',color:'white'}}>VERB</Label> : ''}
+            {isParticle ? <Label size='mini'>PARTICLE</Label> : ''}
+            {isExclamation ? <Label size='mini'>EXCLAMATION</Label> : ''}
+            {isConjunction ? <Label size='mini'>CONJUNCTION</Label> : ''}
+            {isAdverb ? <Label size='mini'>ADVERB</Label> : ''}
+            {isPredicate ? <Label size='mini'>PREDICATE</Label> : ''}
+            {isDemonstrative ? <Label size='mini'>DEMONSTRATIVE</Label> : ''}
+            {isInterjection ? <Label size='mini'>INTERJECTION</Label> : ''}
 
-            {isPostbase ? <Label size='mini' color='pink'>POSTBASE</Label> : ''}
-            {isEnclitic ? <Label size='mini' color='green'>ENCLITIC</Label> : ''}
+            {isPostbase ? <Label size='mini' style={{backgroundColor:'#d56ea8',color:'white'}}>POSTBASE</Label> : ''}
+            {isEnclitic ? <Label size='mini' style={{backgroundColor:'#60bf76',color:'white'}}>ENCLITIC</Label> : ''}
 
           </span>
         </List.Header>
