@@ -52,9 +52,20 @@ export const tagColors = (props) => {
     )
 }
 
+export const AudioItem = (props) => {
+  // console.log(props)
+  return (
+      <List.Content>
+        <List.Header style={{display:'flex',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'16px',paddingBottom:'4px'}}>
+          {props.word.y}
+        </List.Header>
+        <List.Description style={{fontSize:'16px',fontWeight:'400'}}>{props.word.e}</List.Description>
+      </List.Content>
+  );
+}
 
 export const WordItem = (props) => {
-  console.log(props.word)
+  // console.log(props.word)
   let word = props.word;
   let isNoun = props.word.pos.includes('noun');
   let isVerb = props.word.pos.includes('verb');
@@ -80,12 +91,12 @@ export const WordItem = (props) => {
     <Link to={{pathname: '/' + word.url, state: { word: word, search: props.search, wordsList: props.wordsList, yugtunAnalyzer: false, parses: [], segments: [],endingrule: []}}}>
       <List.Content>
         <List.Header style={{display:'flex',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'16px',paddingBottom:'4px'}}>
-          {console.log(word.keySplit)}
+          {/*{console.log(word.keySplit)}*/}
           {word.keySplit.map((w,index) => 
               <span style={{'paddingRight':'3px'}}>
               {/*{console.log(w)}*/}
               {w[0]}
-              {console.log(index, word.keySplit.length,w[1][0])}
+              {/*{console.log(index, word.keySplit.length,w[1][0])}*/}
               {w[1][0] !== '' ?
                   <Label style={{'marginLeft':'5px',marginRight:'5px'}} size='mini' color='white'>{w[1].join(', ')}</Label>
                 :
