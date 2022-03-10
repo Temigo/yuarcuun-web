@@ -53,7 +53,7 @@ export const tagColors = (props) => {
 }
 
 export const AudioItem = (props) => {
-  // console.log(props)
+  console.log(props)
   return (
       <List.Content>
         <List.Header style={{display:'flex',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'16px',paddingBottom:'4px'}}>

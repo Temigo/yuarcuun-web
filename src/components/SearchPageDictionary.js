@@ -4,13 +4,13 @@ import '../semantic/dist/semantic.min.css';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import { Container, Header, Grid, Input, List, Label, Icon, Image, Button, Accordion, Table, Segment, Loader, Divider, Tab } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
-import { API_URL } from '../App.js';
+import { Grid, Input, List, Image, Divider } from 'semantic-ui-react';
+// import { Link } from 'react-router-dom';
+// import { API_URL } from '../App.js';
 // import Fuse from 'fuse.js';
 import fuzzysort from 'fuzzysort'
-import now from 'performance-now';
-import ReactGA from 'react-ga';
+// import now from 'performance-now';
+// import ReactGA from 'react-ga';
 // import GitHubForkRibbon from 'react-github-fork-ribbon';
 import { WordItem } from './SearchPageHelpers.js';
 // import TableEntry from './TableEntry.js';
@@ -18,9 +18,9 @@ import { WordItem } from './SearchPageHelpers.js';
 // import {endingRules} from './constants/endingRules.js';
 
 // Cache dictionary
-let dictionary = [];
-let audiolibrary = []
-let dictionary_dict = {};
+// let dictionary = [];
+// let audiolibrary = []
+// let dictionary_dict = {};
 
 const optionsFuzzy = {
   keys: ['definitionString', 'keyString'],
@@ -36,6 +36,7 @@ class SearchPageDictionary extends Component {
     console.log("SearchPageDictionary props: ", props);
     this.state = {
       dictionary: [],
+      dictionary_dict: {},
       // dictionaryNouns: [],
       // dictionaryVerbs: [],
       wordsList: [],
@@ -53,13 +54,13 @@ class SearchPageDictionary extends Component {
       // segments:[],
       // endingrule:[],
       // currentTableOpen: -1,
-      getCall:false,
+      // getCall:false,
       // notFirstParse: false,
       // searchBarStuckTop: false,
       searchBarStuckTop: props.location.state === undefined ? false : props.location.state.searchBarStuckTop,
       // notFirstParse: props.location.state === undefined ? false : props.location.state.notFirstParse,
-      searchWord: props.location.state === undefined ? "" : props.location.state.searchWord,
-      activeSentenceIndex: props.location.state === undefined ? 0 : props.location.state.activeSentenceIndex,
+      // searchWord: props.location.state === undefined ? "" : props.location.state.searchWord,
+      // activeSentenceIndex: props.location.state === undefined ? 0 : props.location.state.activeSentenceIndex,
       // exampleSentenceSearch: false,
       // smallestParse:[[],[]],
       // segmentOutputList:[],
@@ -72,15 +73,15 @@ class SearchPageDictionary extends Component {
       // activeTabIndex: props.location.state === undefined ? 0 : props.location.state.activeTabIndex,
 
       // exampleSentenceSearch: props.location.state === undefined ? false : props.location.state.exampleSentenceSearch,
-      newSearchList: props.location.state === undefined ? [] : props.location.state.newSearchList,
-      activeIndex:-1,
-      loaderOn:true,
-      entries:undefined,
-      hover:-1,
-      seeMoreActive:false,
-      segment: "",
-      possibleDefinition: ["","","","","","","","","",""],
-      moods: ["[Ind]","[Intrg]","[Opt]","[Sbrd]","[Ptcp]","[Prec]","[Cnsq]","[Cont]","[Conc]","[Cond]","[CtmpI]","[CtmpII]","[Abs]","[Rel]","[Abl_Mod]","[Loc]", "[Ter]","[Via]","[Equ]","%5BQuant_Qual%5D","[PerPro]","[PerPro]","[PerPro]","[PerPro]","[PerPro]","[PerPro]","[PerPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]",],
+      // newSearchList: props.location.state === undefined ? [] : props.location.state.newSearchList,
+      // activeIndex:-1,
+      // loaderOn:true,
+      // entries:undefined,
+      // hover:-1,
+      // seeMoreActive:false,
+      // segment: "",
+      // possibleDefinition: ["","","","","","","","","",""],
+      // moods: ["[Ind]","[Intrg]","[Opt]","[Sbrd]","[Ptcp]","[Prec]","[Cnsq]","[Cont]","[Conc]","[Cond]","[CtmpI]","[CtmpII]","[Abs]","[Rel]","[Abl_Mod]","[Loc]", "[Ter]","[Via]","[Equ]","%5BQuant_Qual%5D","[PerPro]","[PerPro]","[PerPro]","[PerPro]","[PerPro]","[PerPro]","[PerPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]",],
     }
     // this.getParse = this.getParse.bind(this);
     this.onChangeSearch = this.onChangeSearch.bind(this);
@@ -88,69 +89,79 @@ class SearchPageDictionary extends Component {
     this.search_container = React.createRef();
     // this.getEndings = this.getEndings.bind(this);
     // this.getLinks = this.getLinks.bind(this);
-    this.inputClicked = this.inputClicked.bind(this);
+    // this.inputClicked = this.inputClicked.bind(this);
   }
 
-  componentDidMount() {
-    let start = now();
-    if (this.state.updateSearchEntry) {
-      this.inputClicked();
-      this.setState({ updateSearchEntry: false });
-    }
-    if (dictionary.length === 0) {
-      axios
-        .get(API_URL + "/word/all2021")
-        .then(response => {
-          let end = now();
-          ReactGA.timing({
-            category: 'Loading',
-            variable: 'dictionary',
-            value: (end-start).toFixed(3),
-            label: 'Dictionary loading'
-          });
-          dictionary = response.data;
-          // fuse.setCollection(dictionary);
-          // fuse1.setCollection(dictionary);
-          console.log('Fetched dictionary');
+  // componentDidMount() {
+  //   let start = now();
+  //   if (this.state.updateSearchEntry) {
+  //     this.inputClicked();
+  //     this.setState({ updateSearchEntry: false });
+  //   }
+    // if (dictionary.length === 0) {
+    //   axios
+    //     .get(API_URL + "/word/all2021")
+    //     .then(response => {
+    //       let end = now();
+    //       ReactGA.timing({
+    //         category: 'Loading',
+    //         variable: 'dictionary',
+    //         value: (end-start).toFixed(3),
+    //         label: 'Dictionary loading'
+    //       });
+    //       dictionary = response.data;
+    //       // fuse.setCollection(dictionary);
+    //       // fuse1.setCollection(dictionary);
+    //       console.log('Fetched dictionary');
 
-          dictionary.forEach(entry => dictionary_dict[entry.keyString] = entry.definitionString) // create dictionary_dict dictionary
-          // dictionary_prepared = fuzzysort.prepare(dictionary)
+    //       dictionary.forEach(entry => dictionary_dict[entry.keyString] = entry.definitionString) // create dictionary_dict dictionary
+    //       // dictionary_prepared = fuzzysort.prepare(dictionary)
 
-          this.setState({ dictionary: dictionary });
-        });
+    //       this.setState({ dictionary: dictionary });
+    //     });
 
-      axios
-        .get(API_URL + "/audiolibrary/all")
-        .then(response => {
-          // let end = now();
-          // ReactGA.timing({
-          //   category: 'Loading',
-          //   variable: 'dictionary',
-          //   value: (end-start).toFixed(3),
-          //   label: 'Dictionary loading'
-          // });
-          audiolibrary = response.data;
-          // fuse.setCollection(dictionary);
-          // fuse1.setCollection(dictionary);
-          console.log('Fetched AudioLibrary');
+    //   // axios
+    //   //   .get(API_URL + "/audiolibrary/all")
+    //   //   .then(response => {
+    //   //     // let end = now();
+    //   //     // ReactGA.timing({
+    //   //     //   category: 'Loading',
+    //   //     //   variable: 'dictionary',
+    //   //     //   value: (end-start).toFixed(3),
+    //   //     //   label: 'Dictionary loading'
+    //   //     // });
+    //   //     audiolibrary = response.data;
+    //   //     // fuse.setCollection(dictionary);
+    //   //     // fuse1.setCollection(dictionary);
+    //   //     console.log('Fetched AudioLibrary');
 
-          // dictionary.forEach(entry => dictionary_dict[entry.keyString] = entry.definitionString) // create dictionary_dict dictionary
-          // dictionary_prepared = fuzzysort.prepare(dictionary)
+    //   //     // dictionary.forEach(entry => dictionary_dict[entry.keyString] = entry.definitionString) // create dictionary_dict dictionary
+    //   //     // dictionary_prepared = fuzzysort.prepare(dictionary)
 
-          this.setState({ audiolibrary: audiolibrary });
-        });
+    //   //     this.setState({ audiolibrary: audiolibrary });
+    //   //   });
 
-    }
-    else {
-      // fuse.setCollection(dictionary);
-      this.setState({ dictionary: dictionary });
-    }
-  }
+    // }
+    // else {
+    //   // fuse.setCollection(dictionary);
+    //   this.setState({ dictionary: dictionary });
+    // }
+  // }
+
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.dictionary.length !== this.state.dictionary.length) {
-      this.onChangeSearch(undefined, {value: this.state.search});
+    // if (prevState.dictionary.length !== this.state.dictionary.length) {
+    //   this.onChangeSearch(undefined, {value: this.state.search});
+    // }
+    if (this.props.reset !== prevProps.reset) {
+      this.resetAll()
     }
+
+    if (this.props.dictionary.length !== this.state.dictionary.length) {
+      this.setState({dictionary:this.props.dictionary});
+      this.setState({dictionary_dict:this.props.dictionary_dict})
+    }
+
     if (prevState.search !== this.state.search) {
     	this.setState({searchBarStuckTop:true});
     }
@@ -241,7 +252,7 @@ class SearchPageDictionary extends Component {
     // if (data.value === undefined) {new_search = this.state.search}
 
 
-    let wordsList = fuzzysort.go(new_search, dictionary, optionsFuzzy).map(({ obj }) => (obj));
+    let wordsList = fuzzysort.go(new_search, this.props.dictionary, optionsFuzzy).map(({ obj }) => (obj));
     this.setState({ startingSearch: newStartingSearch, wordsList: wordsList, search: new_search });
 
     // if (new_search.length >= 4 && !this.state.yugtunAnalyzer) {
@@ -312,41 +323,42 @@ class SearchPageDictionary extends Component {
 //   }
 // }
 
-inputClicked(search) {
-  this.setState({entries:undefined, activeIndex:-1, loaderOn: true, seeMoreActive:false,currentTableOpen: -1,yugtunAnalyzer:true,showMoreEnding: false,})
-  // console.log(search)
-  if (search === undefined || search === true) {
-  	search = this.state.search
+// inputClicked(search) {
+//   this.setState({entries:undefined, activeIndex:-1, loaderOn: true, seeMoreActive:false,currentTableOpen: -1,yugtunAnalyzer:true,showMoreEnding: false,})
+//   // console.log(search)
+//   if (search === undefined || search === true) {
+//   	search = this.state.search
+//   }
+//   console.log(search)
+//   if (search.length > 0) {
+//     this.setState({ 
+//       newSearchList: search.split(" "), 
+//       activeSentenceIndex: 0, 
+//       searchWord: search.split(" ")[0].replace(/[^a-zA-Z\-̄͡͞ńḿ']/g, "").toLowerCase(),
+//       getCall:true,
+//       // notFirstParse:true,
+//     }); 
+//     this.getParse(search.split(" ")[0].replace(/[^a-zA-Z\-̄͡͞ńḿ']/g, "").toLowerCase());                          
+//   } 
+//   //   this.inputRef.focus();
+//   //   this.setState({
+//   //     search: '', startingSearch: false
+//   //   });
+//   // }
+// }
+
+
+  resetAll = (e,data) => {
+  	this.setState({
+  		search:'',
+      wordsList:[],
+      // newSearchList:[],
+      // parses:[],
+      // segments:[],
+      // searchWord:"",
+      // notFirstParse:false,
+  	})
   }
-  console.log(search)
-  if (search.length > 0) {
-    this.setState({ 
-      newSearchList: search.split(" "), 
-      activeSentenceIndex: 0, 
-      searchWord: search.split(" ")[0].replace(/[^a-zA-Z\-̄͡͞ńḿ']/g, "").toLowerCase(),
-      getCall:true,
-      // notFirstParse:true,
-    }); 
-    this.getParse(search.split(" ")[0].replace(/[^a-zA-Z\-̄͡͞ńḿ']/g, "").toLowerCase());                          
-  } 
-  //   this.inputRef.focus();
-  //   this.setState({
-  //     search: '', startingSearch: false
-  //   });
-  // }
-}
-
-
-  // resetAll = (e,data) => {
-  // 	this.setState({
-  // 		search:'',
-  //     newSearchList:[],
-  //     parses:[],
-  //     segments:[],
-  //     searchWord:"",
-  //     notFirstParse:false,
-  // 	})
-  // }
 
   // handleTabChange = (e,data) => {
   //   // console.log(data.activeIndex, this.state.activeIndex)
@@ -408,10 +420,10 @@ inputClicked(search) {
     // console.log("pissur-[V][Ind][Intr][S_3Sg]=qaa[Encl]".split('-'))
 
     let displayList = this.state.search.length >= 2 && this.state.wordsList.length > 0;
-    let emptyList = this.state.search.length >= 2 && this.state.wordsList.length === 0 && !this.state.yugtunAnalyzer;
+    let emptyList = this.state.search.length >= 2 && this.state.wordsList.length === 0;
     // let pressEnter = this.state.search.length > 0 && this.state.yugtunAnalyzer && this.state.newSearchList.length === 0;
     let wordsList = this.state.wordsList;
-    const { activeIndex } = this.state
+    // const { activeIndex } = this.state
     // let isCommonList = wordsList.map((word) => {
     //   return Object.keys(word).some((key) => {
     //     return word[key].properties && word[key].properties.indexOf('common') > -1;
@@ -441,7 +453,7 @@ inputClicked(search) {
                 fluid  />                
               </Grid.Column>
             </Grid.Row>
-            <Grid.Row>
+            <Grid.Row style={{display:'flex',justifyContent:'center',padding:0}}>
             <List divided selection>
             {displayList  ? 
                 wordsList.map((word) => 
@@ -450,19 +462,18 @@ inputClicked(search) {
               (this.state.search.length === 0 ?
                 <div style={{display:'flex',justifyContent:'center'}}>
                   <div style={{fontSize:'1.2rem',color:'#666',lineHeight:1.6,maxWidth:500}}>
-
                     <div>
                     <div style={{textDecoration:'underline',marginBottom:10,marginTop:15}}> Dictionary </div>
                     <div style={{marginBottom:10}}> Type any English word or Yugtun base and the matching dictionary entries will show automatically.</div>
                     <div> Examples: </div>
                     <div>
-                    <span onClick={()=>{this.setState({search:'pissur',wordsList: fuzzysort.go('pissur', this.state.dictionary, optionsFuzzy).map(({ obj }) => (obj)),newStartingSearch:true})}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>pissur-</span>
+                    <span onClick={()=>{this.setState({search:'pissur',wordsList: fuzzysort.go('pissur', this.props.dictionary, optionsFuzzy).map(({ obj }) => (obj)),newStartingSearch:true})}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>pissur-</span>
                     <span>{', '}</span>
-                    <span onClick={()=>{this.setState({search:'akutaq',wordsList: fuzzysort.go('akutaq', this.state.dictionary, optionsFuzzy).map(({ obj }) => (obj)),newStartingSearch:true})}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>akutaq</span>
+                    <span onClick={()=>{this.setState({search:'akutaq',wordsList: fuzzysort.go('akutaq', this.props.dictionary, optionsFuzzy).map(({ obj }) => (obj)),newStartingSearch:true})}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>akutaq</span>
                     <span>{', '}</span>
-                    <span onClick={()=>{this.setState({search:'book',wordsList: fuzzysort.go('book', this.state.dictionary, optionsFuzzy).map(({ obj }) => (obj)),newStartingSearch:true})}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>book</span>
+                    <span onClick={()=>{this.setState({search:'book',wordsList: fuzzysort.go('book', this.props.dictionary, optionsFuzzy).map(({ obj }) => (obj)),newStartingSearch:true})}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>book</span>
                     <span>{', '}</span>
-                    <span onClick={()=>{this.setState({search:'Christmas',wordsList: fuzzysort.go('Christmas', this.state.dictionary, optionsFuzzy).map(({ obj }) => (obj)),newStartingSearch:true})}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>Christmas</span>         
+                    <span onClick={()=>{this.setState({search:'Christmas',wordsList: fuzzysort.go('Christmas', this.props.dictionary, optionsFuzzy).map(({ obj }) => (obj)),newStartingSearch:true})}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>Christmas</span>         
                     </div>
                     </div>
 

@@ -4,7 +4,7 @@ import '../semantic/dist/semantic.min.css';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import { Container, Header, Grid, Input, List, Label, Icon, Image, Button, Accordion, Table, Segment, Loader, Divider, Tab } from 'semantic-ui-react';
+import { Container, Header, Grid, Input, List, Label, Icon, Image, Button, Accordion, Table, Segment, Loader, Divider, Tab, Dropdown } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { API_URL, TUTORIAL_URL, ICON_URL } from '../App.js';
 // import Fuse from 'fuse.js';
@@ -17,6 +17,7 @@ import { YugtunLoader} from './SearchPageHelpers.js';
 // import {demPro, perPro} from './constants/pronounEndings.js';
 import SearchPageDictionary from './SearchPageDictionary.js'
 import SearchPageAudioLibrary from './SearchPageAudioLibrary.js'
+import SearchPageYugtunToEnglish from './SearchPageYugtunToEnglish.js'
 // import {endingRules} from './constants/endingRules.js';
 
 // Cache dictionary
@@ -25,202 +26,6 @@ let audiolibrary = []
 let dictionary_dict = {};
 // let dictionary_prepared = [];
 
-// Search options
-// let options = {
-//   keys: ['yupik', 'english'],
-//   minMatchCharLength: 3,
-//   // includeScore: true,
-//   distance: 10,
-//   location: 2,
-//   shouldSort: true,
-//   //tokenize: true, // super slow!! 6x slower
-//   // matchAllTokens: true,
-//   threshold: 0.4,
-//   findAllMatches: true,
-// };
-// let fuse = new Fuse([], options);
-
-// let options1 = {
-//   keys: ['yupik'],
-//   // minMatchCharLength: 3,
-//   // includeScore: true,
-//   distance: 0,
-//   // location: 2,
-//   // shouldSort: true,
-//   //tokenize: true, // super slow!! 6x slower
-//   // matchAllTokens: true,
-//   threshold: 0.0,
-//   // findAllMatches: true,
-// };
-// let fuse1 = new Fuse([], options1);
-
-// fuzzysort search
-// const optionsFuzzy = {
-//   keys: ['definitionString', 'keyString'],
-//   limit: 50, // don't return more results than you need!
-//   threshold: -10000, // don't return bad results
-// };
-
-
-// // const endingToEnglishTerms = {
-// //   "[Ind]":"Indicative (Statement Form)",
-// //   "[Intrg]":"Interrogative (Question Form)",
-// //   "[Opt]":"Optative (Command Form)",
-// //   "[Sbrd]":"Subordinative (Polite Command or -ing Form)",
-// //   "[Ptcp]":"Participial",
-// //   "[Prec]":"Precessive (before...)",
-// //   "[Cnsq]":"Consequential (because...)",
-// //   "[Cont]":"Contigent (whenever...)",
-// //   "[Conc]":"Concessive (although, even though, even if...)",
-// //   "[Cond]":"Conditional (if, when in the future...)",
-// //   "[CtmpI]":"Contemporative 1 (when in fthe past...)",
-// //   "[CtmpII]":"Contemporative 2 (while...)",
-// //   "[Abs]":"Absolutive",
-// //   "[Rel]":"Relative",
-// //   "[Abl_Mod]":"Ablative-Modalis (indirect object, from...)",
-// //   "[Loc]":"Localis (in, at...)",
-// //   "[Ter]":"Terminalis (toward...)",
-// //   "[Via]":"Vialis (through, using...)",
-// //   "[Equ]":"Equalis (like, similar to...)",
-// //   "[Quant_Qual]":"Quantifier/Qualifier Inflection",
-// //   "[S_3Sg]":"he,\xa0she,\xa0it",
-// //   "[S_3Du]":"they\xa0(2)",
-// //   "[S_3Pl]":"they\xa0all\xa0(3+)",
-// //   "[S_1Sg]":"I",
-// //   "[S_1Du]":"we\xa0(2)",
-// //   "[S_1Pl]":"we\xa0all\xa0(3+)",
-// //   "[S_2Sg]":"you",
-// //   "[S_2Du]":"you\xa0(2)",
-// //   "[S_2Pl]":"you\xa0all\xa0(3+)",
-// //   "[S_4Sg]":"he, she, it (itself)",
-// //   "[S_4Du]":"they (2) (themselves)",
-// //   "[S_4Pl]":"they all (3+) (themselves)",
-// //   "[A_3Sg]":"he,\xa0she,\xa0it",
-// //   "[A_3Du]":"they\xa0(2)",
-// //   "[A_3Pl]":"they\xa0all\xa0(3+)",
-// //   "[A_1Sg]":"I",
-// //   "[A_1Du]":"we\xa0(2)",
-// //   "[A_1Pl]":"we\xa0all\xa0(3+)",
-// //   "[A_2Sg]":"you",
-// //   "[A_2Du]":"you\xa0(2)",
-// //   "[A_2Pl]":"you\xa0all\xa0(3+)",
-// //   "[A_4Sg]":"he, she, it (itself)",
-// //   "[A_4Du]":"they (2) (themselves)",
-// //   "[A_4Pl]":"they all (3+) (themselves)",
-// // //   "[P_3Sg]":"her,\xa0him,\xa0it\xa0(other)",
-// // //   "[P_3Du]":"the\xa0two\xa0of\xa0them\xa0(others)",
-// // //   "[P_3Pl]":"them\xa0all\xa0(3+)\xa0(others)",
-// //   "[P_3Sg]":"another",
-// //   "[P_3Du]":"two others",
-// //   "[P_3Pl]":"3+ others",
-// //   "[P_1Sg]":"me",
-// //   "[P_1Du]":"the\xa0two\xa0of\xa0us",
-// //   "[P_1Pl]":"us\xa0all\xa0(3+)",
-// //   "[P_2Sg]":"you",
-// //   "[P_2Du]":"the\xa0two\xa0of\xa0you",
-// //   "[P_2Pl]":"you\xa0all\xa0(3+)",
-// //   "[P_4Sg]":"her,\xa0him,\xa0it\xa0(itself)",
-// //   "[P_4Du]":"the\xa0two\xa0of\xa0them\xa0(themselves)",
-// //   "[P_4Pl]":"them\xa0all\xa0(3+)\xa0(themselves)",
-// //   "[SgUnpd]":"the one",
-// //   "[DuUnpd]":"the two",
-// //   "[PlUnpd]":"the 3+",
-// //   "[SgPosd]":"one",
-// //   "[DuPosd]":"two",
-// //   "[PlPosd]":"three or more",
-// //   "[3SgPoss]":"his/her/its\xa0(other)",
-// //   "[3DuPoss]":"their\xa0(2)\xa0(other)",
-// //   "[3PlPoss]":"their\xa0(3+)\xa0(other)",
-// //   "[1SgPoss]":"my",
-// //   "[1DuPoss]":"our\xa0(2)",
-// //   "[1PlPoss]":"our\xa0(3+)",
-// //   "[2SgPoss]":"your\xa0(1)",
-// //   "[2DuPoss]":"your\xa0(2)",
-// //   "[2PlPoss]":"your\xa0(3+)",
-// //   "[4SgPoss]":"his/her/its\xa0own",
-// //   "[4DuPoss]":"their\xa0own\xa0(2)",
-// //   "[4PlPoss]":"their\xa0own\xa0(3+)",
-// //   "[3Sg]":"it\xa0(other)",
-// //   "[3Du]":"them\xa0(2)\xa0(other)",
-// //   "[3Pl]":"them\xa0(3+)\xa0(other)",
-// //   "[1Sg]":"me",
-// //   "[1Du]":"us\xa0(2)",
-// //   "[1Pl]":"us\xa0(3+)",
-// //   "[2Sg]":"you\xa0(1)",
-// //   "[2Du]":"you\xa0(2)",
-// //   "[2Pl]":"you\xa0(3+)",
-// //   "[4Sg]":"itself",
-// //   "[4Du]":"themselves\xa0(2)",
-// //   "[4Pl]":"themselves\xa0(3+)",
-// // };
-
-// // const endingEnglishDescriptions = {
-// //   "[Ind]":"(is, are, am)",
-// //   "[Intrg]":"(question)",
-// //   "[Opt]":"(do it!)",
-// //   "[Sbrd]":"(please do, being)",
-// //   "[Ptcp]":"(the one being, special case)",
-// //   "[Prec]":"(before)",
-// //   "[Cnsq]":"(because)",
-// //   "[Cont]":"(whenever)",
-// //   "[Conc]":"(although, even if)",
-// //   "[Cond]":"(if, when in future)",
-// //   "[CtmpI]":"(when in past)",
-// //   "[CtmpII]":"(while)",
-// //   "[Abs]":"the",
-// //   "[Rel]":"the",
-// //   "[Abl_Mod]":"[a, some, from]",
-// //   "[Loc]":"in or at",
-// //   "[Ter]":"toward",
-// //   "[Via]":"through or using",
-// //   "[Equ]":"like or similar to",
-// //   "[Quant_Qual]":"Quantifier/Qualifier Inflection",
-// // }
-
-// // const endingDescriptions = [
-// // "1) statements; 2) “yes-no” questions, usually with enclitic =qaa",
-// // "1) content questions; 2) exclamations with the postbase @5+pag- | ~vag-",
-// // "1) commands, requests, suggestions; 2) statements in narrative with the postbase ki- and a third person ending",
-// // "1) actions or states subordinate to that of the main verb and involving the same subject; 2) requests, commands, suggestions with a second person ending",
-// // "1) exclamations, usually with tang; 2) certain special constructions (see maaten and =wa)",
-// // "“before”",
-// // "“because”",
-// // "“whenever”",
-// // "“although, even though, even if” ",
-// // "“if, when (in the future)”",
-// // "“when (in the past)” ",
-// // "“while”",
-// // "1) subject of an intransitive verb; 2) object of a transitive verb",
-// // "1) subject of a transitive verb; 2) possessor; 3) “independent relative construction,” see section on roots in Generation Introduction, and Appendix 1, for further information",
-// // "1) place from which, time from which; 2) indefinite object of an intransitive verb; 3) specifying information about a noun within a verb; 4) secondary object especially with verbs of speaking and giving; 5) instrument (only in some dialects)",
-// // "1) place at which, time at which; 2) object of a comparison; 3) with postbase @+paa|~vaa and enclitic =lli in exclamations; 4) formal vocative",
-// // "1) place to which, time to which; 2) subject of an embedded verb",
-// // "1) route; 2) instrument; 3) part of a whole",
-// // "1) comparison; 2) language specification; 3) price specification",
-// // ];
-
-// // const exampleSentences = [
-// // "1) Pissurtuq. - It is hunting. 2) Maqillruuk-qaa? - Did they two took a steambath?",
-// // "1) Qangvaq ayallrua? - When did he go? Caqatarcit? - What will you do? 2) Caperrnaqvagta. - How difficult it is.",
-// // "1) Neri. - Eat. Taisgu. - Bring it here. 2) Tan'gaurluq qanqili, 'Maurluuq!, naw'un iterciqsia?' - The boy said (literally: let the boy say), 'Grandmother!, through where will I get in?'",
-// // "1) Cukaluni aqvaqurtuq. - She is running quickly. 2) Qantan painqegcaarluku. - Lick your plate clean, please.",
-// // "1) Tang, qavalria. - Look, it's sleeping. 2) Maaten itertua anelria. - I came in; lo and behold, he went out.",
-// // "Ayagpailgan payugeskiu. - Before he leaves, bring him food.",
-// // "Ayaksaituq arenqiapakaan ellalluk. - He hasn’t gone because of this bad weather.",
-// // "Ner'aqami tamuanqegcaalartuq. - Whenever she eats, she chews her food well.",
-// // "Pingraan ayagyugtua. - Even though that's the case, I want to go.",
-// // "Anglirikuni elitnauristen͞guyugtuq. - When he grows up, he wants to be a teacher.",
-// // "Akngirtuq atrallermini. - He got hurt when he was coming down.",
-// // "Ayainanermini igtellruuq. - While he was going, he fell.",
-// // "1) Saskaq kuv'uq. - The glass spilled. 2) Maqaruaq pissullrua. - He hunted the rabbit.",
-// // "1) Angutem quyavikaa. - The man was thankful to her. 2) Ciquyam pania cen̄irtuq. - Ciquyaq's daughter is visiting.",
-// // "1) Elitnaurvigmek utertuq. - She's coming home from the school. 2) Ner'uq akutamek. - She is eating some akutaq. 3) Nutaramek qayaliuq. - He is making a new kayak. 4) Aanama kuuvviaryuucimnek aptaanga. - My mother is asking me whether I want coffee.",
-// // "1) Mermi uitauq. - It is in the water. 2) Aatamni sugtunruunga. - I am taller than my dad. 3) Akertem̄i-lli puqlanirpaa! - How warm the sun is! 4) Elpet angutmi, niicugninga. - You man, listen to me.",
-// // "1) Kipusvigmun piyuaguq. - He's walking to the store. 2) Arnam neresqaa neqa taqukamun. - The woman asks/tells the bear to eat the fish.",
-// // "1) Tumyarakun ayallruuq. - He went by the path. 2) Angyakun ayagtut. - They are going by boat. 3) Qercuallruunga it'gamkun. - I got frostbitten on my feet.",
-// // "1) Aatamegcetun yurartut. - They are dancing like their father. 2) Una Yugtun cauga? - What is this in Yup'ik? 3) Akingqertuq malrugtun. - It is two dollars.",
-// // ];
-
 
 class SearchPage extends Component {
   constructor(props) {
@@ -228,6 +33,8 @@ class SearchPage extends Component {
     // console.log("SearchPage props: ", props);
     this.state = {
       dictionary: [],
+      audiolibrary: [],
+      reset: true,
       // dictionaryNouns: [],
       // dictionaryVerbs: [],
       // wordsList: [],
@@ -262,7 +69,7 @@ class SearchPage extends Component {
       // moreIndex:-1,
       // updateSearchEntry: props.location.state === undefined ? false : props.location.state.updateSearchEntry,
       activeTabIndex: props.location.state === undefined ? 0 : props.location.state.activeTabIndex,
-
+      // tabValue: 0,
       // exampleSentenceSearch: props.location.state === undefined ? false : props.location.state.exampleSentenceSearch,
       // newSearchList: props.location.state === undefined ? [] : props.location.state.newSearchList,
       // activeIndex:-1,
@@ -289,7 +96,7 @@ class SearchPage extends Component {
     //   this.inputClicked();
     //   this.setState({ updateSearchEntry: false });
     // }
-    console.log('hi',dictionary)
+    // console.log('hi',dictionary)
     if (dictionary.length === 0) {
       axios
         .get(API_URL + "/word/all2021")
@@ -309,9 +116,15 @@ class SearchPage extends Component {
           dictionary.forEach(entry => dictionary_dict[entry.keyString] = entry.definitionString) // create dictionary_dict dictionary
           // dictionary_prepared = fuzzysort.prepare(dictionary)
 
-          this.setState({ dictionary: dictionary });
+          this.setState({ dictionary: dictionary, dictionary_dict: dictionary_dict});
         });
+    }
+    else {
+      // fuse.setCollection(dictionary);
+      this.setState({ dictionary: dictionary, dictionary_dict: dictionary_dict });
+    }
 
+    if (audiolibrary.length === 0) {
       axios
         .get(API_URL + "/audiolibrary/all")
         .then(response => {
@@ -332,12 +145,11 @@ class SearchPage extends Component {
 
           this.setState({ audiolibrary: audiolibrary });
         });
+    } else {
+      this.setState({ audiolibrary: audiolibrary });
+    }
 
-    }
-    else {
-      // fuse.setCollection(dictionary);
-      this.setState({ dictionary: dictionary });
-    }
+
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -347,6 +159,8 @@ class SearchPage extends Component {
     // if (prevState.search !== this.state.search) {
     // 	this.setState({searchBarStuckTop:true});
     // }
+
+
     if (prevState.startingSearch && !this.state.startingSearch) {
       if(navigator.userAgent.match(/(iPhone|iPod|iPad)/i)) {
         let elts = ReactDOM.findDOMNode(this).getElementsByClassName('search_container');
@@ -641,31 +455,52 @@ class SearchPage extends Component {
 
   resetAll = (e,data) => {
   	this.setState({
-  		search:'',
-      newSearchList:[],
-      parses:[],
-      segments:[],
-      searchWord:"",
-      notFirstParse:false,
+      reset:!this.state.reset,
+  		// search:'',
+    //   newSearchList:[],
+    //   parses:[],
+    //   segments:[],
+    //   searchWord:"",
+    //   notFirstParse:false,
   	})
   }
 
   handleTabChange = (e,data) => {
     // console.log(data.activeIndex, this.state.activeIndex)
-    if (data.activeIndex === 0 && this.state.activeTabIndex !== 0) {
-      this.setState({ yugtunAnalyzer: false, activeTabIndex:0,parses:[],segments:[],endingrule:[],newSearchList:[],notFirstParse:false,search:""})
-    } else if (data.activeIndex === 1 && this.state.activeTabIndex !== 1) {
-      // if (!this.state.yugtunAnalyzer) {
-      this.setState({ yugtunAnalyzer: true, activeTabIndex:1, parses:[],segments:[],endingrule:[],newSearchList:[],notFirstParse:false,search:""});                     
-      // this.inputClicked()
-      // }
-    } else if (data.activeIndex === 2 && this.state.activeTabIndex !== 2) {
-      // if (!this.state.yugtunAnalyzer) {
-      this.setState({ activeTabIndex:2, parses:[],segments:[],endingrule:[],newSearchList:[],notFirstParse:false,search:""});                     
-      // this.inputClicked()
-      // }
+    if (this.state.activeTabIndex !== data.activeIndex) {
+      this.setState({ activeTabIndex:data.activeIndex})
     }
+    // } else if (data.activeIndex === 1 && this.state.activeTabIndex !== 1) {
+    //   // if (!this.state.yugtunAnalyzer) {
+    //   this.setState({ activeTabIndex:1, parses:[],segments:[],endingrule:[],newSearchList:[],notFirstParse:false,search:""});                     
+    //   // this.inputClicked()
+    //   // }
+    // } else if (data.activeIndex === 2 && this.state.activeTabIndex !== 2) {
+    //   // if (!this.state.yugtunAnalyzer) {
+    //   this.setState({ activeTabIndex:2, parses:[],segments:[],endingrule:[],newSearchList:[],notFirstParse:false,search:""});                     
+    //   // this.inputClicked()
+    //   // }
+    // }
   }
+
+  handleTabChange2 = (e, {value}) => {
+    if (this.state.activeTabIndex !== value) {
+      this.setState({ activeTabIndex:value})
+    }
+    // } else if (value === 1 && this.state.activeTabIndex !== 1) {
+    //   // if (!this.state.yugtunAnalyzer) {
+    //   this.setState({ activeTabIndex:1, newSearchList:[],search:""});                     
+    //   // this.inputClicked()
+    //   // }
+    // } else if (value === 2 && this.state.activeTabIndex !== 2) {
+    //   // if (!this.state.yugtunAnalyzer) {
+    //   this.setState({ activeTabIndex:2, newSearchList:[],search:""});                     
+    //   // this.inputClicked()
+    //   // }
+    // }
+    // this.setState({activeTabIndex: value})
+  }
+
 
   // getLinks(index, parse) {
   // 	// console.log(parse)
@@ -740,11 +575,28 @@ class SearchPage extends Component {
     },
   ]
 
+  const tabOptions = [
+    {
+      key: 0,
+      text: <div><span>Dictionary</span></div>,
+      value: 0,
+    },
+    {
+      key: 1,
+      text: <div><span>Word Builder</span></div>,
+      value: 1,
+    },
+    {
+      key: 2,
+      text: <div><span>Audio Library</span></div>,
+      value: 2,
+    },
+  ]
 
     return (
       <div>
       
-      <YugtunLoader criteria={this.state.dictionary.length === 0} />
+      <YugtunLoader criteria={this.state.dictionary.length === 0 || this.state.audiolibrary.length === 0} />
       <Grid textAlign='center' style={{ height: window.innerHeight/1.5 }} verticalAlign={this.state.searchBarStuckTop ? 'top' : 'top'}>
       <Grid.Row style={{height:40,paddingBottom:0}}>
       <Grid.Column>
@@ -752,7 +604,7 @@ class SearchPage extends Component {
       <List horizontal divided>
         <List.Item> <a style={{textDecoration:'underline',color:'#000000de'}} href={TUTORIAL_URL} target="_blank">Tutorial</a> </List.Item>
         <List.Item> <Link style={{textDecoration:'underline',color:'#000000de'}} to='/about'>About</Link> </List.Item>
-        <List.Item> <Link style={{textDecoration:'underline',color:'#000000de'}} to='/dialogues'>About</Link> </List.Item>
+        <List.Item> <Link style={{textDecoration:'underline',color:'#000000de'}} to='/dialogues'>Dialogues</Link> </List.Item>
       </List>
       </div>
       </Grid.Column>
@@ -766,16 +618,26 @@ class SearchPage extends Component {
         <Container style={{height: window.innerHeight}} ref={this.search_container} className='search_container'>
           	<Grid stackable>
 
+          {window.innerWidth < 480 ?
+            <Dropdown compact selection className='frontpage' value={this.state.activeTabIndex} onChange={this.handleTabChange2} options={tabOptions} />
+            :
             <Tab style={{paddingTop:10}} activeIndex={this.state.activeTabIndex} menu={{ secondary: true, pointing: true, size:'huge' }} panes={panes} onTabChange={this.handleTabChange} />
+          }
+
 
             </Grid>
             {this.state.activeTabIndex === 0 ? 
-              <SearchPageDictionary {...this.props} />
+              <SearchPageDictionary dictionary={this.state.dictionary} dictionary_dict={this.state.dictionary_dict} reset={this.state.reset} {...this.props} />
+              :
+              null
+            }
+            {this.state.activeTabIndex === 1 ? 
+              <SearchPageYugtunToEnglish dictionary={this.state.dictionary} dictionary_dict={this.state.dictionary_dict} reset={this.state.reset} {...this.props} />
               :
               null
             }
             {this.state.activeTabIndex === 2 ? 
-              <SearchPageAudioLibrary {...this.props} />
+              <SearchPageAudioLibrary audiolibrary={this.state.audiolibrary} reset={this.state.reset} {...this.props} />
               :
               null
             }

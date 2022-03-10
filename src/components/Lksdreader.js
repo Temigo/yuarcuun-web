@@ -15,7 +15,7 @@ import GitHubForkRibbon from 'react-github-fork-ribbon';
 import { YugtunLoader, YugtunFooter, WordItem } from './SearchPageHelpers.js';
 import TableEntry from './TableEntry.js';
 import StoriesRetrieved from './constants/StoriesRetrieved.js';
-import {demPro, perPro} from './constants/pronounEndings.js';
+import {demPro, perPro} from './constants/endingsConstants.js';
 // import {endingRules} from './constants/endingRules.js';
 
 // Cache dictionary
