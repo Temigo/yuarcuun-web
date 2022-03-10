@@ -67,8 +67,8 @@ class SearchPage extends Component {
     super(props);
     // console.log("SearchPage props: ", props);
     this.state = {
-      dictionary: [],
-      dictionary_dict: {},
+      // dictionary: [],
+      // dictionary_dict: {},
       // dictionaryNouns: [],
       // dictionaryVerbs: [],
       wordsList: [],
@@ -185,10 +185,10 @@ class SearchPage extends Component {
     //   this.onChangeSearch(undefined, {value: this.state.search});
     // }
 
-    if (this.props.dictionary.length !== this.state.dictionary.length) {
-      this.setState({dictionary:this.props.dictionary});
-      this.setState({dictionary_dict:this.props.dictionary_dict})
-    }
+    // if (this.props.dictionary.length !== this.state.dictionary.length) {
+    //   this.setState({dictionary:this.props.dictionary});
+    //   this.setState({dictionary_dict:this.props.dictionary_dict})
+    // }
 
     if (this.props.reset !== prevProps.reset) {
       this.resetAll()
@@ -681,7 +681,7 @@ english3 += subject + " to " + endingToEnglishTerms[tags[tags.length-1]];
                   (this.endingToEnglish(q,index,qindex))
                   :
                   <div style={{paddingTop:15,paddingLeft:qindex*20,fontSize:'16px'}}>
-                    {this.getLinks(qindex,i.split('-')) in this.state.dictionary_dict ?
+                    {this.getLinks(qindex,i.split('-')) in this.props.dictionary_dict ?
                       <div>
                       <div style={{fontWeight:'bold',fontFamily:'Lato,Arial,Helvetica,sans-serif',textDecoration:'underline',paddingBottom:'5px'}}>
                       <Link to={{pathname: this.getLinks(qindex,i.split('-')), state: { word: this.getLinks(qindex,i.split('-')), search: this.state.search, newSearchList: this.state.newSearchList, parses: this.state.parses, segments:this.state.segments,endingrule:this.state.endingrule, searchBarStuckTop: this.state.searchBarStuckTop, notFirstParse:this.state.notFirstParse, searchWord:this.state.searchWord, activeSentenceIndex:this.state.activeSentenceIndex, activeTabIndex: this.state.activeTabIndex }}}>
@@ -690,7 +690,7 @@ english3 += subject + " to " + endingToEnglishTerms[tags[tags.length-1]];
                       </span>
                       </Link>
                       </div>                  
-                      {this.state.dictionary_dict[this.getLinks(qindex,i.split('-'))]}
+                      {this.props.dictionary_dict[this.getLinks(qindex,i.split('-'))]}
                       </div>
                       :
                       <div style={{fontWeight:'bold',fontFamily:'Lato,Arial,Helvetica,sans-serif',textDecoration:'underline'}}>

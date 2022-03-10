@@ -35,8 +35,8 @@ class SearchPageDictionary extends Component {
     super(props);
     console.log("SearchPageDictionary props: ", props);
     this.state = {
-      dictionary: [],
-      dictionary_dict: {},
+      // dictionary: [],
+      // dictionary_dict: {},
       // dictionaryNouns: [],
       // dictionaryVerbs: [],
       wordsList: [],
@@ -157,10 +157,10 @@ class SearchPageDictionary extends Component {
       this.resetAll()
     }
 
-    if (this.props.dictionary.length !== this.state.dictionary.length) {
-      this.setState({dictionary:this.props.dictionary});
-      this.setState({dictionary_dict:this.props.dictionary_dict})
-    }
+    // if (this.props.dictionary.length !== this.state.dictionary.length) {
+    //   this.setState({dictionary:this.props.dictionary});
+    //   this.setState({dictionary_dict:this.props.dictionary_dict})
+    // }
 
     if (prevState.search !== this.state.search) {
     	this.setState({searchBarStuckTop:true});

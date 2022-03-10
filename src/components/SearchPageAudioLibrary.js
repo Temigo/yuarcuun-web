@@ -19,7 +19,7 @@ import { YugtunLoader, YugtunFooter, WordItem, AudioItem, tagColors } from './Se
 
 // Cache dictionary
 // let dictionary = [];
-let audiolibrary = []
+// let audiolibrary = []
 // let dictionary_dict = {};
 // let dictionary_prepared = [];
 
@@ -228,7 +228,7 @@ class SearchPage extends Component {
       // dictionary: [],
       // dictionaryNouns: [],
       // dictionaryVerbs: [],
-      audiolibrary: [],
+      // audiolibrary: [],
       wordsList: [],
       // yugtunAnalyzer: props.location.state === undefined ? false : props.location.state.yugtunAnalyzer,
       search: props.location.state === undefined ? '' : props.location.state.search,
@@ -344,10 +344,10 @@ class SearchPage extends Component {
     //   this.onChangeSearch(undefined, {value: this.state.search});
     // }
 
-    if (this.props.audiolibrary.length !== this.state.audiolibrary.length) {
-      this.setState({audiolibrary:this.props.audiolibrary});
-      // this.setState({dictionary_dict:this.props.dictionary_dict})
-    }
+    // if (this.props.audiolibrary.length !== this.state.audiolibrary.length) {
+    //   this.setState({audiolibrary:this.props.audiolibrary});
+    //   // this.setState({dictionary_dict:this.props.dictionary_dict})
+    // }
 
     if (this.props.reset !== prevProps.reset) {
       this.resetAll()
@@ -443,7 +443,7 @@ class SearchPage extends Component {
     // if (data.value === undefined) {new_search = this.state.search}
 
 
-    let wordsList = fuzzysort.go(new_search, this.state.audiolibrary, optionsFuzzy).map(({ obj }) => (obj));
+    let wordsList = fuzzysort.go(new_search, this.props.audiolibrary, optionsFuzzy).map(({ obj }) => (obj));
     this.setState({ startingSearch: newStartingSearch, wordsList: wordsList, search: new_search });
 
     // if (new_search.length >= 4 && !this.state.yugtunAnalyzer) {
