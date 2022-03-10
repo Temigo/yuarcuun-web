@@ -446,6 +446,11 @@ class SearchPageDictionary extends Component {
                 // }}
                 // icon={<Icon name='x' onClick={console.log('hi')} link />}
                 // iconPosition='right'
+
+                // action={{ icon:'x', transparent:true,size:'huge', onClick: () => this.inputClicked()}}
+                // // icon={<Icon name='search' onClick={console.log('hi')} link />}
+                // iconPosition='right'
+
                 size='huge'
                 onChange={this.onChangeSearch}
                 value={this.state.search}
