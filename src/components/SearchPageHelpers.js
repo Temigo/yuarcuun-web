@@ -21,18 +21,19 @@ export const YugtunFooter = (props) => (
   </Container>
 )
 
-export const tagColors = (props) => {
-  let isNoun = props.word.pos.includes('noun');
-  let isVerb = props.word.pos.includes('verb');
-  let isParticle = props.word.pos.includes('particle');
-  let isExclamation = props.word.pos.includes('exclamation');
-  let isConjunction = props.word.pos.includes('conjunction');
-  let isAdverb = props.word.pos.includes('adverb');
-  let isPredicate = props.word.pos.includes('predicate');
-  let isDemonstrative = props.word.pos.includes('demonstrative');
-  let isInterjection = props.word.pos.includes('interjection');
-  let isPostbase = props.word.pos.includes('postbase');
-  let isEnclitic = props.word.pos.includes('enclitic');
+export const TagColors = (props) => {
+  // console.log('hi',props.word)
+  let isNoun = props.word.includes('noun');
+  let isVerb = props.word.includes('verb');
+  let isParticle = props.word.includes('particle');
+  let isExclamation = props.word.includes('exclamation');
+  let isConjunction = props.word.includes('conjunction');
+  let isAdverb = props.word.includes('adverb');
+  let isPredicate = props.word.includes('predicate');
+  let isDemonstrative = props.word.includes('demonstrative');
+  let isInterjection = props.word.includes('interjection');
+  let isPostbase = props.word.includes('postbase');
+  let isEnclitic = props.word.includes('enclitic');
 
   return (
       <span style={{ 'marginLeft': '15px'}}>  
@@ -45,7 +46,6 @@ export const tagColors = (props) => {
         {isPredicate ? <Label size='mini'>PREDICATE</Label> : ''}
         {isDemonstrative ? <Label size='mini'>DEMONSTRATIVE</Label> : ''}
         {isInterjection ? <Label size='mini'>INTERJECTION</Label> : ''}
-
         {isPostbase ? <Label size='mini' style={{backgroundColor:'#d56ea8',color:'white'}}>POSTBASE</Label> : ''}
         {isEnclitic ? <Label size='mini' style={{backgroundColor:'#60bf76',color:'white'}}>ENCLITIC</Label> : ''}
       </span>
@@ -65,7 +65,7 @@ export const AudioItem = (props) => {
 }
 
 export const WordItem = (props) => {
-  // console.log(props.word)
+  console.log(props.word)
   let word = props.word;
   let isNoun = props.word.pos.includes('noun');
   let isVerb = props.word.pos.includes('verb');
@@ -80,14 +80,29 @@ export const WordItem = (props) => {
 
   let isPostbase = props.word.pos.includes('postbase');
   let isEnclitic = props.word.pos.includes('enclitic');
+  let isUnlinked = props.word.pos.includes('unlinked');
 
   // let isExpression = props.word.pos.includes('expression');
   // let isCommon = props.word.pos.includes('grammar');
   // let isHBC = props.word.pos.includes('Hooper Bay Chevak');
 
-
+  console.log(props.word)
+  if (isUnlinked) {
+    return (
+      <List.Item key={props.word.keyString}>
+        <List.Content>
+          <List.Header style={{display:'flex',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'16px',paddingBottom:'4px'}}>
+            {props.word.keyString}
+            <span style={{ 'marginLeft': '15px'}}>  
+              <Label size='mini'>UNLINKED</Label>
+            </span>
+          </List.Header>
+        </List.Content>
+      </List.Item>    
+      )
+  } else {
   return (
-    <List.Item key={word.keyString}>
+    <List.Item style={{'paddingLeft':8+props.paddingLeft}} key={word.keyString}>
     <Link to={{pathname: '/' + word.url, state: { word: word, search: props.search, wordsList: props.wordsList, yugtunAnalyzer: false, parses: [], segments: [],endingrule: []}}}>
       <List.Content>
         <List.Header style={{display:'flex',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'16px',paddingBottom:'4px'}}>
@@ -118,6 +133,7 @@ export const WordItem = (props) => {
             {isPredicate ? <Label size='mini'>PREDICATE</Label> : ''}
             {isDemonstrative ? <Label size='mini'>DEMONSTRATIVE</Label> : ''}
             {isInterjection ? <Label size='mini'>INTERJECTION</Label> : ''}
+            {isUnlinked ? <Label size='mini'>UNLINKED</Label> : ''}
 
             {isPostbase ? <Label size='mini' style={{backgroundColor:'#d56ea8',color:'white'}}>POSTBASE</Label> : ''}
             {isEnclitic ? <Label size='mini' style={{backgroundColor:'#60bf76',color:'white'}}>ENCLITIC</Label> : ''}
@@ -128,5 +144,6 @@ export const WordItem = (props) => {
       </List.Content>
     </Link>
     </List.Item>
-  );
+    );
+  }
 }

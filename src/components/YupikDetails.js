@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Container } from 'semantic-ui-react';
+import '../App.css';
 import '../semantic/dist/semantic.min.css';
+import { Container } from 'semantic-ui-react';
 import axios from 'axios';
 import { API_URL } from '../App.js';
 import YupikEntry from './YupikEntry.js';
@@ -52,12 +53,12 @@ class YupikDetails extends Component {
     return (
       <div>
       <StickyMenu
-        word={this.state.currentWord}
+        word={this.state.currentWord.replaceAll(',',', ')}
         goBack={() => { this.props.history.push({pathname: '/', state: this.props.location.state }) }}
         displaySimple
         {...this.props}
       />
-      <Container text style={{ marginTop: '5em'}}>
+      <Container text style={{ marginTop: '7em'}}>
 {/*        {Object.keys(this.state.fullWord).map((entryNumber) => {
           if (entryNumber === 'english' || entryNumber === 'yupik') {
             return '';

@@ -29,6 +29,10 @@
   
 }
 
+.hierarchy {
+  padding-top: 20px;
+}
+
 .ui.dropdown.frontpage .menu .item {
   line-height: 20px;
   font-size: 18px;

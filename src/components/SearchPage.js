@@ -109,6 +109,7 @@ class SearchPage extends Component {
             label: 'Dictionary loading'
           });
           dictionary = response.data;
+          console.log(dictionary)
           // fuse.setCollection(dictionary);
           // fuse1.setCollection(dictionary);
           console.log('Fetched dictionary');
