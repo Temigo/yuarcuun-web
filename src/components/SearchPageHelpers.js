@@ -53,7 +53,7 @@ export const TagColors = (props) => {
 }
 
 export const AudioItem = (props) => {
-  console.log(props)
+  // console.log(props)
   return (
       <List.Content>
         <List.Header style={{display:'flex',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'16px',paddingBottom:'4px'}}>
@@ -65,7 +65,7 @@ export const AudioItem = (props) => {
 }
 
 export const WordItem = (props) => {
-  console.log(props.word)
+  // console.log(props.word)
   let word = props.word;
   let isNoun = props.word.pos.includes('noun');
   let isVerb = props.word.pos.includes('verb');
@@ -86,7 +86,7 @@ export const WordItem = (props) => {
   // let isCommon = props.word.pos.includes('grammar');
   // let isHBC = props.word.pos.includes('Hooper Bay Chevak');
 
-  console.log(props.word)
+  // console.log(props.word)
   if (isUnlinked) {
     return (
       <List.Item key={props.word.keyString}>

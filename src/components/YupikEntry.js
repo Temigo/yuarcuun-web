@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Segment, List, Header, Label, Grid , Icon, Divider} from 'semantic-ui-react';
+import { Segment, List, Header, Label, Grid , Icon, Divider, Table} from 'semantic-ui-react';
 import '../App.css';
 import '../semantic/dist/semantic.min.css';
 import { Link } from 'react-router-dom';
 import {withRouter} from 'react-router';
 import { TagColors, WordItem } from './SearchPageHelpers.js';
+import SimpleWordBuilder from './SimpleWordBuilder.js';
 
 
 class YupikEntry extends Component {
@@ -14,6 +15,7 @@ class YupikEntry extends Component {
     this.state = {
       entry: props.entry,
       word: props.word,
+      // postbaseTableOn: false,
       // displayEntryNumber: props.displayEntryNumber,
       // entryNumber: props.entryNumber
     };
@@ -71,6 +73,72 @@ class YupikEntry extends Component {
     }
   }
 
+
+  processPostbaseExampleRow = (sentence) => {     
+    // sentence = sentence.trim()
+    // let words = sentence.trim().split(' ')
+    // console.log(words)
+    // if (words.length > 2 && words[1] === 'or') {
+    //    return <div>
+    //       <span style={{fontWeight:'bold',paddingRight:'5px'}}>{words.slice(0,3)}</span>
+    //       <span>{words.slice(3,).join(' ')}</span>
+    //     </div>     
+    // } else {
+    //  return <div>
+    //     <span style={{fontWeight:'bold',paddingRight:'5px'}}>{words[0]}</span>
+    //     <span>{words.slice(1,).join(' ')}</span>
+    //   </div>
+    // }
+
+    let matches = sentence.match(/\`.*?(\`|\')/g)
+    let matches2 = sentence.match(/\(.*?\)/g)
+
+    console.log(matches2)
+    if (matches !== null) {
+      matches.map((m) => sentence = '<b>'+sentence.replace(m,'<span style="font-weight:normal">'+m.slice(1,-1)+'</span>'))+'</b>'
+    }      
+    if (matches2 !== null) {
+      matches2.map((m) => sentence = sentence.replace(m,'<span style="font-weight:normal"><i>'+m+'</i></span>'))      
+    }
+    if (matches !== null || matches2 !== null) {
+      return <span dangerouslySetInnerHTML={{__html: sentence}} />          
+    } else {
+      return <span>{sentence}</span>
+    }
+  }
+
+  processPostbaseTableRow = (sentence) => {     
+    // sentence = sentence.trim()
+    // let words = sentence.trim().split(' ')
+    // console.log(words)
+    // if (words.length > 2 && words[1] === 'or') {
+    //    return <div>
+    //       <span style={{fontWeight:'bold',paddingRight:'5px'}}>{words.slice(0,3)}</span>
+    //       <span>{words.slice(3,).join(' ')}</span>
+    //     </div>     
+    // } else {
+    //  return <div>
+    //     <span style={{fontWeight:'bold',paddingRight:'5px'}}>{words[0]}</span>
+    //     <span>{words.slice(1,).join(' ')}</span>
+    //   </div>
+    // }
+
+    let matches = sentence.match(/\‘.*?\’(?!\w)/g)
+    let matches2 = sentence.match(/\(.*?\)/g)
+    // console.log(matches)
+    if (matches !== null) {
+      matches.map((m) => sentence = '<b>'+sentence.replace(m,'<span style="font-weight:normal">'+m+'</span>'))+'</b>'
+    }
+    if (matches2 !== null) {
+      matches2.map((m) => sentence = sentence.replace(m,'<span style="font-weight:normal"><i>'+m+'</i></span>'))      
+    }
+    if (matches !== null || matches2 !== null) {
+      return <span dangerouslySetInnerHTML={{__html: sentence}} />          
+    } else {
+      return <span>{sentence}</span>
+    }
+  }
+
   unlinked = (word) => {
     return <List.Item key={word.keyString}>
       <List.Content>
@@ -86,6 +154,8 @@ class YupikEntry extends Component {
 
   render() {
     console.log(this.state)
+    let postbaseTableOn = false
+    let postbaseExampleOn = false
     return (
       <Segment style={{fontSize:'1em'}}>
       <Grid>
@@ -189,6 +259,18 @@ class YupikEntry extends Component {
         }
 
 
+        {this.state.entry.usagekeys.length !== 0 ?
+          <div className='hierarchy'>
+          <Header as='h2'>Usage</Header>
+          {this.state.entry.usagekeys.map((entry,i) => {
+            return <SimpleWordBuilder definition={this.state.entry.usagedefinitions[i]} base={this.state.word} />
+          })}
+          </div>
+          :
+          null
+        }
+
+        
 
         {this.state.entry.entryDialect.length !== 0 ?
           <div className='hierarchy'>
@@ -213,6 +295,7 @@ class YupikEntry extends Component {
           null
         }
 
+
         {this.state.entry.baseExamples.length !== 0 ?
           <div className='hierarchy'>
             <Header as='h2'>Example Sentences</Header>
@@ -236,16 +319,68 @@ class YupikEntry extends Component {
           null
         }
 
-        {this.state.entry.additionalInfoNearDefinition.length !== 0 ?
+        {this.state.entry.postbaseExamples.length !== 0 ?
           <div className='hierarchy'>
-          <Header as='h2'>Additional Info</Header>
-            {this.state.entry.additionalInfo.map((entry,i) => {
-              return <div><span>{entry}</span></div>
+          <Header as='h2'>Postbase Examples</Header>
+
+            {this.state.entry.postbaseExamples.map((entry,i) => {
+              if (postbaseTableOn) {
+                if (entry == '</table>') {
+                  postbaseTableOn = false
+                } else {
+                  let items = []
+                  if (entry.split("\"").length > 1) {
+                    entry = entry.replace("\",\"","@@").replace(",\"","@@").replace("\",","@@").replaceAll("\"","")
+                    items = entry.split('@@') ;                 
+                  } else {
+                    items = entry.split(',')
+                  }
+
+                  let rightside = items[1].split(';');
+                  return <div style={{display:'flex'}}>
+                          <div style={{flex:1}}>
+                            {this.processPostbaseTableRow(items[0])}
+                          </div>
+                          <div style={{flex:1}}>
+                            {rightside.map((k)=>{
+                              return <div>{this.processPostbaseTableRow(k)}</div>
+                            })}
+                          </div>
+                        </div> 
+                }
+              } else if (postbaseExampleOn) {
+                if (entry == '</example>') { 
+                  postbaseExampleOn = false                  
+                } else {
+                  return <div style={{display:'flex'}}>{this.processPostbaseExampleRow(entry)}</div> 
+                }
+              } else {
+                if (entry == '<table>') {              
+                  postbaseTableOn = true
+                } else if (entry == '<example>') { 
+                  postbaseExampleOn = true       
+                  return <div style={{marginTop:'20px',marginBottom:'20px'}}><span style={{fontStyle:'italic'}}>{'Example Sentences'}</span></div>           
+                } else {
+                  return <div style={{marginTop:'20px',marginBottom:'20px'}}><span style={{fontStyle:'italic'}}>{entry}</span></div>                                                    
+                }               
+              }
             })}
           </div>
           :
           null
         }
+
+        {this.state.entry.additionalInfo.length !== 0 ?
+          <div className='hierarchy'>
+          <Header as='h2'>Additional Info</Header>
+            {this.state.entry.additionalInfo.map((entry,i) => {
+              return <div><span>{'- '+entry}</span></div>
+            })}
+          </div>
+          :
+          null
+        }
+
 
         {Object.keys(this.state.entry.childrenEntries).length !== 0 ?
           <div className='hierarchy'>
