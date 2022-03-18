@@ -157,6 +157,12 @@ class SearchPageDictionary extends Component {
       this.resetAll()
     }
 
+
+    // if (this.props.location.state.activeTabIndex !== prevProps.activeTabIndex) {
+    //   this.resetAll()      
+    //   console.log('hi')
+    // }
+
     // if (this.props.dictionary.length !== this.state.dictionary.length) {
     //   this.setState({dictionary:this.props.dictionary});
     //   this.setState({dictionary_dict:this.props.dictionary_dict})
@@ -412,6 +418,7 @@ class SearchPageDictionary extends Component {
 
   render() {
     console.log("SearchPage state: ", this.state);
+    // console.log("props:",this.props)
     // console.log("dictionary: ",dictionary_dict);
     // console.log("fuse.js: ",fuse.search('pissur'))
     // console.log("Fuzzysort: ",fuzzysort.go('pissur', dictionary, optionsFuzzy));

@@ -27,24 +27,27 @@ class SimpleWordBuilder extends Component {
     super(props);
     console.log("YupikDetails props: ", props);
     this.state = {
-      definition: '[he] is hunting', // from json
+      tag: props.entry[0],
+      baseCases: props.entry[1],
+      baseWord: props.entry[2],
+      definition: props.entry[3],
+      firstVerb: props.entry[4],
       // definitionraw: 'hunting', // from json
-      baseCases: ['pissur','nere'], // from json
-      definitionraw: "⟨hunting⟩ <it>", 
-      firstVerb: [
-                    "hunt", 
-                    "hunted", 
-                    "hunts", 
-                    "hunting"
-                ],
+      // baseCases: ['pissur','nere'], // from json
+      // definitionraw: "⟨hunting⟩ <it>", 
+      // firstVerb: [
+      //               "hunt", 
+      //               "hunted", 
+      //               "hunts", 
+      //               "hunting"
+      //           ],
 
       fstCall: '',
       objectPossessed: false,
       baseOptions: [],
       activeKeyInEditIndex: 0,
-      // definition: props.definition === undefined ? '' : props.definition,
+      // definition: props.entry === undefined ? '' : props.definition,
       entryModified: [],
-      tag: 'TRANSITIVE VERB',
       verbMood: 'Indicative',
       wordBuilderOn: false,
 

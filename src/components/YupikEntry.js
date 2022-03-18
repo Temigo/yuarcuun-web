@@ -124,8 +124,8 @@ class YupikEntry extends Component {
     // }
 
     let matches = sentence.match(/\‘.*?\’(?!\w)/g)
-    let matches2 = sentence.match(/\(.*?\)/g)
-    // console.log(matches)
+    let matches2 = sentence.match(/\s\(.*?\)/g)
+    console.log(matches)
     if (matches !== null) {
       matches.map((m) => sentence = '<b>'+sentence.replace(m,'<span style="font-weight:normal">'+m+'</span>'))+'</b>'
     }
@@ -236,7 +236,7 @@ class YupikEntry extends Component {
           null
         }
 
-        {this.state.entry.usagekeys.length !== 0 ?
+{/*        {this.state.entry.usagekeys.length !== 0 ?
           <div className='hierarchy'>
           <Header as='h2'>Usage</Header>
           {this.state.entry.usagekeys.map((entry,i) => {
@@ -257,13 +257,13 @@ class YupikEntry extends Component {
           :
           null
         }
+*/}
 
-
-        {this.state.entry.usagekeys.length !== 0 ?
+        {this.state.entry.usage.length !== 0 ?
           <div className='hierarchy'>
           <Header as='h2'>Usage</Header>
-          {this.state.entry.usagekeys.map((entry,i) => {
-            return <SimpleWordBuilder definition={this.state.entry.usagedefinitions[i]} base={this.state.word} />
+          {this.state.entry.usage.map((entry,i) => {
+            return <SimpleWordBuilder entry={entry} />
           })}
           </div>
           :
@@ -303,7 +303,7 @@ class YupikEntry extends Component {
               return (
                 <List.Item style={{paddingBottom:'10px'}} key={sentence[0]}>
                   <List.Header>
-                <Link to={{pathname:'/', state: {...this.props.location.state, updateSearchEntry:true, search: sentence[0], activeTabIndex:1}}}>
+                <Link to={{pathname:'/', state: {...this.props.location.state, updateSearchEntry:true, search: sentence[0], newSearchList: sentence[0].split(" "), activeTabIndex:1}}}>
                   <span style={{textDecoration:'underline'}}>
                   {sentence[0]}
                   </span>

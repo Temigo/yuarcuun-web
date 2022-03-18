@@ -6,6 +6,7 @@ import './style.css';
 
 import SearchPage from './components/SearchPage.js';
 import YupikDetails from './components/YupikDetails.js';
+import WordBuilder from './components/WordBuilder.js';
 import About from './components/About.js';
 import Dialogues from './components/Dialogues.js';
 import Lksdreader from './components/Lksdreader.js';
@@ -32,6 +33,7 @@ class App extends Component {
         <Route exact path='/symbols' component={Symbols} />
         <Route path='/:word/:entry_id/:usage_id/modify' component={YupikModifyLayout} />
         <Route exact path='/:word' component={YupikDetails} />
+        <Route exact path='/wordbuilder/:word' component={WordBuilder}></Route>
       </Switch>
     );
   }

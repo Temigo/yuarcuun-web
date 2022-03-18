@@ -467,8 +467,10 @@ class SearchPage extends Component {
   }
 
   handleTabChange = (e,data) => {
-    // console.log(data.activeIndex, this.state.activeIndex)
+    // console.log(data.activeIndex, this.state.activeTabIndex)
     if (this.state.activeTabIndex !== data.activeIndex) {
+      console.log('hi')
+      this.resetAll();
       this.setState({ activeTabIndex:data.activeIndex})
     }
     // } else if (data.activeIndex === 1 && this.state.activeTabIndex !== 1) {

@@ -101,7 +101,7 @@ class SearchPage extends Component {
       // activeTabIndex:0,
       showMoreEnding: false,
       moreIndex:-1,
-      // updateSearchEntry: props.location.state === undefined ? false : props.location.state.updateSearchEntry,
+      updateSearchEntry: props.location.state === undefined ? false : props.location.state.updateSearchEntry,
       activeTabIndex: props.location.state === undefined ? 0 : props.location.state.activeTabIndex,
 
       // exampleSentenceSearch: props.location.state === undefined ? false : props.location.state.exampleSentenceSearch,
@@ -124,12 +124,13 @@ class SearchPage extends Component {
     this.inputClicked = this.inputClicked.bind(this);
   }
 
-  // componentDidMount() {
-  //   let start = now();
-  //   if (this.state.updateSearchEntry) {
-  //     this.inputClicked();
-  //     this.setState({ updateSearchEntry: false });
-  //   }
+  componentDidMount() {
+    // let start = now();
+    if (this.state.updateSearchEntry) {
+      this.inputClicked();
+      this.setState({ updateSearchEntry: false });
+    }
+  }
     // if (dictionary.length === 0) {
     //   axios
     //     .get(API_URL + "/word/all2021")
