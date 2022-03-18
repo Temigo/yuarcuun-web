@@ -99,19 +99,19 @@ export const options2 = [
 
 
 export const options3 = [
-  {id: 0, value: 'o11(2)', text:'my'},
-  {id: 1, value: 'o21(2)', text:'your'},
-  {id: 2, value: 'o31-1(2)', text:'his'},
-  {id: 3, value: 'o31-2(2)', text:'her'},
-  {id: 4, value: 'o31-3(2)', text:'its'},
+  {id: 0, value: 'o11(3)', text:'my'},
+  {id: 1, value: 'o21(3)', text:'your'},
+  {id: 2, value: 'o31-1(3)', text:'his'},
+  {id: 3, value: 'o31-2(3)', text:'her'},
+  {id: 4, value: 'o31-3(3)', text:'its'},
   // {id: 5, value: 'o41(2)', text:'its own'},
-  {id: 6, value: 'o12(2)', text:'our (two)'},
-  {id: 7, value: 'o22(2)', text:'your (two)'},
-  {id: 8, value: 'o32(2)', text:'their (two)'},
+  {id: 6, value: 'o12(3)', text:'our (two)'},
+  {id: 7, value: 'o22(3)', text:'your (two)'},
+  {id: 8, value: 'o32(3)', text:'their (two)'},
   // {id: 9, value: 'o42(2)', text:'their own (two)'},
-  {id: 10, value: 'o13(2)', text:'our (3+)'},
-  {id: 11, value: 'o23(2)', text:'your (3+)'},
-  {id: 12, value: 'o33(2)', text:'their (3+)'},
+  {id: 10, value: 'o13(3)', text:'our (3+)'},
+  {id: 11, value: 'o23(3)', text:'your (3+)'},
+  {id: 12, value: 'o33(3)', text:'their (3+)'},
   // {id: 13, value: 'o43(2)', text:'their own (3+)', ptext:'their own (3+)'},
 ];
 
@@ -159,6 +159,96 @@ export const retrieveSubjectObject =
   '33(3)':'their (3+)',
   '43(3)':'their own (3+)'}
 ;
+
+export const retrieveReflexiveSubjectPronoun =
+{
+  'self':
+  {
+  's11(1)':'myself',
+  's21(1)':'yourself',
+  's31-1(1)':'himself',
+  's31-2(1)':'herself',
+  's31-3(1)':'itself',
+  // '41(1)':'its own',
+  's12(1)':'ourselves',
+  's22(1)':'yourselves',
+  's32(1)':'themselves',
+  // '42(1)':'their own (two)',
+  's13(1)':'ourselves',
+  's23(1)':'yourselves',
+  's33(1)':'themselves',
+  },
+  'poss':
+  {
+  's11(1)':'my',
+  's21(1)':'your',
+  's31-1(1)':'his',
+  's31-2(1)':'her',
+  's31-3(1)':'its',
+  // '41(1)':'its own',
+  's12(1)':'our',
+  's22(1)':'your',
+  's32(1)':'their',
+  // '42(1)':'their own (two)',
+  's13(1)':'our',
+  's23(1)':'your',
+  's33(1)':'their',
+  },
+  'regSub':
+  {
+  's11(1)':'I',
+  's21(1)':'you',
+  's31-1(1)':'he',
+  's31-2(1)':'she',
+  's31-3(1)':'it',
+  // '41(1)':'its own',
+  's12(1)':'we',
+  's22(1)':'you two',
+  's32(1)':'they',
+  // '42(1)':'their own (two)',
+  's13(1)':'we all',
+  's23(1)':'you all',
+  's33(1)':'they all',
+  },
+  'regObj':
+  {
+  's11(1)':'me',
+  's21(1)':'you',
+  's31-1(1)':'him',
+  's31-2(1)':'her',
+  's31-3(1)':'it',
+  // '41(1)':'its own',
+  's12(1)':'the two of us',
+  's22(1)':'the two of you',
+  's32(1)':'the two of them',
+  // '42(1)':'their own (two)',
+  's13(1)':'us all',
+  's23(1)':'you all',
+  's33(1)':'them all',
+  },
+};
+
+
+
+// export const retrieveReflexiveSubjectPronounSelf =
+//   {
+//   's11(1)':'myself',
+//   's21(1)':'yourself',
+//   's31-1(1)':'himself',
+//   's31-2(1)':'herself',
+//   's31-3(1)':'itself',
+//   // '41(1)':'its own',
+//   's12(1)':'ourselves',
+//   's22(1)':'yourselves',
+//   's32(1)':'themselves',
+//   // '42(1)':'their own (two)',
+//   's13(1)':'ourselves',
+//   's23(1)':'yourselves',
+//   's33(1)':'themselves',
+//   // '43(1)':'their own (3+)'
+// }
+// ;
+
 
 export const verbPostbases = {
   // '0':{

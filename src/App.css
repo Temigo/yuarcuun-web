@@ -38,6 +38,13 @@
   font-size: 18px;
 }
 
+.ui.input.fill-in-blanks>input  {
+  margin-left: 2px;
+  padding-left: 2px;
+  padding-right: 2px;
+  /*width: 100px;*/
+}
+
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
