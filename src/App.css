@@ -45,6 +45,68 @@
   /*width: 100px;*/
 }
 
+.hierarchy {
+  padding-top: 20px;
+}
+
+.hierarchymain {
+  display:flex;
+  align-items:center;
+  height:45px;
+  background-color:#F3F3F3;
+}
+
+
+.hierarchymain .span1 {
+  margin-left:12px;
+  color:#0D0D0D;
+  font-size:16px;
+}
+
+.hierarchymain .span2 {
+  margin-left:10px;
+  color:#777777;
+  font-size:16px;
+  font-style:italic;
+}
+
+.hierarchymain2 {
+  display:flex;
+  align-items:center;
+  height:45px;
+  /*background-color:#F3F3F3;*/
+}
+
+.hierarchymain2 .span1 {
+  margin-left:10px;
+  color:#777777;
+  font-size:16px;
+  font-style:italic;
+  text-decoration: underline;
+}
+
+.extrainfo {
+  display:flex;
+  align-items:center;
+  height:45px;
+}
+.extrainfo .span1 {
+  margin-left:10px;
+  color:#777777;
+  font-size:16px;
+  font-style:italic;
+  text-decoration: underline;
+}
+
+.extrainformation {
+  /*display:flex;*/
+  /*align-items:center;*/
+  height:30px;
+  margin-left:20px;
+  color:#777777;
+  font-size:16px;
+}
+
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

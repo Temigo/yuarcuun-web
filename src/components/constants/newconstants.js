@@ -757,7 +757,7 @@ export const nounPostbases = {
     englishModifier: (english) => { return 'good '+ english; },
     englishModifierPlural: (english) => { return 'good '+ english; },
 
-    expression: 'lluataq',
+    expression: '–kegtaar(ar*)[N→N]',
     // tense:'future',
     allowable_next_ids: [17,18,19,20,21,22,23,24,25],
   },

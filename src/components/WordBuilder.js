@@ -95,9 +95,11 @@ class WordBuilder extends Component {
 			// word: 'nakuu-',
 			entryModified:[],
 			activeKeyInEditIndex: props.location.state === undefined ? 0 : props.location.state.activeKeyInEditIndex,
+			activeDefinitionInEditIndex: 0,
 			usageDefinition: props.location.state === undefined ? '' : props.location.state.usageDefinition,
 			baseUsageWord: props.location.state === undefined ? 'pissurtuq' : props.location.state.word,
 			baseCase: props.location.state === undefined ? '' : props.location.state.baseCase,
+			pluralizedDefinition:'',
 			tag: '',
 			baseTag: '',
 			otherBases: [],
@@ -105,6 +107,7 @@ class WordBuilder extends Component {
 			nounMood: 'Absolutive',
 			verbMood: 'Indicative',
 			baseOptions: [],
+			definitionBaseOptions: [],
 			postbaseInformationAvailable1: [],
 			postbaseInformationAvailable2: [],
 			postbasesAvailable: [],
@@ -140,7 +143,7 @@ class WordBuilder extends Component {
 			availablePostbaseInformationText: [],
 			usageVerbTenses: [],
 
-			activeKeyInEditIndex: 0,
+			// activeKeyInEditIndex: 0,
 			transitiveLeftOfObject:'',
 			transitiveRightOfObject:'',
 			englishPreVerb:[],
@@ -243,32 +246,32 @@ class WordBuilder extends Component {
 			// 	primaryVerbBase: verbTenseMatch[0].replace("⟨","").replace("⟩",""),
 			// })
 
-		} else if (tag === 'NOUN') {
+		} else if (tag === 'n') {
 			this.setNoun(true,undefined,undefined)
-			this.setState({
-				primaryNoun: this.state.usageDefinition,
-			})			
+			// this.setState({
+			// 	primaryNoun: this.state.usageDefinition,
+			// })			
 		} else if (tag === 't') {
-			let matches = this.state.usageDefinition.match(/\<.*?\>/g)
-			let splitSentence = []
-			if (matches.length == 1) {
-				splitSentence = this.state.usageDefinition.split(matches[0])
-			}
-			this.identifyObjectCase(matches[0])
-			// let leftOfObject = splitSentence[0]
-			let verbTenseMatch = splitSentence[0].match(/\⟨.*?\⟩/g)
-			let splitLeftOfObject = []
-			if (verbTenseMatch.length == 1) {
-				splitLeftOfObject = splitSentence[0].split(verbTenseMatch[0])
-			}
-			this.setState({
-				leftOfVerb: splitLeftOfObject[0],
-				rightOfVerb: splitLeftOfObject[1],
-				primaryVerb: verbTenseMatch[0].replace("⟨","").replace("⟩",""),
-				primaryVerbBase: verbTenseMatch[0].replace("⟨","").replace("⟩",""),
-				transitiveRightOfObject: splitSentence[1],
-				// entryModified: matches[0],
-			});
+			// let matches = this.state.usageDefinition.match(/\<.*?\>/g)
+			// let splitSentence = []
+			// if (matches.length == 1) {
+			// 	splitSentence = this.state.usageDefinition.split(matches[0])
+			// }
+			// this.identifyObjectCase(matches[0])
+			// // let leftOfObject = splitSentence[0]
+			// let verbTenseMatch = splitSentence[0].match(/\⟨.*?\⟩/g)
+			// let splitLeftOfObject = []
+			// if (verbTenseMatch.length == 1) {
+			// 	splitLeftOfObject = splitSentence[0].split(verbTenseMatch[0])
+			// }
+			// this.setState({
+			// 	leftOfVerb: splitLeftOfObject[0],
+			// 	rightOfVerb: splitLeftOfObject[1],
+			// 	primaryVerb: verbTenseMatch[0].replace("⟨","").replace("⟩",""),
+			// 	primaryVerbBase: verbTenseMatch[0].replace("⟨","").replace("⟩",""),
+			// 	transitiveRightOfObject: splitSentence[1],
+			// 	// entryModified: matches[0],
+			// });
 			this.setTransitive(true,undefined,undefined)
 		}
 
@@ -277,6 +280,13 @@ class WordBuilder extends Component {
 			nounPostbaseDefault.map((a)=>{
 				postbaseInformationAvailable.push({value:a,key:a,text:nounPostbases[a].description})
 			})
+
+			let definitionBaseOptions = []
+			this.state.usageDefinition.map((k,index)=>{
+				definitionBaseOptions.push({value:index,key:index,text:k[0].replace("⟨","").replace("⟩","")})
+			})
+			
+			this.setState({definitionBaseOptions:definitionBaseOptions})
 			this.setState({postbasesAvailable:nounPostbaseDefault})
 			this.setState({allPostbasesAvailable:nounPostbaseDefault})
 			this.setState({postbaseMaster:nounPostbases})
@@ -339,8 +349,12 @@ class WordBuilder extends Component {
 	          entryUrl: response.data['key'][2],	
 	          tag: response.data['key'][0],	
 	          sisters: response.data['sisters'],
-	          usageVerbTenses: response.data['key'][4],
 
+	      	})
+
+	        if (response.data['key'].length > 4) {
+	        this.setState({
+	          usageVerbTenses: response.data['key'][4],
 	          startingVerbTense: response.data['key'][4].indexOf(response.data['key'][5][4]),
 			      definitionraw: response.data['key'][5] === undefined ? '' : response.data['key'][5],
 			      preSubjectText: response.data['key'][5] === undefined ? '' : response.data['key'][5][0],
@@ -352,8 +366,8 @@ class WordBuilder extends Component {
 			      value2: response.data['key'][5] === undefined ? '' :response.data['key'][5][6],
 			      afterObjectText: response.data['key'][5] === undefined ? '' :response.data['key'][5][7],
 
-	      	})
-
+	      	})	        	
+	        }
 	      	// console.log(index)
 	        tag = response.data['key'][0]
 	      }
@@ -391,8 +405,6 @@ class WordBuilder extends Component {
   	// let verbMood = 'Indicative'
 
   	if (initializing) {
-
-  		
   		let ind = Math.round(Math.random())
   		if (ind % 2 == 0) {
   		value1 = "s31-2(1)"  			
@@ -421,7 +433,7 @@ class WordBuilder extends Component {
       // fstCall: fstCall,
     });
 
-    if (this.state.baseTag === 'NOUN') {
+    if (this.state.baseTag === 'n') {
     	this.setEnglishNoun(this.state.currentPostbases,value1,'',this.state.nounMood)
     } else {
     	this.setEnglish(this.state.currentPostbases,value1,'',this.state.verbMood,this.state.moodSpecific)
@@ -591,6 +603,23 @@ class WordBuilder extends Component {
       // fstCall: fstCall,
     });
 
+    let definitionBaseOptions = []
+		this.state.usageDefinition.map((k,index)=>{
+	    let sentence = this.state.usageDefinition[index][0]
+			let matches = sentence.match(/\⟨.*?\⟩/g)
+			if (matches !== null) {
+				if (nounvalue1 !== '1') {
+					matches.map((m) => sentence = sentence.replace(m,this.state.usageDefinition[index][2][1]))						
+				} else {
+					matches.map((m) => sentence = sentence.replace(m,this.state.usageDefinition[index][2][0]))						
+				}
+			}
+			// console.log(sentence)
+			definitionBaseOptions.push({value:index,key:index,text:sentence})
+		})
+		
+		this.setState({definitionBaseOptions:definitionBaseOptions})
+
     this.setEnglishNoun(this.state.currentPostbases,nounvalue1,nounvalue2,this.state.nounMood)
     this.getFSTParse(this.state.baseCase,this.state.currentPostbases,this.state.tag,this.state.verbMood,this.state.moodSpecific,[],[],this.state.nounMood,nounvalue1,nounvalue2)
   }
@@ -600,7 +629,7 @@ class WordBuilder extends Component {
 
 	usageEntry = (ind,tag) => {
 		// console.log(ind,tag)
-		if (tag === 'NOUN') {
+		if (tag === 'n') {
 			return (	
 							<div>
 								<div style={{marginTop:'30px',marginBottom:'10px',fontSize:'30px',color:'#000000',fontWeight:'400'}}>
@@ -611,7 +640,7 @@ class WordBuilder extends Component {
 												<span style={{color:(index === 0 ? '#000000': (modifiedword.split(">").length-1 == index ? '#852828' : this.state.colorsList[this.state.currentPostbases[this.state.currentPostbases.length-index]]))}}>{q}</span>
 												))
 											:
-											<Dropdown inline scrolling onChange={this.changeActiveUsageKey.bind(this)} text={(modifiedword.split('>').map((q,index) => <span style={{fontWeight:'400',color:(modifiedword.split(">").length-1 == index ?'#852828':'#000000')}}>{q}</span>))} value={this.state.activeKeyInEditIndex} options={this.state.baseOptions} />
+											<Dropdown inline scrolling onChange={this.changeActiveUsageKey.bind(this)} text={(modifiedword.split('>').map((q,index) => <span style={{fontWeight:'400',color:(modifiedword.split(">").length-1 == index ?'#852828':'#000000')}}>{q}</span>))} value={this.state.activeDefinitionInEditIndex} options={this.state.baseOptions} />
 										}
 									</div>
 									)}
@@ -619,7 +648,7 @@ class WordBuilder extends Component {
 
 								<div style={{display:'flex',justifyContent:'center',fontSize:'20px',marginBottom:'15px',fontWeight:'300'}}> 
 								<span style={{padding:'10px'}}>
-									{this.state.baseCase}
+									{this.state.baseCase+'-'}
 								</span>
 								{this.state.underlyingCallReturn.map((x,xind)=>
 									(x[0] == '' ? 
@@ -643,7 +672,15 @@ class WordBuilder extends Component {
 								{this.state.englishPreNoun.map((w,wind)=>{
 									return <span style={{color:this.state.colorsList[this.state.currentPostbases[wind]]}}>{w}</span>
 								})}
-								<span style={{color:'#777777'}}>{this.processStyledText(this.state.usageDefinition)}</span>
+								{this.state.usageDefinition.length > 1 ?
+									<Dropdown inline scrolling onChange={this.changeActiveDefinitionKey.bind(this)} value={this.state.activeDefinitionInEditIndex} options={this.state.definitionBaseOptions} />
+									:
+									(this.state.nounvalue1 !== '1' ?
+										<span style={{color:'#777777'}}>{this.processStyledText(this.state.usageDefinition[this.state.activeDefinitionInEditIndex][2][1])}</span>
+										:
+										<span style={{color:'#777777'}}>{this.processStyledText(this.state.usageDefinition[this.state.activeDefinitionInEditIndex][2][0])}</span>
+									)
+								}
 								</div>
 							</div>		
 						)
@@ -701,7 +738,7 @@ class WordBuilder extends Component {
 								</div>
 							</div>		
 						)
-		} else if (tag === 'TRANSITIVE VERB') {
+		} else if (tag === 't') {
 			return (	
 							<div>
 								<div style={{marginTop:'30px',marginBottom:'10px',fontSize:'30px',color:'#000000',fontWeight:'400'}}>
@@ -735,19 +772,19 @@ class WordBuilder extends Component {
 								{this.state.englishPreSubject.map((w,wind)=>{
 									return <span style={{color:this.state.colorsList[this.state.currentPostbases[wind]]}}>{w}</span>
 								})}
-								<span style={{color:'#777777'}}>{this.state.beforeSubject}</span>
+								<span style={{color:'#777777'}}>{this.state.preSubjectText}</span>
 								<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={this.setTransitive.bind(this,false)} value={this.state.value1} options={options1} />
+								<span style={{color:'#777777'}}>{this.state.afterSubjectText}</span>
 								<span style={{color:'#777777'}}>{this.state.subjectIs}</span>
 								{this.state.englishPreVerb.map((w,wind)=>{
 									return <span style={{color:this.state.colorsList[this.state.currentPostbases[wind]]}}>{w+" "}</span>
 								})}
-									<span style={{color:'#777777'}}>{this.processStyledText(this.state.bePreVerb)}</span>
-								<span style={{color:'#777777'}}>{this.processStyledText(this.state.leftOfVerb)}</span>
+								<span style={{color:'#777777'}}>{this.processStyledText(this.state.bePreVerb)}</span>
+								<span style={{color:'#777777'}}>{this.processStyledText(this.state.preObjectText)}</span>
 								<span style={{color:'#777777'}}>{this.processStyledText(this.state.primaryVerb)}</span>
-								<span style={{color:'#777777'}}>{this.processStyledText(this.state.rightOfVerb)}</span>
-								<span style={{color:'#777777'}}>{this.state.transitiveLeftOfObject}</span>
-								<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={this.setTransitive.bind(this,false)} value={this.state.value2} options={options2} />
-								<span style={{color:'#777777'}}>{this.state.transitiveRightOfObject}</span>
+								<span style={{color:'#777777'}}>{this.processStyledText(this.state.primaryNoun)}</span>
+								<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}} onChange={this.setTransitive.bind(this,false)} value={this.state.value2} options={options2} />
+								<span style={{color:'#777777'}}>{this.processStyledText(this.state.afterObjectText)}</span>
 								<span style={{color:'#852828'}}>{' '+this.state.questionMark}</span>
 								</div>
 							</div>		
@@ -762,7 +799,7 @@ class WordBuilder extends Component {
 	}
 
 	switchToSister(info) {
-		this.getWord(info['usageWord'],-1)
+		this.getWord(info,-1)
 
 	}
 
@@ -1109,7 +1146,7 @@ class WordBuilder extends Component {
 		// var remove = postbasesAvailable.indexOf(value)
 		// postbasesAvailable.splice(remove,1)
 		// console.log(postbasesAvailable)
-		if (this.state.baseTag == 'NOUN') {
+		if (this.state.baseTag == 'n') {
 			if (nnpostbases.includes(value)) {
 				currentPostbases.push(value)
 			} else {
@@ -1131,7 +1168,7 @@ class WordBuilder extends Component {
 		// let nounvalue2 = this.state.nounvalue2
 		let tag = this.state.tag
 		let verbMood = this.state.verbMood
-		if (this.state.baseTag == 'NOUN') {
+		if (this.state.baseTag == 'n') {
 
 			// postbasesAvailable.map((a)=>{
 			// 	postbaseInformationAvailable.push({value:a,key:a,text:this.state.postbaseMaster[a].englishModifier("")})
@@ -1246,7 +1283,7 @@ class WordBuilder extends Component {
 		let nounvalue1 = this.state.nounvalue1
 		let nounvalue2 = this.state.nounvalue2
 
-		if (this.state.baseTag == 'NOUN') {
+		if (this.state.baseTag == 'n') {
 
 			// postbasesAvailable.map((a)=>{
 			// 	postbaseInformationAvailable.push({value:a,key:a,text:this.state.postbaseMaster[a].englishModifier("")})
@@ -1272,7 +1309,7 @@ class WordBuilder extends Component {
 				verbMood = 'Indicative'
 				// this.getFSTParse(this.state.baseCase,this.state.currentPostbases,'INTRANSITIVE VERB','INDICATIVE',this.state.value1,'',this.state.nounMood,[],[])
 			} else {
-				tag = 'NOUN'
+				tag = 'n'
 			}
 			this.setState({tag:tag})
 			console.log(tag)
@@ -1311,13 +1348,13 @@ class WordBuilder extends Component {
 		if (currentPostbases.length == 0) {
 			if (mood == 'Participial') {
 				postbasesAvailable = verbPostbaseParticipialDefault
-			} else if (this.state.baseTag == 'NOUN' && mood !== 'Absolutive') {
+			} else if (this.state.baseTag == 'n' && mood !== 'Absolutive') {
 				postbasesAvailable = nnpostbases
 			} else {
 				postbasesAvailable = this.state.allPostbasesAvailable
 			}
 		} else {
-			if (this.state.baseTag == 'NOUN' && mood !== 'Absolutive') {
+			if (this.state.baseTag == 'n' && mood !== 'Absolutive') {
 
 			} else {
 				postbasesAvailable = this.state.postbaseMaster[currentPostbases[0]].allowable_next_ids
@@ -1434,7 +1471,7 @@ class WordBuilder extends Component {
 
 
 
-		if (this.state.tag === 'NOUN') {
+		if (this.state.tag === 'n') {
 			// if (mood === this.state.nounMood) {	
 			// 	mood = 'Absolutive'
 			// 	moodSpecific = ''
@@ -1481,16 +1518,41 @@ class WordBuilder extends Component {
 	}
 
   changeActiveUsageKey(entry, data) {
-  	// console.log(data)
+  	console.log(data)
   	let num = data.value
   	// console.log(data.options)
     this.setState({
       // value1: data.value,
       activeKeyInEditIndex:data.value,
-      baseCase: data.options[data.value].text,
+      // baseCase: data.options[data.value].text,
     });
-    this.getFSTParse(data.options[data.value].text,this.state.currentPostbases,this.state.tag,this.state.verbMood,this.state.moodSpecific,this.state.value1,this.state.value2,this.state.nounMood,this.state.nounvalue1,this.state.nounvalue2)
+    this.getFSTParse(this.state.baseCase,this.state.currentPostbases,this.state.tag,this.state.verbMood,this.state.moodSpecific,this.state.value1,this.state.value2,this.state.nounMood,this.state.nounvalue1,this.state.nounvalue2)
   }
+
+
+  changeActiveDefinitionKey(entry, data) {
+  	console.log(data)
+  	let num = data.value
+  	// console.log(data.options)
+    this.setState({
+      // value1: data.value,
+      activeDefinitionInEditIndex:data.value,
+      // baseCase: data.options[data.value].text,
+    });
+
+    console.log(this.state.usageDefinition[data.value][0])
+    let sentence = this.state.usageDefinition[data.value][0]
+		let matches = sentence.match(/\⟨.*?\⟩/g)
+		if (matches !== null) {
+			matches.map((m) => sentence = sentence.replace(m,m.slice(1,-1)))	
+		}
+		console.log(sentence)
+
+    this.setState({pluralizedDefinition:sentence})
+    // console.log(this.state.usageDefinition[data.value][])
+    // this.getFSTParse(this.state.baseCase,this.state.currentPostbases,this.state.tag,this.state.verbMood,this.state.moodSpecific,this.state.value1,this.state.value2,this.state.nounMood,this.state.nounvalue1,this.state.nounvalue2)
+  }
+  
 
   getFSTParse(baseCase,currentPostbases,tag,verbMood,moodSpecific,value1,value2,nounMood,nounvalue1,nounvalue2) {
   	console.log(baseCase,currentPostbases,tag,verbMood,value1,value2,nounMood,nounvalue1,nounvalue2)
@@ -1499,13 +1561,18 @@ class WordBuilder extends Component {
   	let fstCall = ''
   	let owner = ''
   	if (tag == 'n') {
-			if (nounvalue2[0] !== '0') {
-				owner = '+'+nounvalue2[0]+peopleDict[nounvalue2[1]]
-			} else {
-				owner = ''
-			}
+      if (nounvalue2[0] !== '0') {
+        owner = nounvalue2[0]+peopleDict[nounvalue2[1]]+'Poss'
+      } else {
+        owner = 'Unpd'
+      }
+
   		if (nounMood == 'Absolutive') {
-			  fstCall = '>+N+Abs+' + peopleDict[nounvalue1] + owner
+	      if (owner !== 'Unpd') {
+	        fstCall = '[N][Abs][' + owner + '][' + peopleDict[nounvalue1] + 'Posd]'   
+	      } else {
+	        fstCall = '[N][Abs][' + peopleDict[nounvalue1] + owner + ']'        
+	      }
   		} else if (nounMood == 'Localis') {
   			fstCall = '>+N+Loc+' + peopleDict[nounvalue1] + owner
   		} else if (nounMood == 'Terminalis') {
@@ -1524,7 +1591,7 @@ class WordBuilder extends Component {
 	  		if (tag == 'i') {
 	  			fstCall = '[V][Ind][Intr][S_' + value1[1] + peopleDict[value1[2]] + ']'
 	  		} else {
-	  			fstCall = '>+V+Ind+Prs+' + value1[1] + peopleDict[value1[2]] + '+' + value2[1]+peopleDict[value2[2]] + 'O'
+	  			fstCall = '[V][Ind][Trns][A_' + value1[1] + peopleDict[value1[2]] + '][P_' + value2[1]+peopleDict[value2[2]] + ']'
 	  		}	
 	  	} else if (verbMood == 'Participial') {
 	  		if (tag == 'i') {
@@ -1570,10 +1637,11 @@ class WordBuilder extends Component {
 		// console.log(FSTsearch,activeEditIndex)
 		let underlyingCallReturn = []
 		postfstCall.map((j)=>{
-			underlyingCallReturn.push([j])
+			underlyingCallReturn.push([j.replace('[V→V]','-')])
 		})
+		// console.log(ending_underlying[fstCall])
 		underlyingCallReturn.push(ending_underlying[fstCall])
-		console.log(underlyingCallReturn)
+		// console.log(underlyingCallReturn)
     this.setState({
       underlyingCallReturn: underlyingCallReturn,
     });
@@ -1582,7 +1650,7 @@ class WordBuilder extends Component {
     axios
       .get(API_URL + "/segment/" + encodeURIComponent(FSTsearch))
       .then(response => {
-        // console.log(response.data);
+        console.log(response.data);
 
         // var slicedColors = this.state.colorsList
         // slicedColors=slicedColors.slice(0,this.state.currentPostbases.length)
@@ -1618,21 +1686,21 @@ class WordBuilder extends Component {
 	}
 
 	processStyledText2 = (sentence,tag) => {
-		// console.log(sentence,tag)
-		sentence = sentence.replace("⟨","").replace("⟩","")
-		if (tag == 'NOUN') {
-			sentence = 'the one '+sentence
-		} else {
-			sentence = 'he/she is '+sentence
-		}
+		console.log(sentence,tag)
+		sentence = sentence.replace("⟨","").replace("⟩","").replace("]","").replace("[","").replace("<","").replace(">","")
+		// if (tag == 'NOUN') {
+		// 	sentence = 'the one '+sentence
+		// } else {
+		// 	sentence = 'he/she is '+sentence
+		// }
 		
-		let matches = sentence.match(/\⎡.*?\⎤/g)
-		if (matches !== null) {
-			matches.map((m) => sentence = sentence.replace(m,'<i>'+m.slice(1,-1)+'</i>'))		
-			return <span dangerouslySetInnerHTML={{__html: sentence}} />		
-		} else {
-			return <span>{sentence.replace("<","").replace(">","")}</span>
-		}
+		// let matches = sentence.match(/\<.*?\>/g)
+		// if (matches !== null) {
+			// matches.map((m) => sentence = sentence.replace(m,'<b>'+m.slice(1,-1)+'</b>'))		
+			// return <span dangerouslySetInnerHTML={{__html: sentence}} />		
+		// } else {
+			return <span>{sentence}</span>
+		// }
 	}
 
 	render() {
@@ -1750,7 +1818,7 @@ class WordBuilder extends Component {
 				}
 
 
-				{this.state.tag == 'NOUN' && this.state.nounMood == 'Absolutive' ?
+				{this.state.tag == 'n' && this.state.nounMood == 'Absolutive' ?
 					<div style={{display:'flex',justifyContent:'center',height:'71px',paddingTop:'15px',paddingRight:'30px',paddingLeft:'30px'}}>
 					  <Dropdown
 					  	style={{maxWidth:'350px'}}
@@ -1768,7 +1836,7 @@ class WordBuilder extends Component {
 				}
 
 
-				{this.state.baseTag != 'NOUN' && this.state.verbMood != 'Participial' && this.state.verbMood != 'Interrogative' && this.state.currentPostbases.length < 2 ?
+				{this.state.baseTag != 'n' && this.state.verbMood != 'Participial' && this.state.verbMood != 'Interrogative' && this.state.currentPostbases.length < 2 ?
 					<div style={{display:'flex',justifyContent:'center',height:'71px',paddingTop:'15px',paddingRight:'30px',paddingLeft:'30px'}}>
 					  <Dropdown
 					  	style={{maxWidth:'350px'}}
@@ -1787,6 +1855,41 @@ class WordBuilder extends Component {
 
 				<div style={{height:'30px'}} />
 
+
+				{Object.keys(this.state.sisters).length !== 0 ?
+
+					<div>
+					<div className='hierarchymain'>
+					<span className='span1'>Allat Uqaluit Maŋŋuqatiŋi</span>
+					<span className='span2'>Related Entries</span>
+					</div>
+
+							<List style={{marginTop:0}} divided selection>
+							{Object.keys(this.state.sisters).map((i,index)=>
+						    <List.Item key={i} onClick={()=>this.switchToSister(i)}>
+                  <List.Content floated='right'>
+                    <Icon style={{paddingTop:'3px', color:'#B1B1B1'}} size='large' name='chevron right' />
+                  </List.Content>
+						      <List.Content  style={{paddingRight:'16px'}}>
+						        <List.Header style={{fontSize:'19px',paddingBottom:'4px',paddingLeft:'15px',fontFamily:customFontFam,lineHeight:'25px'}}>
+						          		<div> 
+						              <span style={{'paddingRight':'3px',fontWeight:'400'}}>
+						              {this.processStyledText(this.state.sisters[i][2])}
+						                <span style={{'marginLeft':'15px',marginRight:'6px'}}>  
+		                      		<TagColors key={this.state.sisters[i][0]} word={this.state.sisters[i][0]} />
+						                </span>
+						              </span>
+						              </div>
+						        </List.Header>
+						        <List.Description style={{fontSize:'16px',color:'#000000cc',paddingLeft:'15px',fontWeight:'400',lineHeight:'23px',paddingTop:'4px'}}>{this.processStyledText2(this.state.sisters[i][3],this.state.sisters[i][0])}</List.Description>
+						      </List.Content>
+						    </List.Item>
+              	)}
+							</List>
+					</div>
+					:
+					null
+				}
 
 
 					</div>
