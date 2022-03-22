@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import '../App.css';
 import '../semantic/dist/semantic.min.css';
-import { Container, Dropdown, Icon } from 'semantic-ui-react';
+import { Container, Dropdown, Icon, Button } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../App.js';
 import YupikEntry from './YupikEntry.js';
@@ -62,6 +63,8 @@ class SimpleWordBuilder extends Component {
       verbMood: 'Indicative',
       nounMood: 'Absolutive',
       wordBuilderOn: false,
+      nounvalue1:'1',
+      nounvalue2:'00(3)',
 
       // base: props.base === undefined ? '' : props.base,
     };
@@ -105,34 +108,34 @@ class SimpleWordBuilder extends Component {
   //   }
   // }
 
-  getFSTParse(fstCall,activeEditIndex,activeKeyInEditIndex) {
-    console.log(fstCall,activeEditIndex,activeKeyInEditIndex)
-    let FSTsearch = this.state.definition[activeEditIndex][3][activeKeyInEditIndex] + fstCall
-    // console.log(FSTsearch,activeEditIndex)
+  // getFSTParse(fstCall,activeEditIndex,activeKeyInEditIndex) {
+  //   console.log(fstCall,activeEditIndex,activeKeyInEditIndex)
+  //   let FSTsearch = this.state.definition[activeEditIndex][3][activeKeyInEditIndex] + fstCall
+  //   // console.log(FSTsearch,activeEditIndex)
 
-    let baseOptions = []
-    this.state.definition[activeEditIndex][3].map((m,ind)=>{
-      baseOptions.push({id:ind,value:ind,text:m})
-    })
-    this.setState({baseOptions:baseOptions})
+  //   let baseOptions = []
+  //   this.state.definition[activeEditIndex][3].map((m,ind)=>{
+  //     baseOptions.push({id:ind,value:ind,text:m})
+  //   })
+  //   this.setState({baseOptions:baseOptions})
 
-    console.log(encodeURIComponent(FSTsearch))
-    axios
-      .get(API_URL + "/inupiaqsegment/" + encodeURIComponent(FSTsearch))
-      .then(response => {
-        console.log(response.data);
+  //   console.log(encodeURIComponent(FSTsearch))
+  //   axios
+  //     .get(API_URL + "/inupiaqsegment/" + encodeURIComponent(FSTsearch))
+  //     .then(response => {
+  //       console.log(response.data);
 
-        this.setState({
-          entryModified: response.data.words,
-        });
+  //       this.setState({
+  //         entryModified: response.data.words,
+  //       });
 
-        // if (response.data.chld !== []) {}
-        // console.log(response.data.etymology)
-        // if (response.data.etymology !== []) {
-        //  this.setState({etymology: response.data.etymology[0]})
-        // }
-      });
-  }
+  //       // if (response.data.chld !== []) {}
+  //       // console.log(response.data.etymology)
+  //       // if (response.data.etymology !== []) {
+  //       //  this.setState({etymology: response.data.etymology[0]})
+  //       // }
+  //     });
+  // }
 
 
 
@@ -659,10 +662,23 @@ class SimpleWordBuilder extends Component {
           {this.state.wordBuilderOn ?
             <div>
             {this.usageEntry(this.state.tag)}
+                <Link to={{pathname: '/wordbuilder/' + this.state.baseWord, state: { word: this.state.baseWord, activeKeyInEditIndex: this.state.activeKeyInEditIndex, usageDefinition: this.state.definition, baseCase:this.state.baseCases, nounvalue1: this.state.nounvalue1, nounvalue2: this.state.nounvalue2, value1: this.state.value1, value2: this.state.value2, }}}>
+                <Button basic compact style={{marginLeft:'45px',fontSize:'16px',fontWeight:'300',marginBottom:'10px'}}>
+                <div style={{display:'flex',flexDirection:'column',fontFamily:customFontFam}}>
+                <div style={{fontWeight:'400',paddingBottom:'5px'}}>
+                Uuktuaġuŋ Uqaluliuġun
+                </div>
+                <div>
+                Try Word Builder
+                </div>
+                </div>
+                </Button>
+                </Link>
             </div>
             :
             <Icon onClick={this.defaultFstCall.bind(this)} style={{marginLeft:'5px',fontSize:'20px',color:'#989898',cursor:'pointer'}} name='edit outline' />
           }
+
 
       </div>
     );

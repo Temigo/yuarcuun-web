@@ -259,7 +259,8 @@ class YupikEntry extends Component {
         }
 */}
 
-        {this.state.entry.usage.length !== 0 ?
+        {"usage" in this.state.entry ? 
+        (this.state.entry.usage.length !== 0 ?
           <div className='hierarchy'>
           <Header as='h2'>Usage</Header>
           {this.state.entry.usage.map((entry,i) => {
@@ -268,6 +269,9 @@ class YupikEntry extends Component {
           </div>
           :
           null
+        )
+        :
+        null
         }
 
         

@@ -272,6 +272,7 @@ class SearchPage extends Component {
     axios
       .get(API_URL + "/mood?underlying_form=" + encodeURIComponent(word) + "&mood=" + mood)
       .then(response => {
+        console.log(response.data)
         this.setState({ entries: response.data.results,}); 
         this.setState({ loaderOn: false})
     });

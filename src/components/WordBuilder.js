@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { API_URL } from '../App.js';
 import axios from 'axios';
 import {nounoptions1, nounoptions2, nounoptionsmodalis, options1, options2, verbPostbases, nounPostbases} from './constants/newconstants.js'
-import {postbasesEndingsUnderlying} from './constants/underlying.js'
+import {ending_underlying} from './constants/ending_underlying.js'
 import palette from 'google-palette';
 import shuffle from 'shuffle-array';
 import { TagColors } from './SearchPageHelpers.js';
@@ -94,9 +94,9 @@ class WordBuilder extends Component {
 			// word: decodeURI(props.match.params.word),
 			// word: 'nakuu-',
 			entryModified:[],
-			num: props.location.state === undefined ? -1 : props.location.state.num,
+			activeKeyInEditIndex: props.location.state === undefined ? 0 : props.location.state.activeKeyInEditIndex,
 			usageDefinition: props.location.state === undefined ? '' : props.location.state.usageDefinition,
-			baseUsageWord: props.location.state === undefined ? 'atigi>ruq' : props.location.state.word,
+			baseUsageWord: props.location.state === undefined ? 'pissurtuq' : props.location.state.word,
 			baseCase: props.location.state === undefined ? '' : props.location.state.baseCase,
 			tag: '',
 			baseTag: '',
@@ -122,6 +122,19 @@ class WordBuilder extends Component {
 			value1: props.location.state === undefined ? value1def : props.location.state.value1,
 			value2: props.location.state === undefined ? value2def : props.location.state.value2,
 			sisters: [],
+
+
+      firstVerb: '',
+      definitionraw: '',
+      preSubjectText: '',
+      value1: '',
+      afterSubjectText: '',
+      containsIs: '',
+      primaryVerb: '',
+      preObjectText: '',
+      value2: '',
+      afterObjectText: '',
+      startingVerbTense: -1,
 
 			currentPostbases: [],
 			availablePostbaseInformationText: [],
@@ -163,79 +176,79 @@ class WordBuilder extends Component {
 	    
 	}
 
-  identifyObjectCase = (match) => {
-  	console.log('eventually set the object type here, her/him versus it')
-  	let ind = Math.round(Math.random())
-		let value1 = ''
-		let value2 = ''
-		let possessed = false
-		if (ind % 2 == 0) {
-		value1 = "s31-2(1)"  
-		} else {
-		value1 = "s31-1(1)"  
-		}
-		if (match == '<her/him/it>') {
-  		value2 = "o31-3(2)"
-		} else if (match == '<her/him>') {
-  		if (ind % 2 == 0) {
-  		value2 = "o31-1(2)"			
-  		} else {
-  		value2 = "o31-2(2)"
-  		}
-		} else if (match == '<her/his>') {
-  		if (ind % 2 == 0) {
-  		value2 = "o31-1(2)"			
-  		} else {
-  		value2 = "o31-2(2)"
-  		}
-		} else if (match == '<her>') {
-  		value2 = "o31-2(2)"
-		} else if (match == '<him>') {
-  		value2 = "o31-1(2)"
-		} else if (match == '<a person/it>') {
-  		value2 = "o31-3(2)"
-		} else if (match == '<it>') {
-  		value2 = "o31-3(2)"
-		} else if (match == '<them>') {
-  		value2 = "o33(2)"
-		} else if (match == '<someone/something>') {
-  		value2 = "o31-3(2)"
-		} else if (match == '<her/his/its>') {
-			possessed = true
-  		value2 = "o31-3(2)"
-		} else {
-  		value2 = "o31-3(2)"			
-		}
-		this.setState({objectPossessed:possessed})
-		this.setState({value1:value1,value2:value2})
-  }
+  // identifyObjectCase = (match) => {
+  // 	console.log('eventually set the object type here, her/him versus it')
+  // 	let ind = Math.round(Math.random())
+		// let value1 = ''
+		// let value2 = ''
+		// let possessed = false
+		// if (ind % 2 == 0) {
+		// value1 = "s31-2(1)"  
+		// } else {
+		// value1 = "s31-1(1)"  
+		// }
+		// if (match == '<her/him/it>') {
+  // 		value2 = "o31-3(2)"
+		// } else if (match == '<her/him>') {
+  // 		if (ind % 2 == 0) {
+  // 		value2 = "o31-1(2)"			
+  // 		} else {
+  // 		value2 = "o31-2(2)"
+  // 		}
+		// } else if (match == '<her/his>') {
+  // 		if (ind % 2 == 0) {
+  // 		value2 = "o31-1(2)"			
+  // 		} else {
+  // 		value2 = "o31-2(2)"
+  // 		}
+		// } else if (match == '<her>') {
+  // 		value2 = "o31-2(2)"
+		// } else if (match == '<him>') {
+  // 		value2 = "o31-1(2)"
+		// } else if (match == '<a person/it>') {
+  // 		value2 = "o31-3(2)"
+		// } else if (match == '<it>') {
+  // 		value2 = "o31-3(2)"
+		// } else if (match == '<them>') {
+  // 		value2 = "o33(2)"
+		// } else if (match == '<someone/something>') {
+  // 		value2 = "o31-3(2)"
+		// } else if (match == '<her/his/its>') {
+		// 	possessed = true
+  // 		value2 = "o31-3(2)"
+		// } else {
+  // 		value2 = "o31-3(2)"			
+		// }
+		// this.setState({objectPossessed:possessed})
+		// this.setState({value1:value1,value2:value2})
+  // }
 
 
 	defaultFstCall = (tag) => {
 		// console.log(ind)
 		console.log(tag)
 		this.setState({baseTag: tag})
-		if (tag === 'INTRANSITIVE VERB') {
+		if (tag === 'i') {
 			this.setIntransitive(true,undefined,undefined)
 			// this.setState({person: 3,people: 1, value1: "31-1(1)",activeEditIndex:ind}); this.getFSTParse(fstCall,ind,0); 
-			let verbTenseMatch = this.state.usageDefinition.match(/\⟨.*?\⟩/g)
-			let splitAroundVerb = []
-			if (verbTenseMatch.length == 1) {
-				splitAroundVerb = this.state.usageDefinition.split(verbTenseMatch[0])
-			}
-			this.setState({
-				leftOfVerb: splitAroundVerb[0],
-				rightOfVerb: splitAroundVerb[1],
-				primaryVerb: verbTenseMatch[0].replace("⟨","").replace("⟩",""),
-				primaryVerbBase: verbTenseMatch[0].replace("⟨","").replace("⟩",""),
-			})
+			// let verbTenseMatch = this.state.usageDefinition.match(/\⟨.*?\⟩/g)
+			// let splitAroundVerb = []
+			// if (verbTenseMatch.length == 1) {
+			// 	splitAroundVerb = this.state.usageDefinition.split(verbTenseMatch[0])
+			// }
+			// this.setState({
+			// 	leftOfVerb: splitAroundVerb[0],
+			// 	rightOfVerb: splitAroundVerb[1],
+			// 	primaryVerb: verbTenseMatch[0].replace("⟨","").replace("⟩",""),
+			// 	primaryVerbBase: verbTenseMatch[0].replace("⟨","").replace("⟩",""),
+			// })
 
 		} else if (tag === 'NOUN') {
 			this.setNoun(true,undefined,undefined)
 			this.setState({
 				primaryNoun: this.state.usageDefinition,
 			})			
-		} else if (tag === 'TRANSITIVE VERB') {
+		} else if (tag === 't') {
 			let matches = this.state.usageDefinition.match(/\<.*?\>/g)
 			let splitSentence = []
 			if (matches.length == 1) {
@@ -259,7 +272,7 @@ class WordBuilder extends Component {
 			this.setTransitive(true,undefined,undefined)
 		}
 
-		if (tag === 'NOUN') {
+		if (tag === 'n') {
 			let postbaseInformationAvailable = []
 			nounPostbaseDefault.map((a)=>{
 				postbaseInformationAvailable.push({value:a,key:a,text:nounPostbases[a].description})
@@ -295,7 +308,7 @@ class WordBuilder extends Component {
 
 
   getWord(word,num) {
-  	console.log(word)
+  	// console.log(this.state.baseCase,this.state.activeKeyInEditIndex)
   	this.setState({
 			nounvalue1: nounvalue1def,
 			nounvalue2: nounvalue2def,
@@ -312,35 +325,49 @@ class WordBuilder extends Component {
 		})
 
     axios
-      .get(API_URL + "/inupiaqusage/" + encodeURIComponent(word))
+      .get(API_URL + "/yupikusage/" + encodeURIComponent(word))
       .then(response => {
         console.log(response.data);
         let tag;
         if (num === -1) {
         	// console.log(response.data[Object.keys(response.data)[0]])
 	        this.setState({
-	          num: response.data[Object.keys(response.data)[0]].num,	
-	          usageDefinition: response.data[Object.keys(response.data)[0]].usageDefinition,	
-	          baseUsageWord: response.data[Object.keys(response.data)[0]].usageWord,	
-	          otherBases: response.data[Object.keys(response.data)[0]].otherBases,
-	          baseCase: response.data[Object.keys(response.data)[0]].otherBases[0],
-	          entryUrl: response.data[Object.keys(response.data)[0]].url,	
-	          tag: response.data[Object.keys(response.data)[0]].tag,	
-	          sisters: response.data[Object.keys(response.data)[0]].sisters,
-	          usageVerbTenses: response.data[Object.keys(response.data)[0]].usageVerbTenses
+	          usageDefinition: response.data['key'][3],	
+	          baseUsageWord: response.data['key'][2],	
+	          // otherBases: response.data['key'].otherBases,
+	          baseCase: response.data['key'][1],
+	          entryUrl: response.data['key'][2],	
+	          tag: response.data['key'][0],	
+	          sisters: response.data['sisters'],
+	          usageVerbTenses: response.data['key'][4],
+
+	          startingVerbTense: response.data['key'][4].indexOf(response.data['key'][5][4]),
+			      definitionraw: response.data['key'][5] === undefined ? '' : response.data['key'][5],
+			      preSubjectText: response.data['key'][5] === undefined ? '' : response.data['key'][5][0],
+			      value1: response.data['key'][5] === undefined ? '' :response.data['key'][5][1],
+			      afterSubjectText: response.data['key'][5] === undefined ? '' :response.data['key'][5][2],
+			      containsIs: response.data['key'][5] === undefined ? '' :response.data['key'][5][3],
+			      primaryVerbBase: response.data['key'][5] === undefined ? '' :response.data['key'][5][4],
+			      preObjectText: response.data['key'][5] === undefined ? '' :response.data['key'][5][5],
+			      value2: response.data['key'][5] === undefined ? '' :response.data['key'][5][6],
+			      afterObjectText: response.data['key'][5] === undefined ? '' :response.data['key'][5][7],
+
 	      	})
-	        tag = response.data[Object.keys(response.data)[0]].tag
-        } else {
+
+	      	// console.log(index)
+	        tag = response.data['key'][0]
+	      }
+        // } else {
         	// console.log(response.data[this.state.num])        
-	        this.setState({
-	          otherBases: response.data[this.state.num].otherBases,	
-	          entryUrl: response.data[this.state.num].url,	
-	          tag: response.data[this.state.num].tag,	
-	          sisters: response.data[this.state.num].sisters,
-	          usageVerbTenses: response.data[this.state.num].usageVerbTenses
-	      	})
-	        tag = response.data[this.state.num].tag
-        }   
+	       //  this.setState({
+	       //    otherBases: response.data[this.state.activeKeyInEditIndex].otherBases,	
+	       //    entryUrl: response.data[this.state.activeKeyInEditIndex].url,	
+	       //    tag: response.data[this.state.activeKeyInEditIndex].tag,	
+	       //    sisters: response.data[this.state.activeKeyInEditIndex].sisters,
+	       //    usageVerbTenses: response.data[this.state.activeKeyInEditIndex].usageVerbTenses
+	      	// })
+	       //  tag = response.data[this.state.activeKeyInEditIndex].tag
+        // }   
 
         this.setState({
           entryData: response.data,
@@ -360,7 +387,7 @@ class WordBuilder extends Component {
   setIntransitive(initializing, e, data) {
   	// console.log(e, data)
   	let value1;
-  	let tag = 'INTRANSITIVE VERB'
+  	let tag = 'i'
   	// let verbMood = 'Indicative'
 
   	if (initializing) {
@@ -620,7 +647,7 @@ class WordBuilder extends Component {
 								</div>
 							</div>		
 						)
-		} else if (tag === 'INTRANSITIVE VERB') {
+		} else if (tag === 'i') {
 			return (	
 							<div>
 								<div style={{marginTop:'30px',marginBottom:'10px',fontSize:'30px',color:'#000000',fontWeight:'400'}}>
@@ -655,8 +682,9 @@ class WordBuilder extends Component {
 								{this.state.englishPreSubject.map((w,wind)=>{
 									return <span style={{color:this.state.colorsList[this.state.currentPostbases[wind]]}}>{w}</span>
 								})}
-								<span style={{color:'#777777'}}>{this.state.beforeSubject}</span>
+								<span style={{color:'#777777'}}>{this.state.preSubjectText}</span>
 								<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={this.setIntransitive.bind(this,false)} value={this.state.value1} options={options1} />
+								<span style={{color:'#777777'}}>{this.state.afterSubjectText}</span>
 								<span style={{color:'#777777'}}>{this.state.subjectIs}</span>
 								{this.state.englishPreNoun.map((w,wind)=>{
 									return <span style={{color:this.state.colorsList[this.state.currentPostbases[wind]]}}>{w}</span>
@@ -665,10 +693,10 @@ class WordBuilder extends Component {
 									return <span style={{color:this.state.colorsList[this.state.currentPostbases[wind]]}}>{w}</span>
 								})}
 								<span style={{color:'#777777'}}>{this.processStyledText(this.state.bePreVerb)}</span>
-								<span style={{color:'#777777'}}>{this.processStyledText(this.state.leftOfVerb)}</span>
+								<span style={{color:'#777777'}}>{this.processStyledText(this.state.preObjectText)}</span>
 								<span style={{color:'#777777'}}>{this.processStyledText(this.state.primaryVerb)}</span>
 								<span style={{color:'#777777'}}>{this.processStyledText(this.state.primaryNoun)}</span>
-								<span style={{color:'#777777'}}>{this.processStyledText(this.state.rightOfVerb)}</span>
+								<span style={{color:'#777777'}}>{this.processStyledText(this.state.afterObjectText)}</span>
 								<span style={{color:'#852828'}}>{' '+this.state.questionMark}</span>
 								</div>
 							</div>		
@@ -1467,9 +1495,10 @@ class WordBuilder extends Component {
   getFSTParse(baseCase,currentPostbases,tag,verbMood,moodSpecific,value1,value2,nounMood,nounvalue1,nounvalue2) {
   	console.log(baseCase,currentPostbases,tag,verbMood,value1,value2,nounMood,nounvalue1,nounvalue2)
   	console.log(nounMood,tag,value1,value2)
+
   	let fstCall = ''
   	let owner = ''
-  	if (tag == 'NOUN') {
+  	if (tag == 'n') {
 			if (nounvalue2[0] !== '0') {
 				owner = '+'+nounvalue2[0]+peopleDict[nounvalue2[1]]
 			} else {
@@ -1492,26 +1521,27 @@ class WordBuilder extends Component {
   		}
   	} else {
 	  	if (verbMood == 'Indicative') {
-	  		if (tag == 'INTRANSITIVE VERB') {
-	  			fstCall = '>+V+Ind+Prs+' + value1[1] + peopleDict[value1[2]]
+	  		if (tag == 'i') {
+	  			fstCall = '[V][Ind][Intr][S_' + value1[1] + peopleDict[value1[2]] + ']'
 	  		} else {
 	  			fstCall = '>+V+Ind+Prs+' + value1[1] + peopleDict[value1[2]] + '+' + value2[1]+peopleDict[value2[2]] + 'O'
 	  		}	
 	  	} else if (verbMood == 'Participial') {
-	  		if (tag == 'INTRANSITIVE VERB') {
+	  		if (tag == 'i') {
 	  			fstCall = '>+V+Ind+Pst+' + value1[1] + peopleDict[value1[2]]
 	  		} else {
 	  			fstCall = '>+V+Ind+Pst+' + value1[1] + peopleDict[value1[2]] + '+' + value2[1]+peopleDict[value2[2]] + 'O'
 	  		}	
 	  	} else if (verbMood == 'Interrogative') {
-	  		if (tag == 'INTRANSITIVE VERB') {
+	  		if (tag == 'i') {
 	  			fstCall = '>+V+Int+' + value1[1] + peopleDict[value1[2]]
 	  		} else {
 	  			fstCall = '>+V+Int+' + value1[1] + peopleDict[value1[2]] + '+' + value2[1]+peopleDict[value2[2]] + 'O'
 	  		}	
 	  	}
   	}
-  	
+
+
   	let underlyingCall = []
 
 		let postfstCall = []
@@ -1521,7 +1551,7 @@ class WordBuilder extends Component {
 				postfstCall.push(this.state.postbaseMaster[i].expression)
 			})
 			postfstCall = postfstCall.reverse()
-			postfstCallString = '>'+postfstCall.join('>')
+			postfstCallString = '-'+postfstCall.join('-')
 			
 		}
 		// fstCall = postfstCall+fstCall
@@ -1531,22 +1561,26 @@ class WordBuilder extends Component {
 
 
 		
-  	let FSTsearch = baseCase + postfstCallString + fstCall
+  	let FSTsearch = baseCase[this.state.activeKeyInEditIndex] + postfstCallString + '-' + fstCall
   	// console.log(baseCase,postfstCallString,fstCall)
   	// console.log(FSTsearch)
   	// console.log(underlyingCall)
+  	console.log(postfstCall)
+  	console.log(fstCall)
 		// console.log(FSTsearch,activeEditIndex)
 		let underlyingCallReturn = []
-		underlyingCall.map((j)=>{
-			underlyingCallReturn.push(postbasesEndingsUnderlying[j])
+		postfstCall.map((j)=>{
+			underlyingCallReturn.push([j])
 		})
+		underlyingCallReturn.push(ending_underlying[fstCall])
+		console.log(underlyingCallReturn)
     this.setState({
       underlyingCallReturn: underlyingCallReturn,
     });
 
 		// console.log(encodeURIComponent(FSTsearch))
     axios
-      .get(API_URL + "/inupiaqsegment/" + encodeURIComponent(FSTsearch))
+      .get(API_URL + "/segment/" + encodeURIComponent(FSTsearch))
       .then(response => {
         // console.log(response.data);
 
@@ -1554,7 +1588,8 @@ class WordBuilder extends Component {
         // slicedColors=slicedColors.slice(0,this.state.currentPostbases.length)
         let words = []
         response.data.words.map((k,ind)=>{
-        	words.push(k.replace("ia>ŋi","iaŋi"))
+        	words.push(k.replace("u>a","ua"))
+        	// words.push(k)
         })
         this.setState({
         	// englishColorList: slicedColors,
@@ -1653,7 +1688,7 @@ class WordBuilder extends Component {
 
 				<Container>
 					<div>
-					{this.usageEntry(this.state.num,this.state.tag)}
+					{this.usageEntry(this.state.activeKeyInEditIndex,this.state.tag)}
 					</div>
 				</Container>
 
@@ -1752,43 +1787,6 @@ class WordBuilder extends Component {
 
 				<div style={{height:'30px'}} />
 
-
-				{this.state.sisters.length !== 0 ?
-
-					<div>
-					<div className='hierarchymain'>
-					<span className='span1'>Allat Uqaluit Maŋŋuqatiŋi</span>
-					<span className='span2'>Related Entries</span>
-					</div>
-
-							<List style={{marginTop:0}} divided selection>
-							{this.state.sisters.map((i,index)=>
-						    <List.Item key={i} onClick={()=>this.switchToSister(i)}>
-                  <List.Content floated='right'>
-                    <Icon style={{paddingTop:'3px', color:'#B1B1B1'}} size='large' name='chevron right' />
-                  </List.Content>
-						      <List.Content  style={{paddingRight:'16px'}}>
-						        <List.Header style={{fontSize:'19px',paddingBottom:'4px',paddingLeft:'15px',fontFamily:customFontFam,lineHeight:'25px'}}>
-						          		<div> 
-						              <span style={{'paddingRight':'3px',fontWeight:'400'}}>
-						              {this.processStyledText(i['usageWord'])}
-
-						                <span style={{'marginLeft':'15px',marginRight:'6px'}}>  
-		                      		<TagColors tags={i['tag']} />
-						                </span>
-
-						              </span>
-						              </div>
-						        </List.Header>
-						        <List.Description style={{fontSize:'16px',color:'#000000cc',paddingLeft:'15px',fontWeight:'400',lineHeight:'23px',paddingTop:'4px'}}>{this.processStyledText2(i['usageDefinition'],i['tag'])}</List.Description>
-						      </List.Content>
-						    </List.Item>
-              	)}
-							</List>
-					</div>
-					:
-					null
-				}
 
 
 					</div>
