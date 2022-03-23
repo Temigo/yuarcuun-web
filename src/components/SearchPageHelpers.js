@@ -73,12 +73,14 @@ export const AudioItem = (props) => {
 export const WordItem = (props) => {
   console.log(props)
   let verbkeyStringbool = false
-  console.log(props.word.verbkeyString.pos)
-  if (props.word.verbkeyString.keyString.length !== 0 && props.word.pos == 'noun') {
-    props.word.pos.push('verb')
-    props.word.keyString = props.word.keyString.replace(',',', ')
-    console.log('yes!')
-    verbkeyStringbool = true
+  // console.log(props.word.verbkeyString.pos)
+  if ('verbkeyString' in props.word) {
+    if (props.word.verbkeyString.keyString.length !== 0 && props.word.pos == 'noun') {
+      props.word.pos.push('verb')
+      props.word.keyString = props.word.keyString.replace(',',', ')
+      console.log('yes!')
+      verbkeyStringbool = true
+    }    
   }
   // let word = props.word;
   let isNoun = props.word.pos.includes('noun');
