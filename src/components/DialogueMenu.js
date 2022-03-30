@@ -52,7 +52,7 @@ class Dialogues extends Component {
     sound.play()
 
 
-    console.log(audio)
+    // console.log(audio)
     // var a = new Audio('https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/'+audio+'.mp3');
     // a.play();
   }
@@ -123,52 +123,46 @@ class Dialogues extends Component {
 
         <Container>
         {this.state.currentLesson === -1 ?
-          (lessonsList.map((i,index)=>
-            <div>
-              <Button style={{marginBottom:'5px'}} onClick={()=>{this.setState({currentLesson:index})}}>
-              {i.title}
-              </Button>
-            </div>
-            ))
+          <div>
+          <Button onClick={()=>{this.setState({currentLesson:1})}}>Go to Lesson 1</Button>
+          </div>
           :
           <div>
-          <div style={{textAlign:'center',fontStyle:'italic'}}>{lessonsList[this.state.currentLesson].title}</div>
-          <div style={{textAlign:'center',color:'grey',fontStyle:'italic'}}>{lessonsList[this.state.currentLesson].context}</div>
           {!this.state.questionMode ?
-            (lessonsList[this.state.currentLesson].dialogues.map((i,index)=>
+            (exerciseOrder.map((i,index)=>
               <div>
               {index < this.state.currentCounter ?
-                <div style={{padding:'10px',fontSize:'20px',textAlign:(i.slice(-1)=='a'?'left':'right')}}>
+                <div style={{padding:'10px',fontSize:'20px',textAlign:(library[i]['speaker']=='a'?'left':'right')}}>
                   <div>
-                  <span>{dialogueLibrary[i]['yup']}</span>
-                  <span style={{paddingLeft:'5px'}}><Icon name='volume up' color='black' onClick={this.repeatAudio.bind(this,dialogueLibrary[i]['audio'])} /></span>
+                  <span>{library[i]['yup']}</span>
+                  <span style={{paddingLeft:'5px'}}><Icon name='volume up' color='black' onClick={this.repeatAudio.bind(this,i)} /></span>
                   </div>
-                  <div style={{color:'#b9b9b9',fontWeight:'200'}}>{dialogueLibrary[i]['eng']}</div>
+                  <div style={{color:'#b9b9b9',fontWeight:'200'}}>{library[i]['eng']}</div>
                 </div>
                 :
                 null
               }
               {index == this.state.currentCounter ?
                 (this.state.showCurrent ?
-                  <div style={{padding:'10px',fontSize:'20px',textAlign:(i.slice(-1) =='a'?'left':'right')}}>
+                  <div style={{padding:'10px',fontSize:'20px',textAlign:(library[i]['speaker']=='a'?'left':'right')}}>
                     <div>
-                    <span>{dialogueLibrary[i]['yup']}</span>
-                    <span style={{paddingLeft:'5px'}}><Icon name='volume up' color='black' onClick={this.repeatAudio.bind(this,dialogueLibrary[i]['audio'])} /></span>
+                    <span>{library[i]['yup']}</span>
+                    <span style={{paddingLeft:'5px'}}><Icon name='volume up' color='black' onClick={this.repeatAudio.bind(this,i)} /></span>
                     </div>
-                    <div style={{color:'#b9b9b9',fontWeight:'200'}}>{dialogueLibrary[i]['eng']}</div>
+                    <div style={{color:'#b9b9b9',fontWeight:'200'}}>{library[i]['eng']}</div>
                   </div>
                   :
-                  <div style={{padding:'10px',fontSize:'20px',textAlign:(i.slice(-1)=='a'?'left':'right')}}>
+                  <div style={{padding:'10px',fontSize:'20px',textAlign:(library[i]['speaker']=='a'?'left':'right')}}>
                   <span>{'-'}</span>
-                  <div style={{color:'#b9b9b9',fontWeight:'200'}}>{dialogueLibrary[i]['eng']}</div>
-                  <Button onClick={()=>{this.setState({showCurrent:true}); this.repeatAudio(dialogueLibrary[i]['audio'])}}>{"Show Yup'ik"}</Button>
+                  <div style={{color:'#b9b9b9',fontWeight:'200'}}>{library[i]['eng']}</div>
+                  <Button onClick={()=>{this.setState({showCurrent:true}); this.repeatAudio(i)}}>{"Show Yup'ik"}</Button>
                   </div>
                 )
                 :
                 null
               }
               {this.state.showCurrent && index == this.state.currentCounter ?
-                <div style={{padding:'10px',fontSize:'20px',textAlign:(i.slice(-1)=='a'?'right':'left')}}>
+                <div style={{padding:'10px',fontSize:'20px',textAlign:(library[i]['speaker']=='a'?'right':'left')}}>
                   <Button onClick={()=>{this.setState({showCurrent:false,currentCounter:this.state.currentCounter+1})}}>{'Show Next'}</Button>
                 </div>
                 :

@@ -107,6 +107,19 @@
   font-size:16px;
 }
 
+.ui.inline.dropdown>.text {
+  font-weight: 300;
+}
+
+
+.ui.dropdown.frontpage {
+  margin-top: 20px;
+}
+
+.ui.dropdown.frontpage .menu .item {
+  line-height: 20px;
+}
+
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

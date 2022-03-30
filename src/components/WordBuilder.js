@@ -3,7 +3,7 @@ import { Container, Header, Button, Icon, Divider, Image, Grid, Dropdown, List, 
 import { Link } from 'react-router-dom';
 import { API_URL } from '../App.js';
 import axios from 'axios';
-import {nounoptions1, nounoptions2, nounoptionsmodalis, options1, options2, verbPostbases, nounPostbases} from './constants/newconstants.js'
+import {nounoptions1, nounoptions2, nounoptionsmodalis, options1, options2, verbPostbases, nounPostbases, VVpostbases} from './constants/newconstants.js'
 import {ending_underlying} from './constants/ending_underlying.js'
 import palette from 'google-palette';
 import shuffle from 'shuffle-array';
@@ -113,7 +113,7 @@ class WordBuilder extends Component {
 			postbasesAvailable: [],
 			postbaseMaster: {},
 			allPostbasesAvailable: [],
-			colorsList: shuffle(palette('tol-rainbow', 30).map((c) => { return '#' + c; })),
+			colorsList: shuffle(palette('tol-rainbow', 500).map((c) => { return '#' + c; })),
 			// url: 
 
 			subjectIs:'is ',
@@ -169,7 +169,12 @@ class WordBuilder extends Component {
 			ending1: -1,
 
 			objectPossessed: false,
+
+			containsIs:false,
+
+			afterObjectText2: [],
 		}
+
 
 	    this.getWord = this.getWord.bind(this);
 	    this.addPostbase = this.addPostbase.bind(this);
@@ -234,17 +239,24 @@ class WordBuilder extends Component {
 		if (tag === 'i') {
 			this.setIntransitive(true,undefined,undefined)
 			// this.setState({person: 3,people: 1, value1: "31-1(1)",activeEditIndex:ind}); this.getFSTParse(fstCall,ind,0); 
-			// let verbTenseMatch = this.state.usageDefinition.match(/\⟨.*?\⟩/g)
-			// let splitAroundVerb = []
+			let verbTenseMatch = this.state.usageDefinition.match(/\⟨.*?\⟩/g)
+			let ind = -1
+			let indCase = ''
+			// console.log(verbTenseMatch)
 			// if (verbTenseMatch.length == 1) {
-			// 	splitAroundVerb = this.state.usageDefinition.split(verbTenseMatch[0])
+			ind = this.state.usageVerbTenses.indexOf(this.state.primaryVerbBase)
 			// }
-			// this.setState({
-			// 	leftOfVerb: splitAroundVerb[0],
-			// 	rightOfVerb: splitAroundVerb[1],
-			// 	primaryVerb: verbTenseMatch[0].replace("⟨","").replace("⟩",""),
-			// 	primaryVerbBase: verbTenseMatch[0].replace("⟨","").replace("⟩",""),
-			// })
+			if (ind == 3) {
+				indCase = 'g'
+			} else if (ind == 0) {
+				indCase = 'i'
+			} 
+
+    	this.setState({
+    		containsIs:this.state.usageDefinition.includes(' is '),
+				primaryVerbIndex: ind,
+				primaryVerbIndexCase: indCase,
+    	}) 
 
 		} else if (tag === 'n') {
 			this.setNoun(true,undefined,undefined)
@@ -293,12 +305,12 @@ class WordBuilder extends Component {
 			this.setState({postbaseInformationAvailable1:postbaseInformationAvailable})
 		} else {
 			let postbaseInformationAvailable = []
-			verbPostbaseDefault.map((a)=>{
-				postbaseInformationAvailable.push({value:a,key:a,text:verbPostbases[a].description})
+			Object.keys(VVpostbases).map((a)=>{
+				postbaseInformationAvailable.push({value:a,key:a,text:VVpostbases[a].description})
 			})
-			this.setState({postbasesAvailable:verbPostbaseDefault})
-			this.setState({allPostbasesAvailable:verbPostbaseDefault})
-			this.setState({postbaseMaster:verbPostbases})
+			this.setState({postbasesAvailable:VVpostbases})
+			this.setState({allPostbasesAvailable:VVpostbases})
+			this.setState({postbaseMaster:VVpostbases})
 			this.setState({postbaseInformationAvailable1:postbaseInformationAvailable})
 		}
 
@@ -425,8 +437,10 @@ class WordBuilder extends Component {
    //  	fstCall = '>+V+Ind+Prs+' + value1[1] + peopleDict[value1[2]]
    //  }
 
+
     this.setState({
       value1: value1,
+      // containsIs: containsIs,
       // activeEditIndex:ind,
       // person: person,
       // people: people,
@@ -727,13 +741,16 @@ class WordBuilder extends Component {
 									return <span style={{color:this.state.colorsList[this.state.currentPostbases[wind]]}}>{w}</span>
 								})}
 								{this.state.englishPreVerb.map((w,wind)=>{
-									return <span style={{color:this.state.colorsList[this.state.currentPostbases[wind]]}}>{w}</span>
+									return <span style={{color:this.state.colorsList[this.state.currentPostbases[w[1]]]}}>{w[0]+" "}</span>
 								})}
 								<span style={{color:'#777777'}}>{this.processStyledText(this.state.bePreVerb)}</span>
 								<span style={{color:'#777777'}}>{this.processStyledText(this.state.preObjectText)}</span>
 								<span style={{color:'#777777'}}>{this.processStyledText(this.state.primaryVerb)}</span>
 								<span style={{color:'#777777'}}>{this.processStyledText(this.state.primaryNoun)}</span>
 								<span style={{color:'#777777'}}>{this.processStyledText(this.state.afterObjectText)}</span>
+								{this.state.afterObjectText2.map((w,wind)=>{
+									return <span style={{color:this.state.colorsList[this.state.currentPostbases[w[1]]]}}>{" "+w[0]}</span>
+								})}
 								<span style={{color:'#852828'}}>{' '+this.state.questionMark}</span>
 								</div>
 							</div>		
@@ -785,6 +802,9 @@ class WordBuilder extends Component {
 								<span style={{color:'#777777'}}>{this.processStyledText(this.state.primaryNoun)}</span>
 								<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}} onChange={this.setTransitive.bind(this,false)} value={this.state.value2} options={options2} />
 								<span style={{color:'#777777'}}>{this.processStyledText(this.state.afterObjectText)}</span>
+								{this.state.afterObjectText2.map((w,wind)=>{
+									return <span style={{color:this.state.colorsList[this.state.currentPostbases[wind]]}}>{" "+w}</span>
+								})}
 								<span style={{color:'#852828'}}>{' '+this.state.questionMark}</span>
 								</div>
 							</div>		
@@ -861,24 +881,24 @@ class WordBuilder extends Component {
 		let englishPreVerb = []
 		let englishPreSubject = []
 		let primaryVerb = ''
-		let subjectis = ''
+		// let subjectis = ''
 		let beforeSubject = ''
 		let bePreVerb = ''
 		let personN = value1[1]
 		let peopleN = value1[2]
 		let questionWord = ''
 		let questionWordEnglish = ''
-		let capitalize = true
+		let capitalize = false
+		let subjectIs = ''
 
-
-		let i = -1
-		let j = -1
-		if (currentPostbases.length == 1) {
-			i = currentPostbases[0]
-		} else if (currentPostbases.length == 2) {
-			i = currentPostbases[0]
-			j = currentPostbases[1]
-		}
+		// let i = -1
+		// let j = -1
+		// if (currentPostbases.length == 1) {
+		// 	i = currentPostbases[0]
+		// } else if (currentPostbases.length == 2) {
+		// 	i = currentPostbases[0]
+		// 	j = currentPostbases[1]
+		// }
 
 
 // let pastwas = [8,9]
@@ -886,172 +906,280 @@ class WordBuilder extends Component {
 // let pastVerbTense = [3,5,12]
 // let pastGerund = [7,10]
 
-		if (verbMood == 'Participial') {
-			if (this.state.primaryVerbBase.length === 0) { //be condition
-				if (currentPostbases.length === 0) {
-					subjectis = 'was '
-				} else {
-					if (pastwas.includes(i)) {
-						subjectis = 'was '
-					}
-					englishPreVerb.push(this.state.postbaseMaster[i].englishModifierPast(""))
-					if (befirst.includes(i)) {
-						bePreVerb = 'be'
-					} else if (beingfirst.includes(i)) {
-						bePreVerb = 'being'
-					}
-				}
-			} else {
-				if (currentPostbases.length === 0) {
-					primaryVerb=this.state.usageVerbTenses[1]
-				} else {
-					if (pastdid.includes(i)) {
-						subjectis = 'did '
-					} else if (pastwas.includes(i)) {
-						subjectis = 'was '
-					}
-					englishPreVerb.push(this.state.postbaseMaster[i].englishModifierPast(""))
-					if (pastVerbTense.includes(i)) {
-						primaryVerb = this.state.usageVerbTenses[1]
-					} else if (pastGerund.includes(i)) {
-						primaryVerb = this.state.usageVerbTenses[3]
-					} else {
-						primaryVerb = this.state.usageVerbTenses[0]
-					}
-				}
-			}
-		} else if (verbMood == 'Interrogative') {
-			if (moodSpecific.length !== 0) {
-				// console.log(moodSpecific)
-				questionWord = getVerbInfo[moodSpecific]['inup']
-				questionWordEnglish = getVerbInfo[moodSpecific]['eng']
-				capitalize = false
-			}
-			if (this.state.primaryVerbBase.length === 0) { //be condition
-				primaryVerb = this.state.primaryVerbBase
-				if (currentPostbases.length === 0) {
-				  beforeSubject = this.getIs(personN, peopleN, capitalize) 
-				} else {
-					if (notis.includes(i)) {
-						if (doesis.includes(i)) {
-							beforeSubject = this.getDo(personN,peopleN,capitalize)
-						englishPreVerb.push(this.state.postbaseMaster[i].englishModifierInfinitive(""))
-						} else {
-							beforeSubject = ''
-						englishPreVerb.push(this.state.postbaseMaster[i].englishModifier(""))
-						}
-					} else {
-					  beforeSubject = this.getIs(personN, peopleN, capitalize)  	
-						englishPreVerb.push(this.state.postbaseMaster[i].englishModifier(""))
-					}
-					if (befirst.includes(i)) {
-						bePreVerb = 'be'
-					} else if (beingfirst.includes(i)) {
-						bePreVerb = 'being'
-					}
-				}
-			} else {
-				if (currentPostbases.length === 0) {
-				  beforeSubject = this.getIs(personN, peopleN, capitalize) 
-				  primaryVerb = this.state.primaryVerbBase
-				} else {
-					if (notis.includes(i)) {
-						if (doesis.includes(i)) {
-						  beforeSubject = this.getDo(personN,peopleN,capitalize)
-							englishPreVerb.push(this.state.postbaseMaster[i].englishModifierInfinitive(""))
-						} else {
-							beforeSubject = ''
-							englishPreSubject.push(this.state.postbaseMaster[i].englishModifierPast(""))
-						}
-					} else {
-					  beforeSubject = this.getIs(personN, peopleN, capitalize) 
-						englishPreVerb.push(this.state.postbaseMaster[i].englishModifier(""))
-					}
-					if (nextinfinitive.includes(i)) {
-						primaryVerb = this.state.usageVerbTenses[0]
-					} else {
-						primaryVerb = this.state.usageVerbTenses[3]
-					}
-				}
-			}
-		} else{
+		// if (verbMood == 'Participial') {
+		// 	if (this.state.primaryVerbBase.length === 0) { //be condition
+		// 		if (currentPostbases.length === 0) {
+		// 			subjectis = 'was '
+		// 		} else {
+		// 			if (pastwas.includes(i)) {
+		// 				subjectis = 'was '
+		// 			}
+		// 			englishPreVerb.push(this.state.postbaseMaster[i].englishModifierPast(""))
+		// 			if (befirst.includes(i)) {
+		// 				bePreVerb = 'be'
+		// 			} else if (beingfirst.includes(i)) {
+		// 				bePreVerb = 'being'
+		// 			}
+		// 		}
+		// 	} else {
+		// 		if (currentPostbases.length === 0) {
+		// 			primaryVerb=this.state.usageVerbTenses[1]
+		// 		} else {
+		// 			if (pastdid.includes(i)) {
+		// 				subjectis = 'did '
+		// 			} else if (pastwas.includes(i)) {
+		// 				subjectis = 'was '
+		// 			}
+		// 			englishPreVerb.push(this.state.postbaseMaster[i].englishModifierPast(""))
+		// 			if (pastVerbTense.includes(i)) {
+		// 				primaryVerb = this.state.usageVerbTenses[1]
+		// 			} else if (pastGerund.includes(i)) {
+		// 				primaryVerb = this.state.usageVerbTenses[3]
+		// 			} else {
+		// 				primaryVerb = this.state.usageVerbTenses[0]
+		// 			}
+		// 		}
+		// 	}
+		// } else if (verbMood == 'Interrogative') {
+		// 	if (moodSpecific.length !== 0) {
+		// 		// console.log(moodSpecific)
+		// 		questionWord = getVerbInfo[moodSpecific]['inup']
+		// 		questionWordEnglish = getVerbInfo[moodSpecific]['eng']
+		// 		capitalize = false
+		// 	}
+		// 	if (this.state.primaryVerbBase.length === 0) { //be condition
+		// 		primaryVerb = this.state.primaryVerbBase
+		// 		if (currentPostbases.length === 0) {
+		// 		  beforeSubject = this.getIs(personN, peopleN, capitalize) 
+		// 		} else {
+		// 			if (notis.includes(i)) {
+		// 				if (doesis.includes(i)) {
+		// 					beforeSubject = this.getDo(personN,peopleN,capitalize)
+		// 				englishPreVerb.push(this.state.postbaseMaster[i].englishModifierInfinitive(""))
+		// 				} else {
+		// 					beforeSubject = ''
+		// 				englishPreVerb.push(this.state.postbaseMaster[i].englishModifier(""))
+		// 				}
+		// 			} else {
+		// 			  beforeSubject = this.getIs(personN, peopleN, capitalize)  	
+		// 				englishPreVerb.push(this.state.postbaseMaster[i].englishModifier(""))
+		// 			}
+		// 			if (befirst.includes(i)) {
+		// 				bePreVerb = 'be'
+		// 			} else if (beingfirst.includes(i)) {
+		// 				bePreVerb = 'being'
+		// 			}
+		// 		}
+		// 	} else {
+		// 		if (currentPostbases.length === 0) {
+		// 		  beforeSubject = this.getIs(personN, peopleN, capitalize) 
+		// 		  primaryVerb = this.state.primaryVerbBase
+		// 		} else {
+		// 			if (notis.includes(i)) {
+		// 				if (doesis.includes(i)) {
+		// 				  beforeSubject = this.getDo(personN,peopleN,capitalize)
+		// 					englishPreVerb.push(this.state.postbaseMaster[i].englishModifierInfinitive(""))
+		// 				} else {
+		// 					beforeSubject = ''
+		// 					englishPreSubject.push(this.state.postbaseMaster[i].englishModifierPast(""))
+		// 				}
+		// 			} else {
+		// 			  beforeSubject = this.getIs(personN, peopleN, capitalize) 
+		// 				englishPreVerb.push(this.state.postbaseMaster[i].englishModifier(""))
+		// 			}
+		// 			if (nextinfinitive.includes(i)) {
+		// 				primaryVerb = this.state.usageVerbTenses[0]
+		// 			} else {
+		// 				primaryVerb = this.state.usageVerbTenses[3]
+		// 			}
+		// 		}
+		// 	}
+		// } else{
 
-			if (notis.includes(i) || future.includes(j)) {
-				subjectis = ''
-			} else {
-				subjectis = this.getIs(personN, peopleN, false) 	
-			}
+			// if (notis.includes(i) || future.includes(j)) {
+			// if (this.state.postbaseMaster[i]['is']) {
+			// 	subjectis = this.getIs(personN, peopleN, false) 	
+			// } 
 
-			if (this.state.primaryVerbBase.length === 0) { //be condition
+			// if (this.state.primaryVerbBase.length === 0) { //be condition
 
-				if (currentPostbases.length === 0) {
-					// this.setState({primaryVerb: this.state.primaryVerbBase});	
+			// 	if (currentPostbases.length === 0) {
+			// 		// this.setState({primaryVerb: this.state.primaryVerbBase});	
 
-				} else if (currentPostbases.length === 1) { 
+			// 	} else if (currentPostbases.length === 1) { 
 					
-					englishPreVerb.push(this.state.postbaseMaster[i].englishModifier(""))
-					if (befirst.includes(i)) {
-						bePreVerb = 'be'
-					} else if (beingfirst.includes(i)) {
-						bePreVerb = 'being'
-					}
+			// 		englishPreVerb.push(this.state.postbaseMaster[i].englishModifier(""))
+			// 		if (befirst.includes(i)) {
+			// 			bePreVerb = 'be'
+			// 		} else if (beingfirst.includes(i)) {
+			// 			bePreVerb = 'being'
+			// 		}
 
-				} else { // two postbases
-					englishPreVerb.push(this.state.postbaseMaster[i].englishModifier(""))
-					if (nextinfinitive.includes(i)) {
-						englishPreVerb.push(this.state.postbaseMaster[j].englishModifierInfinitive(""))
-					} else {
-						englishPreVerb.push(this.state.postbaseMaster[j].englishModifierGerund(""))
-					}
+			// 	} else { // two postbases
+			// 		englishPreVerb.push(this.state.postbaseMaster[i].englishModifier(""))
+			// 		if (nextinfinitive.includes(i)) {
+			// 			englishPreVerb.push(this.state.postbaseMaster[j].englishModifierInfinitive(""))
+			// 		} else {
+			// 			englishPreVerb.push(this.state.postbaseMaster[j].englishModifierGerund(""))
+			// 		}
 
-					if (matchCase.includes(j)) {
-						if (befirst.includes(i)) {
-							bePreVerb = 'be'
-						} else if (beingfirst.includes(i)) {
-							bePreVerb = 'being'
-						}
-					} else if (befirst.includes(j)) {
-						bePreVerb = 'be'
-					} else if (beingfirst.includes(j)) {
-						bePreVerb = 'being'
-					}
-				}
-			} else {
+			// 		if (matchCase.includes(j)) {
+			// 			if (befirst.includes(i)) {
+			// 				bePreVerb = 'be'
+			// 			} else if (beingfirst.includes(i)) {
+			// 				bePreVerb = 'being'
+			// 			}
+			// 		} else if (befirst.includes(j)) {
+			// 			bePreVerb = 'be'
+			// 		} else if (beingfirst.includes(j)) {
+			// 			bePreVerb = 'being'
+			// 		}
+			// 	}
+			// } else {
+				// if (currentPostbases.length === 0) {
+				// 	primaryVerb=this.state.primaryVerbBase
+				// 	if (this.state.containsIs) {
+				// 		subjectIs = this.getIs(personN, peopleN, capitalize) 
+				// 	}
+				// } else if (currentPostbases.length === 1) { 
+				// 	if (this.state.postbaseMaster[i].is) {
+				// 		subjectIs = this.getIs(personN, peopleN, capitalize) 
+				// 	} else {
+				// 		subjectIs = ''
+				// 	}
+				// 	englishPreVerb.push(this.state.postbaseMaster[i].gen_preverb)
+				// 	console.log(this.state.postbaseMaster[i].gen_preverb_after)
+				// 	if (this.state.postbaseMaster[i].gen_preverb_after == 'ger') { 
+				// 		primaryVerb=this.state.usageVerbTenses[0]
+				// 	} else {
+				// 		primaryVerb=this.state.usageVerbTenses[3]
+				// 	}
+				// } else { // two postbases
+				// 	if (this.state.postbaseMaster[i].is) {
+				// 		subjectIs = this.getIs(personN, peopleN, capitalize) 
+				// 	}
+				// 	englishPreVerb.push(this.state.postbaseMaster[i].gen_preverb)
+				// 	// console.log(i,j)
+				// 	if (this.state.postbaseMaster[i].gen_preverb_after == 'ger') { 
+				// 		// if (this.state.postbaseMaster[j].ger_preverb_after == this.state.postbaseMaster[i].gen_preverb_after) {
+				// 			// englishPreVerb.push(this.state.postbaseMaster[j].ger_preverb)
+				// 			// primaryVerb=this.state.usageVerbTenses[3]
+				// 		// } else {
+				// 			englishPreVerb.push(this.state.postbaseMaster[j].inf_preverb)
+				// 			if (this.state.postbaseMaster[j].inf_preverb_after == 'inf') { 
+				// 				primaryVerb=this.state.usageVerbTenses[0]
+				// 			} else {
+				// 				primaryVerb=this.state.usageVerbTenses[3]
+				// 			}
+				// 		// }
+				// 	} else {
+				// 		// if (this.state.postbaseMaster[j].inf_preverb_after == this.state.postbaseMaster[i].gen_preverb_after) {
+				// 			// englishPreVerb.push(this.state.postbaseMaster[j].inf_preverb)
+				// 			// primaryVerb=this.state.usageVerbTenses[0]
+				// 		// } else {
+				// 			englishPreVerb.push(this.state.postbaseMaster[j].ger_preverb)
+				// 			if (this.state.postbaseMaster[j].ger_preverb_after == 'inf') { 
+				// 				primaryVerb=this.state.usageVerbTenses[0]
+				// 			} else {
+				// 				primaryVerb=this.state.usageVerbTenses[3]
+				// 			}
+				// 		// }						
+				// 	}
+				// }
+			// }
+		// }
+
+				let nextCase = ''
+				let previousCase = this.state.primaryVerbIndexCase
+				let afterObjectText2 = []
+
 				if (currentPostbases.length === 0) {
 					primaryVerb=this.state.primaryVerbBase
-				} else if (currentPostbases.length === 1) { 
-					englishPreVerb.push(this.state.postbaseMaster[i].englishModifier(""))
-					if (nextinfinitive.includes(i)) { 
-						primaryVerb=this.state.usageVerbTenses[0]
-					} else {
-						primaryVerb=this.state.usageVerbTenses[3]
+					if (this.state.containsIs) {
+						subjectIs = this.getIs(personN, peopleN, capitalize) 
 					}
-				} else { // two postbases
-					englishPreVerb.push(this.state.postbaseMaster[i].englishModifier(""))
-					// console.log(i,j)
-					if (matchCase.includes(j)) {
-						if (nextinfinitive.includes(i)) {
-							englishPreVerb.push(this.state.postbaseMaster[j].englishModifierInfinitive(""))
-							primaryVerb=this.state.usageVerbTenses[0]
-						} else {
-							englishPreVerb.push(this.state.postbaseMaster[j].englishModifierGerund(""))
-							primaryVerb=this.state.usageVerbTenses[3]
-						}
-					} else {
-						if (nextinfinitive.includes(i)) {
-							englishPreVerb.push(this.state.postbaseMaster[j].englishModifierInfinitive(""))
-						} else {
-							englishPreVerb.push(this.state.postbaseMaster[j].englishModifierGerund(""))
-						}						
-						if (nextinfinitive.includes(j)) {
-							primaryVerb=this.state.usageVerbTenses[0]
-						} else {
-							primaryVerb=this.state.usageVerbTenses[3]
-						}
-					}
-				}
-			}
-		}
+				} else { 
+					currentPostbases.map((i,index)=>{
+						// if ('postverb' in this.state.postbaseMaster[i]) {
+						// } else {
+							if (index == 0) {
+								if (this.state.postbaseMaster[i].is) {
+									subjectIs = this.getIs(personN, peopleN, capitalize)						
+								}
+								if ('postverb' in this.state.postbaseMaster[i]) {
+									afterObjectText2.push([this.state.postbaseMaster[i].description,index])
+									nextCase = this.state.primaryVerbIndexCase												
+								} else {
+									englishPreVerb.push([this.state.postbaseMaster[i].gen_preverb,index])
+									// console.log(this.state.postbaseMaster[i].match_case,this.state.primaryVerbIndexCase)
+									if (this.state.postbaseMaster[i].match_case === true) {
+										nextCase = this.state.primaryVerbIndexCase
+									} else {
+										nextCase = this.state.postbaseMaster[i].gen_preverb_after										
+									}
+								}
+							} else {
+								if ('postverb' in this.state.postbaseMaster[i]) {
+									afterObjectText2.push([this.state.postbaseMaster[i].description,index])									
+								} else {
+									if (nextCase == 'g') {
+										englishPreVerb.push([this.state.postbaseMaster[i].ger_preverb,index])
+										nextCase = this.state.postbaseMaster[i].ger_preverb_after
+									} else {
+										englishPreVerb.push([this.state.postbaseMaster[i].inf_preverb,index])
+										nextCase = this.state.postbaseMaster[i].inf_preverb_after
+									}
+								}
+							}
+							console.log(nextCase)
+							if (currentPostbases.length-1 == index)	{
+								if (nextCase == 'g') {
+									primaryVerb=this.state.usageVerbTenses[3]																	
+								} else {
+									primaryVerb=this.state.usageVerbTenses[0]																										
+								}
+							}
+						// }
+					})
+				} 
+
+
+				// if ('postverb' in this.state.postbaseMaster[currentPostbases[currentPostbases.length-2]])
+
+
+				// else { // two postbases
+				// 	if (this.state.postbaseMaster[i].is) {
+				// 		subjectIs = this.getIs(personN, peopleN, capitalize) 
+				// 	}
+				// 	englishPreVerb.push(this.state.postbaseMaster[i].gen_preverb)
+				// 	// console.log(i,j)
+				// 	if (this.state.postbaseMaster[i].gen_preverb_after == 'ger') { 
+				// 		// if (this.state.postbaseMaster[j].ger_preverb_after == this.state.postbaseMaster[i].gen_preverb_after) {
+				// 			// englishPreVerb.push(this.state.postbaseMaster[j].ger_preverb)
+				// 			// primaryVerb=this.state.usageVerbTenses[3]
+				// 		// } else {
+				// 			englishPreVerb.push(this.state.postbaseMaster[j].inf_preverb)
+				// 			if (this.state.postbaseMaster[j].inf_preverb_after == 'inf') { 
+				// 				primaryVerb=this.state.usageVerbTenses[0]
+				// 			} else {
+				// 				primaryVerb=this.state.usageVerbTenses[3]
+				// 			}
+				// 		// }
+				// 	} else {
+				// 		// if (this.state.postbaseMaster[j].inf_preverb_after == this.state.postbaseMaster[i].gen_preverb_after) {
+				// 			// englishPreVerb.push(this.state.postbaseMaster[j].inf_preverb)
+				// 			// primaryVerb=this.state.usageVerbTenses[0]
+				// 		// } else {
+				// 			englishPreVerb.push(this.state.postbaseMaster[j].ger_preverb)
+				// 			if (this.state.postbaseMaster[j].ger_preverb_after == 'inf') { 
+				// 				primaryVerb=this.state.usageVerbTenses[0]
+				// 			} else {
+				// 				primaryVerb=this.state.usageVerbTenses[3]
+				// 			}
+				// 		// }						
+				// 	}
+				// }
+
 
 		// currentPostbases.map((i,index)=>{
 		// 	if (index !== currentPostbases.length-1) {
@@ -1084,11 +1212,12 @@ class WordBuilder extends Component {
 		this.setState({
 			primaryVerb: primaryVerb,
 			englishPreVerb: englishPreVerb,
+			afterObjectText2: afterObjectText2,
 			englishPreSubject: englishPreSubject,
 			bePreVerb: bePreVerb,
       person: parseInt(personN),
       people: parseInt(peopleN),
-      subjectIs: subjectis,
+      subjectIs: subjectIs,
       beforeSubject: beforeSubject,
       questionWord: questionWord,
       questionWordEnglish: questionWordEnglish,
@@ -1146,6 +1275,7 @@ class WordBuilder extends Component {
 		// var remove = postbasesAvailable.indexOf(value)
 		// postbasesAvailable.splice(remove,1)
 		// console.log(postbasesAvailable)
+		this.setState({nextCase:value})
 		if (this.state.baseTag == 'n') {
 			if (nnpostbases.includes(value)) {
 				currentPostbases.push(value)
@@ -1333,89 +1463,126 @@ class WordBuilder extends Component {
 
 
 	setAvailablePostbaseInformation(currentPostbases,mood) {
-		let availablePostbaseInformationText = []
+		// let availablePostbaseInformationText = []
 		let postbaseInformationAvailable1 = []
-		let postbaseInformationAvailable2 = []
+		// let postbaseInformationAvailable2 = []
 
-		// if (this.state.currentPostbases.length == 0 && this.state.verbMood == 'Participial') {
-		// 	postbasesAvailable = verbPostbaseParticipialDefault
+		// // if (this.state.currentPostbases.length == 0 && this.state.verbMood == 'Participial') {
+		// // 	postbasesAvailable = verbPostbaseParticipialDefault
+		// // }
+
+		// console.log(currentPostbases)
+
+
+		// let postbasesAvailable = []
+		// if (currentPostbases.length == 0) {
+		// 	if (mood == 'Participial') {
+		// 		postbasesAvailable = verbPostbaseParticipialDefault
+		// 	} else if (this.state.baseTag == 'n' && mood !== 'Absolutive') {
+		// 		postbasesAvailable = nnpostbases
+		// 	} else {
+		let postbasesAvailable = this.state.allPostbasesAvailable
+		// 	}
+		// } else {
+		// 	if (this.state.baseTag == 'n' && mood !== 'Absolutive') {
+
+		// 	} else {
+		// 		postbasesAvailable = this.state.postbaseMaster[currentPostbases[0]].allowable_next_ids
+		// 	}
+			
 		// }
 
-		console.log(currentPostbases)
+		// console.log(mood)
 
-
-		let postbasesAvailable = []
-		if (currentPostbases.length == 0) {
-			if (mood == 'Participial') {
-				postbasesAvailable = verbPostbaseParticipialDefault
-			} else if (this.state.baseTag == 'n' && mood !== 'Absolutive') {
-				postbasesAvailable = nnpostbases
-			} else {
-				postbasesAvailable = this.state.allPostbasesAvailable
-			}
-		} else {
-			if (this.state.baseTag == 'n' && mood !== 'Absolutive') {
-
-			} else {
-				postbasesAvailable = this.state.postbaseMaster[currentPostbases[0]].allowable_next_ids
-			}
-			
-		}
-
-		console.log(mood)
-
-		let hasFuture = false
-		if (mood !== 'Indicative' && mood !== 'Participial' && mood !== 'Interrogative') {
-			if (this.state.currentPostbases.length == 0) {
-				postbasesAvailable.map((a)=>{
-					postbaseInformationAvailable1.push({value:a,key:a,text:this.state.postbaseMaster[a].description})
-					availablePostbaseInformationText.push(this.state.postbaseMaster[a].englishModifier(""))
-				})
-			} else if (this.state.currentPostbases.length == 1) {
-				// console.log('hi',postbasesAvailable)
-				postbaseInformationAvailable1 = this.state.postbaseInformationAvailable1
-				postbasesAvailable.map((a)=>{
-					postbaseInformationAvailable2.push({value:a,key:a,text:this.state.postbaseMaster[a].description})
-					availablePostbaseInformationText.push(this.state.postbaseMaster[a].englishModifier(""))
-				})		
-			}
-		} else {
-			if (mood == 'Participial') {
-				postbasesAvailable.map((a)=>{
-					postbaseInformationAvailable1.push({value:a,key:a,text:this.state.postbaseMaster[a].englishModifierPast("")})
-					availablePostbaseInformationText.push(this.state.postbaseMaster[a].englishModifierPast(""))
-				})
-			} else if (mood == 'Interrogative') {
-				postbasesAvailable.map((a)=>{
-					postbaseInformationAvailable1.push({value:a,key:a,text:this.state.postbaseMaster[a].englishModifierInfinitive("")})
-					availablePostbaseInformationText.push(this.state.postbaseMaster[a].englishModifierInfinitive(""))
-				})
-			} else {
-				if (this.state.currentPostbases.length == 0) {
-					postbasesAvailable.map((a)=>{
-						postbaseInformationAvailable1.push({value:a,key:a,text:this.state.postbaseMaster[a].englishModifier("")})
-						availablePostbaseInformationText.push(this.state.postbaseMaster[a].englishModifier(""))
+		// let hasFuture = false
+		// if (mood !== 'Indicative' && mood !== 'Participial' && mood !== 'Interrogative') {
+		// 	if (this.state.currentPostbases.length == 0) {
+		// 		postbasesAvailable.map((a)=>{
+		// 			postbaseInformationAvailable1.push({value:a,key:a,text:this.state.postbaseMaster[a].description})
+		// 			availablePostbaseInformationText.push(this.state.postbaseMaster[a].englishModifier(""))
+		// 		})
+		// 	} else if (this.state.currentPostbases.length == 1) {
+		// 		// console.log('hi',postbasesAvailable)
+		// 		postbaseInformationAvailable1 = this.state.postbaseInformationAvailable1
+		// 		postbasesAvailable.map((a)=>{
+		// 			postbaseInformationAvailable2.push({value:a,key:a,text:this.state.postbaseMaster[a].description})
+		// 			availablePostbaseInformationText.push(this.state.postbaseMaster[a].englishModifier(""))
+		// 		})		
+		// 	}
+		// } else {
+		// 	if (mood == 'Participial') {
+		// 		postbasesAvailable.map((a)=>{
+		// 			postbaseInformationAvailable1.push({value:a,key:a,text:this.state.postbaseMaster[a].englishModifierPast("")})
+		// 			availablePostbaseInformationText.push(this.state.postbaseMaster[a].englishModifierPast(""))
+		// 		})
+		// 	} else if (mood == 'Interrogative') {
+		// 		postbasesAvailable.map((a)=>{
+		// 			postbaseInformationAvailable1.push({value:a,key:a,text:this.state.postbaseMaster[a].englishModifierInfinitive("")})
+		// 			availablePostbaseInformationText.push(this.state.postbaseMaster[a].englishModifierInfinitive(""))
+		// 		})
+		// 	} else {
+				if (currentPostbases.length == 0) {
+					Object.keys(postbasesAvailable).map((a)=>{
+						postbaseInformationAvailable1.push({value:a,key:a,text:this.state.postbaseMaster[a].description})
+						// availablePostbaseInformationText.push(this.state.postbaseMaster[a].englishModifier(""))
 					})
-				} else if (this.state.currentPostbases.length == 1) {
-					postbaseInformationAvailable1 = this.state.postbaseInformationAvailable1
-					if (future.includes(this.state.currentPostbases[0])) {
-						hasFuture = true
+				} else if (currentPostbases.length == 1) {
+					// console.log(this.state.postbaseMaster[currentPostbases[0]].gen_preverb_after)
+					// console.log(this.state.postbaseMaster[currentPostbases[0]])
+					if (this.state.postbaseMaster[currentPostbases[0]].match_case) {
+						Object.keys(postbasesAvailable).map((a)=>{
+							postbaseInformationAvailable1.push({value:a,key:a,text:this.state.postbaseMaster[a].description})
+							// availablePostbaseInformationText.push(this.state.postbaseMaster[a].englishModifierInfinitive(""))
+						})
+					} else {
+						if (this.state.postbaseMaster[currentPostbases[0]].gen_preverb_after == 'g') {
+							Object.keys(postbasesAvailable).map((a)=>{
+								postbaseInformationAvailable1.push({value:a,key:a,text:('postverb' in this.state.postbaseMaster[a] ? this.state.postbaseMaster[a].description : this.state.postbaseMaster[a].ger_preverb)})
+								// availablePostbaseInformationText.push(this.state.postbaseMaster[a].englishModifierInfinitive(""))
+							})		
+						}	else {
+							Object.keys(postbasesAvailable).map((a)=>{
+								postbaseInformationAvailable1.push({value:a,key:a,text:('postverb' in this.state.postbaseMaster[a] ? this.state.postbaseMaster[a].description : this.state.postbaseMaster[a].inf_preverb)})
+								// availablePostbaseInformationText.push(this.state.postbaseMaster[a].englishModifierGerund(""))
+							})		
+						}	
 					}
-					console.log('wadup')
-					if (nextinfinitive.includes(this.state.currentPostbases[0])) {
-						postbasesAvailable.map((a)=>{
-							postbaseInformationAvailable2.push({value:a,key:a,text:this.state.postbaseMaster[a].englishModifierInfinitive("")})
-							availablePostbaseInformationText.push(this.state.postbaseMaster[a].englishModifierInfinitive(""))
-						})		
-					}	else {
-						postbasesAvailable.map((a)=>{
-							postbaseInformationAvailable2.push({value:a,key:a,text:this.state.postbaseMaster[a].englishModifierGerund("")})
-							availablePostbaseInformationText.push(this.state.postbaseMaster[a].englishModifierGerund(""))
-						})		
-					}		
+				} else {
+					let k = this.state.postbaseMaster[currentPostbases[currentPostbases.length-2]].ger_preverb_after
+					console.log(k)
+					if (k == 'g') {
+						if (this.state.postbaseMaster[currentPostbases[currentPostbases.length-1]].ger_preverb_after == 'g') {
+							Object.keys(postbasesAvailable).map((a)=>{
+								postbaseInformationAvailable1.push({value:a,key:a,text:('postverb' in this.state.postbaseMaster[a] ? this.state.postbaseMaster[a].description : this.state.postbaseMaster[a].ger_preverb)})
+								// availablePostbaseInformationText.push(this.state.postbaseMaster[a].englishModifierInfinitive(""))
+							})		
+						}	else {
+							Object.keys(postbasesAvailable).map((a)=>{
+								postbaseInformationAvailable1.push({value:a,key:a,text:('postverb' in this.state.postbaseMaster[a] ? this.state.postbaseMaster[a].description : this.state.postbaseMaster[a].inf_preverb)})
+								// availablePostbaseInformationText.push(this.state.postbaseMaster[a].englishModifierGerund(""))
+							})		
+						}		
+					} else {
+						if (this.state.postbaseMaster[currentPostbases[currentPostbases.length-1]].inf_preverb_after == 'g') {
+							Object.keys(postbasesAvailable).map((a)=>{
+								postbaseInformationAvailable1.push({value:a,key:a,text:('postverb' in this.state.postbaseMaster[a] ? this.state.postbaseMaster[a].description : this.state.postbaseMaster[a].ger_preverb)})
+								// availablePostbaseInformationText.push(this.state.postbaseMaster[a].englishModifierInfinitive(""))
+							})		
+						}	else {
+							Object.keys(postbasesAvailable).map((a)=>{
+								postbaseInformationAvailable1.push({value:a,key:a,text:('postverb' in this.state.postbaseMaster[a] ? this.state.postbaseMaster[a].description : this.state.postbaseMaster[a].inf_preverb)})
+								// availablePostbaseInformationText.push(this.state.postbaseMaster[a].englishModifierGerund(""))
+							})		
+						}		
+					}			
 				}
-			}
-		}
+					// postbaseInformationAvailable1 = this.state.postbaseInformationAvailable1
+					// if (future.includes(this.state.currentPostbases[0])) {
+						// hasFuture = true
+					// }
+					// console.log('wadup')
+			// 	}
+		// }
 
 
 		// postbasesAvailable.map((a)=>{
@@ -1424,11 +1591,11 @@ class WordBuilder extends Component {
 
 		this.setState({
 			// currentPostbases: currentPostbases,
-			postbasesAvailable: postbasesAvailable,
-			hasFuture: hasFuture,
+			// postbasesAvailable: postbasesAvailable,
+			// hasFuture: hasFuture,
 			postbaseInformationAvailable1: postbaseInformationAvailable1,
-			postbaseInformationAvailable2: postbaseInformationAvailable2,
-			availablePostbaseInformationText: availablePostbaseInformationText,
+			// postbaseInformationAvailable2: postbaseInformationAvailable2,
+			// availablePostbaseInformationText: availablePostbaseInformationText,
 		});
 
 	}
@@ -1615,7 +1782,7 @@ class WordBuilder extends Component {
 		let postfstCallString = ''
 		if (currentPostbases.length > 0) {
 			currentPostbases.map((i)=>{
-				postfstCall.push(this.state.postbaseMaster[i].expression)
+				postfstCall.push(this.state.postbaseMaster[i].exp)
 			})
 			postfstCall = postfstCall.reverse()
 			postfstCallString = '-'+postfstCall.join('-')
@@ -1768,7 +1935,10 @@ class WordBuilder extends Component {
 							return <div style={{display:'flex',justifyContent:'center',paddingBottom:'20px'}}><Button fluid style={{display:'flex',maxWidth:'350px',justifyContent:'space-between',paddingLeft:'14px', paddingRight:'3px', color:this.state.colorsList[this.state.currentPostbases[qindex]], border:'1px solid '+this.state.colorsList[this.state.currentPostbases[qindex]],backgroundColor:'white'}} onClick={this.removePostbase.bind(this,qindex)}><span>{q}</span><Icon name='delete'/></Button></div>
 						})}
 						{this.state.englishPreVerb.map((q,qindex)=>{
-							return <div style={{display:'flex',justifyContent:'center',paddingBottom:'20px'}}><Button fluid style={{display:'flex',maxWidth:'350px',justifyContent:'space-between',paddingLeft:'14px', paddingRight:'3px', color:this.state.colorsList[this.state.currentPostbases[qindex]], border:'1px solid '+this.state.colorsList[this.state.currentPostbases[qindex]],backgroundColor:'white'}} onClick={this.removePostbase.bind(this,qindex)}><span>{q}</span><Icon name='delete'/></Button></div>
+							return <div style={{display:'flex',justifyContent:'center',paddingBottom:'20px'}}><Button fluid style={{display:'flex',maxWidth:'350px',justifyContent:'space-between',paddingLeft:'14px', paddingRight:'3px', color:this.state.colorsList[this.state.currentPostbases[q[1]]], border:'1px solid '+this.state.colorsList[this.state.currentPostbases[q[1]]],backgroundColor:'white'}} onClick={this.removePostbase.bind(this,q[1])}><span>{q[0]}</span><Icon name='delete'/></Button></div>
+						})}
+						{this.state.afterObjectText2.map((q,qindex)=>{
+							return <div style={{display:'flex',justifyContent:'center',paddingBottom:'20px'}}><Button fluid style={{display:'flex',maxWidth:'350px',justifyContent:'space-between',paddingLeft:'14px', paddingRight:'3px', color:this.state.colorsList[this.state.currentPostbases[q[1]]], border:'1px solid '+this.state.colorsList[this.state.currentPostbases[q[1]]],backgroundColor:'white'}} onClick={this.removePostbase.bind(this,q[1])}><span>{q[0]}</span><Icon name='delete'/></Button></div>
 						})}
 						{this.state.nounMood !== 'Absolutive' ?
 							<div style={{display:'flex',justifyContent:'center',paddingBottom:'20px'}}><Button fluid style={{display:'flex',maxWidth:'350px',justifyContent:'space-between',paddingLeft:'14px', paddingRight:'3px',color:'#852828',backgroundColor:'white',border:'1px solid #852828'}} onClick={this.changeNounEnding.bind(this,true)}><span>{getNounInfo[this.state.endingNumber]['buttontext']}</span><Icon name='delete'/></Button></div>
@@ -1783,6 +1953,21 @@ class WordBuilder extends Component {
 				</div>
 
 				<div style={{height:'15px'}} />
+
+					<div style={{display:'flex',justifyContent:'center',paddingRight:'30px',paddingLeft:'30px'}}>
+					  <Dropdown
+					  	style={{maxWidth:'350px'}}
+					    placeholder={()=><div style={{display:'flex', flexDirection:'column'}}><span>{'Akunniġutilivsaaġuŋ'}</span><span style={{color:'grey',paddingTop:'4px'}}>{'Add a postbase'}</span></div>}
+					    fluid
+					    search
+					    selection
+					    text='Add a Postbase'
+					    selectOnBlur={false}
+					    options={this.state.postbaseInformationAvailable1}
+					    onChange={this.addPostbase.bind(this)}
+					  />
+					</div>
+{/*
 
 				{this.state.currentPostbases.length == 0 ? 
 					<div style={{display:'flex',justifyContent:'center',height:'56px',paddingRight:'30px',paddingLeft:'30px'}}>
@@ -1834,7 +2019,7 @@ class WordBuilder extends Component {
 				:
 				null
 				}
-
+*/}
 
 				{this.state.baseTag != 'n' && this.state.verbMood != 'Participial' && this.state.verbMood != 'Interrogative' && this.state.currentPostbases.length < 2 ?
 					<div style={{display:'flex',justifyContent:'center',height:'71px',paddingTop:'15px',paddingRight:'30px',paddingLeft:'30px'}}>
@@ -1881,7 +2066,7 @@ class WordBuilder extends Component {
 						              </span>
 						              </div>
 						        </List.Header>
-						        <List.Description style={{fontSize:'16px',color:'#000000cc',paddingLeft:'15px',fontWeight:'400',lineHeight:'23px',paddingTop:'4px'}}>{this.processStyledText2(this.state.sisters[i][3],this.state.sisters[i][0])}</List.Description>
+						        <List.Description style={{fontSize:'16px',color:'#000000cc',paddingLeft:'15px',fontWeight:'400',lineHeight:'23px',paddingTop:'4px'}}>{this.state.sisters[i][3]}</List.Description>
 						      </List.Content>
 						    </List.Item>
               	)}
