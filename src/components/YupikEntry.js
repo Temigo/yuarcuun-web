@@ -264,6 +264,7 @@ class YupikEntry extends Component {
           <div className='hierarchy'>
           <Header as='h2'>Usage</Header>
           {this.state.entry.usage.map((entry,i) => {
+            console.log(entry)
             return <SimpleWordBuilder entry={entry} />
           })}
           </div>

@@ -71,7 +71,7 @@ export const AudioItem = (props) => {
 }
 
 export const WordItem = (props) => {
-  console.log(props)
+  // console.log(props)
   let verbkeyStringbool = false
   // console.log(props.word.verbkeyString.pos)
   if ('verbkeyString' in props.word) {

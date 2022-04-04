@@ -27,7 +27,7 @@ class SimpleWordBuilder extends Component {
   constructor(props) {
     super(props);
     console.log("YupikDetails props: ", props);
-    console.log(props.entry[5])
+    console.log(props.entry)
     // console.log(props.entry[5][0])
     this.state = {
       tag: props.entry[0],
@@ -35,16 +35,15 @@ class SimpleWordBuilder extends Component {
       baseWord: props.entry[2],
       definition: props.entry[3],
 
-      firstVerb: props.entry[4] === undefined ? '' : props.entry[4],
-      definitionraw: props.entry[5] === undefined ? '' : props.entry[5],
-      preSubjectText: props.entry[5] === undefined ? '' : props.entry[5][0],
-      value1: props.entry[5] === undefined ? '' :props.entry[5][1],
-      afterSubjectText: props.entry[5] === undefined ? '' :props.entry[5][2],
-      containsIs: props.entry[5] === undefined ? '' :props.entry[5][3],
-      primaryVerb: props.entry[5] === undefined ? '' :props.entry[5][4],
-      preObjectText: props.entry[5] === undefined ? '' :props.entry[5][5],
-      value2: props.entry[5] === undefined ? '' :props.entry[5][6],
-      afterObjectText: props.entry[5] === undefined ? '' :props.entry[5][7],
+      firstVerb: '',
+      preSubjectText: '',
+      value1: '',
+      afterSubjectText: '',
+      containsIs: '',
+      primaryVerb: '',
+      preObjectText: '',
+      value2: '',
+      afterObjectText: '',
       // baseCases: ['pissur','nere'], // from json
       // definitionraw: "⟨hunting⟩ <it>", 
       // firstVerb: [
@@ -66,9 +65,31 @@ class SimpleWordBuilder extends Component {
       nounvalue1:'1',
       nounvalue2:'00(3)',
 
+      activeDefinitionInEditIndex: 0,
+      pluralizedDefinition: '',
+
+      definitionBaseOptions: [],
+
       // base: props.base === undefined ? '' : props.base,
     };
-    // this.initialize = this.initialize.bind(this,props.entry[0]);
+
+    if (props.entry[0] !== 'n') {
+      this.state = {
+        ...this.state,
+        firstVerb: this.props.entry[4],
+        preSubjectText: this.props.entry[5][0],
+        value1: this.props.entry[5][1],
+        afterSubjectText: this.props.entry[5][2],
+        containsIs: this.props.entry[5][3],
+        primaryVerb: this.props.entry[5][4],
+        preObjectText: this.props.entry[5][5],
+        value2: this.props.entry[5][6],
+        afterObjectText: this.props.entry[5][7],
+      };
+    }
+
+    // this.initialize = this.initialize.bind(this);
+    // this.initialize(this,props.entry[0]);
     // this.getWord = this.getWord.bind(this);
     // this.getWord(decodeURI(props.match.params.word));
   }
@@ -92,18 +113,19 @@ class SimpleWordBuilder extends Component {
   //     });
   // }
   // initialize(tag) {
-  //   if (tag !== 'n') {
+  //   console.log(tag.state.tag)
+  //   if (tag.state.tag !== 'n') {
+  //     console.log('hi',this.props)
   //     this.setState({
-  //       firstVerb: props.entry[4],
-  //       definitionraw: props.entry[5],
-  //       preSubjectText: props.entry[5] === undefined ? '' : props.entry[5][0],
-  //       value1: props.entry[5] === undefined ? '' :props.entry[5][1],
-  //       afterSubjectText: props.entry[5] === undefined ? '' :props.entry[5][2],
-  //       containsIs: props.entry[5] === undefined ? '' :props.entry[5][3],
-  //       primaryVerb: props.entry[5] === undefined ? '' :props.entry[5][4],
-  //       preObjectText: props.entry[5] === undefined ? '' :props.entry[5][5],
-  //       value2: props.entry[5] === undefined ? '' :props.entry[5][6],
-  //       afterObjectText: props.entry[5] === undefined ? '' :props.entry[5][7],
+  //       firstVerb: this.props.entry[4],
+  //       preSubjectText: this.props.entry[5][0],
+  //       value1: this.props.entry[5][1],
+  //       afterSubjectText: this.props.entry[5][2],
+  //       containsIs: this.props.entry[5][3],
+  //       primaryVerb: this.props.entry[5][4],
+  //       preObjectText: this.props.entry[5][5],
+  //       value2: this.props.entry[5][6],
+  //       afterObjectText: this.props.entry[5][7],
   //     })
   //   }
   // }
@@ -271,6 +293,7 @@ class SimpleWordBuilder extends Component {
 
 
   defaultFstCall = () => {
+    console.log(this.state)
     let tag = this.state.tag
     let value1 = ''
     let value2 = ''
@@ -288,6 +311,17 @@ class SimpleWordBuilder extends Component {
       nounvalue1="1"
       nounvalue2="00(3)"
       owner = 'Unpd'
+
+
+
+      let definitionBaseOptions = []
+      this.state.definition.map((k,index)=>{
+        definitionBaseOptions.push({value:index,key:index,text:k[0].replace("⟨","").replace("⟩","")})
+      })
+      
+      this.setState({definitionBaseOptions:definitionBaseOptions})
+
+
       this.setNoun(true,nounvalue1,nounvalue2,owner,undefined,undefined)
     } else if (tag === 't') {
       // let values = this.identifySubjectIsObjectCase(this.state.definition)
@@ -308,8 +342,9 @@ class SimpleWordBuilder extends Component {
 
   setIntransitive(initializing, e, data) {
     console.log(e, data)
-    console.log(this.state.definitionraw)
+    // console.log(this.state.definitionraw)
     let value1 = this.state.value1
+    console.log(value1)
     if (!initializing) {
       value1 = data.value
       // person = data.value[0]
@@ -366,10 +401,26 @@ class SimpleWordBuilder extends Component {
       }
     }
 
+    let definitionBaseOptions = []
+    this.state.definition.map((k,index)=>{
+      let sentence = this.state.definition[index][0]
+      let matches = sentence.match(/\⟨.*?\⟩/g)
+      if (matches !== null) {
+        if (nounvalue1 !== '1') {
+          matches.map((m) => sentence = sentence.replace(m,this.state.definition[index][2][1]))            
+        } else {
+          matches.map((m) => sentence = sentence.replace(m,this.state.definition[index][2][0]))            
+        }
+      }
+      // console.log(sentence)
+      definitionBaseOptions.push({value:index,key:index,text:sentence})
+    })
+
     this.setState({
       nounvalue1: nounvalue1,
       nounvalue2: nounvalue2,
       value1: "s31-3(1)",
+      definitionBaseOptions: definitionBaseOptions,
       // activeEditIndex:ind,
       // person: person,
       // people: people,
@@ -439,6 +490,29 @@ class SimpleWordBuilder extends Component {
     this.getFSTParse(this.state.fstCall,data.value)
   }
 
+  changeActiveDefinitionKey(entry, data) {
+    console.log(data)
+    let num = data.value
+    // console.log(data.options)
+    this.setState({
+      // value1: data.value,
+      activeDefinitionInEditIndex:data.value,
+      // baseCase: data.options[data.value].text,
+    });
+
+    console.log(this.state.definition[data.value][0])
+    let sentence = this.state.definition[data.value][0]
+    let matches = sentence.match(/\⟨.*?\⟩/g)
+    if (matches !== null) {
+      matches.map((m) => sentence = sentence.replace(m,m.slice(1,-1)))  
+    }
+    console.log(sentence)
+
+    this.setState({pluralizedDefinition:sentence})
+    // console.log(this.state.usageDefinition[data.value][])
+    // this.getFSTParse(this.state.baseCase,this.state.currentPostbases,this.state.tag,this.state.verbMood,this.state.moodSpecific,this.state.value1,this.state.value2,this.state.nounMood,this.state.nounvalue1,this.state.nounvalue2)
+  }
+  
 
   getSubjectIs = (personN, peopleN) => {
     let subjectis = '';
@@ -574,7 +648,16 @@ class SimpleWordBuilder extends Component {
                 <div style={{marginTop:'15px', marginBottom:'15px',marginLeft:'45px',fontSize:'18px',color:'#0D0D0D',fontWeight:'300'}}>
                 <Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={this.setNoun.bind(this,false,'','','')} value={this.state.nounvalue2} options={nounoptions1} />
                 <Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={this.setNoun.bind(this,false,'','','')} value={this.state.nounvalue1} options={nounoptions2} />
-                <span style={{color:'#777777'}}>{this.processStyledText(this.state.definition[this.state.activeKeyInEditIndex][0])}</span>
+                {this.state.definition.length > 1 ?
+                  <Dropdown inline scrolling onChange={this.changeActiveDefinitionKey.bind(this)} value={this.state.activeDefinitionInEditIndex} options={this.state.definitionBaseOptions} />
+                  :
+                  (this.state.nounvalue1 !== '1' ?
+                    <span style={{color:'#777777'}}>{this.processStyledText(this.state.definition[this.state.activeDefinitionInEditIndex][2][1])}</span>
+                    :
+                    <span style={{color:'#777777'}}>{this.processStyledText(this.state.definition[this.state.activeDefinitionInEditIndex][2][0])}</span>
+                  )
+                }
+
                 </div>
               </div>    
             )
@@ -662,7 +745,7 @@ class SimpleWordBuilder extends Component {
           {this.state.wordBuilderOn ?
             <div>
             {this.usageEntry(this.state.tag)}
-                <Link to={{pathname: '/wordbuilder/' + this.state.baseWord, state: { word: this.state.baseWord, activeKeyInEditIndex: this.state.activeKeyInEditIndex, usageDefinition: this.state.definition, baseCase:this.state.baseCases, nounvalue1: this.state.nounvalue1, nounvalue2: this.state.nounvalue2, value1: this.state.value1, value2: this.state.value2, }}}>
+                <Link to={{pathname: '/wordbuilder/' + this.state.baseWord, state: { word: this.state.baseWord, activeDefinitionInEditIndex: this.state.activeDefinitionInEditIndex, activeKeyInEditIndex: this.state.activeKeyInEditIndex, usageDefinition: this.state.definition, baseCase:this.state.baseCases, nounvalue1: this.state.nounvalue1, nounvalue2: this.state.nounvalue2, value1: this.state.value1, value2: this.state.value2, }}}>
                 <Button basic compact style={{marginLeft:'45px',fontSize:'16px',fontWeight:'300',marginBottom:'10px'}}>
                 <div style={{display:'flex',flexDirection:'column',fontFamily:customFontFam}}>
                 <div style={{fontWeight:'400',paddingBottom:'5px'}}>

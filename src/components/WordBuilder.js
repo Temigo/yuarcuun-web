@@ -95,7 +95,7 @@ class WordBuilder extends Component {
 			// word: 'nakuu-',
 			entryModified:[],
 			activeKeyInEditIndex: props.location.state === undefined ? 0 : props.location.state.activeKeyInEditIndex,
-			activeDefinitionInEditIndex: 0,
+			activeDefinitionInEditIndex: props.location.state === undefined ? 0 : props.location.state.activeDefinitionInEditIndex,
 			usageDefinition: props.location.state === undefined ? '' : props.location.state.usageDefinition,
 			baseUsageWord: props.location.state === undefined ? 'pissurtuq' : props.location.state.word,
 			baseCase: props.location.state === undefined ? '' : props.location.state.baseCase,
@@ -128,7 +128,7 @@ class WordBuilder extends Component {
 
 
       firstVerb: '',
-      definitionraw: '',
+      // definitionraw: '',
       preSubjectText: '',
       value1: '',
       afterSubjectText: '',
@@ -295,7 +295,16 @@ class WordBuilder extends Component {
 
 			let definitionBaseOptions = []
 			this.state.usageDefinition.map((k,index)=>{
-				definitionBaseOptions.push({value:index,key:index,text:k[0].replace("⟨","").replace("⟩","")})
+        let sentence = this.state.usageDefinition[index][0]
+        let matches = sentence.match(/\⟨.*?\⟩/g)
+				if (matches !== null) {
+					if (this.state.nounvalue1 !== '1') {
+						matches.map((m) => sentence = sentence.replace(m,this.state.usageDefinition[index][2][1]))						
+					} else {
+						matches.map((m) => sentence = sentence.replace(m,this.state.usageDefinition[index][2][0]))						
+					}
+				}
+        definitionBaseOptions.push({value:index,key:index,text:sentence})
 			})
 			
 			this.setState({definitionBaseOptions:definitionBaseOptions})
@@ -354,29 +363,29 @@ class WordBuilder extends Component {
         if (num === -1) {
         	// console.log(response.data[Object.keys(response.data)[0]])
 	        this.setState({
-	          usageDefinition: response.data['key'][3],	
-	          baseUsageWord: response.data['key'][2],	
-	          // otherBases: response.data['key'].otherBases,
-	          baseCase: response.data['key'][1],
-	          entryUrl: response.data['key'][2],	
 	          tag: response.data['key'][0],	
+	          baseCase: response.data['key'][1],
+	          baseUsageWord: response.data['key'][2],	
+	          entryUrl: response.data['key'][2],	
+	          usageDefinition: response.data['key'][3],	
+	          // otherBases: response.data['key'].otherBases,
 	          sisters: response.data['sisters'],
 
 	      	})
-
+	        console.log(response.data['key'].length)
 	        if (response.data['key'].length > 4) {
 	        this.setState({
 	          usageVerbTenses: response.data['key'][4],
 	          startingVerbTense: response.data['key'][4].indexOf(response.data['key'][5][4]),
-			      definitionraw: response.data['key'][5] === undefined ? '' : response.data['key'][5],
-			      preSubjectText: response.data['key'][5] === undefined ? '' : response.data['key'][5][0],
-			      value1: response.data['key'][5] === undefined ? '' :response.data['key'][5][1],
-			      afterSubjectText: response.data['key'][5] === undefined ? '' :response.data['key'][5][2],
-			      containsIs: response.data['key'][5] === undefined ? '' :response.data['key'][5][3],
-			      primaryVerbBase: response.data['key'][5] === undefined ? '' :response.data['key'][5][4],
-			      preObjectText: response.data['key'][5] === undefined ? '' :response.data['key'][5][5],
-			      value2: response.data['key'][5] === undefined ? '' :response.data['key'][5][6],
-			      afterObjectText: response.data['key'][5] === undefined ? '' :response.data['key'][5][7],
+			      // definitionraw: response.data['key'][3][0][0] === undefined ? '' : response.data['key'][3][0][0],
+			      preSubjectText: response.data['key'][5][0] === undefined ? '' : response.data['key'][5][0],
+			      value1: response.data['key'][5][1] === undefined ? '' :response.data['key'][5][1],
+			      afterSubjectText: response.data['key'][5][2] === undefined ? '' :response.data['key'][5][2],
+			      containsIs: response.data['key'][5][3] === undefined ? '' :response.data['key'][5][3],
+			      primaryVerbBase: response.data['key'][5][4] === undefined ? '' :response.data['key'][5][4],
+			      preObjectText: response.data['key'][5][5] === undefined ? '' :response.data['key'][5][5],
+			      value2: response.data['key'][5][6] === undefined ? '' :response.data['key'][5][6],
+			      afterObjectText: response.data['key'][5][7] === undefined ? '' :response.data['key'][5][7],
 
 	      	})	        	
 	        }
@@ -794,7 +803,7 @@ class WordBuilder extends Component {
 								<span style={{color:'#777777'}}>{this.state.afterSubjectText}</span>
 								<span style={{color:'#777777'}}>{this.state.subjectIs}</span>
 								{this.state.englishPreVerb.map((w,wind)=>{
-									return <span style={{color:this.state.colorsList[this.state.currentPostbases[wind]]}}>{w+" "}</span>
+									return <span style={{color:this.state.colorsList[this.state.currentPostbases[w[1]]]}}>{w[0]+" "}</span>
 								})}
 								<span style={{color:'#777777'}}>{this.processStyledText(this.state.bePreVerb)}</span>
 								<span style={{color:'#777777'}}>{this.processStyledText(this.state.preObjectText)}</span>
@@ -803,7 +812,7 @@ class WordBuilder extends Component {
 								<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}} onChange={this.setTransitive.bind(this,false)} value={this.state.value2} options={options2} />
 								<span style={{color:'#777777'}}>{this.processStyledText(this.state.afterObjectText)}</span>
 								{this.state.afterObjectText2.map((w,wind)=>{
-									return <span style={{color:this.state.colorsList[this.state.currentPostbases[wind]]}}>{" "+w}</span>
+									return <span style={{color:this.state.colorsList[this.state.currentPostbases[w[1]]]}}>{" "+w[0]}</span>
 								})}
 								<span style={{color:'#852828'}}>{' '+this.state.questionMark}</span>
 								</div>
