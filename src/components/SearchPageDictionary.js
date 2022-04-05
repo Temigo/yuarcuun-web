@@ -465,7 +465,8 @@ class SearchPageDictionary extends Component {
                 fluid  />                
               </Grid.Column>
             </Grid.Row>
-            <Grid.Row style={{display:'flex',justifyContent:'center',padding:0}}>
+
+            <Grid.Row style={{display:'flex',justifyContent:'center',padding:0,paddingLeft:14,paddingRight:14}}>
             <List divided selection>
             {displayList  ? 
                 wordsList.map((word) => 

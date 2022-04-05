@@ -863,7 +863,7 @@ class SearchPage extends Component {
                 fluid  />                
               </Grid.Column>
             </Grid.Row>
-            <Grid.Row style={{display:'flex',justifyContent:'center',padding:0}}>
+            <Grid.Row style={{display:'flex',justifyContent:'center',padding:0,paddingLeft:14,paddingRight:14}}>
             <List style={{width:'100%'}} divided selection>
             {displayList  ? 
                 wordsList.map((word, index) => 

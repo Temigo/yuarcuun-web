@@ -71,7 +71,7 @@ export const AudioItem = (props) => {
 }
 
 export const WordItem = (props) => {
-  // console.log(props)
+  console.log(props)
   let verbkeyStringbool = false
   // console.log(props.word.verbkeyString.pos)
   if ('verbkeyString' in props.word) {
@@ -122,44 +122,22 @@ export const WordItem = (props) => {
     <Link to={{pathname: '/' + props.word.url, state: { word: props.word, search: props.search, wordsList: props.wordsList, yugtunAnalyzer: false, parses: [], segments: [],endingrule: []}}}>
       <List.Content>
         <List.Header style={{display:'flex',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'16px',paddingBottom:'4px'}}>
-          {/*{console.log(word.keySplit)}*/}
+          {console.log(props.word.keySplit)}
           {props.word.keySplit.map((w,index) => 
               <span>
               {w[0]}
-              {/*{console.log(index, word.keySplit.length,w[1][0])}*/}
+              {console.log(w)}
               {w[1][0] !== '' ?
                   <Label style={{'marginLeft':'5px',marginRight:'5px'}} size='mini' color='white'>{w[1].join(', ')}</Label>
                 :
                 (index == props.word.keySplit.length-1 ?
                   ''
                   :
-                  ', '
+                  ',\xa0'
                 )
             }
               </span>
             )}
-
-          {verbkeyStringbool ?
-            (props.word.verbkeyString.keySplit.map((w,index) => 
-                <span>
-                {', '}
-                {console.log(w)}
-                {w[0]}
-                {/*{console.log(index, word.keySplit.length,w[1][0])}*/}
-                {w[1][0] !== '' ?
-                    <Label style={{'marginLeft':'5px',marginRight:'5px'}} size='mini' color='white'>{w[1].join(', ')}</Label>
-                  :
-                  (index == props.word.keySplit.length-1 ?
-                    ''
-                    :
-                    ', '
-                  )
-              }
-                </span>
-              ))
-            :
-            null
-          }
 
           <span style={{ 'marginLeft': '18px'}}>  
             {isNoun ? <Label size='mini' style={{backgroundColor:'#7F90B0',color:'white'}}>NOUN</Label> : ''}
@@ -178,7 +156,7 @@ export const WordItem = (props) => {
 
           </span>
         </List.Header>
-        <List.Description style={{fontSize:'16px',fontWeight:'400'}}>{props.word.combinedDefinition}</List.Description>
+        <List.Description style={{fontSize:'16px',fontWeight:'400'}}>{props.word.definitionString}</List.Description>
       </List.Content>
     </Link>
     </List.Item>
