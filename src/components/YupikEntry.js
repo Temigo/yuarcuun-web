@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import {withRouter} from 'react-router';
 import { TagColors, WordItem } from './SearchPageHelpers.js';
 import SimpleWordBuilder from './SimpleWordBuilder.js';
+import {DialectDictionary} from './constants/DialectDictionary.js';
 
 
 class YupikEntry extends Component {
@@ -60,6 +61,12 @@ class YupikEntry extends Component {
       text3 = res[2]
     }
     return [text1, sub, text2, obj, text3]
+  }
+
+  retrieveDialect = (dialect) => {
+    if (dialect in DialectDictionary) {
+      return DialectDictionary[dialect]
+    }
   }
 
   processStyledText = (sentence) => {     
@@ -167,7 +174,10 @@ class YupikEntry extends Component {
 
           {this.state.entry.keySplit.map((key) => {
             return <div>
-            <span style={{fontSize:'20px'}}>{key[0]}</span>
+            {this.state.entry.pos.map((descriptor) => 
+              {return <TagColors key={descriptor} word={descriptor} padding={0} />}
+            )}
+            <span style={{fontSize:'23px',fontWeight:'600',marginLeft:'15px'}}>{key[0]}</span>
             {key[1][0] !== '' ?
               (key[1].map((dialect)=> 
                 <Label horizontal>{dialect}</Label>
@@ -176,20 +186,15 @@ class YupikEntry extends Component {
               null
               }
 
-              {this.state.entry.pos.map((descriptor) => 
-                {return <TagColors key={descriptor} word={descriptor} />}
-              )}
+
 
             </div>
           })}
 
-
-
-
-
           {this.state.entry.definition.map((entry,i) => {
-            return <div style={{marginLeft:'10px'}}>
-            <span>{i+1+'. '+entry[0]}</span>
+            return <div style={{marginLeft:'11px'}}>
+            <span style={{marginLeft:'10px',color:'#777777',fontSize:'20px','fontWeight':'300'}}>{'○'}</span>
+            <span style={{marginLeft:'20px',color:'#000000',fontSize:'20px',lineHeight:'24px','fontWeight':'300'}}>{this.processStyledText(entry[0])}</span>
             {entry[1][0] !== '' ?
               <Label horizontal>{entry[1]}</Label>
               :
@@ -202,35 +207,38 @@ class YupikEntry extends Component {
         {this.state.entry.verbkeyString.keyString.length !== 0 ?
           <div>
             <Divider />
-            {this.state.entry.verbkeyString.keySplit.map((entry,i) => {
-              return <div>
-              <span style={{fontSize:'20px'}}>{entry[0]}</span>
-              {entry[1][0] !== '' ?
-                (entry[1].map((dialect)=> 
-                  <Label horizontal>{entry[1]}</Label>
-                ))
-                :
-                null
-                }
-              </div>;
-            })}
 
-            <Label color='blue' horizontal key={'verb'}>{'verb'.toUpperCase()}</Label>
-            
+          {this.state.entry.verbkeyString.keySplit.map((key) => {
+            return <div>
+            {this.state.entry.verbkeyString.pos.map((descriptor) => 
+              {return <TagColors key={descriptor} word={descriptor} padding={0} />}
+            )}
+            <span style={{fontSize:'23px',fontWeight:'600',marginLeft:'15px'}}>{key[0]}</span>
+            {key[1][0] !== '' ?
+              (key[1].map((dialect)=> 
+                <Label horizontal>{dialect}</Label>
+              ))
+              :
+              null
+              }
+            </div>
+          })}
 
 
-            {this.state.entry.verbkeyString.definition.map((entry,i) => {
-              return <div>
-              <span style={{paddingRight:'5px'}}>{i+1+'. '+entry[0]}</span>
-              {entry[1][0] !== '' ?
-                (entry[1].map((dialect,i)=> 
-                  <Label horizontal>{entry[1][i]}</Label>
-                ))
-                :
-                null
-                }
-              </div>;
-            })}
+
+          {this.state.entry.verbkeyString.definition.map((entry,i) => {
+            return <div style={{marginLeft:'11px'}}>
+            <span style={{marginLeft:'10px',color:'#777777',fontSize:'20px','fontWeight':'300'}}>{'○'}</span>
+            <span style={{marginLeft:'20px',color:'#000000',fontSize:'20px',lineHeight:'24px','fontWeight':'300'}}>{this.processStyledText(entry[0])}</span>
+            {entry[1][0] !== '' ?
+              <Label horizontal>{entry[1]}</Label>
+              :
+              null
+              }
+            </div>;
+          })}
+
+
           </div>
           :
           null
@@ -259,8 +267,7 @@ class YupikEntry extends Component {
         }
 */}
 
-        {"usage" in this.state.entry ? 
-        (this.state.entry.usage.length !== 0 ?
+        {this.state.entry.usage.length !== 0 ?
           <div className='hierarchy'>
           <Header as='h2'>Usage</Header>
           {this.state.entry.usage.map((entry,i) => {
@@ -270,18 +277,14 @@ class YupikEntry extends Component {
           </div>
           :
           null
-        )
-        :
-        null
         }
 
-        
 
         {this.state.entry.entryDialect.length !== 0 ?
           <div className='hierarchy'>
           <Header as='h2'>Dialect</Header>
           {this.state.entry.entryDialect.map((entry,i) => {
-            return <div><span>{entry}</span></div>
+            return <div style={{paddingLeft:8}}><span>{this.retrieveDialect(entry)}</span></div>
           })}
           </div>
           :
@@ -293,7 +296,7 @@ class YupikEntry extends Component {
           <div className='hierarchy'>
           <Header as='h2'>Additional Info Near Definition</Header>
           {this.state.entry.additionalInfoNearDefinition.map((entry,i) => {
-            return <div><span>{entry}</span></div>
+            return <div style={{paddingLeft:8}}><span>{entry}</span></div>
           })}
           </div>
           :
@@ -306,7 +309,7 @@ class YupikEntry extends Component {
             <Header as='h2'>Example Sentences</Header>
             {this.state.entry.baseExamples.map((sentence) => {
               return (
-                <List.Item style={{paddingBottom:'10px'}} key={sentence[0]}>
+                <List.Item style={{paddingBottom:'10px', paddingLeft:'8px'}} key={sentence[0]}>
                   <List.Header>
                 <Link to={{pathname:'/', state: {...this.props.location.state, updateSearchEntry:true, search: sentence[0], newSearchList: sentence[0].split(" "), activeTabIndex:1}}}>
                   <span style={{textDecoration:'underline'}}>
@@ -377,9 +380,9 @@ class YupikEntry extends Component {
 
         {this.state.entry.additionalInfo.length !== 0 ?
           <div className='hierarchy'>
-          <Header as='h2'>Additional Info</Header>
+          <Header as='h2'>Additional Information</Header>
             {this.state.entry.additionalInfo.map((entry,i) => {
-              return <div><span>{'- '+entry}</span></div>
+              return <div style={{paddingLeft:8}}><span>{'- '+entry}</span></div>
             })}
           </div>
           :
@@ -389,7 +392,7 @@ class YupikEntry extends Component {
 
         {Object.keys(this.state.entry.childrenEntries).length !== 0 ?
           <div className='hierarchy'>
-            <Header as='h2'>Related Entries (greaterthan)</Header>
+            <Header as='h2'>Related Entries</Header>
               <List style={{marginTop:0}} divided selection>
               {Object.keys(this.state.entry.childrenEntries).map((word, index) =>
                 (Object.keys(this.state.entry.childrenEntries[word]).length !== 0 ?
@@ -407,7 +410,7 @@ class YupikEntry extends Component {
 
         {Object.keys(this.state.entry.synonyms).length !== 0 ?
           <div className='hierarchy'>
-            <Header as='h2'>Synonyms (equal)</Header>
+            <Header as='h2'>Synonyms</Header>
               <List style={{marginTop:0}} divided selection>
               {Object.keys(this.state.entry.synonyms).map((word, index) =>
                 (Object.keys(this.state.entry.synonyms[word]).length !== 0 ?
@@ -424,7 +427,7 @@ class YupikEntry extends Component {
 
         {Object.keys(this.state.entry.questionablyrelated).length !== 0 ?
           <div className='hierarchy'>
-            <Header as='h2'>Possibly Related (cf.)</Header>
+            <Header as='h2'>Possibly Related</Header>
               <List style={{marginTop:0}} divided selection>
               {Object.keys(this.state.entry.questionablyrelated).map((word, index) =>
                 (Object.keys(this.state.entry.questionablyrelated[word]).length !== 0 ?
@@ -445,9 +448,9 @@ class YupikEntry extends Component {
 
         {this.state.entry.fromLanguage.length !== 0 ?
           <div className='hierarchy'>
-        <Header as='h2'>from language</Header>
+        <Header as='h2'>Language Origin</Header>
           {this.state.entry.fromLanguage.map((entry) => {
-            return <div><span>{entry}</span></div>
+            return <div style={{paddingLeft:8}}><span>{entry}</span></div>
           })}
           </div>
           :
@@ -458,7 +461,7 @@ class YupikEntry extends Component {
 
         {Object.keys(this.state.entry.etymology).length !== 0 ?
           <div className='hierarchy'>
-            <Header as='h2'>Etymology (lessthan)</Header>
+            <Header as='h2'>Etymology</Header>
               <List style={{marginTop:0}} divided selection>
               {Object.keys(this.state.entry.etymology).map((key, index) =>
                 (this.state.entry.etymology[key].map((word,i)=>
@@ -474,9 +477,9 @@ class YupikEntry extends Component {
 
         {this.state.entry.protolessthan.length !== 0 ?
           <div className='hierarchy'>
-        <Header as='h2'>proto-etymology</Header>
+        <Header as='h2'>Proto-Etymology</Header>
           {this.state.entry.protolessthan.map((entry) => {
-            return <div><span>{entry}</span></div>
+            return <div style={{paddingLeft:8}}><span>{entry}</span></div>
           })}
           </div>
           :
@@ -486,9 +489,9 @@ class YupikEntry extends Component {
         {this.state.entry.extra.length !== 0 ?
           <div className='hierarchy'>
 
-        <Header as='h2'>extra</Header>
+        <Header as='h2'>Extra Information</Header>
           {this.state.entry.extra.map((entry) => {
-            return <div><span>{entry}</span></div>
+            return <div style={{paddingLeft:8}}><span>{entry}</span></div>
           })}
           </div>
           :

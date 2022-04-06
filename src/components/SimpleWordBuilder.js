@@ -76,6 +76,8 @@ class SimpleWordBuilder extends Component {
     if (props.entry[0] !== 'n') {
       this.state = {
         ...this.state,
+
+        firstDefinition: props.entry[3],
         firstVerb: this.props.entry[4],
         preSubjectText: this.props.entry[5][0],
         value1: this.props.entry[5][1],
@@ -86,6 +88,12 @@ class SimpleWordBuilder extends Component {
         value2: this.props.entry[5][6],
         afterObjectText: this.props.entry[5][7],
       };
+    } else {
+      this.state = {
+        ...this.state,
+
+        firstDefinition: 'the one '+props.entry[3][0][0],
+      }
     }
 
     // this.initialize = this.initialize.bind(this);
@@ -94,6 +102,34 @@ class SimpleWordBuilder extends Component {
     // this.getWord(decodeURI(props.match.params.word));
   }
 
+
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps)
+    this.setState({ 
+      tag: nextProps.entry[0],
+      baseCases: nextProps.entry[1],
+      baseWord: nextProps.entry[2],
+      definition: nextProps.entry[3],
+    });  
+    if (nextProps.entry[0] !== 'n') {
+      this.setState({ 
+        firstDefinition: nextProps.entry[3],
+        firstVerb: nextProps.entry[4],
+        preSubjectText: nextProps.entry[5][0],
+        value1: nextProps.entry[5][1],
+        afterSubjectText: nextProps.entry[5][2],
+        containsIs: nextProps.entry[5][3],
+        primaryVerb: nextProps.entry[5][4],
+        preObjectText: nextProps.entry[5][5],
+        value2: nextProps.entry[5][6],
+        afterObjectText: nextProps.entry[5][7],
+      });
+    } else {
+      this.setState({ 
+        firstDefinition: 'the one '+nextProps.entry[3][0][0],
+      })
+    }
+  }
   // componentDidUpdate(prevProps) {
   //   if (prevProps.match.params.word !== this.props.match.params.word) {
   //     this.getWord(decodeURI(this.props.match.params.word));
@@ -573,26 +609,26 @@ class SimpleWordBuilder extends Component {
     }
   }
 
-  // processStyledText2 = (sentence,ind,tag) => {
-  //   console.log(sentence,ind,tag)
-  //   sentence = sentence.replace("⟨","").replace("⟩","")
-  //   if (tag == 'NOUN') {
-  //     sentence = 'the one '+sentence
-  //   } else {
-  //     if (ind % 2 == 0) {
-  //     sentence = 'she is '+sentence       
-  //     } else {
-  //     sentence = 'he is '+sentence
-  //     }     
-  //   }
-  //   let matches = sentence.match(/\⎡.*?\⎤/g)
-  //   if (matches !== null) {
-  //     matches.map((m) => sentence = sentence.replace(m,'<i>'+m.slice(1,-1)+'</i>'))   
-  //     return <span dangerouslySetInnerHTML={{__html: sentence}} />    
-  //   } else {
-  //     return <span>{sentence.replace("<","").replace(">","")}</span>
-  //   }
-  // }
+  processStyledText2 = (sentence,ind,tag) => {
+    // console.log(sentence,ind,tag)
+    sentence = sentence.replace("⟨","").replace("⟩","").replace("<","").replace(">","").replace("[","").replace("]","").replaceAll("^","")
+    // if (tag == 'NOUN') {
+    //   sentence = 'the one '+sentence
+    // } else {
+    //   if (ind % 2 == 0) {
+    //   sentence = 'she is '+sentence       
+    //   } else {
+    //   sentence = 'he is '+sentence
+    //   }     
+    // }
+    // let matches = sentence.match(/\⎡.*?\⎤/g)
+    // if (matches !== null) {
+    //   matches.map((m) => sentence = sentence.replace(m,'<i>'+m.slice(1,-1)+'</i>'))   
+    //   return <span dangerouslySetInnerHTML={{__html: sentence}} />    
+    // } else {
+      return <span>{sentence}</span>
+    // }
+  }
 
   processStyledText3 = (sentence) => {
     // sentence = sentence.replace("⟨","").replace("⟩","")
@@ -626,7 +662,7 @@ class SimpleWordBuilder extends Component {
     if (tag === 'n') {
       return (  
               <div>
-                <div style={{marginTop:'15px', marginLeft:'45px',fontSize:'20px',color:'#000000',fontWeight:'300'}}>
+                <div style={{marginTop:'15px', marginLeft:'0px',fontSize:'20px',color:'#000000',fontWeight:'300'}}>
                 {this.state.entryModified.map((modifiedword, m)=>
                   <span>
                   {m > 0 ?
@@ -645,7 +681,7 @@ class SimpleWordBuilder extends Component {
                   )}
                 <Icon onClick={()=>console.log('hi')} style={{marginLeft:'20px',color:'#8F8F8F',cursor:'pointer'}} name='volume up' />
                 </div>
-                <div style={{marginTop:'15px', marginBottom:'15px',marginLeft:'45px',fontSize:'18px',color:'#0D0D0D',fontWeight:'300'}}>
+                <div style={{marginTop:'15px', marginBottom:'15px',marginLeft:'0px',fontSize:'18px',color:'#0D0D0D',fontWeight:'300'}}>
                 <Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={this.setNoun.bind(this,false,'','','')} value={this.state.nounvalue2} options={nounoptions1} />
                 <Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={this.setNoun.bind(this,false,'','','')} value={this.state.nounvalue1} options={nounoptions2} />
                 {this.state.definition.length > 1 ?
@@ -664,7 +700,7 @@ class SimpleWordBuilder extends Component {
     } else if (tag === 'i') {
       return (  
               <div>
-                <div style={{marginTop:'15px', marginLeft:'45px',fontSize:'20px',color:'#000000',fontWeight:'300'}}>
+                <div style={{marginTop:'15px', marginLeft:'0px',fontSize:'20px',color:'#000000',fontWeight:'300'}}>
                 {this.state.entryModified.map((modifiedword, m)=>
                   <span>
                   {m > 0 ?
@@ -683,7 +719,7 @@ class SimpleWordBuilder extends Component {
                   )}
                 <Icon onClick={()=>console.log('hi')} style={{marginLeft:'20px',color:'#8F8F8F',cursor:'pointer'}} name='volume up' />
                 </div>
-                <div style={{marginTop:'15px', marginBottom:'15px',marginLeft:'45px',fontSize:'18px',color:'#0D0D0D',fontWeight:'300'}}>
+                <div style={{marginTop:'3px', marginBottom:'15px',marginLeft:'0px',fontSize:'18px',color:'#0D0D0D',fontWeight:'300'}}>
                 <span style={{color:'#777777'}}>{this.processStyledText(this.state.preSubjectText)}</span>
                 <Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={this.setIntransitive.bind(this, false)} value={this.state.value1} options={options1} />
                 <span style={{color:'#777777'}}>{this.getSubjectIs(this.state.value1[1],this.state.value1[2])+" "}</span>
@@ -696,7 +732,7 @@ class SimpleWordBuilder extends Component {
     } else if (tag === 't') {
       return (  
               <div>
-                <div style={{marginTop:'15px', marginLeft:'45px',fontSize:'20px',color:'#000000',fontWeight:'300'}}>
+                <div style={{marginTop:'15px', marginLeft:'0px',fontSize:'20px',color:'#000000',fontWeight:'300'}}>
                 {this.state.entryModified.map((modifiedword, m)=>
                   <span>
                   {m > 0 ?
@@ -715,7 +751,7 @@ class SimpleWordBuilder extends Component {
                   )}
                 <Icon onClick={()=>console.log('hi')} style={{marginLeft:'20px',color:'#8F8F8F',cursor:'pointer'}} name='volume up' />
                 </div>
-                <div style={{marginTop:'15px', marginBottom:'15px',marginLeft:'45px',fontSize:'18px',color:'#0D0D0D',fontWeight:'300'}}>
+                <div style={{marginTop:'3px', marginBottom:'15px',marginLeft:'0px',fontSize:'18px',color:'#0D0D0D',fontWeight:'300'}}>
                 <span style={{color:'#777777'}}>{this.processStyledText(this.state.preSubjectText+" ")}</span>
                 <Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={this.setTransitive.bind(this,false)} value={this.state.value1} options={options1} />
                 <span style={{color:'#777777'}}>{this.getSubjectIs(this.state.value1[1],this.state.value1[2])+" "}</span>
@@ -741,25 +777,29 @@ class SimpleWordBuilder extends Component {
     // }).length;
     return (
       <div>
-        {this.state.baseWord}
           {this.state.wordBuilderOn ?
-            <div>
+            <div style={{fontSize:'20px',color:'#000000',fontWeight:'300',marginLeft:'8px'}}>
             {this.usageEntry(this.state.tag)}
                 <Link to={{pathname: '/wordbuilder/' + this.state.baseWord, state: { word: this.state.baseWord, activeDefinitionInEditIndex: this.state.activeDefinitionInEditIndex, activeKeyInEditIndex: this.state.activeKeyInEditIndex, usageDefinition: this.state.definition, baseCase:this.state.baseCases, nounvalue1: this.state.nounvalue1, nounvalue2: this.state.nounvalue2, value1: this.state.value1, value2: this.state.value2, }}}>
-                <Button basic compact style={{marginLeft:'45px',fontSize:'16px',fontWeight:'300',marginBottom:'10px'}}>
+                <Button basic compact style={{fontSize:'16px',fontWeight:'300',marginBottom:'10px'}}>
                 <div style={{display:'flex',flexDirection:'column',fontFamily:customFontFam}}>
-                <div style={{fontWeight:'400',paddingBottom:'5px'}}>
-                Uuktuaġuŋ Uqaluliuġun
-                </div>
-                <div>
                 Try Word Builder
-                </div>
                 </div>
                 </Button>
                 </Link>
             </div>
             :
-            <Icon onClick={this.defaultFstCall.bind(this)} style={{marginLeft:'5px',fontSize:'20px',color:'#989898',cursor:'pointer'}} name='edit outline' />
+                <div style={{marginTop:'12px',marginLeft:'8px'}}>
+                  <div style={{fontSize:'20px',color:'#000000',fontWeight:'300'}}>
+                  <span>{this.state.baseWord}</span>
+                  <Icon onClick={()=>console.log('hi')} style={{marginLeft:'20px',color:'#8F8F8F',cursor:'pointer'}} name='volume up' />
+                  <Icon onClick={this.defaultFstCall.bind(this)} style={{marginLeft:'5px',fontSize:'20px',color:'#989898',cursor:'pointer'}} name='edit outline' />
+                  </div>
+                  <div style={{marginTop:'10px',fontSize:'18px',color:'#0D0D0D',fontWeight:'300'}}>
+
+                  <span style={{color:'#777777'}}>{this.processStyledText2(this.state.firstDefinition)}</span>
+                  </div>
+                </div>
           }
 
 

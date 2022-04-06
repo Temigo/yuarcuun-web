@@ -22,7 +22,7 @@ export const YugtunFooter = (props) => (
 )
 
 export const TagColors = (props) => {
-  // console.log('hi',props.word)
+  console.log('hi',props.word)
   let isNoun = props.word.includes('noun');
   let isVerb = props.word.includes('verb');
   let isParticle = props.word.includes('particle');
@@ -34,12 +34,12 @@ export const TagColors = (props) => {
   let isInterjection = props.word.includes('interjection');
   let isPostbase = props.word.includes('postbase');
   let isEnclitic = props.word.includes('enclitic');
-  let isTransitive = props.word.includes('t');
-  let isIntransitive = props.word.includes('i');
-  let isNoun2 = props.word.includes('n');
+  let isTransitive = props.word == 't';
+  let isIntransitive = props.word == 'i';
+  let isNoun2 = props.word == 'n';
 
   return (
-      <span style={{ 'marginLeft': '15px'}}>  
+      <span style={{ 'marginLeft': props.padding}}>  
         {isNoun ? <Label size='mini' style={{backgroundColor:'#7F90B0',color:'white'}}>NOUN</Label> : ''}
         {isNoun2 ? <Label size='mini' style={{backgroundColor:'#7F90B0',color:'white'}}>NOUN</Label> : ''}
         {isVerb ? <Label size='mini' style={{backgroundColor:'#B07F7F',color:'white'}}>VERB</Label> : ''}
@@ -71,7 +71,7 @@ export const AudioItem = (props) => {
 }
 
 export const WordItem = (props) => {
-  console.log(props)
+  // console.log(props)
   let verbkeyStringbool = false
   // console.log(props.word.verbkeyString.pos)
   if ('verbkeyString' in props.word) {
@@ -119,14 +119,14 @@ export const WordItem = (props) => {
   } else {
   return (
     <List.Item style={{'paddingLeft':8+props.paddingLeft}} key={props.word.keyString}>
-    <Link to={{pathname: '/' + props.word.url, state: { word: props.word, search: props.search, wordsList: props.wordsList, yugtunAnalyzer: false, parses: [], segments: [],endingrule: []}}}>
+    <Link to={{pathname: '/' + props.word.url, state: { entry: props.entry, word: props.word, search: props.search, wordsList: props.wordsList, yugtunAnalyzer: false, parses: [], segments: [],endingrule: []}}}>
       <List.Content>
         <List.Header style={{display:'flex',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'16px',paddingBottom:'4px'}}>
-          {console.log(props.word.keySplit)}
+          {/*{console.log(props.word.keySplit)}*/}
           {props.word.keySplit.map((w,index) => 
               <span>
               {w[0]}
-              {console.log(w)}
+              {/*{console.log(w)}*/}
               {w[1][0] !== '' ?
                   <Label style={{'marginLeft':'5px',marginRight:'5px'}} size='mini' color='white'>{w[1].join(', ')}</Label>
                 :

@@ -1822,7 +1822,7 @@ class WordBuilder extends Component {
       underlyingCallReturn: underlyingCallReturn,
     });
 
-		// console.log(encodeURIComponent(FSTsearch))
+		console.log(FSTsearch)
     axios
       .get(API_URL + "/segment/" + encodeURIComponent(FSTsearch))
       .then(response => {
@@ -1902,7 +1902,7 @@ class WordBuilder extends Component {
 			<div style={{display:'flex',textDecoration:'underline'}}>
 	      <div style={{flex:1,justifyContent:'flex-start'}}>
 					<Link to={{pathname: '/'}}>
-					Ivaqłiqsatqiun Allanik Uqaluŋnik - Back to Search
+					Back to Search
 					</Link>
 	      </div>
 
@@ -1911,7 +1911,7 @@ class WordBuilder extends Component {
 					<Link to={{pathname: '/'+ this.state.entryUrl}}>
 					<span>
 
-					{'Utiġiñ Uqaluum Maŋŋuanun - See Dictionary Entry: '}
+					{'See Dictionary Entry: '}
 					</span>
 					<span style={{fontWeight:'500'}}>
 					{this.state.entryUrl}
@@ -1924,7 +1924,6 @@ class WordBuilder extends Component {
 					<div style={{border:'1px solid #E3E3E3',marginTop:'20px'}}>
 
 					<div className='hierarchymain'>
-					<span className='span1'>Uqaluliuġun</span>
 					<span className='span2'>Word Builder</span>
 					</div>
 
@@ -1966,7 +1965,6 @@ class WordBuilder extends Component {
 					<div style={{display:'flex',justifyContent:'center',paddingRight:'30px',paddingLeft:'30px'}}>
 					  <Dropdown
 					  	style={{maxWidth:'350px'}}
-					    placeholder={()=><div style={{display:'flex', flexDirection:'column'}}><span>{'Akunniġutilivsaaġuŋ'}</span><span style={{color:'grey',paddingTop:'4px'}}>{'Add a postbase'}</span></div>}
 					    fluid
 					    search
 					    selection
@@ -2030,14 +2028,15 @@ class WordBuilder extends Component {
 				}
 */}
 
-				{this.state.baseTag != 'n' && this.state.verbMood != 'Participial' && this.state.verbMood != 'Interrogative' && this.state.currentPostbases.length < 2 ?
-					<div style={{display:'flex',justifyContent:'center',height:'71px',paddingTop:'15px',paddingRight:'30px',paddingLeft:'30px'}}>
+				{this.state.baseTag != 'n' && this.state.verbMood == 'Participial' && this.state.verbMood != 'Interrogative' && this.state.currentPostbases.length < 2 ?
+					<div style={{display:'flex',justifyContent:'center',paddingTop:'15px',paddingRight:'30px',paddingLeft:'30px'}}>
 					  <Dropdown
 					  	style={{maxWidth:'350px'}}
-					    placeholder={()=><div style={{display:'flex', flexDirection:'column'}}><span>{'Simmiġuŋ Isua'}</span><span style={{color:'grey',paddingTop:'4px'}}>{'Change Ending Type'}</span></div>}
 					    fluid
+					    search
 					    selection
 					    selectOnBlur={false}
+					    text='Change Ending'
 					    value={this.state.ending1}
 					    options={verbQuestionWords}
 				    	onChange={this.changeVerbEnding.bind(this,false)}
@@ -2054,7 +2053,6 @@ class WordBuilder extends Component {
 
 					<div>
 					<div className='hierarchymain'>
-					<span className='span1'>Allat Uqaluit Maŋŋuqatiŋi</span>
 					<span className='span2'>Related Entries</span>
 					</div>
 
@@ -2075,7 +2073,7 @@ class WordBuilder extends Component {
 						              </span>
 						              </div>
 						        </List.Header>
-						        <List.Description style={{fontSize:'16px',color:'#000000cc',paddingLeft:'15px',fontWeight:'400',lineHeight:'23px',paddingTop:'4px'}}>{this.state.sisters[i][3]}</List.Description>
+						        <List.Description style={{fontSize:'16px',color:'#000000cc',paddingLeft:'15px',fontWeight:'400',lineHeight:'23px',paddingTop:'4px'}}>{this.processStyledText2(this.state.sisters[i][3])}</List.Description>
 						      </List.Content>
 						    </List.Item>
               	)}
