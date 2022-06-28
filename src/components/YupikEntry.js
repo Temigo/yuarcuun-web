@@ -170,14 +170,13 @@ class YupikEntry extends Component {
       {this.state.entry !== "" ?
       <Grid.Row>
         <Grid.Column>
-        <Header as='h2'>Definition</Header>
 
           {this.state.entry.keySplit.map((key) => {
             return <div>
             {this.state.entry.pos.map((descriptor) => 
               {return <TagColors key={descriptor} word={descriptor} padding={0} />}
             )}
-            <span style={{fontSize:'23px',fontWeight:'600',marginLeft:'15px'}}>{key[0]}</span>
+            <span style={{fontSize:'23px',fontWeight:'500',marginLeft:'15px'}}>{key[0]}</span>
             {key[1][0] !== '' ?
               (key[1].map((dialect)=> 
                 <Label horizontal>{dialect}</Label>
@@ -194,7 +193,7 @@ class YupikEntry extends Component {
           {this.state.entry.definition.map((entry,i) => {
             return <div style={{marginLeft:'11px'}}>
             <span style={{marginLeft:'10px',color:'#777777',fontSize:'20px','fontWeight':'300'}}>{'○'}</span>
-            <span style={{marginLeft:'20px',color:'#000000',fontSize:'20px',lineHeight:'24px','fontWeight':'300'}}>{this.processStyledText(entry[0])}</span>
+            <span style={{marginLeft:'20px',color:'#000000',fontSize:'18px',lineHeight:'24px','fontWeight':'300'}}>{this.processStyledText(entry[0])}</span>
             {entry[1][0] !== '' ?
               <Label horizontal>{entry[1]}</Label>
               :
@@ -213,7 +212,7 @@ class YupikEntry extends Component {
             {this.state.entry.verbkeyString.pos.map((descriptor) => 
               {return <TagColors key={descriptor} word={descriptor} padding={0} />}
             )}
-            <span style={{fontSize:'23px',fontWeight:'600',marginLeft:'15px'}}>{key[0]}</span>
+            <span style={{fontSize:'23px',fontWeight:'500',marginLeft:'15px'}}>{key[0]}</span>
             {key[1][0] !== '' ?
               (key[1].map((dialect)=> 
                 <Label horizontal>{dialect}</Label>
@@ -228,8 +227,8 @@ class YupikEntry extends Component {
 
           {this.state.entry.verbkeyString.definition.map((entry,i) => {
             return <div style={{marginLeft:'11px'}}>
-            <span style={{marginLeft:'10px',color:'#777777',fontSize:'20px','fontWeight':'300'}}>{'○'}</span>
-            <span style={{marginLeft:'20px',color:'#000000',fontSize:'20px',lineHeight:'24px','fontWeight':'300'}}>{this.processStyledText(entry[0])}</span>
+            <span style={{marginLeft:'10px',color:'#777777',fontSize:'18px','fontWeight':'300'}}>{'○'}</span>
+            <span style={{marginLeft:'20px',color:'#000000',fontSize:'18px',lineHeight:'24px','fontWeight':'300'}}>{this.processStyledText(entry[0])}</span>
             {entry[1][0] !== '' ?
               <Label horizontal>{entry[1]}</Label>
               :

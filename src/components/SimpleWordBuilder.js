@@ -110,6 +110,30 @@ class SimpleWordBuilder extends Component {
       baseCases: nextProps.entry[1],
       baseWord: nextProps.entry[2],
       definition: nextProps.entry[3],
+
+      firstVerb: '',
+      preSubjectText: '',
+      value1: '',
+      afterSubjectText: '',
+      containsIs: '',
+      primaryVerb: '',
+      preObjectText: '',
+      value2: '',
+      afterObjectText: '',
+      fstCall: '',
+      objectPossessed: false,
+      baseOptions: [],
+      activeKeyInEditIndex: 0,
+      entryModified: [],
+      verbMood: 'Indicative',
+      nounMood: 'Absolutive',
+      wordBuilderOn: false,
+      nounvalue1:'1',
+      nounvalue2:'00(3)',
+      activeDefinitionInEditIndex: 0,
+      pluralizedDefinition: '',
+      definitionBaseOptions: [],
+
     });  
     if (nextProps.entry[0] !== 'n') {
       this.setState({ 

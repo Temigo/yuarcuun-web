@@ -4,27 +4,27 @@ import { API_URL, TUTORIAL_URL, ICON_URL } from '../App.js';
 import {lessonsList, dialogueLibrary} from './constants/qaneryaurci.js';
 import '../semantic/dist/semantic.min.css';
 
-let library = {
-"ch3-001":{"eng":"How nice it is outside!","yup":"Ellami-lli assirpaa!","speaker":"a"},
-"ch3-002":{"eng":"Yes, it is really nice out.","yup":"Ii-i, ella assirtuq.","speaker":"b"},
-"ch3-003":{"eng":"Your parka is very nice!","yup":"Atkuun assirpagta!","speaker":"a"},
-"ch3-004":{"eng":"Thank you, my mother made it.","yup":"Quyana, aanama pilialqaa.","speaker":"b"},
-"ch3-005":{"eng":"Where are you from?","yup":"Camiungusit?","speaker":"a"},
-"ch3-006":{"eng":"I'm from Kuinerraq.","yup":"Kuinerrarmiunguunga.","speaker":"b"},
-"ch3-007":{"eng":"Who are you related to?","yup":"Kia ilakaten?","speaker":"a"},
-"ch3-008":{"eng":"I'm Apurin's offspring.","yup":"Apurinaam yukaanga.","speaker":"b"},
-}
+// let library = {
+// "ch3-001":{"eng":"How nice it is outside!","yup":"Ellami-lli assirpaa!","speaker":"a"},
+// "ch3-002":{"eng":"Yes, it is really nice out.","yup":"Ii-i, ella assirtuq.","speaker":"b"},
+// "ch3-003":{"eng":"Your parka is very nice!","yup":"Atkuun assirpagta!","speaker":"a"},
+// "ch3-004":{"eng":"Thank you, my mother made it.","yup":"Quyana, aanama pilialqaa.","speaker":"b"},
+// "ch3-005":{"eng":"Where are you from?","yup":"Camiungusit?","speaker":"a"},
+// "ch3-006":{"eng":"I'm from Kuinerraq.","yup":"Kuinerrarmiunguunga.","speaker":"b"},
+// "ch3-007":{"eng":"Who are you related to?","yup":"Kia ilakaten?","speaker":"a"},
+// "ch3-008":{"eng":"I'm Apurin's offspring.","yup":"Apurinaam yukaanga.","speaker":"b"},
+// }
 
-let exerciseOrder = [
-"ch3-001",
-"ch3-002",
-"ch3-003",
-"ch3-004",
-"ch3-005",
-"ch3-006",
-"ch3-007",
-"ch3-008",
-]
+// let exerciseOrder = [
+// "ch3-001",
+// "ch3-002",
+// "ch3-003",
+// "ch3-004",
+// "ch3-005",
+// "ch3-006",
+// "ch3-007",
+// "ch3-008",
+// ]
 
 
 class Dialogues extends Component {
@@ -34,7 +34,7 @@ class Dialogues extends Component {
       show: false,
       currentLesson: -1,
       currentCounter: 0,
-      questionMode:false,
+      questionMode:true,
       showCurrent: false,
       correct:'assirpagta',
       inputtedWords: '',

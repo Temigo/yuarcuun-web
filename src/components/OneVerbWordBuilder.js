@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Header, Button, Icon, Divider, Image, Grid, Dropdown, List, Label } from 'semantic-ui-react';
+import { Container, Header, Button, Icon, Divider, Image, Grid, Dropdown, List, Label, Input, Segment } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { API_URL } from '../App.js';
 import axios from 'axios';
@@ -8,6 +8,9 @@ import {ending_underlying} from './constants/ending_underlying.js'
 import palette from 'google-palette';
 import shuffle from 'shuffle-array';
 import { TagColors } from './SearchPageHelpers.js';
+import fuzzysort from 'fuzzysort'
+import now from 'performance-now';
+import ReactGA from 'react-ga';
 
 let peopleDict = {
 	'1':"Sg",
@@ -85,7 +88,21 @@ let nounvalue2def = '00(3)'
 let value1def = 's31-3(1)'
 let value2def = 'o31-3(2)'
 
-class WordBuilder extends Component {
+
+
+let dictionary = [];
+let dictionary_dict = {};
+
+const optionsFuzzy = {
+  keys: ['definitionString', 'keyString'],
+  limit: 10, // don't return more results than you need!
+  threshold: -10000, // don't return bad results
+};
+
+
+
+
+class OneVerbWordBuilder extends Component {
 	constructor(props) {
 		// console.log(props)
 		super(props);
@@ -173,6 +190,13 @@ class WordBuilder extends Component {
 			containsIs:false,
 
 			afterObjectText2: [],
+
+
+			search:'',
+
+      wordsList: [],
+      opened: false,
+
 		}
 
 
@@ -182,6 +206,39 @@ class WordBuilder extends Component {
 	    this.setNoun = this.setNoun.bind(this);
 	    this.setIntransitive = this.setIntransitive.bind(this);
 	    
+	}
+
+
+	componentDidMount() {
+		let start = now();
+    if (dictionary.length === 0) {
+      axios
+        .get(API_URL + "/word/all2021")
+        .then(response => {
+          let end = now();
+          ReactGA.timing({
+            category: 'Loading',
+            variable: 'dictionary',
+            value: (end-start).toFixed(3),
+            label: 'Dictionary loading'
+          });
+          dictionary = response.data;
+          console.log(dictionary)
+          // fuse.setCollection(dictionary);
+          // fuse1.setCollection(dictionary);
+          console.log('Fetched dictionary');
+
+          dictionary.forEach(entry => dictionary_dict[entry.keyString] = entry.definitionString) // create dictionary_dict dictionary
+          // dictionary_prepared = fuzzysort.prepare(dictionary)
+
+          this.setState({ dictionary: dictionary, dictionary_dict: dictionary_dict});
+        });
+    }
+    else {
+      // fuse.setCollection(dictionary);
+      this.setState({ dictionary: dictionary, dictionary_dict: dictionary_dict });
+    }
+
 	}
 
   // identifyObjectCase = (match) => {
@@ -647,179 +704,6 @@ class WordBuilder extends Component {
     this.getFSTParse(this.state.baseCase,this.state.currentPostbases,this.state.tag,this.state.verbMood,this.state.moodSpecific,[],[],this.state.nounMood,nounvalue1,nounvalue2)
   }
 
-
-
-
-	usageEntry = (ind,tag) => {
-		// console.log(ind,tag)
-		if (tag === 'n') {
-			return (	
-							<div>
-								<div style={{marginTop:'30px',marginBottom:'10px',fontSize:'30px',color:'#000000',fontWeight:'400'}}>
-								{this.state.entryModified.map((modifiedword, m)=>
-									<div style={{display:'flex',justifyContent:'center', lineHeight:'35px'}}>
-										{this.state.otherBases.length == 0 ?
-											(modifiedword.split('>').map((q,index) =>
-												<span style={{color:(index === 0 ? '#000000': (modifiedword.split(">").length-1 == index ? '#852828' : this.state.colorsList[this.state.currentPostbases[this.state.currentPostbases.length-index]]))}}>{q}</span>
-												))
-											:
-											<Dropdown inline scrolling onChange={this.changeActiveUsageKey.bind(this)} text={(modifiedword.split('>').map((q,index) => <span style={{fontWeight:'400',color:(modifiedword.split(">").length-1 == index ?'#852828':'#000000')}}>{q}</span>))} value={this.state.activeDefinitionInEditIndex} options={this.state.baseOptions} />
-										}
-									</div>
-									)}
-								</div>
-
-								<div style={{display:'flex',justifyContent:'center',fontSize:'20px',marginBottom:'15px',fontWeight:'300'}}> 
-								<span style={{padding:'10px'}}>
-									{this.state.baseCase+'-'}
-								</span>
-								{this.state.underlyingCallReturn.map((x,xind)=>
-									(x[0] == '' ? 
-										null
-										:
-										<span style={{padding:'10px',color:(xind == this.state.underlyingCallReturn.length - 1 ? '#852828' : this.state.colorsList[this.state.currentPostbases[this.state.currentPostbases.length-xind-1]])}}>
-										{x.join(', ')}
-										</span>			
-									)
-								)}
-								</div>
-
-								<div style={{textAlign:'center',fontSize:'18px',color:'#0D0D0D',fontWeight:'300'}}>
-								<span style={{color:'#852828'}}>{this.state.englishPreNounOptions}</span>
-								{this.state.nounMood === 'Modalis' ?
-								<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={this.setNoun.bind(this,false)} value={this.state.nounvalue2} options={nounoptionsmodalis} />
-								:
-								<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={this.setNoun.bind(this,false)} value={this.state.nounvalue2} options={nounoptions1} />
-								}
-								<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={this.setNoun.bind(this,false)} value={this.state.nounvalue1} options={nounoptions2} />
-								{this.state.englishPreNoun.map((w,wind)=>{
-									return <span style={{color:this.state.colorsList[this.state.currentPostbases[wind]]}}>{w}</span>
-								})}
-								{this.state.usageDefinition.length > 1 ?
-									<Dropdown inline scrolling onChange={this.changeActiveDefinitionKey.bind(this)} value={this.state.activeDefinitionInEditIndex} options={this.state.definitionBaseOptions} />
-									:
-									(this.state.nounvalue1 !== '1' ?
-										<span style={{color:'#777777'}}>{this.processStyledText(this.state.usageDefinition[this.state.activeDefinitionInEditIndex][2][1])}</span>
-										:
-										<span style={{color:'#777777'}}>{this.processStyledText(this.state.usageDefinition[this.state.activeDefinitionInEditIndex][2][0])}</span>
-									)
-								}
-								</div>
-							</div>		
-						)
-		} else if (tag === 'i') {
-			return (	
-							<div>
-								<div style={{marginTop:'30px',marginBottom:'10px',fontSize:'30px',color:'#000000',fontWeight:'400'}}>
-								{this.state.entryModified.map((modifiedword, m)=>
-									<div style={{display:'flex',justifyContent:'center', lineHeight:'35px'}}>
-									<span style={{color:'#852828','paddingRight':'5px'}}>{this.state.questionWord}</span>
-									{this.state.otherBases.length == 0 ?
-										(modifiedword.split('>').map((q,index) =>
-											<span style={{color:(index === 0 ? '#000000': (modifiedword.split(">").length-1 == index ? '#852828' : this.state.colorsList[this.state.currentPostbases[this.state.currentPostbases.length-index]]))}}>{q}</span>
-											))
-										:
-										<Dropdown inline scrolling onChange={this.changeActiveUsageKey.bind(this)} text={(modifiedword.split('>').map((q,index) => <span style={{fontWeight:'400',color:(modifiedword.split(">").length-1 == index ?'#852828':this.state.colorsList[this.state.currentPostbases[this.state.currentPostbases.length-index]])}}>{q}</span>))} value={this.state.activeKeyInEditIndex} options={this.state.baseOptions} />
-									}
-									<span style={{color:'#852828'}}>{' '+this.state.questionMark}</span>									
-									</div>
-									)}
-								</div>
-
-								<div style={{display:'flex',justifyContent:'center',fontSize:'20px',marginBottom:'15px',fontWeight:'300'}}> 
-								<span style={{padding:'10px'}}>
-									{this.state.baseCase+'-'}
-								</span>
-								{this.state.underlyingCallReturn.map((x,xind)=>
-									<span style={{padding:'10px',color:(xind == this.state.underlyingCallReturn.length - 1 ? '#852828' : this.state.colorsList[this.state.currentPostbases[this.state.currentPostbases.length-xind-1]])}}>
-									{x.join(', ')}
-									</span>			
-								)}
-								</div>
-
-								<div style={{textAlign:'center',fontSize:'18px',color:'#0D0D0D',fontWeight:'300'}}>
-								<span style={{color:'#852828'}}>{this.processStyledText(this.state.questionWordEnglish)}</span>
-								{this.state.englishPreSubject.map((w,wind)=>{
-									return <span style={{color:this.state.colorsList[this.state.currentPostbases[wind]]}}>{w}</span>
-								})}
-								<span style={{color:'#777777'}}>{this.state.preSubjectText}</span>
-								<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={this.setIntransitive.bind(this,false)} value={this.state.value1} options={options1} />
-								<span style={{color:'#777777'}}>{this.state.afterSubjectText}</span>
-								<span style={{color:'#777777'}}>{this.state.subjectIs}</span>
-								{this.state.englishPreNoun.map((w,wind)=>{
-									return <span style={{color:this.state.colorsList[this.state.currentPostbases[wind]]}}>{w}</span>
-								})}
-								{this.state.englishPreVerb.map((w,wind)=>{
-									return <span style={{color:this.state.colorsList[this.state.currentPostbases[w[1]]]}}>{w[0]+" "}</span>
-								})}
-								<span style={{color:'#777777'}}>{this.processStyledText(this.state.bePreVerb)}</span>
-								<span style={{color:'#777777'}}>{this.processStyledText(this.state.primaryVerb+" ")}</span>
-								<span style={{color:'#777777'}}>{this.processStyledText(this.state.primaryNoun)}</span>
-								<span style={{color:'#777777'}}>{this.processStyledText(this.state.preObjectText+" ")}</span>
-								<span style={{color:'#777777'}}>{this.processStyledText(this.state.afterObjectText)}</span>
-								{this.state.afterObjectText2.map((w,wind)=>{
-									return <span style={{color:this.state.colorsList[this.state.currentPostbases[w[1]]]}}>{" "+w[0]}</span>
-								})}
-								<span style={{color:'#852828'}}>{' '+this.state.questionMark}</span>
-								</div>
-							</div>		
-						)
-		} else if (tag === 't') {
-			return (	
-							<div>
-								<div style={{marginTop:'30px',marginBottom:'10px',fontSize:'30px',color:'#000000',fontWeight:'400'}}>
-								{this.state.entryModified.map((modifiedword, m)=>
-									<div style={{display:'flex',justifyContent:'center', lineHeight:'35px'}}>
-									<span style={{color:'#852828','paddingRight':'5px'}}>{this.state.questionWord}</span>
-									{this.state.otherBases.length == 0 ?
-										(modifiedword.split('>').map((q,index) =>
-											<span style={{color:(index === 0 ? '#000000': (modifiedword.split(">").length-1 == index ? '#852828' : this.state.colorsList[this.state.currentPostbases[this.state.currentPostbases.length-index]]))}}>{q}</span>
-											))
-										:
-										<Dropdown inline scrolling onChange={this.changeActiveUsageKey.bind(this)} text={(modifiedword.split('>').map((q,index) => <span style={{fontWeight:'400',color:(modifiedword.split(">").length-1 == index ?'#852828':this.state.colorsList[this.state.currentPostbases[this.state.currentPostbases.length-index]])}}>{q}</span>))} value={this.state.activeKeyInEditIndex} options={this.state.baseOptions} />
-									}
-									<span style={{color:'#852828'}}>{' '+this.state.questionMark}</span>
-									</div>
-									)}
-								</div>
-
-								<div style={{display:'flex',justifyContent:'center',fontSize:'20px',marginBottom:'15px',fontWeight:'300'}}> 
-								<span style={{padding:'10px'}}>
-									{this.state.baseCase+'-'}
-								</span>
-								{this.state.underlyingCallReturn.map((x,xind)=>
-									<span style={{padding:'10px',color:(xind == this.state.underlyingCallReturn.length - 1 ? '#852828' : this.state.colorsList[this.state.currentPostbases[this.state.currentPostbases.length-xind-1]])}}>
-									{x.join(', ')}
-									</span>			
-								)}
-								</div>
-																<div style={{textAlign:'center',fontSize:'18px',color:'#0D0D0D',fontWeight:'300'}}>
-								<span style={{color:'#852828'}}>{this.processStyledText(this.state.questionWordEnglish)}</span>
-								{this.state.englishPreSubject.map((w,wind)=>{
-									return <span style={{color:this.state.colorsList[this.state.currentPostbases[wind]]}}>{w}</span>
-								})}
-								<span style={{color:'#777777'}}>{this.state.preSubjectText}</span>
-								<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={this.setTransitive.bind(this,false)} value={this.state.value1} options={options1} />
-								<span style={{color:'#777777'}}>{this.state.afterSubjectText}</span>
-								<span style={{color:'#777777'}}>{this.state.subjectIs}</span>
-								{this.state.englishPreVerb.map((w,wind)=>{
-									return <span style={{color:this.state.colorsList[this.state.currentPostbases[w[1]]]}}>{w[0]+" "}</span>
-								})}
-								<span style={{color:'#777777'}}>{this.processStyledText(this.state.bePreVerb)}</span>
-								<span style={{color:'#777777'}}>{this.processStyledText(this.state.preObjectText)}</span>
-								<span style={{color:'#777777'}}>{this.processStyledText(this.state.primaryVerb)}</span>
-								<span style={{color:'#777777'}}>{this.processStyledText(this.state.primaryNoun)}</span>
-								<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}} onChange={this.setTransitive.bind(this,false)} value={this.state.value2} options={options2} />
-								<span style={{color:'#777777'}}>{this.processStyledText(this.state.afterObjectText)}</span>
-								{this.state.afterObjectText2.map((w,wind)=>{
-									return <span style={{color:this.state.colorsList[this.state.currentPostbases[w[1]]]}}>{" "+w[0]}</span>
-								})}
-								<span style={{color:'#852828'}}>{' '+this.state.questionMark}</span>
-								</div>
-							</div>		
-						)			
-		}
-	}
 
 
 
@@ -1879,18 +1763,238 @@ class WordBuilder extends Component {
 		// }
 	}
 
+
+
+	usageEntry = (ind,tag) => {
+		// console.log(ind,tag)
+		if (tag === 'n') {
+			return (	
+							<div>
+								<div style={{marginTop:'30px',marginBottom:'10px',fontSize:'30px',color:'#000000',fontWeight:'400'}}>
+								{this.state.entryModified.map((modifiedword, m)=>
+									<div style={{display:'flex',justifyContent:'center', lineHeight:'35px'}}>
+										{this.state.otherBases.length == 0 ?
+											(modifiedword.split('>').map((q,index) =>
+												<span style={{color:(index === 0 ? '#000000': (modifiedword.split(">").length-1 == index ? '#852828' : this.state.colorsList[this.state.currentPostbases[this.state.currentPostbases.length-index]]))}}>{q}</span>
+												))
+											:
+											<Dropdown inline scrolling onChange={this.changeActiveUsageKey.bind(this)} text={(modifiedword.split('>').map((q,index) => <span style={{fontWeight:'400',color:(modifiedword.split(">").length-1 == index ?'#852828':'#000000')}}>{q}</span>))} value={this.state.activeDefinitionInEditIndex} options={this.state.baseOptions} />
+										}
+									</div>
+									)}
+								</div>
+
+								<div style={{display:'flex',justifyContent:'center',fontSize:'20px',marginBottom:'15px',fontWeight:'300'}}> 
+								<span style={{padding:'10px'}}>
+									{this.state.baseCase+'-'}
+								</span>
+								{this.state.underlyingCallReturn.map((x,xind)=>
+									(x[0] == '' ? 
+										null
+										:
+										<span style={{padding:'10px',color:(xind == this.state.underlyingCallReturn.length - 1 ? '#852828' : this.state.colorsList[this.state.currentPostbases[this.state.currentPostbases.length-xind-1]])}}>
+										{x.join(', ')}
+										</span>			
+									)
+								)}
+								</div>
+
+								<div style={{textAlign:'center',fontSize:'18px',color:'#0D0D0D',fontWeight:'300'}}>
+								<span style={{color:'#852828'}}>{this.state.englishPreNounOptions}</span>
+								{this.state.nounMood === 'Modalis' ?
+								<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={this.setNoun.bind(this,false)} value={this.state.nounvalue2} options={nounoptionsmodalis} />
+								:
+								<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={this.setNoun.bind(this,false)} value={this.state.nounvalue2} options={nounoptions1} />
+								}
+								<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={this.setNoun.bind(this,false)} value={this.state.nounvalue1} options={nounoptions2} />
+								{this.state.englishPreNoun.map((w,wind)=>{
+									return <span style={{color:this.state.colorsList[this.state.currentPostbases[wind]]}}>{w}</span>
+								})}
+								{this.state.usageDefinition.length > 1 ?
+									<Dropdown inline scrolling onChange={this.changeActiveDefinitionKey.bind(this)} value={this.state.activeDefinitionInEditIndex} options={this.state.definitionBaseOptions} />
+									:
+									(this.state.nounvalue1 !== '1' ?
+										<span style={{color:'#777777'}}>{this.processStyledText(this.state.usageDefinition[this.state.activeDefinitionInEditIndex][2][1])}</span>
+										:
+										<span style={{color:'#777777'}}>{this.processStyledText(this.state.usageDefinition[this.state.activeDefinitionInEditIndex][2][0])}</span>
+									)
+								}
+								</div>
+							</div>		
+						)
+		} else if (tag === 'i') {
+			return (	
+							<div>
+								<div style={{marginTop:'30px',marginBottom:'10px',fontSize:'30px',color:'#000000',fontWeight:'400'}}>
+								{this.state.entryModified.map((modifiedword, m)=>
+									<div style={{display:'flex',justifyContent:'center', lineHeight:'35px'}}>
+									<span style={{color:'#852828','paddingRight':'5px'}}>{this.state.questionWord}</span>
+									{this.state.otherBases.length == 0 ?
+										(modifiedword.split('>').map((q,index) =>
+											<span style={{color:(index === 0 ? '#000000': (modifiedword.split(">").length-1 == index ? '#852828' : this.state.colorsList[this.state.currentPostbases[this.state.currentPostbases.length-index]]))}}>{q}</span>
+											))
+										:
+										<Dropdown inline scrolling onChange={this.changeActiveUsageKey.bind(this)} text={(modifiedword.split('>').map((q,index) => <span style={{fontWeight:'400',color:(modifiedword.split(">").length-1 == index ?'#852828':this.state.colorsList[this.state.currentPostbases[this.state.currentPostbases.length-index]])}}>{q}</span>))} value={this.state.activeKeyInEditIndex} options={this.state.baseOptions} />
+									}
+									<span style={{color:'#852828'}}>{' '+this.state.questionMark}</span>									
+									</div>
+									)}
+								</div>
+
+								<div style={{display:'flex',justifyContent:'center',fontSize:'20px',marginBottom:'15px',fontWeight:'300'}}> 
+								<span style={{padding:'10px'}}>
+									{this.state.baseCase+'-'}
+											<Icon onClick={()=>{}} style={{color:'#8F8F8F',cursor:'pointer'}} name='pencil' />
+								</span>
+
+								<span style={{padding:'10px'}}>
+
+								  <Dropdown
+								  	// style={{maxWidth:'350px'}}
+								  	icon='plus'
+								    fluid
+								    search
+								    selection
+								    // text='Add a Postbase'
+								    selectOnBlur={false}
+								    options={this.state.postbaseInformationAvailable1}
+								    onChange={this.addPostbase.bind(this)}
+								  />
+								</span>
+
+								{this.state.underlyingCallReturn.map((x,xind)=>
+									<span style={{padding:'10px',color:(xind == this.state.underlyingCallReturn.length - 1 ? '#852828' : this.state.colorsList[this.state.currentPostbases[this.state.currentPostbases.length-xind-1]])}}>
+									{x.join(', ')}
+									</span>			
+								)}
+								</div>
+
+								<div style={{textAlign:'center',fontSize:'18px',color:'#0D0D0D',fontWeight:'300'}}>
+								<span style={{color:'#852828'}}>{this.processStyledText(this.state.questionWordEnglish)}</span>
+								{this.state.englishPreSubject.map((w,wind)=>{
+									return <span style={{color:this.state.colorsList[this.state.currentPostbases[wind]]}}>{w}</span>
+								})}
+								<span style={{color:'#777777'}}>{this.state.preSubjectText}</span>
+								<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={this.setIntransitive.bind(this,false)} value={this.state.value1} options={options1} />
+								<span style={{color:'#777777'}}>{this.state.afterSubjectText}</span>
+								<span style={{color:'#777777'}}>{this.state.subjectIs}</span>
+								{this.state.englishPreNoun.map((w,wind)=>{
+									return <span style={{color:this.state.colorsList[this.state.currentPostbases[wind]]}}>{w}</span>
+								})}
+								{this.state.englishPreVerb.map((w,wind)=>{
+									return <span style={{color:this.state.colorsList[this.state.currentPostbases[w[1]]]}}>{w[0]+" "}</span>
+								})}
+								<span style={{color:'#777777'}}>{this.processStyledText(this.state.bePreVerb)}</span>
+								<span style={{color:'#777777'}}>{this.processStyledText(this.state.primaryVerb+" ")}</span>
+								<span style={{color:'#777777'}}>{this.processStyledText(this.state.primaryNoun)}</span>
+								<span style={{color:'#777777'}}>{this.processStyledText(this.state.preObjectText+" ")}</span>
+								<span style={{color:'#777777'}}>{this.processStyledText(this.state.afterObjectText)}</span>
+								{this.state.afterObjectText2.map((w,wind)=>{
+									return <span style={{color:this.state.colorsList[this.state.currentPostbases[w[1]]]}}>{" "+w[0]}</span>
+								})}
+								<span style={{color:'#852828'}}>{' '+this.state.questionMark}</span>
+								</div>
+							</div>		
+						)
+		} else if (tag === 't') {
+			return (	
+							<div>
+								<div style={{marginTop:'30px',marginBottom:'10px',fontSize:'30px',color:'#000000',fontWeight:'400'}}>
+								{this.state.entryModified.map((modifiedword, m)=>
+									<div style={{display:'flex',justifyContent:'center', lineHeight:'35px'}}>
+									<span style={{color:'#852828','paddingRight':'5px'}}>{this.state.questionWord}</span>
+									{this.state.otherBases.length == 0 ?
+										(modifiedword.split('>').map((q,index) =>
+											<span style={{color:(index === 0 ? '#000000': (modifiedword.split(">").length-1 == index ? '#852828' : this.state.colorsList[this.state.currentPostbases[this.state.currentPostbases.length-index]]))}}>{q}</span>
+											))
+										:
+										<Dropdown inline scrolling onChange={this.changeActiveUsageKey.bind(this)} text={(modifiedword.split('>').map((q,index) => <span style={{fontWeight:'400',color:(modifiedword.split(">").length-1 == index ?'#852828':this.state.colorsList[this.state.currentPostbases[this.state.currentPostbases.length-index]])}}>{q}</span>))} value={this.state.activeKeyInEditIndex} options={this.state.baseOptions} />
+									}
+									<span style={{color:'#852828'}}>{' '+this.state.questionMark}</span>
+									</div>
+									)}
+								</div>
+
+								<div style={{display:'flex',justifyContent:'center',fontSize:'20px',marginBottom:'15px',fontWeight:'300'}}> 
+								<span style={{padding:'10px'}}>
+									{this.state.baseCase+'-'}
+								</span>
+								{this.state.underlyingCallReturn.map((x,xind)=>
+									<span style={{padding:'10px',color:(xind == this.state.underlyingCallReturn.length - 1 ? '#852828' : this.state.colorsList[this.state.currentPostbases[this.state.currentPostbases.length-xind-1]])}}>
+									{x.join(', ')}
+									</span>			
+								)}
+								</div>
+																<div style={{textAlign:'center',fontSize:'18px',color:'#0D0D0D',fontWeight:'300'}}>
+								<span style={{color:'#852828'}}>{this.processStyledText(this.state.questionWordEnglish)}</span>
+								{this.state.englishPreSubject.map((w,wind)=>{
+									return <span style={{color:this.state.colorsList[this.state.currentPostbases[wind]]}}>{w}</span>
+								})}
+								<span style={{color:'#777777'}}>{this.state.preSubjectText}</span>
+								<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={this.setTransitive.bind(this,false)} value={this.state.value1} options={options1} />
+								<span style={{color:'#777777'}}>{this.state.afterSubjectText}</span>
+								<span style={{color:'#777777'}}>{this.state.subjectIs}</span>
+								{this.state.englishPreVerb.map((w,wind)=>{
+									return <span style={{color:this.state.colorsList[this.state.currentPostbases[w[1]]]}}>{w[0]+" "}</span>
+								})}
+								<span style={{color:'#777777'}}>{this.processStyledText(this.state.bePreVerb)}</span>
+								<span style={{color:'#777777'}}>{this.processStyledText(this.state.preObjectText)}</span>
+								<span style={{color:'#777777'}}>{this.processStyledText(this.state.primaryVerb)}</span>
+								<span style={{color:'#777777'}}>{this.processStyledText(this.state.primaryNoun)}</span>
+								<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}} onChange={this.setTransitive.bind(this,false)} value={this.state.value2} options={options2} />
+								<span style={{color:'#777777'}}>{this.processStyledText(this.state.afterObjectText)}</span>
+								{this.state.afterObjectText2.map((w,wind)=>{
+									return <span style={{color:this.state.colorsList[this.state.currentPostbases[w[1]]]}}>{" "+w[0]}</span>
+								})}
+								<span style={{color:'#852828'}}>{' '+this.state.questionMark}</span>
+								</div>
+							</div>		
+						)			
+		}
+	}
+
+
+	onChangeSearch = (searchType,event,data) => {
+    // console.log(bool,homeMode, event,data)
+    // let word
+    // if (bool) {
+      // word = data
+    // } else {
+    let word = data.value
+    //   homeMode = this.state.homeMode
+    // }
+
+    let wordsList
+    // word = word.replaceAll("’","'").replaceAll("ḷ","ḷ").replaceAll("ł̣","ł̣").replaceAll("G","ġ").replaceAll("g.","ġ").replaceAll("l.","ḷ").replaceAll("L","ł").replaceAll("ł.","ł̣");
+    // new_search = word.replaceAll('ġ','g').replaceAll('ñ','n').replaceAll('ḷ','l').replaceAll('ł','l').replaceAll('ł̣','l').replaceAll('G','g').replaceAll('(','').replaceAll('-','').replaceAll(')','').toLowerCase().replaceAll('he is ','').replaceAll('she is ','').replaceAll('it is ','').replaceAll('i am ','').replaceAll(' ','').replaceAll(',','')
+
+    // console.log(word, new_search)
+    // if (homeMode === 1) {
+    	// wordsList = fuzzysort.go(new_search, usagedictionary, optionsUsageFuzzy).map(({ obj }) => (obj));
+    // } else if (homeMode === 0) {
+    wordsList = fuzzysort.go(word, dictionary, optionsFuzzy).map(({ obj }) => (obj));
+    // } else if (homeMode === 2) {
+    	// wordsList = fuzzysort.go(new_search, audiolibrary, optionsAudioFuzzy).map(({ obj }) => (obj));
+    // }
+
+
+    this.setState({ wordsList: wordsList, search: word });
+	}
+
+
+
 	render() {
 		console.log(this.state)
 		// console.log(this.state.colorsList)
-		let verbQuestionWords = [
-			{value:0,key:0,text:'past tense',disabled:this.state.hasFuture},
-			{value:1,key:1,text:'question: yes or no?'},
-			{value:2,key:2,text:'question: why?'},
-			{value:3,key:3,text:'question: how?'},
-			{value:4,key:4,text:'question: where at?'},
-			{value:5,key:5,text:'question: to where?'},
-			{value:6,key:6,text:'question: from where?'},
-		]
+		// let verbQuestionWords = [
+		// 	{value:0,key:0,text:'past tense',disabled:this.state.hasFuture},
+		// 	{value:1,key:1,text:'question: yes or no?'},
+		// 	{value:2,key:2,text:'question: why?'},
+		// 	{value:3,key:3,text:'question: how?'},
+		// 	{value:4,key:4,text:'question: where at?'},
+		// 	{value:5,key:5,text:'question: to where?'},
+		// 	{value:6,key:6,text:'question: from where?'},
+		// ]
 
 		return (
 			<div style={{fontFamily:customFontFam}}>
@@ -1962,129 +2066,58 @@ class WordBuilder extends Component {
 
 				<div style={{height:'15px'}} />
 
-					<div style={{display:'flex',justifyContent:'center',paddingRight:'30px',paddingLeft:'30px'}}>
+					<div style={{display:'flex',justifyContent:'center'}}>
 					  <Dropdown
-					  	style={{maxWidth:'350px'}}
+					  	icon='plus'
+					  	circular
+					  	// style={{maxWidth:'350px'}}
 					    fluid
 					    search
 					    selection
-					    text='Add a Postbase'
+					    // text='Add a Postbase'
 					    selectOnBlur={false}
 					    options={this.state.postbaseInformationAvailable1}
 					    onChange={this.addPostbase.bind(this)}
 					  />
 					</div>
-{/*
 
-				{this.state.currentPostbases.length == 0 ? 
-					<div style={{display:'flex',justifyContent:'center',height:'56px',paddingRight:'30px',paddingLeft:'30px'}}>
-					  <Dropdown
-					  	style={{maxWidth:'350px'}}
-					    placeholder={()=><div style={{display:'flex', flexDirection:'column'}}><span>{'Akunniġutilivsaaġuŋ'}</span><span style={{color:'grey',paddingTop:'4px'}}>{'Add a postbase'}</span></div>}
-					    fluid
-					    selection
-					    value={this.state.postbase1}
-					    selectOnBlur={false}
-					    options={this.state.postbaseInformationAvailable1}
-					    onChange={this.addPostbase.bind(this)}
-					  />
-					</div>
-					:
-					<div style={{display:'flex',justifyContent:'center',height:'56px',paddingRight:'30px',paddingLeft:'30px'}}>
-
-						{this.state.currentPostbases.length == 1 && this.state.postbasesAvailable.length !== 0 && this.state.verbMood != 'Participial' && this.state.verbMood != 'Interrogative' ?
-						  <Dropdown
-					  		style={{maxWidth:'350px'}}
-					    	placeholder={()=><div style={{display:'flex', flexDirection:'column'}}><span>{'Akunniġutilivsaaġuŋ'}</span><span style={{color:'grey',paddingTop:'4px'}}>{'Add a postbase'}</span></div>}
-						    fluid
-						    selection
-						    value={this.state.postbase2}
-						    selectOnBlur={false}
-						    options={this.state.postbaseInformationAvailable2}
-					    	onChange={this.addPostbase.bind(this)}
-						  />
-						  :
-						  null
-						}
-					</div>
-				}
-
-
-				{this.state.tag == 'n' && this.state.nounMood == 'Absolutive' ?
-					<div style={{display:'flex',justifyContent:'center',height:'71px',paddingTop:'15px',paddingRight:'30px',paddingLeft:'30px'}}>
-					  <Dropdown
-					  	style={{maxWidth:'350px'}}
-					    placeholder={()=><div style={{display:'flex', flexDirection:'column'}}><span>{'Simmiġuŋ Isua'}</span><span style={{color:'grey',paddingTop:'4px'}}>{'Change Ending Type'}</span></div>}
-					    fluid
-					    selection
-					    selectOnBlur={false}
-					    value={this.state.ending1}
-					    options={nounQuestionWords}
-				    	onChange={this.changeNounEnding.bind(this,false)}
-					  />
-				  </div>
-				:
-				null
-				}
-*/}
-
-				{this.state.baseTag != 'n' && this.state.verbMood == 'Participial' && this.state.verbMood != 'Interrogative' && this.state.currentPostbases.length < 2 ?
-					<div style={{display:'flex',justifyContent:'center',paddingTop:'15px',paddingRight:'30px',paddingLeft:'30px'}}>
-					  <Dropdown
-					  	style={{maxWidth:'350px'}}
-					    fluid
-					    search
-					    selection
-					    selectOnBlur={false}
-					    text='Change Ending'
-					    value={this.state.ending1}
-					    options={verbQuestionWords}
-				    	onChange={this.changeVerbEnding.bind(this,false)}
-					  />
-				  </div>
-				  :
-				  null
-				}
 
 				<div style={{height:'30px'}} />
+					<div style={{display:'flex',justifyContent:'center'}}>
 
+					  <Dropdown
+					    icon='plus'
+					    floating={true}
+					    closeOnChange={false}
+					    pointing={'bottom'}
+					    // labeled
+					    button
+					    onOpen={()=>{this.setState({opened:true})}}
+					    open={this.state.opened}
+					    className='icon'
+					  >
+					    <Dropdown.Menu>
+					      <Dropdown.Header content='Search Verbs' />
+					      <Input 
+					      icon='search' 
+					      iconPosition='left' 
+					      name='search'     
+					 		  onChange={this.onChangeSearch.bind(this,'verbs')}
+		            value={this.state.search}
+		            />
+					      <Dropdown.Divider />
+					      <Segment vertical style={{maxHeight:145,width:'100%',padding:'7px',overflow: 'auto'}}>
+					      {this.state.wordsList.map((k)=>{return <Dropdown.Item>
+						        <div style={{display:'flex',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'16px',paddingBottom:'4px'}}>{k['keyString']}</div>
+						        <div style={{fontSize:'16px',fontWeight:'400'}}>{k['definitionString']}</div>
+						      </Dropdown.Item>				      	
+					      })}
+					      </Segment>
+					    </Dropdown.Menu>
+					  </Dropdown>
 
-				{Object.keys(this.state.sisters).length !== 0 ?
-
-					<div>
-					<div className='hierarchymain'>
-					<span className='span2'>Related Entries</span>
-					</div>
-
-							<List style={{marginTop:0}} divided selection>
-							{Object.keys(this.state.sisters).map((i,index)=>
-						    <List.Item key={i} onClick={()=>this.switchToSister(i)}>
-                  <List.Content floated='right'>
-                    <Icon style={{paddingTop:'3px', color:'#B1B1B1'}} size='large' name='chevron right' />
-                  </List.Content>
-						      <List.Content  style={{paddingRight:'16px'}}>
-						        <List.Header style={{fontSize:'19px',paddingBottom:'4px',paddingLeft:'15px',fontFamily:customFontFam,lineHeight:'25px'}}>
-						          		<div> 
-						              <span style={{'paddingRight':'3px',fontWeight:'400'}}>
-						              {this.processStyledText(this.state.sisters[i][2])}
-						                <span style={{'marginLeft':'15px',marginRight:'6px'}}>  
-		                      		<TagColors key={this.state.sisters[i][0]} word={this.state.sisters[i][0]} />
-						                </span>
-						              </span>
-						              </div>
-						        </List.Header>
-						        <List.Description style={{fontSize:'16px',color:'#000000cc',paddingLeft:'15px',fontWeight:'400',lineHeight:'23px',paddingTop:'4px'}}>{this.processStyledText2(this.state.sisters[i][3])}</List.Description>
-						      </List.Content>
-						    </List.Item>
-              	)}
-							</List>
-					</div>
-					:
-					null
-				}
-
-
-					</div>
+  				</div>
+				</div>
 
 			</Grid.Column>
 			</Grid.Row>
@@ -2094,4 +2127,4 @@ class WordBuilder extends Component {
 		);
 	}
 }
-export default WordBuilder;
+export default OneVerbWordBuilder;
