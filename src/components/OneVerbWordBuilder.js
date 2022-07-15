@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Container, Header, Button, Icon, Divider, Image, Grid, Dropdown, List, Label, Input, Segment } from 'semantic-ui-react';
+import { Container, Header, Button, Icon, Divider, Image, Grid, Dropdown, List, Label, Input, Segment, Popup } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { API_URL } from '../App.js';
 import axios from 'axios';
-import {nounoptions1, nounoptions2, nounoptionsmodalis, options1, options2, verbPostbases, nounPostbases, VVpostbases} from './constants/newconstants.js'
+import {nounoptions1, nounoptions2, nounoptionsmodalis, options1, options2, verbPostbases, nounPostbases, VVpostbases, NNpostbases} from './constants/newconstants.js'
 import {ending_underlying} from './constants/ending_underlying.js'
 import palette from 'google-palette';
 import shuffle from 'shuffle-array';
@@ -100,6 +100,10 @@ const optionsFuzzy = {
 };
 
 
+const postbaseOptionsFuzzy = {
+	keys: ['symbol', 'text'],
+  threshold: -10000, // don't return bad results
+}
 
 
 class OneVerbWordBuilder extends Component {
@@ -118,7 +122,7 @@ class OneVerbWordBuilder extends Component {
 			baseCase: props.location.state === undefined ? '' : props.location.state.baseCase,
 			pluralizedDefinition:'',
 			tag: '',
-			baseTag: '',
+			baseTag: 'i',
 			otherBases: [],
 			entryUrl: '',
 			nounMood: 'Absolutive',
@@ -193,16 +197,32 @@ class OneVerbWordBuilder extends Component {
 
 
 			search:'',
+			postbaseSearch:'',
 
       wordsList: [],
+      subjectWordsList: [],
+      verbsWordsList: [],
+      postbasesList: [],
+      postbaseOpened: false,
       opened: false,
+      postbaseOpened: false,
+
+
+
+			mvTag: '',
+			mvBase: '',
+			mvPostbases: [],
+			mvMood: '',
+			mvSubject: '',
+			mvObject: '',
 
 		}
 
 
 	    this.getWord = this.getWord.bind(this);
+	    this.changeBase = this.changeBase.bind(this)
 	    this.addPostbase = this.addPostbase.bind(this);
-	    this.getWord(decodeURI(props.match.params.word),-1);
+	    // this.getWord(decodeURI(props.match.params.word),-1);
 	    this.setNoun = this.setNoun.bind(this);
 	    this.setIntransitive = this.setIntransitive.bind(this);
 	    
@@ -210,6 +230,8 @@ class OneVerbWordBuilder extends Component {
 
 
 	componentDidMount() {
+
+
 		let start = now();
     if (dictionary.length === 0) {
       axios
@@ -231,70 +253,155 @@ class OneVerbWordBuilder extends Component {
           dictionary.forEach(entry => dictionary_dict[entry.keyString] = entry.definitionString) // create dictionary_dict dictionary
           // dictionary_prepared = fuzzysort.prepare(dictionary)
 
-          this.setState({ dictionary: dictionary, dictionary_dict: dictionary_dict});
+					let filteredDictI = dictionary.filter(entry => entry.usagetags.includes('i'))
+					let filteredDictT = dictionary.filter(entry => entry.usagetags.includes('t'))
+					let filteredDictN = dictionary.filter(entry => entry.usagetags.includes('n'))
+
+    // let wordsList = fuzzysort.go(word, filteredDictionary, optionsFuzzy).map(({ obj }) => (obj));
+
+          this.setState({ dictionary: dictionary, dictionary_dict: dictionary_dict, filteredDictI: filteredDictI, filteredDictT: filteredDictT, filteredDictN: filteredDictN});
         });
     }
-    else {
-      // fuse.setCollection(dictionary);
-      this.setState({ dictionary: dictionary, dictionary_dict: dictionary_dict });
-    }
+
+
+
+
+		let queryParams = new URLSearchParams(window.location.search);
+
+		let mvTag = queryParams.get('mvTag');
+		let mvBase = queryParams.get('mvBase');
+		let mvPostbases = []
+		if (queryParams.get('mvPostbases')) {
+			mvPostbases = queryParams.get('mvPostbases').split(',').map(Number)
+		}
+		let mvMood = queryParams.get('mvMood');
+		let mvSubject = queryParams.get('mvSubject');
+		let mvObject = queryParams.get('mvObject');
+		console.log(mvTag, mvBase, mvPostbases, mvMood, mvSubject, mvObject); // 55 test null
+
+
+
+
+  	this.setState({
+			// nounvalue1: nounvalue1def,
+			// nounvalue2: nounvalue2def,
+			// value1: value1def,
+			// value2: value2def,
+			// verbMood: 'Indicative',
+			// nounMood: 'Absolutive',
+			// currentPostbases: [],
+			// englishPreVerb: [],
+			// primaryNoun: '',
+			// englishPreNounOptions:'',
+			// postbase1: -1,
+			// postbase2: -1,
+
+			mvTag: mvTag,
+			mvBase: mvBase,
+			mvPostbases: mvPostbases,
+			mvMood: mvMood,
+			mvSubject: mvSubject,
+			mvObject: mvObject,
+		})
+
+    axios
+      .get(API_URL + "/word2021/" + mvBase)
+      .then(response => {
+
+        console.log(response.data);
+        let usage = response.data['usage']
+        usage.forEach(entry => {
+        	if (entry[0] === mvTag) {
+		        this.setState({
+		        	entryData: response.data,
+		          tag: entry[0],	
+		          baseCase: entry[1],
+		          baseUsageWord: entry[2],	
+		          // entryUrl: entry[2],	
+		          usageDefinition: entry[3],	
+		          // otherBases: entry.otherBases,
+		          // sisters: response.data['sisters'],
+
+		      	})
+		        if (entry.length > 4) {
+			        this.setState({
+			          usageVerbTenses: entry[4],
+			          startingVerbTense: entry[4].indexOf(entry[5][4]),
+					      // definitionraw: entry[3][0][0] === undefined ? '' : entry[3][0][0],
+					      preSubjectText: entry[5][0] === undefined ? '' : entry[5][0],
+					      value1: entry[5][1] === undefined ? '' :entry[5][1],
+					      afterSubjectText: entry[5][2] === undefined ? '' :entry[5][2],
+					      containsIs: entry[5][3] === undefined ? '' :entry[5][3],
+					      primaryVerbBase: entry[5][4] === undefined ? '' :entry[5][4],
+					      preObjectText: entry[5][5] === undefined ? '' :entry[5][5],
+					      value2: entry[5][6] === undefined ? '' :entry[5][6],
+					      afterObjectText: entry[5][7] === undefined ? '' :entry[5][7],
+
+			      	})	        	
+		        }
+
+						this.defaultFstCall(mvTag)
+
+        	}
+        }) 
+
+
+        // if (tag == 'NOUN') {
+        // 	this.setNoun(this,true)
+        // } else if (tag == 'INTRANSITIVE VERB') {
+        // 	this.setIntransitive(this,true)
+        // }
+        
+      });
+
+
+
+			let mvPostbaseInformationAvailable = []
+			Object.keys(VVpostbases).map((a)=>{
+				mvPostbaseInformationAvailable.push({value:a,key:a,symbol: VVpostbases[a].exp_display,text:VVpostbases[a].description})
+			})
+			this.setState({mvPostbasesAvailable:VVpostbases})
+			// this.setState({allPostbasesAvailable:VVpostbases})
+			this.setState({mvPostbaseMaster:VVpostbases})
+			this.setState({mvPostbaseInformationAvailable1:mvPostbaseInformationAvailable})
+
+
+   //  else {
+   //    // fuse.setCollection(dictionary);
+   //    dictionary.forEach(entry => dictionary_dict[entry.keyString] = entry.definitionString)
+			// let filteredDictI = dictionary.filter(entry => entry.usagetags.includes('i'))
+			// let filteredDictT = dictionary.filter(entry => entry.usagetags.includes('t'))
+			// let filteredDictN = dictionary.filter(entry => entry.usagetags.includes('n'))
+   //    this.setState({ dictionary: dictionary, dictionary_dict: dictionary_dict, filteredDictI: filteredDictI, filteredDictT: filteredDictT, filteredDictN: filteredDictN});
+   //  }
 
 	}
 
-  // identifyObjectCase = (match) => {
-  // 	console.log('eventually set the object type here, her/him versus it')
-  // 	let ind = Math.round(Math.random())
-		// let value1 = ''
-		// let value2 = ''
-		// let possessed = false
-		// if (ind % 2 == 0) {
-		// value1 = "s31-2(1)"  
-		// } else {
-		// value1 = "s31-1(1)"  
-		// }
-		// if (match == '<her/him/it>') {
-  // 		value2 = "o31-3(2)"
-		// } else if (match == '<her/him>') {
-  // 		if (ind % 2 == 0) {
-  // 		value2 = "o31-1(2)"			
-  // 		} else {
-  // 		value2 = "o31-2(2)"
-  // 		}
-		// } else if (match == '<her/his>') {
-  // 		if (ind % 2 == 0) {
-  // 		value2 = "o31-1(2)"			
-  // 		} else {
-  // 		value2 = "o31-2(2)"
-  // 		}
-		// } else if (match == '<her>') {
-  // 		value2 = "o31-2(2)"
-		// } else if (match == '<him>') {
-  // 		value2 = "o31-1(2)"
-		// } else if (match == '<a person/it>') {
-  // 		value2 = "o31-3(2)"
-		// } else if (match == '<it>') {
-  // 		value2 = "o31-3(2)"
-		// } else if (match == '<them>') {
-  // 		value2 = "o33(2)"
-		// } else if (match == '<someone/something>') {
-  // 		value2 = "o31-3(2)"
-		// } else if (match == '<her/his/its>') {
-		// 	possessed = true
-  // 		value2 = "o31-3(2)"
-		// } else {
-  // 		value2 = "o31-3(2)"			
-		// }
-		// this.setState({objectPossessed:possessed})
-		// this.setState({value1:value1,value2:value2})
-  // }
 
 
 	defaultFstCall = (tag) => {
 		// console.log(ind)
 		console.log(tag)
-		this.setState({baseTag: tag})
+		// this.setState({baseTag: tag})
+
+		// (this.state.baseCase,this.state.currentPostbases,tag,this.state.verbMood,this.state.moodSpecific,value1,'',this.state.nounMood,[],[])
+		// let startingVerb = ['pissur-',[0],'i','Indicative','s31-2(1)','']
+
 		if (tag === 'i') {
+    	// this.setState({
+    	// 	baseCase:startingVerb[0],
+    	// 	currentPostbases:startingVerb[1],
+    	// 	tag:startingVerb[2],
+    	// 	verbMood:startingVerb[3],
+    	// 	value1:startingVerb[4],
+    	// 	value2:startingVerb[5],
+    	// },()=>{
+
+
 			this.setIntransitive(true,undefined,undefined)
+
+    	// }) 
+
 			// this.setState({person: 3,people: 1, value1: "31-1(1)",activeEditIndex:ind}); this.getFSTParse(fstCall,ind,0); 
 			let verbTenseMatch = this.state.usageDefinition.match(/\⟨.*?\⟩/g)
 			let ind = -1
@@ -317,37 +424,20 @@ class OneVerbWordBuilder extends Component {
 
 		} else if (tag === 'n') {
 			this.setNoun(true,undefined,undefined)
-			// this.setState({
-			// 	primaryNoun: this.state.usageDefinition,
-			// })			
+	
 		} else if (tag === 't') {
-			// let matches = this.state.usageDefinition.match(/\<.*?\>/g)
-			// let splitSentence = []
-			// if (matches.length == 1) {
-			// 	splitSentence = this.state.usageDefinition.split(matches[0])
-			// }
-			// this.identifyObjectCase(matches[0])
-			// // let leftOfObject = splitSentence[0]
-			// let verbTenseMatch = splitSentence[0].match(/\⟨.*?\⟩/g)
-			// let splitLeftOfObject = []
-			// if (verbTenseMatch.length == 1) {
-			// 	splitLeftOfObject = splitSentence[0].split(verbTenseMatch[0])
-			// }
-			// this.setState({
-			// 	leftOfVerb: splitLeftOfObject[0],
-			// 	rightOfVerb: splitLeftOfObject[1],
-			// 	primaryVerb: verbTenseMatch[0].replace("⟨","").replace("⟩",""),
-			// 	primaryVerbBase: verbTenseMatch[0].replace("⟨","").replace("⟩",""),
-			// 	transitiveRightOfObject: splitSentence[1],
-			// 	// entryModified: matches[0],
-			// });
+
 			this.setTransitive(true,undefined,undefined)
 		}
 
 		if (tag === 'n') {
 			let postbaseInformationAvailable = []
-			nounPostbaseDefault.map((a)=>{
-				postbaseInformationAvailable.push({value:a,key:a,text:nounPostbases[a].description})
+			// nounPostbaseDefault.map((a)=>{
+			// 	postbaseInformationAvailable.push({value:a,key:a,text:nounPostbases[a].description})
+			// })
+
+			Object.keys(NNpostbases).map((a)=>{
+				postbaseInformationAvailable.push({value:a,key:a,symbol: NNpostbases[a].exp_display,text:NNpostbases[a].description})
 			})
 
 			let definitionBaseOptions = []
@@ -365,19 +455,19 @@ class OneVerbWordBuilder extends Component {
 			})
 			
 			this.setState({definitionBaseOptions:definitionBaseOptions})
-			this.setState({postbasesAvailable:nounPostbaseDefault})
-			this.setState({allPostbasesAvailable:nounPostbaseDefault})
-			this.setState({postbaseMaster:nounPostbases})
+			this.setState({postbasesAvailable:NNpostbases})
+			this.setState({allPostbasesAvailable:NNpostbases})
+			this.setState({postbaseMaster:NNpostbases})
 			this.setState({postbaseInformationAvailable1:postbaseInformationAvailable})
 		} else {
-			let postbaseInformationAvailable = []
-			Object.keys(VVpostbases).map((a)=>{
-				postbaseInformationAvailable.push({value:a,key:a,text:VVpostbases[a].exp_display+' - '+VVpostbases[a].description})
-			})
-			this.setState({postbasesAvailable:VVpostbases})
-			this.setState({allPostbasesAvailable:VVpostbases})
-			this.setState({postbaseMaster:VVpostbases})
-			this.setState({postbaseInformationAvailable1:postbaseInformationAvailable})
+			// let postbaseInformationAvailable = []
+			// Object.keys(VVpostbases).map((a)=>{
+			// 	postbaseInformationAvailable.push({value:a,key:a,symbol: VVpostbases[a].exp_display,text:VVpostbases[a].description})
+			// })
+			// this.setState({postbasesAvailable:VVpostbases})
+			// this.setState({allPostbasesAvailable:VVpostbases})
+			// this.setState({postbaseMaster:VVpostbases})
+			// this.setState({postbaseInformationAvailable1:postbaseInformationAvailable})
 		}
 
 		let baseOptions = []
@@ -397,75 +487,132 @@ class OneVerbWordBuilder extends Component {
 
   getWord(word,num) {
   	// console.log(this.state.baseCase,this.state.activeKeyInEditIndex)
+
+
+		// let startingVerb = ['pissur-',[0],'i','Indicative','s31-2(1)','']
+
+		let queryParams = new URLSearchParams(window.location.search);
+
+		let mvTag = queryParams.get('mvTag');
+		let mvBase = queryParams.get('mvBase');
+		let mvPostbases = []
+		if (queryParams.get('mvPostbases')) {
+			mvPostbases = queryParams.get('mvPostbases').split(',').map(Number)
+		}
+		let mvMood = queryParams.get('mvMood');
+		let mvSubject = queryParams.get('mvSubject');
+		let mvObject = queryParams.get('mvObject');
+		console.log(mvTag, mvBase, mvPostbases, mvMood, mvSubject, mvObject); // 55 test null
+
+
+
+
   	this.setState({
-			nounvalue1: nounvalue1def,
-			nounvalue2: nounvalue2def,
-			value1: value1def,
-			value2: value2def,
-			verbMood: 'Indicative',
-			nounMood: 'Absolutive',
-			currentPostbases: [],
-			englishPreVerb: [],
-			primaryNoun: '',
-			englishPreNounOptions:'',
-			postbase1: -1,
-			postbase2: -1,
+			// nounvalue1: nounvalue1def,
+			// nounvalue2: nounvalue2def,
+			// value1: value1def,
+			// value2: value2def,
+			// verbMood: 'Indicative',
+			// nounMood: 'Absolutive',
+			// currentPostbases: [],
+			// englishPreVerb: [],
+			// primaryNoun: '',
+			// englishPreNounOptions:'',
+			// postbase1: -1,
+			// postbase2: -1,
+
+			mvTag: mvTag,
+			mvBase: mvBase,
+			mvPostbases: mvPostbases,
+			mvMood: mvMood,
+			mvSubject: mvSubject,
+			mvObject: mvObject,
 		})
 
     axios
-      .get(API_URL + "/yupikusage/" + encodeURIComponent(word))
+      .get(API_URL + "/word2021/" + mvBase)
       .then(response => {
+       //  console.log(response.data);
+       //  let tag;
+       //  if (num === -1) {
+       //  	// console.log(response.data[Object.keys(response.data)[0]])
+	      //   this.setState({
+	      //     tag: response.data['key'][0],	
+	      //     baseCase: response.data['key'][1],
+	      //     baseUsageWord: response.data['key'][2],	
+	      //     entryUrl: response.data['key'][2],	
+	      //     usageDefinition: response.data['key'][3],	
+	      //     // otherBases: response.data['key'].otherBases,
+	      //     sisters: response.data['sisters'],
+
+	      // 	})
+	      //   console.log(response.data['key'].length)
+	      //   if (response.data['key'].length > 4) {
+	      //   this.setState({
+	      //     usageVerbTenses: response.data['key'][4],
+	      //     startingVerbTense: response.data['key'][4].indexOf(response.data['key'][5][4]),
+			    //   // definitionraw: response.data['key'][3][0][0] === undefined ? '' : response.data['key'][3][0][0],
+			    //   preSubjectText: response.data['key'][5][0] === undefined ? '' : response.data['key'][5][0],
+			    //   value1: response.data['key'][5][1] === undefined ? '' :response.data['key'][5][1],
+			    //   afterSubjectText: response.data['key'][5][2] === undefined ? '' :response.data['key'][5][2],
+			    //   containsIs: response.data['key'][5][3] === undefined ? '' :response.data['key'][5][3],
+			    //   primaryVerbBase: response.data['key'][5][4] === undefined ? '' :response.data['key'][5][4],
+			    //   preObjectText: response.data['key'][5][5] === undefined ? '' :response.data['key'][5][5],
+			    //   value2: response.data['key'][5][6] === undefined ? '' :response.data['key'][5][6],
+			    //   afterObjectText: response.data['key'][5][7] === undefined ? '' :response.data['key'][5][7],
+
+	      // 	})	        	
+	      //   }
+	      // 	// console.log(index)
+	      //   tag = response.data['key'][0]
+	      // }
+
+
+       //  this.setState({
+       //    entryData: response.data,
+       //  });
+       //  // console.log(tag)
+       //  this.defaultFstCall(tag)
+
+
         console.log(response.data);
-        let tag;
-        if (num === -1) {
-        	// console.log(response.data[Object.keys(response.data)[0]])
-	        this.setState({
-	          tag: response.data['key'][0],	
-	          baseCase: response.data['key'][1],
-	          baseUsageWord: response.data['key'][2],	
-	          entryUrl: response.data['key'][2],	
-	          usageDefinition: response.data['key'][3],	
-	          // otherBases: response.data['key'].otherBases,
-	          sisters: response.data['sisters'],
+        let usage = response.data['usage']
+        usage.forEach(entry => {
+        	if (entry[0] === mvTag) {
+		        this.setState({
+		        	entryData: response.data,
+		          tag: entry[0],	
+		          baseCase: entry[1],
+		          baseUsageWord: entry[2],	
+		          // entryUrl: entry[2],	
+		          usageDefinition: entry[3],	
+		          // otherBases: entry.otherBases,
+		          // sisters: response.data['sisters'],
 
-	      	})
-	        console.log(response.data['key'].length)
-	        if (response.data['key'].length > 4) {
-	        this.setState({
-	          usageVerbTenses: response.data['key'][4],
-	          startingVerbTense: response.data['key'][4].indexOf(response.data['key'][5][4]),
-			      // definitionraw: response.data['key'][3][0][0] === undefined ? '' : response.data['key'][3][0][0],
-			      preSubjectText: response.data['key'][5][0] === undefined ? '' : response.data['key'][5][0],
-			      value1: response.data['key'][5][1] === undefined ? '' :response.data['key'][5][1],
-			      afterSubjectText: response.data['key'][5][2] === undefined ? '' :response.data['key'][5][2],
-			      containsIs: response.data['key'][5][3] === undefined ? '' :response.data['key'][5][3],
-			      primaryVerbBase: response.data['key'][5][4] === undefined ? '' :response.data['key'][5][4],
-			      preObjectText: response.data['key'][5][5] === undefined ? '' :response.data['key'][5][5],
-			      value2: response.data['key'][5][6] === undefined ? '' :response.data['key'][5][6],
-			      afterObjectText: response.data['key'][5][7] === undefined ? '' :response.data['key'][5][7],
+		      	})
+		        if (entry.length > 4) {
+			        this.setState({
+			          usageVerbTenses: entry[4],
+			          startingVerbTense: entry[4].indexOf(entry[5][4]),
+					      // definitionraw: entry[3][0][0] === undefined ? '' : entry[3][0][0],
+					      preSubjectText: entry[5][0] === undefined ? '' : entry[5][0],
+					      value1: entry[5][1] === undefined ? '' :entry[5][1],
+					      afterSubjectText: entry[5][2] === undefined ? '' :entry[5][2],
+					      containsIs: entry[5][3] === undefined ? '' :entry[5][3],
+					      primaryVerbBase: entry[5][4] === undefined ? '' :entry[5][4],
+					      preObjectText: entry[5][5] === undefined ? '' :entry[5][5],
+					      value2: entry[5][6] === undefined ? '' :entry[5][6],
+					      afterObjectText: entry[5][7] === undefined ? '' :entry[5][7],
 
-	      	})	        	
-	        }
-	      	// console.log(index)
-	        tag = response.data['key'][0]
-	      }
-        // } else {
-        	// console.log(response.data[this.state.num])        
-	       //  this.setState({
-	       //    otherBases: response.data[this.state.activeKeyInEditIndex].otherBases,	
-	       //    entryUrl: response.data[this.state.activeKeyInEditIndex].url,	
-	       //    tag: response.data[this.state.activeKeyInEditIndex].tag,	
-	       //    sisters: response.data[this.state.activeKeyInEditIndex].sisters,
-	       //    usageVerbTenses: response.data[this.state.activeKeyInEditIndex].usageVerbTenses
-	      	// })
-	       //  tag = response.data[this.state.activeKeyInEditIndex].tag
-        // }   
+			      	})	        	
+		        }
 
-        this.setState({
-          entryData: response.data,
-        });
-        // console.log(tag)
-        this.defaultFstCall(tag)
+						this.defaultFstCall(this.state.baseTag)
+
+        	}
+        }) 
+
+
         // if (tag == 'NOUN') {
         // 	this.setNoun(this,true)
         // } else if (tag == 'INTRANSITIVE VERB') {
@@ -473,53 +620,109 @@ class OneVerbWordBuilder extends Component {
         // }
         
       });
+
+
+
   }
+
+
+
+
+  changeBase(entry,tag) {
+  	console.log(entry, tag, this.state.baseTag)
+
+
+    axios
+      .get(API_URL + "/word2021/" + encodeURIComponent(entry['url']))
+      .then(response => {
+        console.log(response.data);
+        let usage = response.data['usage']
+        usage.forEach(entry => {
+        	console.log(entry)
+        	if (entry[0] === this.state.baseTag) {
+		        this.setState({
+		        	entryData: response.data,
+		          tag: entry[0],	
+		          baseCase: entry[1],
+		          baseUsageWord: entry[2],	
+		          // entryUrl: entry[2],	
+		          usageDefinition: entry[3],	
+		          // otherBases: entry.otherBases,
+		          // sisters: response.data['sisters'],
+
+		      	})
+		        if (entry.length > 4) {
+			        this.setState({
+			          usageVerbTenses: entry[4],
+			          startingVerbTense: entry[4].indexOf(entry[5][4]),
+					      // definitionraw: entry[3][0][0] === undefined ? '' : entry[3][0][0],
+					      preSubjectText: entry[5][0] === undefined ? '' : entry[5][0],
+					      value1: entry[5][1] === undefined ? '' :entry[5][1],
+					      afterSubjectText: entry[5][2] === undefined ? '' :entry[5][2],
+					      containsIs: entry[5][3] === undefined ? '' :entry[5][3],
+					      primaryVerbBase: entry[5][4] === undefined ? '' :entry[5][4],
+					      preObjectText: entry[5][5] === undefined ? '' :entry[5][5],
+					      value2: entry[5][6] === undefined ? '' :entry[5][6],
+					      afterObjectText: entry[5][7] === undefined ? '' :entry[5][7],
+
+			      	})	        	
+		        }
+
+						this.defaultFstCall(this.state.baseTag)
+
+        	}
+        }) 
+
+  })
+
+}
+
 
 
   setIntransitive(initializing, e, data) {
   	// console.log(e, data)
-  	let value1;
-  	let tag = 'i'
+  	// let value1;
+  	// let tag = 'i'
   	// let verbMood = 'Indicative'
 
-  	if (initializing) {
-  		let ind = Math.round(Math.random())
-  		if (ind % 2 == 0) {
-  		value1 = "s31-2(1)"  			
-  		} else {
-  		value1 = "s31-1(1)"   
-  		}
+  	// if (initializing) {
+  	// 	let ind = Math.round(Math.random())
+  	// 	if (ind % 2 == 0) {
+  	// 	value1 = "s31-2(1)"  			
+  	// 	} else {
+  	// 	value1 = "s31-1(1)"   
+  	// 	}
 
-  		// person = 
-  		// people = 
-  	} else {
-  		value1 = data.value
-  		// person = data.value[0]
-  		// people = data.value[1]
-  	}
+  	// 	// person = 
+  	// 	// people = 
+  	// } else {
+  	// 	value1 = data.value
+  	// 	// person = data.value[0]
+  	// 	// people = data.value[1]
+  	// }
 
-  	// let fstCall = ''
-   //  if (verbMood === 'Indicative') {
-   //  	fstCall = '>+V+Ind+Prs+' + value1[1] + peopleDict[value1[2]]
-   //  }
+  	// // let fstCall = ''
+   // //  if (verbMood === 'Indicative') {
+   // //  	fstCall = '>+V+Ind+Prs+' + value1[1] + peopleDict[value1[2]]
+   // //  }
 
 
-    this.setState({
-      value1: value1,
-      // containsIs: containsIs,
-      // activeEditIndex:ind,
-      // person: person,
-      // people: people,
-      // fstCall: fstCall,
-    });
+   //  this.setState({
+   //    value1: value1,
+   //    // containsIs: containsIs,
+   //    // activeEditIndex:ind,
+   //    // person: person,
+   //    // people: people,
+   //    // fstCall: fstCall,
+   //  });
 
     if (this.state.baseTag === 'n') {
-    	this.setEnglishNoun(this.state.currentPostbases,value1,'',this.state.nounMood)
+    	this.setEnglishNoun(this.state.currentPostbases,this.state.value1,'',this.state.nounMood)
     } else {
-    	this.setEnglish(this.state.currentPostbases,value1,'',this.state.verbMood,this.state.moodSpecific)
+    	this.setEnglish(this.state.currentPostbases,this.state.value1,'',this.state.verbMood,this.state.moodSpecific)
     }
     
-    this.getFSTParse(this.state.baseCase,this.state.currentPostbases,tag,this.state.verbMood,this.state.moodSpecific,value1,'',this.state.nounMood,[],[])
+    this.getFSTParse(this.state.baseCase,this.state.currentPostbases,this.state.tag,this.state.verbMood,this.state.moodSpecific,this.state.value1,'',this.state.nounMood,[],[])
   }
 
   setTransitive(initializing, e, data) {
@@ -566,33 +769,6 @@ class OneVerbWordBuilder extends Component {
   }
 
 
-	// getSubjectIs = (personN, peopleN) => {
-	//   let subjectis = '';
-	//   if (this.state.currentPostbases.length > 0) {
-	// 	  if (!notis.includes(this.state.currentPostbases[0])) {
-	// 		  if (peopleN === '1' && personN === '1') {
-	// 		    subjectis = 'am '
-	// 		  } else if (peopleN === '1' && personN === '3') {
-	// 		    subjectis = 'is '
-	// 		  } else {
-	// 		    subjectis = 'are '
-	// 		  }	  	
-	// 	  }  	
-	//   } else {
-	// 	  if (peopleN === '1' && personN === '1') {
-	// 	    subjectis = 'am '
-	// 	  } else if (peopleN === '1' && personN === '3') {
-	// 	    subjectis = 'is '
-	// 	  } else {
-	// 	    subjectis = 'are '
-	// 	  }	 	  	
-	//   }
- //    this.setState({
- //      person: parseInt(personN),
- //      people: parseInt(peopleN),
- //      subjectIs: subjectis,
- //      })	 
-	// };
 
 	getIs = (personN, peopleN,capitalize) => {
 		// console.log()
@@ -663,16 +839,6 @@ class OneVerbWordBuilder extends Component {
   		// people = data.value[1]
   	}
 
-	// if (nounvalue2[0] !== '0') {
-	// 	owner = '+'+nounvalue2[0]+peopleDict[nounvalue2[1]]
-	// } else {
-	// 	owner = ''
-	// }
-
- //  	let fstCall = ''
- //    if (this.state.nounMood === 'Absolutive') {
- //    	fstCall = '>+N+Abs+' + peopleDict[nounvalue1] + owner
- //    }
 
     this.setState({
       nounvalue1: nounvalue1,
@@ -705,12 +871,6 @@ class OneVerbWordBuilder extends Component {
   }
 
 
-
-
-	processUnderlyingForm() {
-		//add here
-	}
-
 	switchToSister(info) {
 		this.getWord(info,-1)
 
@@ -731,11 +891,11 @@ class OneVerbWordBuilder extends Component {
 
 			if (peopleN === '1' && personN === '3') {
 				currentPostbases.map((i,index)=>{
-					englishPreNoun.push(this.state.postbaseMaster[i].englishModifier(""))
+					englishPreNoun.push(this.state.mvPostbaseMaster[i].singularDefinition)
 				})
 			} else {
 				currentPostbases.map((i,index)=>{
-					englishPreNoun.push(this.state.postbaseMaster[i].englishModifierPlural(""))
+					englishPreNoun.push(this.state.mvPostbaseMaster[i].pluralDefinition)
 				})				
 			}
 
@@ -743,7 +903,7 @@ class OneVerbWordBuilder extends Component {
 		
 
 		// currentPostbases.map((i,index)=>{
-		// 	englishPreNoun.push(this.state.postbaseMaster[i].englishModifier(""))
+		// 	englishPreNoun.push(this.state.mvPostbaseMaster[i].englishModifier(""))
 		// })
 
 		if (nounMood === 'Localis') {
@@ -784,204 +944,6 @@ class OneVerbWordBuilder extends Component {
 		let capitalize = false
 		let subjectIs = ''
 
-		// let i = -1
-		// let j = -1
-		// if (currentPostbases.length == 1) {
-		// 	i = currentPostbases[0]
-		// } else if (currentPostbases.length == 2) {
-		// 	i = currentPostbases[0]
-		// 	j = currentPostbases[1]
-		// }
-
-
-// let pastwas = [8,9]
-// let pastdid = [4] // becomes inf
-// let pastVerbTense = [3,5,12]
-// let pastGerund = [7,10]
-
-		// if (verbMood == 'Participial') {
-		// 	if (this.state.primaryVerbBase.length === 0) { //be condition
-		// 		if (currentPostbases.length === 0) {
-		// 			subjectis = 'was '
-		// 		} else {
-		// 			if (pastwas.includes(i)) {
-		// 				subjectis = 'was '
-		// 			}
-		// 			englishPreVerb.push(this.state.postbaseMaster[i].englishModifierPast(""))
-		// 			if (befirst.includes(i)) {
-		// 				bePreVerb = 'be'
-		// 			} else if (beingfirst.includes(i)) {
-		// 				bePreVerb = 'being'
-		// 			}
-		// 		}
-		// 	} else {
-		// 		if (currentPostbases.length === 0) {
-		// 			primaryVerb=this.state.usageVerbTenses[1]
-		// 		} else {
-		// 			if (pastdid.includes(i)) {
-		// 				subjectis = 'did '
-		// 			} else if (pastwas.includes(i)) {
-		// 				subjectis = 'was '
-		// 			}
-		// 			englishPreVerb.push(this.state.postbaseMaster[i].englishModifierPast(""))
-		// 			if (pastVerbTense.includes(i)) {
-		// 				primaryVerb = this.state.usageVerbTenses[1]
-		// 			} else if (pastGerund.includes(i)) {
-		// 				primaryVerb = this.state.usageVerbTenses[3]
-		// 			} else {
-		// 				primaryVerb = this.state.usageVerbTenses[0]
-		// 			}
-		// 		}
-		// 	}
-		// } else if (verbMood == 'Interrogative') {
-		// 	if (moodSpecific.length !== 0) {
-		// 		// console.log(moodSpecific)
-		// 		questionWord = getVerbInfo[moodSpecific]['inup']
-		// 		questionWordEnglish = getVerbInfo[moodSpecific]['eng']
-		// 		capitalize = false
-		// 	}
-		// 	if (this.state.primaryVerbBase.length === 0) { //be condition
-		// 		primaryVerb = this.state.primaryVerbBase
-		// 		if (currentPostbases.length === 0) {
-		// 		  beforeSubject = this.getIs(personN, peopleN, capitalize) 
-		// 		} else {
-		// 			if (notis.includes(i)) {
-		// 				if (doesis.includes(i)) {
-		// 					beforeSubject = this.getDo(personN,peopleN,capitalize)
-		// 				englishPreVerb.push(this.state.postbaseMaster[i].englishModifierInfinitive(""))
-		// 				} else {
-		// 					beforeSubject = ''
-		// 				englishPreVerb.push(this.state.postbaseMaster[i].englishModifier(""))
-		// 				}
-		// 			} else {
-		// 			  beforeSubject = this.getIs(personN, peopleN, capitalize)  	
-		// 				englishPreVerb.push(this.state.postbaseMaster[i].englishModifier(""))
-		// 			}
-		// 			if (befirst.includes(i)) {
-		// 				bePreVerb = 'be'
-		// 			} else if (beingfirst.includes(i)) {
-		// 				bePreVerb = 'being'
-		// 			}
-		// 		}
-		// 	} else {
-		// 		if (currentPostbases.length === 0) {
-		// 		  beforeSubject = this.getIs(personN, peopleN, capitalize) 
-		// 		  primaryVerb = this.state.primaryVerbBase
-		// 		} else {
-		// 			if (notis.includes(i)) {
-		// 				if (doesis.includes(i)) {
-		// 				  beforeSubject = this.getDo(personN,peopleN,capitalize)
-		// 					englishPreVerb.push(this.state.postbaseMaster[i].englishModifierInfinitive(""))
-		// 				} else {
-		// 					beforeSubject = ''
-		// 					englishPreSubject.push(this.state.postbaseMaster[i].englishModifierPast(""))
-		// 				}
-		// 			} else {
-		// 			  beforeSubject = this.getIs(personN, peopleN, capitalize) 
-		// 				englishPreVerb.push(this.state.postbaseMaster[i].englishModifier(""))
-		// 			}
-		// 			if (nextinfinitive.includes(i)) {
-		// 				primaryVerb = this.state.usageVerbTenses[0]
-		// 			} else {
-		// 				primaryVerb = this.state.usageVerbTenses[3]
-		// 			}
-		// 		}
-		// 	}
-		// } else{
-
-			// if (notis.includes(i) || future.includes(j)) {
-			// if (this.state.postbaseMaster[i]['is']) {
-			// 	subjectis = this.getIs(personN, peopleN, false) 	
-			// } 
-
-			// if (this.state.primaryVerbBase.length === 0) { //be condition
-
-			// 	if (currentPostbases.length === 0) {
-			// 		// this.setState({primaryVerb: this.state.primaryVerbBase});	
-
-			// 	} else if (currentPostbases.length === 1) { 
-					
-			// 		englishPreVerb.push(this.state.postbaseMaster[i].englishModifier(""))
-			// 		if (befirst.includes(i)) {
-			// 			bePreVerb = 'be'
-			// 		} else if (beingfirst.includes(i)) {
-			// 			bePreVerb = 'being'
-			// 		}
-
-			// 	} else { // two postbases
-			// 		englishPreVerb.push(this.state.postbaseMaster[i].englishModifier(""))
-			// 		if (nextinfinitive.includes(i)) {
-			// 			englishPreVerb.push(this.state.postbaseMaster[j].englishModifierInfinitive(""))
-			// 		} else {
-			// 			englishPreVerb.push(this.state.postbaseMaster[j].englishModifierGerund(""))
-			// 		}
-
-			// 		if (matchCase.includes(j)) {
-			// 			if (befirst.includes(i)) {
-			// 				bePreVerb = 'be'
-			// 			} else if (beingfirst.includes(i)) {
-			// 				bePreVerb = 'being'
-			// 			}
-			// 		} else if (befirst.includes(j)) {
-			// 			bePreVerb = 'be'
-			// 		} else if (beingfirst.includes(j)) {
-			// 			bePreVerb = 'being'
-			// 		}
-			// 	}
-			// } else {
-				// if (currentPostbases.length === 0) {
-				// 	primaryVerb=this.state.primaryVerbBase
-				// 	if (this.state.containsIs) {
-				// 		subjectIs = this.getIs(personN, peopleN, capitalize) 
-				// 	}
-				// } else if (currentPostbases.length === 1) { 
-				// 	if (this.state.postbaseMaster[i].is) {
-				// 		subjectIs = this.getIs(personN, peopleN, capitalize) 
-				// 	} else {
-				// 		subjectIs = ''
-				// 	}
-				// 	englishPreVerb.push(this.state.postbaseMaster[i].gen_preverb)
-				// 	console.log(this.state.postbaseMaster[i].gen_preverb_after)
-				// 	if (this.state.postbaseMaster[i].gen_preverb_after == 'ger') { 
-				// 		primaryVerb=this.state.usageVerbTenses[0]
-				// 	} else {
-				// 		primaryVerb=this.state.usageVerbTenses[3]
-				// 	}
-				// } else { // two postbases
-				// 	if (this.state.postbaseMaster[i].is) {
-				// 		subjectIs = this.getIs(personN, peopleN, capitalize) 
-				// 	}
-				// 	englishPreVerb.push(this.state.postbaseMaster[i].gen_preverb)
-				// 	// console.log(i,j)
-				// 	if (this.state.postbaseMaster[i].gen_preverb_after == 'ger') { 
-				// 		// if (this.state.postbaseMaster[j].ger_preverb_after == this.state.postbaseMaster[i].gen_preverb_after) {
-				// 			// englishPreVerb.push(this.state.postbaseMaster[j].ger_preverb)
-				// 			// primaryVerb=this.state.usageVerbTenses[3]
-				// 		// } else {
-				// 			englishPreVerb.push(this.state.postbaseMaster[j].inf_preverb)
-				// 			if (this.state.postbaseMaster[j].inf_preverb_after == 'inf') { 
-				// 				primaryVerb=this.state.usageVerbTenses[0]
-				// 			} else {
-				// 				primaryVerb=this.state.usageVerbTenses[3]
-				// 			}
-				// 		// }
-				// 	} else {
-				// 		// if (this.state.postbaseMaster[j].inf_preverb_after == this.state.postbaseMaster[i].gen_preverb_after) {
-				// 			// englishPreVerb.push(this.state.postbaseMaster[j].inf_preverb)
-				// 			// primaryVerb=this.state.usageVerbTenses[0]
-				// 		// } else {
-				// 			englishPreVerb.push(this.state.postbaseMaster[j].ger_preverb)
-				// 			if (this.state.postbaseMaster[j].ger_preverb_after == 'inf') { 
-				// 				primaryVerb=this.state.usageVerbTenses[0]
-				// 			} else {
-				// 				primaryVerb=this.state.usageVerbTenses[3]
-				// 			}
-				// 		// }						
-				// 	}
-				// }
-			// }
-		// }
-
 				let nextCase = ''
 				let previousCase = this.state.primaryVerbIndexCase
 				let afterObjectText2 = []
@@ -993,34 +955,34 @@ class OneVerbWordBuilder extends Component {
 					}
 				} else { 
 					currentPostbases.map((i,index)=>{
-						// if ('postverb' in this.state.postbaseMaster[i]) {
+						// if ('postverb' in this.state.mvPostbaseMaster[i]) {
 						// } else {
 							if (index == 0) {
-								if (this.state.postbaseMaster[i].is) {
+								if (this.state.mvPostbaseMaster[i].is) {
 									subjectIs = this.getIs(personN, peopleN, capitalize)						
 								}
-								if ('postverb' in this.state.postbaseMaster[i]) {
-									afterObjectText2.push([this.state.postbaseMaster[i].description,index])
+								if ('postverb' in this.state.mvPostbaseMaster[i]) {
+									afterObjectText2.push([this.state.mvPostbaseMaster[i].description,index])
 									nextCase = this.state.primaryVerbIndexCase												
 								} else {
-									englishPreVerb.push([this.state.postbaseMaster[i].gen_preverb,index])
-									// console.log(this.state.postbaseMaster[i].match_case,this.state.primaryVerbIndexCase)
-									if (this.state.postbaseMaster[i].match_case === true) {
+									englishPreVerb.push([this.state.mvPostbaseMaster[i].gen_preverb,index])
+									// console.log(this.state.mvPostbaseMaster[i].match_case,this.state.primaryVerbIndexCase)
+									if (this.state.mvPostbaseMaster[i].match_case === true) {
 										nextCase = this.state.primaryVerbIndexCase
 									} else {
-										nextCase = this.state.postbaseMaster[i].gen_preverb_after										
+										nextCase = this.state.mvPostbaseMaster[i].gen_preverb_after										
 									}
 								}
 							} else {
-								if ('postverb' in this.state.postbaseMaster[i]) {
-									afterObjectText2.push([this.state.postbaseMaster[i].description,index])									
+								if ('postverb' in this.state.mvPostbaseMaster[i]) {
+									afterObjectText2.push([this.state.mvPostbaseMaster[i].description,index])									
 								} else {
 									if (nextCase == 'g') {
-										englishPreVerb.push([this.state.postbaseMaster[i].ger_preverb,index])
-										nextCase = this.state.postbaseMaster[i].ger_preverb_after
+										englishPreVerb.push([this.state.mvPostbaseMaster[i].ger_preverb,index])
+										nextCase = this.state.mvPostbaseMaster[i].ger_preverb_after
 									} else {
-										englishPreVerb.push([this.state.postbaseMaster[i].inf_preverb,index])
-										nextCase = this.state.postbaseMaster[i].inf_preverb_after
+										englishPreVerb.push([this.state.mvPostbaseMaster[i].inf_preverb,index])
+										nextCase = this.state.mvPostbaseMaster[i].inf_preverb_after
 									}
 								}
 							}
@@ -1037,64 +999,6 @@ class OneVerbWordBuilder extends Component {
 				} 
 
 
-				// if ('postverb' in this.state.postbaseMaster[currentPostbases[currentPostbases.length-2]])
-
-
-				// else { // two postbases
-				// 	if (this.state.postbaseMaster[i].is) {
-				// 		subjectIs = this.getIs(personN, peopleN, capitalize) 
-				// 	}
-				// 	englishPreVerb.push(this.state.postbaseMaster[i].gen_preverb)
-				// 	// console.log(i,j)
-				// 	if (this.state.postbaseMaster[i].gen_preverb_after == 'ger') { 
-				// 		// if (this.state.postbaseMaster[j].ger_preverb_after == this.state.postbaseMaster[i].gen_preverb_after) {
-				// 			// englishPreVerb.push(this.state.postbaseMaster[j].ger_preverb)
-				// 			// primaryVerb=this.state.usageVerbTenses[3]
-				// 		// } else {
-				// 			englishPreVerb.push(this.state.postbaseMaster[j].inf_preverb)
-				// 			if (this.state.postbaseMaster[j].inf_preverb_after == 'inf') { 
-				// 				primaryVerb=this.state.usageVerbTenses[0]
-				// 			} else {
-				// 				primaryVerb=this.state.usageVerbTenses[3]
-				// 			}
-				// 		// }
-				// 	} else {
-				// 		// if (this.state.postbaseMaster[j].inf_preverb_after == this.state.postbaseMaster[i].gen_preverb_after) {
-				// 			// englishPreVerb.push(this.state.postbaseMaster[j].inf_preverb)
-				// 			// primaryVerb=this.state.usageVerbTenses[0]
-				// 		// } else {
-				// 			englishPreVerb.push(this.state.postbaseMaster[j].ger_preverb)
-				// 			if (this.state.postbaseMaster[j].ger_preverb_after == 'inf') { 
-				// 				primaryVerb=this.state.usageVerbTenses[0]
-				// 			} else {
-				// 				primaryVerb=this.state.usageVerbTenses[3]
-				// 			}
-				// 		// }						
-				// 	}
-				// }
-
-
-		// currentPostbases.map((i,index)=>{
-		// 	if (index !== currentPostbases.length-1) {
-		// 		// console.log(notis.includes(i), value1[1], value1[2])
-		// 		if (notis.includes(i)) {
-		// 			if (value1[1] === '3' && value1[2] === '1') {
-		// 				englishPreVerb.push(this.state.postbaseMaster[i].englishModifier(""))
-		// 			} else {
-		// 				englishPreVerb.push(this.state.postbaseMaster[i].englishModifierSecond(""))
-		// 			}
-		// 		} else {
-		// 			englishPreVerb.push(this.state.postbaseMaster[i].englishModifierSecond(""))
-		// 		}
-		// 	} else {
-		// 		englishPreVerb.push(this.state.postbaseMaster[i].englishModifierSecond(""))
-		// 		if (infinitive.includes(i)) {
-		// 			this.setState({primaryVerb: this.state.usageVerbTenses[0],});	
-		// 		}
-		// 	}
-		// })
-		// console.log(englishPreVerb)
-		// this.getSubjectIs(value1[1],value1[2])
 
 		if (verbMood == 'Interrogative') {
 			this.setState({questionMark: '?'})
@@ -1117,112 +1021,45 @@ class OneVerbWordBuilder extends Component {
 		});	
 	}
 
-	// addNounPostbase(e, {value}) {
-	// 	// console.log(e, value)
-	// 	let currentPostbases = this.state.currentPostbases
-	// 	let postbasesAvailable = this.state.postbaseMaster[value].allowable_next_ids
-	// 	// var remove = postbasesAvailable.indexOf(value)
-	// 	// postbasesAvailable.splice(remove,1)
-	// 	// console.log(postbasesAvailable)
-	// 	let postbaseInformationAvailable = []
-	// 	postbasesAvailable.map((a)=>{
-	// 		postbaseInformationAvailable.push({value:a,key:a,text:this.state.postbaseMaster[a].englishModifier("")})
-	// 	})
-	// 	currentPostbases.push(value)
-	// 	this.setState({
-	// 		currentPostbases: currentPostbases,
-	// 		postbasesAvailable: postbasesAvailable,
-	// 		postbaseInformationAvailable: postbaseInformationAvailable,
-	// 	});
 
-	// 	// let fstCall = ''
-	// 	let owner = ''
-	// 	let nounvalue1 = this.state.nounvalue1
-	// 	let nounvalue2 = this.state.nounvalue2
-
-	// 	if (nounvalue2[0] !== '0') {
-	// 		owner = '+'+nounvalue2[0]+peopleDict[nounvalue2[1]]
-	// 	} else {
-	// 		owner = ''
-	// 	}
-
-	// 	// if (currentPostbases.includes(17)) {
-	// 	// 	this.setState({tag: 'INTRANSITIVE VERB'})	
- //  //   	fstCall = '>+V+Ind+Prs+' + this.state.value1[1] + peopleDict[this.state.value1[2]]
-	// 	// } else {
-	// 	// 	this.setState({tag: 'NOUN'})	
-	//  //    if (this.state.nounMood === 'Absolutive') {
-	//  //    	fstCall = '>+N+Abs+' + peopleDict[nounvalue1] + owner
-	//  //    }
-	// 	// }
-
-	// 	this.setEnglishNoun(currentPostbases,this.state.value1,this.state.value2)
-	// 	this.getFSTParse(this.state.baseCase,currentPostbases,this.state.tag,this.state.verbMood,null,null,this.state.nounMood,nounvalue1,nounvalue2)
-	// }
-
-	addPostbase(e, {value}) {
-		// console.log(e, value)
+	addPostbase(k, e, {value}) {
+		// console.log(k, e, value)
+		let newPostbase = k['value']
+		this.setState({postbaseSearch:'',postbasesList:[],postbaseOpened:false})
 
 		let currentPostbases = this.state.currentPostbases
-		// let postbasesAvailable = this.state.postbaseMaster[value].allowable_next_ids
+		// let postbasesAvailable = this.state.mvPostbaseMaster[value].allowable_next_ids
 		// var remove = postbasesAvailable.indexOf(value)
 		// postbasesAvailable.splice(remove,1)
 		// console.log(postbasesAvailable)
-		this.setState({nextCase:value})
+		this.setState({nextCase:newPostbase})
 		if (this.state.baseTag == 'n') {
-			if (nnpostbases.includes(value)) {
-				currentPostbases.push(value)
+			if (nnpostbases.includes(newPostbase)) {
+				currentPostbases.push(newPostbase)
 			} else {
-				currentPostbases.unshift(value)
+				currentPostbases.unshift(newPostbase)
 			}
 		} else {
-			currentPostbases.push(value)
+			currentPostbases.push(newPostbase)
 		}
 
-		// this.setAvailablePostbaseInformation(currentPostbases,this.state.verbMood)
-		// let postbaseInformationAvailable = []
 
-		
-
-
-		// let fstCall = this.state.fstCall
-		// let owner = ''
-		// let nounvalue1 = this.state.nounvalue1
-		// let nounvalue2 = this.state.nounvalue2
 		let tag = this.state.tag
 		let verbMood = this.state.verbMood
 		if (this.state.baseTag == 'n') {
 
-			// postbasesAvailable.map((a)=>{
-			// 	postbaseInformationAvailable.push({value:a,key:a,text:this.state.postbaseMaster[a].englishModifier("")})
-			// })
-			// if (nounvalue2[0] !== '0') {
-			// 	owner = '+'+nounvalue2[0]+peopleDict[nounvalue2[1]]
-			// } else {
-			// 	owner = ''
-			// }
-			// this.setAvailablePostbaseInformation(postbasesAvailable)
-			// console.log(currentPostbases,nounToVerb)
-			// console.log(currentPostbases.filter(value => nounToVerb.includes(value)).)
-			if (currentPostbases.filter(value => nounToVerb.includes(value)).length > 0) {
+			if (currentPostbases.filter(value => nounToVerb.includes(newPostbase)).length > 0) {
 				tag = 'INTRANSITIVE VERB'
 				verbMood = 'Indicative'
 				// this.getFSTParse(this.state.baseCase,this.state.currentPostbases,'INTRANSITIVE VERB','INDICATIVE',this.state.value1,'',this.state.nounMood,[],[])
 			}
-				// this.setState({tag: 'INTRANSITIVE VERB'})	
-	    	// fstCall = '>+V+Ind+Prs+' + this.state.value1[1] + peopleDict[this.state.value1[2]]
-			// } else {
-				// this.setState({tag: 'NOUN'})	
-		    // if (this.state.nounMood === 'Absolutive') {
-		    	// fstCall = '>+N+Abs+' + peopleDict[nounvalue1] + owner
-		    // }
-			// }
+
 			this.setAvailablePostbaseInformation(currentPostbases,this.state.nounMood)
 			this.setEnglishNoun(currentPostbases,this.state.value1,this.state.value2,this.state.nounMood)
 
 		} else {
 			// postbasesAvailable.map((a)=>{
-			// 	postbaseInformationAvailable.push({value:a,key:a,text:this.state.postbaseMaster[a].englishModifier("")})
+			// 	postbaseInformationAvailable.push({value:a,key:a,text:this.state.mvPostbaseMaster[a].englishModifier("")})
 			// })
 			this.setAvailablePostbaseInformation(currentPostbases,this.state.verbMood)
 			this.setEnglish(currentPostbases,this.state.value1,this.state.value2,this.state.verbMood,this.state.moodSpecific)			
@@ -1263,7 +1100,7 @@ class OneVerbWordBuilder extends Component {
 
 		// let postbasesAvailable = []
 		// if (currentPostbases.length == 1) {
-		// 	postbasesAvailable = this.state.postbaseMaster[currentPostbases[0]].allowable_next_ids
+		// 	postbasesAvailable = this.state.mvPostbaseMaster[currentPostbases[0]].allowable_next_ids
 		// } else {
 		// 	if (this.state.verbMood == 'Participial') {
 		// 		postbasesAvailable = verbPostbaseParticipialDefault
@@ -1274,7 +1111,7 @@ class OneVerbWordBuilder extends Component {
 		// }
 		// let postbaseInformationAvailable = []
 		// postbasesAvailable.map((a)=>{
-		// 	postbaseInformationAvailable.push({value:a,key:a,text:this.state.postbaseMaster[a].description})
+		// 	postbaseInformationAvailable.push({value:a,key:a,text:this.state.mvPostbaseMaster[a].description})
 		// })
 
 		this.setAvailablePostbaseInformation(currentPostbases,this.state.verbMood)
@@ -1309,7 +1146,7 @@ class OneVerbWordBuilder extends Component {
 		if (this.state.baseTag == 'n') {
 
 			// postbasesAvailable.map((a)=>{
-			// 	postbaseInformationAvailable.push({value:a,key:a,text:this.state.postbaseMaster[a].englishModifier("")})
+			// 	postbaseInformationAvailable.push({value:a,key:a,text:this.state.mvPostbaseMaster[a].englishModifier("")})
 			// })
 			// if (nounvalue2[0] !== '0') {
 			// 	owner = '+'+nounvalue2[0]+peopleDict[nounvalue2[1]]
@@ -1342,7 +1179,7 @@ class OneVerbWordBuilder extends Component {
 
 		} else {
 			// postbasesAvailable.map((a)=>{
-			// 	postbaseInformationAvailable.push({value:a,key:a,text:this.state.postbaseMaster[a].englishModifierSecond("")})
+			// 	postbaseInformationAvailable.push({value:a,key:a,text:this.state.mvPostbaseMaster[a].englishModifierSecond("")})
 			// })
 			this.setAvailablePostbaseInformation(currentPostbases,this.state.verbMood)
 			this.setEnglish(currentPostbases,this.state.value1,this.state.value2,this.state.verbMood,this.state.moodSpecific)			
@@ -1356,140 +1193,140 @@ class OneVerbWordBuilder extends Component {
 
 
 	setAvailablePostbaseInformation(currentPostbases,mood) {
-		// let availablePostbaseInformationText = []
-		let postbaseInformationAvailable1 = []
-		// let postbaseInformationAvailable2 = []
+		// // let availablePostbaseInformationText = []
+		// let postbaseInformationAvailable1 = []
+		// // let postbaseInformationAvailable2 = []
 
-		// // if (this.state.currentPostbases.length == 0 && this.state.verbMood == 'Participial') {
-		// // 	postbasesAvailable = verbPostbaseParticipialDefault
+		// // // if (this.state.currentPostbases.length == 0 && this.state.verbMood == 'Participial') {
+		// // // 	postbasesAvailable = verbPostbaseParticipialDefault
+		// // // }
+
+		// // console.log(currentPostbases)
+
+
+		// // let postbasesAvailable = []
+		// // if (currentPostbases.length == 0) {
+		// // 	if (mood == 'Participial') {
+		// // 		postbasesAvailable = verbPostbaseParticipialDefault
+		// // 	} else if (this.state.baseTag == 'n' && mood !== 'Absolutive') {
+		// // 		postbasesAvailable = nnpostbases
+		// // 	} else {
+		// let postbasesAvailable = this.state.allPostbasesAvailable
+		// // 	}
+		// // } else {
+		// // 	if (this.state.baseTag == 'n' && mood !== 'Absolutive') {
+
+		// // 	} else {
+		// // 		postbasesAvailable = this.state.mvPostbaseMaster[currentPostbases[0]].allowable_next_ids
+		// // 	}
+			
 		// // }
 
-		// console.log(currentPostbases)
+		// // console.log(mood)
+
+		// // let hasFuture = false
+		// // if (mood !== 'Indicative' && mood !== 'Participial' && mood !== 'Interrogative') {
+		// // 	if (this.state.currentPostbases.length == 0) {
+		// // 		postbasesAvailable.map((a)=>{
+		// // 			postbaseInformationAvailable1.push({value:a,key:a,text:this.state.mvPostbaseMaster[a].description})
+		// // 			availablePostbaseInformationText.push(this.state.mvPostbaseMaster[a].englishModifier(""))
+		// // 		})
+		// // 	} else if (this.state.currentPostbases.length == 1) {
+		// // 		// console.log('hi',postbasesAvailable)
+		// // 		postbaseInformationAvailable1 = this.state.postbaseInformationAvailable1
+		// // 		postbasesAvailable.map((a)=>{
+		// // 			postbaseInformationAvailable2.push({value:a,key:a,text:this.state.mvPostbaseMaster[a].description})
+		// // 			availablePostbaseInformationText.push(this.state.mvPostbaseMaster[a].englishModifier(""))
+		// // 		})		
+		// // 	}
+		// // } else {
+		// // 	if (mood == 'Participial') {
+		// // 		postbasesAvailable.map((a)=>{
+		// // 			postbaseInformationAvailable1.push({value:a,key:a,text:this.state.mvPostbaseMaster[a].englishModifierPast("")})
+		// // 			availablePostbaseInformationText.push(this.state.mvPostbaseMaster[a].englishModifierPast(""))
+		// // 		})
+		// // 	} else if (mood == 'Interrogative') {
+		// // 		postbasesAvailable.map((a)=>{
+		// // 			postbaseInformationAvailable1.push({value:a,key:a,text:this.state.mvPostbaseMaster[a].englishModifierInfinitive("")})
+		// // 			availablePostbaseInformationText.push(this.state.mvPostbaseMaster[a].englishModifierInfinitive(""))
+		// // 		})
+		// // 	} else {
+		// 		if (currentPostbases.length == 0) {
+		// 			Object.keys(postbasesAvailable).map((a)=>{
+		// 				postbaseInformationAvailable1.push({value:a,key:a,text:this.state.mvPostbaseMaster[a].description})
+		// 				// availablePostbaseInformationText.push(this.state.mvPostbaseMaster[a].englishModifier(""))
+		// 			})
+		// 		} else if (currentPostbases.length == 1) {
+		// 			// console.log(this.state.mvPostbaseMaster[currentPostbases[0]].gen_preverb_after)
+		// 			// console.log(this.state.mvPostbaseMaster[currentPostbases[0]])
+		// 			if (this.state.mvPostbaseMaster[currentPostbases[0]].match_case) {
+		// 				Object.keys(postbasesAvailable).map((a)=>{
+		// 					postbaseInformationAvailable1.push({value:a,key:a,text:this.state.mvPostbaseMaster[a].description})
+		// 					// availablePostbaseInformationText.push(this.state.mvPostbaseMaster[a].englishModifierInfinitive(""))
+		// 				})
+		// 			} else {
+		// 				if (this.state.mvPostbaseMaster[currentPostbases[0]].gen_preverb_after == 'g') {
+		// 					Object.keys(postbasesAvailable).map((a)=>{
+		// 						postbaseInformationAvailable1.push({value:a,key:a,text:('postverb' in this.state.mvPostbaseMaster[a] ? this.state.mvPostbaseMaster[a].description : this.state.mvPostbaseMaster[a].ger_preverb)})
+		// 						// availablePostbaseInformationText.push(this.state.mvPostbaseMaster[a].englishModifierInfinitive(""))
+		// 					})		
+		// 				}	else {
+		// 					Object.keys(postbasesAvailable).map((a)=>{
+		// 						postbaseInformationAvailable1.push({value:a,key:a,text:('postverb' in this.state.mvPostbaseMaster[a] ? this.state.mvPostbaseMaster[a].description : this.state.mvPostbaseMaster[a].inf_preverb)})
+		// 						// availablePostbaseInformationText.push(this.state.mvPostbaseMaster[a].englishModifierGerund(""))
+		// 					})		
+		// 				}	
+		// 			}
+		// 		} else {
+		// 			let k = this.state.mvPostbaseMaster[currentPostbases[currentPostbases.length-2]].ger_preverb_after
+		// 			console.log(k)
+		// 			if (k == 'g') {
+		// 				if (this.state.mvPostbaseMaster[currentPostbases[currentPostbases.length-1]].ger_preverb_after == 'g') {
+		// 					Object.keys(postbasesAvailable).map((a)=>{
+		// 						postbaseInformationAvailable1.push({value:a,key:a,text:('postverb' in this.state.mvPostbaseMaster[a] ? this.state.mvPostbaseMaster[a].description : this.state.mvPostbaseMaster[a].ger_preverb)})
+		// 						// availablePostbaseInformationText.push(this.state.mvPostbaseMaster[a].englishModifierInfinitive(""))
+		// 					})		
+		// 				}	else {
+		// 					Object.keys(postbasesAvailable).map((a)=>{
+		// 						postbaseInformationAvailable1.push({value:a,key:a,text:('postverb' in this.state.mvPostbaseMaster[a] ? this.state.mvPostbaseMaster[a].description : this.state.mvPostbaseMaster[a].inf_preverb)})
+		// 						// availablePostbaseInformationText.push(this.state.mvPostbaseMaster[a].englishModifierGerund(""))
+		// 					})		
+		// 				}		
+		// 			} else {
+		// 				if (this.state.mvPostbaseMaster[currentPostbases[currentPostbases.length-1]].inf_preverb_after == 'g') {
+		// 					Object.keys(postbasesAvailable).map((a)=>{
+		// 						postbaseInformationAvailable1.push({value:a,key:a,text:('postverb' in this.state.mvPostbaseMaster[a] ? this.state.mvPostbaseMaster[a].description : this.state.mvPostbaseMaster[a].ger_preverb)})
+		// 						// availablePostbaseInformationText.push(this.state.mvPostbaseMaster[a].englishModifierInfinitive(""))
+		// 					})		
+		// 				}	else {
+		// 					Object.keys(postbasesAvailable).map((a)=>{
+		// 						postbaseInformationAvailable1.push({value:a,key:a,text:('postverb' in this.state.mvPostbaseMaster[a] ? this.state.mvPostbaseMaster[a].description : this.state.mvPostbaseMaster[a].inf_preverb)})
+		// 						// availablePostbaseInformationText.push(this.state.mvPostbaseMaster[a].englishModifierGerund(""))
+		// 					})		
+		// 				}		
+		// 			}			
+		// 		}
+		// 			// postbaseInformationAvailable1 = this.state.postbaseInformationAvailable1
+		// 			// if (future.includes(this.state.currentPostbases[0])) {
+		// 				// hasFuture = true
+		// 			// }
+		// 			// console.log('wadup')
+		// 	// 	}
+		// // }
 
 
-		// let postbasesAvailable = []
-		// if (currentPostbases.length == 0) {
-		// 	if (mood == 'Participial') {
-		// 		postbasesAvailable = verbPostbaseParticipialDefault
-		// 	} else if (this.state.baseTag == 'n' && mood !== 'Absolutive') {
-		// 		postbasesAvailable = nnpostbases
-		// 	} else {
-		let postbasesAvailable = this.state.allPostbasesAvailable
-		// 	}
-		// } else {
-		// 	if (this.state.baseTag == 'n' && mood !== 'Absolutive') {
+		// // postbasesAvailable.map((a)=>{
+		// // 	postbaseInformationAvailable.push({value:a,key:a,text:this.state.mvPostbaseMaster[a].englishModifier("")})
+		// // })		
 
-		// 	} else {
-		// 		postbasesAvailable = this.state.postbaseMaster[currentPostbases[0]].allowable_next_ids
-		// 	}
-			
-		// }
-
-		// console.log(mood)
-
-		// let hasFuture = false
-		// if (mood !== 'Indicative' && mood !== 'Participial' && mood !== 'Interrogative') {
-		// 	if (this.state.currentPostbases.length == 0) {
-		// 		postbasesAvailable.map((a)=>{
-		// 			postbaseInformationAvailable1.push({value:a,key:a,text:this.state.postbaseMaster[a].description})
-		// 			availablePostbaseInformationText.push(this.state.postbaseMaster[a].englishModifier(""))
-		// 		})
-		// 	} else if (this.state.currentPostbases.length == 1) {
-		// 		// console.log('hi',postbasesAvailable)
-		// 		postbaseInformationAvailable1 = this.state.postbaseInformationAvailable1
-		// 		postbasesAvailable.map((a)=>{
-		// 			postbaseInformationAvailable2.push({value:a,key:a,text:this.state.postbaseMaster[a].description})
-		// 			availablePostbaseInformationText.push(this.state.postbaseMaster[a].englishModifier(""))
-		// 		})		
-		// 	}
-		// } else {
-		// 	if (mood == 'Participial') {
-		// 		postbasesAvailable.map((a)=>{
-		// 			postbaseInformationAvailable1.push({value:a,key:a,text:this.state.postbaseMaster[a].englishModifierPast("")})
-		// 			availablePostbaseInformationText.push(this.state.postbaseMaster[a].englishModifierPast(""))
-		// 		})
-		// 	} else if (mood == 'Interrogative') {
-		// 		postbasesAvailable.map((a)=>{
-		// 			postbaseInformationAvailable1.push({value:a,key:a,text:this.state.postbaseMaster[a].englishModifierInfinitive("")})
-		// 			availablePostbaseInformationText.push(this.state.postbaseMaster[a].englishModifierInfinitive(""))
-		// 		})
-		// 	} else {
-				if (currentPostbases.length == 0) {
-					Object.keys(postbasesAvailable).map((a)=>{
-						postbaseInformationAvailable1.push({value:a,key:a,text:this.state.postbaseMaster[a].description})
-						// availablePostbaseInformationText.push(this.state.postbaseMaster[a].englishModifier(""))
-					})
-				} else if (currentPostbases.length == 1) {
-					// console.log(this.state.postbaseMaster[currentPostbases[0]].gen_preverb_after)
-					// console.log(this.state.postbaseMaster[currentPostbases[0]])
-					if (this.state.postbaseMaster[currentPostbases[0]].match_case) {
-						Object.keys(postbasesAvailable).map((a)=>{
-							postbaseInformationAvailable1.push({value:a,key:a,text:this.state.postbaseMaster[a].description})
-							// availablePostbaseInformationText.push(this.state.postbaseMaster[a].englishModifierInfinitive(""))
-						})
-					} else {
-						if (this.state.postbaseMaster[currentPostbases[0]].gen_preverb_after == 'g') {
-							Object.keys(postbasesAvailable).map((a)=>{
-								postbaseInformationAvailable1.push({value:a,key:a,text:('postverb' in this.state.postbaseMaster[a] ? this.state.postbaseMaster[a].description : this.state.postbaseMaster[a].ger_preverb)})
-								// availablePostbaseInformationText.push(this.state.postbaseMaster[a].englishModifierInfinitive(""))
-							})		
-						}	else {
-							Object.keys(postbasesAvailable).map((a)=>{
-								postbaseInformationAvailable1.push({value:a,key:a,text:('postverb' in this.state.postbaseMaster[a] ? this.state.postbaseMaster[a].description : this.state.postbaseMaster[a].inf_preverb)})
-								// availablePostbaseInformationText.push(this.state.postbaseMaster[a].englishModifierGerund(""))
-							})		
-						}	
-					}
-				} else {
-					let k = this.state.postbaseMaster[currentPostbases[currentPostbases.length-2]].ger_preverb_after
-					console.log(k)
-					if (k == 'g') {
-						if (this.state.postbaseMaster[currentPostbases[currentPostbases.length-1]].ger_preverb_after == 'g') {
-							Object.keys(postbasesAvailable).map((a)=>{
-								postbaseInformationAvailable1.push({value:a,key:a,text:('postverb' in this.state.postbaseMaster[a] ? this.state.postbaseMaster[a].description : this.state.postbaseMaster[a].ger_preverb)})
-								// availablePostbaseInformationText.push(this.state.postbaseMaster[a].englishModifierInfinitive(""))
-							})		
-						}	else {
-							Object.keys(postbasesAvailable).map((a)=>{
-								postbaseInformationAvailable1.push({value:a,key:a,text:('postverb' in this.state.postbaseMaster[a] ? this.state.postbaseMaster[a].description : this.state.postbaseMaster[a].inf_preverb)})
-								// availablePostbaseInformationText.push(this.state.postbaseMaster[a].englishModifierGerund(""))
-							})		
-						}		
-					} else {
-						if (this.state.postbaseMaster[currentPostbases[currentPostbases.length-1]].inf_preverb_after == 'g') {
-							Object.keys(postbasesAvailable).map((a)=>{
-								postbaseInformationAvailable1.push({value:a,key:a,text:('postverb' in this.state.postbaseMaster[a] ? this.state.postbaseMaster[a].description : this.state.postbaseMaster[a].ger_preverb)})
-								// availablePostbaseInformationText.push(this.state.postbaseMaster[a].englishModifierInfinitive(""))
-							})		
-						}	else {
-							Object.keys(postbasesAvailable).map((a)=>{
-								postbaseInformationAvailable1.push({value:a,key:a,text:('postverb' in this.state.postbaseMaster[a] ? this.state.postbaseMaster[a].description : this.state.postbaseMaster[a].inf_preverb)})
-								// availablePostbaseInformationText.push(this.state.postbaseMaster[a].englishModifierGerund(""))
-							})		
-						}		
-					}			
-				}
-					// postbaseInformationAvailable1 = this.state.postbaseInformationAvailable1
-					// if (future.includes(this.state.currentPostbases[0])) {
-						// hasFuture = true
-					// }
-					// console.log('wadup')
-			// 	}
-		// }
-
-
-		// postbasesAvailable.map((a)=>{
-		// 	postbaseInformationAvailable.push({value:a,key:a,text:this.state.postbaseMaster[a].englishModifier("")})
-		// })		
-
-		this.setState({
-			// currentPostbases: currentPostbases,
-			// postbasesAvailable: postbasesAvailable,
-			// hasFuture: hasFuture,
-			postbaseInformationAvailable1: postbaseInformationAvailable1,
-			// postbaseInformationAvailable2: postbaseInformationAvailable2,
-			// availablePostbaseInformationText: availablePostbaseInformationText,
-		});
+		// this.setState({
+		// 	// currentPostbases: currentPostbases,
+		// 	// postbasesAvailable: postbasesAvailable,
+		// 	// hasFuture: hasFuture,
+		// 	postbaseInformationAvailable1: postbaseInformationAvailable1,
+		// 	// postbaseInformationAvailable2: postbaseInformationAvailable2,
+		// 	// availablePostbaseInformationText: availablePostbaseInformationText,
+		// });
 
 	}
 
@@ -1675,7 +1512,7 @@ class OneVerbWordBuilder extends Component {
 		let postfstCallString = ''
 		if (currentPostbases.length > 0) {
 			currentPostbases.map((i)=>{
-				postfstCall.push(this.state.postbaseMaster[i].exp)
+				postfstCall.push(this.state.mvPostbaseMaster[i].exp)
 			})
 			postfstCall = postfstCall.reverse()
 			postfstCallString = '-'+postfstCall.join('-')
@@ -1787,7 +1624,107 @@ class OneVerbWordBuilder extends Component {
 								<div style={{display:'flex',justifyContent:'center',fontSize:'20px',marginBottom:'15px',fontWeight:'300'}}> 
 								<span style={{padding:'10px'}}>
 									{this.state.baseCase+'-'}
+
+
+
+              <Popup
+                trigger={<Icon style={{color:'#d4d4d4'}} link name='pencil'>{'\n'}</Icon>}
+                on='click'
+                position='bottom left'
+                style={{maxHeight:(this.state.verbsWordsList.length > 0 ? '400px' : '110px')}}
+                content={
+                	<div>
+                		<div style={{color:'#666666',marginBottom:'5px'}}>{'Change Base'}</div>
+							      <Input 
+							      icon='search' 
+							      iconPosition='left' 
+							      name='search'     
+							      // width='100%'
+							      style={{width:'220px'}}
+							 		  onChange={this.onChangeSearch.bind(this,this.state.baseTag)}
+				            value={this.state.search}
+				            />
+							      <Segment vertical style={{maxHeight:300,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
+							      <List selection>
+								    {this.state.verbsWordsList.length > 0 ?
+								      (this.state.verbsWordsList.map((k)=>{return <List.Item onClick={()=>{this.setState({search:'',verbsWordsList:[],opened:false}); this.changeBase(k,this.state.baseTag)}} style={{cursor:'pointer',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'15px',padding:5}}>
+									        <List.Header style={{paddingBottom:'4px'}}>{k['keyString']}</List.Header>
+									        <List.Description style={{fontWeight:'400'}}>{k['definitionString']}</List.Description>
+									      </List.Item>				      	
+								      }))
+							      :
+							      (this.state.search.length > 1 ? 
+								      <div style={{marginTop:'2px',color:'grey'}}>{'No results'}</div>
+								      :
+								      null
+							      )
+							    }
+							    	</List>
+							      </Segment>
+							      {this.state.verbsWordsList.length > 0 ?
+								      <div style={{textAlign:'center'}}>
+									      <Icon color='grey' name='chevron down' />
+								      </div>
+								      :
+								      null
+								    }
+							    </div>
+                }
+              />
+
+
+
 								</span>
+
+
+	              <Popup
+	                trigger={<Icon circular style={{color:'#d4d4d4'}} link name='plus'>{'\n'}</Icon>}
+	                on='click'
+	                // onOpen={this.setState({postbaseOpened:true})}
+	                // open={this.state.postbaseOpened}
+	                position='bottom center'
+	                style={{maxHeight:(this.state.postbasesList.length > 0 ? '400px' : '110px')}}
+	                content={
+	                	<div>
+	                		<div style={{color:'#666666',marginBottom:'5px'}}>{'Add Postbase'}</div>
+								      <Input 
+								      icon='search' 
+								      iconPosition='left' 
+								      name='search'     
+								      // width='100%'
+								      style={{width:'220px'}}
+								 		  onChange={this.onChangePostbaseSearch.bind(this)}
+					            value={this.state.postbaseSearch}
+					            />
+								      <Segment vertical style={{maxHeight:300,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
+								      <List selection>
+									    {this.state.postbasesList.length > 0 ?
+									      (this.state.postbasesList.map((k)=>{return <List.Item onClick={this.addPostbase.bind(this,k)} style={{cursor:'pointer',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'15px',padding:5}}>
+										        <List.Header style={{paddingBottom:'4px'}}>{k['symbol']}</List.Header>
+										        <List.Description style={{fontWeight:'400'}}>{k['text']}</List.Description>
+										      </List.Item>				      	
+									      }))
+								      :
+								      (this.state.postbaseSearch.length > 1 ? 
+									      <div style={{marginTop:'2px',color:'grey'}}>{'No results'}</div>
+									      :
+									      null
+								      )
+								    }
+								    	</List>
+								      </Segment>
+								      {this.state.postbasesList.length > 0 ?
+									      <div style={{textAlign:'center'}}>
+										      <Icon color='grey' name='chevron down' />
+									      </div>
+									      :
+									      null
+									    }
+								    </div>
+	                }
+	              />
+
+
 								{this.state.underlyingCallReturn.map((x,xind)=>
 									(x[0] == '' ? 
 										null
@@ -1844,23 +1781,106 @@ class OneVerbWordBuilder extends Component {
 								<div style={{display:'flex',justifyContent:'center',fontSize:'20px',marginBottom:'15px',fontWeight:'300'}}> 
 								<span style={{padding:'10px'}}>
 									{this.state.baseCase+'-'}
-											<Icon onClick={()=>{}} style={{color:'#8F8F8F',cursor:'pointer'}} name='pencil' />
+
+
+              <Popup
+                trigger={<Icon style={{color:'#d4d4d4'}} link name='pencil'>{'\n'}</Icon>}
+                on='click'
+                position='bottom left'
+                style={{maxHeight:(this.state.verbsWordsList.length > 0 ? '400px' : '110px')}}
+                content={
+                	<div>
+                		<div style={{color:'#666666',marginBottom:'5px'}}>{'Change Base'}</div>
+							      <Input 
+							      icon='search' 
+							      iconPosition='left' 
+							      name='search'     
+							      // width='100%'
+							      style={{width:'220px'}}
+							 		  onChange={this.onChangeSearch.bind(this,this.state.baseTag)}
+				            value={this.state.search}
+				            />
+							      <Segment vertical style={{maxHeight:300,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
+							      <List selection>
+								    {this.state.verbsWordsList.length > 0 ?
+								      (this.state.verbsWordsList.map((k)=>{return <List.Item onClick={()=>{this.setState({search:'',verbsWordsList:[],opened:false}); this.changeBase(k,this.state.baseTag)}} style={{cursor:'pointer',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'15px',padding:5}}>
+									        <List.Header style={{paddingBottom:'4px'}}>{k['keyString']}</List.Header>
+									        <List.Description style={{fontWeight:'400'}}>{k['definitionString']}</List.Description>
+									      </List.Item>				      	
+								      }))
+							      :
+							      (this.state.search.length > 1 ? 
+								      <div style={{marginTop:'2px',color:'grey'}}>{'No results'}</div>
+								      :
+								      null
+							      )
+							    }
+							    	</List>
+							      </Segment>
+							      {this.state.verbsWordsList.length > 0 ?
+								      <div style={{textAlign:'center'}}>
+									      <Icon color='grey' name='chevron down' />
+								      </div>
+								      :
+								      null
+								    }
+							    </div>
+                }
+              />
+
+
+
 								</span>
 
-								<span style={{padding:'10px'}}>
 
-								  <Dropdown
-								  	// style={{maxWidth:'350px'}}
-								  	icon='plus'
-								    fluid
-								    search
-								    selection
-								    // text='Add a Postbase'
-								    selectOnBlur={false}
-								    options={this.state.postbaseInformationAvailable1}
-								    onChange={this.addPostbase.bind(this)}
-								  />
-								</span>
+              <Popup
+                trigger={<Icon circular style={{color:'#d4d4d4'}} link name='plus'>{'\n'}</Icon>}
+                on='click'
+                // onOpen={this.setState({postbaseOpened:true})}
+                // open={this.state.postbaseOpened}
+                position='bottom center'
+                style={{maxHeight:(this.state.postbasesList.length > 0 ? '400px' : '110px')}}
+                content={
+                	<div>
+                		<div style={{color:'#666666',marginBottom:'5px'}}>{'Add Postbase'}</div>
+							      <Input 
+							      icon='search' 
+							      iconPosition='left' 
+							      name='search'     
+							      // width='100%'
+							      style={{width:'220px'}}
+							 		  onChange={this.onChangePostbaseSearch.bind(this)}
+				            value={this.state.postbaseSearch}
+				            />
+							      <Segment vertical style={{maxHeight:300,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
+							      <List selection>
+								    {this.state.postbasesList.length > 0 ?
+								      (this.state.postbasesList.map((k)=>{return <List.Item onClick={this.addPostbase.bind(this,k)} style={{cursor:'pointer',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'15px',padding:5}}>
+									        <List.Header style={{paddingBottom:'4px'}}>{k['symbol']}</List.Header>
+									        <List.Description style={{fontWeight:'400'}}>{k['text']}</List.Description>
+									      </List.Item>				      	
+								      }))
+							      :
+							      (this.state.postbaseSearch.length > 1 ? 
+								      <div style={{marginTop:'2px',color:'grey'}}>{'No results'}</div>
+								      :
+								      null
+							      )
+							    }
+							    	</List>
+							      </Segment>
+							      {this.state.postbasesList.length > 0 ?
+								      <div style={{textAlign:'center'}}>
+									      <Icon color='grey' name='chevron down' />
+								      </div>
+								      :
+								      null
+								    }
+							    </div>
+                }
+              />
+
+
 
 								{this.state.underlyingCallReturn.map((x,xind)=>
 									<span style={{padding:'10px',color:(xind == this.state.underlyingCallReturn.length - 1 ? '#852828' : this.state.colorsList[this.state.currentPostbases[this.state.currentPostbases.length-xind-1]])}}>
@@ -1954,6 +1974,65 @@ class OneVerbWordBuilder extends Component {
 	}
 
 
+	subjectEntry = (ind) => {
+
+			return (	
+							<div>
+								<div style={{marginTop:'30px',marginBottom:'10px',fontSize:'30px',color:'#000000',fontWeight:'400'}}>
+								{this.state.entryModified.map((modifiedword, m)=>
+									<div style={{display:'flex',justifyContent:'center', lineHeight:'35px'}}>
+										{this.state.otherBases.length == 0 ?
+											(modifiedword.split('>').map((q,index) =>
+												<span style={{color:(index === 0 ? '#000000': (modifiedword.split(">").length-1 == index ? '#852828' : this.state.colorsList[this.state.currentPostbases[this.state.currentPostbases.length-index]]))}}>{q}</span>
+												))
+											:
+											<Dropdown inline scrolling onChange={this.changeActiveUsageKey.bind(this)} text={(modifiedword.split('>').map((q,index) => <span style={{fontWeight:'400',color:(modifiedword.split(">").length-1 == index ?'#852828':'#000000')}}>{q}</span>))} value={this.state.activeDefinitionInEditIndex} options={this.state.baseOptions} />
+										}
+									</div>
+									)}
+								</div>
+
+								<div style={{display:'flex',justifyContent:'center',fontSize:'20px',marginBottom:'15px',fontWeight:'300'}}> 
+								<span style={{padding:'10px'}}>
+									{this.state.baseCase+'-'}
+								</span>
+								{this.state.underlyingCallReturn.map((x,xind)=>
+									(x[0] == '' ? 
+										null
+										:
+										<span style={{padding:'10px',color:(xind == this.state.underlyingCallReturn.length - 1 ? '#852828' : this.state.colorsList[this.state.currentPostbases[this.state.currentPostbases.length-xind-1]])}}>
+										{x.join(', ')}
+										</span>			
+									)
+								)}
+								</div>
+
+								<div style={{textAlign:'center',fontSize:'18px',color:'#0D0D0D',fontWeight:'300'}}>
+								<span style={{color:'#852828'}}>{this.state.englishPreNounOptions}</span>
+								{this.state.nounMood === 'Modalis' ?
+								<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={this.setNoun.bind(this,false)} value={this.state.nounvalue2} options={nounoptionsmodalis} />
+								:
+								<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={this.setNoun.bind(this,false)} value={this.state.nounvalue2} options={nounoptions1} />
+								}
+								<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={this.setNoun.bind(this,false)} value={this.state.nounvalue1} options={nounoptions2} />
+								{this.state.englishPreNoun.map((w,wind)=>{
+									return <span style={{color:this.state.colorsList[this.state.currentPostbases[wind]]}}>{w}</span>
+								})}
+								{this.state.usageDefinition.length > 1 ?
+									<Dropdown inline scrolling onChange={this.changeActiveDefinitionKey.bind(this)} value={this.state.activeDefinitionInEditIndex} options={this.state.definitionBaseOptions} />
+									:
+									(this.state.nounvalue1 !== '1' ?
+										<span style={{color:'#777777'}}>{this.processStyledText(this.state.usageDefinition[this.state.activeDefinitionInEditIndex][2][1])}</span>
+										:
+										<span style={{color:'#777777'}}>{this.processStyledText(this.state.usageDefinition[this.state.activeDefinitionInEditIndex][2][0])}</span>
+									)
+								}
+								</div>
+							</div>		
+						)
+
+	}
+
 	onChangeSearch = (searchType,event,data) => {
     // console.log(bool,homeMode, event,data)
     // let word
@@ -1972,14 +2051,70 @@ class OneVerbWordBuilder extends Component {
     // if (homeMode === 1) {
     	// wordsList = fuzzysort.go(new_search, usagedictionary, optionsUsageFuzzy).map(({ obj }) => (obj));
     // } else if (homeMode === 0) {
-    wordsList = fuzzysort.go(word, dictionary, optionsFuzzy).map(({ obj }) => (obj));
+		// let filterFlag = 'i'
+    // let filteredDictionary = dictionary.filter(entry => entry.usagetags.includes(filterFlag))
+    if (searchType === 'i') {
+    	wordsList = fuzzysort.go(word, this.state.filteredDictI, optionsFuzzy).map(({ obj }) => (obj));
+    	this.setState({ verbsWordsList: wordsList, verbSearch: word });
+
+    } else if (searchType === 't') {
+    	wordsList = fuzzysort.go(word, this.state.filteredDictT, optionsFuzzy).map(({ obj }) => (obj));
+    } else if (searchType === 'n') {
+    	wordsList = fuzzysort.go(word, this.state.filteredDictN, optionsFuzzy).map(({ obj }) => (obj));
+    	this.setState({ verbsWordsList: wordsList, search: word });
+
+    }
     // } else if (homeMode === 2) {
     	// wordsList = fuzzysort.go(new_search, audiolibrary, optionsAudioFuzzy).map(({ obj }) => (obj));
     // }
 
 
-    this.setState({ wordsList: wordsList, search: word });
 	}
+
+
+	onChangePostbaseSearch = (event,data) => {
+    // console.log(bool,homeMode, event,data)
+    // let word
+    // if (bool) {
+      // word = data
+    // } else {
+    let word = data.value
+    //   homeMode = this.state.homeMode
+    // }
+
+    let postbasesList
+    // word = word.replaceAll("’","'").replaceAll("ḷ","ḷ").replaceAll("ł̣","ł̣").replaceAll("G","ġ").replaceAll("g.","ġ").replaceAll("l.","ḷ").replaceAll("L","ł").replaceAll("ł.","ł̣");
+    // new_search = word.replaceAll('ġ','g').replaceAll('ñ','n').replaceAll('ḷ','l').replaceAll('ł','l').replaceAll('ł̣','l').replaceAll('G','g').replaceAll('(','').replaceAll('-','').replaceAll(')','').toLowerCase().replaceAll('he is ','').replaceAll('she is ','').replaceAll('it is ','').replaceAll('i am ','').replaceAll(' ','').replaceAll(',','')
+
+    // console.log(word, new_search)
+    // if (homeMode === 1) {
+    	// wordsList = fuzzysort.go(new_search, usagedictionary, optionsUsageFuzzy).map(({ obj }) => (obj));
+    // } else if (homeMode === 0) {
+		// let filterFlag = 'i'
+    // let filteredDictionary = dictionary.filter(entry => entry.usagetags.includes(filterFlag))
+    // if (searchType === 'i') {
+    	console.log(this.state.postbaseInformationAvailable1)
+    	postbasesList = fuzzysort.go(word, this.state.postbaseInformationAvailable1, postbaseOptionsFuzzy).map(({ obj }) => (obj));
+    // } else if (searchType === 't') {
+    	// wordsList = fuzzysort.go(word, this.state.filteredDictT, optionsFuzzy).map(({ obj }) => (obj));
+    // } else if (searchType === 'n') {
+    	// wordsList = fuzzysort.go(word, this.state.filteredDictN, optionsFuzzy).map(({ obj }) => (obj));
+// 
+    // }
+    // } else if (homeMode === 2) {
+    	// wordsList = fuzzysort.go(new_search, audiolibrary, optionsAudioFuzzy).map(({ obj }) => (obj));
+    // }
+
+
+    this.setState({ postbasesList: postbasesList, postbaseSearch: word });
+	}
+
+
+
+	// changeBase = (newBase,event,data) => {
+	// 	console.log(newBase)
+	// 	this.changeDaBase(newBase,-1)
+	// }
 
 
 
@@ -2066,57 +2201,6 @@ class OneVerbWordBuilder extends Component {
 
 				<div style={{height:'15px'}} />
 
-					<div style={{display:'flex',justifyContent:'center'}}>
-					  <Dropdown
-					  	icon='plus'
-					  	circular
-					  	// style={{maxWidth:'350px'}}
-					    fluid
-					    search
-					    selection
-					    // text='Add a Postbase'
-					    selectOnBlur={false}
-					    options={this.state.postbaseInformationAvailable1}
-					    onChange={this.addPostbase.bind(this)}
-					  />
-					</div>
-
-
-				<div style={{height:'30px'}} />
-					<div style={{display:'flex',justifyContent:'center'}}>
-
-					  <Dropdown
-					    icon='plus'
-					    floating={true}
-					    closeOnChange={false}
-					    pointing={'bottom'}
-					    // labeled
-					    button
-					    onOpen={()=>{this.setState({opened:true})}}
-					    open={this.state.opened}
-					    className='icon'
-					  >
-					    <Dropdown.Menu>
-					      <Dropdown.Header content='Search Verbs' />
-					      <Input 
-					      icon='search' 
-					      iconPosition='left' 
-					      name='search'     
-					 		  onChange={this.onChangeSearch.bind(this,'verbs')}
-		            value={this.state.search}
-		            />
-					      <Dropdown.Divider />
-					      <Segment vertical style={{maxHeight:145,width:'100%',padding:'7px',overflow: 'auto'}}>
-					      {this.state.wordsList.map((k)=>{return <Dropdown.Item>
-						        <div style={{display:'flex',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'16px',paddingBottom:'4px'}}>{k['keyString']}</div>
-						        <div style={{fontSize:'16px',fontWeight:'400'}}>{k['definitionString']}</div>
-						      </Dropdown.Item>				      	
-					      })}
-					      </Segment>
-					    </Dropdown.Menu>
-					  </Dropdown>
-
-  				</div>
 				</div>
 
 			</Grid.Column>

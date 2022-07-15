@@ -8,6 +8,7 @@ import SearchPage from './components/SearchPage.js';
 import YupikDetails from './components/YupikDetails.js';
 import WordBuilder from './components/WordBuilder.js';
 import OneVerbWordBuilder from './components/OneVerbWordBuilder.js';
+import SentenceBuilder from './components/SentenceBuilder.js';
 import About from './components/About.js';
 import Dialogues from './components/Dialogues.js';
 import Lksdreader from './components/Lksdreader.js';
@@ -35,6 +36,7 @@ class App extends Component {
         <Route path='/:word/:entry_id/:usage_id/modify' component={YupikModifyLayout} />
         <Route exact path='/:word' component={YupikDetails} />
         <Route exact path='/wordbuilder/:word' component={WordBuilder}></Route>
+        <Route exact path='/sentencebuilder/:num' component={SentenceBuilder}></Route>
         <Route exact path='/oneverbwordbuilder/:word' component={OneVerbWordBuilder}></Route>
       </Switch>
     );
