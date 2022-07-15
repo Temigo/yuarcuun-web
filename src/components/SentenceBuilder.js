@@ -16,6 +16,14 @@ import ReactGA from 'react-ga';
 let customFontFam = "Roboto,'Helvetica Neue',Arial,Helvetica,sans-serif"
 
 
+const optionsFuzzy = {
+  keys: ['definitionString', 'keyString'],
+  limit: 10, // don't return more results than you need!
+  threshold: -10000, // don't return bad results
+};
+
+let dictionary = [];
+let dictionary_dict = {};
 
 class OneVerbWordBuilder extends Component {
 	constructor(props) {
@@ -60,7 +68,7 @@ class OneVerbWordBuilder extends Component {
 			mvEnglish3: [],
 
 
-			cvExists: false,
+			cvExists: true,
 			cvSubjectDisplay: [['arnar',6],['pi',21],['it',6]],
 			cvSubjectUnderlyingDisplay: [[['arnar-',6]],[['–rpag|@vag[N→N]',21]],[['%:(e)t',6]],],
 
@@ -108,8 +116,8 @@ class OneVerbWordBuilder extends Component {
 			mvSubjectNumber: '3',
 			mvSubjectPossessor: '000',
 
-			mvObjectExists: false,
-			mvObjectNounExists: false,
+			mvObjectExists: true,
+			mvObjectNounExists: true,
 			mvObjectNumber: '3',
 			mvObjectPossessor: '000',
 
@@ -127,6 +135,10 @@ class OneVerbWordBuilder extends Component {
 			cvObjectNumber: '3',
 			cvObjectPossessor: '000',
 
+
+			verbsWordsList: [],
+			verbSearch:'',
+			search:'',
 		}
 
 
@@ -140,11 +152,47 @@ class OneVerbWordBuilder extends Component {
 	}
 
 
+	componentDidMount() {
+
+
+		let start = now();
+    if (dictionary.length === 0) {
+      axios
+        .get(API_URL + "/word/all2021")
+        .then(response => {
+          let end = now();
+          ReactGA.timing({
+            category: 'Loading',
+            variable: 'dictionary',
+            value: (end-start).toFixed(3),
+            label: 'Dictionary loading'
+          });
+          dictionary = response.data;
+          console.log(dictionary)
+          // fuse.setCollection(dictionary);
+          // fuse1.setCollection(dictionary);
+          console.log('Fetched dictionary');
+
+          dictionary.forEach(entry => dictionary_dict[entry.keyString] = entry.definitionString) // create dictionary_dict dictionary
+          // dictionary_prepared = fuzzysort.prepare(dictionary)
+
+					let filteredDictI = dictionary.filter(entry => entry.usagetags.includes('i'))
+					let filteredDictT = dictionary.filter(entry => entry.usagetags.includes('t'))
+					let filteredDictN = dictionary.filter(entry => entry.usagetags.includes('n'))
+
+    // let wordsList = fuzzysort.go(word, filteredDictionary, optionsFuzzy).map(({ obj }) => (obj));
+
+          this.setState({ dictionary: dictionary, dictionary_dict: dictionary_dict, filteredDictI: filteredDictI, filteredDictT: filteredDictT, filteredDictN: filteredDictN});
+        });
+    }
+}
+
+
 	modifySentence(verb, entry, {value}) {
 
 		// console.log(verb, value)
 		let keyChanged = verb
-		let keyChangedValue=value.split('').map(x => Number(x))
+		let keyChangedValue=value.split('')
 		let mv = {
 			nsBases:this.state.mvnsBases,
 			ns:this.state.mvns, 
@@ -161,7 +209,7 @@ class OneVerbWordBuilder extends Component {
 
 
     axios
-      .post(API_URL + "/sentencebuilder/", {
+      .post(API_URL + "/sentencebuilder", {
       	keyChanged:keyChanged,
       	keyChangedValue:keyChangedValue,
       	mv:mv,
@@ -170,7 +218,6 @@ class OneVerbWordBuilder extends Component {
       .then(response => {
         console.log(response);
   		})
-
 	}
 	// changeVerbEnding(reset,e, data) {
 	// 	console.log(data.value)
@@ -199,6 +246,46 @@ class OneVerbWordBuilder extends Component {
 		} else {
 			return <span>{sentence.replace("<","").replace(">","")}</span>
 		}
+	}
+
+
+
+	onChangeSearch = (searchType,event,data) => {
+    // console.log(bool,homeMode, event,data)
+    // let word
+    // if (bool) {
+      // word = data
+    // } else {
+    let word = data.value
+    //   homeMode = this.state.homeMode
+    // }
+
+    let wordsList
+    // word = word.replaceAll("’","'").replaceAll("ḷ","ḷ").replaceAll("ł̣","ł̣").replaceAll("G","ġ").replaceAll("g.","ġ").replaceAll("l.","ḷ").replaceAll("L","ł").replaceAll("ł.","ł̣");
+    // new_search = word.replaceAll('ġ','g').replaceAll('ñ','n').replaceAll('ḷ','l').replaceAll('ł','l').replaceAll('ł̣','l').replaceAll('G','g').replaceAll('(','').replaceAll('-','').replaceAll(')','').toLowerCase().replaceAll('he is ','').replaceAll('she is ','').replaceAll('it is ','').replaceAll('i am ','').replaceAll(' ','').replaceAll(',','')
+
+    // console.log(word, new_search)
+    // if (homeMode === 1) {
+    	// wordsList = fuzzysort.go(new_search, usagedictionary, optionsUsageFuzzy).map(({ obj }) => (obj));
+    // } else if (homeMode === 0) {
+		// let filterFlag = 'i'
+    // let filteredDictionary = dictionary.filter(entry => entry.usagetags.includes(filterFlag))
+    if (searchType === 'i') {
+    	wordsList = fuzzysort.go(word, this.state.filteredDictI, optionsFuzzy).map(({ obj }) => (obj));
+    	this.setState({ verbsWordsList: wordsList, verbSearch: word });
+
+    } else if (searchType === 't') {
+    	wordsList = fuzzysort.go(word, this.state.filteredDictT, optionsFuzzy).map(({ obj }) => (obj));
+    } else if (searchType === 'n') {
+    	wordsList = fuzzysort.go(word, this.state.filteredDictN, optionsFuzzy).map(({ obj }) => (obj));
+    	this.setState({ verbsWordsList: wordsList, search: word });
+
+    }
+    // } else if (homeMode === 2) {
+    	// wordsList = fuzzysort.go(new_search, audiolibrary, optionsAudioFuzzy).map(({ obj }) => (obj));
+    // }
+
+
 	}
 
 
@@ -360,7 +447,57 @@ class OneVerbWordBuilder extends Component {
 											{this.state.mvObjectEnglish.map((w,wind)=>{
 												return <span style={{color:this.state.colorsList[w[1]]}}>{w[0]+" "}</span>
 											})}
-											<Icon style={{color:this.state.colorsList[2]}}  name='edit outline' />																	
+											<Icon style={{color:this.state.colorsList[2]}}  name='edit outline' />
+
+
+				              <Popup
+				                trigger={<Icon style={{color:'#d4d4d4'}} link name='pencil'>{'\n'}</Icon>}
+				                on='click'
+				                position='bottom left'
+				                style={{maxHeight:(this.state.verbsWordsList.length > 0 ? '400px' : '110px')}}
+				                content={
+				                	<div>
+				                		<div style={{color:'#666666',marginBottom:'5px'}}>{'Change Base'}</div>
+											      <Input 
+											      icon='search' 
+											      iconPosition='left' 
+											      name='search'     
+											      // width='100%'
+											      style={{width:'220px'}}
+											 		  onChange={this.onChangeSearch.bind(this,this.state.baseTag)}
+								            value={this.state.search}
+								            />
+											      <Segment vertical style={{maxHeight:300,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
+											      <List selection>
+												    {this.state.verbsWordsList.length > 0 ?
+												      (this.state.verbsWordsList.map((k)=>{return <List.Item onClick={()=>{this.setState({search:'',verbsWordsList:[],opened:false}); this.changeBase(k,this.state.baseTag)}} style={{cursor:'pointer',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'15px',padding:5}}>
+													        <List.Header style={{paddingBottom:'4px'}}>{k['keyString']}</List.Header>
+													        <List.Description style={{fontWeight:'400'}}>{k['definitionString']}</List.Description>
+													      </List.Item>				      	
+												      }))
+											      :
+											      (this.state.search.length > 1 ? 
+												      <div style={{marginTop:'2px',color:'grey'}}>{'No results'}</div>
+												      :
+												      null
+											      )
+											    }
+											    	</List>
+											      </Segment>
+											      {this.state.verbsWordsList.length > 0 ?
+												      <div style={{textAlign:'center'}}>
+													      <Icon color='grey' name='chevron down' />
+												      </div>
+												      :
+												      null
+												    }
+											    </div>
+				                }
+				              />
+
+
+
+
 										</span>
 										:
 										<span>
