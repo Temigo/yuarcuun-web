@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Header, Button, Icon, Divider, Image, Grid, Dropdown, List, Label, Input, Segment, Popup } from 'semantic-ui-react';
+import { Container, Header, Button, Icon, Divider, Image, Grid, Dropdown, List, Label, Input, Segment, Popup, Menu } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { API_URL } from '../App.js';
 import axios from 'axios';
@@ -44,31 +44,65 @@ class OneVerbWordBuilder extends Component {
 			].concat(shuffle(palette('tol-rainbow', 500).map((c) => { return '#' + c; }))),
 
 
-			// mvSubjectColor: '#852828',
-			// mvObjectColor: '#b53434',
+			mvSubjectColor: '#852828',
+			mvObjectColor: '#b53434',
 			// // mvPostbaseColors: 
 
 			// cvSubjectColor: '#3070AB',
 			// cvObjectColor: '#b53434',
 
-			currentPostbases: ['13'],
-			mvSubjectDisplay: [['angute',1],['cuara',20],['at',1]],
-			mvSubjectUnderlyingDisplay: [[['angute-',1]],[['–cuar(ar*)[N→N]',20]],[['%:(e)t',1]],],
+			// currentPostbases: ['13'],
+			// mvSubjectDisplay: [['angute',1],['cuara',20],['at',1]],
+			// mvSubjectUnderlyingDisplay: [[['angute-',1]],[['–cuar(ar*)[N→N]',20]],[['%:(e)t',1]],],
 
-			mvObjectDisplay: [['tuntuvi',2],['it',2]],
-			mvObjectUnderlyingDisplay: [[['tuntuvag-',2]],[['%:(e)t',2]],],
 
-			mvDisplay: [['nii',0],['cugnarqe',3],['llru',0],['i',2],['t',1]],
-			mvUnderlyingDisplay: [[['niite-',0]],[['@~+yugnarqe2[V→V]',3]],[['–llru[V→V]',0]],[["+'(g)ai",2],["t",1]]],
+
+			// mvObjectDisplay: [['tuntuvi',2],['it',2]],
+			// mvObjectUnderlyingDisplay: [[['tuntuvag-',2]],[['%:(e)t',2]],],
+
+			// mvDisplay: [['nii',0],['cugnarqe',3],['llru',0],['i',2],['t',1]],
+			// mvUnderlyingDisplay: [[['niite-',0]],[['@~+yugnarqe2[V→V]',3]],[['–llru[V→V]',0]],[["+'(g)ai",2],["t",1]]],
+
+			// mvEnglish1: [],			
+			// mvSubjectEnglish: [['small',20],['men',1]],
+			// mvEnglish2: [['probably',3],['heard',0],['', 0]],
+			// mvObjectEnglish: [['moose',2]],
+			// mvEnglish3: [],
+
+
+			// cvExists: true,
+			// cvSubjectDisplay: [['arnar',6],['pi',21],['it',6]],
+			// cvSubjectUnderlyingDisplay: [[['arnar-',6]],[['–rpag|@vag[N→N]',21]],[['%:(e)t',6]],],
+
+			// cvObjectDisplay: [['tumyara',7],['t',7]],
+			// cvObjectUnderlyingDisplay: [[['tumyarar-',7]],[['%:(e)t',7]],],
+
+			// cvDisplay: [['tanger',0],['pailg',5],['at',6],['ki',7]],
+			// cvUnderlyingDisplay: [[['niite-',0]],[['@+paileg',5]],[['at',6],["ki",7]]],
+
+			// cvEnglish1: [['before',5],],			
+			// cvSubjectEnglish: [['big',21],['women',6]],
+			// cvEnglish2: [['saw',0]],
+			// cvObjectEnglish: [['trails',7]],
+			// cvEnglish3: [],
+
+
+			mvSubjectDisplay: [[['arna',2],['cuara',2],['ak',2]],[['qimugt',1],['ii',1],['k',2]],],
+			mvSubjectUnderlyingDisplay: [[[['arnar-',2]],[['–cuar(ar*)[N→N]',2]],[['%:(e)k',2]]],[[['qimugte-',1]],[[':(ng)a',1],['k',2]]]],
+			mvObjectDisplay: [],
+			mvObjectUnderlyingDisplay: [],
+
+			mvDisplay: [['aqume',0],['llru',3],['uq',1]],
+			mvUnderlyingDisplay: [[['aqume-',0]],[['–llru[V→V]',3]],[["+'(g/t)uq",1]]],
 
 			mvEnglish1: [],			
-			mvSubjectEnglish: [['small',20],['men',1]],
-			mvEnglish2: [['probably',3],['heard',0],['', 0]],
+			mvSubjectEnglish: [[['small',2],["womens'",2]],[['dog',1]]],
+			mvEnglish2: [['sat down',0]],
 			mvObjectEnglish: [['moose',2]],
 			mvEnglish3: [],
 
 
-			cvExists: true,
+			cvExists: false,
 			cvSubjectDisplay: [['arnar',6],['pi',21],['it',6]],
 			cvSubjectUnderlyingDisplay: [[['arnar-',6]],[['–rpag|@vag[N→N]',21]],[['%:(e)t',6]],],
 
@@ -85,39 +119,22 @@ class OneVerbWordBuilder extends Component {
 			cvEnglish3: [],
 
 
-			mvnsBases:[],
-			mvns:[], 
-			mvvBase:"aqume-–llru[V→V]",
+
+			mvvBase:(["aqume","–llru[V→V]"],"i"),
 			mvvMood:"Ind",
-			mvvTrans:"i",
 			mvvs:[3,1,3],
-			// mvnoBases:
+			mvnsBases:[["qimugte","–cuar(ar*)[N→N]"],["angute","–rpag|@vag[N→N]"],],
+			mvns:[[3,1,1,1],[2,1,1,1]],
 
-			// mvBase:"aqume-–llru[V→V]",
+			mvvo:[],
+			mvnoBases:[],
+			mvno:[],
 
-			baseCase: ['niite'],
+
+			mvSubjectNumbers: [['000','2'],['1']],
+			// mvSubjectPossessor: '000',
 
 
-			postObject: "",
-			subjectIs: "is ",
-			bePreVerb: "",
-			preObjectText: "",
-			primaryVerb: "hunt",
-			primaryNoun: "",
-			afterObjectText: "",
-			afterObjectText2: [],
-			questionMark: "",
-
-			mvSubject: "330",
-			mvObject: "330",
-
-			mvSubjectExists: true,
-			mvSubjectNounExists: false,
-			mvSubjectNumber: '3',
-			mvSubjectPossessor: '000',
-
-			mvObjectExists: true,
-			mvObjectNounExists: true,
 			mvObjectNumber: '3',
 			mvObjectPossessor: '000',
 
@@ -139,6 +156,9 @@ class OneVerbWordBuilder extends Component {
 			verbsWordsList: [],
 			verbSearch:'',
 			search:'',
+			currentEditMode:'default',
+
+			candidateBase:[],
 		}
 
 
@@ -288,7 +308,99 @@ class OneVerbWordBuilder extends Component {
 
 	}
 
+	editMenu = (type) => {
+		if (type==='mv') {
+			if (this.state.currentEditMode==='default') {
+				return (<Menu vertical>
+					        <Menu.Item
+					          name='messages'
+					          // active={this.state.activeItem === 'messages'}
+					          onClick={()=>{console.log('deleted')}}
+					        >
+					          Delete Main Verb
+					        </Menu.Item>
+					        <Dropdown open={true} item text='Change Verb Base'>
 
+					          <Dropdown.Menu style={{padding:13}}>
+					          <div>
+		                	<Grid style={{height:'400px',width:'505px'}}>
+		                	<Grid.Row columns={2} style={{paddingBottom:'0px'}}divided>
+		                	<Grid.Column >
+									      <Input 
+									      icon='search' 
+									      iconPosition='left' 
+									      name='search'     
+									      // width='100%'
+									      style={{width:'220px'}}
+									 		  onChange={this.onChangeSearch.bind(this,this.state.mvvBase)}
+						            value={this.state.verbSearch}
+						            />
+									      <Segment vertical style={{height:320,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
+									      <List selection>
+										    {this.state.verbsWordsList.map((k)=>{return <List.Item onClick={()=>{this.setState({verbSearch:'',verbsWordsList:[],candidateBase:this.state.candidateBase.concat(k)})}} style={{cursor:'pointer',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'15px',padding:5}}>
+											        <List.Description style={{paddingBottom:'4px'}}>{k['keyString']}</List.Description>
+											        <List.Header style={{fontWeight:'400'}}>{k['definitionString']}</List.Header>
+											      </List.Item>				      	
+										      })}
+									    	</List>
+									      </Segment>
+									      {this.state.verbsWordsList.length > 0 ?
+										      <div style={{textAlign:'center'}}>
+											      <Icon color='grey' name='chevron down' />
+										      </div>
+										      :
+										      null
+										    }
+
+										  </Grid.Column>
+										  <Grid.Column style={{display:'flex',flexDirection:'column'}}>
+									  
+									        <div style={{color:'#666666'}}>{'Candidate (English Order)'}</div>
+									        <Segment style={{height:290,overflow: 'auto',padding:10}}>
+									        	<List divided>
+									        	{this.state.candidateBase.map((k,kindex)=>{return (kindex===this.state.candidateBase.length-1 ?
+										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
+										        		<div style={{flex:1}}>
+											        		<div style={{color:'#000000b3'}}>{k['keyString']}</div>
+											        		<div style={{fontWeight:''}}>{k['definitionString']}</div>
+										        		</div>
+										        		<Icon circular onClick={()=>{this.setState({candidateBase:this.state.candidateBase.slice(0,-1)})}} style={{cursor:'pointer',width:30}} name='x' />
+										        		</List.Item>
+									        			:
+										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
+										        		<div style={{flex:1}}>										        		
+											        		<div style={{color:'#000000b3'}}>{k['keyString']}</div>
+											        		<div style={{fontWeight:''}}>{k['definitionString']}</div>
+										        		</div>
+										        		<div style={{width:30}} />
+										        		</List.Item>
+									        			)
+									        	})}
+									        	</List>
+								        	</Segment>
+									      <div style={{paddingBottom:10}}>
+		                		<Button color='blue' disabled={true} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}>
+		                			<div>{'Submit'}</div>
+		                			<Icon name='chevron right' />
+		                		</Button>
+		                		</div>
+
+		                	</Grid.Column>
+		                	</Grid.Row>
+									    </Grid>
+									  </div>
+					          </Dropdown.Menu>
+
+					        </Dropdown>
+					      </Menu>)				
+			} else if (this.state.currentEditMode==='changeverbbase') {
+				return (<div>
+            		hi
+					    </div>)				
+			}
+
+		}
+	}
 
 	render() {
 		console.log(this.state)
@@ -345,21 +457,29 @@ class OneVerbWordBuilder extends Component {
 
 							<div style={{marginTop:'30px',}}>
 
-							 	{this.state.mvSubjectNounExists ? 
+							 	{this.state.mvnsBases.length > 0 ? 
 									<div>
 										<div style={{marginBottom:'5px',fontSize:'30px',color:'#000000',fontWeight:'400'}}>
 											<div style={{display:'flex',justifyContent:'center', lineHeight:'35px'}}>
 											{this.state.mvSubjectDisplay.map((m, mind)=>
-													<span style={{color:this.state.colorsList[m[1]]}}>{m[0]}</span>
+												<div style={{paddingRight:10}}>
+												{m.map((n,nind)=>
+														<span style={{color:this.state.colorsList[n[1]]}}>{n[0]}</span>
+													)}
+												</div>
 												)}
 											</div>
 										</div>
 
 										<div style={{display:'flex',justifyContent:'center',fontSize:'18px',marginBottom:'10px',fontWeight:'300'}}> 
 										{this.state.mvSubjectUnderlyingDisplay.map((y)=>
-											<span style={{padding:'8px'}}>
-											{y.map((x,xind)=> <span style={{borderBottom:'1px solid '+this.state.colorsList[x[1]], color:this.state.colorsList[x[1]]}}>{x[0]}</span>)}
-											</span>
+												<span style={{padding:'8px'}}>
+												{y.map((z)=>
+													<span style={{padding:'8px'}}>
+													{z.map((x,xind)=> <span style={{opacity:0.6,borderBottom:'1px solid '+this.state.colorsList[x[1]], color:this.state.colorsList[x[1]]}}>{x[0]}</span>)}
+													</span>
+												)}
+												</span>
 										)}
 										</div>
 									</div>
@@ -367,7 +487,9 @@ class OneVerbWordBuilder extends Component {
 									null
 								}
 
-							 	{this.state.mvObjectNounExists ? 
+
+
+							 	{this.state.mvnoBases.length > 0 ? 
 							 		<div>
 										<div style={{marginBottom:'5px',fontSize:'30px',color:'#000000',fontWeight:'400'}}>
 											<div style={{display:'flex',justifyContent:'center', lineHeight:'35px'}}>
@@ -380,7 +502,7 @@ class OneVerbWordBuilder extends Component {
 										<div style={{display:'flex',justifyContent:'center',fontSize:'18px',marginBottom:'10px',fontWeight:'300'}}> 
 										{this.state.mvObjectUnderlyingDisplay.map((y)=>
 											<span style={{padding:'8px'}}>
-											{y.map((x,xind)=> <span style={{borderBottom:'1px solid '+this.state.colorsList[x[1]], color:this.state.colorsList[x[1]]}}>{x[0]}</span>)}
+											{y.map((x,xind)=> <span style={{opacity:0.6,borderBottom:'1px solid '+this.state.colorsList[x[1]], color:this.state.colorsList[x[1]]}}>{x[0]}</span>)}
 											</span>
 										)}
 										</div>			
@@ -400,7 +522,7 @@ class OneVerbWordBuilder extends Component {
 								<div style={{display:'flex',justifyContent:'center',fontSize:'18px',marginBottom:'10px',fontWeight:'300'}}> 
 								{this.state.mvUnderlyingDisplay.map((y)=>
 									<span style={{padding:'8px'}}>
-									{y.map((x,xind)=> <span style={{borderBottom:'1px solid '+this.state.colorsList[x[1]], color:this.state.colorsList[x[1]]}}>{x[0]}</span>)}
+									{y.map((x,xind)=> <span style={{opacity:0.6,borderBottom:'1px solid '+this.state.colorsList[x[1]], color:this.state.colorsList[x[1]]}}>{x[0]}</span>)}
 									</span>
 								)}
 								</div>
@@ -413,14 +535,29 @@ class OneVerbWordBuilder extends Component {
 									return <span style={{color:this.state.colorsList[w[1]]}}>{w[0]+" "}</span>
 								})}			
 
-								{this.state.mvSubjectExists ?
-									(this.state.mvSubjectNounExists ? 
-										<span>
-											<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} value={this.state.mvSubjectPossessor} options={nounOptionsPossessors} />
-											<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} value={this.state.mvSubjectNumber} options={nounOptionsNumbers} />								
-											{this.state.mvSubjectEnglish.map((w,wind)=>{
-												return <span style={{color:this.state.colorsList[w[1]]}}>{w[0]+" "}</span>
-											})}
+								{this.state.mvns.length > 0 ?
+									(this.state.mvnsBases.length > 0 ? 
+										<span>					
+											{this.state.mvSubjectEnglish.map((x,xind)=>
+												<span>
+												{xind === 0 ?
+													<span>
+														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} value={this.state.mvSubjectNumbers[0][0]} options={nounOptionsPossessors} />
+														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} value={this.state.mvSubjectNumbers[0][1]} options={nounOptionsNumbers} />																
+														{x.map((w,wind)=>
+														<span style={{color:this.state.colorsList[w[1]]}}>{w[0]+" "}</span>
+														)}
+													</span>
+													:
+													<span>
+														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} value={this.state.mvSubjectNumbers[xind][0]} options={nounOptionsNumbers} />								
+														{x.map((w,wind)=>
+															<span style={{color:this.state.colorsList[w[1]]}}>{w[0]+" "}</span>
+															)}
+													</span>
+												}
+												</span>
+											)}
 											<Icon style={{color:this.state.colorsList[1]}}  name='edit outline' />
 										</span>
 										:
@@ -436,11 +573,55 @@ class OneVerbWordBuilder extends Component {
 								{this.state.mvEnglish2.map((w,wind)=>{
 									return <span style={{color:this.state.colorsList[w[1]]}}>{w[0]+" "}</span>
 								})}		
-								<Icon style={{color:this.state.colorsList[0]}}  name='edit outline' />
+
+		              <Popup
+		                trigger={<Icon style={{color:this.state.colorsList[0]}} link name='edit outline'>{'\n'}</Icon>}
+		                on='click'
+		                position='bottom left'
+		                style={{maxHeight:'400px'}}
+		                content={
+		                	<div>
+		                		<div style={{color:'#666666',marginBottom:'5px'}}>{'Change Base'}</div>
+									      <Input 
+									      icon='search' 
+									      iconPosition='left' 
+									      name='search'     
+									      // width='100%'
+									      style={{width:'220px'}}
+									 		  onChange={this.onChangeSearch.bind(this,this.state.mvvBase)}
+						            value={this.state.verbSearch}
+						            />
+									      <Segment vertical style={{maxHeight:300,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
+									      <List selection>
+										    {this.state.verbsWordsList.length > 0 ?
+										      (this.state.verbsWordsList.map((k)=>{return <List.Item onClick={()=>{this.setState({search:'',verbsWordsList:[],opened:false}); this.changeBase(k,this.state.mvvBase)}} style={{cursor:'pointer',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'15px',padding:5}}>
+											        <List.Header style={{paddingBottom:'4px'}}>{k['keyString']}</List.Header>
+											        <List.Description style={{fontWeight:'400'}}>{k['definitionString']}</List.Description>
+											      </List.Item>				      	
+										      }))
+									      :
+									      (this.state.search.length > 1 ? 
+										      <div style={{marginTop:'2px',color:'grey'}}>{'No results'}</div>
+										      :
+										      null
+									      )
+									    }
+									    	</List>
+									      </Segment>
+									      {this.state.verbsWordsList.length > 0 ?
+										      <div style={{textAlign:'center'}}>
+											      <Icon color='grey' name='chevron down' />
+										      </div>
+										      :
+										      null
+										    }
+									    </div>
+		                }
+		              />
 
 
-								{this.state.mvObjectExists ?
-									(this.state.mvObjectNounExists ? 
+								{this.state.mvno.length > 0 ?
+									(this.state.mvnoBases.length > 0 ? 
 										<span>
 											<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} value={this.state.mvObjectPossessor} options={nounOptionsPossessors} />
 											<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} value={this.state.mvObjectNumber} options={nounOptionsNumbers} />								
@@ -448,56 +629,6 @@ class OneVerbWordBuilder extends Component {
 												return <span style={{color:this.state.colorsList[w[1]]}}>{w[0]+" "}</span>
 											})}
 											<Icon style={{color:this.state.colorsList[2]}}  name='edit outline' />
-
-
-				              <Popup
-				                trigger={<Icon style={{color:'#d4d4d4'}} link name='pencil'>{'\n'}</Icon>}
-				                on='click'
-				                position='bottom left'
-				                style={{maxHeight:(this.state.verbsWordsList.length > 0 ? '400px' : '110px')}}
-				                content={
-				                	<div>
-				                		<div style={{color:'#666666',marginBottom:'5px'}}>{'Change Base'}</div>
-											      <Input 
-											      icon='search' 
-											      iconPosition='left' 
-											      name='search'     
-											      // width='100%'
-											      style={{width:'220px'}}
-											 		  onChange={this.onChangeSearch.bind(this,this.state.baseTag)}
-								            value={this.state.search}
-								            />
-											      <Segment vertical style={{maxHeight:300,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
-											      <List selection>
-												    {this.state.verbsWordsList.length > 0 ?
-												      (this.state.verbsWordsList.map((k)=>{return <List.Item onClick={()=>{this.setState({search:'',verbsWordsList:[],opened:false}); this.changeBase(k,this.state.baseTag)}} style={{cursor:'pointer',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'15px',padding:5}}>
-													        <List.Header style={{paddingBottom:'4px'}}>{k['keyString']}</List.Header>
-													        <List.Description style={{fontWeight:'400'}}>{k['definitionString']}</List.Description>
-													      </List.Item>				      	
-												      }))
-											      :
-											      (this.state.search.length > 1 ? 
-												      <div style={{marginTop:'2px',color:'grey'}}>{'No results'}</div>
-												      :
-												      null
-											      )
-											    }
-											    	</List>
-											      </Segment>
-											      {this.state.verbsWordsList.length > 0 ?
-												      <div style={{textAlign:'center'}}>
-													      <Icon color='grey' name='chevron down' />
-												      </div>
-												      :
-												      null
-												    }
-											    </div>
-				                }
-				              />
-
-
-
-
 										</span>
 										:
 										<span>
@@ -654,11 +785,154 @@ class OneVerbWordBuilder extends Component {
 
 				<div style={{height:'15px'}} />
 
+
 				</div>
+		              <Popup
+		                trigger={<Icon style={{color:this.state.colorsList[0]}} link name='edit outline'>{'\n'}</Icon>}
+		                on='click'
+		                position='bottom left'
+		                style={{maxHeight:(this.state.verbsWordsList.length > 0 ? '400px' : '110px')}}
+		                content={
+		                	<div>
+		                		<div style={{color:'#666666',marginBottom:'5px'}}>{'Change Base'}</div>
+									      <Input 
+									      icon='search' 
+									      iconPosition='left' 
+									      name='search'     
+									      // width='100%'
+									      style={{width:'220px'}}
+									 		  onChange={this.onChangeSearch.bind(this,this.state.mvvBase)}
+						            value={this.state.verbSearch}
+						            />
+									      <Segment vertical style={{maxHeight:300,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
+									      <List selection>
+										    {this.state.verbsWordsList.length > 0 ?
+										      (this.state.verbsWordsList.map((k)=>{return <List.Item onClick={()=>{this.setState({search:'',verbsWordsList:[],opened:false}); this.changeBase(k,this.state.mvvBase)}} style={{cursor:'pointer',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'15px',padding:5}}>
+											        <List.Header style={{paddingBottom:'4px'}}>{k['keyString']}</List.Header>
+											        <List.Description style={{fontWeight:'400'}}>{k['definitionString']}</List.Description>
+											      </List.Item>				      	
+										      }))
+									      :
+									      (this.state.search.length > 1 ? 
+										      <div style={{marginTop:'2px',color:'grey'}}>{'No results'}</div>
+										      :
+										      null
+									      )
+									    }
+									    	</List>
+									      </Segment>
+									      {this.state.verbsWordsList.length > 0 ?
+										      <div style={{textAlign:'center'}}>
+											      <Icon color='grey' name='chevron down' />
+										      </div>
+										      :
+										      null
+										    }
+									    </div>
+		                }
+		              />
+
+
+
+
+
+		              <Popup
+		                trigger={<Icon style={{color:this.state.colorsList[0]}} link name='edit outline'>{'\n'}</Icon>}
+		                on='click'
+		                onClose={()=>{this.setState({currentEditMode:'default'})}}
+		                position='bottom left'
+		                style={{height:80,padding:0}}
+		                content={this.editMenu('mv')}
+		              />
+
+
+
+
+		              <Popup
+		                trigger={<Icon style={{color:this.state.colorsList[0]}} link name='edit outline'>{'\n'}</Icon>}
+		                on='click'
+		                position='bottom left'
+		                style={{height:'406px'}}
+		                content={
+		                	<Grid style={{height:'400px',width:'505px'}}>
+		                	<Grid.Row columns={2} style={{paddingBottom:'0px'}}divided>
+		                	<Grid.Column >
+		                		<Button style={{display:'flex',flexDirection:'row',alignItems:'center',paddingLeft:'13px'}}>
+		                			<Icon name='chevron left' />
+		                			<div style={{color:'#666666'}}>{'Back'}</div>
+		                		</Button>
+		                		<div style={{color:'#666666',marginTop:'5px',marginBottom:'5px'}}>{'Change Verb Base'}</div>
+									      <Input 
+									      icon='search' 
+									      iconPosition='left' 
+									      name='search'     
+									      // width='100%'
+									      style={{width:'220px'}}
+									 		  onChange={this.onChangeSearch.bind(this,this.state.mvvBase)}
+						            value={this.state.verbSearch}
+						            />
+									      <Segment vertical style={{height:255,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
+									      <List selection>
+										    {this.state.verbsWordsList.map((k)=>{return <List.Item onClick={()=>{this.setState({verbSearch:'',verbsWordsList:[],candidateBase:this.state.candidateBase.concat(k)})}} style={{cursor:'pointer',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'15px',padding:5}}>
+											        <List.Description style={{paddingBottom:'4px'}}>{k['keyString']}</List.Description>
+											        <List.Header style={{fontWeight:'400'}}>{k['definitionString']}</List.Header>
+											      </List.Item>				      	
+										      })}
+									    	</List>
+									      </Segment>
+									      {this.state.verbsWordsList.length > 0 ?
+										      <div style={{textAlign:'center'}}>
+											      <Icon color='grey' name='chevron down' />
+										      </div>
+										      :
+										      null
+										    }
+
+										  </Grid.Column>
+										  <Grid.Column style={{display:'flex',flexDirection:'column'}}>
+									  
+									        <div style={{color:'#666666'}}>{'Candidate (English Order)'}</div>
+									        <Segment style={{height:290,overflow: 'auto',padding:10}}>
+									        	<List divided>
+									        	{this.state.candidateBase.map((k,kindex)=>{return (kindex===this.state.candidateBase.length-1 ?
+										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
+										        		<div style={{flex:1}}>
+											        		<div style={{color:'#000000b3'}}>{k['keyString']}</div>
+											        		<div style={{fontWeight:''}}>{k['definitionString']}</div>
+										        		</div>
+										        		<Icon circular onClick={()=>{this.setState({candidateBase:this.state.candidateBase.slice(0,-1)})}} style={{cursor:'pointer',width:30}} name='x' />
+										        		</List.Item>
+									        			:
+										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
+										        		<div style={{flex:1}}>										        		
+											        		<div style={{color:'#000000b3'}}>{k['keyString']}</div>
+											        		<div style={{fontWeight:''}}>{k['definitionString']}</div>
+										        		</div>
+										        		<div style={{width:30}} />
+										        		</List.Item>
+									        			)
+									        	})}
+									        	</List>
+								        	</Segment>
+									      <div style={{paddingBottom:10}}>
+		                		<Button color='blue' disabled={true} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}>
+		                			<div>{'Submit'}</div>
+		                			<Icon name='chevron right' />
+		                		</Button>
+		                		</div>
+
+		                	</Grid.Column>
+		                	</Grid.Row>
+									    </Grid>
+		                }
+		              />
+
+
 
 			</Grid.Column>
 			</Grid.Row>
 			</Grid>
+
 
 			</div>
 		);
