@@ -123,7 +123,7 @@ class OneVerbWordBuilder extends Component {
 
 
 
-			mvvBase:(["aqume","–llru[V→V]"],"i"),
+			mvvBase:[["aqume","–llru[V→V]"],"i"],
 			mvvMood:"Ind",
 			// mvvs:[3,1,1],
 			mvvs:[3,1,1],
@@ -221,7 +221,7 @@ class OneVerbWordBuilder extends Component {
 
 	backEndCallModify(command,label,value) {
 		console.log(command,label,value)
-		let keyChanged = [[command,label,value]]
+		let keyChanged = [[command,label,value],]
 		console.log(keyChanged)
 		// let keyChangedValue=value.split('')
 		let mv = {
@@ -235,7 +235,7 @@ class OneVerbWordBuilder extends Component {
 
 
 
-		console.log(keyChanged,mv)
+		console.log(keyChanged, mv)
 
 
     axios
