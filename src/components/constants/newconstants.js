@@ -98,9 +98,9 @@ export const nounOptionsNumbers = [
 
 
 export const mvSubjectOptions = [
-  {id: 0, value: '110', text:'I', otext:'me'},
+  {id: 0, value: [1,1,0], text:'I', otext:'me'},
   {id: 1, value: '210', text:'you', otext:'you'},
-  {id: 2, value: '311', text:'he', otext:'him'},
+  {id: 2, value: [3,1,1], text:'he', otext:'him'},
   {id: 3, value: '312', text:'she', otext:'her'},
   {id: 4, value: '313', text:'it', otext:'it'},
   // {id: 5, value: 's41(1)', text:'its own', otext:'its own'},
@@ -115,9 +115,9 @@ export const mvSubjectOptions = [
 ];
 
 export const mvObjectOptions = [
-  {id: 0, value: '110', text:'me', ptext:'my'},
+  {id: 0, value: [1,1,0], text:'me', ptext:'my'},
   {id: 1, value: '210', text:'you', ptext:'your'},
-  {id: 2, value: '311', text:'him', ptext:'his'},
+  {id: 2, value: [3,1,1], text:'him', ptext:'his'},
   {id: 3, value: '312', text:'her', ptext:'her'},
   {id: 4, value: '313', text:'it', ptext:'its'},
   // {id: 5, value: '41', text:'its own', ptext:'its own'},
