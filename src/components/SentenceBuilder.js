@@ -95,15 +95,19 @@ class OneVerbWordBuilder extends Component {
 			mvObjectDisplay: [],
 			mvObjectUnderlyingDisplay: [],
 
-			mvDisplay: [['aqume',0],['llru',3],['uq',1]],
-			mvUnderlyingDisplay: [[['aqume-',0]],[['–llru[V→V]',3]],[["+'(g/t)uq",1]]],
+			// mvDisplay: [['aqume',0],['llru',3],['uq',1]],
+			// mvUnderlyingDisplay: [[['aqume-',0]],[['–llru[V→V]',3]],[["+'(g/t)uq",1]]],
 
-			mvEnglish1: [],			
+			mvEnglish1: [['<definition1>',0]],
 			mvSubjectEnglish: [[['small',2],["womens'",2]],[['dog',1]]],
-			mvEnglish2: [['sat down',0]],
+			mvEnglish2: [['<definition2>',0]],
+			// mvEnglish2: [['sat down',0]],
 			mvObjectEnglish: [['moose',2]],
-			mvEnglish3: [],
+			mvEnglish3: [['<definition3>',0]],
 
+			mvSubjectSegments:"",
+			// mvSegments:"nere>llru>uq",
+			mvSegments:"",
 
 			cvExists: false,
 			cvSubjectDisplay: [['arnar',6],['pi',21],['it',6]],
@@ -123,13 +127,17 @@ class OneVerbWordBuilder extends Component {
 
 
 
-			mvvBase:[["aqume","–llru[V→V]"],"i"],
-			mvvMood:"Ind",
+			// mvvBase:[["nere","–llru[V→V]"],"i"],
+			// mvvMood:"Ind",
 			// mvvs:[3,1,1],
-			mvvs:[3,1,1],
+
 			// mvnsBases:[["qimugte","–cuar(ar*)[N→N]"],["angute","–rpag|@vag[N→N]"],],
 			// mvns:[[3,1,1,1],[2,1,1,1]],
 
+
+			mvvBase:[],
+			mvvMood:"",
+			mvvs:[],
 
 			mvnsBases:[],
 			mvns:[],
@@ -225,11 +233,18 @@ class OneVerbWordBuilder extends Component {
 		console.log(keyChanged)
 		// let keyChangedValue=value.split('')
 		let mv = {
-			nsBases:this.state.mvnsBases,
-			ns:this.state.mvns, 
+			// nsBases:this.state.mvnsBases,
+			// ns:this.state.mvns, 
 			vBase:this.state.mvvBase,
 			vMood:this.state.mvvMood,
-			vs:this.state.mvvs,
+		}
+
+		if (this.state.mvvs.length > 0) {
+			mv['vs'] = this.state.mvvs
+		}
+
+		if (this.state.mvvo.length > 0) {
+			mv['vo'] = this.state.mvvo
 		}
 		// let cv = {}
 
@@ -241,23 +256,94 @@ class OneVerbWordBuilder extends Component {
     axios
       .post(API_URL + "/sentencebuilder", {
       	keyChanged:keyChanged,
-      	mv:mv,
+      	// mv:mv,
       	// cv:cv,
       })
       .then(response => {
-        console.log(response);
+      	console.log(response.data)
+      	// if ("mv" in response.data) {
+      	// 	Object.keys(response.data['mv']).map((k)=>{
+      	// 		let mvkey = 'mv'+k
+		     //    this.setState({
+		     //    	[mvkey]: response.data['mv'][k],
+		     //    })
+
+      	// 	})
+      	// }
+       //  console.log(response.data.segments.mv.v);
+       //  this.setState({
+       //  	mvSegments: response.data.segments.mv.v,
+       //  })
   		})
 	}
 
-	modifySentence(change, entry, {value}) {
 
-		console.log(change, entry, value)
+	backEndCall(keyChanged, data, entry) {
+		console.log(keyChanged)
+
+		let mv = {}
+		let cv = {}
+		let sv = {}
+		let np = {}
+
+		if (this.state.mvvBase.length > 0) {mv['vBase']=this.state.mvvBase}
+		if (this.state.mvnsBases.length > 0) {mv['nsBases']=this.state.mvnsBases}
+		if (this.state.mvns.length > 0) {mv['ns']=this.state.mvns}
+		if (this.state.mvvMood.length > 0) {mv['vMood']=this.state.mvvMood}
+		if (this.state.mvvs.length > 0) {mv['vs']=this.state.mvvs}
+
+		console.log(keyChanged,mv)
+    axios
+      .post(API_URL + "/sentencebuilder", {
+      	keyChanged:keyChanged,
+      	mv:mv,
+      	// cv:cv,
+      	// sv:sv,
+      	// np:np,
+      })
+      .then(response => {
+      	console.log(response.data)
+      	if ("mv" in response.data) {
+      		Object.keys(response.data['mv']).map((k)=>{
+      			let mvkey = 'mv'+k
+		        this.setState({
+		        	[mvkey]: response.data['mv'][k],
+		        })
+
+      		})
+      	}
+      	if ("segments" in response.data) {
+      		if ("mv" in response.data.segments) {
+      			if ("v" in response.data.segments.mv) {
+			        this.setState({
+			        	mvSegments: response.data.segments.mv.v,
+			        })      				
+      			}
+      		}
+      	}
+
+  		})
+
+	}
+
+	modifySentence(change, data, entry) {
+
+		console.log(change,data,entry)
 
 
-		if (change === 'mvvs') {
-			this.setState({mvvs:value},()=>{this.backEndCallModify('Update',["mv","vs"],value)})
+		if (change[0] === 'mvvs') {
+			this.setState({mvvs:data.value.split('').map(Number)},()=>{this.backEndCallModify('Update',["mv","vs"],data.value.split('').map(Number))})
 		}
-		// let keyChanged = verb
+
+		if (change[0] === 'mvvo') {
+			this.setState({mvvo:data.value.split('').map(Number)},()=>{this.backEndCallModify('Update',["mv","vo"],data.value.split('').map(Number))})
+		}
+
+		if (change[0] === 'mvvBase') {
+			this.setState({mvvBase: change[1] },()=>{this.backEndCallModify('Update',["mv","vBase"],change[1])})
+		}
+
+				// let keyChanged = verb
 		// let keyChangedValue=value.split('')
 		// let mv = {
 		// 	nsBases:this.state.mvnsBases,
@@ -356,197 +442,7 @@ class OneVerbWordBuilder extends Component {
 
 	}
 
-	// editMenu = (type) => {
-
-
-
-	// 	if (type==='mv') {
-	// 		return (<Popup
-	// 	                trigger={<Icon style={{color:this.state.colorsList[0]}} link name='edit outline'>{'\n'}</Icon>}
-	// 	                on='click'
-	// 	                onClose={()=>{this.setState({currentEditMode:'default'})}}
-	// 	                position='bottom left'
-	// 	                style={{height:80,padding:0}}
-	// 	                content={
-
-	// 								<Menu vertical>
-	// 				        <Menu.Item
-	// 				          name='messages'
-	// 				          // active={this.state.activeItem === 'messages'}
-	// 				          onClick={()=>{console.log('deleted')}}
-	// 				        >
-	// 				          Delete Main Verb
-	// 				        </Menu.Item>
-	// 				        <Dropdown open={true} item text='Change Verb Base'>
-
-	// 				          <Dropdown.Menu style={{padding:13}}>
-	// 				          <div>
-	// 	                	<Grid style={{height:'400px',width:'505px'}}>
-	// 	                	<Grid.Row columns={2} style={{paddingBottom:'0px'}}divided>
-	// 	                	<Grid.Column >
-	// 								      <Input 
-	// 								      icon='search' 
-	// 								      iconPosition='left' 
-	// 								      name='search'     
-	// 								      // width='100%'
-	// 								      style={{width:'220px'}}
-	// 								 		  onChange={this.onChangeSearch.bind(this,this.state.mvvBase)}
-	// 					            value={this.state.verbSearch}
-	// 					            />
-	// 								      <Segment vertical style={{height:320,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
-	// 								      <List selection>
-	// 									    {this.state.verbsWordsList.map((k)=>{return <List.Item onClick={()=>{this.setState({verbSearch:'',verbsWordsList:[],candidateBase:this.state.candidateBase.concat(k)})}} style={{cursor:'pointer',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'15px',padding:5}}>
-	// 										        <List.Description style={{paddingBottom:'4px'}}>{k['keyString']}</List.Description>
-	// 										        <List.Header style={{fontWeight:'400'}}>{k['definitionString']}</List.Header>
-	// 										      </List.Item>				      	
-	// 									      })}
-	// 								    	</List>
-	// 								      </Segment>
-	// 								      {this.state.verbsWordsList.length > 0 ?
-	// 									      <div style={{textAlign:'center'}}>
-	// 										      <Icon color='grey' name='chevron down' />
-	// 									      </div>
-	// 									      :
-	// 									      null
-	// 									    }
-
-	// 									  </Grid.Column>
-	// 									  <Grid.Column style={{display:'flex',flexDirection:'column'}}>
-									  
-	// 								        <div style={{color:'#666666'}}>{'Candidate (English Order)'}</div>
-	// 								        <Segment style={{height:290,overflow: 'auto',padding:10}}>
-	// 								        	<List divided>
-	// 								        	{this.state.candidateBase.map((k,kindex)=>{return (kindex===this.state.candidateBase.length-1 ?
-	// 									        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
-	// 									        		<div style={{flex:1}}>
-	// 										        		<div style={{color:'#000000b3'}}>{k['keyString']}</div>
-	// 										        		<div style={{fontWeight:''}}>{k['definitionString']}</div>
-	// 									        		</div>
-	// 									        		<Icon circular onClick={()=>{this.setState({candidateBase:this.state.candidateBase.slice(0,-1)})}} style={{cursor:'pointer',width:30}} name='x' />
-	// 									        		</List.Item>
-	// 								        			:
-	// 									        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
-	// 									        		<div style={{flex:1}}>										        		
-	// 										        		<div style={{color:'#000000b3'}}>{k['keyString']}</div>
-	// 										        		<div style={{fontWeight:''}}>{k['definitionString']}</div>
-	// 									        		</div>
-	// 									        		<div style={{width:30}} />
-	// 									        		</List.Item>
-	// 								        			)
-	// 								        	})}
-	// 								        	</List>
-	// 							        	</Segment>
-	// 								      <div style={{paddingBottom:10}}>
-	// 	                		<Button color='blue' disabled={true} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}>
-	// 	                			<div>{'Submit'}</div>
-	// 	                			<Icon name='chevron right' />
-	// 	                		</Button>
-	// 	                		</div>
-
-	// 	                	</Grid.Column>
-	// 	                	</Grid.Row>
-	// 								    </Grid>
-	// 								  </div>
-	// 				          </Dropdown.Menu>
-
-	// 				        </Dropdown>
-	// 				      </Menu>
-
-	// 	                }
-	// 	              />
-	// 	)
-	// 		// if (this.state.currentEditMode==='default') {
-	// 		// 	return (<Menu vertical>
-	// 		// 		        <Menu.Item
-	// 		// 		          name='messages'
-	// 		// 		          // active={this.state.activeItem === 'messages'}
-	// 		// 		          onClick={()=>{console.log('deleted')}}
-	// 		// 		        >
-	// 		// 		          Delete Main Verb
-	// 		// 		        </Menu.Item>
-	// 		// 		        <Dropdown open={true} item text='Change Verb Base'>
-
-	// 		// 		          <Dropdown.Menu style={{padding:13}}>
-	// 		// 		          <div>
-	// 	 //                	<Grid style={{height:'400px',width:'505px'}}>
-	// 	 //                	<Grid.Row columns={2} style={{paddingBottom:'0px'}}divided>
-	// 	 //                	<Grid.Column >
-	// 		// 						      <Input 
-	// 		// 						      icon='search' 
-	// 		// 						      iconPosition='left' 
-	// 		// 						      name='search'     
-	// 		// 						      // width='100%'
-	// 		// 						      style={{width:'220px'}}
-	// 		// 						 		  onChange={this.onChangeSearch.bind(this,this.state.mvvBase)}
-	// 		// 			            value={this.state.verbSearch}
-	// 		// 			            />
-	// 		// 						      <Segment vertical style={{height:320,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
-	// 		// 						      <List selection>
-	// 		// 							    {this.state.verbsWordsList.map((k)=>{return <List.Item onClick={()=>{this.setState({verbSearch:'',verbsWordsList:[],candidateBase:this.state.candidateBase.concat(k)})}} style={{cursor:'pointer',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'15px',padding:5}}>
-	// 		// 								        <List.Description style={{paddingBottom:'4px'}}>{k['keyString']}</List.Description>
-	// 		// 								        <List.Header style={{fontWeight:'400'}}>{k['definitionString']}</List.Header>
-	// 		// 								      </List.Item>				      	
-	// 		// 							      })}
-	// 		// 						    	</List>
-	// 		// 						      </Segment>
-	// 		// 						      {this.state.verbsWordsList.length > 0 ?
-	// 		// 							      <div style={{textAlign:'center'}}>
-	// 		// 								      <Icon color='grey' name='chevron down' />
-	// 		// 							      </div>
-	// 		// 							      :
-	// 		// 							      null
-	// 		// 							    }
-
-	// 		// 							  </Grid.Column>
-	// 		// 							  <Grid.Column style={{display:'flex',flexDirection:'column'}}>
-									  
-	// 		// 						        <div style={{color:'#666666'}}>{'Candidate (English Order)'}</div>
-	// 		// 						        <Segment style={{height:290,overflow: 'auto',padding:10}}>
-	// 		// 						        	<List divided>
-	// 		// 						        	{this.state.candidateBase.map((k,kindex)=>{return (kindex===this.state.candidateBase.length-1 ?
-	// 		// 							        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
-	// 		// 							        		<div style={{flex:1}}>
-	// 		// 								        		<div style={{color:'#000000b3'}}>{k['keyString']}</div>
-	// 		// 								        		<div style={{fontWeight:''}}>{k['definitionString']}</div>
-	// 		// 							        		</div>
-	// 		// 							        		<Icon circular onClick={()=>{this.setState({candidateBase:this.state.candidateBase.slice(0,-1)})}} style={{cursor:'pointer',width:30}} name='x' />
-	// 		// 							        		</List.Item>
-	// 		// 						        			:
-	// 		// 							        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
-	// 		// 							        		<div style={{flex:1}}>										        		
-	// 		// 								        		<div style={{color:'#000000b3'}}>{k['keyString']}</div>
-	// 		// 								        		<div style={{fontWeight:''}}>{k['definitionString']}</div>
-	// 		// 							        		</div>
-	// 		// 							        		<div style={{width:30}} />
-	// 		// 							        		</List.Item>
-	// 		// 						        			)
-	// 		// 						        	})}
-	// 		// 						        	</List>
-	// 		// 					        	</Segment>
-	// 		// 						      <div style={{paddingBottom:10}}>
-	// 	 //                		<Button color='blue' disabled={true} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}>
-	// 	 //                			<div>{'Submit'}</div>
-	// 	 //                			<Icon name='chevron right' />
-	// 	 //                		</Button>
-	// 	 //                		</div>
-
-	// 	 //                	</Grid.Column>
-	// 	 //                	</Grid.Row>
-	// 		// 						    </Grid>
-	// 		// 						  </div>
-	// 		// 		          </Dropdown.Menu>
-
-	// 		// 		        </Dropdown>
-	// 		// 		      </Menu>)				
-	// 		// } else if (this.state.currentEditMode==='changeverbbase') {
-	// 		// 	return (<div>
- //   //          		hi
-	// 		// 		    </div>)				
-	// 		// }
-
-	// 	}
-	// }
-
+	
 
   handleOpen = (current) => {
     this.setState({ isOpen: true ,currentlyOpen: current});
@@ -608,13 +504,24 @@ class OneVerbWordBuilder extends Component {
 							      />
 			
 		} else if (type === 'mv') {
+
+		         //        trigger={
+											// <div style={{marginBottom:10,fontSize:'30px',color:'#000000',fontWeight:'400'}}>
+											// 	<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
+
+											// 	{this.state.mvDisplay.map((m, mind)=>
+											// 			<span style={{color:this.state.colorsList[m[1]],paddingBottom:'2px',borderBottom:'2px solid '+this.state.colorsList[m[1]]}}>{m[0]}</span>
+											// 		)}
+
+											// 	</div>
+											// </div>
+		         //        }
+
 			         		return <Popup
 		                trigger={
 											<div style={{marginBottom:10,fontSize:'30px',color:'#000000',fontWeight:'400'}}>
 												<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
-												{this.state.mvDisplay.map((m, mind)=>
-														<span style={{color:this.state.colorsList[m[1]],paddingBottom:'2px',borderBottom:'2px solid '+this.state.colorsList[m[1]]}}>{m[0]}</span>
-													)}
+													{this.state.mvSegments.replaceAll('>','')}
 												</div>
 											</div>
 		                }
@@ -725,6 +632,7 @@ class OneVerbWordBuilder extends Component {
 
 	render() {
 		console.log(this.state)
+		console.log(this.state.mvvs.join(""))
 		// console.log(this.state.colorsList)
 		// let verbQuestionWords = [
 		// 	{value:0,key:0,text:'past tense',disabled:this.state.hasFuture},
@@ -764,6 +672,13 @@ class OneVerbWordBuilder extends Component {
 				</div>
 			</div>
 
+
+
+			<div><Button onClick={this.modifySentence.bind(this,['mvvBase',[["nere","–llru[V→V]"],"t"]])}>Transitive</Button></div>
+			<div><Button onClick={this.modifySentence.bind(this,['mvvBase',[["nere","–llru[V→V]"],"i"]])}>Intransitive</Button></div>
+
+			<div><Button onClick={this.backEndCall.bind(this,[["Insert",["mv",],[["aqume","–llru[V→V]"],"i","Ind"]]])}>Add mv</Button></div>
+			<div><Button onClick={this.backEndCall.bind(this,["Insert",["mv","ns",0,0],[["angute",],[0,0,0,1]]])}>Add noun</Button></div>
 
 					<div style={{border:'1px solid #E3E3E3',marginTop:'20px'}}>
 
@@ -881,11 +796,10 @@ class OneVerbWordBuilder extends Component {
 												}
 												</span>
 											)}
-											<Icon style={{color:this.state.colorsList[1]}}  name='edit outline' />
 										</span>
 										:
 										<span>
-											<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={this.modifySentence.bind(this, 'mvvs')}  value={this.state.mvvs} options={mvSubjectOptions} />
+											<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={this.modifySentence.bind(this, 'mvvs')}  value={this.state.mvvs.join("")} options={mvSubjectOptions} />
 										</span>
 										)
 									:
@@ -897,53 +811,8 @@ class OneVerbWordBuilder extends Component {
 									return <span style={{color:this.state.colorsList[w[1]]}}>{w[0]+" "}</span>
 								})}		
 
-		              <Popup
-		                trigger={<Icon style={{color:this.state.colorsList[0]}} link name='edit outline'>{'\n'}</Icon>}
-		                on='click'
-		                position='bottom left'
-		                style={{maxHeight:'400px'}}
-		                content={
-		                	<div>
-		                		<div style={{color:'#666666',marginBottom:'5px'}}>{'Change Base'}</div>
-									      <Input 
-									      icon='search' 
-									      iconPosition='left' 
-									      name='search'     
-									      // width='100%'
-									      style={{width:'220px'}}
-									 		  onChange={this.onChangeSearch.bind(this,this.state.mvvBase)}
-						            value={this.state.verbSearch}
-						            />
-									      <Segment vertical style={{maxHeight:300,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
-									      <List selection>
-										    {this.state.verbsWordsList.length > 0 ?
-										      (this.state.verbsWordsList.map((k)=>{return <List.Item onClick={()=>{this.setState({search:'',verbsWordsList:[],opened:false}); this.changeBase(k,this.state.mvvBase)}} style={{cursor:'pointer',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'15px',padding:5}}>
-											        <List.Header style={{paddingBottom:'4px'}}>{k['keyString']}</List.Header>
-											        <List.Description style={{fontWeight:'400'}}>{k['definitionString']}</List.Description>
-											      </List.Item>				      	
-										      }))
-									      :
-									      (this.state.search.length > 1 ? 
-										      <div style={{marginTop:'2px',color:'grey'}}>{'No results'}</div>
-										      :
-										      null
-									      )
-									    }
-									    	</List>
-									      </Segment>
-									      {this.state.verbsWordsList.length > 0 ?
-										      <div style={{textAlign:'center'}}>
-											      <Icon color='grey' name='chevron down' />
-										      </div>
-										      :
-										      null
-										    }
-									    </div>
-		                }
-		              />
 
-
-								{this.state.mvno.length > 0 ?
+								{this.state.mvvo.length > 0 ?
 									(this.state.mvnoBases.length > 0 ? 
 										<span>
 											<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={this.modifySentence.bind(this, 'Update', ['mv','vs'])} value={this.state.mvObjectPossessor} options={nounOptionsPossessors} />
@@ -955,7 +824,7 @@ class OneVerbWordBuilder extends Component {
 										</span>
 										:
 										<span>
-											<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  value={this.state.mvObject} options={mvObjectOptions} />
+											<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}} onChange={this.modifySentence.bind(this, ['mvvo'])}  value={this.state.mvvo.join("")} options={mvObjectOptions} />
 										</span>
 									)
 									:
@@ -1253,7 +1122,9 @@ class OneVerbWordBuilder extends Component {
 */}
 
 
-			</Grid.Column>
+
+
+			</Grid.Column>  
 			</Grid.Row>
 			</Grid>
 

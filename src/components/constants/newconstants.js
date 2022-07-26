@@ -98,26 +98,26 @@ export const nounOptionsNumbers = [
 
 
 export const mvSubjectOptions = [
-  {id: 0, value: [1,1,0], text:'I', otext:'me'},
-  {id: 1, value: [2,1,0], text:'you', otext:'you'},
-  {id: 2, value: [3,1,1], text:'he', otext:'him'},
-  {id: 3, value: [3,1,2], text:'she', otext:'her'},
-  {id: 4, value: [3,1,3], text:'it', otext:'it'},
+  {id: 0, value: '110', text:'I', otext:'me'},
+  {id: 1, value: '210', text:'you', otext:'you'},
+  {id: 2, value: '311', text:'he', otext:'him'},
+  {id: 3, value: '312', text:'she', otext:'her'},
+  {id: 4, value: '313', text:'it', otext:'it'},
   // {id: 5, value: 's41(1)', text:'its own', otext:'its own'},
-  {id: 6, value: [1,2,0], text:'the two of us', otext:'the two of us'},
-  {id: 7, value: [2,2,0], text:'the two of you', otext:'the two of you'},
-  {id: 8, value: [3,2,0], text:'the two of them', otext:'the two of them'},
+  {id: 6, value: '120', text:'the two of us', otext:'the two of us'},
+  {id: 7, value: '220', text:'the two of you', otext:'the two of you'},
+  {id: 8, value: '320', text:'the two of them', otext:'the two of them'},
   // {id: 9, value: 's42(1)', text:'their own (two)', otext:'their own (two)'},
-  {id: 10, value: [1,3,0], text:'we all (3+)', otext:'us all (3+)'},
-  {id: 11, value: [2,3,0], text:'you all (3+)', otext:'you all (3+)'},
-  {id: 12, value: [3,3,0], text:'they all (3+)', otext:'them all (3+)'},
+  {id: 10, value: '130', text:'we all (3+)', otext:'us all (3+)'},
+  {id: 11, value: '230', text:'you all (3+)', otext:'you all (3+)'},
+  {id: 12, value: '330', text:'they all (3+)', otext:'them all (3+)'},
   // {id: 13, value: 's43(1)', text:'their own (3+)', otext:'their own (3+)'}
 ];
 
 export const mvObjectOptions = [
-  {id: 0, value: [1,1,0], text:'me', ptext:'my'},
-  {id: 1, value: [2,1,0], text:'you', ptext:'your'},
-  {id: 2, value: [3,1,1], text:'him', ptext:'his'},
+  {id: 0, value: '110', text:'me', ptext:'my'},
+  {id: 1, value: '210', text:'you', ptext:'your'},
+  {id: 2, value: '311', text:'him', ptext:'his'},
   {id: 3, value: '312', text:'her', ptext:'her'},
   {id: 4, value: '313', text:'it', ptext:'its'},
   // {id: 5, value: '41', text:'its own', ptext:'its own'},
