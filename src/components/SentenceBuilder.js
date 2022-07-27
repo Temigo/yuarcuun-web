@@ -17,12 +17,13 @@ let customFontFam = "Roboto,'Helvetica Neue',Arial,Helvetica,sans-serif"
 
 
 const optionsFuzzy = {
-  keys: ['definitionString', 'keyString'],
+  keys: ['yupikword', 'englishnorm'],
   limit: 10, // don't return more results than you need!
   threshold: -10000, // don't return bad results
 };
 
 let dictionary = [];
+let usageDictionary = [];
 let dictionary_dict = {};
 
 class OneVerbWordBuilder extends Component {
@@ -107,23 +108,24 @@ class OneVerbWordBuilder extends Component {
 
 			mvSubjectSegments:"",
 			// mvSegments:"nere>llru>uq",
-			mvSegments:"",
+			mvvSegments:"",
+			mvnsSegments:[],
 
-			cvExists: false,
-			cvSubjectDisplay: [['arnar',6],['pi',21],['it',6]],
-			cvSubjectUnderlyingDisplay: [[['arnar-',6]],[['–rpag|@vag[N→N]',21]],[['%:(e)t',6]],],
+			// cvExists: false,
+			// cvSubjectDisplay: [['arnar',6],['pi',21],['it',6]],
+			// cvSubjectUnderlyingDisplay: [[['arnar-',6]],[['–rpag|@vag[N→N]',21]],[['%:(e)t',6]],],
 
-			cvObjectDisplay: [['tumyara',7],['t',7]],
-			cvObjectUnderlyingDisplay: [[['tumyarar-',7]],[['%:(e)t',7]],],
+			// cvObjectDisplay: [['tumyara',7],['t',7]],
+			// cvObjectUnderlyingDisplay: [[['tumyarar-',7]],[['%:(e)t',7]],],
 
-			cvDisplay: [['tanger',0],['pailg',5],['at',6],['ki',7]],
-			cvUnderlyingDisplay: [[['niite-',0]],[['@+paileg',5]],[['at',6],["ki",7]]],
+			// cvDisplay: [['tanger',0],['pailg',5],['at',6],['ki',7]],
+			// cvUnderlyingDisplay: [[['niite-',0]],[['@+paileg',5]],[['at',6],["ki",7]]],
 
-			cvEnglish1: [['before',5],],			
-			cvSubjectEnglish: [['big',21],['women',6]],
-			cvEnglish2: [['saw',0]],
-			cvObjectEnglish: [['trails',7]],
-			cvEnglish3: [],
+			// cvEnglish1: [['before',5],],			
+			// cvSubjectEnglish: [['big',21],['women',6]],
+			// cvEnglish2: [['saw',0]],
+			// cvObjectEnglish: [['trails',7]],
+			// cvEnglish3: [],
 
 
 
@@ -149,26 +151,26 @@ class OneVerbWordBuilder extends Component {
 
 			// mvSubject:[3,1,1],
 
-			mvSubjectNumbers: [['000','2'],['1']],
+			// mvSubjectNumbers: [['000','2'],['1']],
 			// mvSubjectPossessor: '000',
 
 
-			mvObjectNumber: '3',
-			mvObjectPossessor: '000',
+			// mvObjectNumber: '3',
+			// mvObjectPossessor: '000',
 
 
-			cvSubject: "330",
-			cvObject: "330",
+			// cvSubject: "330",
+			// cvObject: "330",
 
-			cvSubjectExists: true,
-			cvSubjectNounExists: true,
-			cvSubjectNumber: '3',
-			cvSubjectPossessor: '000',
+			// cvSubjectExists: true,
+			// cvSubjectNounExists: true,
+			// cvSubjectNumber: '3',
+			// cvSubjectPossessor: '000',
 
-			cvObjectExists: true,
-			cvObjectNounExists: true,
-			cvObjectNumber: '3',
-			cvObjectPossessor: '000',
+			// cvObjectExists: true,
+			// cvObjectNounExists: true,
+			// cvObjectNumber: '3',
+			// cvObjectPossessor: '000',
 
 
 			verbsWordsList: [],
@@ -177,7 +179,10 @@ class OneVerbWordBuilder extends Component {
 			currentEditMode:'default',
 
 			candidateBase:[],
+			candidateFST:[],
+			candidateType:'',
 			showUnderlying:false,
+			lockSubmit:false,
 		}
 
 
@@ -212,18 +217,48 @@ class OneVerbWordBuilder extends Component {
           // fuse1.setCollection(dictionary);
           console.log('Fetched dictionary');
 
-          dictionary.forEach(entry => dictionary_dict[entry.keyString] = entry.definitionString) // create dictionary_dict dictionary
+          // dictionary.forEach(entry => dictionary_dict[entry.keyString] = entry.definitionString) // create dictionary_dict dictionary
           // dictionary_prepared = fuzzysort.prepare(dictionary)
 
-					let filteredDictI = dictionary.filter(entry => entry.usagetags.includes('i'))
-					let filteredDictT = dictionary.filter(entry => entry.usagetags.includes('t'))
-					let filteredDictN = dictionary.filter(entry => entry.usagetags.includes('n'))
+					// let filteredDictI = dictionary.filter(entry => entry.usagetags.includes('i'))
+					// let filteredDictT = dictionary.filter(entry => entry.usagetags.includes('t'))
+					// let filteredDictN = dictionary.filter(entry => entry.usagetags.includes('n'))
 
     // let wordsList = fuzzysort.go(word, filteredDictionary, optionsFuzzy).map(({ obj }) => (obj));
 
-          this.setState({ dictionary: dictionary, dictionary_dict: dictionary_dict, filteredDictI: filteredDictI, filteredDictT: filteredDictT, filteredDictN: filteredDictN});
+          this.setState({ dictionary: dictionary});
         });
     }
+
+    if (usageDictionary.length === 0) {
+      axios
+        .get(API_URL + "/yupiksearchableusagelist/all")
+        .then(response => {
+          let end = now();
+          ReactGA.timing({
+            category: 'Loading',
+            variable: 'dictionary',
+            value: (end-start).toFixed(3),
+            label: 'Dictionary loading'
+          });
+          usageDictionary = response.data;
+          console.log(usageDictionary)
+          // fuse.setCollection(dictionary);
+          // fuse1.setCollection(dictionary);
+          console.log('Fetched usage dictionary');
+
+          // dictionary.forEach(entry => dictionary_dict[entry.keyString] = entry.definitionString) // create dictionary_dict dictionary
+          // dictionary_prepared = fuzzysort.prepare(dictionary)
+
+					let filteredDictV = usageDictionary.filter(entry => (entry.type.includes('i')||entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')||entry.type.includes('[V→V]')) )
+					let filteredDictN = usageDictionary.filter(entry => (entry.type.includes('n')||entry.type.includes('[V→N]')||entry.type.includes('[N→N]')))
+
+    // let wordsList = fuzzysort.go(word, filteredDictionary, optionsFuzzy).map(({ obj }) => (obj));
+
+          this.setState({ usageDictionary: usageDictionary, filteredDictV: filteredDictV, filteredDictN: filteredDictN});
+        });
+    }
+
 }
 
 
@@ -278,7 +313,7 @@ class OneVerbWordBuilder extends Component {
 	}
 
 
-	backEndCall(keyChanged, data, entry) {
+	backEndCall(keyChanged) {
 		console.log(keyChanged)
 
 		let mv = {}
@@ -316,7 +351,12 @@ class OneVerbWordBuilder extends Component {
       		if ("mv" in response.data.segments) {
       			if ("v" in response.data.segments.mv) {
 			        this.setState({
-			        	mvSegments: response.data.segments.mv.v,
+			        	mvvSegments: response.data.segments.mv.v,
+			        })      				
+      			}
+      			if ("ns" in response.data.segments.mv) {
+			        this.setState({
+			        	mvnsSegments: response.data.segments.mv.ns,
 			        })      				
       			}
       		}
@@ -331,15 +371,15 @@ class OneVerbWordBuilder extends Component {
 		console.log(change,data,entry)
 
 
-		if (change[0] === 'mvvs') {
-			this.setState({mvvs:data.value.split('').map(Number)},()=>{this.backEndCallModify('Update',["mv","vs"],data.value.split('').map(Number))})
+		if (change === 'mvvs') {
+			this.setState({mvvs:entry.value.split('').map(Number)},()=>{this.backEndCall([["Update",["mv","vs"],entry.value.split('').map(Number)]])})
 		}
 
-		if (change[0] === 'mvvo') {
-			this.setState({mvvo:data.value.split('').map(Number)},()=>{this.backEndCallModify('Update',["mv","vo"],data.value.split('').map(Number))})
+		if (change === 'mvvo') {
+			this.setState({mvvo:entry.value.split('').map(Number)},()=>{this.backEndCallModify('Update',["mv","vo"],entry.value.split('').map(Number))})
 		}
 
-		if (change[0] === 'mvvBase') {
+		if (change === 'mvvBase') {
 			this.setState({mvvBase: change[1] },()=>{this.backEndCallModify('Update',["mv","vBase"],change[1])})
 		}
 
@@ -403,6 +443,18 @@ class OneVerbWordBuilder extends Component {
 	}
 
 
+	onChangeBaseSearch = (endingNeeded,event,data) => {
+		let word = data.value
+		let wordsList
+		if (endingNeeded === 'v') {
+    	wordsList = fuzzysort.go(word, this.state.filteredDictV, optionsFuzzy).map(({ obj }) => (obj));
+    	this.setState({ verbsWordsList: wordsList, verbSearch: word });
+		} else if (endingNeeded = 'n') {
+    	wordsList = fuzzysort.go(word, this.state.filteredDictN, optionsFuzzy).map(({ obj }) => (obj));
+    	this.setState({ verbsWordsList: wordsList, verbSearch: word });
+		}
+	}
+
 
 	onChangeSearch = (searchType,event,data) => {
     // console.log(bool,homeMode, event,data)
@@ -458,15 +510,63 @@ class OneVerbWordBuilder extends Component {
 		// if (mind) {
 		// 	mind=mind.toString()			
 		// }
-		console.log(type,ind)
+		// console.log(type,ind)
 		let typeInd = type+(ind+1).toString()
 
-		if (type === 'mvns') {
+		// console.log(typeInd)
+
+		if (type==='default') {
+			         		return <Popup
+		                trigger={									
+											<Button icon>
+												<Icon name='plus' />
+											</Button>
+		                }
+		                on='click'
+		                open={this.state.isOpen && this.state.currentlyOpen === typeInd}
+		                onOpen={()=>{this.handleOpen(typeInd)}}
+		                onClose={()=>{this.setState({isOpen:false,currentEditMode:'default'})}}
+		                position='bottom center'
+		                style={{
+		                	height:(this.state.currentEditMode==='default' ? 80 : '406px'),
+		                	padding:(this.state.currentEditMode==='default' ? 0 : null)}}
+		                content={
+											this.state.currentEditMode==='default' ?
+											<Menu vertical>
+							        <Menu.Item
+							          name='messages'
+							          // active={this.state.activeItem === 'messages'}
+							          style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}
+							          onClick={()=>{this.menuSelect('changeverbbase')}}
+							        >
+							          <div>Add Main Verb Phrase</div>
+		                		<Icon name='chevron right' />
+							        </Menu.Item>
+							        <Menu.Item
+							          name='messages'
+							          // active={this.state.activeItem === 'messages'}
+							          style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}
+							          onClick={()=>{this.menuSelect('changeverbbase')}}
+							        >
+							          <div>Add Noun Phrase</div>
+		                		<Icon name='chevron right' />
+							        </Menu.Item>					        
+							        </Menu>
+							        :
+							        this.baseChooser(["Insert",["mv",]],'v')
+							      }
+							      />
+
+		} else if (type === 'mvns') {
 			         		return <Popup
 		                trigger={									
 
 												<div style={{paddingRight:10,cursor:'pointer',marginBottom:10,}}>
-												{this.state.mvSubjectDisplay[ind].map((n,nind)=> <span onClick={()=>{this.handleOpen(typeInd)}} style={{color:this.state.colorsList[n[1]],paddingBottom:'2px',borderBottom:'2px solid '+this.state.colorsList[n[1]]}}>{n[0]}</span>)}
+												{this.state.mvnsSegments[ind].map((k,kind)=>
+													<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
+														{k.replaceAll('>','')}
+													</div>													
+												)}
 												</div>
 											
 		                }
@@ -521,7 +621,7 @@ class OneVerbWordBuilder extends Component {
 		                trigger={
 											<div style={{marginBottom:10,fontSize:'30px',color:'#000000',fontWeight:'400'}}>
 												<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
-													{this.state.mvSegments.replaceAll('>','')}
+													{this.state.mvvSegments.replaceAll('>','')}
 												</div>
 											</div>
 		                }
@@ -554,7 +654,36 @@ class OneVerbWordBuilder extends Component {
 							        </Menu.Item>							        
 							        </Menu>
 							        :
-		                	<Grid style={{height:'400px',width:'505px'}}>
+							        this.baseChooser()
+							      }
+							      />
+		      // }
+		}
+	}
+
+	updateCandidateCall=()=>{
+		let lockSubmit = false
+		let candidateFST = ''
+		let type = 'Ind'
+		let transitivity = ''
+		this.state.candidateBase.reverse().map((x,xind)=>{
+			if (xind === 0 && x['type'].length < 3) {
+				lockSubmit = true
+				transitivity = x['type'] 
+			}
+			candidateFST = candidateFST + x['fsts'][0]
+		})
+
+		if (lockSubmit) {
+	  	this.setState({
+	  		candidateCall:[candidateFST,type,transitivity],
+	  		lockSubmit:lockSubmit,
+	  	})			
+		}
+	}
+
+	baseChooser = (itemUpdating,endingNeeded) => {
+		         return <Grid style={{height:'400px',width:'505px'}}>
 		                	<Grid.Row columns={2} style={{paddingBottom:'0px'}}divided>
 		                	<Grid.Column >
 		                		<Button onClick={()=>{this.menuSelect('default')}} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingLeft:'13px'}}>
@@ -568,14 +697,37 @@ class OneVerbWordBuilder extends Component {
 									      name='search'     
 									      // width='100%'
 									      style={{width:'220px'}}
-									 		  onChange={this.onChangeSearch.bind(this,this.state.mvvBase)}
+									 		  onChange={this.onChangeBaseSearch.bind(this,endingNeeded)}
 						            value={this.state.verbSearch}
 						            />
 									      <Segment vertical style={{height:255,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
 									      <List selection>
-										    {this.state.verbsWordsList.map((k)=>{return <List.Item onClick={()=>{this.setState({verbSearch:'',verbsWordsList:[],candidateBase:this.state.candidateBase.concat(k)})}} style={{cursor:'pointer',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'15px',padding:5}}>
-											        <List.Description style={{paddingBottom:'4px'}}>{k['keyString']}</List.Description>
-											        <List.Header style={{fontWeight:'400'}}>{k['definitionString']}</List.Header>
+										    {this.state.verbsWordsList.map((k)=>{return <List.Item onClick={()=>{
+										    	// let candidateFST = ''
+										    	// let lockSubmit = false
+										    	// console.log(this.state.candidateBase)
+										    	// this.state.candidateBase.reverse().map((x,xind)=>{
+										    	// 	console.log(xind === 0, x['type'].length < 3)
+										    	// let lockSubmit = false
+									    		// if (k['type'].length < 3) {
+									    		// 	lockSubmit = true
+
+									    		// }
+										    	// 	candidateFST = candidateFST + x['fsts'][0]
+										    	// })
+										    	this.setState({
+										    		verbSearch:'',
+										    		verbsWordsList:[],
+										    		candidateBase:this.state.candidateBase.concat(k),
+										    		// candidateFST:this.state.candidateFST.concat(k['fsts'][0]),
+										    		// lockSubmit:lockSubmit,
+										    	},()=>{
+										    		this.updateCandidateCall()
+										    	})
+
+										    }} style={{cursor:'pointer',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'15px',padding:5}}>
+											        <List.Description style={{paddingBottom:'4px'}}>{k['yupikword']}</List.Description>
+											        <List.Header style={{fontWeight:'400'}}>{k['englishraw']}</List.Header>
 											      </List.Item>				      	
 										      })}
 									    	</List>
@@ -597,16 +749,16 @@ class OneVerbWordBuilder extends Component {
 									        	{this.state.candidateBase.map((k,kindex)=>{return (kindex===this.state.candidateBase.length-1 ?
 										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
 										        		<div style={{flex:1}}>
-											        		<div style={{color:'#000000b3'}}>{k['keyString']}</div>
-											        		<div style={{fontWeight:''}}>{k['definitionString']}</div>
+											        		<div style={{color:'#000000b3'}}>{k['yupikword']}</div>
+											        		<div style={{fontWeight:''}}>{k['englishraw']}</div>
 										        		</div>
-										        		<Icon circular onClick={()=>{this.setState({candidateBase:this.state.candidateBase.slice(0,-1)})}} style={{cursor:'pointer',width:30}} name='x' />
+										        		<Icon circular onClick={()=>{this.setState({candidateBase:this.state.candidateBase.slice(0,-1)},()=>{this.updateCandidateCall()})}} style={{cursor:'pointer',width:30}} name='x' />
 										        		</List.Item>
 									        			:
 										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
 										        		<div style={{flex:1}}>										        		
-											        		<div style={{color:'#000000b3'}}>{k['keyString']}</div>
-											        		<div style={{fontWeight:''}}>{k['definitionString']}</div>
+											        		<div style={{color:'#000000b3'}}>{k['yupikword']}</div>
+											        		<div style={{fontWeight:''}}>{k['englishraw']}</div>
 										        		</div>
 										        		<div style={{width:30}} />
 										        		</List.Item>
@@ -615,7 +767,7 @@ class OneVerbWordBuilder extends Component {
 									        	</List>
 								        	</Segment>
 									      <div style={{paddingBottom:10}}>
-		                		<Button color='blue' disabled={true} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}>
+		                		<Button color='blue' disabled={!this.state.lockSubmit} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}>
 		                			<div>{'Submit'}</div>
 		                			<Icon name='chevron right' />
 		                		</Button>
@@ -624,15 +776,12 @@ class OneVerbWordBuilder extends Component {
 		                	</Grid.Column>
 		                	</Grid.Row>
 									    </Grid>
-							      }
-							      />
-		      // }
-		}
+
 	}
 
 	render() {
 		console.log(this.state)
-		console.log(this.state.mvvs.join(""))
+		// console.log(this.state.mvvs.join(""))
 		// console.log(this.state.colorsList)
 		// let verbQuestionWords = [
 		// 	{value:0,key:0,text:'past tense',disabled:this.state.hasFuture},
@@ -677,8 +826,10 @@ class OneVerbWordBuilder extends Component {
 			<div><Button onClick={this.modifySentence.bind(this,['mvvBase',[["nere","–llru[V→V]"],"t"]])}>Transitive</Button></div>
 			<div><Button onClick={this.modifySentence.bind(this,['mvvBase',[["nere","–llru[V→V]"],"i"]])}>Intransitive</Button></div>
 
-			<div><Button onClick={this.backEndCall.bind(this,[["Insert",["mv",],[["aqume","–llru[V→V]"],"i","Ind"]]])}>Add mv</Button></div>
-			<div><Button onClick={this.backEndCall.bind(this,["Insert",["mv","ns",0,0],[["angute",],[0,0,0,1]]])}>Add noun</Button></div>
+			<div><Button onClick={()=>{this.backEndCall([["Insert",["mv",],[["aqume","–llru[V→V]"],"i","Ind"]]])}}>Add mv</Button></div>
+			<div><Button onClick={()=>{this.backEndCall([["Insert",["mv","ns",0,0],[["angute",],[0,0,0,1]]]])}}>Add noun</Button></div>
+			<div><Button onClick={()=>{this.backEndCall([["Insert",["mv","ns",0],[["arnar",],[0,0,0,1]]]])}}>Add woman possessed</Button></div>
+			<div><Button onClick={()=>{this.backEndCall([["Insert",["mv","ns",-1],[["qimugte",],[0,0,0,1]]]])}}>Add dog possessor</Button></div>
 
 					<div style={{border:'1px solid #E3E3E3',marginTop:'20px'}}>
 
@@ -697,7 +848,7 @@ class OneVerbWordBuilder extends Component {
 									<div>
 										<div style={{marginBottom:'5px',fontSize:'30px',color:'#000000',fontWeight:'400'}}>
 											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
-											{this.state.mvnsBases.map((k,kind)=> {
+											{this.state.mvnsSegments.reverse().map((k,kind)=> {
 												return <span>{this.editMenu('mvns',kind)}</span>								
 											})}
 											</div>	
@@ -750,7 +901,11 @@ class OneVerbWordBuilder extends Component {
 									null
 								}			
 
-								{this.editMenu('mv',-1)}
+								{this.state.mvvBase.length > 0 ?
+									this.editMenu('mv',-1)
+									:
+									null
+								}
 
 
 								{this.state.showUnderlying ?
@@ -774,21 +929,21 @@ class OneVerbWordBuilder extends Component {
 								})}			
 
 								{this.state.mvvs.length > 0 ?
-									(this.state.mvnsBases.length > 0 ? 
+									(this.state.mvnsSegments.length > 0 ? 
 										<span>					
-											{this.state.mvSubjectEnglish.map((x,xind)=>
+											{this.state.mvnsSegments.map((x,xind)=>
 												<span>
 												{xind === 0 ?
 													<span>
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} value={this.state.mvSubjectNumbers[0][0]} options={nounOptionsPossessors} />
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} value={this.state.mvSubjectNumbers[0][1]} options={nounOptionsNumbers} />																
+														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","ns",0,0],(data.value+this.state.mvns[0][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.mvns[0][0].slice(0, -1).join("")} options={nounOptionsPossessors} />
+														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","ns",0,0],this.state.mvns[0][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.mvns[0][0].slice(-1).join("")} options={nounOptionsNumbers} />																
 														{x.map((w,wind)=>
 														<span style={{color:this.state.colorsList[w[1]]}}>{w[0]+" "}</span>
 														)}
 													</span>
 													:
 													<span>
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} value={this.state.mvSubjectNumbers[xind][0]} options={nounOptionsNumbers} />								
+														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","ns",0,xind],this.state.mvns[xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.mvns[xind][0].slice(-1).join("")}  options={nounOptionsNumbers} />								
 														{x.map((w,wind)=>
 															<span style={{color:this.state.colorsList[w[1]]}}>{w[0]+" "}</span>
 															)}
@@ -799,7 +954,7 @@ class OneVerbWordBuilder extends Component {
 										</span>
 										:
 										<span>
-											<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={this.modifySentence.bind(this, 'mvvs')}  value={this.state.mvvs.join("")} options={mvSubjectOptions} />
+											<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={(event,data)=>{this.backEndCall([["Update",["mv","vs"],data.value.split('').map(Number)]])}}  value={this.state.mvvs.join("")} options={mvSubjectOptions} />
 										</span>
 										)
 									:
@@ -837,7 +992,11 @@ class OneVerbWordBuilder extends Component {
 
 								</div>
 
+								<div style={{display:'flex',justifyContent:'center'}}>
 
+								{this.editMenu('default')}
+
+								</div>
 
 							</div>
 
