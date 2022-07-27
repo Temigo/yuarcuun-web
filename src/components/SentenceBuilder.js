@@ -110,6 +110,7 @@ class OneVerbWordBuilder extends Component {
 			// mvSegments:"nere>llru>uq",
 			mvvSegments:"",
 			mvnsSegments:[],
+			mvnoSegments:[],
 
 			// cvExists: false,
 			// cvSubjectDisplay: [['arnar',6],['pi',21],['it',6]],
@@ -323,9 +324,12 @@ class OneVerbWordBuilder extends Component {
 
 		if (this.state.mvvBase.length > 0) {mv['vBase']=this.state.mvvBase}
 		if (this.state.mvnsBases.length > 0) {mv['nsBases']=this.state.mvnsBases}
+		if (this.state.mvnoBases.length > 0) {mv['noBases']=this.state.mvnoBases}
+		if (this.state.mvno.length > 0) {mv['no']=this.state.mvno}
 		if (this.state.mvns.length > 0) {mv['ns']=this.state.mvns}
 		if (this.state.mvvMood.length > 0) {mv['vMood']=this.state.mvvMood}
 		if (this.state.mvvs.length > 0) {mv['vs']=this.state.mvvs}
+		if (this.state.mvvo.length > 0) {mv['vo']=this.state.mvvo}
 
 		console.log(keyChanged,mv)
     axios
@@ -359,6 +363,11 @@ class OneVerbWordBuilder extends Component {
 			        	mvnsSegments: response.data.segments.mv.ns,
 			        })      				
       			}
+      			if ("no" in response.data.segments.mv) {
+			        this.setState({
+			        	mvnoSegments: response.data.segments.mv.no,
+			        })      				
+      			}      			
       		}
       	}
 
@@ -376,7 +385,7 @@ class OneVerbWordBuilder extends Component {
 		}
 
 		if (change === 'mvvo') {
-			this.setState({mvvo:entry.value.split('').map(Number)},()=>{this.backEndCallModify('Update',["mv","vo"],entry.value.split('').map(Number))})
+			this.setState({mvvo:entry.value.split('').map(Number)},()=>{this.backEndCall([["Update",["mv","vo"],entry.value.split('').map(Number)]])})
 		}
 
 		if (change === 'mvvBase') {
@@ -557,18 +566,25 @@ class OneVerbWordBuilder extends Component {
 							      }
 							      />
 
-		} else if (type === 'mvns') {
+		} else if (type === 'mvns' || type === 'mvno') {
 			         		return <Popup
 		                trigger={									
-
+		                	type === 'mvns' ?
 												<div style={{paddingRight:10,cursor:'pointer',marginBottom:10,}}>
-												{this.state.mvnsSegments[ind].map((k,kind)=>
+												{this.state.mvnsSegments.slice().reverse()[ind].map((k,kind)=>
 													<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
 														{k.replaceAll('>','')}
 													</div>													
 												)}
 												</div>
-											
+												:
+												<div style={{paddingRight:10,cursor:'pointer',marginBottom:10,}}>
+												{this.state.mvnoSegments.slice().reverse()[ind].map((k,kind)=>
+													<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
+														{k.replaceAll('>','')}
+													</div>													
+												)}
+												</div>											
 		                }
 		                on='click'
 		                open={this.state.isOpen && this.state.currentlyOpen === typeInd}
@@ -654,7 +670,7 @@ class OneVerbWordBuilder extends Component {
 							        </Menu.Item>							        
 							        </Menu>
 							        :
-							        this.baseChooser()
+							        this.baseChooser(["Update",["mv","mvBase"]],'v')  
 							      }
 							      />
 		      // }
@@ -662,24 +678,23 @@ class OneVerbWordBuilder extends Component {
 	}
 
 	updateCandidateCall=()=>{
+		console.log('test')
 		let lockSubmit = false
-		let candidateFST = ''
+		let candidateFST = []
 		let type = 'Ind'
 		let transitivity = ''
-		this.state.candidateBase.reverse().map((x,xind)=>{
+		this.state.candidateBase.slice().reverse().map((x,xind)=>{
 			if (xind === 0 && x['type'].length < 3) {
 				lockSubmit = true
 				transitivity = x['type'] 
 			}
-			candidateFST = candidateFST + x['fsts'][0]
+			candidateFST = candidateFST.concat(x['fsts'][0])
 		})
 
-		if (lockSubmit) {
-	  	this.setState({
-	  		candidateCall:[candidateFST,type,transitivity],
-	  		lockSubmit:lockSubmit,
-	  	})			
-		}
+  	this.setState({
+  		candidateCall:[candidateFST,transitivity,type],
+  		lockSubmit:lockSubmit,
+  	})			
 	}
 
 	baseChooser = (itemUpdating,endingNeeded) => {
@@ -695,6 +710,7 @@ class OneVerbWordBuilder extends Component {
 									      icon='search' 
 									      iconPosition='left' 
 									      name='search'     
+									      disabled={this.state.lockSubmit}
 									      // width='100%'
 									      style={{width:'220px'}}
 									 		  onChange={this.onChangeBaseSearch.bind(this,endingNeeded)}
@@ -766,8 +782,8 @@ class OneVerbWordBuilder extends Component {
 									        	})}
 									        	</List>
 								        	</Segment>
-									      <div style={{paddingBottom:10}}>
-		                		<Button color='blue' disabled={!this.state.lockSubmit} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}>
+									      <div style={{paddingBottom:10}}>  
+		                		<Button color='blue' onClick={()=>{this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall]]); this.setState({isOpen:false,currentEditMode:'default',verbSearch:'',verbsWordsList:[],candidateBase:[],lockSubmit:false}) }} disabled={!this.state.lockSubmit} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}>
 		                			<div>{'Submit'}</div>
 		                			<Icon name='chevron right' />
 		                		</Button>
@@ -826,10 +842,13 @@ class OneVerbWordBuilder extends Component {
 			<div><Button onClick={this.modifySentence.bind(this,['mvvBase',[["nere","–llru[V→V]"],"t"]])}>Transitive</Button></div>
 			<div><Button onClick={this.modifySentence.bind(this,['mvvBase',[["nere","–llru[V→V]"],"i"]])}>Intransitive</Button></div>
 
-			<div><Button onClick={()=>{this.backEndCall([["Insert",["mv",],[["aqume","–llru[V→V]"],"i","Ind"]]])}}>Add mv</Button></div>
-			<div><Button onClick={()=>{this.backEndCall([["Insert",["mv","ns",0,0],[["angute",],[0,0,0,1]]]])}}>Add noun</Button></div>
-			<div><Button onClick={()=>{this.backEndCall([["Insert",["mv","ns",0],[["arnar",],[0,0,0,1]]]])}}>Add woman possessed</Button></div>
-			<div><Button onClick={()=>{this.backEndCall([["Insert",["mv","ns",-1],[["qimugte",],[0,0,0,1]]]])}}>Add dog possessor</Button></div>
+			<div><Button onClick={()=>{this.backEndCall([["Insert",["mv",],[["pissur"],"i","Ind"]]])}}>Add mv</Button></div>
+			<div><Button onClick={()=>{this.backEndCall([["Update",["mv","vBase"],[["nere","–llru[V→V]"],"i"]]])}}>Change mv</Button></div>
+
+			<div><Button onClick={()=>{this.backEndCall([["Insert",["mv","ns",0,0],[["angute",],[0,0,0,1]]]])}}>Add subject</Button></div>
+			<div><Button onClick={()=>{this.backEndCall([["Insert",["mv","no",0,0],[["tuntu",],[0,0,0,1]]]])}}>Add object</Button></div>
+			<div><Button onClick={()=>{this.backEndCall([["Insert",["mv","ns",-1],[["arnar",],[0,0,0,1]]]])}}>Add woman possessor</Button></div>
+			<div><Button onClick={()=>{this.backEndCall([["Insert",["mv","ns",0],[["qimugte",],[0,0,0,1]]]])}}>Add dog possessed</Button></div>
 
 					<div style={{border:'1px solid #E3E3E3',marginTop:'20px'}}>
 
@@ -848,7 +867,7 @@ class OneVerbWordBuilder extends Component {
 									<div>
 										<div style={{marginBottom:'5px',fontSize:'30px',color:'#000000',fontWeight:'400'}}>
 											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
-											{this.state.mvnsSegments.reverse().map((k,kind)=> {
+											{this.state.mvnsSegments.slice().reverse().map((k,kind)=> {
 												return <span>{this.editMenu('mvns',kind)}</span>								
 											})}
 											</div>	
@@ -879,11 +898,11 @@ class OneVerbWordBuilder extends Component {
 							 	{this.state.mvnoBases.length > 0 ? 
 							 		<div>
 										<div style={{marginBottom:'5px',fontSize:'30px',color:'#000000',fontWeight:'400'}}>
-											<div style={{display:'flex',justifyContent:'center', lineHeight:'35px'}}>
-											{this.state.mvObjectDisplay.map((m, mind)=>
-													<span style={{color:this.state.colorsList[m[1]]}}>{m[0]}</span>
-												)}
-											</div>
+											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
+											{this.state.mvnoSegments.slice().reverse().map((k,kind)=> {
+												return <span>{this.editMenu('mvno',kind)}</span>								
+											})}
+											</div>	
 										</div>
 										{this.state.showUnderlying ?
 											<div style={{display:'flex',justifyContent:'center',fontSize:'18px',marginBottom:'10px',fontWeight:'300'}}> 
@@ -931,21 +950,21 @@ class OneVerbWordBuilder extends Component {
 								{this.state.mvvs.length > 0 ?
 									(this.state.mvnsSegments.length > 0 ? 
 										<span>					
-											{this.state.mvnsSegments.map((x,xind)=>
+											{this.state.mvnsSegments.slice().reverse().map((x,xind)=>
 												<span>
 												{xind === 0 ?
 													<span>
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","ns",0,0],(data.value+this.state.mvns[0][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.mvns[0][0].slice(0, -1).join("")} options={nounOptionsPossessors} />
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","ns",0,0],this.state.mvns[0][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.mvns[0][0].slice(-1).join("")} options={nounOptionsNumbers} />																
+														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","ns",0,this.state.mvnsSegments.length-1],(data.value+this.state.mvns[this.state.mvnsSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.mvns[this.state.mvnsSegments.length-1][0].slice(0, -1).join("")} options={nounOptionsPossessors} />
+														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","ns",0,this.state.mvnsSegments.length-1],this.state.mvns[this.state.mvnsSegments.length-1][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.mvns[this.state.mvnsSegments.length-1][0].slice(-1).join("")} options={nounOptionsNumbers} />																
 														{x.map((w,wind)=>
-														<span style={{color:this.state.colorsList[w[1]]}}>{w[0]+" "}</span>
+														<span style={{color:this.state.colorsList[w[1]]}}>{w+" "}</span>
 														)}
 													</span>
 													:
 													<span>
 														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","ns",0,xind],this.state.mvns[xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.mvns[xind][0].slice(-1).join("")}  options={nounOptionsNumbers} />								
 														{x.map((w,wind)=>
-															<span style={{color:this.state.colorsList[w[1]]}}>{w[0]+" "}</span>
+															<span style={{color:this.state.colorsList[w[1]]}}>{w+" "}</span>
 															)}
 													</span>
 												}
@@ -968,18 +987,32 @@ class OneVerbWordBuilder extends Component {
 
 
 								{this.state.mvvo.length > 0 ?
-									(this.state.mvnoBases.length > 0 ? 
-										<span>
-											<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={this.modifySentence.bind(this, 'Update', ['mv','vs'])} value={this.state.mvObjectPossessor} options={nounOptionsPossessors} />
-											<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}}  onChange={this.modifySentence.bind(this, 'Update', ['mv','vs'])} value={this.state.mvObjectNumber} options={nounOptionsNumbers} />								
-											{this.state.mvObjectEnglish.map((w,wind)=>{
-												return <span style={{color:this.state.colorsList[w[1]]}}>{w[0]+" "}</span>
-											})}
-											<Icon style={{color:this.state.colorsList[2]}}  name='edit outline' />
+									(this.state.mvnoSegments.length > 0 ? 
+										<span>					
+											{this.state.mvnoSegments.map((x,xind)=>
+												<span>
+												{xind === 0 ?
+													<span>
+														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","no",0,0],(data.value+this.state.mvno[0][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.mvno[0][0].slice(0, -1).join("")} options={nounOptionsPossessors} />
+														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","no",0,0],this.state.mvno[0][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.mvno[0][0].slice(-1).join("")} options={nounOptionsNumbers} />																
+														{x.map((w,wind)=>
+														<span style={{color:this.state.colorsList[w[1]]}}>{w+" "}</span>
+														)}
+													</span>
+													:
+													<span>
+														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","no",0,xind],this.state.mvno[xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.mvno[xind][0].slice(-1).join("")}  options={nounOptionsNumbers} />								
+														{x.map((w,wind)=>
+															<span style={{color:this.state.colorsList[w[1]]}}>{w+" "}</span>
+															)}
+													</span>
+												}
+												</span>
+											)}
 										</span>
 										:
 										<span>
-											<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}} onChange={this.modifySentence.bind(this, ['mvvo'])}  value={this.state.mvvo.join("")} options={mvObjectOptions} />
+											<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={(event,data)=>{this.backEndCall([["Update",["mv","vo"],data.value.split('').map(Number)]])}}  value={this.state.mvvo.join("")} options={mvObjectOptions} />
 										</span>
 									)
 									:
