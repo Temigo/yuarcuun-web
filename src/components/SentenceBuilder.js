@@ -22,6 +22,18 @@ const optionsFuzzy = {
   threshold: -10000, // don't return bad results
 };
 
+let mvOptions = [
+	'vBase',
+	'nsBases',
+	'noBases',
+	'no',
+	'ns',
+	'vMood',
+	'vs',
+	'vo',
+]
+
+
 let dictionary = [];
 let usageDictionary = [];
 let dictionary_dict = {};
@@ -190,6 +202,8 @@ class OneVerbWordBuilder extends Component {
 			candidateType:'',
 			showUnderlying:false,
 			lockSubmit:false,
+
+			showShortcuts:false,
 		}
 
 	}
@@ -261,6 +275,7 @@ class OneVerbWordBuilder extends Component {
 
 		}
 	}
+
 	backEndCall(keyChanged) {
 		console.log(keyChanged)
 
@@ -293,17 +308,24 @@ class OneVerbWordBuilder extends Component {
       })
       .then(response => {
       	console.log(response.data)
+      	let mvkey
       	if ("mv" in response.data) {
-      		Object.keys(response.data['mv']).map((k)=>{
-      			let mvkey = 'mv'+k
-		        this.setState({
-		        	[mvkey]: response.data['mv'][k],
-		        })
-
+      		mvOptions.map((k)=>{
+      			mvkey = 'mv'+k
+      			if (k in response.data['mv']) {
+			        this.setState({
+			        	[mvkey]: response.data['mv'][k],
+			        })
+      			} else {
+			        this.setState({
+			        	[mvkey]: [],
+			        })      				
+      			}
       		})
       	} else {
       		this.initialize('mv')
       	}
+
       	if ("np" in response.data) {
       		Object.keys(response.data['np']).map((k)=>{
       			let npkey = 'np'+k
@@ -322,16 +344,28 @@ class OneVerbWordBuilder extends Component {
 			        this.setState({
 			        	mvvSegments: response.data.segments.mv.v,
 			        })      				
+      			} else {
+			        this.setState({
+			        	mvvSegments: [],
+			        })      	      				
       			}
       			if ("ns" in response.data.segments.mv) {
 			        this.setState({
 			        	mvnsSegments: response.data.segments.mv.ns,
 			        })      				
+      			} else {
+			        this.setState({
+			        	mvnsSegments: [],
+			        })      	      				
       			}
       			if ("no" in response.data.segments.mv) {
 			        this.setState({
 			        	mvnoSegments: response.data.segments.mv.no,
 			        })      				
+      			} else {
+			        this.setState({
+			        	mvnoSegments: [],
+			        })      	      				
       			}      			  
       		}
 
@@ -340,7 +374,11 @@ class OneVerbWordBuilder extends Component {
 			        this.setState({
 			        	npnSegments: response.data.segments.np.n,
 			        })      				
-			      }
+			      } else {
+			        this.setState({
+			        	npnSegments: [],
+			        })      	      				
+      			}
     			} 
 
       	}
@@ -369,7 +407,7 @@ class OneVerbWordBuilder extends Component {
 		if (endingNeeded === 'v') {
     	wordsList = fuzzysort.go(word, this.state.filteredDictV, optionsFuzzy).map(({ obj }) => (obj));
     	this.setState({ wordsList: wordsList, searchQuery: word });
-		} else if (endingNeeded = 'n') {
+		} else if (endingNeeded === 'n') {
     	wordsList = fuzzysort.go(word, this.state.filteredDictN, optionsFuzzy).map(({ obj }) => (obj));
     	this.setState({ wordsList: wordsList, searchQuery: word });
 		}
@@ -395,6 +433,7 @@ class OneVerbWordBuilder extends Component {
   }
 
   triggerItems = (type,ind) => {
+  	console.log(type,ind)
   	if (type==='default') {
   		return <Button size='large' icon>
 							 <Icon name='plus' />
@@ -404,21 +443,29 @@ class OneVerbWordBuilder extends Component {
 							 <Icon name='plus' />
 						 </Button>
   	} else if (type==='mvns') {
-  		return <div style={{paddingRight:10,cursor:'pointer',marginBottom:10,}}>
-							{this.state.mvnsSegments.slice().reverse()[ind].map((k,kind)=>
+  		return 	<div style={{paddingRight:10,cursor:'pointer',marginBottom:10,}}>
 								<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
-									{k.replaceAll('>','')}
+									{this.state.mvnsSegments.slice().reverse()[ind[0]][ind[1]].replaceAll('>','')}
 								</div>													
-							)}
-							</div>
+							</div>	
+  	} else if (type==='mvnsappositive') {
+  		return 	<div style={{paddingRight:10,cursor:'pointer',marginBottom:10,}}>
+								<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
+									{this.state.mvnsSegments.slice().reverse()[ind[0]][ind[1]].replaceAll('>','')}
+								</div>													
+							</div>			
   	} else if (type==='mvno') {
   		return 	<div style={{paddingRight:10,cursor:'pointer',marginBottom:10,}}>
-							{this.state.mvnoSegments.slice().reverse()[ind].map((k,kind)=>
 								<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
-									{k.replaceAll('>','')}
+									{this.state.mvnoSegments.slice().reverse()[ind[0]][ind[1]].replaceAll('>','')}
 								</div>													
-							)}
 							</div>	
+  	} else if (type==='mvnoappositive') {
+  		return 	<div style={{paddingRight:10,cursor:'pointer',marginBottom:10,}}>
+								<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
+									{this.state.mvnoSegments.slice().reverse()[ind[0]][ind[1]].replaceAll('>','')}
+								</div>													
+							</div>			
   	} else if (type==='mv') {
   		return 	<div style={{marginBottom:10,fontSize:'30px',color:'#000000',fontWeight:'400'}}>
 								<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
@@ -447,13 +494,33 @@ class OneVerbWordBuilder extends Component {
 				return <Menu vertical>
 			      {this.subMenuItem('Change Verb Type')}
 			      {this.menuItem('BaseChooser','Change Main Verb','mvupdate',null)}
-			      {this.menuItem('BaseChooser','Delete Main Verb','npinsert',null)}
-			    	</Menu>  			
+			      {this.menuItem('Delete','Delete Main Verb',null,null,[["Delete",["mv",],-1]])}
+			    	</Menu>
  			} else if (type === 'mvns') {
 				return <Menu vertical>
 						{this.menuItem('BaseChooser','Change Noun','mvnsupdate',null)}
-						{ind == 0 ? this.menuItem('BaseChooser','Add Possessor Noun','mvnspossessorinsert',null) : null}
-			      {ind == this.state.mvns.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun','mvnsinsert',null): null}
+						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun','mvnspossessorinsert',null) : null}
+			      {ind[0] == this.state.mvns.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun','mvnsinsert',null): null}
+						{this.menuItem('BaseChooser','Add Descriptor Noun','mvnsappositiveinsert',null)}
+			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["mv","ns",this.state.mvns.length-1-ind[0],ind[1]],-1]])}
+			    	</Menu>  			
+ 			} else if (type === 'mvnsappositive') {
+				return <Menu vertical>
+						{this.menuItem('BaseChooser','Change Descriptor Noun','mvnsupdate',null)}
+			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["mv","ns",this.state.mvns.length-1-ind[0],ind[1]],-1]])}
+			    	</Menu>  			
+ 			} else if (type === 'mvnoappositive') {
+				return <Menu vertical>
+						{this.menuItem('BaseChooser','Change Descriptor Noun','mvnoupdate',null)}
+			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["mv","no",this.state.mvno.length-1-ind[0],ind[1]],-1]])}
+			    	</Menu>  			
+ 			} else if (type === 'mvno') {
+				return <Menu vertical>
+						{this.menuItem('BaseChooser','Change Noun','mvnoupdate',null)}
+						{ind == 0 ? this.menuItem('BaseChooser','Add Possessor Noun','mvnopossessorinsert',null) : null}
+			      {ind == this.state.mvno.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun','mvnoinsert',null): null}
+						{this.menuItem('BaseChooser','Add Descriptor Noun','mvnoappositiveinsert',null)}
+			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["mv","no",this.state.mvno.length-1-ind[0],ind[1]],-1]])}
 			    	</Menu>  			
  			}
   	} else if (this.state.currentEditMode==='mvinsert') {
@@ -465,11 +532,19 @@ class OneVerbWordBuilder extends Component {
   	} else if (this.state.currentEditMode==='mvnsinsert') {
   		return this.baseChooser(["Insert",["mv","ns",0]],'n','insert')
   	} else if (this.state.currentEditMode==='mvnsupdate') {
-  		return this.baseChooser(["Update",["mv","ns",this.state.mvnsSegments.length-1-ind,0]],'n','insert')
-  	} else if (this.state.currentEditMode==='npinsert') {
-  		return this.baseChooser(["Insert",["np"]],'n','insert')
+  		return this.baseChooser(["Update",["mv","nsBases",this.state.mvnsSegments.length-1-ind[0],ind[1]]],'n','updatebase')
+  	} else if (this.state.currentEditMode==='mvnsappositiveinsert') {
+  		return this.baseChooser(["Insert",["mv","ns",this.state.mvnsSegments.length-1-ind[0],ind[1]]],'n','insert')
   	} else if (this.state.currentEditMode==='mvnspossessorinsert') {
   		return this.baseChooser(["Insert",["mv","ns",-1]],'n','insert')
+  	} else if (this.state.currentEditMode==='mvnoinsert') {
+  		return this.baseChooser(["Insert",["mv","no",0]],'n','insert')
+  	} else if (this.state.currentEditMode==='mvnoappositiveinsert') {
+  		return this.baseChooser(["Insert",["mv","no",this.state.mvnoSegments.length-1-ind[0],ind[1]]],'n','insert')
+  	} else if (this.state.currentEditMode==='mvnoupdate') {
+  		return this.baseChooser(["Update",["mv","noBases",this.state.mvnoSegments.length-1-ind[0],ind[1]]],'n','updatebase')
+  	} else if (this.state.currentEditMode==='mvnopossessorinsert') {
+  		return this.baseChooser(["Insert",["mv","no",-1]],'n','insert')
   	} else if (this.state.currentEditMode==='question') {
   		return this.menuItem('Question','Make Command','command',null,null)
   	}
@@ -518,7 +593,7 @@ class OneVerbWordBuilder extends Component {
 		          name='messages'
 		          // active={this.state.activeItem === 'messages'}
 		          style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}
-							onClick={()=>{this.backEndCall(backEnd)}}
+							onClick={()=>{this.setState({ isOpen: false },()=>{this.backEndCall(backEnd)})}}
 		        >
 		          <div>{text}</div>
 	        		<Icon name='chevron right' />
@@ -597,7 +672,15 @@ class OneVerbWordBuilder extends Component {
 			}
 	
 
+		}	else if (update==='updatebase') {
+			if (type === 'n') {
+		  	this.setState({
+		  		candidateCall:candidateFST,
+		  		lockSubmit:lockSubmit,
+		  	})			
+			}
 		}
+	
 
 	
 
@@ -722,27 +805,39 @@ class OneVerbWordBuilder extends Component {
 			</div>
 
 
+			<Button onClick={()=>this.setState({showShortcuts:!this.state.showShortcuts})}>show shortcuts</Button>
+			{this.state.showShortcuts ?
+				<div>
+					<Button onClick={()=>{this.backEndCall([[ "Insert", ["np"], 	[["arnar","–yagar*[N→N]"],[0,0,0,1],"Equ"] ]])}}>Add np equalis</Button>
+					<Button onClick={()=>{this.backEndCall([[ "Insert", ["np"], 	[["arnar","–yagar*[N→N]"],[0,0,0,1]] ]])}}>Add np arnayagaq</Button>
+					<Button onClick={()=>{this.backEndCall([["Insert",["mv",],[["pissur"],"i","Ind"]]])}}>Add mv</Button>
+					<Button onClick={()=>{this.backEndCall([["Update",["mv","vBase"],[["nere","–llru[V→V]"],"i"]]])}}>Change mv</Button>
+					<Button onClick={()=>{this.backEndCall([[ "Delete", ["mv"],	-1 ],])}}>Delete mv</Button>
+					<Button onClick={()=>{this.backEndCall([[ "Delete", ["mv","ns",0,0],	-1 ],])}}>Delete mv ns 0 0</Button>
+					<Button onClick={()=>{this.backEndCall([[ "Delete", ["mv","no",0,0],	-1 ],])}}>Delete mv no 0 0</Button>
+					<Button onClick={()=>{this.backEndCall([[ "Delete", ["mv","ns",1,0],	-1 ],])}}>Delete mv ns 1 0</Button>
 
+					<Button onClick={()=>{this.backEndCall([[ "Delete", ["np","n",0,0],	-1 ],])}}>Delete np 0 0</Button>
+					<Button onClick={()=>{this.backEndCall([[ "Delete", ["np"],	-1 ],])}}>Delete np</Button>
 
-			<div><Button onClick={()=>{this.backEndCall([[ "Insert", ["np"], 	[["arnar","–yagar*[N→N]"],[0,0,0,1],"Equ"] ]])}}>Add np equalis</Button></div>
-			<div><Button onClick={()=>{this.backEndCall([[ "Insert", ["np"], 	[["arnar","–yagar*[N→N]"],[0,0,0,1]] ]])}}>Add np arnayagaq</Button></div>
-			<div><Button onClick={()=>{this.backEndCall([["Insert",["mv",],[["pissur"],"i","Ind"]]])}}>Add mv</Button></div>
-			<div><Button onClick={()=>{this.backEndCall([["Update",["mv","vBase"],[["nere","–llru[V→V]"],"i"]]])}}>Change mv</Button></div>
+					<Button onClick={()=>{this.backEndCall([["Update",["mv","vBase"],[["nere","–llru[V→V]"],"t"]]])}}>Change mv transitive</Button>
 
-			<div><Button onClick={()=>{this.backEndCall([["Update",["mv","vBase"],[["nere","–llru[V→V]"],"t"]]])}}>Change mv transitive</Button></div>
+					<Button onClick={()=>{this.backEndCall([["Insert",["mv","ns",0,0],[["angute",],[0,0,0,1]]]])}}>Add subject</Button>
+					<Button onClick={()=>{this.backEndCall([["Insert",["mv","ns",0,1],[["tungulria",],[0,0,0,1]]]])}}>Add subject appositive</Button>
+					
+					<Button onClick={()=>{this.backEndCall([["Update",["mv","nsBases",0,0],["qimugte",]]])}}>Update subject</Button>
 
-			<div><Button onClick={()=>{this.backEndCall([["Insert",["mv","ns",0,0],[["angute",],[0,0,0,1]]]])}}>Add subject</Button></div>
-			
-			<div><Button onClick={()=>{this.backEndCall([["Update",["mv","ns",0,0],[["qimugte",],[0,0,0,1]]]])}}>Update subject</Button></div>
+					<Button onClick={()=>{this.backEndCall([["Insert",["mv","ns",-1],[["arnar",],[0,0,0,1]]]])}}>Add subject woman possessor</Button>
+					<Button onClick={()=>{this.backEndCall([["Insert",["mv","ns",0],[["qimugte",],[0,0,0,1]]]])}}>Add subject dog possessed</Button>
 
-
-			<div><Button onClick={()=>{this.backEndCall([["Insert",["mv","ns",-1],[["arnar",],[0,0,0,1]]]])}}>Add subject woman possessor</Button></div>
-			<div><Button onClick={()=>{this.backEndCall([["Insert",["mv","ns",0],[["qimugte",],[0,0,0,1]]]])}}>Add subject dog possessed</Button></div>
-
-			<div><Button onClick={()=>{this.backEndCall([["Insert",["mv","no",0,0],[["tuntu",],[0,0,0,1]]]])}}>Add object</Button></div>
-			<div><Button onClick={()=>{this.backEndCall([["Insert",["mv","no",-1],[["kuig",],[0,0,0,1]]]])}}>Add object river possessor</Button></div>
-			<div><Button onClick={()=>{this.backEndCall([["Insert",["mv","no",0],[["piipir",],[0,0,0,1]]]])}}>Add object babies possessor</Button></div>
-
+					<Button onClick={()=>{this.backEndCall([["Insert",["mv","no",0,0],[["tuntu",],[0,0,0,1]]]])}}>Add object</Button>
+					<Button onClick={()=>{this.backEndCall([["Insert",["mv","no",0,1],[["tungulria",],[0,0,0,1]]]])}}>Add object appositive</Button>
+					<Button onClick={()=>{this.backEndCall([["Insert",["mv","no",-1],[["kuig",],[0,0,0,1]]]])}}>Add object river possessor</Button>
+					<Button onClick={()=>{this.backEndCall([["Insert",["mv","no",0],[["piipir",],[0,0,0,1]]]])}}>Add object babies possessor</Button>
+				</div>
+			:
+			null
+		}
 
 					<div style={{border:'1px solid #E3E3E3',marginTop:'20px'}}>
 
@@ -761,9 +856,18 @@ class OneVerbWordBuilder extends Component {
 									<div>
 										<div style={{marginBottom:'5px',fontSize:'30px',color:'#000000',fontWeight:'400'}}>
 											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
-											{this.state.mvnsSegments.slice().reverse().map((k,kind)=> {
-												return <span>{this.editMenu('mvns',kind)}</span>								
-											})}
+											{this.state.mvnsSegments.slice().reverse().map((k,kind)=> 
+												<div style={{paddingRight:10,cursor:'pointer',marginBottom:10,}}>
+												{k.map((q,qind)=> {
+													if (qind === 0) {
+														return <span>{this.editMenu('mvns',[kind,0])}</span>												
+													} else {
+														return <span>{this.editMenu('mvnsappositive',[kind,qind])}</span>												
+													}
+												})}
+												</div>												
+
+											)}
 											</div>	
 
 										</div>
@@ -787,15 +891,29 @@ class OneVerbWordBuilder extends Component {
 									null
 								}
 
-
+								{this.state.mvvBase.length > 0 && this.state.mvvSegments.length > 0 ?
+									this.editMenu('mv',-1)
+									:
+									null
+								}
+								
 
 							 	{this.state.mvnoBases.length > 0 ? 
 							 		<div>
 										<div style={{marginBottom:'5px',fontSize:'30px',color:'#000000',fontWeight:'400'}}>
 											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
-											{this.state.mvnoSegments.slice().reverse().map((k,kind)=> {
-												return <span>{this.editMenu('mvno',kind)}</span>								
-											})}
+											{this.state.mvnoSegments.slice().reverse().map((k,kind)=> 
+												<div style={{paddingRight:10,cursor:'pointer',marginBottom:10,}}>
+												{k.map((q,qind)=> {
+													if (qind === 0) {
+														return <span>{this.editMenu('mvno',[kind,0])}</span>												
+													} else {
+														return <span>{this.editMenu('mvnoappositive',[kind,qind])}</span>												
+													}
+												})}
+												</div>												
+
+											)}
 											</div>	
 										</div>
 										{this.state.showUnderlying ?
@@ -814,25 +932,26 @@ class OneVerbWordBuilder extends Component {
 									null
 								}			
 
-								{this.state.mvvBase.length > 0 ?
-									this.editMenu('mv',-1)
-									:
-									null
-								}
-								
+
 								
 								{this.state.npnSegments.length > 0 ?
-									(this.state.npnSegments.slice().reverse().map((x,xind)=> 
-									<div style={{paddingRight:10,cursor:'pointer',marginBottom:10,}}>
-										<span>
-										{x.map((k,kind)=>
-											<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
-												{k.replaceAll('>','')}
-											</div>													
-										)}
-										</span>
+									<div>
+										<div style={{marginBottom:'5px',fontSize:'30px',color:'#000000',fontWeight:'400'}}>
+											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
+												{this.state.npnSegments.slice().reverse().map((x,xind)=> 
+												<div style={{paddingRight:10,cursor:'pointer',marginBottom:10,}}>
+													<span>
+													{x.map((k,kind)=>
+														<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
+															{k.replaceAll('>','')}
+														</div>													
+													)}
+													</span>
+												</div>
+												)}
+											</div>
+										</div>
 									</div>
-									))
 									:
 									null
 								}
@@ -866,7 +985,7 @@ class OneVerbWordBuilder extends Component {
 								})}			
 
 								{this.state.mvvs.length > 0 ?
-									(this.state.mvnsSegments.length > 0 ? 
+									(this.state.mvnsSegments.length > 0 && this.state.mvnsSegments.length === this.state.mvns.length ? 
 										<span>					
 											{this.state.mvnsSegments.slice().reverse().map((x,xind)=>
 												<span>
@@ -905,7 +1024,7 @@ class OneVerbWordBuilder extends Component {
 
 
 								{this.state.mvvo.length > 0 ?
-									(this.state.mvnoSegments.length > 0 ? 
+									(this.state.mvnoSegments.length > 0 && this.state.mvnoSegments.length === this.state.mvno.length ? 
 										<span>					
 											{this.state.mvnoSegments.slice().reverse().map((x,xind)=>
 												<span>
