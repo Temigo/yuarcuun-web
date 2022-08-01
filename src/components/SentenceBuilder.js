@@ -344,6 +344,15 @@ class OneVerbWordBuilder extends Component {
 		if (this.state.cvvs.length > 0) {cv['vs']=this.state.cvvs}
 		if (this.state.cvvo.length > 0) {cv['vo']=this.state.cvvo}
 
+		if (this.state.svvBase.length > 0) {sv['vBase']=this.state.svvBase}
+		if (this.state.svnsBases.length > 0) {sv['nsBases']=this.state.svnsBases}
+		if (this.state.svnoBases.length > 0) {sv['noBases']=this.state.svnoBases}
+		if (this.state.svno.length > 0) {sv['no']=this.state.svno}
+		if (this.state.svns.length > 0) {sv['ns']=this.state.svns}
+		if (this.state.svvMood.length > 0) {sv['vMood']=this.state.svvMood}
+		if (this.state.svvs.length > 0) {sv['vs']=this.state.svvs}
+		if (this.state.svvo.length > 0) {sv['vo']=this.state.svvo}
+
 
 		if (this.state.npn.length > 0) {np['npn']=this.state.npn}
 		if (this.state.npnBases.length > 0) {np['npnBases']=this.state.npnBases}
