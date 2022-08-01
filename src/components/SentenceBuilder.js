@@ -340,6 +340,7 @@ class OneVerbWordBuilder extends Component {
 		if (this.state.cvnoBases.length > 0) {cv['noBases']=this.state.cvnoBases}
 		if (this.state.cvno.length > 0) {cv['no']=this.state.cvno}
 		if (this.state.cvns.length > 0) {cv['ns']=this.state.cvns}
+		if (this.state.cvvMood.length > 0) {mv['vMood']=this.state.cvvMood}
 		if (this.state.cvvs.length > 0) {cv['vs']=this.state.cvvs}
 		if (this.state.cvvo.length > 0) {cv['vo']=this.state.cvvo}
 
@@ -354,7 +355,7 @@ class OneVerbWordBuilder extends Component {
       	keyChanged:keyChanged,
       	mv:mv,
       	cv:cv,
-      	// sv:sv,
+      	sv:sv,
       	// np:np,
       })
       .then(response => {
@@ -853,7 +854,7 @@ class OneVerbWordBuilder extends Component {
 			} else if (type === 'v') {
 				if (mood === 'Ind') {
 			  	this.setState({
-			  		candidateCall:[candidateFST,transitivity],
+			  		candidateCall:[candidateFST,transitivity,mood],
 			  		lockSubmit:lockSubmit,
 			  	})							
 				} else {
@@ -980,7 +981,7 @@ class OneVerbWordBuilder extends Component {
 	}
 
 	render() {
-		console.log(this.state)
+		// console.log(this.state)
 
 
 		return (
