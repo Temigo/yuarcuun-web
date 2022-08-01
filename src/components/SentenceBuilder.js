@@ -340,7 +340,7 @@ class OneVerbWordBuilder extends Component {
 		if (this.state.cvnoBases.length > 0) {cv['noBases']=this.state.cvnoBases}
 		if (this.state.cvno.length > 0) {cv['no']=this.state.cvno}
 		if (this.state.cvns.length > 0) {cv['ns']=this.state.cvns}
-		if (this.state.cvvMood.length > 0) {mv['vMood']=this.state.cvvMood}
+		if (this.state.cvvMood.length > 0) {cv['vMood']=this.state.cvvMood}
 		if (this.state.cvvs.length > 0) {cv['vs']=this.state.cvvs}
 		if (this.state.cvvo.length > 0) {cv['vo']=this.state.cvvo}
 
