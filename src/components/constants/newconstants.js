@@ -88,14 +88,50 @@ export const nounOptionsPossessorsNo4th = [
 ];
 
 
-export const nounOptionsPossessors = [
+export const nounOptionsMVPossessors = [
   {id: 0, value: '000', text:'the'},
   {id: 1, value: '110', text:'my'},
   {id: 2, value: '210', text:'your'},
   {id: 3, value: '311', text:'his'},
   {id: 4, value: '312', text:'her'},
   {id: 5, value: '313', text:'its'},
-  {id: 6, value: '410', text:'its own'},
+  {id: 6, value: '410', text: "mvsubject's"},
+  {id: 7, value: '120', text:'our (two)'},
+  {id: 8, value: '220', text:'your (two)'},
+  {id: 9, value: '320', text:'their (two)'},
+  {id: 10, value: '420', text:'their own (two)'},
+  {id: 11, value: '130', text:'our (3+)'},
+  {id: 12, value: '230', text:'your (3+)'},
+  {id: 13, value: '330', text:'their (3+)'},
+  {id: 14, value: '430', text:'their own (3+)'},
+];
+
+export const nounOptionsCVPossessors = [
+  {id: 0, value: '000', text:'the'},
+  {id: 1, value: '110', text:'my'},
+  {id: 2, value: '210', text:'your'},
+  {id: 3, value: '311', text:'his'},
+  {id: 4, value: '312', text:'her'},
+  {id: 5, value: '313', text:'its'},
+  {id: 6, value: '411', text:"cvsubject's"},
+  {id: 7, value: '120', text:'our (two)'},
+  {id: 8, value: '220', text:'your (two)'},
+  {id: 9, value: '320', text:'their (two)'},
+  {id: 10, value: '420', text:'their own (two)'},
+  {id: 11, value: '130', text:'our (3+)'},
+  {id: 12, value: '230', text:'your (3+)'},
+  {id: 13, value: '330', text:'their (3+)'},
+  {id: 14, value: '430', text:'their own (3+)'},
+];
+
+export const nounOptionsSVPossessors = [
+  {id: 0, value: '000', text:'the'},
+  {id: 1, value: '110', text:'my'},
+  {id: 2, value: '210', text:'your'},
+  {id: 3, value: '311', text:'his'},
+  {id: 4, value: '312', text:'her'},
+  {id: 5, value: '313', text:'its'},
+  {id: 6, value: '412', text:"svsubject's"},
   {id: 7, value: '120', text:'our (two)'},
   {id: 8, value: '220', text:'your (two)'},
   {id: 9, value: '320', text:'their (two)'},
@@ -120,7 +156,7 @@ export const mvSubjectOptions = [
   {id: 2, value: '311', text:'he', otext:'him'},
   {id: 3, value: '312', text:'she', otext:'her'},
   {id: 4, value: '313', text:'it', otext:'it'},
-  {id: 5, value: [4,1,['mv','vs']], text:'mvsubject', otext:'mvsubject'},
+  {id: 5, value: '410', text:'subject', otext:'subject'},
   {id: 6, value: '120', text:'the two of us', otext:'the two of us'},
   {id: 7, value: '220', text:'the two of you', otext:'the two of you'},
   {id: 8, value: '320', text:'the two of them', otext:'the two of them'},
@@ -137,7 +173,7 @@ export const mvObjectOptions = [
   {id: 2, value: '311', text:'him', ptext:'his'},
   {id: 3, value: '312', text:'her', ptext:'her'},
   {id: 4, value: '313', text:'it', ptext:'its'},
-  {id: 5, value: [4,1,['mv','vs']], text:'subject', ptext:'subject'},
+  {id: 5, value: '410', text:'subject', ptext:'subject'},
   {id: 6, value: '120', text:'the two of us', ptext:'our (two)'},
   {id: 7, value: '220', text:'the two of you', ptext:'your (two)'},
   {id: 8, value: '320', text:'the two of them', ptext:'their (two)'},
@@ -147,6 +183,41 @@ export const mvObjectOptions = [
   {id: 12, value: '330', text:'them all (3+)', ptext:'their (3+)'},
   {id: 13, value: '430', text:'their own (3+)', ptext:'their own (3+)'},
 ];
+
+export const cvSubjectOptions = [
+  {id: 0, value: '110', text:'I', otext:'me'},
+  {id: 1, value: '210', text:'you', otext:'you'},
+  {id: 2, value: '311', text:'he', otext:'him'},
+  {id: 3, value: '312', text:'she', otext:'her'},
+  {id: 4, value: '313', text:'it', otext:'it'},
+  {id: 5, value: '410', text:'mvsubject', otext:'mvsubject'},
+  {id: 6, value: '120', text:'the two of us', otext:'the two of us'},
+  {id: 7, value: '220', text:'the two of you', otext:'the two of you'},
+  {id: 8, value: '320', text:'the two of them', otext:'the two of them'},
+  {id: 9, value: '420', text:'their own (two)', otext:'their own (two)'},
+  {id: 10, value: '130', text:'we all (3+)', otext:'us all (3+)'},
+  {id: 11, value: '230', text:'you all (3+)', otext:'you all (3+)'},
+  {id: 12, value: '330', text:'they all (3+)', otext:'them all (3+)'},
+  {id: 13, value: '430', text:'their own (3+)', otext:'their own (3+)'},
+];
+
+export const cvObjectOptions = [
+  {id: 0, value: '110', text:'me', ptext:'my'},
+  {id: 1, value: '210', text:'you', ptext:'your'},
+  {id: 2, value: '311', text:'him', ptext:'his'},
+  {id: 3, value: '312', text:'her', ptext:'her'},
+  {id: 4, value: '313', text:'it', ptext:'its'},
+  {id: 5, value: '411', text:'cvsubject', ptext:'cvsubject'},
+  {id: 6, value: '120', text:'the two of us', ptext:'our (two)'},
+  {id: 7, value: '220', text:'the two of you', ptext:'your (two)'},
+  {id: 8, value: '320', text:'the two of them', ptext:'their (two)'},
+  {id: 9, value: '420', text:'their own (two)', ptext:'their own (two)'},
+  {id: 10, value: '130', text:'us all (3+)', ptext:'our (3+)'},
+  {id: 11, value: '230', text:'you all (3+)', ptext:'your (3+)'},
+  {id: 12, value: '330', text:'them all (3+)', ptext:'their (3+)'},
+  {id: 13, value: '430', text:'their own (3+)', ptext:'their own (3+)'},
+];
+
 
 export const mvSubjectOptionsNo4th = [
   {id: 0, value: '110', text:'I', otext:'me'},
