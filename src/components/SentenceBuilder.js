@@ -367,9 +367,9 @@ class OneVerbWordBuilder extends Component {
 		if (this.state.svvo.length > 0) {sv['vo']=this.state.svvo}
 
 
-		if (this.state.npn.length > 0) {np['npn']=this.state.npn}
-		if (this.state.npnBases.length > 0) {np['npnBases']=this.state.npnBases}
-		if (this.state.npnCase.length > 0) {np['npnCase']=this.state.npnCase}
+		if (this.state.npn.length > 0) {np['n']=this.state.npn}
+		if (this.state.npnBases.length > 0) {np['nBases']=this.state.npnBases}
+		if (this.state.npnCase.length > 0) {np['nCase']=this.state.npnCase}
 
 		// console.log(keyChanged,mv)
     axios
@@ -378,7 +378,7 @@ class OneVerbWordBuilder extends Component {
       	mv:mv,
       	cv:cv,
       	sv:sv,
-      	// np:np,
+      	np:np,
       })
       .then(response => {
       	console.log(response.data)
@@ -693,6 +693,20 @@ class OneVerbWordBuilder extends Component {
 									{this.state.svvSegments.replaceAll('>','')}
 								</div>
 							</div>
+  	} else if (type==='nps') {
+  		console.log(ind)
+  		return 	<div style={{marginBottom:10,fontSize:'30px',color:'#000000',fontWeight:'400'}}>
+								<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
+									{this.state.npnSegments.slice().reverse()[ind[0]][ind[1]].replaceAll('>','')}
+								</div>
+							</div>
+  	} else if (type==='mvnObliques') {
+  		console.log(ind)
+  		return 	<div style={{marginBottom:10,fontSize:'30px',color:'#000000',fontWeight:'400'}}>
+								<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
+									{this.state.mvnObliquesSegments[ind[0]][ind[1]][ind[2]].replaceAll('>','')}
+								</div>
+							</div>
   	}
     	
   }
@@ -711,7 +725,7 @@ class OneVerbWordBuilder extends Component {
 				return <Menu vertical>
 						{this.state.mvvs.length > 0 && this.state.mvns.length == 0 ? this.menuItem('BaseChooser','Add Noun Subject','mvnsinsert',null) : null}
 						{this.state.mvvo.length > 0 && this.state.mvno.length == 0 ? this.menuItem('BaseChooser','Add Noun Object','mvnoinsert',null) : null}
-			      {this.subMenuItem('addNP')}
+			      {this.subMenuItem('addnOblique')}
 			    	</Menu>  			
   		} else if (type === 'defaultcv') {
 				return <Menu vertical>
@@ -794,7 +808,13 @@ class OneVerbWordBuilder extends Component {
 						{this.menuItem('BaseChooser','Add Descriptor Noun','cvnoappositiveinsert',null)}
 			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["cv","no",this.state.cvno.length-1-ind[0]],-1]])}
 			    	</Menu>  			
- 			}
+ 			} else if (type==='mvnObliques') {
+  					return <Menu vertical>
+						{this.menuItem('BaseChooser','Change Oblique Noun','mvnObliqueUpdate',null)}
+			    	</Menu> 
+	  	}
+  	} else if (this.state.currentEditMode==='mvnOblique') {
+  		return this.baseChooser(["Insert",["mv","nObliques",ind[0],ind[1],ind[2]]],'n','insert','Ind')
   	} else if (this.state.currentEditMode==='mvinsert') {
   		return this.baseChooser(["Insert",["mv"]],'v','insert','Ind')
   	} else if (this.state.currentEditMode==='cvinsert') {
@@ -805,6 +825,12 @@ class OneVerbWordBuilder extends Component {
   		return this.baseChooser(["Update",["mv","vBase"]],'v','update')
   	} else if (this.state.currentEditMode==='npinsert') {
   		return this.baseChooser(["Insert",["np"]],'n','insert',this.state.npCase)
+  	} else if (this.state.currentEditMode==='nObliqueInsert') {
+  		if (this.state.mvnObliques.length > 0) {
+  		return this.baseChooser(["Insert",["mv","nObliques",-1]],'n','insert',this.state.npCase)
+  		} else {
+  		return this.baseChooser(["Insert",["mv","nObliques"]],'n','insert',this.state.npCase)  			
+  		}
   	} else if (this.state.currentEditMode==='mvnsinsert') {
   		return this.baseChooser(["Insert",["mv","ns",0]],'n','insert','Ind')
   	} else if (this.state.currentEditMode==='mvnsupdate') {
@@ -892,14 +918,14 @@ class OneVerbWordBuilder extends Component {
 	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'CtmpII'},()=>{this.menuSelect('cvinsert',-1)})}}>while...</Dropdown.Item>
 	      </Dropdown.Menu>
 	    </Dropdown>			
-		} else if (type==='addNP') {
-	    return <Dropdown item text='Add Noun Phrase'>
+		} else if (type==='addnOblique') {
+	    return <Dropdown item text='Add Noun Obliques'>
 	      <Dropdown.Menu>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Abl_Mod'},()=>{this.menuSelect('npinsert',-1)})}}>from, indirect object......</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Loc'},()=>{this.menuSelect('npinsert',-1)})}}>in, at...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Ter'},()=>{this.menuSelect('npinsert',-1)})}}>toward...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Via'},()=>{this.menuSelect('npinsert',-1)})}}>through, using...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Equ'},()=>{this.menuSelect('npinsert',-1)})}}>like, similar to...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Abl_Mod'},()=>{this.menuSelect('nObliqueInsert',-1)})}}>from, indirect object......</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Loc'},()=>{this.menuSelect('nObliqueInsert',-1)})}}>in, at...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Ter'},()=>{this.menuSelect('nObliqueInsert',-1)})}}>toward...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Via'},()=>{this.menuSelect('nObliqueInsert',-1)})}}>through, using...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Equ'},()=>{this.menuSelect('nObliqueInsert',-1)})}}>like, similar to...</Dropdown.Item>
 	      </Dropdown.Menu>
 	    </Dropdown>			
 		} else if (type==='addSV') {
@@ -1180,6 +1206,9 @@ class OneVerbWordBuilder extends Component {
 			{this.state.showShortcuts ?
 				<div>
 					<Button onClick={()=>{this.backEndCall([[ "Insert", ["np"], 	[["arnar","–yagar*[N→N]"],[0,0,0,1],"Equ"] ]])}}>Add np equalis</Button>
+					<Button onClick={()=>{this.backEndCall([[ "Insert", ["np",0,-1], 	[["arnar"],[0,0,0,1]] ]])}}>Add np equalis</Button>
+					<Button onClick={()=>{this.backEndCall([[ "Insert", ["np",0,0,-1], 	[["arnar"],[0,0,0,1],] ]])}}>Add np equalis</Button>
+
 					<Button onClick={()=>{this.backEndCall([[ "Insert", ["np"], 	[["arnar","–yagar*[N→N]"],[0,0,0,1]] ]])}}>Add np arnayagaq</Button>
 					<Button onClick={()=>{this.backEndCall([["Insert",["mv",],[["pissur"],"i","Ind"]]])}}>Add mv</Button>
 					<Button onClick={()=>{this.backEndCall([["Insert",["mv","nObliques"],[["kuig","–cuar(ar*)[N→N]"],[0,0,0,1],"Equ"]]])}}>Add mv noblique</Button>
@@ -1320,7 +1349,7 @@ class OneVerbWordBuilder extends Component {
 									null
 								}			
 
-								{this.state.mvnObliquesSegments.map((obliques)=>
+								{this.state.mvnObliquesSegments.map((obliques,obliqueind)=>
 									<div>
 										<div style={{marginBottom:'5px',fontSize:'30px',color:'#000000',fontWeight:'400'}}>
 											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
@@ -1329,7 +1358,7 @@ class OneVerbWordBuilder extends Component {
 													<span>
 													{x.map((k,kind)=>
 														<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
-															{k.replaceAll('>','')}
+															{this.editMenu('mvnObliques',[obliqueind,obliques.length-1-xind,kind])}
 														</div>													
 													)}
 													</span>
@@ -1349,7 +1378,7 @@ class OneVerbWordBuilder extends Component {
 													<span>
 													{x.map((k,kind)=>
 														<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
-															{k.replaceAll('>','')}
+															{this.editMenu('nps',[xind,this.state.npnSegments.length-1-kind])}
 														</div>													
 													)}
 													</span>
@@ -1363,27 +1392,7 @@ class OneVerbWordBuilder extends Component {
 								}
 
 
-								{this.state.npnSegments.length > 0 ?
-									<div>
-										<div style={{marginBottom:'5px',fontSize:'30px',color:'#000000',fontWeight:'400'}}>
-											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
-												{this.state.npnSegments.slice().reverse().map((x,xind)=> 
-												<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
-													<span>
-													{x.map((k,kind)=>
-														<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
-															{k.replaceAll('>','')}
-														</div>													
-													)}
-													</span>
-												</div>
-												)}
-											</div>
-										</div>
-									</div>
-									:
-									null
-								}
+
 
 								{this.state.showUnderlying ?
 									<div style={{display:'flex',justifyContent:'center',fontSize:'18px',marginBottom:'10px',fontWeight:'300'}}> 
