@@ -313,6 +313,7 @@ class OneVerbWordBuilder extends Component {
 				mvvMood:"",
 				mvvs:[],
 				mvvo:[],
+				mvnObliques:[],
 			})
 
 		} else if (type === 'cv') {
@@ -325,6 +326,7 @@ class OneVerbWordBuilder extends Component {
 				cvvMood:"",
 				cvvs:[],
 				cvvo:[],
+				cvnObliques:[],
 			})			
 		}
 	}
@@ -695,14 +697,14 @@ class OneVerbWordBuilder extends Component {
 							</div>
   	} else if (type==='nps') {
   		console.log(ind)
-  		return 	<div style={{marginBottom:10,fontSize:'30px',color:'#000000',fontWeight:'400'}}>
+  		return 	<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
 								<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
 									{this.state.npnSegments.slice().reverse()[ind[0]][ind[1]].replaceAll('>','')}
 								</div>
 							</div>
-  	} else if (type==='mvnObliques') {
+  	} else if (type==='mvnObliques' || type==='mvnObliquesAppositive') {
   		console.log(ind)
-  		return 	<div style={{marginBottom:10,fontSize:'30px',color:'#000000',fontWeight:'400'}}>
+  		return 	<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
 								<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
 									{this.state.mvnObliquesSegments[ind[0]][ind[1]][ind[2]].replaceAll('>','')}
 								</div>
@@ -811,10 +813,18 @@ class OneVerbWordBuilder extends Component {
  			} else if (type==='mvnObliques') {
   					return <Menu vertical>
 						{this.menuItem('BaseChooser','Change Oblique Noun','mvnObliqueUpdate',null)}
+						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Oblique Possessor Noun','mvnObliquepossessorinsert',null) : null}
+			      {ind[0] == this.state.cvno.length-1 ? this.menuItem('BaseChooser','Add Oblique Possessed Noun','mvnObliquepossessedinsert',null): null}
+			      {this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["mv","nObliques",ind[0],ind[1],ind[2]],-1]])}
+			    	</Menu> 
+	  	} else if (type==='mvnObliquesAppositive') {
+  					return <Menu vertical>
+						{this.menuItem('BaseChooser','Change Oblique Appositive Noun','mvnObliqueUpdate',null)}
+			      {this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["mv","nObliques",ind[0],ind[1],ind[2]],-1]])}
 			    	</Menu> 
 	  	}
-  	} else if (this.state.currentEditMode==='mvnOblique') {
-  		return this.baseChooser(["Insert",["mv","nObliques",ind[0],ind[1],ind[2]]],'n','insert','Ind')
+  	} else if (this.state.currentEditMode==='mvnObliqueUpdate') {
+  		return this.baseChooser(["Update",["mv","nObliques",ind[0],'nBases',ind[1],ind[2]]],'n','updatebase','Ind')
   	} else if (this.state.currentEditMode==='mvinsert') {
   		return this.baseChooser(["Insert",["mv"]],'v','insert','Ind')
   	} else if (this.state.currentEditMode==='cvinsert') {
@@ -1170,7 +1180,7 @@ class OneVerbWordBuilder extends Component {
 	}
 
 	render() {
-		console.log(this.state)
+		// console.log(this.state)
 
 
 		return (
@@ -1214,7 +1224,12 @@ class OneVerbWordBuilder extends Component {
 					<Button onClick={()=>{this.backEndCall([["Insert",["mv","nObliques"],[["kuig","–cuar(ar*)[N→N]"],[0,0,0,1],"Equ"]]])}}>Add mv noblique</Button>
 					<Button onClick={()=>{this.backEndCall([["Insert",["mv","nObliques",-1],[["arnar"],[0,0,0,1],"Equ"]]])}}>Add new oblique noun</Button>
 					<Button onClick={()=>{this.backEndCall([["Insert",["mv","nObliques",0,-1],[["paluqtar*"],[0,0,0,1]]]])}}>Add possessor</Button>
+					<Button onClick={()=>{this.backEndCall([["Insert",["mv","nObliques",0,0],[["angute"],[0,0,0,1]]]])}}>Add possessed</Button>
 					<Button onClick={()=>{this.backEndCall([["Insert",["mv","nObliques",0,0,-1],[["kameksag"],[0,0,0,1]]]])}}>Add add appositive</Button>
+					<Button onClick={()=>{this.backEndCall([["Delete",["mv","nObliques",0,0],-1]])}}>Delete full 0 index</Button>
+					<Button onClick={()=>{this.backEndCall([["Delete",["mv","nObliques",0,1],-1]])}}>Delete full 1 index</Button>
+					<Button onClick={()=>{this.backEndCall([["Delete",["mv","nObliques",0,0,0],-1]])}}>Delete  0 0 0index</Button>
+					<Button onClick={()=>{this.backEndCall([["Update",["mv","nObliques",0,'nBases',0,0],["kuig"]]])}}>Change possessor</Button>
 					<Button onClick={()=>{this.backEndCall([["Insert",["cv",],[["nere"],"t","Prec"]]])}}>Add cv</Button>
 					<Button onClick={()=>{this.backEndCall([["Update",["cv","vs"],[4,1,0]]])}}>Make 4th s cv</Button>
 					<Button onClick={()=>{this.backEndCall([["Update",["cv","vo"],[4,1,0]]])}}>Make 4th o cv</Button>
@@ -1355,13 +1370,13 @@ class OneVerbWordBuilder extends Component {
 											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
 												{obliques.slice().reverse().map((x,xind)=> 
 												<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
-													<span>
 													{x.map((k,kind)=>
-														<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
-															{this.editMenu('mvnObliques',[obliqueind,obliques.length-1-xind,kind])}
-														</div>													
+													{if (kind === 0) {
+														return <span>{this.editMenu('mvnObliques',[obliqueind,obliques.length-1-xind,kind])}</span>												
+													} else {
+														return <span>{this.editMenu('mvnObliquesAppositive',[obliqueind,obliques.length-1-xind,kind])}</span>												
+													}}
 													)}
-													</span>
 												</div>
 												)}
 											</div>
@@ -1517,22 +1532,74 @@ class OneVerbWordBuilder extends Component {
 								})}		
 
 
-								{this.state.npn.length > 0 ?
-									(this.state.npnSegments.length > 0 && this.state.npnSegments.length === this.state.npn.length ? 
+
+
+								{this.state.mvnObliquesSegments.map((obliques,obliqueind)=>
+									<div>
+										<div style={{marginBottom:'5px',fontSize:'30px',color:'#000000',fontWeight:'400'}}>
+											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
+												{obliques.slice().reverse().map((x,xind)=> 
+												<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
+													{x.map((k,kind)=>
+													{if (kind === 0) {
+														return <span>{this.editMenu('mvnObliques',[obliqueind,obliques.length-1-xind,kind])}</span>												
+													} else {
+														return <span>{this.editMenu('mvnObliquesAppositive',[obliqueind,obliques.length-1-xind,kind])}</span>												
+													}}
+													)}
+												</div>
+												)}
+											</div>
+										</div>
+									</div>									
+								)}
+
+{/*								{this.state.mvnObliquesSegments.length > 0 && this.state.mvnObliquesSegments.length === this.state.mvnObliques.length ? 
+									(this.state.mvnObliquesSegments.map((obliques,obliqueind)=>
 										<span>					
-											{this.state.npnSegments.slice().reverse().map((x,xind)=>
+											{obliques.slice().reverse().map((x,xind)=>
 												<span>
 												{xind === 0 ?
 													<span>
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","no",this.state.npnSegments.length-1,0],(data.value+this.state.npn[this.state.npnSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.npn[this.state.npnSegments.length-1][0].slice(0, -1).join("")} options={nounOptionsMVPossessors} />
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","no",this.state.npnSegments.length-1,0],this.state.npn[this.state.npnSegments.length-1][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.npn[this.state.npnSegments.length-1][0].slice(-1).join("")} options={nounOptionsNumbers} />																
+														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","nObliques",[obliqueind,obliques.length-1-xind,kind]],(data.value+this.state.mvnObliques[this.state.mvnObliquesSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.mvnObliques[this.state.mvnObliquesSegments.length-1][0].slice(0, -1).join("")} options={nounOptionsMVPossessors} />
+														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","nObliques",[obliqueind,obliques.length-1-xind,kind]],this.state.mvnObliques[this.state.mvnObliquesSegments.length-1][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.mvnObliques[this.state.mvnObliquesSegments.length-1][0].slice(-1).join("")} options={nounOptionsNumbers} />																
 														{x.map((w,wind)=>
 														<span style={{color:this.state.colorsList[w[1]]}}>{w+" "}</span>
 														)}
 													</span>
 													:
 													<span>
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","no",this.state.npnSegments.length-1-xind,0],this.state.npn[this.state.npnSegments.length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.npn[this.state.npnSegments.length-1-xind][0].slice(-1).join("")}  options={nounOptionsNumbers} />								
+														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["np","n",this.state.npnSegments.length-1-xind,0],this.state.npn[this.state.npnSegments.length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.npn[this.state.npnSegments.length-1-xind][0].slice(-1).join("")}  options={nounOptionsNumbers} />								
+														{x.map((w,wind)=>
+															<span style={{color:this.state.colorsList[w[1]]}}>{w+" "}</span>
+															)}
+													</span>
+												}
+												</span>
+											)}
+										</span>
+										))
+									:
+									null
+								}*/}
+
+
+
+								{this.state.npnSegments.length > 0 && this.state.npnSegments.length === this.state.npn.length ? 
+										<span>					
+											{this.state.npnSegments.slice().reverse().map((x,xind)=>
+												<span>
+												{xind === 0 ?
+													<span>
+														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["np","n",this.state.npnSegments.length-1,0],(data.value+this.state.npn[this.state.npnSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.npn[this.state.npnSegments.length-1][0].slice(0, -1).join("")} options={nounOptionsMVPossessors} />
+														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["np","n",this.state.npnSegments.length-1,0],this.state.npn[this.state.npnSegments.length-1][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.npn[this.state.npnSegments.length-1][0].slice(-1).join("")} options={nounOptionsNumbers} />																
+														{x.map((w,wind)=>
+														<span style={{color:this.state.colorsList[w[1]]}}>{w+" "}</span>
+														)}
+													</span>
+													:
+													<span>
+														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["np","n",this.state.npnSegments.length-1-xind,0],this.state.npn[this.state.npnSegments.length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.npn[this.state.npnSegments.length-1-xind][0].slice(-1).join("")}  options={nounOptionsNumbers} />								
 														{x.map((w,wind)=>
 															<span style={{color:this.state.colorsList[w[1]]}}>{w+" "}</span>
 															)}
@@ -1542,12 +1609,7 @@ class OneVerbWordBuilder extends Component {
 											)}
 										</span>
 										:
-										<span>
-											<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={(event,data)=>{this.backEndCall([["Update",["mv","vo"],data.value.split('').map(Number)]])}}  value={this.state.mvvo.join("")} options={mvObjectOptions} />
-										</span>
-									)
-									:
-									null
+										null
 								}
 
 								{this.state.npEnglish2.map((w,wind)=>{
