@@ -204,6 +204,7 @@ class OneVerbWordBuilder extends Component {
 			npnCase:[],
 			npnSegments:[],
 
+
 			mvnObliquesSegments: [],
 			cvnObliquesSegments: [],
 
@@ -303,7 +304,6 @@ class OneVerbWordBuilder extends Component {
 
 	initialize(type) {
 		if (type === 'mv') {
-
 			this.setState({
 				mvvBase:[],
 				mvnsBases:[],
@@ -314,6 +314,10 @@ class OneVerbWordBuilder extends Component {
 				mvvs:[],
 				mvvo:[],
 				mvnObliques:[],
+      	mvnObliquesSegments: [],
+      	mvvSegments: [],
+      	mvnsSegments: [],
+      	mvnoSegments: [],
 			})
 
 		} else if (type === 'cv') {
@@ -327,6 +331,32 @@ class OneVerbWordBuilder extends Component {
 				cvvs:[],
 				cvvo:[],
 				cvnObliques:[],
+      	cvnObliquesSegments: [],
+      	cvvSegments: [],
+      	cvnsSegments: [],
+      	cvnoSegments: [],
+			})			
+		} else if (type === 'sv') {
+			this.setState({
+				svvBase:[],
+				svnsBases:[],
+				svnoBases:[],
+				svno:[],				
+				svns:[],
+				svvMood:"",
+				svvs:[],
+				svvo:[],
+				svnObliques:[],
+      	svnObliquesSegments: [],
+      	svvSegments: [],
+      	svnoSegments: [],
+			})			
+		} else if (type === 'np') {
+			this.setState({
+				npn:[],
+				npnBases:[],
+				npnCase:[],
+		    npnSegments: [],
 			})			
 		}
 	}
@@ -487,7 +517,6 @@ class OneVerbWordBuilder extends Component {
 			        })      	      				
       			}      			  
       		}
-
       		if ("cv" in response.data.segments) {
       			if ("nObliques" in response.data.segments.cv) {
 			        this.setState({
@@ -528,6 +557,15 @@ class OneVerbWordBuilder extends Component {
       		}
 
       		if ("sv" in response.data.segments) {
+      			if ("nObliques" in response.data.segments.sv) {
+			        this.setState({
+			        	svnObliquesSegments: response.data.segments.sv.nObliques,
+			        })      				
+      			} else {
+			        this.setState({
+			        	svnObliquesSegments: "",
+			        })      	      				
+      			}   
       			if ("v" in response.data.segments.sv) {
 			        this.setState({
 			        	svvSegments: response.data.segments.sv.v,
@@ -558,8 +596,7 @@ class OneVerbWordBuilder extends Component {
 			        	npnSegments: [],
 			        })      	      				
       			}
-    			} 
-
+    			}
       	}
 
   		})
@@ -629,6 +666,10 @@ class OneVerbWordBuilder extends Component {
   		return <Button size='small' icon>
 							 <Icon name='plus' />
 						 </Button>
+  	} else if (type==='defaultsv') {
+  		return <Button size='small' icon>
+							 <Icon name='plus' />
+						 </Button>
   	} else if (type==='mvns') {
   		return 	<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
 								<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
@@ -695,15 +736,19 @@ class OneVerbWordBuilder extends Component {
 									{this.state.svvSegments.replaceAll('>','')}
 								</div>
 							</div>
-  	} else if (type==='nps') {
-  		console.log(ind)
+  	} else if (type==='npn') {
+  		return 	<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
+								<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
+									{this.state.npnSegments.slice().reverse()[ind[0]][ind[1]].replaceAll('>','')}
+								</div>
+							</div>
+  	} else if (type==='npnappositive') {
   		return 	<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
 								<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
 									{this.state.npnSegments.slice().reverse()[ind[0]][ind[1]].replaceAll('>','')}
 								</div>
 							</div>
   	} else if (type==='mvnObliques' || type==='mvnObliquesAppositive') {
-  		console.log(ind)
   		return 	<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
 								<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
 									{this.state.mvnObliquesSegments[ind[0]][ind[1]][ind[2]].replaceAll('>','')}
@@ -734,6 +779,10 @@ class OneVerbWordBuilder extends Component {
 						{this.state.cvvs.length > 0 && this.state.cvns.length == 0 ? this.menuItem('BaseChooser','Add Connective Noun Subject','cvnsinsert',null) : null}
 						{this.state.cvvo.length > 0 && this.state.cvno.length == 0 ? this.menuItem('BaseChooser','Add Connective Noun Object','cvnoinsert',null) : null}
 			    	</Menu>  			
+  		}else if (type === 'defaultsv') {
+				return <Menu vertical>
+						{this.state.svvo.length > 0 && this.state.svno.length == 0 ? this.menuItem('BaseChooser','Add Subordinative Noun Object','svnoinsert',null) : null}
+			    	</Menu>  			
   		} else if (type === 'defaultverbphrase' && this.state.cvvs.length === 0 ) {
 				return <Menu vertical>
 			      {this.subMenuItem('addCV')}
@@ -755,9 +804,17 @@ class OneVerbWordBuilder extends Component {
  			} else if (type === 'sv') {
 				return <Menu vertical>
 			      {this.subMenuItem('changeSV')}
-			      {this.menuItem('BaseChooser','Change Connective Verb','mvupdate',null)}
-			      {this.menuItem('Delete','Delete Main Verb',null,null,[["Delete",["mv",],-1]])}
+			      {this.menuItem('BaseChooser','Change Subordinative Verb','svupdate',null)}
+			      {this.menuItem('Delete','Delete Subordinative Verb',null,null,[["Delete",["sv",],-1]])}
 			    	</Menu>
+ 			} else if (type === 'svno') {
+				return <Menu vertical>
+						{this.menuItem('BaseChooser','Change Noun','svnoupdate',null)}
+						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun','svnopossessorinsert',null) : null}
+			      {ind[0] == this.state.svno.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun','svnoinsert',null): null}
+						{this.menuItem('BaseChooser','Add Descriptor Noun','svnoappositiveinsert',null)}
+			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["sv","no",this.state.svno.length-1-ind[0]],-1]])}
+			    	</Menu>  			
  			} else if (type === 'mvns') {
 				return <Menu vertical>
 						{this.menuItem('BaseChooser','Change Noun','mvnsupdate',null)}
@@ -792,7 +849,40 @@ class OneVerbWordBuilder extends Component {
 						{this.menuItem('BaseChooser','Add Descriptor Noun','cvnsappositiveinsert',null)}
 			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["cv","ns",this.state.cvns.length-1-ind[0]],-1]])}
 			    	</Menu>  			
- 			} else if (type === 'cvnsappositive') {
+ 			} else if (type === 'cvno') {
+				return <Menu vertical>
+						{this.menuItem('BaseChooser','Change Noun','cvnoupdate',null)}
+						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun','cvnopossessorinsert',null) : null}
+			      {ind[0] == this.state.cvno.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun','cvnoinsert',null): null}
+						{this.menuItem('BaseChooser','Add Descriptor Noun','cvnoappositiveinsert',null)}
+			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["cv","no",this.state.cvno.length-1-ind[0]],-1]])}
+			    	</Menu>  			
+ 			} else if (type === 'npn') {
+				return <Menu vertical>
+						{this.menuItem('BaseChooser','Change Noun','npnupdate',null)}
+						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun','npnpossessorinsert',null) : null}
+			      {ind[0] == this.state.npn.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun','npnpossessedinsert',null): null}
+						{this.menuItem('BaseChooser','Add Descriptor Noun','npnappositiveinsert',null)}
+						{this.menuItem('Delete','Delete Noun',null,null,[["Delete",["np","n",this.state.npn.length-1-ind[0]],-1]])}
+			    	</Menu>  			
+ 			} else if (type==='mvnObliques') {
+  					return <Menu vertical>
+						{this.menuItem('BaseChooser','Change Oblique Noun','mvnObliqueUpdate',null)}
+						{this.state.mvnObliques.length > 0 ?
+						(ind[1] == this.state.mvnObliques[ind[0]].n.length-1 ? this.menuItem('BaseChooser','Add Oblique Possessor Noun','mvnObliquepossessorinsert',null) : null)
+						:
+						null
+						}
+			      {ind[1] == 0 ? this.menuItem('BaseChooser','Add Oblique Possessed Noun','mvnObliquepossessedinsert',null): null}
+						{this.menuItem('BaseChooser','Add Descriptor Noun','mvnObliqueappositiveinsert',null)}
+						{ind[1] == 0 ? 
+							(this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["mv","nObliques",ind[0],ind[1]],-1]]))
+							:
+							(this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["mv","nObliques",ind[0],ind[1],ind[2]],-1]]))
+						}
+			      
+			    	</Menu> 
+	  	} else if (type === 'cvnsappositive') {
 				return <Menu vertical>
 						{this.menuItem('BaseChooser','Change Descriptor Noun','cvnsupdate',null)}
 			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["cv","ns",this.state.cvns.length-1-ind[0],ind[1]],-1]])}
@@ -802,22 +892,12 @@ class OneVerbWordBuilder extends Component {
 						{this.menuItem('BaseChooser','Change Descriptor Noun','cvnoupdate',null)}
 			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["cv","no",this.state.cvno.length-1-ind[0],ind[1]],-1]])}
 			    	</Menu>  			
- 			} else if (type === 'cvno') {
+ 			} else if (type === 'npnappositive') {
 				return <Menu vertical>
-						{this.menuItem('BaseChooser','Change Noun','cvnoupdate',null)}
-						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun','cvnopossessorinsert',null) : null}
-			      {ind[0] == this.state.cvno.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun','cvnoinsert',null): null}
-						{this.menuItem('BaseChooser','Add Descriptor Noun','cvnoappositiveinsert',null)}
-			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["cv","no",this.state.cvno.length-1-ind[0]],-1]])}
+						{this.menuItem('BaseChooser','Change Noun','npnupdate',null)}
+				    {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["np","n",this.state.npn.length-1-ind[0],ind[1]],-1]])}
 			    	</Menu>  			
- 			} else if (type==='mvnObliques') {
-  					return <Menu vertical>
-						{this.menuItem('BaseChooser','Change Oblique Noun','mvnObliqueUpdate',null)}
-						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Oblique Possessor Noun','mvnObliquepossessorinsert',null) : null}
-			      {ind[0] == this.state.cvno.length-1 ? this.menuItem('BaseChooser','Add Oblique Possessed Noun','mvnObliquepossessedinsert',null): null}
-			      {this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["mv","nObliques",ind[0],ind[1],ind[2]],-1]])}
-			    	</Menu> 
-	  	} else if (type==='mvnObliquesAppositive') {
+ 			} else if (type==='mvnObliquesAppositive') {
   					return <Menu vertical>
 						{this.menuItem('BaseChooser','Change Oblique Appositive Noun','mvnObliqueUpdate',null)}
 			      {this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["mv","nObliques",ind[0],ind[1],ind[2]],-1]])}
@@ -833,20 +913,36 @@ class OneVerbWordBuilder extends Component {
   		return this.baseChooser(["Insert",["sv"]],'v','insert','Sbrd')
   	} else if (this.state.currentEditMode==='mvupdate') {
   		return this.baseChooser(["Update",["mv","vBase"]],'v','update')
-  	} else if (this.state.currentEditMode==='npinsert') {
-  		return this.baseChooser(["Insert",["np"]],'n','insert',this.state.npCase)
+  	} else if (this.state.currentEditMode==='svupdate') {
+  		return this.baseChooser(["Update",["sv","vBase"]],'v','update')
   	} else if (this.state.currentEditMode==='nObliqueInsert') {
   		if (this.state.mvnObliques.length > 0) {
   		return this.baseChooser(["Insert",["mv","nObliques",-1]],'n','insert',this.state.npCase)
   		} else {
   		return this.baseChooser(["Insert",["mv","nObliques"]],'n','insert',this.state.npCase)  			
   		}
+  	} else if (this.state.currentEditMode==='mvnObliquepossessorinsert') {
+  		return this.baseChooser(["Insert",["mv","nObliques",ind[0],-1]],'n','insert',this.state.npCase)
+  	} else if (this.state.currentEditMode==='mvnObliquepossessedinsert') {
+  		return this.baseChooser(["Insert",["mv","nObliques",ind[0],0]],'n','insert',this.state.npCase)
+  	} else if (this.state.currentEditMode==='npnupdate') {
+  		return this.baseChooser(["Update",["np","nBases",ind[0],ind[1]]],'n','updatebase')
+  	} else if (this.state.currentEditMode==='npinsert') {
+  		return this.baseChooser(["Insert",["np"]],'n','insert',this.state.npCase)
+  	} else if (this.state.currentEditMode==='npnpossessorinsert') {
+  		return this.baseChooser(["Insert",["np","n",-1]],'n','insert')
+  	} else if (this.state.currentEditMode==='npnappositiveinsert') {
+  		return this.baseChooser(["Insert",["np","n",ind[0],-1]],'n','insert')
+  	} else if (this.state.currentEditMode==='npnpossessedinsert') {
+  		return this.baseChooser(["Insert",["np","n",0]],'n','insert')
   	} else if (this.state.currentEditMode==='mvnsinsert') {
   		return this.baseChooser(["Insert",["mv","ns",0]],'n','insert','Ind')
   	} else if (this.state.currentEditMode==='mvnsupdate') {
   		return this.baseChooser(["Update",["mv","nsBases",this.state.mvnsSegments.length-1-ind[0],ind[1]]],'n','updatebase')
   	} else if (this.state.currentEditMode==='mvnsappositiveinsert') {
   		return this.baseChooser(["Insert",["mv","ns",this.state.mvnsSegments.length-1-ind[0],ind[1]]],'n','insert')
+  	} else if (this.state.currentEditMode==='mvnObliqueappositiveinsert') {
+  		return this.baseChooser(["Insert",["mv","nObliques",ind[0],ind[1],-1]],'n','insert')
   	} else if (this.state.currentEditMode==='mvnspossessorinsert') {
   		return this.baseChooser(["Insert",["mv","ns",-1]],'n','insert')
   	} else if (this.state.currentEditMode==='mvnoinsert') {
@@ -860,8 +956,7 @@ class OneVerbWordBuilder extends Component {
   	} 
  		else if (this.state.currentEditMode==='cvupdate') {
   		return this.baseChooser(["Update",["cv","vBase"]],'v','update')
-  	}
-  	else if (this.state.currentEditMode==='cvnsinsert') {
+  	} else if (this.state.currentEditMode==='cvnsinsert') {
   		return this.baseChooser(["Insert",["cv","ns",0]],'n','insert','Ind')
   	} else if (this.state.currentEditMode==='cvnsupdate') {
   		return this.baseChooser(["Update",["cv","nsBases",this.state.cvnsSegments.length-1-ind[0],ind[1]]],'n','updatebase')
@@ -877,6 +972,8 @@ class OneVerbWordBuilder extends Component {
   		return this.baseChooser(["Update",["cv","noBases",this.state.cvnoSegments.length-1-ind[0],ind[1]]],'n','updatebase')
   	} else if (this.state.currentEditMode==='cvnopossessorinsert') {
   		return this.baseChooser(["Insert",["cv","no",-1]],'n','insert',null)
+  	} else if (this.state.currentEditMode==='svnoinsert') {
+  		return this.baseChooser(["Insert",["sv","no",0]],'n','insert','Ind')
   	}
 
   	 else if (this.state.currentEditMode==='question') {
@@ -1029,12 +1126,14 @@ class OneVerbWordBuilder extends Component {
 		let candidateFST = []
 		let transitivity = ''
 		this.state.candidateBase.slice().reverse().map((x,xind)=>{
+			console.log(x)
 			if (xind === 0 && x['type'].length < 3) {
 				lockSubmit = true
 				transitivity = x['type'] 
 			}
-			candidateFST = candidateFST.concat(x['fsts'][0])
+			candidateFST = candidateFST.concat([x['key'],0,x['usageIndex'],0])
 		})
+		candidateFST = [candidateFST]
 
 		if (update==='insert') {
 			if (type === 'n') {
@@ -1180,7 +1279,7 @@ class OneVerbWordBuilder extends Component {
 	}
 
 	render() {
-		// console.log(this.state)
+		console.log(this.state)
 
 
 		return (
@@ -1215,26 +1314,32 @@ class OneVerbWordBuilder extends Component {
 			<Button onClick={()=>this.setState({showShortcuts:!this.state.showShortcuts})}>show shortcuts</Button>
 			{this.state.showShortcuts ?
 				<div>
-					<Button onClick={()=>{this.backEndCall([[ "Insert", ["np"], 	[["arnar","–yagar*[N→N]"],[0,0,0,1],"Equ"] ]])}}>Add np equalis</Button>
-					<Button onClick={()=>{this.backEndCall([[ "Insert", ["np",0,-1], 	[["arnar"],[0,0,0,1]] ]])}}>Add np equalis</Button>
-					<Button onClick={()=>{this.backEndCall([[ "Insert", ["np",0,0,-1], 	[["arnar"],[0,0,0,1],] ]])}}>Add np equalis</Button>
+					<Button onClick={()=>{this.backEndCall([[ "Insert", ["np"], 	[[["kuik",0,0,0],["-cuar(aq*)",0,0,0]],[0,0,0,1],"Equ"] ]])}}>Add np equalis equ</Button>
+					<Button onClick={()=>{this.backEndCall([[ "Insert", ["np"], 	[[["kuik",0,0,0],["-cuar(aq*)",0,0,0]],[0,0,0,1],"Abs"] ]])}}>Add np equalis abs</Button>
+					<Button onClick={()=>{this.backEndCall([[ "Insert", ["np","n",-1], 	[[["angun",0,0,1],],[0,0,0,1]] ]])}}>Add np equalis possessor</Button>
+					<Button onClick={()=>{this.backEndCall([[ "Insert", ["np","n",0,-1], 	[[["tungulria",0,0,0]],[0,0,0,1]] ]])}}>Add np equalis appositive</Button>
+					<Button onClick={()=>{this.backEndCall([[ "Insert", ["np","n",1,-1], 	[[["qatellria,qatelria",0,0,0]],[0,0,0,1]] ]])}}>Add np equalis appositive</Button>
+					<Button onClick={()=>{this.backEndCall([[ "Insert", ["np","n",0,-1], 	[[["arnaq",0,0,0],],[0,0,0,1]] ]])}}>Add np equalis</Button>
+					<Button onClick={()=>{this.backEndCall([[ "Insert", ["np","n",0,0,-1], 	[[["arnaq",0,0,0],],[0,0,0,1],] ]])}}>Add np equalis</Button>
 
 					<Button onClick={()=>{this.backEndCall([[ "Insert", ["np"], 	[["arnar","–yagar*[N→N]"],[0,0,0,1]] ]])}}>Add np arnayagaq</Button>
-					<Button onClick={()=>{this.backEndCall([["Insert",["mv",],[["pissur"],"i","Ind"]]])}}>Add mv</Button>
+					<Button onClick={()=>{this.backEndCall([["Insert",["mv",],[[["aqume-",0,0,0],["-a-|-ar-|-aa-|+a-|+aar-",0,0,0],],"i","Ind"]]])}}>Add mv</Button>
 					<Button onClick={()=>{this.backEndCall([["Insert",["mv","nObliques"],[["kuig","–cuar(ar*)[N→N]"],[0,0,0,1],"Equ"]]])}}>Add mv noblique</Button>
 					<Button onClick={()=>{this.backEndCall([["Insert",["mv","nObliques",-1],[["arnar"],[0,0,0,1],"Equ"]]])}}>Add new oblique noun</Button>
 					<Button onClick={()=>{this.backEndCall([["Insert",["mv","nObliques",0,-1],[["paluqtar*"],[0,0,0,1]]]])}}>Add possessor</Button>
 					<Button onClick={()=>{this.backEndCall([["Insert",["mv","nObliques",0,0],[["angute"],[0,0,0,1]]]])}}>Add possessed</Button>
 					<Button onClick={()=>{this.backEndCall([["Insert",["mv","nObliques",0,0,-1],[["kameksag"],[0,0,0,1]]]])}}>Add add appositive</Button>
+
 					<Button onClick={()=>{this.backEndCall([["Delete",["mv","nObliques",0,0],-1]])}}>Delete full 0 index</Button>
 					<Button onClick={()=>{this.backEndCall([["Delete",["mv","nObliques",0,1],-1]])}}>Delete full 1 index</Button>
+
 					<Button onClick={()=>{this.backEndCall([["Delete",["mv","nObliques",0,0,0],-1]])}}>Delete  0 0 0index</Button>
 					<Button onClick={()=>{this.backEndCall([["Update",["mv","nObliques",0,'nBases',0,0],["kuig"]]])}}>Change possessor</Button>
 					<Button onClick={()=>{this.backEndCall([["Insert",["cv",],[["nere"],"t","Prec"]]])}}>Add cv</Button>
 					<Button onClick={()=>{this.backEndCall([["Update",["cv","vs"],[4,1,0]]])}}>Make 4th s cv</Button>
 					<Button onClick={()=>{this.backEndCall([["Update",["cv","vo"],[4,1,0]]])}}>Make 4th o cv</Button>
 
-					<Button onClick={()=>{this.backEndCall([["Insert",["sv",],[["utaqa"],"i","Sbrd"]]])}}>Add sv</Button>
+					<Button onClick={()=>{this.backEndCall([["Insert",["sv",],[[["utaqa-",0,0,0]],"t","Sbrd"]]])}}>Add sv</Button>
 
 					<Button onClick={()=>{this.backEndCall([["Update",["sv","vBase"],[["utaqa"],"t"]]])}}>Change sv trans</Button>
 					<Button onClick={()=>{this.backEndCall([["Update",["sv","vo"],[1,1,0]]])}}>change sv object to 1st person</Button>
@@ -1364,7 +1469,7 @@ class OneVerbWordBuilder extends Component {
 									null
 								}			
 
-								{this.state.mvnObliquesSegments.map((obliques,obliqueind)=>
+{/*								{this.state.mvnObliquesSegments.map((obliques,obliqueind)=>
 									<div>
 										<div style={{marginBottom:'5px',fontSize:'30px',color:'#000000',fontWeight:'400'}}>
 											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
@@ -1382,22 +1487,22 @@ class OneVerbWordBuilder extends Component {
 											</div>
 										</div>
 									</div>									
-								)}
+								)}*/}
 								
-								{this.state.npnSegments.length > 0 ?
+								{this.state.npnSegments.length > 0 && this.state.npnSegments.length === this.state.npn.length ?
 									<div>
 										<div style={{marginBottom:'5px',fontSize:'30px',color:'#000000',fontWeight:'400'}}>
 											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
 												{this.state.npnSegments.slice().reverse().map((x,xind)=> 
-												<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
-													<span>
+													<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
 													{x.map((k,kind)=>
-														<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
-															{this.editMenu('nps',[xind,this.state.npnSegments.length-1-kind])}
-														</div>													
+														{if (kind === 0) {
+															return <span>{this.editMenu('npn',[xind,kind])}</span>												
+														} else {
+															return <span>{this.editMenu('npnappositive',[xind,kind])}</span>												
+														}}											
 													)}
-													</span>
-												</div>
+													</div>
 												)}
 											</div>
 										</div>
@@ -1405,7 +1510,6 @@ class OneVerbWordBuilder extends Component {
 									:
 									null
 								}
-
 
 
 
@@ -1533,26 +1637,27 @@ class OneVerbWordBuilder extends Component {
 
 
 
-
-								{this.state.mvnObliquesSegments.map((obliques,obliqueind)=>
-									<div>
-										<div style={{marginBottom:'5px',fontSize:'30px',color:'#000000',fontWeight:'400'}}>
-											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
-												{obliques.slice().reverse().map((x,xind)=> 
-												<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
-													{x.map((k,kind)=>
-													{if (kind === 0) {
-														return <span>{this.editMenu('mvnObliques',[obliqueind,obliques.length-1-xind,kind])}</span>												
-													} else {
-														return <span>{this.editMenu('mvnObliquesAppositive',[obliqueind,obliques.length-1-xind,kind])}</span>												
-													}}
+								{this.state.mvnObliquesSegments.length > 0 && this.state.mvnObliques.length === this.state.mvnObliquesSegments.length ?
+									(this.state.mvnObliquesSegments.map((obliques,obliqueind)=>
+										<div>
+											<div style={{marginBottom:'5px',fontSize:'30px',color:'#000000',fontWeight:'400'}}>
+												<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
+													{obliques.slice().reverse().map((x,xind)=> 
+													<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
+														{x.map((k,kind)=>
+														{if (kind === 0) {
+															return <span>{this.editMenu('mvnObliques',[obliqueind,obliques.length-1-xind,kind])}</span>												
+														} else {
+															return <span>{this.editMenu('mvnObliquesAppositive',[obliqueind,obliques.length-1-xind,kind])}</span>												
+														}}
+														)}
+													</div>
 													)}
 												</div>
-												)}
 											</div>
-										</div>
-									</div>									
-								)}
+										</div>									
+									)):null
+								}
 
 {/*								{this.state.mvnObliquesSegments.length > 0 && this.state.mvnObliquesSegments.length === this.state.mvnObliques.length ? 
 									(this.state.mvnObliquesSegments.map((obliques,obliqueind)=>
@@ -1844,6 +1949,15 @@ class OneVerbWordBuilder extends Component {
 									:
 									null
 								}
+
+								{this.state.svvo.length > 0 ?
+									<div style={{display:'flex',justifyContent:'center',paddingBottom:10}}>
+									{this.editMenu('defaultsv',-1)}
+									</div>
+									:
+									null
+								}								
+
 
 								{this.state.mvEnglish3.map((w,wind)=>{
 									return <span style={{color:this.state.colorsList[w[1]]}}>{w[0]+" "}</span>
