@@ -936,7 +936,7 @@ class OneVerbWordBuilder extends Component {
   	} else if (this.state.currentEditMode==='npnpossessedinsert') {
   		return this.baseChooser(["Insert",["np","n",0]],'n','insert')
   	} else if (this.state.currentEditMode==='mvnsinsert') {
-  		return this.baseChooser(["Insert",["mv","ns",0]],'n','insert','Ind')
+  		return this.baseChooser(["Insert",["mv","ns"]],'n','insert','Ind')
   	} else if (this.state.currentEditMode==='mvnsupdate') {
   		return this.baseChooser(["Update",["mv","nsBases",this.state.mvnsSegments.length-1-ind[0],ind[1]]],'n','updatebase')
   	} else if (this.state.currentEditMode==='mvnsappositiveinsert') {
@@ -946,7 +946,7 @@ class OneVerbWordBuilder extends Component {
   	} else if (this.state.currentEditMode==='mvnspossessorinsert') {
   		return this.baseChooser(["Insert",["mv","ns",-1]],'n','insert')
   	} else if (this.state.currentEditMode==='mvnoinsert') {
-  		return this.baseChooser(["Insert",["mv","no",0]],'n','insert','Ind')
+  		return this.baseChooser(["Insert",["mv","no"]],'n','insert','Ind')
   	} else if (this.state.currentEditMode==='mvnoappositiveinsert') {
   		return this.baseChooser(["Insert",["mv","no",this.state.mvnoSegments.length-1-ind[0],ind[1]]],'n','insert')
   	} else if (this.state.currentEditMode==='mvnoupdate') {
@@ -957,7 +957,7 @@ class OneVerbWordBuilder extends Component {
  		else if (this.state.currentEditMode==='cvupdate') {
   		return this.baseChooser(["Update",["cv","vBase"]],'v','update')
   	} else if (this.state.currentEditMode==='cvnsinsert') {
-  		return this.baseChooser(["Insert",["cv","ns",0]],'n','insert','Ind')
+  		return this.baseChooser(["Insert",["cv","ns"]],'n','insert','Ind')
   	} else if (this.state.currentEditMode==='cvnsupdate') {
   		return this.baseChooser(["Update",["cv","nsBases",this.state.cvnsSegments.length-1-ind[0],ind[1]]],'n','updatebase')
   	} else if (this.state.currentEditMode==='cvnsappositiveinsert') {
@@ -965,7 +965,7 @@ class OneVerbWordBuilder extends Component {
   	} else if (this.state.currentEditMode==='cvnspossessorinsert') {
   		return this.baseChooser(["Insert",["cv","ns",-1]],'n','insert')
   	} else if (this.state.currentEditMode==='cvnoinsert') {
-  		return this.baseChooser(["Insert",["cv","no",0]],'n','insert','Ind')
+  		return this.baseChooser(["Insert",["cv","no"]],'n','insert','Ind')
   	} else if (this.state.currentEditMode==='cvnoappositiveinsert') {
   		return this.baseChooser(["Insert",["cv","no",this.state.cvnoSegments.length-1-ind[0],ind[1]]],'n','insert')
   	} else if (this.state.currentEditMode==='cvnoupdate') {
@@ -973,7 +973,7 @@ class OneVerbWordBuilder extends Component {
   	} else if (this.state.currentEditMode==='cvnopossessorinsert') {
   		return this.baseChooser(["Insert",["cv","no",-1]],'n','insert',null)
   	} else if (this.state.currentEditMode==='svnoinsert') {
-  		return this.baseChooser(["Insert",["sv","no",0]],'n','insert','Ind')
+  		return this.baseChooser(["Insert",["sv","no"]],'n','insert','Ind')
   	}
 
   	 else if (this.state.currentEditMode==='question') {
