@@ -45,17 +45,28 @@ class OneVerbWordBuilder extends Component {
 		super(props);
 		this.state = {
 			otherBases: [],
-			colorsList: [
-			'#000000',
-			'#852828',
-			'#b53434',
-			'#578f7f',
-			'#f29090',
-			'purple',//connective 5
-			'#3070AB',//connective subject 6
-			'#4338ac', //connective object 7
+			colorsList: {
+				'mvv.b':'#000000',
+				'mvv.e':'#852828',
+				'mvv.s':'#852828',
+				'mvv.o':'#852828',
+				'mvv.m':'#000000',
+				'mvv.1':'#3455b5',
+				'mvv.2':'#d3741e',
+				'mvns00.b':'#852828',
+				// 'mvns10.b':'#852828',
+				// 'mvv.4':'#000000',
+			},
+			// '#000000',
+			// '#852828',
+			// '#b53434',
+			// '#578f7f',
+			// '#f29090',
+			// 'purple',//connective 5
+			// '#3070AB',//connective subject 6
+			// '#4338ac', //connective object 7
 
-			].concat(shuffle(palette('tol-rainbow', 500).map((c) => { return '#' + c; }))),
+			// ].concat(shuffle(palette('tol-rainbow', 500).map((c) => { return '#' + c; }))),
 
 
 			mvSubjectColor: '#852828',
@@ -112,15 +123,28 @@ class OneVerbWordBuilder extends Component {
 			// mvDisplay: [['aqume',0],['llru',3],['uq',1]],
 			// mvUnderlyingDisplay: [[['aqume-',0]],[['–llru[V→V]',3]],[["+'(g/t)uq",1]]],
 
-			mvEnglish1: [['<>',0]],
-			mvSubjectEnglish: [[['small',2],["womens'",2]],[['dog',1]]],
-			mvEnglish2: [['<>',0]],
-			// mvEnglish2: [['sat down',0]],
-			mvObjectEnglish: [['moose',2]],
-			mvEnglish3: [['<>',0]],
+			mvEnglish1: [],
+			mvEnglish2: [],
+			mvEnglish3: [],
 
-			npEnglish1: [['<>',0]],
-			npEnglish2: [['<>',0]],
+			mvnsEnglish1: [],
+			mvnsEnglish2: [],
+
+			mvSubjectEnglish: [],
+			mvObjectEnglish: [],
+
+			cvEnglish1: [],
+			cvEnglish2: [],
+			cvEnglish3: [],
+			cvSubjectEnglish: [],
+			cvObjectEnglish: [],
+
+			svEnglish1: [],
+			svEnglish2: [],
+			svObjectEnglish: [],
+
+			npEnglish1: [],
+			npEnglish2: [],
 
 
 			mvSubjectSegments:"",
@@ -362,6 +386,7 @@ class OneVerbWordBuilder extends Component {
 	}
 
 	backEndCall(keyChanged) {
+		console.log(this.state)
 		console.log(keyChanged)
 
 		let mv = {}
@@ -415,6 +440,17 @@ class OneVerbWordBuilder extends Component {
       .then(response => {
       	console.log(response.data)
       	let vkey
+
+      	if ("english" in response.data) {
+      		Object.keys(response.data['english']).map((k)=>{
+      				console.log(k)
+      				console.log(response.data['english'][k])
+			        this.setState({
+			        	[k]: response.data['english'][k],
+			        })
+			      })
+      	}
+
       	if ("mv" in response.data) {
       		vOptions.map((k)=>{
       			vkey = 'mv'+k
@@ -649,6 +685,7 @@ class OneVerbWordBuilder extends Component {
   }
 
   triggerItems = (type,ind) => {
+  	console.log(this.state)
   	// console.log('trigger',type,ind)
   	if (type==='default') {
   		return <Button size='large' icon>
@@ -673,19 +710,25 @@ class OneVerbWordBuilder extends Component {
   	} else if (type==='mvns') {
   		return 	<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
 								<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
-									{this.state.mvnsSegments.slice().reverse()[ind[0]][ind[1]].replaceAll('>','')}
+									{this.state.mvnsSegments.slice().reverse()[ind[0]][ind[1]].map((t)=>
+										<span style={{color:this.state.colorsList[t[1]]}}>{t[0]}</span>
+										)}		
 								</div>						
 							</div>
   	} else if (type==='mvnsappositive') {
   		return 	<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
 								<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
-									{this.state.mvnsSegments.slice().reverse()[ind[0]][ind[1]].replaceAll('>','')}
+									{this.state.mvnsSegments.slice().reverse()[ind[0]][ind[1]].map((t)=>
+										<span style={{color:this.state.colorsList[t[1]]}}>{t[0]}</span>
+										)}								
 								</div>													
 							</div>			
   	} else if (type==='mvno') {
   		return 	<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
 								<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
-									{this.state.mvnoSegments.slice().reverse()[ind[0]][ind[1]].replaceAll('>','')}
+									{this.state.mvnoSegments.slice().reverse()[ind[0]][ind[1]].map((t)=>
+										<span style={{color:this.state.colorsList[t[1]]}}>{t[0]}</span>
+										)}
 								</div>													
 							</div>	
   	} else if (type==='mvnoappositive') {
@@ -721,7 +764,9 @@ class OneVerbWordBuilder extends Component {
   	} else if (type==='mv') {
   		return 	<div style={{marginBottom:10,fontSize:'30px',color:'#000000',fontWeight:'400'}}>
 								<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
-									{this.state.mvvSegments.replaceAll('>','')}
+									{this.state.mvvSegments.map((t)=>
+										<span style={{color:this.state.colorsList[t[1]]}}>{t[0]}</span>
+									)}
 								</div>
 							</div>
   	} else if (type==='cv') {
@@ -1131,9 +1176,10 @@ class OneVerbWordBuilder extends Component {
 				lockSubmit = true
 				transitivity = x['type'] 
 			}
-			candidateFST = candidateFST.concat([x['key'],0,x['usageIndex'],0])
+			candidateFST.push([x['key'],0,x['usageIndex'],0])
 		})
-		candidateFST = [candidateFST]
+		// candidateFST = [candidateFST]
+		console.log(candidateFST)
 
 		if (update==='insert') {
 			if (type === 'n') {
@@ -1279,7 +1325,7 @@ class OneVerbWordBuilder extends Component {
 	}
 
 	render() {
-		console.log(this.state)
+		// console.log(this.state)
 
 
 		return (
@@ -1314,6 +1360,8 @@ class OneVerbWordBuilder extends Component {
 			<Button onClick={()=>this.setState({showShortcuts:!this.state.showShortcuts})}>show shortcuts</Button>
 			{this.state.showShortcuts ?
 				<div>
+					<Button onClick={()=>{this.backEndCall([["Insert",["mv",],[[["pitalqegte-,pitacqegte-",0,2,0],],"t","Ind"]]])}}>Add mv</Button>
+					<Button onClick={()=>{this.backEndCall([["Insert",["mv",],[[["pitalqegte-,pitacqegte-",0,2,0],["-laag-",0,0,0],["~+lar-,@~+lar-,-lar-",0,2,0],],"t","Ind"]]])}}>Add mv</Button>
 					<Button onClick={()=>{this.backEndCall([[ "Insert", ["np"], 	[[["kuik",0,0,0],["-cuar(aq*)",0,0,0]],[0,0,0,1],"Equ"] ]])}}>Add np equalis equ</Button>
 					<Button onClick={()=>{this.backEndCall([[ "Insert", ["np"], 	[[["kuik",0,0,0],["-cuar(aq*)",0,0,0]],[0,0,0,1],"Abs"] ]])}}>Add np equalis abs</Button>
 					<Button onClick={()=>{this.backEndCall([[ "Insert", ["np","n",-1], 	[[["angun",0,0,1],],[0,0,0,1]] ]])}}>Add np equalis possessor</Button>
@@ -1356,15 +1404,15 @@ class OneVerbWordBuilder extends Component {
 					<Button onClick={()=>{this.backEndCall([["Update",["mv","vBase"],[["nere","–llru[V→V]"],"t"]]])}}>Change mv transitive</Button>
 					<Button onClick={()=>{this.backEndCall([["Insert",["cv","ns",0,0],[["angute",],[0,0,0,1]]]])}}>Add connective subject</Button>
 
-					<Button onClick={()=>{this.backEndCall([["Insert",["mv","ns",0,0],[["angute",],[0,0,0,1]]]])}}>Add subject</Button>
+					<Button onClick={()=>{this.backEndCall([["Insert",["mv","ns"],[[["kuik",0,0,0],["-cuar(aq*)",0,0,0]],[0,0,0,1]]]])}}>Add subject</Button>
 					<Button onClick={()=>{this.backEndCall([["Insert",["cv","ns",0,0],[["angute",],[0,0,0,1]]]])}}>Add cv subject</Button>
 					<Button onClick={()=>{this.backEndCall([["Insert",["cv","ns",0,0],[["angute",],[0,0,0,1]]]])}}>Add cv subject</Button>
 
-					<Button onClick={()=>{this.backEndCall([["Insert",["mv","ns",0,1],[["tungulria",],[0,0,0,1]]]])}}>Add subject appositive</Button>
+					<Button onClick={()=>{this.backEndCall([["Insert",["mv","ns",0,1],[[["tungulria",0,0,0]],[0,0,0,1]]]])}}>Add subject appositive</Button>
 					
 					<Button onClick={()=>{this.backEndCall([["Update",["mv","nsBases",0,0],["qimugte",]]])}}>Update subject</Button>
 
-					<Button onClick={()=>{this.backEndCall([["Insert",["mv","ns",-1],[["arnar",],[0,0,0,1]]]])}}>Add subject woman possessor</Button>
+					<Button onClick={()=>{this.backEndCall([["Insert",["mv","ns",-1],[[["arnar",0,0,0]],[0,0,0,1]]]])}}>Add subject woman possessor</Button>
 					<Button onClick={()=>{this.backEndCall([["Insert",["mv","ns",0],[["qimugte",],[0,0,0,1]]]])}}>Add subject dog possessed</Button>
 
 					<Button onClick={()=>{this.backEndCall([["Insert",["mv","no",0,0],[["tuntu",],[0,0,0,1]]]])}}>Add object</Button>
@@ -1550,15 +1598,15 @@ class OneVerbWordBuilder extends Component {
 													<span>
 														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","ns",this.state.mvnsSegments.length-1,0],(data.value+this.state.mvns[this.state.mvnsSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.mvns[this.state.mvnsSegments.length-1][0].slice(0, -1).join("")} options={nounOptionsPossessorsNo4th} />
 														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","ns",this.state.mvnsSegments.length-1,0],this.state.mvns[this.state.mvnsSegments.length-1][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.mvns[this.state.mvnsSegments.length-1][0].slice(-1).join("")} options={nounOptionsNumbers} />																
-														{x.map((w,wind)=>
-														<span style={{color:this.state.colorsList[w[1]]}}>{w+" "}</span>
+														{this.state.mvnsEnglish2[xind].map((w,wind)=>
+															(w.map((t)=> <span style={{color:this.state.colorsList[t[1]]}}>{t[0]+" "}</span>))
 														)}
 													</span>
 													:
 													<span>
 														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","ns",this.state.mvnsSegments.length-1-xind,0],this.state.mvns[this.state.mvnsSegments.length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.mvns[this.state.mvnsSegments.length-1-xind][0].slice(-1).join("")}  options={nounOptionsNumbers} />								
-														{x.map((w,wind)=>
-															<span style={{color:this.state.colorsList[w[1]]}}>{w+" "}</span>
+														{this.state.mvnsEnglish2[xind].map((w,wind)=>
+															(w.map((t)=> <span style={{color:this.state.colorsList[t[1]]}}>{t[0]+" "}</span>))
 															)}
 													</span>
 												}
@@ -1817,7 +1865,7 @@ class OneVerbWordBuilder extends Component {
 
 								<div style={{textAlign:'center',fontSize:'18px',color:'#0D0D0D',fontWeight:'300'}}>
 
-								{this.state.mvEnglish1.map((w,wind)=>{
+								{this.state.cvEnglish1.map((w,wind)=>{
 									return <span style={{color:this.state.colorsList[w[1]]}}>{w[0]+" "}</span>
 								})}			
 
@@ -1855,7 +1903,7 @@ class OneVerbWordBuilder extends Component {
 								}
 
 						
-								{this.state.mvEnglish2.map((w,wind)=>{
+								{this.state.cvEnglish2.map((w,wind)=>{
 									return <span style={{color:this.state.colorsList[w[1]]}}>{w[0]+" "}</span>
 								})}		
 
@@ -1893,7 +1941,7 @@ class OneVerbWordBuilder extends Component {
 									null
 								}
 
-								{this.state.mvEnglish3.map((w,wind)=>{
+								{this.state.cvEnglish3.map((w,wind)=>{
 									return <span style={{color:this.state.colorsList[w[1]]}}>{w[0]+" "}</span>
 								})}
 
@@ -1912,7 +1960,7 @@ class OneVerbWordBuilder extends Component {
 								<div style={{textAlign:'center',fontSize:'18px',color:'#0D0D0D',fontWeight:'300'}}>
 
 						
-								{this.state.mvEnglish2.map((w,wind)=>{
+								{this.state.svEnglish1.map((w,wind)=>{
 									return <span style={{color:this.state.colorsList[w[1]]}}>{w[0]+" "}</span>
 								})}		
 
@@ -1959,7 +2007,7 @@ class OneVerbWordBuilder extends Component {
 								}								
 
 
-								{this.state.mvEnglish3.map((w,wind)=>{
+								{this.state.svEnglish2.map((w,wind)=>{
 									return <span style={{color:this.state.colorsList[w[1]]}}>{w[0]+" "}</span>
 								})}
 
