@@ -50,10 +50,19 @@ class OneVerbWordBuilder extends Component {
 				'mvv.e':'#852828',
 				'mvv.s':'#852828',
 				'mvv.o':'#852828',
-				'mvv.m':'#000000',
+				'mvv.m':'#838383',
 				'mvv.1':'#3455b5',
 				'mvv.2':'#d3741e',
+				'mvv.3':'#c062c3',
+				'mvv.4':'#008000',
+				'mvv.5':'#69b4b4',
+				'mvv.6':'#e02323',
+
+
 				'mvns00.b':'#852828',
+				'mvns00.1':'#b53434',
+				'mvns00.2':'#578f7f',
+				'mvns00.e':'#f29090',
 				// 'mvns10.b':'#852828',
 				// 'mvv.4':'#000000',
 			},
@@ -129,6 +138,9 @@ class OneVerbWordBuilder extends Component {
 
 			mvnsEnglish1: [],
 			mvnsEnglish2: [],
+
+			mvnoEnglish1: [],
+			mvnoEnglish2: [],
 
 			mvSubjectEnglish: [],
 			mvObjectEnglish: [],
@@ -1261,7 +1273,7 @@ class OneVerbWordBuilder extends Component {
 									      <Segment vertical style={{height:255,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
 									      <List selection>
 										    {this.state.wordsList.map((k)=>{return <List.Item onClick={()=>{
-
+										    	// if (k['type']=='[→V]' || k['type']=='[V→V]')
 										    	this.setState({
 										    		searchQuery:'',
 										    		wordsList:[],
@@ -1362,6 +1374,14 @@ class OneVerbWordBuilder extends Component {
 				<div>
 					<Button onClick={()=>{this.backEndCall([["Insert",["mv",],[[["pitalqegte-,pitacqegte-",0,2,0],],"t","Ind"]]])}}>Add mv</Button>
 					<Button onClick={()=>{this.backEndCall([["Insert",["mv",],[[["pitalqegte-,pitacqegte-",0,2,0],["-laag-",0,0,0],["~+lar-,@~+lar-,-lar-",0,2,0],],"t","Ind"]]])}}>Add mv</Button>
+					<Button onClick={()=>{this.backEndCall([["Insert",["mv",],[[["pissur-",0,0,0],["-curlak,-curlag-",0,1,0],["-cuar(aq*)",0,0,0],["+ci-",0,0,0],["@~+yug-,+(r)yug-",0,1,0],["~+lar-,@~+lar-,-lar-",0,2,0],],"i","Ind"]]])}}>Add mv vv nv boat</Button>
+					<Button onClick={()=>{this.backEndCall([["Insert",["mv",],[[["angyaq,angyar-",0,0,0],["+ci-",0,0,0],],"i","Ind"]]])}}>Add mv nv boat</Button>
+					<Button onClick={()=>{this.backEndCall([["Insert",["mv",],[[["pissur-",0,0,0],["-curlak,-curlag-",0,1,0],["+ci-",0,0,0],["@~+yug-,+(r)yug-",0,1,0],],"i","Ind"]]])}}>Add mv vv nv boat</Button>
+					<Button onClick={()=>{this.backEndCall([["Insert",["mv",],[[["angyaq,angyar-",0,0,0],["+ci-",0,0,0],["@~+yug-,+(r)yug-",0,1,0],["-laag-",0,0,0]],"i","Ind"]]])}}>Add mv vv nv boat</Button>
+					<Button onClick={()=>{this.backEndCall([["Insert",["mv",],[[["angyaq,angyar-",0,0,0],["+ci-",0,0,0],["-laag-",0,0,0]],"i","Ind"]]])}}>Add mv vv nv boat</Button>
+					<Button onClick={()=>{this.backEndCall([["Insert",["mv","ns"],[[["kuik",0,0,0],],[0,0,0,1]]]])}}>Add subject</Button>
+					<Button onClick={()=>{this.backEndCall([["Insert",["mv","ns"],[[["pissur-",0,0,0],["-curlak,-curlag-",0,1,0]],[0,0,0,1]]]])}}>Add subject</Button>
+					<Button onClick={()=>{this.backEndCall([["Insert",["mv","no"],[[["pissur-",0,0,0],["-curlak,-curlag-",0,1,0]],[0,0,0,1]]]])}}>Add object</Button>
 					<Button onClick={()=>{this.backEndCall([[ "Insert", ["np"], 	[[["kuik",0,0,0],["-cuar(aq*)",0,0,0]],[0,0,0,1],"Equ"] ]])}}>Add np equalis equ</Button>
 					<Button onClick={()=>{this.backEndCall([[ "Insert", ["np"], 	[[["kuik",0,0,0],["-cuar(aq*)",0,0,0]],[0,0,0,1],"Abs"] ]])}}>Add np equalis abs</Button>
 					<Button onClick={()=>{this.backEndCall([[ "Insert", ["np","n",-1], 	[[["angun",0,0,1],],[0,0,0,1]] ]])}}>Add np equalis possessor</Button>
@@ -1637,15 +1657,15 @@ class OneVerbWordBuilder extends Component {
 													<span>
 														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","no",this.state.mvnoSegments.length-1,0],(data.value+this.state.mvno[this.state.mvnoSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.mvno[this.state.mvnoSegments.length-1][0].slice(0, -1).join("")} options={nounOptionsMVPossessors} />
 														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","no",this.state.mvnoSegments.length-1,0],this.state.mvno[this.state.mvnoSegments.length-1][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.mvno[this.state.mvnoSegments.length-1][0].slice(-1).join("")} options={nounOptionsNumbers} />																
-														{x.map((w,wind)=>
-														<span style={{color:this.state.colorsList[w[1]]}}>{w+" "}</span>
+														{this.state.mvnoEnglish2[xind].map((w,wind)=>
+															(w.map((t)=> <span style={{color:this.state.colorsList[t[1]]}}>{t[0]+" "}</span>))
 														)}
 													</span>
 													:
 													<span>
 														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","no",this.state.mvnoSegments.length-1-xind,0],this.state.mvno[this.state.mvnoSegments.length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.mvno[this.state.mvnoSegments.length-1-xind][0].slice(-1).join("")}  options={nounOptionsNumbers} />								
-														{x.map((w,wind)=>
-															<span style={{color:this.state.colorsList[w[1]]}}>{w+" "}</span>
+														{this.state.mvnoEnglish2[xind].map((w,wind)=>
+															(w.map((t)=> <span style={{color:this.state.colorsList[t[1]]}}>{t[0]+" "}</span>))
 															)}
 													</span>
 												}
