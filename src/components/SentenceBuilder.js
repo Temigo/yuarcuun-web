@@ -15,6 +15,7 @@ import ReactGA from 'react-ga';
 
 let customFontFam = "Roboto,'Helvetica Neue',Arial,Helvetica,sans-serif"
 
+let instructionSet = {1:[["Insert", ["mv"], [[["yuvrir-", 0, 2, 0], ["@~+niar-", 0, 0, 0]], "t", "Ind"]], ["Update", ["mv", "vs"], [2, 1, 0]], ["Update", ["mv", "vo"], [3, 1, 3]], ["Insert", ["mv", "no"], [[["kaassaq", 0, 0, 0]], [0, 0, 0, 1]]], ["Insert", ["cv"], [[["ayag¹-", 0, 0, 0]], "i", "Prec"]], ["Update", ["cv", "vs"], [2, 1, 0]]]}
 
 const optionsFuzzy = {
   keys: ['yupikword', 'englishnorm'],
@@ -41,8 +42,8 @@ let dictionary_dict = {};
 
 class OneVerbWordBuilder extends Component {
 	constructor(props) {
-		// console.log(decodeURI(props.match.params.num))
 		super(props);
+		// console.log(decodeURI(props.match.params.num))
 		this.state = {
 			otherBases: [],
 			colorsList: {
@@ -285,14 +286,17 @@ class OneVerbWordBuilder extends Component {
 			showShortcuts:false,
 			svvText:'',
 			interCase:'',
-		}
+			endingAdjusted:'',
 
+
+		}
+    if (decodeURI(props.match.params.num) in instructionSet) {
+			this.backEndCall(instructionSet[decodeURI(props.match.params.num)])
+    }
 	}
 
 
 	componentDidMount() {
-
-
 		let start = now();
     if (dictionary.length === 0) {
       axios
@@ -339,6 +343,15 @@ class OneVerbWordBuilder extends Component {
 
 }
 
+
+
+
+	setDefaultInstructions = (num, event, data) => {
+		// instructionSet[num].map((x)=>{
+		// 	console.log(x)
+		this.backEndCall(instructionSet[num])
+		// })
+	}
 
 	initialize(type) {
 		if (type === 'mv') {
@@ -664,8 +677,6 @@ class OneVerbWordBuilder extends Component {
 	}
 
 
-
-
 	processStyledText = (sentence) => {			
 		let matches = sentence.match(/\⎡.*?\⎤/g)
 		if (matches !== null) {
@@ -680,15 +691,23 @@ class OneVerbWordBuilder extends Component {
 	onChangeBaseSearch = (endingNeeded,event,data) => {
 		let word = data.value
 		let wordsList
-		if (endingNeeded === 'v') {
-    	wordsList = fuzzysort.go(word, this.state.filteredDictV, optionsFuzzy).map(({ obj }) => (obj));
-    	this.setState({ wordsList: wordsList, searchQuery: word });
-		} else if (endingNeeded === 'n') {
-    	wordsList = fuzzysort.go(word, this.state.filteredDictN, optionsFuzzy).map(({ obj }) => (obj));
-    	this.setState({ wordsList: wordsList, searchQuery: word });
+
+		// console.log(this.state.candidateBase)
+		if (this.state.endingAdjusted == 'n') {
+	    	wordsList = fuzzysort.go(word, this.state.filteredDictN, optionsFuzzy).map(({ obj }) => (obj));
+	    	this.setState({ wordsList: wordsList, searchQuery: word });
+		} else if (this.state.endingAdjusted == 'v') {
+	    	wordsList = fuzzysort.go(word, this.state.filteredDictV, optionsFuzzy).map(({ obj }) => (obj));
+	    	this.setState({ wordsList: wordsList, searchQuery: word });
+		} else {
+			if (endingNeeded === 'v') {
+	    	wordsList = fuzzysort.go(word, this.state.filteredDictV, optionsFuzzy).map(({ obj }) => (obj));
+	    	this.setState({ wordsList: wordsList, searchQuery: word });
+			} else if (endingNeeded === 'n') {
+	    	wordsList = fuzzysort.go(word, this.state.filteredDictN, optionsFuzzy).map(({ obj }) => (obj));
+	    	this.setState({ wordsList: wordsList, searchQuery: word });
+			}			
 		}
-
-
 	}
 
 	
@@ -711,7 +730,7 @@ class OneVerbWordBuilder extends Component {
   }
 
   triggerItems = (type,ind) => {
-  	console.log(this.state)
+  	// console.log(this.state)
   	// console.log('trigger',type,ind)
   	if (type==='default') {
   		return <Button size='large' icon>
@@ -912,7 +931,7 @@ class OneVerbWordBuilder extends Component {
 				return <Menu vertical>
 						{this.menuItem('BaseChooser','Change Noun','mvnsupdate',null)}
 						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun','mvnspossessorinsert',null) : null}
-			      {ind[0] == this.state.mvns.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun','mvnsinsert',null): null}
+			      {ind[0] == this.state.mvns.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun','mvnspossessedinsert',null): null}
 						{this.menuItem('BaseChooser','Add Descriptor Noun','mvnsappositiveinsert',null)}
 			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["mv","ns",this.state.mvns.length-1-ind[0]],-1]])}
 			    	</Menu>  			
@@ -930,7 +949,7 @@ class OneVerbWordBuilder extends Component {
 				return <Menu vertical>
 						{this.menuItem('BaseChooser','Change Noun','mvnoupdate',null)}
 						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun','mvnopossessorinsert',null) : null}
-			      {ind[0] == this.state.mvno.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun','mvnoinsert',null): null}
+			      {ind[0] == this.state.mvno.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun','mvnopossessedinsert',null): null}
 						{this.menuItem('BaseChooser','Add Descriptor Noun','mvnoappositiveinsert',null)}
 			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["mv","no",this.state.mvno.length-1-ind[0]],-1]])}
 			    	</Menu>  			
@@ -1040,7 +1059,11 @@ class OneVerbWordBuilder extends Component {
   		return this.baseChooser(["Insert",["mv","nObliques",ind[0],ind[1],-1]],'n','insert')
   	} else if (this.state.currentEditMode==='mvnspossessorinsert') {
   		return this.baseChooser(["Insert",["mv","ns",-1]],'n','insert')
-  	} else if (this.state.currentEditMode==='mvnoinsert') {
+  	} else if (this.state.currentEditMode==='mvnspossessedinsert') {
+  		return this.baseChooser(["Insert",["mv","ns",0]],'n','insert')
+  	} else if (this.state.currentEditMode==='mvnopossessedinsert') {
+  		return this.baseChooser(["Insert",["mv","no",0]],'n','insert')
+  	}else if (this.state.currentEditMode==='mvnoinsert') {
   		return this.baseChooser(["Insert",["mv","no"]],'n','insert','Ind')
   	} else if (this.state.currentEditMode==='mvnoappositiveinsert') {
   		return this.baseChooser(["Insert",["mv","no",this.state.mvnoSegments.length-1-ind[0],ind[1]]],'n','insert')
@@ -1232,15 +1255,27 @@ class OneVerbWordBuilder extends Component {
 		let candidateFST = []
 		let transitivity = ''
 		this.state.candidateBase.slice().reverse().map((x,xind)=>{
-			console.log(x)
-			if (xind === 0 && x['type'].length < 3) {
-				lockSubmit = true
-				transitivity = x['type'] 
+			if (xind === 0) {
+				console.log(x)
+				if (x['type'].length < 3) {
+					lockSubmit = true
+					transitivity = x['type']
+					if (transitivity == 'n' && type == 'v') {
+						transitivity = 'i'
+					}			
+					this.setState({endingAdjusted:''})					
+				} else if (x['type'] == '[V→N]' || x['type'] == '[V→V]') {
+					lockSubmit = false
+					this.setState({endingAdjusted:'v'})
+				} else {
+					lockSubmit = false
+					this.setState({endingAdjusted:'n'})					
+				}
 			}
 			candidateFST.push([x['key'],0,x['usageIndex'],0])
 		})
 		// candidateFST = [candidateFST]
-		console.log(candidateFST)
+		console.log(candidateFST, transitivity)
 
 		if (update==='insert') {
 			if (type === 'n') {
@@ -1323,6 +1358,7 @@ class OneVerbWordBuilder extends Component {
 									      <List selection>
 										    {this.state.wordsList.map((k)=>{return <List.Item onClick={()=>{
 										    	// if (k['type']=='[→V]' || k['type']=='[V→V]')
+										    	console.log(k)
 										    	this.setState({
 										    		searchQuery:'',
 										    		wordsList:[],
@@ -1358,7 +1394,7 @@ class OneVerbWordBuilder extends Component {
 											        		<div style={{color:'#000000b3'}}>{k['yupikword']}</div>
 											        		<div style={{fontWeight:''}}>{k['englishraw']}</div>
 										        		</div>
-										        		<Icon circular onClick={()=>{this.setState({candidateBase:this.state.candidateBase.slice(0,-1)},()=>{this.updateCandidateCall(endingNeeded)})}} style={{cursor:'pointer',width:30}} name='x' />
+										        		<Icon circular onClick={()=>{this.setState({candidateBase:this.state.candidateBase.slice(0,-1)},()=>{this.updateCandidateCall(endingNeeded,update,mood)})}} style={{cursor:'pointer',width:30}} name='x' />
 										        		</List.Item>
 									        			:
 										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
