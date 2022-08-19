@@ -3,7 +3,7 @@ import { Container, Header, Button, Icon, Divider, Image, Grid, Dropdown, List, 
 import { Link } from 'react-router-dom';
 import { API_URL } from '../App.js';
 import axios from 'axios';
-import {nounOptionsMVPossessors, nounOptionsCVPossessors, nounOptionsSVPossessors, nounOptionsPossessorsNo4th, nounOptionsNumbers, nounoptionsmodalis, mvSubjectOptions, mvSubjectOptionsNo4th, mvObjectOptions, cvSubjectOptions, cvObjectOptions, mvObjectOptionsNo4th, verbPostbases, nounPostbases, VVpostbases, NNpostbases} from './constants/newconstants.js'
+import {nounOptionsMVPossessors, nounOptionsMVAblPossessors,nounOptionsCVAblPossessors, retrieveMoodEnglish, nounOptionsCVPossessors, nounOptionsSVPossessors, nounOptionsPossessorsNo4th, nounOptionsNumbers, nounoptionsmodalis, mvSubjectOptions, mvSubjectOptionsNo4th, mvObjectOptions, mvSubjectOptionsEnglish, cvSubjectOptions, cvObjectOptions, mvObjectOptionsNo4th, verbPostbases, nounPostbases, VVpostbases, NNpostbases} from './constants/newconstants.js'
 import {ending_underlying} from './constants/ending_underlying.js'
 import palette from 'google-palette';
 import shuffle from 'shuffle-array';
@@ -11,11 +11,38 @@ import shuffle from 'shuffle-array';
 import fuzzysort from 'fuzzysort'
 import now from 'performance-now';
 import ReactGA from 'react-ga';
+// import SentenceTemplates from './SentenceTemplates.js'
+import { sentenceTemplates } from './constants/sentence_templates.js'
 
 
 let customFontFam = "Roboto,'Helvetica Neue',Arial,Helvetica,sans-serif"
 
-let instructionSet = {1:[["Insert", ["mv"], [[["yuvrir-", 0, 2, 0], ["@~+niar-", 0, 0, 0]], "t", "Ind"]], ["Update", ["mv", "vs"], [2, 1, 0]], ["Update", ["mv", "vo"], [3, 1, 3]], ["Insert", ["mv", "no"], [[["kaassaq", 0, 0, 0]], [0, 0, 0, 1]]], ["Insert", ["cv"], [[["ayag¹-", 0, 0, 0]], "i", "Prec"]], ["Update", ["cv", "vs"], [2, 1, 0]]]}
+let instructionSet = {
+0:[["Insert", ["mv"], [[["yuvrir-", 0, 2, 0], ["@~+niar-", 0, 0, 0]], "t", "Ind"]], ["Update", ["mv", "vs"], [2, 1, 0]], ["Update", ["mv", "vo"], [3, 1, 3]], ["Insert", ["mv", "no"], [[["kaassaq", 0, 0, 0]], [0, 0, 0, 1]]], ["Insert", ["cv"], [[["ayag¹-", 0, 0, 0]], "i", "Prec"]], ["Update", ["cv", "vs"], [2, 1, 0]]],
+1:[["Insert", ["np"], [[["qimugta", 0, 0, 0]], [0, 0, 0, 1], "Abs"]]],
+2:[["Insert", ["np"], [[["qimugta", 0, 0, 0]], [1, 1, 0, 1], "Abs"]]],
+3:[["Insert", ["np"], [[["pamyuq,pamsuq", 0, 0, 0]], [0, 0, 0, 1], "Abs"]], ["Insert", ["np", "n", -1], [[["qimugta", 0, 0, 0]], [0, 0, 0, 1]]]],
+4:[["Insert", ["np"], [[["imarpik,imarpak", 0, 0, 0]], [0, 0, 0, 1], "Loc"]]],
+5:[["Insert", ["np"], [[["kipusvik,kipuyvik", 0, 0, 0]], [0, 0, 0, 1], "Ter"]]],
+6:[["Insert", ["np"], [[["Mamterilleq", 0, 0, 0]], [0, 0, 0, 1], "Abl_Mod"]]],
+7:[["Insert", ["np"], [[["tengssuun", 0, 0, 0]], [0, 0, 0, 1], "Via"]]],
+8:[["Insert", ["np"], [[["qimugta", 0, 0, 0]], [0, 0, 0, 1], "Equ"]]],
+9:[["Insert", ["np"], [[[]], [0, 0, 0, 1], "Abs"]], ["Insert", ["np", "n", 0, -1], [[["arnaq", 0, 0, 0]], [0, 0, 0, 1]]]],
+10:[["Insert", ["np"], [[["piipiq", 0, 0, 0], ["-rpak,-rpag-", 0, 0, 0]], [0, 0, 0, 1], "Abs"]]],
+11:[["Insert", ["np"], [[["piipiq", 0, 0, 0], ["-cuar(aq*)", 0, 0, 0]], [0, 0, 0, 1], "Abs"]]],
+12:[["Insert", ["np"], [[["piipiq", 0, 0, 0], ["-ya(g)aq*,-yagaq*,-ya(g)ar-,-yagar-", 0, 0, 0]], [0, 0, 0, 1], "Abs"]]],
+13:[["Insert", ["np"], [[["piipiq", 0, 0, 0], ["-kegtaar(aq*)", 0, 0, 0]], [0, 0, 0, 1], "Abs"]]],
+14:[["Insert", ["np"], [[["piipiq", 0, 0, 0], ["+(ng)uaq,@~+(ng)uar-", 0, 0, 0]], [0, 0, 0, 1], "Abs"]]],
+15:[["Insert", ["mv"], [[["nere-", 0, 0, 0]], "i", "Ind"]]],
+16:[["Insert", ["mv"], [[["nere-", 0, 0, 0]], "i", "Ind"]], ["Insert", ["mv", "ns"], [[["piipiq", 0, 0, 0]], [0, 0, 0, 1]]]],
+17:[["Insert", ["mv"], [[["nere-", 0, 1, 0]], "it", "Ind"]]],
+18:[["Insert", ["mv"], [[["nere-", 0, 1, 0]], "it", "Ind"]], ["Insert", ["mv", "ns"], [[["piipiq", 0, 0, 0]], [0, 0, 0, 1]]]],
+19:[["Insert", ["mv"], [[["nere-", 0, 1, 0]], "it", "Ind"]], ["Insert", ["mv", "no"], [[["akutaq", 0, 0, 1]], [0, 0, 0, 1]]]],
+20:[["Insert", ["mv"], [[["nere-", 0, 1, 0]], "it", "Ind"]], ["Insert", ["mv", "ns"], [[["piipiq", 0, 0, 0]], [0, 0, 0, 1]]], ["Insert", ["mv", "no"], [[["akutaq", 0, 0, 1]], [0, 0, 0, 1]]]],
+21:[["Insert", ["mv"], [[["nere-", 0, 2, 0]], "t", "Ind"]]],
+22:[["Insert", ["mv"], [[["nere-", 0, 2, 0]], "t", "Ind"]], ["Insert", ["mv", "ns"], [[["piipiq", 0, 0, 0]], [0, 0, 0, 1]]]],
+23:[["Insert", ["mv"], [[["nere-", 0, 2, 0]], "t", "Ind"]], ["Insert", ["mv", "no"], [[["akutaq", 0, 0, 1]], [0, 0, 0, 1]]]],
+24:[["Insert", ["mv"], [[["nere-", 0, 2, 0]], "t", "Ind"]], ["Insert", ["mv", "ns"], [[["piipiq", 0, 0, 0]], [0, 0, 0, 1]]], ["Insert", ["mv", "no"], [[["akutaq", 0, 0, 1]], [0, 0, 0, 1]]]],}
 
 const optionsFuzzy = {
   keys: ['yupikword', 'englishnorm'],
@@ -34,6 +61,25 @@ let vOptions = [
 	'vo',
 	'nObliques',
 ]
+
+let vEnglish = [
+	'mvEnglish1',
+	'mvEnglish2',
+	'mvEnglish3',
+	'mvEnglishAbl',
+	'cvEnglish1',
+	'cvEnglish2',
+	'cvEnglish3',
+	'cvEnglishAbl',
+	'svEnglish1',
+	'svEnglish2',
+	'npnEnglish1',
+	'npnEnglish2',
+]
+
+// let retrieveMoodEnglish = {
+// 	'Prec':'before'
+// }
 
 
 let dictionary = [];
@@ -136,6 +182,7 @@ class OneVerbWordBuilder extends Component {
 			mvEnglish1: [],
 			mvEnglish2: [],
 			mvEnglish3: [],
+			mvEnglishAbl: [],
 
 			mvnsEnglish1: [],
 			mvnsEnglish2: [],
@@ -149,6 +196,7 @@ class OneVerbWordBuilder extends Component {
 			cvEnglish1: [],
 			cvEnglish2: [],
 			cvEnglish3: [],
+			cvEnglishAbl: [],
 			cvSubjectEnglish: [],
 			cvObjectEnglish: [],
 
@@ -229,6 +277,7 @@ class OneVerbWordBuilder extends Component {
 			svvMood:"",
 			svvs:[],
 			svvo:[],
+			svvCase:'',
 
 			svvSegments:"",
 			svnsSegments:[],
@@ -290,8 +339,12 @@ class OneVerbWordBuilder extends Component {
 
 
 		}
-    if (decodeURI(props.match.params.num) in instructionSet) {
-			this.backEndCall(instructionSet[decodeURI(props.match.params.num)])
+   //  if (decodeURI(props.match.params.num) in instructionSet) {
+			// this.backEndCall(instructionSet[decodeURI(props.match.params.num)])
+   //  }
+
+    if (decodeURI(props.match.params.num) in sentenceTemplates) {
+			this.backEndCall(sentenceTemplates[decodeURI(props.match.params.num)][2])
     }
 	}
 
@@ -372,6 +425,7 @@ class OneVerbWordBuilder extends Component {
       	mvEnglish1: [],
       	mvEnglish2: [],
       	mvEnglish3: [],
+      	mvEnglishAbl: [],
 			})
 
 		} else if (type === 'cv') {
@@ -392,6 +446,7 @@ class OneVerbWordBuilder extends Component {
       	cvEnglish1: [],
       	cvEnglish2: [],
       	cvEnglish3: [],
+      	cvEnglishAbl: [],
 			})			
 		} else if (type === 'sv') {
 			this.setState({
@@ -422,8 +477,8 @@ class OneVerbWordBuilder extends Component {
 		}
 	}
 
-	backEndCall(keyChanged) {
-		console.log(this.state)
+	backEndCall(keyChanged, eraseExisting) {
+		console.log('backend',this.state)
 		console.log(keyChanged)
 
 		let mv = {}
@@ -431,39 +486,44 @@ class OneVerbWordBuilder extends Component {
 		let sv = {}
 		let np = {}
 
-		if (this.state.mvvBase.length > 0) {mv['vBase']=this.state.mvvBase}
-		if (this.state.mvnsBases.length > 0) {mv['nsBases']=this.state.mvnsBases}
-		if (this.state.mvnoBases.length > 0) {mv['noBases']=this.state.mvnoBases}
-		if (this.state.mvno.length > 0) {mv['no']=this.state.mvno}
-		if (this.state.mvns.length > 0) {mv['ns']=this.state.mvns}
-		if (this.state.mvvMood.length > 0) {mv['vMood']=this.state.mvvMood}
-		if (this.state.mvvs.length > 0) {mv['vs']=this.state.mvvs}
-		if (this.state.mvvo.length > 0) {mv['vo']=this.state.mvvo}
-		if (this.state.mvnObliques.length > 0) {mv['nObliques']=this.state.mvnObliques}
+		if (eraseExisting) {
 
-		if (this.state.cvvBase.length > 0) {cv['vBase']=this.state.cvvBase}
-		if (this.state.cvnsBases.length > 0) {cv['nsBases']=this.state.cvnsBases}
-		if (this.state.cvnoBases.length > 0) {cv['noBases']=this.state.cvnoBases}
-		if (this.state.cvno.length > 0) {cv['no']=this.state.cvno}
-		if (this.state.cvns.length > 0) {cv['ns']=this.state.cvns}
-		if (this.state.cvvMood.length > 0) {cv['vMood']=this.state.cvvMood}
-		if (this.state.cvvs.length > 0) {cv['vs']=this.state.cvvs}
-		if (this.state.cvvo.length > 0) {cv['vo']=this.state.cvvo}
-		if (this.state.cvnObliques.length > 0) {cv['nObliques']=this.state.cvnObliques}
+		} else {
+			if (this.state.mvvBase.length > 0) {mv['vBase']=this.state.mvvBase}
+			if (this.state.mvnsBases.length > 0) {mv['nsBases']=this.state.mvnsBases}
+			if (this.state.mvnoBases.length > 0) {mv['noBases']=this.state.mvnoBases}
+			if (this.state.mvno.length > 0) {mv['no']=this.state.mvno}
+			if (this.state.mvns.length > 0) {mv['ns']=this.state.mvns}
+			if (this.state.mvvMood.length > 0) {mv['vMood']=this.state.mvvMood}
+			if (this.state.mvvs.length > 0) {mv['vs']=this.state.mvvs}
+			if (this.state.mvvo.length > 0) {mv['vo']=this.state.mvvo}
+			if (this.state.mvnObliques.length > 0) {mv['nObliques']=this.state.mvnObliques}
 
-		if (this.state.svvBase.length > 0) {sv['vBase']=this.state.svvBase}
-		if (this.state.svnsBases.length > 0) {sv['nsBases']=this.state.svnsBases}
-		if (this.state.svnoBases.length > 0) {sv['noBases']=this.state.svnoBases}
-		if (this.state.svno.length > 0) {sv['no']=this.state.svno}
-		if (this.state.svns.length > 0) {sv['ns']=this.state.svns}
-		if (this.state.svvMood.length > 0) {sv['vMood']=this.state.svvMood}
-		if (this.state.svvs.length > 0) {sv['vs']=this.state.svvs}
-		if (this.state.svvo.length > 0) {sv['vo']=this.state.svvo}
+			if (this.state.cvvBase.length > 0) {cv['vBase']=this.state.cvvBase}
+			if (this.state.cvnsBases.length > 0) {cv['nsBases']=this.state.cvnsBases}
+			if (this.state.cvnoBases.length > 0) {cv['noBases']=this.state.cvnoBases}
+			if (this.state.cvno.length > 0) {cv['no']=this.state.cvno}
+			if (this.state.cvns.length > 0) {cv['ns']=this.state.cvns}
+			if (this.state.cvvMood.length > 0) {cv['vMood']=this.state.cvvMood}
+			if (this.state.cvvs.length > 0) {cv['vs']=this.state.cvvs}
+			if (this.state.cvvo.length > 0) {cv['vo']=this.state.cvvo}
+			if (this.state.cvnObliques.length > 0) {cv['nObliques']=this.state.cvnObliques}
 
+			if (this.state.svvBase.length > 0) {sv['vBase']=this.state.svvBase}
+			if (this.state.svnsBases.length > 0) {sv['nsBases']=this.state.svnsBases}
+			if (this.state.svnoBases.length > 0) {sv['noBases']=this.state.svnoBases}
+			if (this.state.svno.length > 0) {sv['no']=this.state.svno}
+			if (this.state.svns.length > 0) {sv['ns']=this.state.svns}
+			if (this.state.svvMood.length > 0) {sv['vMood']=this.state.svvMood}
+			if (this.state.svvs.length > 0) {sv['vs']=this.state.svvs}
+			if (this.state.svvo.length > 0) {sv['vo']=this.state.svvo}
 
-		if (this.state.npn.length > 0) {np['n']=this.state.npn}
-		if (this.state.npnBases.length > 0) {np['nBases']=this.state.npnBases}
-		if (this.state.npnCase.length > 0) {np['nCase']=this.state.npnCase}
+			if (this.state.npn.length > 0) {np['n']=this.state.npn}
+			if (this.state.npnBases.length > 0) {np['nBases']=this.state.npnBases}
+			if (this.state.npnCase.length > 0) {np['nCase']=this.state.npnCase}
+
+		}
+
 
 		// console.log(keyChanged,mv)
     axios
@@ -477,28 +537,44 @@ class OneVerbWordBuilder extends Component {
       .then(response => {
       	console.log(response.data)
       	let vkey
-
+      	let updateDict = {}
       	if ("english" in response.data) {
-      		Object.keys(response.data['english']).map((k)=>{
-      				console.log(k)
-      				console.log(response.data['english'][k])
-			        this.setState({
-			        	[k]: response.data['english'][k],
-			        })
-			      })
+      		vEnglish.map((k)=>{
+      			if (k in response.data['english']) {
+      				updateDict[[k]] = response.data['english'][k]
+      			} else {
+      				updateDict[[k]] = []
+      			}
+      		})
+      		// Object.keys(response.data['english']).map((k)=>{
+      		// 		// console.log(k)
+      		// 		// console.log(response.data['english'][k])
+      		// 		updateDict[[k]] = response.data['english'][k]
+
+			     //    // this.setState({
+			     //    // 	[k]: response.data['english'][k],
+			     //    // })
+
+			     //  })
       	}
 
       	if ("mv" in response.data) {
       		vOptions.map((k)=>{
       			vkey = 'mv'+k
       			if (k in response.data['mv']) {
-			        this.setState({
-			        	[vkey]: response.data['mv'][k],
-			        })
+			        // this.setState({
+			        	// [vkey]: response.data['mv'][k],
+			        // })
+
+      				updateDict[[vkey]] = response.data['mv'][k]
+
       			} else {
-			        this.setState({
-			        	[vkey]: [],
-			        })      				
+
+      				updateDict[[vkey]] = []
+
+			        // this.setState({
+			        	// [vkey]: [],
+			        // })      				
       			}
       		})
       	} else {
@@ -509,13 +585,15 @@ class OneVerbWordBuilder extends Component {
       		vOptions.map((k)=>{
       			vkey = 'cv'+k
       			if (k in response.data['cv']) {
-			        this.setState({
-			        	[vkey]: response.data['cv'][k],
-			        })
+      				updateDict[[vkey]] = response.data['cv'][k]
+			        // this.setState({
+			        	// [vkey]: response.data['cv'][k],
+			        // })
       			} else {
-			        this.setState({
-			        	[vkey]: [],
-			        })      				
+      				updateDict[[vkey]] = []
+			        // this.setState({
+			        	// [vkey]: [],
+			        // })      				
       			}
       		})
       	} else {
@@ -526,15 +604,21 @@ class OneVerbWordBuilder extends Component {
       		vOptions.map((k)=>{
       			vkey = 'sv'+k
       			if (k in response.data['sv']) {
-			        this.setState({
-			        	[vkey]: response.data['sv'][k],
-			        })
+      				updateDict[[vkey]] = response.data['sv'][k]
+			        // this.setState({
+			        // 	[vkey]: response.data['sv'][k],
+			        // })
       			} else {
-			        this.setState({
-			        	[vkey]: [],
-			        })      				
+      				updateDict[[vkey]] = []
+			        // this.setState({
+			        	// [vkey]: [],
+			        // })      				
       			}
       		})
+      		if (this.state.svvCase.length > 0) {
+      			updateDict['svEnglish1']=[[this.state.svvCase, 'svv.e']].concat(updateDict['svEnglish1'])
+      			// this.setState({svEnglish1:[[this.state.svvCase, 'svv.e']].concat(this.state.svEnglish1)})
+      		}
       	} else {
       		this.initialize('sv')
       	}
@@ -542,9 +626,10 @@ class OneVerbWordBuilder extends Component {
       	if ("np" in response.data) {
       		Object.keys(response.data['np']).map((k)=>{
       			let npkey = 'np'+k
-		        this.setState({
-		        	[npkey]: response.data['np'][k],
-		        })
+		        // this.setState({
+		        // 	[npkey]: response.data['np'][k],
+		        // })
+      			updateDict[[npkey]] = response.data['np'][k]
 
       		})
       	} else {
@@ -554,123 +639,155 @@ class OneVerbWordBuilder extends Component {
       	if ("segments" in response.data) {
       		if ("mv" in response.data.segments) {
       			if ("nObliques" in response.data.segments.mv) {
-			        this.setState({
-			        	mvnObliquesSegments: response.data.segments.mv.nObliques,
-			        })      				
+			        // this.setState({
+			        	// mvnObliquesSegments: response.data.segments.mv.nObliques,
+			        // })      				
+      				updateDict['mvnObliquesSegments'] = response.data.segments.mv.nObliques
       			} else {
-			        this.setState({
-			        	mvnObliquesSegments: [],
-			        })      	      				
+			        // this.setState({
+			        	// mvnObliquesSegments: [],
+			        // })      	      				
+      				updateDict['mvnObliquesSegments'] = []
       			}
       			if ("v" in response.data.segments.mv) {
-			        this.setState({
-			        	mvvSegments: response.data.segments.mv.v,
-			        })      				
+			        // this.setState({
+			        	// mvvSegments: response.data.segments.mv.v,
+			        // })      				
+      				updateDict['mvvSegments'] = response.data.segments.mv.v
       			} else {
-			        this.setState({
-			        	mvvSegments: "",
-			        })      	      				
+			        // this.setState({
+			        	// mvvSegments: "",
+			        // })      	      				
+      				updateDict['mvvSegments'] = ""
       			}
       			if ("ns" in response.data.segments.mv) {
-			        this.setState({
-			        	mvnsSegments: response.data.segments.mv.ns,
-			        })      				
+			        // this.setState({
+			        	// mvnsSegments: response.data.segments.mv.ns,
+			        // })      				
+      				updateDict['mvnsSegments'] = response.data.segments.mv.ns
       			} else {
-			        this.setState({
-			        	mvnsSegments: [],
-			        })      	      				
+			        // this.setState({
+			        	// mvnsSegments: [],
+			        // })      	      				
+      				updateDict['mvnsSegments'] = []
       			}
       			if ("no" in response.data.segments.mv) {
-			        this.setState({
-			        	mvnoSegments: response.data.segments.mv.no,
-			        })      				
+			        // this.setState({
+			        	// mvnoSegments: response.data.segments.mv.no,
+			        // })      				
+      				updateDict['mvnoSegments'] = response.data.segments.mv.no
       			} else {
-			        this.setState({
-			        	mvnoSegments: [],
-			        })      	      				
+			        // this.setState({
+			        	// mvnoSegments: [],
+			        // })      	      				
+      				updateDict['mvnoSegments'] = []
       			}      			  
       		}
       		if ("cv" in response.data.segments) {
       			if ("nObliques" in response.data.segments.cv) {
-			        this.setState({
-			        	cvnObliquesSegments: response.data.segments.cv.nObliques,
-			        })      				
+			        // this.setState({
+			        	// cvnObliquesSegments: response.data.segments.cv.nObliques,
+			        // })      				
+      				updateDict['cvnObliquesSegments'] = response.data.segments.cv.nObliques
       			} else {
-			        this.setState({
-			        	cvnObliquesSegments: "",
-			        })      	      				
+			        // this.setState({
+			        	// cvnObliquesSegments: "",
+			        // })      	      				
+      				updateDict['cvnObliquesSegments'] = ""
       			}      			
       			if ("v" in response.data.segments.cv) {
-			        this.setState({
-			          cvvSegments: response.data.segments.cv.v,
-			        })      				
+			        // this.setState({
+			          // cvvSegments: response.data.segments.cv.v,
+			        // })      				
+      				updateDict['cvvSegments'] = response.data.segments.cv.v
       			} else {
-			        this.setState({
-			        	cvvSegments: "",
-			        })      	      				
+			        // this.setState({
+			        	// cvvSegments: "",
+			        // })      	      				
+      				updateDict['cvvSegments'] = ""
       			}
       			if ("ns" in response.data.segments.cv) {
-			        this.setState({
-			        	cvnsSegments: response.data.segments.cv.ns,
-			        })      				
+			        // this.setState({
+			        	// cvnsSegments: response.data.segments.cv.ns,
+			        // })      				
+      				updateDict['cvnsSegments'] = response.data.segments.cv.ns
       			} else {
-			        this.setState({
-			        	cvnsSegments: [],
-			        })      	      				
+			        // this.setState({
+			        	// cvnsSegments: [],
+			        // })      	      				
+      				updateDict['cvnsSegments'] = []
       			}
       			if ("no" in response.data.segments.cv) {
-			        this.setState({
-			        	cvnoSegments: response.data.segments.cv.no,
-			        })      				
+			        // this.setState({
+			        	// cvnoSegments: response.data.segments.cv.no,
+			        // })      				
+      				updateDict['cvnoSegments'] = response.data.segments.cv.no
       			} else {
-			        this.setState({
-			        	cvnoSegments: [],
-			        })      	      				
+			        // this.setState({
+			        	// cvnoSegments: [],
+			        // })      	      				
+      				updateDict['cvnoSegments'] = []
       			}      			  
       		}
 
       		if ("sv" in response.data.segments) {
       			if ("nObliques" in response.data.segments.sv) {
-			        this.setState({
-			        	svnObliquesSegments: response.data.segments.sv.nObliques,
-			        })      				
+			        // this.setState({
+			        	// svnObliquesSegments: response.data.segments.sv.nObliques,
+			        // })      				
+      				updateDict['svnObliquesSegments'] = response.data.segments.sv.nObliques
       			} else {
-			        this.setState({
-			        	svnObliquesSegments: "",
-			        })      	      				
+			        // this.setState({
+			        	// svnObliquesSegments: "",
+			        // })      	      				
+      				updateDict['svnObliquesSegments'] = ""
       			}   
       			if ("v" in response.data.segments.sv) {
-			        this.setState({
-			        	svvSegments: response.data.segments.sv.v,
-			        })      				
+			        // this.setState({
+			        	// svvSegments: response.data.segments.sv.v,
+			        // })      				
+      				updateDict['svvSegments'] = response.data.segments.sv.v
       			} else {
-			        this.setState({
-			        	svvSegments: "",
-			        })      	      				
+			        // this.setState({
+			        	// svvSegments: "",
+			        // })      	      				
+      				updateDict['svvSegments'] = ""
       			}
       			if ("no" in response.data.segments.sv) {
-			        this.setState({
-			        	svnoSegments: response.data.segments.sv.no,
-			        })      				
+			        // this.setState({
+			        	// svnoSegments: response.data.segments.sv.no,
+			        // })      				
+      				updateDict['svnoSegments'] = response.data.segments.sv.no
       			} else {
-			        this.setState({
-			        	svnoSegments: [],
-			        })      	      				
+			        // this.setState({
+			        	// svnoSegments: [],
+			        // })      	      				
+      				updateDict['svnoSegments'] = []
       			}      			  
       		}
 
     			if ("np" in response.data.segments) {
     				if ("n" in response.data.segments.np) {
-			        this.setState({
-			        	npnSegments: response.data.segments.np.n,
-			        })      				
+			        // this.setState({
+			        	// npnSegments: response.data.segments.np.n,
+			        // })      				
+      				updateDict['npnSegments'] = response.data.segments.np.n
 			      } else {
-			        this.setState({
-			        	npnSegments: [],
-			        })      	      				
+			        // this.setState({
+			        	// npnSegments: [],
+			        // })      	      				
+      				updateDict['npnSegments'] = []
       			}
     			}
       	}
+
+
+      	this.setState(updateDict)
+
+      	// Object.keys(updateDict).map((k)=>{
+      		// this.setState({[k]:updateDict[k]})
+      	// })
+      	
 
   		})
 
@@ -678,12 +795,12 @@ class OneVerbWordBuilder extends Component {
 
 
 	processStyledText = (sentence) => {			
-		let matches = sentence.match(/\⎡.*?\⎤/g)
+		let matches = sentence.match(/\<.*?\>/g)
 		if (matches !== null) {
 			matches.map((m) => sentence = sentence.replace(m,'<i>'+m.slice(1,-1)+'</i>'))		
-			return <span dangerouslySetInnerHTML={{__html: sentence}} />		
+			return <span dangerouslySetInnerHTML={{__html: sentence.replace("⟨","").replace("⟩","")}} />		
 		} else {
-			return <span>{sentence.replace("<","").replace(">","")}</span>
+			return <span>{sentence.replace("⟨","").replace("⟩","")}</span>
 		}
 	}
 
@@ -808,6 +925,22 @@ class OneVerbWordBuilder extends Component {
 									)}
 								</div>													
 							</div>	
+  	} else if (type==='svno') {
+  		return 	<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
+								<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
+									{this.state.svnoSegments.slice().reverse()[ind[0]][ind[1]].map((t)=>
+										<span style={{color:this.state.colorsList[t[1]]}}>{t[0]}</span>
+									)}
+								</div>													
+							</div>	
+  	} else if (type==='svnoappositive') {
+  		return 	<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
+								<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
+									{this.state.svnoSegments.slice().reverse()[ind[0]][ind[1]].map((t)=>
+										<span style={{color:this.state.colorsList[t[1]]}}>{t[0]}</span>
+									)}
+								</div>													
+							</div>			
   	} else if (type==='cvnoappositive') {
   		return 	<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
 								<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
@@ -864,6 +997,14 @@ class OneVerbWordBuilder extends Component {
 									)}
 								</div>
 							</div>
+  	} else if (type==='cvnObliques' || type==='cvnObliquesAppositive') {
+  		return 	<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
+								<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
+									{this.state.cvnObliquesSegments[ind[0]][ind[1]][ind[2]].map((t)=>
+										<span style={{color:this.state.colorsList[t[1]]}}>{t[0]}</span>
+									)}
+								</div>
+							</div>
   	}
     	
   }
@@ -890,6 +1031,7 @@ class OneVerbWordBuilder extends Component {
 				return <Menu vertical>
 						{this.state.cvvs.length > 0 && this.state.cvns.length == 0 ? this.menuItem('BaseChooser','Add Connective Noun Subject','cvnsinsert',null) : null}
 						{this.state.cvvo.length > 0 && this.state.cvno.length == 0 ? this.menuItem('BaseChooser','Add Connective Noun Object','cvnoinsert',null) : null}
+			      {this.subMenuItem('caddnOblique')}
 			    	</Menu>  			
   		}else if (type === 'defaultsv') {
 				return <Menu vertical>
@@ -923,7 +1065,7 @@ class OneVerbWordBuilder extends Component {
 				return <Menu vertical>
 						{this.menuItem('BaseChooser','Change Noun','svnoupdate',null)}
 						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun','svnopossessorinsert',null) : null}
-			      {ind[0] == this.state.svno.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun','svnoinsert',null): null}
+			      {ind[0] == this.state.svno.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun','svnopossessedinsert',null): null}
 						{this.menuItem('BaseChooser','Add Descriptor Noun','svnoappositiveinsert',null)}
 			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["sv","no",this.state.svno.length-1-ind[0]],-1]])}
 			    	</Menu>  			
@@ -957,7 +1099,7 @@ class OneVerbWordBuilder extends Component {
 				return <Menu vertical>
 						{this.menuItem('BaseChooser','Change Noun','cvnsupdate',null)}
 						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun','cvnspossessorinsert',null) : null}
-			      {ind[0] == this.state.cvns.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun','cvnsinsert',null): null}
+			      {ind[0] == this.state.cvns.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun','cvnspossessedinsert',null): null}
 						{this.menuItem('BaseChooser','Add Descriptor Noun','cvnsappositiveinsert',null)}
 			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["cv","ns",this.state.cvns.length-1-ind[0]],-1]])}
 			    	</Menu>  			
@@ -965,7 +1107,7 @@ class OneVerbWordBuilder extends Component {
 				return <Menu vertical>
 						{this.menuItem('BaseChooser','Change Noun','cvnoupdate',null)}
 						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun','cvnopossessorinsert',null) : null}
-			      {ind[0] == this.state.cvno.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun','cvnoinsert',null): null}
+			      {ind[0] == this.state.cvno.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun','cvnopossessedinsert',null): null}
 						{this.menuItem('BaseChooser','Add Descriptor Noun','cvnoappositiveinsert',null)}
 			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["cv","no",this.state.cvno.length-1-ind[0]],-1]])}
 			    	</Menu>  			
@@ -994,6 +1136,23 @@ class OneVerbWordBuilder extends Component {
 						}
 			      
 			    	</Menu> 
+	  	} else if (type==='cvnObliques') {
+  					return <Menu vertical>
+						{this.menuItem('BaseChooser','Change Oblique Noun','cvnObliqueUpdate',null)}
+						{this.state.cvnObliques.length > 0 ?
+						(ind[1] == this.state.cvnObliques[ind[0]].n.length-1 ? this.menuItem('BaseChooser','Add Oblique Possessor Noun','cvnObliquepossessorinsert',null) : null)
+						:
+						null
+						}
+			      {ind[1] == 0 ? this.menuItem('BaseChooser','Add Oblique Possessed Noun','cvnObliquepossessedinsert',null): null}
+						{this.menuItem('BaseChooser','Add Descriptor Noun','cvnObliqueappositiveinsert',null)}
+						{ind[1] == 0 ? 
+							(this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["cv","nObliques",ind[0],ind[1]],-1]]))
+							:
+							(this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["cv","nObliques",ind[0],ind[1],ind[2]],-1]]))
+						}
+			      
+			    	</Menu> 
 	  	} else if (type === 'cvnsappositive') {
 				return <Menu vertical>
 						{this.menuItem('BaseChooser','Change Descriptor Noun','cvnsupdate',null)}
@@ -1014,9 +1173,16 @@ class OneVerbWordBuilder extends Component {
 						{this.menuItem('BaseChooser','Change Oblique Appositive Noun','mvnObliqueUpdate',null)}
 			      {this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["mv","nObliques",ind[0],ind[1],ind[2]],-1]])}
 			    	</Menu> 
+	  	} else if (type==='cvnObliquesAppositive') {
+  					return <Menu vertical>
+						{this.menuItem('BaseChooser','Change Oblique Appositive Noun','cvnObliqueUpdate',null)}
+			      {this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["cv","nObliques",ind[0],ind[1],ind[2]],-1]])}
+			    	</Menu> 
 	  	}
   	} else if (this.state.currentEditMode==='mvnObliqueUpdate') {
   		return this.baseChooser(["Update",["mv","nObliques",ind[0],'nBases',ind[1],ind[2]]],'n','updatebase','Ind')
+  	} else if (this.state.currentEditMode==='cvnObliqueUpdate') {
+  		return this.baseChooser(["Update",["cv","nObliques",ind[0],'nBases',ind[1],ind[2]]],'n','updatebase','Ind')
   	} else if (this.state.currentEditMode==='mvinsert') {
   		return this.baseChooser(["Insert",["mv"]],'v','insert','Ind')
   	} else if (this.state.currentEditMode==='cvinsert') {
@@ -1035,10 +1201,20 @@ class OneVerbWordBuilder extends Component {
   		} else {
   		return this.baseChooser(["Insert",["mv","nObliques"]],'n','insert',this.state.npCase)  			
   		}
+  	} else if (this.state.currentEditMode==='cnObliqueInsert') {
+  		if (this.state.cvnObliques.length > 0) {
+  		return this.baseChooser(["Insert",["cv","nObliques",-1]],'n','insert',this.state.npCase)
+  		} else {
+  		return this.baseChooser(["Insert",["cv","nObliques"]],'n','insert',this.state.npCase)  			
+  		}
   	} else if (this.state.currentEditMode==='mvnObliquepossessorinsert') {
   		return this.baseChooser(["Insert",["mv","nObliques",ind[0],-1]],'n','insert',this.state.npCase)
   	} else if (this.state.currentEditMode==='mvnObliquepossessedinsert') {
   		return this.baseChooser(["Insert",["mv","nObliques",ind[0],0]],'n','insert',this.state.npCase)
+  	} else if (this.state.currentEditMode==='cvnObliquepossessorinsert') {
+  		return this.baseChooser(["Insert",["cv","nObliques",ind[0],-1]],'n','insert',this.state.npCase)
+  	} else if (this.state.currentEditMode==='cvnObliquepossessedinsert') {
+  		return this.baseChooser(["Insert",["cv","nObliques",ind[0],0]],'n','insert',this.state.npCase)
   	} else if (this.state.currentEditMode==='npnupdate') {
   		return this.baseChooser(["Update",["np","nBases",ind[0],ind[1]]],'n','updatebase')
   	} else if (this.state.currentEditMode==='npinsert') {
@@ -1054,19 +1230,21 @@ class OneVerbWordBuilder extends Component {
   	} else if (this.state.currentEditMode==='mvnsupdate') {
   		return this.baseChooser(["Update",["mv","nsBases",this.state.mvnsSegments.length-1-ind[0],ind[1]]],'n','updatebase')
   	} else if (this.state.currentEditMode==='mvnsappositiveinsert') {
-  		return this.baseChooser(["Insert",["mv","ns",this.state.mvnsSegments.length-1-ind[0],ind[1]]],'n','insert')
+  		return this.baseChooser(["Insert",["mv","ns",this.state.mvnsSegments.length-1-ind[0],-1]],'n','insert')
   	} else if (this.state.currentEditMode==='mvnObliqueappositiveinsert') {
   		return this.baseChooser(["Insert",["mv","nObliques",ind[0],ind[1],-1]],'n','insert')
+  	} else if (this.state.currentEditMode==='cvnObliqueappositiveinsert') {
+  		return this.baseChooser(["Insert",["cv","nObliques",ind[0],ind[1],-1]],'n','insert')
   	} else if (this.state.currentEditMode==='mvnspossessorinsert') {
   		return this.baseChooser(["Insert",["mv","ns",-1]],'n','insert')
   	} else if (this.state.currentEditMode==='mvnspossessedinsert') {
   		return this.baseChooser(["Insert",["mv","ns",0]],'n','insert')
   	} else if (this.state.currentEditMode==='mvnopossessedinsert') {
   		return this.baseChooser(["Insert",["mv","no",0]],'n','insert')
-  	}else if (this.state.currentEditMode==='mvnoinsert') {
+  	} else if (this.state.currentEditMode==='mvnoinsert') {
   		return this.baseChooser(["Insert",["mv","no"]],'n','insert','Ind')
   	} else if (this.state.currentEditMode==='mvnoappositiveinsert') {
-  		return this.baseChooser(["Insert",["mv","no",this.state.mvnoSegments.length-1-ind[0],ind[1]]],'n','insert')
+  		return this.baseChooser(["Insert",["mv","no",this.state.mvnoSegments.length-1-ind[0],-1]],'n','insert')
   	} else if (this.state.currentEditMode==='mvnoupdate') {
   		return this.baseChooser(["Update",["mv","noBases",this.state.mvnoSegments.length-1-ind[0],ind[1]]],'n','updatebase')
   	} else if (this.state.currentEditMode==='mvnopossessorinsert') {
@@ -1079,20 +1257,32 @@ class OneVerbWordBuilder extends Component {
   	} else if (this.state.currentEditMode==='cvnsupdate') {
   		return this.baseChooser(["Update",["cv","nsBases",this.state.cvnsSegments.length-1-ind[0],ind[1]]],'n','updatebase')
   	} else if (this.state.currentEditMode==='cvnsappositiveinsert') {
-  		return this.baseChooser(["Insert",["cv","ns",this.state.cvnsSegments.length-1-ind[0],ind[1]]],'n','insert')
+  		return this.baseChooser(["Insert",["cv","ns",this.state.cvnsSegments.length-1-ind[0],-1]],'n','insert')
   	} else if (this.state.currentEditMode==='cvnspossessorinsert') {
   		return this.baseChooser(["Insert",["cv","ns",-1]],'n','insert')
   	} else if (this.state.currentEditMode==='cvnoinsert') {
   		return this.baseChooser(["Insert",["cv","no"]],'n','insert','Ind')
   	} else if (this.state.currentEditMode==='cvnoappositiveinsert') {
-  		return this.baseChooser(["Insert",["cv","no",this.state.cvnoSegments.length-1-ind[0],ind[1]]],'n','insert')
+  		return this.baseChooser(["Insert",["cv","no",this.state.cvnoSegments.length-1-ind[0],-1]],'n','insert')
   	} else if (this.state.currentEditMode==='cvnoupdate') {
   		return this.baseChooser(["Update",["cv","noBases",this.state.cvnoSegments.length-1-ind[0],ind[1]]],'n','updatebase')
   	} else if (this.state.currentEditMode==='cvnopossessorinsert') {
   		return this.baseChooser(["Insert",["cv","no",-1]],'n','insert',null)
+  	} else if (this.state.currentEditMode==='cvnopossessedinsert') {
+  		return this.baseChooser(["Insert",["cv","no",0]],'n','insert')
+  	} else if (this.state.currentEditMode==='cvnspossessedinsert') {
+  		return this.baseChooser(["Insert",["cv","ns",0]],'n','insert')
+  	} else if (this.state.currentEditMode==='svnopossessedinsert') {
+  		return this.baseChooser(["Insert",["sv","no",0]],'n','insert')
   	} else if (this.state.currentEditMode==='svnoinsert') {
   		return this.baseChooser(["Insert",["sv","no"]],'n','insert','Ind')
-  	}
+  	} else if (this.state.currentEditMode==='svnoappositiveinsert') {
+  		return this.baseChooser(["Insert",["sv","no",this.state.svnoSegments.length-1-ind[0],-1]],'n','insert')
+  	} else if (this.state.currentEditMode==='svnoupdate') {
+  		return this.baseChooser(["Update",["sv","noBases",this.state.svnoSegments.length-1-ind[0],ind[1]]],'n','updatebase')
+  	} else if (this.state.currentEditMode==='svnopossessorinsert') {
+  		return this.baseChooser(["Insert",["sv","no",-1]],'n','insert',null)
+  	} 
 
   	 else if (this.state.currentEditMode==='question') {
   		return this.menuItem('Question','Make Command','command',null,null)
@@ -1162,6 +1352,16 @@ class OneVerbWordBuilder extends Component {
 	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Ter'},()=>{this.menuSelect('nObliqueInsert',-1)})}}>toward...</Dropdown.Item>
 	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Via'},()=>{this.menuSelect('nObliqueInsert',-1)})}}>through, using...</Dropdown.Item>
 	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Equ'},()=>{this.menuSelect('nObliqueInsert',-1)})}}>like, similar to...</Dropdown.Item>
+	      </Dropdown.Menu>
+	    </Dropdown>			
+		} else if (type==='caddnOblique') {
+	    return <Dropdown item text='Add Noun Obliques'>
+	      <Dropdown.Menu>
+	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Abl_Mod'},()=>{this.menuSelect('cnObliqueInsert',-1)})}}>from, indirect object......</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Loc'},()=>{this.menuSelect('cnObliqueInsert',-1)})}}>in, at...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Ter'},()=>{this.menuSelect('cnObliqueInsert',-1)})}}>toward...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Via'},()=>{this.menuSelect('cnObliqueInsert',-1)})}}>through, using...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Equ'},()=>{this.menuSelect('cnObliqueInsert',-1)})}}>like, similar to...</Dropdown.Item>
 	      </Dropdown.Menu>
 	    </Dropdown>			
 		} else if (type==='addSV') {
@@ -1336,7 +1536,8 @@ class OneVerbWordBuilder extends Component {
 	}
 
 	baseChooser = (itemUpdating,endingNeeded,update,mood,submood) => {
-		// console.log(itemUpdating,endingNeeded,update,mood)
+		console.log(itemUpdating,endingNeeded,update,mood,submood)
+		// console.log(this.state.currentEditMode, itemUpdating,endingNeeded,update,mood,submood)
 		         return <Grid style={{height:'400px',width:'505px'}}>
 		                	<Grid.Row columns={2} style={{paddingBottom:'0px'}}divided>
 		                	<Grid.Column >
@@ -1369,7 +1570,7 @@ class OneVerbWordBuilder extends Component {
 
 										    }} style={{cursor:'pointer',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'15px',padding:5}}>
 											        <List.Description style={{paddingBottom:'4px'}}>{k['yupikword']}</List.Description>
-											        <List.Header style={{fontWeight:'400'}}>{k['englishraw']}</List.Header>
+											        <List.Header style={{fontWeight:'400'}}>{this.processStyledText(k['englishraw'])}</List.Header>
 											      </List.Item>				      	
 										      })}
 									    	</List>
@@ -1388,11 +1589,21 @@ class OneVerbWordBuilder extends Component {
 									        <div style={{color:'#666666'}}>{'Candidate (English Order)'}</div>
 									        <Segment style={{height:290,overflow: 'auto',padding:10}}>
 									        	<List divided>
+									        	{this.state.cvvMood.length > 0 ?
+										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
+										        		<div style={{flex:1}}>
+											        		<div style={{color:'#000000b3'}}>{retrieveMoodEnglish[this.state.cvvMood]['fst']}</div>
+											        		<div style={{fontWeight:''}}>{retrieveMoodEnglish[this.state.cvvMood]['english']+' '}<span style={{fontStyle:'italic'}}>{mvSubjectOptionsEnglish[this.state.cvvs.join("")]}</span></div>
+										        		</div>
+										        		</List.Item>
+									        		:
+									        		null
+									        	}
 									        	{this.state.candidateBase.map((k,kindex)=>{return (kindex===this.state.candidateBase.length-1 ?
 										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
 										        		<div style={{flex:1}}>
 											        		<div style={{color:'#000000b3'}}>{k['yupikword']}</div>
-											        		<div style={{fontWeight:''}}>{k['englishraw']}</div>
+											        		<div style={{fontWeight:''}}>{this.processStyledText(k['englishraw'])}</div>
 										        		</div>
 										        		<Icon circular onClick={()=>{this.setState({candidateBase:this.state.candidateBase.slice(0,-1)},()=>{this.updateCandidateCall(endingNeeded,update,mood)})}} style={{cursor:'pointer',width:30}} name='x' />
 										        		</List.Item>
@@ -1400,7 +1611,7 @@ class OneVerbWordBuilder extends Component {
 										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
 										        		<div style={{flex:1}}>										        		
 											        		<div style={{color:'#000000b3'}}>{k['yupikword']}</div>
-											        		<div style={{fontWeight:''}}>{k['englishraw']}</div>
+											        		<div style={{fontWeight:''}}>{this.processStyledText(k['englishraw'])}</div>
 										        		</div>
 										        		<div style={{width:30}} />
 										        		</List.Item>
@@ -1422,7 +1633,7 @@ class OneVerbWordBuilder extends Component {
 	}
 
 	render() {
-		// console.log(this.state)
+		console.log(this.state)
 
 
 		return (
@@ -1622,25 +1833,29 @@ class OneVerbWordBuilder extends Component {
 									null
 								}			
 
-{/*								{this.state.mvnObliquesSegments.map((obliques,obliqueind)=>
-									<div>
-										<div style={{marginBottom:'5px',fontSize:'30px',color:'#000000',fontWeight:'400'}}>
-											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
-												{obliques.slice().reverse().map((x,xind)=> 
-												<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
-													{x.map((k,kind)=>
-													{if (kind === 0) {
-														return <span>{this.editMenu('mvnObliques',[obliqueind,obliques.length-1-xind,kind])}</span>												
-													} else {
-														return <span>{this.editMenu('mvnObliquesAppositive',[obliqueind,obliques.length-1-xind,kind])}</span>												
-													}}
+
+
+								{this.state.mvnObliquesSegments.length > 0 && this.state.mvnObliques.length === this.state.mvnObliquesSegments.length ?
+									(this.state.mvnObliquesSegments.map((obliques,obliqueind)=>
+										<div>
+											<div style={{marginBottom:'5px',fontSize:'30px',color:'#000000',fontWeight:'400'}}>
+												<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
+													{obliques.slice().reverse().map((x,xind)=> 
+													<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
+														{x.map((k,kind)=>
+														{if (kind === 0) {
+															return <span>{this.editMenu('mvnObliques',[obliqueind,obliques.length-1-xind,kind])}</span>												
+														} else {
+															return <span>{this.editMenu('mvnObliquesAppositive',[obliqueind,obliques.length-1-xind,kind])}</span>												
+														}}
+														)}
+													</div>
 													)}
 												</div>
-												)}
 											</div>
-										</div>
-									</div>									
-								)}*/}
+										</div>									
+									)):null
+								}
 								
 								{this.state.npnSegments.length > 0 && this.state.npnSegments.length === this.state.npn.length ?
 									<div>
@@ -1695,7 +1910,7 @@ class OneVerbWordBuilder extends Component {
 								})}			
 
 								{this.state.mvvs.length > 0 ?
-									(this.state.mvnsSegments.length > 0 && this.state.mvnsSegments.length === this.state.mvns.length ? 
+									(this.state.mvnsSegments.length > 0 && this.state.mvnsSegments.length === this.state.mvns.length && this.state.mvnsSegments.length === this.state.mvnsEnglish2.length ? 
 										<span>					
 											{this.state.mvnsSegments.slice().reverse().map((x,xind)=>
 												<span>
@@ -1740,7 +1955,11 @@ class OneVerbWordBuilder extends Component {
 												<span>
 												{xind === 0 ?
 													<span>
+														{this.state.mvvBase[1] == 'it' ?
+														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","no",this.state.mvnoSegments.length-1,0],(data.value+this.state.mvno[this.state.mvnoSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.mvno[this.state.mvnoSegments.length-1][0].slice(0, -1).join("")} options={nounOptionsMVAblPossessors} />
+														:
 														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","no",this.state.mvnoSegments.length-1,0],(data.value+this.state.mvno[this.state.mvnoSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.mvno[this.state.mvnoSegments.length-1][0].slice(0, -1).join("")} options={nounOptionsMVPossessors} />
+														}
 														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","no",this.state.mvnoSegments.length-1,0],this.state.mvno[this.state.mvnoSegments.length-1][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.mvno[this.state.mvnoSegments.length-1][0].slice(-1).join("")} options={nounOptionsNumbers} />																
 														{this.state.mvnoEnglish2[xind].map((w,wind)=>
 															(w.map((t)=> <span style={{color:this.state.colorsList[t[1]]}}>{t[0]+" "}</span>))
@@ -1759,7 +1978,13 @@ class OneVerbWordBuilder extends Component {
 										</span>
 										:
 										<span>
-											<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={(event,data)=>{this.backEndCall([["Update",["mv","vo"],data.value.split('').map(Number)]])}}  value={this.state.mvvo.join("")} options={mvObjectOptions} />
+											{this.state.mvvBase[1] == 'it' ?
+												(this.state.mvEnglishAbl.map((w,wind)=>
+													<span style={{color:this.state.colorsList[w[1]]}}>{w[0]}</span>
+												))
+												:
+												<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={(event,data)=>{this.backEndCall([["Update",["mv","vo"],data.value.split('').map(Number)]])}}  value={this.state.mvvo.join("")} options={mvObjectOptions} />												
+											}
 										</span>
 									)
 									:
@@ -1785,36 +2010,18 @@ class OneVerbWordBuilder extends Component {
 								<div style={{textAlign:'center',fontSize:'18px',color:'#0D0D0D',fontWeight:'300'}}>
 
 
-								{this.state.mvnObliquesSegments.length > 0 && this.state.mvnObliques.length === this.state.mvnObliquesSegments.length ?
-									(this.state.mvnObliquesSegments.map((obliques,obliqueind)=>
-										<div>
-											<div style={{marginBottom:'5px',fontSize:'30px',color:'#000000',fontWeight:'400'}}>
-												<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
-													{obliques.slice().reverse().map((x,xind)=> 
-													<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
-														{x.map((k,kind)=>
-														{if (kind === 0) {
-															return <span>{this.editMenu('mvnObliques',[obliqueind,obliques.length-1-xind,kind])}</span>												
-														} else {
-															return <span>{this.editMenu('mvnObliquesAppositive',[obliqueind,obliques.length-1-xind,kind])}</span>												
-														}}
-														)}
-													</div>
-													)}
-												</div>
-											</div>
-										</div>									
-									)):null
-								}
 
-								{this.state.mvnObliquesSegments.length > 0 && this.state.mvnObliquesSegments.length === this.state.mvnObliques.length ? 
+
+								{this.state.mvnObliquesSegments.length > 0 && this.state.mvnObliquesSegments.length === this.state.mvnObliques.length && this.state.mvnObliquesSegments.length === this.state.mvnObliquesEnglish2.length ? 
 									(this.state.mvnObliques.map((obliques,obliqueind)=>
 										<div>					
 											{obliques['n'].slice().reverse().map((x,xind)=>
 												<span>
 												{xind === 0 ?
 													<span>
-														{console.log(obliques,obliqueind,x,xind,this.state.mvnObliques[this.state.mvnObliquesSegments.length-1]['n'][0][0].slice(0, -1).join(""))}
+														{this.state.mvnObliquesEnglish1[obliqueind].map((w,wind)=>
+															<span style={{color:this.state.colorsList[w[1]]}}>{w[0]+" "}</span>
+															)}														
 														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","nObliques",obliqueind,'n',obliques['n'].length-1-xind,0],(data.value+this.state.mvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.mvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(0, -1).join("")} options={nounOptionsMVPossessors} />
 														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","nObliques",obliqueind,'n',obliques['n'].length-1-xind,0],this.state.mvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.mvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(-1).join("")} options={nounOptionsNumbers} />																
 														{this.state.mvnObliquesEnglish2[obliqueind][xind].map((w,wind)=>
@@ -1955,6 +2162,27 @@ class OneVerbWordBuilder extends Component {
 									null
 								}			
 
+								{this.state.cvnObliquesSegments.length > 0 && this.state.cvnObliques.length === this.state.cvnObliquesSegments.length ?
+									(this.state.cvnObliquesSegments.map((obliques,obliqueind)=>
+										<div>
+											<div style={{marginBottom:'5px',fontSize:'30px',color:'#000000',fontWeight:'400'}}>
+												<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
+													{obliques.slice().reverse().map((x,xind)=> 
+													<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
+														{x.map((k,kind)=>
+														{if (kind === 0) {
+															return <span>{this.editMenu('cvnObliques',[obliqueind,obliques.length-1-xind,kind])}</span>												
+														} else {
+															return <span>{this.editMenu('cvnObliquesAppositive',[obliqueind,obliques.length-1-xind,kind])}</span>												
+														}}
+														)}
+													</div>
+													)}
+												</div>
+											</div>
+										</div>									
+									)):null
+								}
 
 								{this.state.cvvs.length > 0 ?
 									<div style={{display:'flex',justifyContent:'center',paddingBottom:10}}>
@@ -2016,7 +2244,11 @@ class OneVerbWordBuilder extends Component {
 												<span>
 												{xind === 0 ?
 													<span>
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["cv","no",this.state.cvnoSegments.length-1,0],(data.value+this.state.cvno[this.state.cvnoSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.cvno[this.state.cvnoSegments.length-1][0].slice(0, -1).join("")} options={nounOptionsCVPossessors} />
+														{this.state.cvvBase[1] == 'it' ?
+															<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["cv","no",this.state.cvnoSegments.length-1,0],(data.value+this.state.cvno[this.state.cvnoSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.cvno[this.state.cvnoSegments.length-1][0].slice(0, -1).join("")} options={nounOptionsCVAblPossessors} />
+															:
+															<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["cv","no",this.state.cvnoSegments.length-1,0],(data.value+this.state.cvno[this.state.cvnoSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.cvno[this.state.cvnoSegments.length-1][0].slice(0, -1).join("")} options={nounOptionsCVPossessors} />
+														}
 														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["cv","no",this.state.cvnoSegments.length-1,0],this.state.cvno[this.state.cvnoSegments.length-1][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.cvno[this.state.cvnoSegments.length-1][0].slice(-1).join("")} options={nounOptionsNumbers} />																
 														{this.state.cvnoEnglish2[xind].map((w,wind)=>
 															(w.map((t)=> <span style={{color:this.state.colorsList[t[1]]}}>{t[0]+" "}</span>))
@@ -2035,7 +2267,13 @@ class OneVerbWordBuilder extends Component {
 										</span>
 										:
 										<span>
-											<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}   onChange={(event,data)=>{if (data.value === 'mvsubject') {this.backEndCall([["Update",["cv","vo"],[4,1,["mv","vs"]]]])} else {this.backEndCall([["Update",["cv","vo"],data.value.split('').map(Number)]])}}}  value={this.state.cvvo.join("")} options={mvObjectOptions} />
+											{this.state.cvvBase[1] == 'it' ?
+												(this.state.cvEnglishAbl.map((w,wind)=>{
+													return <span style={{color:this.state.colorsList[w[1]]}}>{w[0]+" "}</span>
+												}))			
+												:
+												<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}   onChange={(event,data)=>{if (data.value === 'mvsubject') {this.backEndCall([["Update",["cv","vo"],[4,1,["mv","vs"]]]])} else {this.backEndCall([["Update",["cv","vo"],data.value.split('').map(Number)]])}}}  value={this.state.cvvo.join("")} options={mvObjectOptions} />								
+											}
 										</span>
 									)
 									:
@@ -2045,6 +2283,39 @@ class OneVerbWordBuilder extends Component {
 								{this.state.cvEnglish3.map((w,wind)=>{
 									return <span style={{color:this.state.colorsList[w[1]]}}>{w[0]+" "}</span>
 								})}
+
+								{this.state.cvnObliquesSegments.length > 0 && this.state.cvnObliquesSegments.length === this.state.cvnObliques.length ? 
+									(this.state.cvnObliques.map((obliques,obliqueind)=>
+										<div>					
+											{obliques['n'].slice().reverse().map((x,xind)=>
+												<span>
+												{xind === 0 ?
+													<span>
+														{this.state.cvnObliquesEnglish1[obliqueind].map((w,wind)=>
+															<span style={{color:this.state.colorsList[w[1]]}}>{w[0]+" "}</span>
+															)}														
+														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","nObliques",obliqueind,'n',obliques['n'].length-1-xind,0],(data.value+this.state.cvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.cvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(0, -1).join("")} options={nounOptionsMVPossessors} />
+														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","nObliques",obliqueind,'n',obliques['n'].length-1-xind,0],this.state.cvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.cvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(-1).join("")} options={nounOptionsNumbers} />																
+														{this.state.cvnObliquesEnglish2[obliqueind][xind].map((w,wind)=>
+															(w.map((t)=> <span style={{color:this.state.colorsList[t[1]]}}>{t[0]+" "}</span>))
+															)}
+													</span>
+													:
+													<span>
+														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","nObliques",obliqueind,'n',obliques['n'].length-1-xind,0],this.state.cvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.cvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(-1).join("")} options={nounOptionsNumbers} />																
+														{console.log(xind)}
+														{this.state.cvnObliquesEnglish2[obliqueind][xind].map((w,wind)=>
+															(w.map((t)=> <span style={{color:this.state.colorsList[t[1]]}}>{t[0]+" "}</span>))
+															)}
+													</span>
+												}
+												</span>
+											)}
+										</div>
+										))
+									:
+									null
+								}
 
 
 							</div>
@@ -2060,6 +2331,39 @@ class OneVerbWordBuilder extends Component {
 
 								<div style={{textAlign:'center',fontSize:'18px',color:'#0D0D0D',fontWeight:'300'}}>
 
+							 	{this.state.svnoBases.length > 0 ? 
+							 		<div>
+										<div style={{marginBottom:'5px',fontSize:'30px',color:'#000000',fontWeight:'400'}}>
+											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
+											{this.state.svnoSegments.slice().reverse().map((k,kind)=> 
+												<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
+												{k.map((q,qind)=> {
+													if (qind === 0) {
+														return <span>{this.editMenu('svno',[kind,0])}</span>												
+													} else {
+														return <span>{this.editMenu('svnoappositive',[kind,qind])}</span>												
+													}
+												})}
+												</div>												
+
+											)}
+											</div>	
+										</div>
+										{this.state.showUnderlying ?
+											<div style={{display:'flex',justifyContent:'center',fontSize:'18px',marginBottom:'10px',fontWeight:'300'}}> 
+											{this.state.svObjectUnderlyingDisplay.map((y)=>
+												<span style={{padding:'8px'}}>
+												{y.map((x,xind)=> <span style={{opacity:0.6,borderBottom:'1px solid '+this.state.colorsList[x[1]], color:this.state.colorsList[x[1]]}}>{x[0]}</span>)}
+												</span>
+											)}
+											</div>		
+											:
+											null
+										}	
+									</div>
+									:
+									null
+								}		
 						
 								{this.state.svEnglish1.map((w,wind)=>{
 									return <span style={{color:this.state.colorsList[w[1]]}}>{this.state.svvText+w[0]+" "}</span>
@@ -2133,8 +2437,14 @@ class OneVerbWordBuilder extends Component {
 
 
 				<div style={{height:'15px'}} />
-
-
+          <div>
+            {Object.keys(sentenceTemplates).map((k)=>
+              <Button basic onClick={()=>this.backEndCall(sentenceTemplates[k][2],true)}>
+                <div>{sentenceTemplates[k][0]}</div>
+                <div>{sentenceTemplates[k][1]}</div>
+              </Button>             
+            )}
+          </div>
 				</div>
 
 
@@ -2144,8 +2454,6 @@ class OneVerbWordBuilder extends Component {
 			</Grid.Column>  
 			</Grid.Row>
 			</Grid>
-
-
 			</div>
 		);
 	}

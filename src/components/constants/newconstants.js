@@ -22,6 +22,18 @@ export const inupiaqSpeakerIDs = {
 "Yaayuk (Bernadette Alvanna-Stimpfle)":8,    
 }
 
+
+
+export const retrieveMoodEnglish = {
+  'Prec':{english:'before',fst:'@~+(t)vaileg-'},
+  'Cnsq':{english:'because',fst:'@~:(ng)a-'},
+  'Cont':{english:'whenever',fst:"+'(g)aqa-"},
+  'Conc':{english:'although, even though, even if',fst:'@+ngr(ar)-'},
+  'Cond':{english:'if, when in the future',fst:'@~-ku-'},
+  'CtmpI':{english:'when in the past',fst:'-ller-'},
+  'CtmpII':{english:'while',fst:'@:(ng)inaner-'},
+}
+
 export const nounoptions1 = [
   {id: 0, value: '00(3)', text:'the'},
   {id: 1, value: '11(3)', text:'my'},
@@ -106,6 +118,42 @@ export const nounOptionsMVPossessors = [
   {id: 14, value: '430', text:'their own (3+)'},
 ];
 
+export const nounOptionsMVAblPossessors = [
+  {id: 0, value: '000', text:'a, some'},
+  {id: 1, value: '110', text:'my'},
+  {id: 2, value: '210', text:'your'},
+  {id: 3, value: '311', text:'his'},
+  {id: 4, value: '312', text:'her'},
+  {id: 5, value: '313', text:'its'},
+  {id: 6, value: '410', text: "mvsubject's"},
+  {id: 7, value: '120', text:'our (two)'},
+  {id: 8, value: '220', text:'your (two)'},
+  {id: 9, value: '320', text:'their (two)'},
+  {id: 10, value: '420', text:'their own (two)'},
+  {id: 11, value: '130', text:'our (3+)'},
+  {id: 12, value: '230', text:'your (3+)'},
+  {id: 13, value: '330', text:'their (3+)'},
+  {id: 14, value: '430', text:'their own (3+)'},
+];
+
+export const nounOptionsCVAblPossessors = [
+  {id: 0, value: '000', text:'a, some'},
+  {id: 1, value: '110', text:'my'},
+  {id: 2, value: '210', text:'your'},
+  {id: 3, value: '311', text:'his'},
+  {id: 4, value: '312', text:'her'},
+  {id: 5, value: '313', text:'its'},
+  {id: 6, value: '411', text:"cvsubject's"},
+  {id: 7, value: '120', text:'our (two)'},
+  {id: 8, value: '220', text:'your (two)'},
+  {id: 9, value: '320', text:'their (two)'},
+  {id: 10, value: '420', text:'their own (two)'},
+  {id: 11, value: '130', text:'our (3+)'},
+  {id: 12, value: '230', text:'your (3+)'},
+  {id: 13, value: '330', text:'their (3+)'},
+  {id: 14, value: '430', text:'their own (3+)'},
+];
+
 export const nounOptionsCVPossessors = [
   {id: 0, value: '000', text:'the'},
   {id: 1, value: '110', text:'my'},
@@ -149,6 +197,22 @@ export const nounOptionsNumbers = [
   {id: 2, value: '3', text:'3+'},
 ];
 
+export const mvSubjectOptionsEnglish = {
+  '110':'I', 
+  '210':'you', 
+  '311':'he',
+  '312':'she',
+  '313':'it',
+  '410':'subject',
+  '120':'the two of us',
+  '220':'the two of you',
+  '320':'the two of them',
+  '420':'their own (two)',
+  '130':'we all (3+)',
+  '230':'you all (3+)',
+  '330':'they all (3+)',
+  '430':'their own (3+)',
+};
 
 export const mvSubjectOptions = [
   {id: 0, value: '110', text:'I', otext:'me'},
