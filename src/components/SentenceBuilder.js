@@ -67,6 +67,16 @@ let vEnglish = [
 	'mvEnglish2',
 	'mvEnglish3',
 	'mvEnglishAbl',
+	'mvnsEnglish1',
+	'mvnsEnglish2',
+	'mvnoEnglish1',
+	'mvnoEnglish2',
+	'cvnsEnglish1',
+	'cvnsEnglish2',
+	'cvnoEnglish1',
+	'cvnoEnglish2',
+	'svnoEnglish1',
+	'svnoEnglish2',
 	'cvEnglish1',
 	'cvEnglish2',
 	'cvEnglish3',
@@ -75,6 +85,10 @@ let vEnglish = [
 	'svEnglish2',
 	'npnEnglish1',
 	'npnEnglish2',
+	'mvnObliquesEnglish1',
+	'mvnObliquesEnglish2',
+	'cvnObliquesEnglish1',
+	'cvnObliquesEnglish2',
 ]
 
 // let retrieveMoodEnglish = {
@@ -343,9 +357,9 @@ class OneVerbWordBuilder extends Component {
 			// this.backEndCall(instructionSet[decodeURI(props.match.params.num)])
    //  }
 
-    if (decodeURI(props.match.params.num) in sentenceTemplates) {
-			this.backEndCall(sentenceTemplates[decodeURI(props.match.params.num)][2])
-    }
+    // if (decodeURI(props.match.params.num) in sentenceTemplates) {
+			// this.backEndCall(sentenceTemplates[decodeURI(props.match.params.num)][2])
+    // }
 	}
 
 
@@ -1910,7 +1924,7 @@ class OneVerbWordBuilder extends Component {
 								})}			
 
 								{this.state.mvvs.length > 0 ?
-									(this.state.mvnsSegments.length > 0 && this.state.mvnsSegments.length === this.state.mvns.length && this.state.mvnsSegments.length === this.state.mvnsEnglish2.length ? 
+									(this.state.mvnsSegments.length > 0 ? 
 										<span>					
 											{this.state.mvnsSegments.slice().reverse().map((x,xind)=>
 												<span>
