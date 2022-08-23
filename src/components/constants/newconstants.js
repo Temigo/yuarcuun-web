@@ -257,12 +257,29 @@ export const mvObjectOptions = [
   {id: 13, value: '430', text:'their own (3+)', ptext:'their own (3+)'},
 ];
 
+export const mvSubjectOptionsWho = [
+  // {id: 0, value: '110', text:'I', otext:'me'},
+  // {id: 1, value: '210', text:'you', otext:'you'},
+  {id: 2, value: '311', text:'he', otext:'him'},
+  {id: 3, value: '312', text:'she', otext:'her'},
+  {id: 4, value: '313', text:'it', otext:'it'},
+  // {id: 5, value: '410', text:'subject', otext:'subject'},
+  // {id: 6, value: '120', text:'the two of us', otext:'the two of us'},
+  // {id: 7, value: '220', text:'the two of you', otext:'the two of you'},
+  {id: 8, value: '320', text:'the two of them', otext:'the two of them'},
+  // {id: 9, value: '420', text:'their own (two)', otext:'their own (two)'},
+  // {id: 10, value: '130', text:'we all (3+)', otext:'us all (3+)'},
+  // {id: 11, value: '230', text:'you all (3+)', otext:'you all (3+)'},
+  {id: 12, value: '330', text:'they all (3+)', otext:'them all (3+)'},
+  // {id: 13, value: '430', text:'their own (3+)', otext:'their own (3+)'},
+];
+
 export const mvObjectOptionsWhom = [
   {id: 0, value: '110', text:'whom (me)', ptext:'my'},
   {id: 1, value: '210', text:'whom (you)', ptext:'your'},
   {id: 2, value: '311', text:'whom (him)', ptext:'his'},
   {id: 3, value: '312', text:'whom (her)', ptext:'her'},
-  {id: 4, value: '313', text:'whom (it)', ptext:'its'},
+  // {id: 4, value: '313', text:'whom (it)', ptext:'its'},
   // {id: 5, value: '410', text:'whom (subject', ptext:'subject'},
   {id: 6, value: '120', text:'whom (the two of us)', ptext:'our (two)'},
   {id: 7, value: '220', text:'whom (the two of you)', ptext:'your (two)'},
@@ -274,11 +291,28 @@ export const mvObjectOptionsWhom = [
   // {id: 13, value: '430', text:'whom (their own 3+)', ptext:'their own (3+)'},
 ];
 
+export const mvSubjectOptionsWhat = [
+  // {id: 0, value: '110', text:'I', otext:'me'},
+  // {id: 1, value: '210', text:'you', otext:'you'},
+  // {id: 2, value: '311', text:'he', otext:'him'},
+  // {id: 3, value: '312', text:'she', otext:'her'},
+  {id: 4, value: '313', text:'it', otext:'it'},
+  // {id: 5, value: '410', text:'subject', otext:'subject'},
+  // {id: 6, value: '120', text:'the two of us', otext:'the two of us'},
+  // {id: 7, value: '220', text:'the two of you', otext:'the two of you'},
+  {id: 8, value: '320', text:'the two of them', otext:'the two of them'},
+  // {id: 9, value: '420', text:'their own (two)', otext:'their own (two)'},
+  // {id: 10, value: '130', text:'we all (3+)', otext:'us all (3+)'},
+  // {id: 11, value: '230', text:'you all (3+)', otext:'you all (3+)'},
+  {id: 12, value: '330', text:'they all (3+)', otext:'them all (3+)'},
+  // {id: 13, value: '430', text:'their own (3+)', otext:'their own (3+)'},
+];
+
 export const mvObjectOptionsWhat = [
   {id: 0, value: '110', text:'what (me)', ptext:'my'},
   {id: 1, value: '210', text:'what (you)', ptext:'your'},
-  {id: 2, value: '311', text:'what (him)', ptext:'his'},
-  {id: 3, value: '312', text:'what (her)', ptext:'her'},
+  // {id: 2, value: '311', text:'what (him)', ptext:'his'},
+  // {id: 3, value: '312', text:'what (her)', ptext:'her'},
   {id: 4, value: '313', text:'what (it)', ptext:'its'},
   // {id: 5, value: '410', text:'whom (subject', ptext:'subject'},
   {id: 6, value: '120', text:'what (the two of us)', ptext:'our (two)'},
@@ -288,6 +322,40 @@ export const mvObjectOptionsWhat = [
   {id: 10, value: '130', text:'what (us all 3+)', ptext:'our (3+)'},
   {id: 11, value: '230', text:'what (you all 3+)', ptext:'your (3+)'},
   {id: 12, value: '330', text:'what (them all 3+)', ptext:'their (3+)'},
+  // {id: 13, value: '430', text:'whom (their own 3+)', ptext:'their own (3+)'},
+];
+
+export const mvObjectOptionsWhomAbl = [
+  // {id: 0, value: '110', text:'whom (me)', ptext:'my'},
+  // {id: 1, value: '210', text:'whom (you)', ptext:'your'},
+  {id: 2, value: '311', text:'whom (him)', ptext:'his'},
+  {id: 3, value: '312', text:'whom (her)', ptext:'her'},
+  // {id: 4, value: '313', text:'whom (someone)', ptext:'its'},
+  // {id: 5, value: '410', text:'whom (subject', ptext:'subject'},
+  // {id: 6, value: '120', text:'whom (the two of us)', ptext:'our (two)'},
+  // {id: 7, value: '220', text:'whom (the two of you)', ptext:'your (two)'},
+  {id: 8, value: '320', text:'whom (some 2 people)', ptext:'their (two)'},
+  // {id: 9, value: '420', text:'whom (their own two)', ptext:'their own (two)'},
+  // {id: 10, value: '130', text:'whom (us all 3+)', ptext:'our (3+)'},
+  // {id: 11, value: '230', text:'whom (you all 3+)', ptext:'your (3+)'},
+  {id: 12, value: '330', text:'whom (some 3+ people)', ptext:'their (3+)'},
+  // {id: 13, value: '430', text:'whom (their own 3+)', ptext:'their own (3+)'},
+];
+
+export const mvObjectOptionsWhatAbl = [
+  // {id: 0, value: '110', text:'what (me)', ptext:'my'},
+  // {id: 1, value: '210', text:'what (you)', ptext:'your'},
+  // {id: 2, value: '311', text:'what (him)', ptext:'his'},
+  // {id: 3, value: '312', text:'what (her)', ptext:'her'},
+  {id: 4, value: '313', text:'what (something)', ptext:'its'},
+  // {id: 5, value: '410', text:'whom (subject', ptext:'subject'},
+  // {id: 6, value: '120', text:'what (the two of us)', ptext:'our (two)'},
+  // {id: 7, value: '220', text:'what (the two of you)', ptext:'your (two)'},
+  {id: 8, value: '320', text:'what (some 2 things)', ptext:'their (two)'},
+  // {id: 9, value: '420', text:'whom (their own two)', ptext:'their own (two)'},
+  // {id: 10, value: '130', text:'what (us all 3+)', ptext:'our (3+)'},
+  // {id: 11, value: '230', text:'what (you all 3+)', ptext:'your (3+)'},
+  {id: 12, value: '330', text:'what (some 3+ things)', ptext:'their (3+)'},
   // {id: 13, value: '430', text:'whom (their own 3+)', ptext:'their own (3+)'},
 ];
 

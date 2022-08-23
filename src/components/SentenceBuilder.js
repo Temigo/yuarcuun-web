@@ -3,7 +3,7 @@ import { Container, Header, Button, Icon, Divider, Image, Grid, Dropdown, List, 
 import { Link } from 'react-router-dom';
 import { API_URL } from '../App.js';
 import axios from 'axios';
-import {nounOptionsMVPossessors, nounOptionsMVAblPossessors,nounOptionsCVAblPossessors, mvObjectOptionsWhom, mvObjectOptionsWhat, retrieveMoodEnglish, nounOptionsCVPossessors, nounOptionsSVPossessors, nounOptionsPossessorsNo4th, mvSubjectOptionsOnly2nd, nounOptionsNumbers, nounoptionsmodalis, mvSubjectOptions, mvSubjectOptionsNo4th, mvObjectOptions, mvSubjectOptionsEnglish, cvSubjectOptions, cvObjectOptions, mvObjectOptionsNo4th, verbPostbases, nounPostbases, VVpostbases, NNpostbases} from './constants/newconstants.js'
+import {nounOptionsMVPossessors, nounOptionsMVAblPossessors,nounOptionsCVAblPossessors, mvSubjectOptionsWho, mvSubjectOptionsWhat, mvObjectOptionsWhom, mvObjectOptionsWhomAbl, mvObjectOptionsWhat, mvObjectOptionsWhatAbl,retrieveMoodEnglish, nounOptionsCVPossessors, nounOptionsSVPossessors, nounOptionsPossessorsNo4th, mvSubjectOptionsOnly2nd, nounOptionsNumbers, nounoptionsmodalis, mvSubjectOptions, mvSubjectOptionsNo4th, mvObjectOptions, mvSubjectOptionsEnglish, cvSubjectOptions, cvObjectOptions, mvObjectOptionsNo4th, verbPostbases, nounPostbases, VVpostbases, NNpostbases} from './constants/newconstants.js'
 import {ending_underlying} from './constants/ending_underlying.js'
 import palette from 'google-palette';
 import shuffle from 'shuffle-array';
@@ -16,6 +16,25 @@ import { sentenceTemplates } from './constants/sentence_templates.js'
 
 
 let customFontFam = "Roboto,'Helvetica Neue',Arial,Helvetica,sans-serif"
+
+let requirePostbasesDictionary = {
+
+	// 'Intrg4': [
+	// {'fst':[['+ciqe-|@ciiqe-',0,-1,0]],'english':'future V (+ciqe-)'}, 
+	// {'fst':[['-qatar-',0,-1,0]],'english':'about to V (-qatar-)'}
+	// ],
+
+	'Intrg5': [
+	{'fst':[['+ciqe-|@ciiqe-',0,-1,0]],'english':'future V (+ciqe-)'}, 
+	{'fst':[['-qatar-',0,-1,0]],'english':'about to V (-qatar-)'}
+	],
+
+	'Cont': [
+	{'fst':[['@~-yuite-',0,-1,0]],'english':'never Vs (@~-yuite-)'}, 
+	{'fst':[['~+lar-,@~+lar-,-lar-',0,-1,0]],'english':'often Vs (-lar-)'}
+	],
+
+}
 
 let instructionSet = {
 0:[["Insert", ["mv"], [[["yuvrir-", 0, 2, 0], ["@~+niar-", 0, 0, 0]], "t", "Ind"]], ["Update", ["mv", "vs"], [2, 1, 0]], ["Update", ["mv", "vo"], [3, 1, 3]], ["Insert", ["mv", "no"], [[["kaassaq", 0, 0, 0]], [0, 0, 0, 1]]], ["Insert", ["cv"], [[["ayag¹-", 0, 0, 0]], "i", "Prec"]], ["Update", ["cv", "vs"], [2, 1, 0]]],
@@ -354,6 +373,8 @@ class OneVerbWordBuilder extends Component {
 			interCase:'',
 			endingAdjusted:'',
 
+			requirePostbase: '',
+
 
 		}
    //  if (decodeURI(props.match.params.num) in instructionSet) {
@@ -404,10 +425,11 @@ class OneVerbWordBuilder extends Component {
 
 					let filteredDictV = usageDictionary.filter(entry => (entry.type.includes('i')||entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')||entry.type.includes('[V→V]')) )
 					let filteredDictN = usageDictionary.filter(entry => (entry.type.includes('n')||entry.type.includes('[V→N]')||entry.type.includes('[N→N]')))
+					let filteredDictVit = usageDictionary.filter(entry => (entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')||entry.type.includes('[V→V]')))
 
     // let wordsList = fuzzysort.go(word, filteredDictionary, optionsFuzzy).map(({ obj }) => (obj));
 
-          this.setState({ usageDictionary: usageDictionary, filteredDictV: filteredDictV, filteredDictN: filteredDictN});
+          this.setState({ usageDictionary: usageDictionary, filteredDictV: filteredDictV, filteredDictVit: filteredDictVit, filteredDictN: filteredDictN});
         });
     }
 
@@ -445,6 +467,8 @@ class OneVerbWordBuilder extends Component {
       	mvEnglishAbl: [],
       	mvqWord: [],
       	mvqWordSegments: [],
+      	optCase:'',
+      	interCase:'',
 			})
 
 		} else if (type === 'cv') {
@@ -513,12 +537,12 @@ class OneVerbWordBuilder extends Component {
 			if (this.state.mvnoBases.length > 0) {mv['noBases']=this.state.mvnoBases}
 			if (this.state.mvno.length > 0) {mv['no']=this.state.mvno}
 			if (this.state.mvns.length > 0) {mv['ns']=this.state.mvns}
+
 			if (this.state.mvvMood.length > 0) {mv['vMood']=this.state.mvvMood}
 			if (this.state.mvvs.length > 0) {mv['vs']=this.state.mvvs}
 			if (this.state.mvvo.length > 0) {mv['vo']=this.state.mvvo}
 			if (this.state.mvnObliques.length > 0) {mv['nObliques']=this.state.mvnObliques}
 			if (this.state.mvqWord.length > 0) {mv['qWord']=this.state.mvqWord}
-
 
 			if (this.state.cvvBase.length > 0) {cv['vBase']=this.state.cvvBase}
 			if (this.state.cvnsBases.length > 0) {cv['nsBases']=this.state.cvnsBases}
@@ -545,7 +569,19 @@ class OneVerbWordBuilder extends Component {
 
 		}
 
-
+		if (this.state.interCase == 'Intrg4' || this.state.interCase == 'Intrg5') {
+			this.setState({
+				requirePostbase:this.state.interCase,
+			})
+		} else if (this.state.cvvMood === 'Cont') {
+			this.setState({
+				requirePostbase:this.state.cvvMood,
+			})			
+		} else {
+			this.setState({
+				requirePostbase:'',
+			})			
+		}
 		// console.log(keyChanged,mv)
     axios
       .post(API_URL + "/sentencebuilder", {
@@ -840,22 +876,27 @@ class OneVerbWordBuilder extends Component {
 	onChangeBaseSearch = (endingNeeded,event,data) => {
 		let word = data.value
 		let wordsList
-
-		// console.log(this.state.candidateBase)
+		let filteredDictV = {}
+		if (this.state.interCase == 'Intrg1' || this.state.interCase == 'Intrg3') {
+			filteredDictV = this.state.filteredDictVit
+		} else {
+			filteredDictV = this.state.filteredDictV
+		}
+		console.log(this.state)
 		if (this.state.endingAdjusted == 'n') {
 	    	wordsList = fuzzysort.go(word, this.state.filteredDictN, optionsFuzzy).map(({ obj }) => (obj));
 	    	this.setState({ wordsList: wordsList, searchQuery: word });
 		} else if (this.state.endingAdjusted == 'v') {
-	    	wordsList = fuzzysort.go(word, this.state.filteredDictV, optionsFuzzy).map(({ obj }) => (obj));
+	    	wordsList = fuzzysort.go(word, filteredDictV, optionsFuzzy).map(({ obj }) => (obj));
 	    	this.setState({ wordsList: wordsList, searchQuery: word });
 		} else {
 			if (endingNeeded === 'v') {
-	    	wordsList = fuzzysort.go(word, this.state.filteredDictV, optionsFuzzy).map(({ obj }) => (obj));
+	    	wordsList = fuzzysort.go(word, filteredDictV, optionsFuzzy).map(({ obj }) => (obj));
 	    	this.setState({ wordsList: wordsList, searchQuery: word });
 			} else if (endingNeeded === 'n') {
 	    	wordsList = fuzzysort.go(word, this.state.filteredDictN, optionsFuzzy).map(({ obj }) => (obj));
 	    	this.setState({ wordsList: wordsList, searchQuery: word });
-			}			
+			}
 		}
 	}
 
@@ -981,7 +1022,7 @@ class OneVerbWordBuilder extends Component {
 									)}
 								</div>													
 							</div>			
-  	} else if (type==='mv') {
+  	} else if (type==='mv' || type == 'mvQuestion') {
   		return 	<div style={{marginBottom:10,fontSize:'30px',color:'#000000',fontWeight:'400'}}>
 								<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
 									{this.state.mvvSegments.map((t)=>
@@ -1049,6 +1090,10 @@ class OneVerbWordBuilder extends Component {
     	
   }
 
+  requiredPostbases = () => {
+  	return <div>hi</div>
+  }
+
   contentItems = (type,ind) => {
   	// console.log('content',type,ind)
   	if (this.state.currentEditMode==='default') {
@@ -1061,8 +1106,8 @@ class OneVerbWordBuilder extends Component {
 			    	</Menu>  			
   		} else if (type === 'defaultmv') {
 				return <Menu vertical>
-						{this.state.mvvs.length > 0 && this.state.mvns.length == 0 ? this.menuItem('BaseChooser','Add Noun Subject','mvnsinsert',null) : null}
-						{this.state.mvvo.length > 0 && this.state.mvno.length == 0 ? this.menuItem('BaseChooser','Add Noun Object','mvnoinsert',null) : null}
+						{this.state.mvvs.length > 0 && this.state.mvns.length == 0 && this.state.interCase !== 'Intrg0' && this.state.interCase !== 'Intrg2' ? this.menuItem('BaseChooser','Add Noun Subject','mvnsinsert',null) : null}
+						{this.state.mvvo.length > 0 && this.state.mvno.length == 0 && this.state.interCase !== 'Intrg1' && this.state.interCase !== 'Intrg3' ? this.menuItem('BaseChooser','Add Noun Object','mvnoinsert',null) : null}
 			      {this.subMenuItem('addnOblique')}
 			    	</Menu>  			
   		} else if (type === 'defaultcv') {
@@ -1085,7 +1130,21 @@ class OneVerbWordBuilder extends Component {
   		} else if (type === 'mv') {
 				return <Menu vertical>
 			      {this.menuItem('BaseChooser','Change Main Verb','mvupdate',null)}
+			      {this.state.requirePostbase.length > 0 ?
+			      	this.subMenuItem('changeRequiredPostbase')
+			      	:
+			      	null
+			      }
+			      {this.state.optCase.length > 0 ?
+			      	this.subMenuItem('switchOptative')
+			      	:
+			      	null
+			      }
 			      {this.menuItem('Delete','Delete Main Verb',null,null,[["Delete",["mv",],-1]])}
+			    	</Menu>
+ 			} else if (type === 'mvqWord') {
+				return <Menu vertical>
+			      {this.subMenuItem('changeQuestiontype')}
 			    	</Menu>
  			} else if (type === 'cv') {
 				return <Menu vertical>
@@ -1386,7 +1445,7 @@ class OneVerbWordBuilder extends Component {
 	        <Dropdown.Item onClick={()=>{this.setState({interCase:'Intrg7'},()=>{this.menuSelect('questionInsert',-1)})}}>from where is...?</Dropdown.Item>
 	        <Dropdown.Item onClick={()=>{this.setState({interCase:'Intrg8'},()=>{this.menuSelect('questionInsert',-1)})}}>to where is...?</Dropdown.Item>
 	        <Dropdown.Item onClick={()=>{this.setState({interCase:'Intrg9'},()=>{this.menuSelect('questionInsert',-1)})}}>why is...?</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({interCase:'IntrgA'},()=>{this.menuSelect('questionInsert',-1)})}}>how is...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({interCase:'IntrgA'},()=>{this.menuSelect('questionInsert',-1)})}}>how is...?</Dropdown.Item>
 	      </Dropdown.Menu>
 	    </Dropdown>			
 		} else if (type==='addCommand') {
@@ -1397,7 +1456,7 @@ class OneVerbWordBuilder extends Component {
 	        <Dropdown.Item onClick={()=>{this.setState({optCase:'Opt][PRS][NEG'},()=>{this.menuSelect('commandInsert',-1)})}}>do not ...</Dropdown.Item>
 	        <Dropdown.Item onClick={()=>{this.setState({optCase:'Opt][FUT][NEG'},()=>{this.menuSelect('commandInsert',-1)})}}>do not ... (future)</Dropdown.Item>
 	        <Dropdown.Item onClick={()=>{this.setState({optCase:'Sbrd'},()=>{this.menuSelect('commandInsert',-1)})}}>polite request</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({optCase:'Sbrd'},()=>{this.menuSelect('commandInsert',-1)})}}>polite do not...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({optCase:'SbrdNeg'},()=>{this.menuSelect('commandInsert',-1)})}}>polite do not...</Dropdown.Item>
 	      </Dropdown.Menu>
 	    </Dropdown>			
 		} else if (type==='addnOblique') {
@@ -1439,9 +1498,57 @@ class OneVerbWordBuilder extends Component {
 	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'CtmpII',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>while...</Dropdown.Item>
 	      </Dropdown.Menu>
 	    </Dropdown>					
+		} else if (type==='changeQuestiontype') {
+	    return <Dropdown item text='Change Question Type'>
+	      <Dropdown.Menu>
+	        <Dropdown.Item onClick={()=>{this.setState({interCase:'Intrg0',isOpen: false},()=>{this.backEndCall([["Insert",["mv","qWord"],['Intrg0',1]]])})}}>who is (subject)...?</Dropdown.Item>
+	        {this.state.mvvBase[1] != 'i' ?
+	        	<Dropdown.Item onClick={()=>{this.setState({interCase:'Intrg1',isOpen: false},()=>{this.backEndCall([["Insert",["mv","qWord"],['Intrg1',1]]])})}}>to whom (object)...?</Dropdown.Item>
+	        	:
+	        	null
+	        }
+	        <Dropdown.Item onClick={()=>{this.setState({interCase:'Intrg2',isOpen: false},()=>{this.backEndCall([["Insert",["mv","qWord"],['Intrg2',1]]])})}}>what is (subject)...?</Dropdown.Item>
+	        {this.state.mvvBase[1] != 'i' ?
+	        	<Dropdown.Item onClick={()=>{this.setState({interCase:'Intrg3',isOpen: false},()=>{this.backEndCall([["Insert",["mv","qWord"],['Intrg3',1]]])})}}>to what (object)...?</Dropdown.Item>
+	        	:
+	        	null
+	        }
+	        <Dropdown.Item onClick={()=>{this.setState({interCase:'Intrg4',isOpen: false},()=>{this.backEndCall([["Insert",["mv","qWord"],['Intrg4',1]]])})}}>when did...?</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({interCase:'Intrg5',isOpen: false},()=>{this.backEndCall([["Insert",["mv","qWord"],['Intrg5',1]]])})}}>when will...?</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({interCase:'Intrg6',isOpen: false},()=>{this.backEndCall([["Insert",["mv","qWord"],['Intrg6',1]]])})}}>where is...?</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({interCase:'Intrg7',isOpen: false},()=>{this.backEndCall([["Insert",["mv","qWord"],['Intrg7',1]]])})}}>from where is...?</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({interCase:'Intrg8',isOpen: false},()=>{this.backEndCall([["Insert",["mv","qWord"],['Intrg8',1]]])})}}>to where is...?</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({interCase:'Intrg9',isOpen: false},()=>{this.backEndCall([["Insert",["mv","qWord"],['Intrg9',1]]])})}}>why is...?</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({interCase:'IntrgA',isOpen: false},()=>{this.backEndCall([["Insert",["mv","qWord"],['IntrgA',1]]])})}}>how is...?</Dropdown.Item>
+	      </Dropdown.Menu>
+	    </Dropdown>					
+		} else if (type == 'changeRequiredPostbase') {
+	    return <Dropdown item text='Change Postbase'>
+	      <Dropdown.Menu>
+	      	{requirePostbasesDictionary[this.state.requirePostbase].map((x)=>{
+	      		if (x['fst'][0].toString() !== this.state.mvvBase[0][this.state.mvvBase[0].length-1].toString()) {
+	      			return <Dropdown.Item onClick={()=>{this.setState({isOpen: false},()=>{this.backEndCall([["Update",['mv','vBase'],[this.state.mvvBase[0].slice(0,-1).concat(x['fst']),this.state.mvvBase[1],]]]); })}}>{x['english']}</Dropdown.Item>
+	      		}
+	      	})
+	      	}
+	      </Dropdown.Menu>
+	    </Dropdown>						
+		} else if (type == 'switchOptative') {
+	    return <Dropdown item text='Change Command Type'>
+	      <Dropdown.Menu>
+	        <Dropdown.Item onClick={()=>{this.setState({optCase:'Opt][PRS',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Opt][PRS']])})}}>command right now</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({optCase:'Opt][FUT',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Opt][FUT']])})}}>command in future</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({optCase:'Opt][PRS][NEG',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Opt][PRS][NEG']])})}}>do not ...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({optCase:'Opt][FUT][NEG',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Opt][FUT][NEG']])})}}>do not ... (future)</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({optCase:'Sbrd',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Sbrd']])})}}>polite request</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({optCase:'SbrdNeg',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Sbrd']])})}}>polite do not...</Dropdown.Item>
+	      </Dropdown.Menu>
+	    </Dropdown>		
 		}
 
 	}
+
+
 
 
 // "[Abl_Mod]":"Ablative-Modalis (indirect object, from...)",
@@ -1504,7 +1611,7 @@ class OneVerbWordBuilder extends Component {
 
 	updateCandidateCall=(type,update,mood,submood)=>{
 
-		console.log(type, update, mood)
+		console.log(type, update, mood, submood)
 
 
 		let lockSubmit = false
@@ -1553,6 +1660,12 @@ class OneVerbWordBuilder extends Component {
 			  		candidateCall:[candidateFST,transitivity,mood],
 			  		lockSubmit:lockSubmit,
 			  	})							
+				} else if (submood == 'SbrdNeg') {
+					console.log(candidateFST.concat([['+peke-|+vke-,+pege-|+vke-', 0, -1, 0]]))
+			  	this.setState({
+			  		candidateCall:[candidateFST.concat([['+peke-|+vke-,+pege-|+vke-', 0, -1, 0]]),transitivity,'Sbrd'],
+			  		lockSubmit:lockSubmit,
+			  	})								
 				} else if (mood === 'Opt') {
 			  	this.setState({
 			  		candidateCall:[candidateFST,transitivity,submood],
@@ -1691,6 +1804,7 @@ class OneVerbWordBuilder extends Component {
 		                			if (mood === 'Intrg') {
 		                				this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Insert",["mv","qWord"],[submood,1]]]); 		                				
 		                			} else {
+		                				console.log([[itemUpdating[0],itemUpdating[1],this.state.candidateCall]])
 		                				this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall]]); 		                						                				
 		                			}
 		                			this.setState({isOpen:false,currentEditMode:'default',searchQuery:'',wordsList:[],candidateBase:[],lockSubmit:false}) 
@@ -2019,7 +2133,15 @@ class OneVerbWordBuilder extends Component {
 											{this.state.mvvMood == "Opt][PRS][NEG" || this.state.mvvMood == "Opt][FUT][NEG" ?
 												<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={(event,data)=>{this.backEndCall([["Update",["mv","vs"],data.value.split('').map(Number)]])}}  value={this.state.mvvs.join("")} options={mvSubjectOptionsOnly2nd} />
 												:
-												<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={(event,data)=>{this.backEndCall([["Update",["mv","vs"],data.value.split('').map(Number)]])}}  value={this.state.mvvs.join("")} options={mvSubjectOptions} />
+												(this.state.interCase == 'Intrg0' ?
+													<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={(event,data)=>{this.backEndCall([["Update",["mv","vs"],data.value.split('').map(Number)]])}}  value={this.state.mvvs.join("")} options={mvSubjectOptionsWho} />
+													:
+													(this.state.interCase == 'Intrg2' ?
+														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={(event,data)=>{this.backEndCall([["Update",["mv","vs"],data.value.split('').map(Number)]])}}  value={this.state.mvvs.join("")} options={mvSubjectOptionsWhat} />
+														:
+														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={(event,data)=>{this.backEndCall([["Update",["mv","vs"],data.value.split('').map(Number)]])}}  value={this.state.mvvs.join("")} options={mvSubjectOptions} />
+														)
+													)
 											}
 										</span>
 										)
@@ -2064,9 +2186,17 @@ class OneVerbWordBuilder extends Component {
 										:
 										<span>
 											{this.state.mvvBase[1] == 'it' ?
-												(this.state.mvEnglishAbl.map((w,wind)=>
-													<span style={{color:this.state.colorsList[w[1]]}}>{w[0]}</span>
-												))
+												(this.state.interCase == 'Intrg1' ?
+													<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={(event,data)=>{this.backEndCall([["Update",["mv","vo"],data.value.split('').map(Number)]])}}  value={this.state.mvvo.join("")} options={mvObjectOptionsWhomAbl} />		
+													:
+													(this.state.interCase == 'Intrg3' ?
+														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={(event,data)=>{this.backEndCall([["Update",["mv","vo"],data.value.split('').map(Number)]])}}  value={this.state.mvvo.join("")} options={mvObjectOptionsWhatAbl} />		
+														:
+														(this.state.mvEnglishAbl.map((w,wind)=>
+															<span style={{color:this.state.colorsList[w[1]]}}>{w[0]}</span>
+														))
+														)
+													)
 												:
 												(this.state.interCase == 'Intrg1' ?
 													<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={(event,data)=>{this.backEndCall([["Update",["mv","vo"],data.value.split('').map(Number)]])}}  value={this.state.mvvo.join("")} options={mvObjectOptionsWhom} />		
