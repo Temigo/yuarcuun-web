@@ -374,6 +374,7 @@ class OneVerbWordBuilder extends Component {
 			endingAdjusted:'',
 
 			requirePostbase: '',
+			optCase: '',
 
 
 		}
@@ -1541,7 +1542,7 @@ class OneVerbWordBuilder extends Component {
 	        <Dropdown.Item onClick={()=>{this.setState({optCase:'Opt][PRS][NEG',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Opt][PRS][NEG']])})}}>do not ...</Dropdown.Item>
 	        <Dropdown.Item onClick={()=>{this.setState({optCase:'Opt][FUT][NEG',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Opt][FUT][NEG']])})}}>do not ... (future)</Dropdown.Item>
 	        <Dropdown.Item onClick={()=>{this.setState({optCase:'Sbrd',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Sbrd']])})}}>polite request</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({optCase:'SbrdNeg',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Sbrd']])})}}>polite do not...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({optCase:'SbrdNeg',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Sbrd'],["Insert",["mv"],[this.state.candidateCall[0].concat([['+peke-|+vke-,+pege-|+vke-', 0, 0, 0]]),this.state.candidateCall[1],'Sbrd']]])})}}>polite do not...</Dropdown.Item>
 	      </Dropdown.Menu>
 	    </Dropdown>		
 		}
@@ -1661,9 +1662,8 @@ class OneVerbWordBuilder extends Component {
 			  		lockSubmit:lockSubmit,
 			  	})							
 				} else if (submood == 'SbrdNeg') {
-					console.log(candidateFST.concat([['+peke-|+vke-,+pege-|+vke-', 0, -1, 0]]))
 			  	this.setState({
-			  		candidateCall:[candidateFST.concat([['+peke-|+vke-,+pege-|+vke-', 0, -1, 0]]),transitivity,'Sbrd'],
+			  		candidateCall:[candidateFST.concat([['+peke-|+vke-,+pege-|+vke-', 0, 0, 0]]),transitivity,'Sbrd'],
 			  		lockSubmit:lockSubmit,
 			  	})								
 				} else if (mood === 'Opt') {
