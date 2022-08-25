@@ -599,7 +599,7 @@ class SearchPage extends Component {
     return (
       <div>
       
-      <YugtunLoader criteria={this.state.dictionary.length === 0 || this.state.audiolibrary.length === 0} />
+      <YugtunLoader criteria={this.state.dictionary.length === 0} />
       <Grid textAlign='center' style={{ height: window.innerHeight/1.5 }} verticalAlign={this.state.searchBarStuckTop ? 'top' : 'top'}>
       <Grid.Row style={{height:40,paddingBottom:0}}>
       <Grid.Column>

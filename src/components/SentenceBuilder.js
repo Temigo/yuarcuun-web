@@ -89,6 +89,12 @@ let vOptions = [
 	'qWord',
 ]
 
+let nOptions = [
+	'n',
+	'nBases',
+	'nCase',
+]
+
 let vEnglish = [
 	'mvEnglish1',
 	'mvEnglish2',
@@ -601,7 +607,7 @@ class OneVerbWordBuilder extends Component {
       })
       .then(response => {
       	console.log(response.data)
-      	let vkey
+      	let vkey, nkey
       	let updateDict = {}
       	if ("english" in response.data) {
       		vEnglish.map((k)=>{
@@ -689,13 +695,13 @@ class OneVerbWordBuilder extends Component {
       	}
 
       	if ("np" in response.data) {
-      		Object.keys(response.data['np']).map((k)=>{
-      			let npkey = 'np'+k
-		        // this.setState({
-		        // 	[npkey]: response.data['np'][k],
-		        // })
-      			updateDict[[npkey]] = response.data['np'][k]
-
+      		nOptions.map((k)=>{
+      			nkey = 'np'+k
+      			if (k in response.data['np']) {
+      				updateDict[[nkey]] = response.data['np'][k]
+      			} else {
+      				updateDict[[nkey]] = []    				
+      			}
       		})
       	} else {
       		this.initialize('np')
@@ -2675,14 +2681,17 @@ class OneVerbWordBuilder extends Component {
 
 
 				<div style={{height:'15px'}} />
-          <div>
-            {Object.keys(sentenceTemplates).map((k)=>
-              <Button basic onClick={()=>this.backEndCall(sentenceTemplates[k][2],true)}>
-                <div>{sentenceTemplates[k][0]}</div>
-                <div>{sentenceTemplates[k][1]}</div>
-              </Button>             
-            )}
-          </div>
+
+          <Segment vertical style={{fontSize:22,padding:0,marginTop:20,maxHeight:245,overflow: 'auto',borderBottom:0}}>
+	          <div>
+	            {Object.keys(sentenceTemplates).map((k)=>
+	              <Button basic onClick={()=>this.backEndCall(sentenceTemplates[k][2],true)}>
+	                <div>{sentenceTemplates[k][0]}</div>
+	                <div>{sentenceTemplates[k][1]}</div>
+	              </Button>             
+	            )}
+	          </div>
+          </Segment>
 				</div>
 
 
