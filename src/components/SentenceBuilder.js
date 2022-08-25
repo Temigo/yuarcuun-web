@@ -19,14 +19,21 @@ let customFontFam = "Roboto,'Helvetica Neue',Arial,Helvetica,sans-serif"
 
 let requirePostbasesDictionary = {
 
-	// 'Intrg4': [
-	// {'fst':[['+ciqe-|@ciiqe-',0,-1,0]],'english':'future V (+ciqe-)'}, 
-	// {'fst':[['-qatar-',0,-1,0]],'english':'about to V (-qatar-)'}
-	// ],
+	'Intrg4': [
+	{'fst':[['-llru¹-',0,-1,0]],'english':'past tense (-llru-)'}, 
+	],
 
 	'Intrg5': [
 	{'fst':[['+ciqe-|@ciiqe-',0,-1,0]],'english':'future V (+ciqe-)'}, 
 	{'fst':[['-qatar-',0,-1,0]],'english':'about to V (-qatar-)'}
+	],
+
+	'CtmpI': [
+	{'fst':[['-llru¹-',0,-1,0]],'english':'past tense (-llru-)'}, 
+	],
+
+	'CtmpII': [
+	{'fst':[['-llru¹-',0,-1,0]],'english':'past tense (-llru-)'}, 
 	],
 
 	'Cont': [
@@ -574,7 +581,7 @@ class OneVerbWordBuilder extends Component {
 			this.setState({
 				requirePostbase:this.state.interCase,
 			})
-		} else if (this.state.cvvMood === 'Cont') {
+		} else if (this.state.cvvMood === 'Cont' || this.state.cvvMood === 'CtmpI' || this.state.cvvMood === 'CtmpII') {
 			this.setState({
 				requirePostbase:this.state.cvvMood,
 			})			
