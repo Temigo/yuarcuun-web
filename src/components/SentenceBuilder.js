@@ -1413,7 +1413,7 @@ class OneVerbWordBuilder extends Component {
       }
       on='click'
       open={this.state.isOpen && this.state.currentlyOpen === typeInd}
-      onOpen={()=>{this.handleOpen(typeInd)}}
+      onOpen={()=>{this.setState({isOpen:false,currentEditMode:'default'},()=>{this.handleOpen(typeInd)})}}
       onClose={()=>{this.setState({isOpen:false,currentEditMode:'default'})}}
       position='bottom center'
       style={{
@@ -1776,7 +1776,7 @@ class OneVerbWordBuilder extends Component {
 									        <div style={{color:'#666666'}}>{'Candidate (English Order)'}</div>
 									        <Segment style={{height:290,overflow: 'auto',padding:10}}>
 									        	<List divided>
-									        	{this.state.cvvMood.length > 0 ?
+									        	{this.state.cvvMood.length > 0 && this.state.currentEditMode == 'cvupdate' ?
 										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
 										        		<div style={{flex:1}}>
 											        		<div style={{color:'#000000b3'}}>{retrieveMoodEnglish[this.state.cvvMood]['fst']}</div>
