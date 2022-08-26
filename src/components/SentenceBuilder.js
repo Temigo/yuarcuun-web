@@ -93,6 +93,7 @@ let nOptions = [
 	'n',
 	'nBases',
 	'nCase',
+	'nType',
 ]
 
 let vEnglish = [
@@ -151,6 +152,11 @@ class OneVerbWordBuilder extends Component {
 				'mvv.4':'#008000',
 				'mvv.5':'#69b4b4',
 				'mvv.6':'#e02323',
+
+				'npn00.b':'#000000',
+				'npn00.1':'#e02323',
+				'npn00.2':'#69b4b4',
+
 
 
 				'mvns00.b':'#852828',
@@ -338,6 +344,7 @@ class OneVerbWordBuilder extends Component {
 			npnBases:[],
 			npnCase:[],
 			npnSegments:[],
+			npnType:[],
 
 
 			mvnObliquesSegments: [],
@@ -527,6 +534,7 @@ class OneVerbWordBuilder extends Component {
 				npn:[],
 				npnBases:[],
 				npnCase:[],
+				npnType:[],
 		    npnSegments: [],
 		    npnEnglish1: [],
 		    npnEnglish2: [],
@@ -580,6 +588,7 @@ class OneVerbWordBuilder extends Component {
 			if (this.state.npn.length > 0) {np['n']=this.state.npn}
 			if (this.state.npnBases.length > 0) {np['nBases']=this.state.npnBases}
 			if (this.state.npnCase.length > 0) {np['nCase']=this.state.npnCase}
+			if (this.state.npnType.length > 0) {np['nType']=this.state.npnType}
 
 		}
 
@@ -1113,8 +1122,8 @@ class OneVerbWordBuilder extends Component {
   	if (this.state.currentEditMode==='default') {
   		if (type === 'default') {
   			return <Menu vertical>
-			      {this.menuItem('BaseChooser','Add Main Verb Phrase','mvinsert',null,null)}
-			      {this.menuItem('BaseChooser','Add Noun Phrase','npinsert',null,null)}
+			      {this.menuItem('BaseChooser','Make a Verb Statement','mvinsert',null,null)}
+			      {this.subMenuItem('nounPhrase')}
 			      {this.subMenuItem('addQuestion')}
 			      {this.subMenuItem('addCommand')}
 			    	</Menu>  			
@@ -1225,6 +1234,7 @@ class OneVerbWordBuilder extends Component {
  			} else if (type === 'npn') {
 				return <Menu vertical>
 						{this.menuItem('BaseChooser','Change Noun','npnupdate',null)}
+			      {this.subMenuItem('changeNPtype')}
 						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun','npnpossessorinsert',null) : null}
 			      {ind[0] == this.state.npn.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun','npnpossessedinsert',null): null}
 						{this.menuItem('BaseChooser','Add Descriptor Noun','npnappositiveinsert',null)}
@@ -1310,28 +1320,30 @@ class OneVerbWordBuilder extends Component {
   		return this.baseChooser(["Update",["sv","vBase"]],'v','update')
   	} else if (this.state.currentEditMode==='nObliqueInsert') {
   		if (this.state.mvnObliques.length > 0) {
-  		return this.baseChooser(["Insert",["mv","nObliques",-1]],'n','insert',this.state.npCase)
+  		return this.baseChooser(["Insert",["mv","nObliques",-1]],'n','insert',this.state.npCase,this.state.npCaseType)
   		} else {
-  		return this.baseChooser(["Insert",["mv","nObliques"]],'n','insert',this.state.npCase)  			
+  		return this.baseChooser(["Insert",["mv","nObliques"]],'n','insert',this.state.npCase,this.state.npCaseType)  			
   		}
+  	} else if (this.state.currentEditMode==='nPhraseInsert') {
+  		return this.baseChooser(["Insert",["np"]],'n','insert',this.state.npCase,this.state.npCaseType)  			
   	} else if (this.state.currentEditMode==='cnObliqueInsert') {
   		if (this.state.cvnObliques.length > 0) {
-  		return this.baseChooser(["Insert",["cv","nObliques",-1]],'n','insert',this.state.npCase)
+  		return this.baseChooser(["Insert",["cv","nObliques",-1]],'n','insert',this.state.npCase,this.state.npCaseType)
   		} else {
-  		return this.baseChooser(["Insert",["cv","nObliques"]],'n','insert',this.state.npCase)  			
+  		return this.baseChooser(["Insert",["cv","nObliques"]],'n','insert',this.state.npCase,this.state.npCaseType)  			
   		}
   	} else if (this.state.currentEditMode==='mvnObliquepossessorinsert') {
-  		return this.baseChooser(["Insert",["mv","nObliques",ind[0],-1]],'n','insert',this.state.npCase)
+  		return this.baseChooser(["Insert",["mv","nObliques",ind[0],-1]],'n','insert',this.state.npCase,this.state.npCaseType)
   	} else if (this.state.currentEditMode==='mvnObliquepossessedinsert') {
-  		return this.baseChooser(["Insert",["mv","nObliques",ind[0],0]],'n','insert',this.state.npCase)
+  		return this.baseChooser(["Insert",["mv","nObliques",ind[0],0]],'n','insert',this.state.npCase,this.state.npCaseType)
   	} else if (this.state.currentEditMode==='cvnObliquepossessorinsert') {
-  		return this.baseChooser(["Insert",["cv","nObliques",ind[0],-1]],'n','insert',this.state.npCase)
+  		return this.baseChooser(["Insert",["cv","nObliques",ind[0],-1]],'n','insert',this.state.npCase,this.state.npCaseType)
   	} else if (this.state.currentEditMode==='cvnObliquepossessedinsert') {
-  		return this.baseChooser(["Insert",["cv","nObliques",ind[0],0]],'n','insert',this.state.npCase)
+  		return this.baseChooser(["Insert",["cv","nObliques",ind[0],0]],'n','insert',this.state.npCase,this.state.npCaseType)
   	} else if (this.state.currentEditMode==='npnupdate') {
   		return this.baseChooser(["Update",["np","nBases",ind[0],ind[1]]],'n','updatebase')
   	} else if (this.state.currentEditMode==='npinsert') {
-  		return this.baseChooser(["Insert",["np"]],'n','insert',this.state.npCase)
+  		return this.baseChooser(["Insert",["np"]],'n','insert',this.state.npCase,this.state.npCaseType)
   	} else if (this.state.currentEditMode==='npnpossessorinsert') {
   		return this.baseChooser(["Insert",["np","n",-1]],'n','insert')
   	} else if (this.state.currentEditMode==='npnappositiveinsert') {
@@ -1473,14 +1485,27 @@ class OneVerbWordBuilder extends Component {
 	        <Dropdown.Item onClick={()=>{this.setState({optCase:'SbrdNeg'},()=>{this.menuSelect('commandInsert',-1)})}}>polite do not...</Dropdown.Item>
 	      </Dropdown.Menu>
 	    </Dropdown>			
+		} else if (type==='nounPhrase') {
+	    return <Dropdown item text='Add Noun Phrase'>
+	      <Dropdown.Menu>
+	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Abs',npCaseType:''},()=>{this.menuSelect('nPhraseInsert',-1)})}}>the...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'from'},()=>{this.menuSelect('nPhraseInsert',-1)})}}>from...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'io'},()=>{this.menuSelect('nPhraseInsert',-1)})}}>a or some...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Loc',npCaseType:''},()=>{this.menuSelect('nPhraseInsert',-1)})}}>in, at...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Ter',npCaseType:''},()=>{this.menuSelect('nPhraseInsert',-1)})}}>toward...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Via',npCaseType:''},()=>{this.menuSelect('nPhraseInsert',-1)})}}>through, using...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Equ',npCaseType:''},()=>{this.menuSelect('nPhraseInsert',-1)})}}>like, similar to...</Dropdown.Item>
+	      </Dropdown.Menu>
+	    </Dropdown>			
 		} else if (type==='addnOblique') {
 	    return <Dropdown item text='Add Noun Obliques'>
 	      <Dropdown.Menu>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Abl_Mod'},()=>{this.menuSelect('nObliqueInsert',-1)})}}>from, indirect object......</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Loc'},()=>{this.menuSelect('nObliqueInsert',-1)})}}>in, at...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Ter'},()=>{this.menuSelect('nObliqueInsert',-1)})}}>toward...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Via'},()=>{this.menuSelect('nObliqueInsert',-1)})}}>through, using...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Equ'},()=>{this.menuSelect('nObliqueInsert',-1)})}}>like, similar to...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'from'},()=>{this.menuSelect('nObliqueInsert',-1)})}}>from...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'io'},()=>{this.menuSelect('nObliqueInsert',-1)})}}>a or some...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Loc',npCaseType:''},()=>{this.menuSelect('nObliqueInsert',-1)})}}>in, at...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Ter',npCaseType:''},()=>{this.menuSelect('nObliqueInsert',-1)})}}>toward...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Via',npCaseType:''},()=>{this.menuSelect('nObliqueInsert',-1)})}}>through, using...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Equ',npCaseType:''},()=>{this.menuSelect('nObliqueInsert',-1)})}}>like, similar to...</Dropdown.Item>
 	      </Dropdown.Menu>
 	    </Dropdown>			
 		} else if (type==='caddnOblique') {
@@ -1558,12 +1583,22 @@ class OneVerbWordBuilder extends Component {
 	        <Dropdown.Item onClick={()=>{this.setState({optCase:'SbrdNeg',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Sbrd'],["Insert",["mv"],[this.state.candidateCall[0].concat([['+peke-|+vke-,+pege-|+vke-', 0, 0, 0]]),this.state.candidateCall[1],'Sbrd']]])})}}>polite do not...</Dropdown.Item>
 	      </Dropdown.Menu>
 	    </Dropdown>		
+		} else if (type == 'changeNPtype') {
+	    return <Dropdown item text='Change Noun Phrase Type'>
+	      <Dropdown.Menu>
+	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Abs',npCaseType:'',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Abs']])})}}>the...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'from',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Abl_Mod'],["Update",["np","nType"],'from']])})}}>from...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'io',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Abl_Mod'],["Update",["np","nType"],'io']])})}}>a or some...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Loc',npCaseType:'',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Loc']])})}}>in or at...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Ter',npCaseType:'',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Ter']])})}}>toward...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Via',npCaseType:'',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Via']])})}}>through, using...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Equ',npCaseType:'',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Equ']])})}}>like, similar to...</Dropdown.Item>
+
+	      </Dropdown.Menu>
+	    </Dropdown>		
 		}
 
 	}
-
-
-
 
 // "[Abl_Mod]":"Ablative-Modalis (indirect object, from...)",
 // "[Loc]":"Localis (in, at...)",
@@ -1663,7 +1698,7 @@ class OneVerbWordBuilder extends Component {
 			  	})							
 				} else {
 			  	this.setState({
-			  		candidateCall:[candidateFST,[0,0,0,1],mood],
+			  		candidateCall:[candidateFST,[0,0,0,1],mood,submood],
 			  		lockSubmit:lockSubmit,
 			  	})		
 				}
@@ -2258,7 +2293,7 @@ class OneVerbWordBuilder extends Component {
 														{this.state.mvnObliquesEnglish1[obliqueind].map((w,wind)=>
 															<span style={{color:this.state.colorsList[w[1]]}}>{w[0]+" "}</span>
 															)}						
-														{obliques['nCase'] == 'Equ' || obliques['nCase'] == 'Via' ? 
+														{obliques['nCase'] == 'Equ' || obliques['nCase'] == 'Via' || obliques['nType'] == 'io' ? 
 															<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","nObliques",obliqueind,'n',obliques['n'].length-1-xind,0],(data.value+this.state.mvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.mvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(0, -1).join("")} options={nounOptionsMVAblPossessors} />
 															:
 															<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","nObliques",obliqueind,'n',obliques['n'].length-1-xind,0],(data.value+this.state.mvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.mvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(0, -1).join("")} options={nounOptionsMVPossessors} />
@@ -2296,7 +2331,11 @@ class OneVerbWordBuilder extends Component {
 														{this.state.npnEnglish1.map((w,wind)=>
 															<span style={{color:this.state.colorsList[w[1]]}}>{w[0]+" "}</span>
 															)}
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["np","n",this.state.npnSegments.length-1,0],(data.value+this.state.npn[this.state.npnSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.npn[this.state.npnSegments.length-1][0].slice(0, -1).join("")} options={nounOptionsMVPossessors} />
+														{this.state.npnCase == 'Equ' || this.state.npnCase == 'Via' || this.state.npCaseType == 'io' ? 
+															<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["np","n",this.state.npnSegments.length-1,0],(data.value+this.state.npn[this.state.npnSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.npn[this.state.npnSegments.length-1][0].slice(0, -1).join("")} options={nounOptionsMVAblPossessors} />
+															:
+															<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["np","n",this.state.npnSegments.length-1,0],(data.value+this.state.npn[this.state.npnSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.npn[this.state.npnSegments.length-1][0].slice(0, -1).join("")} options={nounOptionsMVPossessors} />
+														}
 														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["np","n",this.state.npnSegments.length-1,0],this.state.npn[this.state.npnSegments.length-1][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.npn[this.state.npnSegments.length-1][0].slice(-1).join("")} options={nounOptionsNumbers} />																
 														{this.state.npnEnglish2[xind].map((w,wind)=>
 															(w.map((t)=> <span style={{color:this.state.colorsList[t[1]]}}>{t[0]+" "}</span>))
