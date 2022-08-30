@@ -3,7 +3,7 @@ import { Container, Header, Button, Icon, Divider, Image, Grid, Dropdown, List, 
 import { Link } from 'react-router-dom';
 import { API_URL } from '../App.js';
 import axios from 'axios';
-import {nounOptionsMVPossessors, nounOptionsMVAblPossessors,nounOptionsCVAblPossessors, mvSubjectOptionsWho, mvSubjectOptionsWhat, mvObjectOptionsWhom, mvObjectOptionsWhomAbl, mvObjectOptionsWhat, mvObjectOptionsWhatAbl,retrieveMoodEnglish, nounOptionsCVPossessors, nounOptionsSVPossessors, nounOptionsPossessorsNo4th, mvSubjectOptionsOnly2nd, nounOptionsNumbers, nounoptionsmodalis, mvSubjectOptions, mvSubjectOptionsNo4th, mvObjectOptions, mvSubjectOptionsEnglish, cvSubjectOptions, cvObjectOptions, mvObjectOptionsNo4th, verbPostbases, nounPostbases, VVpostbases, NNpostbases} from './constants/newconstants.js'
+import {nounOptionsMVPossessors, mvSubject4thPersonCalls, mvObject4thPersonCalls, nounOptionsMVAblPossessors,nounOptionsCVAblPossessors, mvSubjectOptionsWho, mvSubjectOptionsWhat, mvObjectOptionsWhom, mvObjectOptionsWhomAbl, mvObjectOptionsWhat, mvObjectOptionsWhatAbl,retrieveMoodEnglish, nounOptionsCVPossessors, nounOptionsSVPossessors, nounOptionsPossessorsNo4th, mvSubjectOptionsOnly2nd, nounOptionsNumbers, nounoptionsmodalis, mvSubjectOptions, mvObjectOptions, mvSubjectOptionsEnglish, verbPostbases, nounPostbases, VVpostbases, NNpostbases} from './constants/newconstants.js'
 import {ending_underlying} from './constants/ending_underlying.js'
 import palette from 'google-palette';
 import shuffle from 'shuffle-array';
@@ -1452,13 +1452,15 @@ class OneVerbWordBuilder extends Component {
 		if (type==='addCV') {
 	    return <Dropdown item text='Add Connective Verb Phrase'>
 	      <Dropdown.Menu>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Prec'},()=>{this.menuSelect('cvinsert',-1)})}}>before...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cnsq'},()=>{this.menuSelect('cvinsert',-1)})}}>because...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cont'},()=>{this.menuSelect('cvinsert',-1)})}}>whenever...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Conc'},()=>{this.menuSelect('cvinsert',-1)})}}>although, even though, even if...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cond'},()=>{this.menuSelect('cvinsert',-1)})}}>if, when in the future...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'CtmpI'},()=>{this.menuSelect('cvinsert',-1)})}}>when in the past...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'CtmpII'},()=>{this.menuSelect('cvinsert',-1)})}}>while...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Prec',mvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>before...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cnsq',mvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>because...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cont',mvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>whenever...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Conc',mvvType:'eventhough'},()=>{this.menuSelect('cvinsert',-1)})}}>even though...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Conc',mvvType:'evenif'},()=>{this.menuSelect('cvinsert',-1)})}}>even if...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cond',mvvType:'if'},()=>{this.menuSelect('cvinsert',-1)})}}>if...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cond',mvvType:'wheninthefuture'},()=>{this.menuSelect('cvinsert',-1)})}}>when (in the future)...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'CtmpI',mvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>when (in the past)...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'CtmpII',mvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>while...</Dropdown.Item>
 	      </Dropdown.Menu>
 	    </Dropdown>			
 		} else if (type==='addQuestion') {
@@ -1531,13 +1533,15 @@ class OneVerbWordBuilder extends Component {
 		} else if (type==='changeCVtype') {
 	    return <Dropdown item text='Change Connective Verb Phrase'>
 	      <Dropdown.Menu>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Prec',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>before...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cnsq',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>because...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cont',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>whenever...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Conc',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>although, even though, even if...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cond',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>if, when in the future...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'CtmpI',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>when in the past...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'CtmpII',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>while...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Prec',mvvType:'',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>before...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cnsq',mvvType:'',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>because...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cont',mvvType:'',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>whenever...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Conc',mvvType:'eventhough',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>even though...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Conc',mvvType:'evenif',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>even if...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cond',mvvType:'if',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>if...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cond',mvvType:'wheninthefuture',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>when (in the future)...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'CtmpI',mvvType:'',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>when (in the past)...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'CtmpII',mvvType:'',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>while...</Dropdown.Item>
 	      </Dropdown.Menu>
 	    </Dropdown>					
 		} else if (type==='changeQuestiontype') {
@@ -1863,6 +1867,23 @@ class OneVerbWordBuilder extends Component {
 	render() {
 		console.log(this.state)
 
+		let mvSubjectOptions1 = mvSubjectOptions
+		let mvObjectOptions1 = mvObjectOptions
+
+		if (this.state.mvvs.length > 0) {
+			let mvvalueSub = mvSubject4thPersonCalls[this.state.mvvs.join("")]
+			let mvvalueObj = mvObject4thPersonCalls[this.state.mvvs.join("")]
+			if (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) {
+				mvSubjectOptions1 = [{id: 5, value: '410', text:mvvalueSub+' (subject)'}].concat(mvSubjectOptions1)
+				mvObjectOptions1 = [{id: 5, value: '410', text:mvvalueObj+' (subject)'}].concat(mvObjectOptions1)
+			} else if (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 2) {
+				mvSubjectOptions1 = [{id: 9, value: '420', text:mvvalueSub+' (subjects)'}].concat(mvSubjectOptions1)
+				mvObjectOptions1 = [{id: 9, value: '420', text:mvvalueObj+' (subjects)'}].concat(mvObjectOptions1)
+			} else if (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 3) {
+				mvSubjectOptions1 = [{id: 13, value: '430', text:mvvalueSub+' (subjects)'}].concat(mvSubjectOptions1)
+				mvObjectOptions1 = [{id: 13, value: '430', text:mvvalueObj+' (subjects)'}].concat(mvObjectOptions1)
+			}
+		}
 
 		return (
 			<div style={{fontFamily:customFontFam}}>
@@ -2495,7 +2516,7 @@ class OneVerbWordBuilder extends Component {
 										</span>
 										:
 										<span>
-											<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={(event,data)=>{console.log(data.value[0]===4);if (data.value[0] === 4) {this.backEndCall([["Update",["cv","vs"],[4,1,["mv","vs"]]]])} else {this.backEndCall([["Update",["cv","vs"],data.value.split('').map(Number)]])}}}  value={this.state.cvvs.join("")} options={mvSubjectOptions} />
+											<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={(event,data)=>{console.log(data.value[0]===4);if (data.value[0] === 4) {this.backEndCall([["Update",["cv","vs"],[4,1,["mv","vs"]]]])} else {this.backEndCall([["Update",["cv","vs"],data.value.split('').map(Number)]])}}}  value={this.state.cvvs.join("")} options={mvSubjectOptions1} />
 										</span>
 										)
 									:
@@ -2543,7 +2564,7 @@ class OneVerbWordBuilder extends Component {
 													return <span style={{color:this.state.colorsList[w[1]]}}>{w[0]+" "}</span>
 												}))			
 												:
-												<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}   onChange={(event,data)=>{if (data.value === 'mvsubject') {this.backEndCall([["Update",["cv","vo"],[4,1,["mv","vs"]]]])} else {this.backEndCall([["Update",["cv","vo"],data.value.split('').map(Number)]])}}}  value={this.state.cvvo.join("")} options={mvObjectOptions} />								
+												<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}   onChange={(event,data)=>{if (data.value === 'mvsubject') {this.backEndCall([["Update",["cv","vo"],[4,1,["mv","vs"]]]])} else {this.backEndCall([["Update",["cv","vo"],data.value.split('').map(Number)]])}}}  value={this.state.cvvo.join("")} options={mvObjectOptions1} />								
 											}
 										</span>
 									)
@@ -2671,7 +2692,7 @@ class OneVerbWordBuilder extends Component {
 										</span>
 										:
 										<span>
-											<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={(event,data)=>{this.backEndCall([["Update",["sv","vo"],data.value.split('').map(Number)]])}}  value={this.state.svvo.join("")} options={mvObjectOptions} />
+											<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={(event,data)=>{this.backEndCall([["Update",["sv","vo"],data.value.split('').map(Number)]])}}  value={this.state.svvo.join("")} options={mvObjectOptions1} />
 										</span>
 									)
 									:

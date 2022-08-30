@@ -217,6 +217,22 @@ export const mvSubjectOptionsEnglish = {
 };
 
 
+export const mvSubject4thPersonCalls = {
+  '311':'he',
+  '312':'she',
+  '313':'it',
+  '320':'the two of them',
+  '330':'they all (3+)',
+}
+
+export const mvObject4thPersonCalls = {
+  '311':'him',
+  '312':'her',
+  '313':'it',
+  '320':'the two of them',
+  '330':'them all (3+)',
+}
+
 export const mvSubjectOptionsOnly2nd = [
   {id: 1, value: '210', text:'you', otext:'you'},
   {id: 7, value: '220', text:'you two', otext:'you two'},
@@ -229,15 +245,15 @@ export const mvSubjectOptions = [
   {id: 2, value: '311', text:'he', otext:'him'},
   {id: 3, value: '312', text:'she', otext:'her'},
   {id: 4, value: '313', text:'it', otext:'it'},
-  {id: 5, value: '410', text:'subject', otext:'subject'},
+  // {id: 5, value: '410', text:'subject', otext:'subject'},
   {id: 6, value: '120', text:'the two of us', otext:'the two of us'},
   {id: 7, value: '220', text:'the two of you', otext:'the two of you'},
   {id: 8, value: '320', text:'the two of them', otext:'the two of them'},
-  {id: 9, value: '420', text:'their own (two)', otext:'their own (two)'},
+  // {id: 9, value: '420', text:'their own (two)', otext:'their own (two)'},
   {id: 10, value: '130', text:'we all (3+)', otext:'us all (3+)'},
   {id: 11, value: '230', text:'you all (3+)', otext:'you all (3+)'},
   {id: 12, value: '330', text:'they all (3+)', otext:'them all (3+)'},
-  {id: 13, value: '430', text:'their own (3+)', otext:'their own (3+)'},
+  // {id: 13, value: '430', text:'their own (3+)', otext:'their own (3+)'},
 ];
 
 export const mvObjectOptions = [
@@ -246,15 +262,15 @@ export const mvObjectOptions = [
   {id: 2, value: '311', text:'him', ptext:'his'},
   {id: 3, value: '312', text:'her', ptext:'her'},
   {id: 4, value: '313', text:'it', ptext:'its'},
-  {id: 5, value: '410', text:'subject', ptext:'subject'},
+  // {id: 5, value: '410', text:'subject', ptext:'subject'},
   {id: 6, value: '120', text:'the two of us', ptext:'our (two)'},
   {id: 7, value: '220', text:'the two of you', ptext:'your (two)'},
   {id: 8, value: '320', text:'the two of them', ptext:'their (two)'},
-  {id: 9, value: '420', text:'their own (two)', ptext:'their own (two)'},
+  // {id: 9, value: '420', text:'their own (two)', ptext:'their own (two)'},
   {id: 10, value: '130', text:'us all (3+)', ptext:'our (3+)'},
   {id: 11, value: '230', text:'you all (3+)', ptext:'your (3+)'},
   {id: 12, value: '330', text:'them all (3+)', ptext:'their (3+)'},
-  {id: 13, value: '430', text:'their own (3+)', ptext:'their own (3+)'},
+  // {id: 13, value: '430', text:'their own (3+)', ptext:'their own (3+)'},
 ];
 
 export const mvSubjectOptionsWho = [
@@ -359,74 +375,6 @@ export const mvObjectOptionsWhatAbl = [
   // {id: 13, value: '430', text:'whom (their own 3+)', ptext:'their own (3+)'},
 ];
 
-export const cvSubjectOptions = [
-  {id: 0, value: '110', text:'I', otext:'me'},
-  {id: 1, value: '210', text:'you', otext:'you'},
-  {id: 2, value: '311', text:'he', otext:'him'},
-  {id: 3, value: '312', text:'she', otext:'her'},
-  {id: 4, value: '313', text:'it', otext:'it'},
-  {id: 5, value: '410', text:'mvsubject', otext:'mvsubject'},
-  {id: 6, value: '120', text:'the two of us', otext:'the two of us'},
-  {id: 7, value: '220', text:'the two of you', otext:'the two of you'},
-  {id: 8, value: '320', text:'the two of them', otext:'the two of them'},
-  {id: 9, value: '420', text:'their own (two)', otext:'their own (two)'},
-  {id: 10, value: '130', text:'we all (3+)', otext:'us all (3+)'},
-  {id: 11, value: '230', text:'you all (3+)', otext:'you all (3+)'},
-  {id: 12, value: '330', text:'they all (3+)', otext:'them all (3+)'},
-  {id: 13, value: '430', text:'their own (3+)', otext:'their own (3+)'},
-];
-
-export const cvObjectOptions = [
-  {id: 0, value: '110', text:'me', ptext:'my'},
-  {id: 1, value: '210', text:'you', ptext:'your'},
-  {id: 2, value: '311', text:'him', ptext:'his'},
-  {id: 3, value: '312', text:'her', ptext:'her'},
-  {id: 4, value: '313', text:'it', ptext:'its'},
-  {id: 5, value: '411', text:'cvsubject', ptext:'cvsubject'},
-  {id: 6, value: '120', text:'the two of us', ptext:'our (two)'},
-  {id: 7, value: '220', text:'the two of you', ptext:'your (two)'},
-  {id: 8, value: '320', text:'the two of them', ptext:'their (two)'},
-  {id: 9, value: '420', text:'their own (two)', ptext:'their own (two)'},
-  {id: 10, value: '130', text:'us all (3+)', ptext:'our (3+)'},
-  {id: 11, value: '230', text:'you all (3+)', ptext:'your (3+)'},
-  {id: 12, value: '330', text:'them all (3+)', ptext:'their (3+)'},
-  {id: 13, value: '430', text:'their own (3+)', ptext:'their own (3+)'},
-];
-
-
-export const mvSubjectOptionsNo4th = [
-  {id: 0, value: '110', text:'I', otext:'me'},
-  {id: 1, value: '210', text:'you', otext:'you'},
-  {id: 2, value: '311', text:'he', otext:'him'},
-  {id: 3, value: '312', text:'she', otext:'her'},
-  {id: 4, value: '313', text:'it', otext:'it'},
-  // {id: 5, value: 's41(1)', text:'its own', otext:'its own'},
-  {id: 6, value: '120', text:'the two of us', otext:'the two of us'},
-  {id: 7, value: '220', text:'the two of you', otext:'the two of you'},
-  {id: 8, value: '320', text:'the two of them', otext:'the two of them'},
-  // {id: 9, value: 's42(1)', text:'their own (two)', otext:'their own (two)'},
-  {id: 10, value: '130', text:'we all (3+)', otext:'us all (3+)'},
-  {id: 11, value: '230', text:'you all (3+)', otext:'you all (3+)'},
-  {id: 12, value: '330', text:'they all (3+)', otext:'them all (3+)'},
-  // {id: 13, value: 's43(1)', text:'their own (3+)', otext:'their own (3+)'}
-];
-
-export const mvObjectOptionsNo4th = [
-  {id: 0, value: '110', text:'me', ptext:'my'},
-  {id: 1, value: '210', text:'you', ptext:'your'},
-  {id: 2, value: '311', text:'him', ptext:'his'},
-  {id: 3, value: '312', text:'her', ptext:'her'},
-  {id: 4, value: '313', text:'it', ptext:'its'},
-  // {id: 5, value: '41', text:'its own', ptext:'its own'},
-  {id: 6, value: '120', text:'the two of us', ptext:'our (two)'},
-  {id: 7, value: '220', text:'the two of you', ptext:'your (two)'},
-  {id: 8, value: '320', text:'the two of them', ptext:'their (two)'},
-  // {id: 9, value: '42', text:'their own (two)', ptext:'their own (two)'},
-  {id: 10, value: '130', text:'us all (3+)', ptext:'our (3+)'},
-  {id: 11, value: '230', text:'you all (3+)', ptext:'your (3+)'},
-  {id: 12, value: '330', text:'them all (3+)', ptext:'their (3+)'},
-  // {id: 13, value: 'o43', text:'their own (3+)', ptext:'their own (3+)'},
-];
 
 
 
