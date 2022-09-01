@@ -100,7 +100,23 @@ export const nounOptionsPossessorsNo4th = [
 ];
 
 
-
+export const nounOptionsMVPossessorsThe = [
+  {id: 0, value: '000', text:'the'},
+  {id: 1, value: '110', text:'my'},
+  {id: 2, value: '210', text:'your'},
+  {id: 3, value: '311', text:'his'},
+  {id: 4, value: '312', text:'her'},
+  {id: 5, value: '313', text:'its'},
+  // {id: 6, value: '410', text: "mvsubject's"},
+  {id: 7, value: '120', text:'our (two)'},
+  {id: 8, value: '220', text:'your (two)'},
+  {id: 9, value: '320', text:'their (two)'},
+  // {id: 10, value: '420', text:'their own (two)'},
+  {id: 11, value: '130', text:'our (3+)'},
+  {id: 12, value: '230', text:'your (3+)'},
+  {id: 13, value: '330', text:'their (3+)'},
+  // {id: 14, value: '430', text:'their own (3+)'},
+];
 
 export const nounOptionsMVPossessors = [
   // {id: 0, value: '000', text:'the'},

@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import {withRouter} from 'react-router';
 import { TagColors, WordItem } from './SearchPageHelpers.js';
 import SimpleWordBuilder from './SimpleWordBuilder.js';
+import SimpleWordBuilderUpdated from './SimpleWordBuilderUpdated.js';
 import {DialectDictionary} from './constants/DialectDictionary.js';
 
 
@@ -270,8 +271,11 @@ class YupikEntry extends Component {
           <div className='hierarchy'>
           <Header as='h2'>Usage</Header>
           {this.state.entry.usage.map((entry,i) => {
-            console.log(entry)
-            return <SimpleWordBuilder entry={entry} />
+            if (entry[3].constructor === Array) {
+              return entry[3].map((k,index) => <SimpleWordBuilderUpdated entry={entry} index={i} definitionIndex={index} word={this.state.word} />)
+            } else {
+              return <SimpleWordBuilderUpdated entry={entry} index={i} word={this.state.word} />
+            }
           })}
           </div>
           :

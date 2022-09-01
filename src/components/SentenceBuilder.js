@@ -43,32 +43,6 @@ let requirePostbasesDictionary = {
 
 }
 
-let instructionSet = {
-0:[["Insert", ["mv"], [[["yuvrir-", 0, 2, 0], ["@~+niar-", 0, 0, 0]], "t", "Ind"]], ["Update", ["mv", "vs"], [2, 1, 0]], ["Update", ["mv", "vo"], [3, 1, 3]], ["Insert", ["mv", "no"], [[["kaassaq", 0, 0, 0]], [0, 0, 0, 1]]], ["Insert", ["cv"], [[["ayag¹-", 0, 0, 0]], "i", "Prec"]], ["Update", ["cv", "vs"], [2, 1, 0]]],
-1:[["Insert", ["np"], [[["qimugta", 0, 0, 0]], [0, 0, 0, 1], "Abs"]]],
-2:[["Insert", ["np"], [[["qimugta", 0, 0, 0]], [1, 1, 0, 1], "Abs"]]],
-3:[["Insert", ["np"], [[["pamyuq,pamsuq", 0, 0, 0]], [0, 0, 0, 1], "Abs"]], ["Insert", ["np", "n", -1], [[["qimugta", 0, 0, 0]], [0, 0, 0, 1]]]],
-4:[["Insert", ["np"], [[["imarpik,imarpak", 0, 0, 0]], [0, 0, 0, 1], "Loc"]]],
-5:[["Insert", ["np"], [[["kipusvik,kipuyvik", 0, 0, 0]], [0, 0, 0, 1], "Ter"]]],
-6:[["Insert", ["np"], [[["Mamterilleq", 0, 0, 0]], [0, 0, 0, 1], "Abl_Mod"]]],
-7:[["Insert", ["np"], [[["tengssuun", 0, 0, 0]], [0, 0, 0, 1], "Via"]]],
-8:[["Insert", ["np"], [[["qimugta", 0, 0, 0]], [0, 0, 0, 1], "Equ"]]],
-9:[["Insert", ["np"], [[[]], [0, 0, 0, 1], "Abs"]], ["Insert", ["np", "n", 0, -1], [[["arnaq", 0, 0, 0]], [0, 0, 0, 1]]]],
-10:[["Insert", ["np"], [[["piipiq", 0, 0, 0], ["-rpak,-rpag-", 0, 0, 0]], [0, 0, 0, 1], "Abs"]]],
-11:[["Insert", ["np"], [[["piipiq", 0, 0, 0], ["-cuar(aq*)", 0, 0, 0]], [0, 0, 0, 1], "Abs"]]],
-12:[["Insert", ["np"], [[["piipiq", 0, 0, 0], ["-ya(g)aq*,-yagaq*,-ya(g)ar-,-yagar-", 0, 0, 0]], [0, 0, 0, 1], "Abs"]]],
-13:[["Insert", ["np"], [[["piipiq", 0, 0, 0], ["-kegtaar(aq*)", 0, 0, 0]], [0, 0, 0, 1], "Abs"]]],
-14:[["Insert", ["np"], [[["piipiq", 0, 0, 0], ["+(ng)uaq,@~+(ng)uar-", 0, 0, 0]], [0, 0, 0, 1], "Abs"]]],
-15:[["Insert", ["mv"], [[["nere-", 0, 0, 0]], "i", "Ind"]]],
-16:[["Insert", ["mv"], [[["nere-", 0, 0, 0]], "i", "Ind"]], ["Insert", ["mv", "ns"], [[["piipiq", 0, 0, 0]], [0, 0, 0, 1]]]],
-17:[["Insert", ["mv"], [[["nere-", 0, 1, 0]], "it", "Ind"]]],
-18:[["Insert", ["mv"], [[["nere-", 0, 1, 0]], "it", "Ind"]], ["Insert", ["mv", "ns"], [[["piipiq", 0, 0, 0]], [0, 0, 0, 1]]]],
-19:[["Insert", ["mv"], [[["nere-", 0, 1, 0]], "it", "Ind"]], ["Insert", ["mv", "no"], [[["akutaq", 0, 0, 1]], [0, 0, 0, 1]]]],
-20:[["Insert", ["mv"], [[["nere-", 0, 1, 0]], "it", "Ind"]], ["Insert", ["mv", "ns"], [[["piipiq", 0, 0, 0]], [0, 0, 0, 1]]], ["Insert", ["mv", "no"], [[["akutaq", 0, 0, 1]], [0, 0, 0, 1]]]],
-21:[["Insert", ["mv"], [[["nere-", 0, 2, 0]], "t", "Ind"]]],
-22:[["Insert", ["mv"], [[["nere-", 0, 2, 0]], "t", "Ind"]], ["Insert", ["mv", "ns"], [[["piipiq", 0, 0, 0]], [0, 0, 0, 1]]]],
-23:[["Insert", ["mv"], [[["nere-", 0, 2, 0]], "t", "Ind"]], ["Insert", ["mv", "no"], [[["akutaq", 0, 0, 1]], [0, 0, 0, 1]]]],
-24:[["Insert", ["mv"], [[["nere-", 0, 2, 0]], "t", "Ind"]], ["Insert", ["mv", "ns"], [[["piipiq", 0, 0, 0]], [0, 0, 0, 1]]], ["Insert", ["mv", "no"], [[["akutaq", 0, 0, 1]], [0, 0, 0, 1]]]],}
 
 const optionsFuzzy = {
   keys: ['yupikword', 'englishnorm'],
@@ -422,9 +396,10 @@ class OneVerbWordBuilder extends Component {
 
 
 		}
-   //  if (decodeURI(props.match.params.num) in instructionSet) {
-			// this.backEndCall(instructionSet[decodeURI(props.match.params.num)])
-   //  }
+    if (decodeURI(props.match.params.num) == 2) {
+    	// console.log('hi',this.props.location.state)
+			this.backEndCall([],true,true)
+    }
 
     // if (decodeURI(props.match.params.num) in sentenceTemplates) {
 			// this.backEndCall(sentenceTemplates[decodeURI(props.match.params.num)][2])
@@ -595,12 +570,12 @@ class OneVerbWordBuilder extends Component {
   }
 
 
-	setDefaultInstructions = (num, event, data) => {
-		// instructionSet[num].map((x)=>{
-		// 	console.log(x)
-		this.backEndCall(instructionSet[num])
-		// })
-	}
+	// setDefaultInstructions = (num, event, data) => {
+	// 	// instructionSet[num].map((x)=>{
+	// 	// 	console.log(x)
+	// 	this.backEndCall(instructionSet[num])
+	// 	// })
+	// }
 
 	initialize(type) {
 		if (type === 'mv') {
@@ -684,17 +659,31 @@ class OneVerbWordBuilder extends Component {
 		}
 	}
 
-	backEndCall(keyChanged, eraseExisting) {
+	backEndCall(keyChanged, eraseExisting, simpleCall) {
 		console.log('backend',this.state)
-		console.log(keyChanged)
+		console.log('backendcall',keyChanged, eraseExisting, simpleCall)
 
 		let mv = {}
 		let cv = {}
 		let sv = {}
 		let np = {}
 
-		if (eraseExisting) {
 
+
+		if (eraseExisting) {
+			if (simpleCall) {
+				if ('mv' in this.props.location.state) {
+					Object.keys(this.props.location.state['mv']).map((k)=>{
+						// console.log('entry',k)
+						mv[k]=this.props.location.state['mv'][k]
+					})
+				} else {
+					Object.keys(this.props.location.state['np']).map((k)=>{
+						// console.log('entry',k)
+						np[k]=this.props.location.state['np'][k]
+					})
+				}
+			}
 		} else {
 			if (this.state.mvvBase.length > 0) {mv['vBase']=this.state.mvvBase}
 			if (this.state.mvnsBases.length > 0) {mv['nsBases']=this.state.mvnsBases}
