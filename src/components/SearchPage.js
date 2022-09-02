@@ -12,7 +12,6 @@ import { API_URL, TUTORIAL_URL, ICON_URL } from '../App.js';
 import now from 'performance-now';
 import ReactGA from 'react-ga';
 // import GitHubForkRibbon from 'react-github-fork-ribbon';
-import { YugtunLoader} from './SearchPageHelpers.js';
 // import TableEntry from './TableEntry.js';
 // import {demPro, perPro} from './constants/pronounEndings.js';
 import SearchPageDictionary from './SearchPageDictionary.js'
@@ -30,10 +29,11 @@ let dictionary_dict = {};
 class SearchPage extends Component {
   constructor(props) {
     super(props);
-    // console.log("SearchPage props: ", props);
+    console.log("SearchPage props: ", props);
     this.state = {
-      dictionary: [],
-      audiolibrary: [],
+      dictionary: props.dictionary,
+      audiolibrary: props.audiolibrary,
+      dictionary_dict: props.dictionary_dict,
       reset: true,
       // dictionaryNouns: [],
       // dictionaryVerbs: [],
@@ -90,68 +90,68 @@ class SearchPage extends Component {
     // this.inputClicked = this.inputClicked.bind(this);
   }
 
-  componentDidMount() {
-    let start = now();
-    // if (this.state.updateSearchEntry) {
-    //   this.inputClicked();
-    //   this.setState({ updateSearchEntry: false });
-    // }
-    // console.log('hi',dictionary)
-    if (dictionary.length === 0) {
-      axios
-        .get(API_URL + "/word/all2021")
-        .then(response => {
-          let end = now();
-          ReactGA.timing({
-            category: 'Loading',
-            variable: 'dictionary',
-            value: (end-start).toFixed(3),
-            label: 'Dictionary loading'
-          });
-          dictionary = response.data;
-          console.log(dictionary)
-          // fuse.setCollection(dictionary);
-          // fuse1.setCollection(dictionary);
-          console.log('Fetched dictionary');
+  // componentDidMount() {
+  //   let start = now();
+  //   // if (this.state.updateSearchEntry) {
+  //   //   this.inputClicked();
+  //   //   this.setState({ updateSearchEntry: false });
+  //   // }
+  //   // console.log('hi',dictionary)
+  //   if (dictionary.length === 0) {
+  //     axios
+  //       .get(API_URL + "/word/all2021")
+  //       .then(response => {
+  //         let end = now();
+  //         ReactGA.timing({
+  //           category: 'Loading',
+  //           variable: 'dictionary',
+  //           value: (end-start).toFixed(3),
+  //           label: 'Dictionary loading'
+  //         });
+  //         dictionary = response.data;
+  //         console.log(dictionary)
+  //         // fuse.setCollection(dictionary);
+  //         // fuse1.setCollection(dictionary);
+  //         console.log('Fetched dictionary');
 
-          dictionary.forEach(entry => dictionary_dict[entry.keyString] = entry.definitionString) // create dictionary_dict dictionary
-          // dictionary_prepared = fuzzysort.prepare(dictionary)
+  //         dictionary.forEach(entry => dictionary_dict[entry.keyString] = entry.definitionString) // create dictionary_dict dictionary
+  //         // dictionary_prepared = fuzzysort.prepare(dictionary)
 
-          this.setState({ dictionary: dictionary, dictionary_dict: dictionary_dict});
-        });
-    }
-    else {
-      // fuse.setCollection(dictionary);
-      this.setState({ dictionary: dictionary, dictionary_dict: dictionary_dict });
-    }
+  //         this.setState({ dictionary: dictionary, dictionary_dict: dictionary_dict});
+  //       });
+  //   }
+  //   else {
+  //     // fuse.setCollection(dictionary);
+  //     this.setState({ dictionary: dictionary, dictionary_dict: dictionary_dict });
+  //   }
 
-    if (audiolibrary.length === 0) {
-      axios
-        .get(API_URL + "/audiolibrary/all")
-        .then(response => {
-          // let end = now();
-          // ReactGA.timing({
-          //   category: 'Loading',
-          //   variable: 'dictionary',
-          //   value: (end-start).toFixed(3),
-          //   label: 'Dictionary loading'
-          // });
-          audiolibrary = response.data;
-          // fuse.setCollection(dictionary);
-          // fuse1.setCollection(dictionary);
-          console.log('Fetched AudioLibrary');
+  //   if (audiolibrary.length === 0) {
+  //     axios
+  //       .get(API_URL + "/audiolibrary/all")
+  //       .then(response => {
+  //         // let end = now();
+  //         // ReactGA.timing({
+  //         //   category: 'Loading',
+  //         //   variable: 'dictionary',
+  //         //   value: (end-start).toFixed(3),
+  //         //   label: 'Dictionary loading'
+  //         // });
+  //         audiolibrary = response.data;
+  //         // fuse.setCollection(dictionary);
+  //         // fuse1.setCollection(dictionary);
+  //         console.log('Fetched AudioLibrary');
 
-          // dictionary.forEach(entry => dictionary_dict[entry.keyString] = entry.definitionString) // create dictionary_dict dictionary
-          // dictionary_prepared = fuzzysort.prepare(dictionary)
+  //         // dictionary.forEach(entry => dictionary_dict[entry.keyString] = entry.definitionString) // create dictionary_dict dictionary
+  //         // dictionary_prepared = fuzzysort.prepare(dictionary)
 
-          this.setState({ audiolibrary: audiolibrary });
-        });
-    } else {
-      this.setState({ audiolibrary: audiolibrary });
-    }
+  //         this.setState({ audiolibrary: audiolibrary });
+  //       });
+  //   } else {
+  //     this.setState({ audiolibrary: audiolibrary });
+  //   }
 
 
-  }
+  // }
 
   componentDidUpdate(prevProps, prevState) {
     // if (prevState.dictionary.length !== this.state.dictionary.length) {
@@ -545,6 +545,7 @@ class SearchPage extends Component {
 
   render() {
     console.log("SearchPage state: ", this.state);
+    console.log("SearchPage props: ", this.props);
     // console.log("dictionary: ",dictionary_dict);
     // console.log("fuse.js: ",fuse.search('pissur'))
     // console.log("Fuzzysort: ",fuzzysort.go('pissur', dictionary, optionsFuzzy));
@@ -599,7 +600,6 @@ class SearchPage extends Component {
     return (
       <div>
       
-      <YugtunLoader criteria={this.state.dictionary.length === 0} />
       <Grid textAlign='center' style={{ height: window.innerHeight/1.5 }} verticalAlign={this.state.searchBarStuckTop ? 'top' : 'top'}>
       <Grid.Row style={{height:40,paddingBottom:0}}>
       <Grid.Column>

@@ -127,6 +127,9 @@ class SearchPage extends Component {
 
   componentDidMount() {
     // let start = now();
+    console.log('before',this.state)
+    this.resetAll();
+    
     if (this.state.updateSearchEntry) {
       this.inputClicked();
       this.setState({ updateSearchEntry: false });
@@ -570,7 +573,7 @@ class SearchPage extends Component {
       links: [],
       searchWord: "",
       notFirstParse: false,
-    });
+    },()=>{console.log('after',this.state)});
   };
 
   // handleTabChange = (e,data) => {
@@ -812,7 +815,7 @@ class SearchPage extends Component {
                 </div>
 
                 <div style={{ fontSize: 22 }}>
-                  {this.state.segments[index].replace(/</g, "·")}
+                  {this.state.segments[index].replace(/</g, "·").replace(/&/g, "·").replace(/↞/g, "·").replace(/↠/g, "·").replace(/·$/g,"")}
                 </div>
 
                 {i.split("-").map((q, qindex) =>

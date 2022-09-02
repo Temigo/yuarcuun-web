@@ -92,7 +92,9 @@ class SearchPageDictionary extends Component {
     // this.inputClicked = this.inputClicked.bind(this);
   }
 
-  // componentDidMount() {
+  componentDidMount() {
+    this.resetAll();
+  }
   //   let start = now();
   //   if (this.state.updateSearchEntry) {
   //     this.inputClicked();

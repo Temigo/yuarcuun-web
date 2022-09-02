@@ -24,6 +24,51 @@ class TableEntry extends PureComponent {
   //   }
   // }
 
+  processSubjObjArrow = (word, base) => {
+    let finalHTML = ''
+    let ksub = ''
+    let kobj = ''
+    if (base == 'n') {
+      word.map((k,index)=>{
+        const lastIndex = k.lastIndexOf('<')
+        finalHTML = k.slice(0, lastIndex)
+        let desiredRegion = k.slice(lastIndex+1).split('&')[0]
+        if (desiredRegion.includes('↠')) {
+          finalHTML += '<span style="color:#002477">'+desiredRegion.split('↠')[0]+'</span>'
+          finalHTML += '<span style="color:#7b0e0e">'+desiredRegion.split('↠')[1]+'</span>'
+        } else if (desiredRegion.includes('↞')) {
+          finalHTML += '<span style="color:#7b0e0e">'+desiredRegion.split('↞')[0]+'</span>'
+          finalHTML += '<span style="color:#002477">'+desiredRegion.split('↞')[1]+'</span>'
+        } else {
+          finalHTML += '<span style="color:#002477">'+desiredRegion+'</span>'
+        }
+        finalHTML += '<span>'+k.slice(lastIndex+1).split('&')[1]+'</span>'  
+        if (word.length-1 !== index) {
+        finalHTML += '<span>, </span>'
+        }
+      })     
+    } else {
+      word.map((k,index)=>{
+        k = k.replace(/</g,'')
+        finalHTML += '<span>'+k.split('&')[0]+'</span>'
+        if (k.split('&')[1].includes('↠')) {
+          finalHTML += '<span style="color:#002477">'+k.split('&')[1].split('↠')[0]+'</span>'
+          finalHTML += '<span style="color:#7b0e0e">'+k.split('&')[1].split('↠')[1]+'</span>'
+        } else if (k.split('&')[1].includes('↞')) {
+          finalHTML += '<span style="color:#7b0e0e">'+k.split('&')[1].split('↞')[0]+'</span>'
+          finalHTML += '<span style="color:#002477">'+k.split('&')[1].split('↞')[1]+'</span>'
+        } else {
+          finalHTML += '<span style="color:#002477">'+k.split('&')[1]+'</span>'       
+        }
+        if (word.length-1 !== index) {
+        finalHTML += '<span>, </span>'
+        }
+      })      
+    }
+
+    return <span dangerouslySetInnerHTML={{__html: finalHTML}} />
+  }
+
 
   render() {
     console.log(this.state)
@@ -328,6 +373,7 @@ class TableEntry extends PureComponent {
     "[S_4Pl]",
     ]
 
+
     return (
     <div>
     {this.state.mood === "[Abs]" || this.state.mood === "[Rel]" || this.state.mood === "[Abl_Mod]" || this.state.mood === "[Loc]" || this.state.mood === "[Ter]" || this.state.mood === "[Via]" || this.state.mood === "[Equ]" ?
@@ -338,7 +384,7 @@ class TableEntry extends PureComponent {
                 {unpossessedNounIdentifiers.map((i,index) =>
                     <Table.Row>
                       <Table.HeaderCell style={{color:"#002477"}}>{unpossessedNouns[index]}</Table.HeaderCell>
-                      <Table.Cell style={{paddingLeft:10}}>{e[i].join(",\n").replace(/>/g,'')}</Table.Cell>
+                      <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e[i],'n')}</Table.Cell>
                     </Table.Row>
                 )}
             </Table.Body>
@@ -366,7 +412,7 @@ class TableEntry extends PureComponent {
               <Table.Row>
                 <Table.HeaderCell style={{color:"#002477"}}>{l}</Table.HeaderCell>
                 {possessedNumberOfNounIdentifiers.map((i,index) =>
-                <Table.Cell style={{paddingLeft:10}}>{e[possessedNounIdentifiers[lindex]+possessedNumberOfNounIdentifiers[index]].join(",\n").replace(/>/g,'')}</Table.Cell>
+                <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e[possessedNounIdentifiers[lindex]+possessedNumberOfNounIdentifiers[index]],'n')}</Table.Cell>
                 )}
               </Table.Row>
             )}
@@ -394,14 +440,14 @@ class TableEntry extends PureComponent {
             (subjectsEnglishTerms.map((i,index) =>
             <Table.Row>
               <Table.HeaderCell style={{color:"#002477"}}>{subjectsEnglish[index]}</Table.HeaderCell>
-              <Table.Cell style={{paddingLeft:10}}>{e["[Intr]"+optativeIdentifiers[kindex]+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+              <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Intr]"+optativeIdentifiers[kindex]+i])}</Table.Cell>
             </Table.Row>
             ))
             :
             (subjectOptativeTerms.map((i,index) =>
             <Table.Row>
               <Table.HeaderCell style={{color:"#002477"}}>{subjectOptativeTermsEnglish[index]}</Table.HeaderCell>
-              <Table.Cell style={{paddingLeft:10}}>{e["[Intr]"+optativeIdentifiers[kindex]+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+              <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Intr]"+optativeIdentifiers[kindex]+i])}</Table.Cell>
             </Table.Row>
             ))
         }
@@ -426,7 +472,7 @@ class TableEntry extends PureComponent {
 	            {subjectsEnglishTerms.map((i,index) =>
 		            <Table.Row>
 		              <Table.HeaderCell style={{color:"#002477"}}>{subjectsEnglishConnective[index]}</Table.HeaderCell>
-		              <Table.Cell style={{paddingLeft:10}}>{e["[Intr]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+		              <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Intr]"+i])}</Table.Cell>
 		            </Table.Row>
 	            )}
 	        </Table.Body>
@@ -448,7 +494,7 @@ class TableEntry extends PureComponent {
                 {quantQual.map((i,index) =>
                     <Table.Row>
                       <Table.HeaderCell style={{color:"#002477"}}>{subjectsEnglishQuantQual[index]}</Table.HeaderCell>
-                      <Table.Cell style={{paddingLeft:10}}>{e[i].join(",\n").replace(/>/g,'')}</Table.Cell>
+                      <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e[i])}</Table.Cell>
                     </Table.Row>
                 )}
             </Table.Body>
@@ -471,12 +517,12 @@ class TableEntry extends PureComponent {
                     (this.state.mood === '[Sbrd]' ?
                     <Table.Row>
                       <Table.HeaderCell style={{color:"#002477"}}>{subjectsEnglishSbrd[index]}</Table.HeaderCell>
-                      <Table.Cell style={{paddingLeft:10}}>{e["[Intr]"+subjectsEnglishTermsSbrd[index]].join(",\n").replace(/>/g,'')}</Table.Cell>
+                      <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Intr]"+subjectsEnglishTermsSbrd[index]])}</Table.Cell>
                     </Table.Row>
                     :
                     <Table.Row>
                       <Table.HeaderCell style={{color:"#002477"}}>{subjectsEnglish[index]}</Table.HeaderCell>
-                      <Table.Cell style={{paddingLeft:10}}>{e["[Intr]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+                      <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Intr]"+i])}</Table.Cell>
                     </Table.Row>
                 )
                 )}
@@ -524,19 +570,19 @@ class TableEntry extends PureComponent {
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"he,\xa0she,\xa0it"}</Table.HeaderCell>
             {objectsEnglish3.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_3Sg]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns][A_3Sg]"+i])}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>they (2)</Table.HeaderCell>
             {objectsEnglish3.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_3Du]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns][A_3Du]"+i])}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"they\xa0all\xa0(3+)"}</Table.HeaderCell>
             {objectsEnglish3.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_3Pl]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns][A_3Pl]"+i])}</Table.Cell>
             )}
           </Table.Row>
         </Table.Body>
@@ -559,7 +605,7 @@ class TableEntry extends PureComponent {
         <Table.Body>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477",width:80}}>I</Table.HeaderCell>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_1Sg][P_2Sg]"].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns][A_1Sg][P_2Sg]"])}</Table.Cell>
           </Table.Row>
         </Table.Body>
       </Table>
@@ -591,19 +637,19 @@ class TableEntry extends PureComponent {
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>I</Table.HeaderCell>
             {objectsEnglish1.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_1Sg]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns][A_1Sg]"+i])}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>we (2)</Table.HeaderCell>
             {objectsEnglish1.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_1Du]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns][A_1Du]"+i])}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"we\xa0all\xa03+"}</Table.HeaderCell>
             {objectsEnglish1.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_1Pl]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns][A_1Pl]"+i])}</Table.Cell>
             )}
           </Table.Row>
         </Table.Body>
@@ -637,19 +683,19 @@ class TableEntry extends PureComponent {
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>you</Table.HeaderCell>
             {objectsEnglish2.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_2Sg]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns][A_2Sg]"+i])}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>you (2)</Table.HeaderCell>
             {objectsEnglish2.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_2Du]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns][A_2Du]"+i])}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"you\xa0all\xa0(3+)"}</Table.HeaderCell>
             {objectsEnglish2.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_2Pl]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns][A_2Pl]"+i])}</Table.Cell>
             )}
           </Table.Row>
         </Table.Body>
@@ -699,19 +745,19 @@ class TableEntry extends PureComponent {
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"he,\xa0she,\xa0it"}</Table.HeaderCell>
             {objectsEnglish3.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns]"+k+"[A_3Sg]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns]"+k+"[A_3Sg]"+i])}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>they (2)</Table.HeaderCell>
             {objectsEnglish3.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns]"+k+"[A_3Du]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns]"+k+"[A_3Du]"+i])}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"they\xa0all\xa0(3+)"}</Table.HeaderCell>
             {objectsEnglish3.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns]"+k+"[A_3Pl]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns]"+k+"[A_3Pl]"+i])}</Table.Cell>
             )}
           </Table.Row>
         </Table.Body>
@@ -744,19 +790,19 @@ class TableEntry extends PureComponent {
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>I</Table.HeaderCell>
             {objectsEnglish1.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns]"+k+"[A_1Sg]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns]"+k+"[A_1Sg]"+i])}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>we (2)</Table.HeaderCell>
             {objectsEnglish1.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns]"+k+"[A_1Du]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns]"+k+"[A_1Du]"+i])}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"we\xa0all\xa03+"}</Table.HeaderCell>
             {objectsEnglish1.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns]"+k+"[A_1Pl]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns]"+k+"[A_1Pl]"+i])}</Table.Cell>
             )}
           </Table.Row>
         </Table.Body>
@@ -793,19 +839,19 @@ class TableEntry extends PureComponent {
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>you</Table.HeaderCell>
             {objectsEnglish2.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns]"+k+"[A_2Sg]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns]"+k+"[A_2Sg]"+i])}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>you (2)</Table.HeaderCell>
             {objectsEnglish2.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns]"+k+"[A_2Du]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns]"+k+"[A_2Du]"+i])}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"you\xa0all\xa0(3+)"}</Table.HeaderCell>
             {objectsEnglish2.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns]"+k+"[A_2Pl]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns]"+k+"[A_2Pl]"+i])}</Table.Cell>
             )}
           </Table.Row>
         </Table.Body>
@@ -853,7 +899,7 @@ class TableEntry extends PureComponent {
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477",fontStyle:'italic'}}>{"all"}</Table.HeaderCell>
             {objectsEnglish3.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns]"+i])}</Table.Cell>
             )}
           </Table.Row>
         </Table.Body>
@@ -908,19 +954,19 @@ class TableEntry extends PureComponent {
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"he,\xa0she,\xa0it\xa0(other)"}</Table.HeaderCell>
             {objectsEnglishConnective3.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_3Sg]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns][A_3Sg]"+i])}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>they (2) (others)</Table.HeaderCell>
             {objectsEnglishConnective3.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_3Du]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns][A_3Du]"+i])}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"they\xa0all\xa0(3+)\xa0(others)"}</Table.HeaderCell>
             {objectsEnglishConnective3.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_3Pl]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns][A_3Pl]"+i])}</Table.Cell>
             )}
           </Table.Row>
         </Table.Body>
@@ -959,19 +1005,19 @@ class TableEntry extends PureComponent {
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>I</Table.HeaderCell>
             {objectsEnglishConnective1.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_1Sg]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns][A_1Sg]"+i])}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>we (2)</Table.HeaderCell>
             {objectsEnglishConnective1.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_1Du]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns][A_1Du]"+i])}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"we\xa0all\xa03+"}</Table.HeaderCell>
             {objectsEnglishConnective1.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_1Pl]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns][A_1Pl]"+i])}</Table.Cell>
             )}
           </Table.Row>
         </Table.Body>
@@ -1010,19 +1056,19 @@ class TableEntry extends PureComponent {
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>you</Table.HeaderCell>
             {objectsEnglishConnective2.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_2Sg]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns][A_2Sg]"+i])}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>you (2)</Table.HeaderCell>
             {objectsEnglishConnective2.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_2Du]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns][A_2Du]"+i])}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"you\xa0all\xa0(3+)"}</Table.HeaderCell>
             {objectsEnglishConnective2.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_2Pl]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns][A_2Pl]"+i])}</Table.Cell>
             )}
           </Table.Row>
         </Table.Body>
@@ -1061,19 +1107,19 @@ class TableEntry extends PureComponent {
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"her,\xa0him,\xa0it\xa0(itself)"}</Table.HeaderCell>
             {objectsEnglishConnective4.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_4Sg]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns][A_4Sg]"+i])}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"they\xa0(2)\xa0(themselves)"}</Table.HeaderCell>
             {objectsEnglishConnective4.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_4Du]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns][A_4Du]"+i])}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"they\xa0all\xa0(3+)\xa0(themselves)"}</Table.HeaderCell>
             {objectsEnglishConnective4.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{e["[Trns][A_4Pl]"+i].join(",\n").replace(/>/g,'')}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns][A_4Pl]"+i])}</Table.Cell>
             )}
           </Table.Row>
         </Table.Body>

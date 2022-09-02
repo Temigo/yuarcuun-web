@@ -117,6 +117,14 @@ class OneVerbWordBuilder extends Component {
 		super(props);
 		// console.log(decodeURI(props.match.params.num))
 		this.state = {
+
+			dictionary: this.props.dictionary,
+			usageDictionary: this.props.usageDictionary,
+			dictionary_dict: this.props.dictionary_dict,
+			filteredDictV: [],
+			filteredDictVit: [],
+			filteredDictN: [],
+
 			otherBases: [],
 			colorsList: {
 				'mvv.b':'#000000',
@@ -276,6 +284,7 @@ class OneVerbWordBuilder extends Component {
 			mvvBase:[],
 			mvvMood:"",
 			mvvs:[],
+			mvvType:'',
 
 			mvnsBases:[],
 			mvns:[],
@@ -294,6 +303,7 @@ class OneVerbWordBuilder extends Component {
 			cvno:[],				
 			cvns:[],
 			cvvMood:"",
+			cvvType:'',
 			cvvs:[],
 			cvvo:[],
 
@@ -411,49 +421,49 @@ class OneVerbWordBuilder extends Component {
 
 
 	componentDidMount() {
-		let start = now();
-    if (dictionary.length === 0) {
-      axios
-        .get(API_URL + "/word/all2021")
-        .then(response => {
-          let end = now();
-          ReactGA.timing({
-            category: 'Loading',
-            variable: 'dictionary',
-            value: (end-start).toFixed(3),
-            label: 'Dictionary loading'
-          });
-          dictionary = response.data;
-          console.log(dictionary)
-          console.log('Fetched dictionary');
+		// let start = now();
+		// console.log(this.props)
+    // if (dictionary.length === 0) {
+    //   // axios
+    //   //   .get(API_URL + "/word/all2021")
+    //   //   .then(response => {
+    //   //     let end = now();
+    //   //     ReactGA.timing({
+    //   //       category: 'Loading',
+    //   //       variable: 'dictionary',
+    //   //       value: (end-start).toFixed(3),
+    //   //       label: 'Dictionary loading'
+    //   //     });
+    //   //     dictionary = response.data;
+    //   //     console.log(dictionary)
+    //   //     console.log('Fetched dictionary');
 
-          this.setState({ dictionary: dictionary});
-        });
-    }
+          // this.setState({ dictionary: this.props.dictionary});
+    //   //   });
+    // }
 
-    if (usageDictionary.length === 0) {
-      axios
-        .get(API_URL + "/yupiksearchableusagelist/all")
-        .then(response => {
-          let end = now();
-          ReactGA.timing({
-            category: 'Loading',
-            variable: 'dictionary',
-            value: (end-start).toFixed(3),
-            label: 'Dictionary loading'
-          });
-          usageDictionary = response.data;
-          console.log(usageDictionary)
-          console.log('Fetched usage dictionary');
+    if (this.props.usageDictionary.length > 0) {
+      // axios
+      //   .get(API_URL + "/yupiksearchableusagelist/all")
+      //   .then(response => {
+      //     let end = now();
+      //     ReactGA.timing({
+      //       category: 'Loading',
+      //       variable: 'dictionary',
+      //       value: (end-start).toFixed(3),
+      //       label: 'Dictionary loading'
+      //     });
+      //     usageDictionary = response.data;
+      //     console.log(usageDictionary)
+      //     console.log('Fetched usage dictionary');
 
-					let filteredDictV = usageDictionary.filter(entry => (entry.type.includes('i')||entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')||entry.type.includes('[V→V]')) )
-					let filteredDictN = usageDictionary.filter(entry => (entry.type.includes('n')||entry.type.includes('[V→N]')||entry.type.includes('[N→N]')))
-					let filteredDictVit = usageDictionary.filter(entry => (entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')||entry.type.includes('[V→V]')))
+					let filteredDictV = this.props.usageDictionary.filter(entry => (entry.type.includes('i')||entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')||entry.type.includes('[V→V]')) )
+					let filteredDictN = this.props.usageDictionary.filter(entry => (entry.type.includes('n')||entry.type.includes('[V→N]')||entry.type.includes('[N→N]')))
+					let filteredDictVit = this.props.usageDictionary.filter(entry => (entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')||entry.type.includes('[V→V]')))
 
-    // let wordsList = fuzzysort.go(word, filteredDictionary, optionsFuzzy).map(({ obj }) => (obj));
 
-          this.setState({ usageDictionary: usageDictionary, filteredDictV: filteredDictV, filteredDictVit: filteredDictVit, filteredDictN: filteredDictN});
-        });
+          this.setState({ filteredDictV: filteredDictV, filteredDictVit: filteredDictVit, filteredDictN: filteredDictN});
+        // });
     }
 
 }
