@@ -440,14 +440,14 @@ class TableEntry extends PureComponent {
             (subjectsEnglishTerms.map((i,index) =>
             <Table.Row>
               <Table.HeaderCell style={{color:"#002477"}}>{subjectsEnglish[index]}</Table.HeaderCell>
-              <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Intr]"+optativeIdentifiers[kindex]+i])}</Table.Cell>
+              <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e[optativeIdentifiers[kindex]+"[Intr]"+i])}</Table.Cell>
             </Table.Row>
             ))
             :
             (subjectOptativeTerms.map((i,index) =>
             <Table.Row>
               <Table.HeaderCell style={{color:"#002477"}}>{subjectOptativeTermsEnglish[index]}</Table.HeaderCell>
-              <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Intr]"+optativeIdentifiers[kindex]+i])}</Table.Cell>
+              <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e[optativeIdentifiers[kindex]+"[Intr]"+i])}</Table.Cell>
             </Table.Row>
             ))
         }
@@ -745,19 +745,19 @@ class TableEntry extends PureComponent {
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"he,\xa0she,\xa0it"}</Table.HeaderCell>
             {objectsEnglish3.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns]"+k+"[A_3Sg]"+i])}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e[k+"[Trns]"+"[A_3Sg]"+i])}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>they (2)</Table.HeaderCell>
             {objectsEnglish3.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns]"+k+"[A_3Du]"+i])}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e[k+"[Trns]"+"[A_3Du]"+i])}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"they\xa0all\xa0(3+)"}</Table.HeaderCell>
             {objectsEnglish3.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns]"+k+"[A_3Pl]"+i])}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e[k+"[Trns]"+"[A_3Pl]"+i])}</Table.Cell>
             )}
           </Table.Row>
         </Table.Body>
@@ -790,19 +790,19 @@ class TableEntry extends PureComponent {
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>I</Table.HeaderCell>
             {objectsEnglish1.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns]"+k+"[A_1Sg]"+i])}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e[k+"[Trns]"+"[A_1Sg]"+i])}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>we (2)</Table.HeaderCell>
             {objectsEnglish1.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns]"+k+"[A_1Du]"+i])}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e[k+"[Trns]"+"[A_1Du]"+i])}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"we\xa0all\xa03+"}</Table.HeaderCell>
             {objectsEnglish1.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns]"+k+"[A_1Pl]"+i])}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e[k+"[Trns]"+"[A_1Pl]"+i])}</Table.Cell>
             )}
           </Table.Row>
         </Table.Body>
@@ -839,19 +839,19 @@ class TableEntry extends PureComponent {
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>you</Table.HeaderCell>
             {objectsEnglish2.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns]"+k+"[A_2Sg]"+i])}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e[k+"[Trns]"+"[A_2Sg]"+i])}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>you (2)</Table.HeaderCell>
             {objectsEnglish2.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns]"+k+"[A_2Du]"+i])}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e[k+"[Trns]"+"[A_2Du]"+i])}</Table.Cell>
             )}
           </Table.Row>
           <Table.Row>
             <Table.HeaderCell style={{color:"#002477"}}>{"you\xa0all\xa0(3+)"}</Table.HeaderCell>
             {objectsEnglish2.map((i,index) =>
-            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e["[Trns]"+k+"[A_2Pl]"+i])}</Table.Cell>
+            <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e[k+"[Trns]"+"[A_2Pl]"+i])}</Table.Cell>
             )}
           </Table.Row>
         </Table.Body>

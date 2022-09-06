@@ -344,7 +344,9 @@ class SearchPage extends Component {
     const { activeIndex } = this.state;
     const newIndex = activeIndex === index ? -1 : index;
     let mood = moods[index];
-    this.getEndings(this.state.parses[currentIndex], mood);
+    if (newIndex !== -1) {   
+      this.getEndings(this.state.parses[currentIndex], mood);
+    }
     this.setState({ activeIndex: newIndex, mood: mood });
   };
 
