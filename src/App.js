@@ -39,6 +39,10 @@ class App extends Component {
       dictionary_dict: {},
       audiolibrary: [],
       usageDictionary: [],
+      filteredDictV: [],
+      filteredDictVit: [],
+      filteredDictN: [],
+
     }
   }
 
@@ -118,7 +122,13 @@ class App extends Component {
           // let filteredDictVit = usageDictionary.filter(entry => (entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')||entry.type.includes('[V→V]')))
 
 
-          this.setState({ usageDictionary: usageDictionary});
+          // this.setState({ usageDictionary: usageDictionary});
+
+          let filteredDictV = usageDictionary.filter(entry => (entry.type.includes('i')||entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')||entry.type.includes('[V→V]')) )
+          let filteredDictN = usageDictionary.filter(entry => (entry.type.includes('n')||entry.type.includes('[V→N]')||entry.type.includes('[N→N]')))
+          let filteredDictVit = usageDictionary.filter(entry => (entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')||entry.type.includes('[V→V]')))
+
+          this.setState({ usageDictionary: usageDictionary, filteredDictV: filteredDictV, filteredDictVit: filteredDictVit, filteredDictN: filteredDictN});
         });
     } else {
       this.setState({ usageDictionary: usageDictionary});      
@@ -129,11 +139,11 @@ class App extends Component {
     console.log(this.state)
     return (
       <div>
-      <YugtunLoader criteria={this.state.dictionary.length === 0 && this.state.audiolibrary.length === 0 && this.state.usageDictionary.length === 0} />
+      <YugtunLoader criteria={this.state.dictionary.length === 0 && this.state.audiolibrary.length === 0 && this.state.usageDictionary.length === 0 && this.state.filteredDictV === 0 && this.state.filteredDictVit === 0 && this.state.filteredDictN === 0} />
         {
-          this.state.audiolibrary.length !== 0 && this.state.dictionary.length !== 0 && this.state.usageDictionary !== 0 ?
+          this.state.audiolibrary.length !== 0 && this.state.dictionary.length !== 0 && this.state.usageDictionary !== 0 && this.state.filteredDictV !== 0 && this.state.filteredDictVit !== 0 && this.state.filteredDictN !== 0 ?
             <Switch>
-              <Route exact path='/' render={(props) => <SearchPage audiolibrary={this.state.audiolibrary} dictionary_dict={this.state.dictionary_dict} usageDictionary={this.state.usageDictionary} dictionary={this.state.dictionary} {...props} />}/>
+              <Route exact path='/' render={(props) => <SearchPage audiolibrary={this.state.audiolibrary} dictionary_dict={this.state.dictionary_dict} usageDictionary={this.state.usageDictionary} dictionary={this.state.dictionary} filteredDictV={this.state.filteredDictV} filteredDictVit={this.state.filteredDictVit} filteredDictN={this.state.filteredDictN} {...props} />}/>
               <Route exact path='/about' component={About} />
               <Route exact path='/dialogues' component={Dialogues} />
               <Route exact path='/lksdreader' component={Lksdreader} />
@@ -143,7 +153,7 @@ class App extends Component {
               <Route path='/:word/:entry_id/:usage_id/modify' component={YupikModifyLayout} />
               <Route exact path='/:word' component={YupikDetails} />
               <Route exact path='/wordbuilder/:word' component={WordBuilder}></Route>
-              <Route exact path='/sentencebuilder/:num' render={(props) => <SentenceBuilder audiolibrary={this.state.audiolibrary} usageDictionary={this.state.usageDictionary} dictionary_dict={this.state.dictionary_dict} dictionary={this.state.dictionary} {...props} />}/>
+              <Route exact path='/sentencebuilder/:num' render={(props) => <SentenceBuilder audiolibrary={this.state.audiolibrary} usageDictionary={this.state.usageDictionary} dictionary_dict={this.state.dictionary_dict} dictionary={this.state.dictionary} filteredDictV={this.state.filteredDictV} filteredDictVit={this.state.filteredDictVit} filteredDictN={this.state.filteredDictN} {...props} />}/>
               <Route exact path='/oneverbwordbuilder/:word' component={OneVerbWordBuilder}></Route>
             </Switch>       
             :

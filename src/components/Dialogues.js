@@ -34,7 +34,7 @@ class Dialogues extends Component {
       show: false,
       currentLesson: -1,
       currentCounter: 0,
-      questionMode:false,
+      questionMode:true,
       showCurrent: false,
       correct:'assirpagta',
       inputtedWords: '',
