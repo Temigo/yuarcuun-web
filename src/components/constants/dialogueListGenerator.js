@@ -14,6 +14,7 @@ function dialogueGenerator() {
 	var previousDialogue = "";
 	var dialogueIndex = 2
 
+	var order_out;
 	var title_out = "";
 	var context_out = "";
 
@@ -43,6 +44,8 @@ function dialogueGenerator() {
 		// 17-18 Exersize1	Exercise2
 		const exercise1 = dialogueList[d][17]
 		const exercise2 = dialogueList[d][18]
+		// 19 Order
+		const order = dialogueList[d][19]
 
 		const lesson = `${ch}-${lsn}-${num}`;
 		var dialogue = `qaneryaurci-${ch}-${lsn}-${num}-${turn}-${per}`;
@@ -51,10 +54,7 @@ function dialogueGenerator() {
 			currentLesson = lesson;
 		}
 		else if (currentLesson !== lesson) {
-			if (title_out === '') {
-				title_out = `Qaneryaurci Ch${ch}-${lsn} #${num}`;
-			}
-			lessons.push({"title":title_out, "context":context_out, "dialogues":lessonDialogues, "exercises":lessonExercises});
+			lessons.push({"order":order_out, "title":title_out, "context":context_out, "dialogues":lessonDialogues, "exercises":lessonExercises});
 			currentLesson = lesson;
 			lessonDialogues = [];
 			lessonExercises = [];
@@ -63,7 +63,11 @@ function dialogueGenerator() {
 		// first line in lesson
 		if (turn === 1 && per === "a" && dialogue !== previousDialogue) {
 			title_out = title;
+			if (title_out === '') {
+				title_out = `Qaneryaurci Ch${ch}-${lsn} #${num}`;
+			}
 			context_out = context;
+			order_out = order;
 		}
 
 		if (dialogue === previousDialogue) {
@@ -91,6 +95,8 @@ function dialogueGenerator() {
 			"fillInBlank2":fib2,
 		}
 	}
+	lessons = lessons.filter(a => a.order !== undefined)
+	lessons = lessons.sort((a,b) => (a.order > b.order) ? 1 : -1);
 	return {lessons, dialogues};
 }
 
