@@ -2,13 +2,6 @@
 
 
 import {dialogueList} from "./dialogueList.js";
-// 0-4 [Chapter,Lesson,Number,Turn,"Person",
-// 5-6 "Yugtun","English",
-// 7-10 "Choose-Base","Choose-Base-Options","Choose-Ending","Choose-Ending-Options",
-// 11-12 "Fill-in-Blank 1","Fill-in-Blank 2",
-// 13-14 "Title","Context"],
-
-
 
 function dialogueGenerator() {
 	var lessons = [];
@@ -20,30 +13,52 @@ function dialogueGenerator() {
 	var previousDialogue = "";
 	var dialogueIndex = 2
 
-	var title = "";
-	// var titleIndex = 0;
-	var context = "";
+	var title_out = "";
+	var context_out = "";
 
 	for (const d in dialogueList) {
-		const lesson = `${dialogueList[d][0]}-${dialogueList[d][1]}-${dialogueList[d][2]}`;
-		var dialogue = `qaneryaurci-${dialogueList[d][0]}-${dialogueList[d][1]}-${dialogueList[d][2]}-${dialogueList[d][3]}-${dialogueList[d][4]}`;
+		// 0-4 Chapter	Lesson	Number	Turn	Person	
+		const ch = dialogueList[d][0]
+		const lsn = dialogueList[d][1]
+		const num = dialogueList[d][2]
+		const turn = dialogueList[d][3]
+		const per = dialogueList[d][4]
+		// 5-7 Yugtun	English	Audio-Full	
+		const yug = dialogueList[d][5]
+		const eng = dialogueList[d][6]
+		const audio = dialogueList[d][7]
+		// 8-12 Choose-Base	Choose-Base-Options	Choose-Ending	Choose-Ending-Options	Choose-Ending-English	
+		const chBase = dialogueList[d][8]
+		const chBaseOp = dialogueList[d][9]
+		const chEnding = dialogueList[d][10]
+		const chEndingOp = dialogueList[d][11]
+		const chEndingEng = dialogueList[d][12]
+		// 13-14 Fill-in-Blank 1	Fill-in-Blank 2	
+		const fib1 = dialogueList[d][13]
+		const fib2 = dialogueList[d][14]
+		// 15-16 Title	Context
+		const title = dialogueList[d][15]
+		const context = dialogueList[d][16]
+
+		const lesson = `${ch}-${lsn}-${num}`;
+		var dialogue = `qaneryaurci-${ch}-${lsn}-${num}-${turn}-${per}`;
 		
 		if (currentLesson === "") {
 			currentLesson = lesson;
 		}
 		else if (currentLesson !== lesson) {
-			if (title === '') {
-				title = `Qaneryaurci Ch${dialogueList[d][0]}-${dialogueList[d][1]} #${dialogueList[d][2]}`;
+			if (title_out === '') {
+				title_out = `Qaneryaurci Ch${ch}-${lsn} #${num}`;
 			}
-			lessons.push({"title":title, "context":context, "dialogues":lessonDialogues});
+			lessons.push({"title":title_out, "context":context_out, "dialogues":lessonDialogues});
 			currentLesson = lesson;
 			lessonDialogues = [];
 		}
 
 		// first line in lesson
-		if (dialogueList[d][3] === 1 && dialogueList[d][4] === "a" && dialogue !== previousDialogue) {
-			title = dialogueList[d][13];
-			context = dialogueList[d][14];
+		if (turn === 1 && per === "a" && dialogue !== previousDialogue) {
+			title_out = title;
+			context_out = context;
 		}
 
 		if (dialogue === previousDialogue) {
@@ -57,16 +72,17 @@ function dialogueGenerator() {
 		}
 
 		dialogues[dialogue] = {
-			"yup":dialogueList[d][5],
-			"eng":dialogueList[d][6],
-			"speaker":dialogueList[d][4],
-			"audio":dialogueList[d][6],
-			"chooseBase":dialogueList[d][7],
-			"chooseBaseOptions":dialogueList[d][8],
-			"chooseEnding":dialogueList[d][9],
-			"chooseEndingOptions":dialogueList[d][10],
-			"fillInBlank1":dialogueList[d][11],
-			"fillInBlank2":dialogueList[d][12],
+			"speaker":per,
+			"yup":yug,
+			"eng":eng,
+			"audio":audio,
+			"chooseBase":chBase,
+			"chooseBaseOptions":chBaseOp.split(";"),
+			"chooseEnding":chEnding,
+			"chooseEndingOptions":chEndingOp.split(";"),
+			"chooseEndingEnglish":chEndingEng,
+			"fillInBlank1":fib1,
+			"fillInBlank2":fib2,
 		}
 	}
 	return {lessons, dialogues};
