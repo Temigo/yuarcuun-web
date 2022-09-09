@@ -9,6 +9,7 @@ function dialogueGenerator() {
 
 	var currentLesson = "";
 	var lessonDialogues = [];
+	var lessonExercises = [];
 
 	var previousDialogue = "";
 	var dialogueIndex = 2
@@ -39,6 +40,9 @@ function dialogueGenerator() {
 		// 15-16 Title	Context
 		const title = dialogueList[d][15]
 		const context = dialogueList[d][16]
+		// 17-18 Exersize1	Exercise2
+		const exercise1 = dialogueList[d][17]
+		const exercise2 = dialogueList[d][18]
 
 		const lesson = `${ch}-${lsn}-${num}`;
 		var dialogue = `qaneryaurci-${ch}-${lsn}-${num}-${turn}-${per}`;
@@ -50,9 +54,10 @@ function dialogueGenerator() {
 			if (title_out === '') {
 				title_out = `Qaneryaurci Ch${ch}-${lsn} #${num}`;
 			}
-			lessons.push({"title":title_out, "context":context_out, "dialogues":lessonDialogues});
+			lessons.push({"title":title_out, "context":context_out, "dialogues":lessonDialogues, "exercises":lessonExercises});
 			currentLesson = lesson;
 			lessonDialogues = [];
+			lessonExercises = [];
 		}
 
 		// first line in lesson
@@ -67,6 +72,7 @@ function dialogueGenerator() {
 			lessonDialogues[lessonDialogues.length-1].push(dialogue)
 		} else {
 			lessonDialogues.push([dialogue,])
+			lessonExercises.push([exercise1,exercise2])
 			previousDialogue = dialogue;
 			dialogueIndex = 2
 		}
