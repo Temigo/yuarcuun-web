@@ -11,6 +11,7 @@ import OneVerbWordBuilder from './components/OneVerbWordBuilder.js';
 import SentenceBuilder from './components/SentenceBuilder.js';
 import About from './components/About.js';
 import Dialogues from './components/Dialogues.js';
+import DialogueMenu from './components/DialogueMenu.js';
 import Lksdreader from './components/Lksdreader.js';
 import Support from './components/Support.js';
 import Privacy from './components/Privacy.js';
@@ -145,7 +146,8 @@ class App extends Component {
             <Switch>
               <Route exact path='/' render={(props) => <SearchPage audiolibrary={this.state.audiolibrary} dictionary_dict={this.state.dictionary_dict} usageDictionary={this.state.usageDictionary} dictionary={this.state.dictionary} filteredDictV={this.state.filteredDictV} filteredDictVit={this.state.filteredDictVit} filteredDictN={this.state.filteredDictN} {...props} />}/>
               <Route exact path='/about' component={About} />
-              <Route exact path='/dialogues' component={Dialogues} />
+              <Route exact path='/dialogues/:num' component={Dialogues} />
+              <Route exact path='/dialogues' component={DialogueMenu} />
               <Route exact path='/lksdreader' component={Lksdreader} />
               <Route exact path='/support' component={Support} />
               <Route exact path='/privacy' component={Privacy} />
