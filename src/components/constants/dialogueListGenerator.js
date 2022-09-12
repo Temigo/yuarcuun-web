@@ -17,6 +17,8 @@ function dialogueGenerator() {
 	var order_out;
 	var title_out = "";
 	var context_out = "";
+	var matchingYug_out = [];
+	var matchingEng_out = [];
 
 	for (const d in dialogueList) {
 		// Chapter	Lesson	Number	Turn	Person	
@@ -44,8 +46,8 @@ function dialogueGenerator() {
 		const endingEng = dialogueList[d][17]
 		const endingEngCh = dialogueList[d][18]
 		// Fill-in-Blank 1	Fill-in-Blank 2	
-		const fib1 = dialogueList[d][19]
-		const fib2 = dialogueList[d][20]
+		const matchingYug = dialogueList[d][19]
+		const matchingEng = dialogueList[d][20]
 		// Exercise 1	Exercise 2
 		const exercise1 = dialogueList[d][21]
 		const exercise2 = dialogueList[d][22]
@@ -58,7 +60,8 @@ function dialogueGenerator() {
 			currentLesson = lesson;
 		}
 		else if (currentLesson !== lesson) {
-			lessons.push({"order":order_out, "title":title_out, "context":context_out, "dialogues":lessonDialogues, "exercises":lessonExercises});
+			const matching = matchingYug_out.length === 1 ? [] : [matchingYug_out,matchingEng_out]
+			lessons.push({"order":order_out, "title":title_out, "context":context_out, "dialogues":lessonDialogues, "exercises":lessonExercises, "matching":matching});
 			currentLesson = lesson;
 			lessonDialogues = [];
 			lessonExercises = [];
@@ -72,6 +75,8 @@ function dialogueGenerator() {
 			}
 			context_out = context;
 			order_out = order;
+			matchingYug_out = matchingYug.split(";");
+			matchingEng_out = matchingEng.split(";");
 		}
 
 		if (dialogue === previousDialogue) {
@@ -98,8 +103,6 @@ function dialogueGenerator() {
 			"endingYupikChoose":endingYugCh.split(";"),
 			"endingEnglish":endingEng,
 			"endingEnglishChoose":endingEngCh.split(";"),
-			"fillInBlank1":fib1,
-			"fillInBlank2":fib2,
 		}
 	}
 	lessons = lessons.filter(a => a.order !== undefined)
