@@ -46,7 +46,12 @@ class DialogueMenu extends Component {
               </Link>
               <Link to={{pathname: 'dialogues/'+ index, state: {exerciseNumber:0}}}>
               <Button style={{marginBottom:'5px'}}>
-              {'Exercise 0'}
+              {'Exercise 1'}
+              </Button>
+              </Link>
+              <Link to={{pathname: 'dialogues/'+ index, state: {exerciseNumber:1}}}>
+              <Button style={{marginBottom:'5px'}}>
+              {'Exercise 2'}
               </Button>
               </Link>
             </div>
