@@ -51,6 +51,9 @@ function dialogueGenerator() {
 		// Exercise 1	Exercise 2
 		const exercise1 = dialogueList[d][21]
 		const exercise2 = dialogueList[d][22]
+		// fib1 fib2
+		const fib1 = dialogueList[d][23]
+		const fib2 = dialogueList[d][24]
 
 
 		const lesson = `${ch}-${lsn}-${num}`;
@@ -103,6 +106,8 @@ function dialogueGenerator() {
 			"endingYupikChoose":endingYugCh.split(";"),
 			"endingEnglish":endingEng,
 			"endingEnglishChoose":endingEngCh.split(";"),
+			"fillinblank1":fib1,
+			"fillinblank2":fib2,
 		}
 	}
 	lessons = lessons.filter(a => a.order !== undefined)
