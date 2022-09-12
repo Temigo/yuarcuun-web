@@ -19,33 +19,37 @@ function dialogueGenerator() {
 	var context_out = "";
 
 	for (const d in dialogueList) {
-		// 0-4 Chapter	Lesson	Number	Turn	Person	
+		// Chapter	Lesson	Number	Turn	Person	
 		const ch = dialogueList[d][0]
 		const lsn = dialogueList[d][1]
 		const num = dialogueList[d][2]
 		const turn = dialogueList[d][3]
 		const per = dialogueList[d][4]
-		// 5-7 Yugtun	English	Audio-Full	
+		// Yugtun	English	Audio-Full	
 		const yug = dialogueList[d][5]
 		const eng = dialogueList[d][6]
 		const audio = dialogueList[d][7]
-		// 8-12 Choose-Base	Choose-Base-Options	Choose-Ending	Choose-Ending-Options	Choose-Ending-English	
-		const chBase = dialogueList[d][8]
-		const chBaseOp = dialogueList[d][9]
-		const chEnding = dialogueList[d][10]
-		const chEndingOp = dialogueList[d][11]
-		const chEndingEng = dialogueList[d][12]
-		// 13-14 Fill-in-Blank 1	Fill-in-Blank 2	
-		const fib1 = dialogueList[d][13]
-		const fib2 = dialogueList[d][14]
-		// 15-16 Title	Context
-		const title = dialogueList[d][15]
-		const context = dialogueList[d][16]
-		// 17-18 Exersize1	Exercise2
-		const exercise1 = dialogueList[d][17]
-		const exercise2 = dialogueList[d][18]
-		// 19 Order
-		const order = dialogueList[d][19]
+		// Order	Title	Context	
+		const order = dialogueList[d][8]
+		const title = dialogueList[d][9]
+		const context = dialogueList[d][10]
+		// Base-Yugtun	Base-Yugtun-Choose	Base-English	Base-English-Choose	
+		const baseYug = dialogueList[d][11]
+		const baseYugCh = dialogueList[d][12]
+		const baseEng = dialogueList[d][13]
+		const baseEngCh = dialogueList[d][14]
+		// Ending-Yugtun	Ending-Yugtun-Choose	Ending-English	Ending-English-Choose
+		const endingYug = dialogueList[d][15]
+		const endingYugCh = dialogueList[d][16]
+		const endingEng = dialogueList[d][17]
+		const endingEngCh = dialogueList[d][18]
+		// Fill-in-Blank 1	Fill-in-Blank 2	
+		const fib1 = dialogueList[d][19]
+		const fib2 = dialogueList[d][20]
+		// Exercise 1	Exercise 2
+		const exercise1 = dialogueList[d][21]
+		const exercise2 = dialogueList[d][22]
+
 
 		const lesson = `${ch}-${lsn}-${num}`;
 		var dialogue = `qaneryaurci-${ch}-${lsn}-${num}-${turn}-${per}`;
@@ -86,11 +90,14 @@ function dialogueGenerator() {
 			"yup":yug,
 			"eng":eng,
 			"audio":audio,
-			"chooseBase":chBase,
-			"chooseBaseOptions":chBaseOp.split(";"),
-			"chooseEnding":chEnding,
-			"chooseEndingOptions":chEndingOp.split(";"),
-			"chooseEndingEnglish":chEndingEng,
+			"baseYupik":baseYug,
+			"baseYupikChoose":baseYugCh.split(";"),
+			"baseEnglish":baseEng,
+			"baseEnglishChoose":baseEngCh.split(";"),
+			"endingYupik":endingYug,
+			"endingYupikChoose":endingYugCh.split(";"),
+			"endingEnglish":endingEng,
+			"endingEnglishChoose":endingEngCh.split(";"),
 			"fillInBlank1":fib1,
 			"fillInBlank2":fib2,
 		}
