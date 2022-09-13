@@ -50,19 +50,34 @@ class Dialogues extends Component {
     console.log(dialog_gen)
   }
 
+  componentDidUpdate(prevProps,prevState) {
+
+    if (prevState.currentCounter !== this.state.currentCounter && this.state.lessons[this.state.currentLesson]['exercises'].length !== this.state.currentCounter) {
+      // console.log(this.state.lessons[this.state.currentLesson]['exercises'][this.state.currentCounter], this.state.exerciseNumber)
+      if (this.state.exerciseNumber !== -1) {
+        if (this.state.lessons[this.state.currentLesson]['exercises'][this.state.currentCounter][this.state.exerciseNumber].includes('listenchoose')) {
+          this.repeatAudio(this.state.dialogues[this.state.lessons[this.state.currentLesson]['dialogues'][this.state.currentCounter][this.state.randomCounters['randomExerciseCounter'][this.state.currentCounter]]]['audio'])
+        }
+      }
+    }
+  }
+
   componentWillMount() {
     let randomCounters = {}
     let randomExerciseCounter = []
-    let chooseEndingOptionsRandom = {}
+    let baseChooseRandom = {}
+    let endingChooseRandom = {}
     this.state.lessons[this.state.currentLesson]['dialogues'].map((k)=>{
       randomExerciseCounter = randomExerciseCounter.concat(Math.floor(Math.random()*k.length))
       k.map((j)=>{
-        chooseEndingOptionsRandom[j] = this.shuffle(Array.from({length: this.state.dialogues[j]['endingYupikChoose'].length}, (v, i) => i))
+        baseChooseRandom[j] = this.shuffle(Array.from({length: this.state.dialogues[j]['baseYupikChoose'].length}, (v, i) => i))
+        endingChooseRandom[j] = this.shuffle(Array.from({length: this.state.dialogues[j]['endingYupikChoose'].length}, (v, i) => i))
       })
     })
 
     randomCounters['randomExerciseCounter']=randomExerciseCounter
-    randomCounters['chooseEndingOptionsRandom']=chooseEndingOptionsRandom
+    randomCounters['baseChooseRandom']=baseChooseRandom
+    randomCounters['endingChooseRandom']=endingChooseRandom
     this.setState({randomCounters:randomCounters})
   }
 
@@ -94,7 +109,7 @@ class Dialogues extends Component {
     sound.play()
 
 
-    console.log(audio)
+    // console.log(audio)
     // var a = new Audio('https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/'+audio+'.mp3');
     // a.play();
   }
@@ -113,6 +128,7 @@ class Dialogues extends Component {
 
   handleFormSubmit = (i, randomExerciseCounter, match, event,data) => {
   console.log('search:', i, this.state.inputtedWords, data);
+  this.setState({showCurrent:true})
   this.checkInputCorrect(i, randomExerciseCounter, match);
   }
 
@@ -134,10 +150,11 @@ class Dialogues extends Component {
           this.setState({record:record})
           setTimeout(function() {this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}.bind(this),150)
       }
-      this.iterateOne();
+      // this.iterateOne();
+      this.setState({inputtedWords: '',})
   }
 
-  checkSelectCorrect(correctIndex, index, lengthOfOptions, event, data) {
+  checkSelectCorrect(i,randomExerciseCounter,correctIndex, index, lengthOfOptions, event, data) {
       let exerciseNum = this.state.lessons[this.state.currentLesson]['exercises'][this.state.currentCounter][this.state.exerciseNumber]
       let correct = correctIndex
       let record = this.state.record
@@ -145,11 +162,11 @@ class Dialogues extends Component {
       if (this.state.currentCounter === record.length-1) {
         optionsTried = record[this.state.currentCounter][1]
       }
-      console.log(correctIndex, index, lengthOfOptions, this.state.currentCounter, exerciseNum, optionsTried)
+      // console.log(correctIndex, index, lengthOfOptions, this.state.currentCounter, exerciseNum, optionsTried)
       // console.log(optionsTried, index)
       if (!optionsTried.includes(index) && !optionsTried.includes(correctIndex)) {
         if (index === correctIndex) {
-            console.log('right');
+            // console.log('right');
             this.correctSound.bind(this)();
             if (optionsTried.length > 0) {
               optionsTried = optionsTried.concat([index])
@@ -158,17 +175,20 @@ class Dialogues extends Component {
               record.push([exerciseNum, [index], true])            
             }
             this.setState({record:record, showCurrent: true})
-            // this.iterateOne();
-
-            // setTimeout(function() {this.repeatAudio(i)}.bind(this),150)
+            if (!exerciseNum.includes('listenchoose')) {
+              setTimeout(function() {this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}.bind(this),150)              
+            }
         } else {
-            console.log('wrong');
+            // console.log('wrong');
             this.incorrectSound.bind(this)();
             if (optionsTried.length > 0) {
               optionsTried = optionsTried.concat([index])
               if (optionsTried.length === lengthOfOptions-1) {
                 optionsTried = optionsTried.concat([correctIndex])              
                 this.setState({showCurrent: true})
+                if (!exerciseNum.includes('listenchoose')) {
+                  setTimeout(function() {this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}.bind(this),150)              
+                }
                 // this.iterateOne();
               }
               record[this.state.currentCounter]=[exerciseNum, optionsTried, false]          
@@ -176,13 +196,15 @@ class Dialogues extends Component {
               if (lengthOfOptions == 2) {
                 this.setState({showCurrent: true})
                 // this.iterateOne();
-                record.push([exerciseNum, [index,correctIndex], false])                            
+                record.push([exerciseNum, [index,correctIndex], false])        
+                if (!exerciseNum.includes('listenchoose')) {
+                  setTimeout(function() {this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}.bind(this),150)              
+                }
               } else {
                 record.push([exerciseNum, [index], false])                            
               }
             }
             this.setState({record:record})
-            // setTimeout(function() {this.repeatAudio(i)}.bind(this),300)
         }
 
       }
@@ -207,11 +229,52 @@ class Dialogues extends Component {
     }
   }
 
+  splitCarrot = (sentence, displayBoolean) => {     
+    let matches = sentence.match(/\<.*?\>/g)
+    if (matches !== null) {
+      if (displayBoolean) {
+        matches.map((m) => sentence = sentence.replace(m,'<u>'+m.slice(1,-1)+'</u>'))           
+      } else {
+        matches.map((m) => sentence = sentence.replace(m,'____'))   
+      }
+      return <span dangerouslySetInnerHTML={{__html: sentence}} />    
+    } else {
+      return <span>{sentence}</span>
+    }
+  }
+
+
+  splitCarrotReturn = (sentence, num, displayBoolean) => {     
+    let matches = sentence.match(/\<.*?\>/g)
+    if (matches !== null) {
+      matches.map((m) => sentence = sentence.split(m))           
+      // console.log(sentence,matches[0])
+      if (num == 0) {
+        // return(sentence[0])
+        return <span dangerouslySetInnerHTML={{__html: sentence[0]}} />    
+      } else if (num == 1) {
+        // return(matches[0].slice(1,-1))
+        return <span dangerouslySetInnerHTML={{__html: matches[0].slice(1,-1)}} />    
+      } else if (num == 2) {
+        return matches[0].slice(1,-1)
+        // return <span dangerouslySetInnerHTML={{__html: matches[0].slice(1,-1)}} />    
+      } else if (num == 3) {
+        // return(sentence[1])
+        return <span dangerouslySetInnerHTML={{__html: sentence[1]}} />    
+      }
+    } else {
+      return <span>{sentence}</span>
+    }
+  }
+
+
+
   previousItem = (index, i, randomExerciseCounter, typeAttributes) => {
 
     // let ind = this.state.record[index][0]
     typeAttributes = this.retrieveContent(this.state.record[index][0])
     let ind = typeAttributes[0]
+    console.log(ind, index, i, randomExerciseCounter, typeAttributes)
 
     if (ind == -1) {
       return <div style={{padding:'10px',fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'left':'right')}}>
@@ -231,6 +294,173 @@ class Dialogues extends Component {
         <div style={{color:'#b9b9b9',fontWeight:'200'}}>{this.state.dialogues[i[randomExerciseCounter]]['eng']}</div>
       </div>
     } else if (ind == 0) {
+      return <div style={{padding:'10px',fontFamily:"Lato,Helvetica Neue,Arial,Helvetica,sans-serif",fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'left':'right')}}>
+          <div style={{display:'flex',alignItems:'center',justifyContent:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'flex-start':'flex-end')}}>
+            <span>{this.splitCarrotReturn(this.state.dialogues[i[randomExerciseCounter]][typeAttributes[1]],0)}</span>
+            <span style={{color:(this.state.record[index][2] ? 'green' : 'red')}}>{this.state.record[index][1]}</span>
+            <span>{this.splitCarrotReturn(this.state.dialogues[i[randomExerciseCounter]][typeAttributes[1]],3)}</span>
+          </div>
+          <div>
+            {this.state.dialogues[i[randomExerciseCounter]]['speaker']=='b' ?
+              <span style={{paddingRight:'5px'}}><Icon name='volume up' color='black' onClick={()=>{this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}} /></span>
+              :
+              null
+            }
+            <span>{this.state.dialogues[i[randomExerciseCounter]]['yup']}</span>               
+            {this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a' ? 
+              <span style={{paddingLeft:'5px'}}><Icon name='volume up' color='black' onClick={()=>{this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}} /></span>
+              :
+              null
+            }
+          </div>          
+          <div style={{color:'#b9b9b9',fontWeight:'200'}}>{this.underlineRegion(this.state.dialogues[i[randomExerciseCounter]][typeAttributes[2]])}</div>
+          {i.length > 0 ? this.displayAlternates(i, index, randomExerciseCounter, index):null}
+        </div>
+    } else if (ind == 1) {
+      return <div style={{padding:'10px',fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'left':'right')}}>
+          <div style={{display:'flex',alignItems:'center',justifyContent:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'flex-start':'flex-end'),fontFamily:"Lato,Helvetica Neue,Arial,Helvetica,sans-serif"}}>
+            {this.state.dialogues[i[randomExerciseCounter]]['speaker']=='b' ?
+              <span style={{paddingRight:'5px'}}><Icon name='volume up' color='black' onClick={()=>{this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}} /></span>
+              :
+              null
+            }
+            <span>{this.splitCarrot(this.state.dialogues[i[randomExerciseCounter]][typeAttributes[1]],true)}</span>
+            {this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a' ? 
+              <span style={{paddingLeft:'5px'}}><Icon name='volume up' color='black' onClick={()=>{this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}} /></span>
+              :
+              null
+            }
+          </div>
+          <div style={{color:'#b9b9b9',fontWeight:'200'}}>{this.underlineRegion(this.state.dialogues[i[randomExerciseCounter]][typeAttributes[2]])}</div>
+          {this.state.randomCounters[typeAttributes[4]][i[randomExerciseCounter]].map((k)=>
+          {
+            let optionsTried = []
+            if (index < this.state.record.length) {
+              optionsTried = this.state.record[index][1]
+            }
+            return <div> 
+            <Button style={{backgroundColor:(optionsTried.includes(k) && k == 0 ? 'green' : (optionsTried.includes(k) ? 'red' : null ) )}} onClick={this.checkSelectCorrect.bind(this,i,randomExerciseCounter,0,k,this.state.randomCounters[typeAttributes[4]][i[randomExerciseCounter]].length)}>
+            {this.state.dialogues[i[randomExerciseCounter]][typeAttributes[3]][k]}
+            </Button>
+            </div>
+          })}
+          {i.length > 0 ? this.displayAlternates(i, index, randomExerciseCounter, index):null}
+        </div>
+
+    } else if (ind == 2) {
+      return <div style={{padding:'10px',fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'left':'right')}}>
+          <div style={{display:'flex',alignItems:'center',justifyContent:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'flex-start':'flex-end'),fontFamily:"Lato,Helvetica Neue,Arial,Helvetica,sans-serif"}}>
+            {this.state.dialogues[i[randomExerciseCounter]]['speaker']=='b' ?
+              <span style={{paddingRight:'5px'}}><Icon name='volume up' color='black' onClick={()=>{this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}} /></span>
+              :
+              null
+            }
+            <span>{this.underlineRegion(this.state.dialogues[i[randomExerciseCounter]][typeAttributes[2]])}</span>
+            {this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a' ? 
+              <span style={{paddingLeft:'5px'}}><Icon name='volume up' color='black' onClick={()=>{this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}} /></span>
+              :
+              null
+            }
+          </div>
+          <div style={{color:'#b9b9b9',fontWeight:'200'}}>{this.splitCarrot(this.state.dialogues[i[randomExerciseCounter]][typeAttributes[1]],true)}</div>
+          {this.state.randomCounters[typeAttributes[4]][i[randomExerciseCounter]].map((k)=>
+          {
+            let optionsTried = []
+            if (index < this.state.record.length) {
+              optionsTried = this.state.record[index][1]
+            }
+            return <div> 
+            <Button style={{backgroundColor:(optionsTried.includes(k) && k == 0 ? 'green' : (optionsTried.includes(k) ? 'red' : null ) )}} onClick={this.checkSelectCorrect.bind(this,i,randomExerciseCounter,0,k,this.state.randomCounters[typeAttributes[4]][i[randomExerciseCounter]].length)}>
+            {this.state.dialogues[i[randomExerciseCounter]][typeAttributes[3]][k]}
+            </Button>
+            </div>
+          })}
+          {i.length > 0 ? this.displayAlternates(i, index, randomExerciseCounter, index):null}
+        </div>
+
+    } else if (ind == 3) {
+      return <div style={{padding:'10px',fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'left':'right')}}>
+          <div style={{display:'flex',alignItems:'center',justifyContent:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'flex-start':'flex-end'),fontFamily:"Lato,Helvetica Neue,Arial,Helvetica,sans-serif"}}>
+            {this.state.dialogues[i[randomExerciseCounter]]['speaker']=='b' ?
+              <span style={{paddingRight:'5px'}}><Icon name='volume up' color='black' onClick={()=>{this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}} /></span>
+              :
+              null
+            }
+            <span>{this.splitCarrot(this.state.dialogues[i[randomExerciseCounter]][typeAttributes[1]],true)}</span>
+            {this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a' ? 
+              <span style={{paddingLeft:'5px'}}><Icon name='volume up' color='black' onClick={()=>{this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}} /></span>
+              :
+              null
+            }
+          </div>
+          <div style={{color:'#b9b9b9',fontWeight:'200'}}>{this.underlineRegion(this.state.dialogues[i[randomExerciseCounter]][typeAttributes[2]])}</div>
+          {this.state.randomCounters[typeAttributes[4]][i[randomExerciseCounter]].map((k)=>
+          {
+            let optionsTried = []
+            if (index < this.state.record.length) {
+              optionsTried = this.state.record[index][1]
+            }
+            return <div> 
+            <Button style={{backgroundColor:(optionsTried.includes(k) && k == 0 ? 'green' : (optionsTried.includes(k) ? 'red' : null ) )}} onClick={this.checkSelectCorrect.bind(this,i,randomExerciseCounter,0,k,this.state.randomCounters[typeAttributes[4]][i[randomExerciseCounter]].length)}>
+            {this.state.dialogues[i[randomExerciseCounter]][typeAttributes[3]][k]}
+            </Button>
+            </div>
+          })}
+          {i.length > 0 ? this.displayAlternates(i, index, randomExerciseCounter, index):null}
+        </div>
+
+    } else if (ind == 4) {
+        return <div style={{padding:'10px',fontFamily:"Lato,Helvetica Neue,Arial,Helvetica,sans-serif",fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'left':'right')}}>
+          <div style={{display:'flex',alignItems:'center',justifyContent:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'flex-start':'flex-end')}}>
+            <span>{this.splitCarrotReturn(this.state.dialogues[i[randomExerciseCounter]][typeAttributes[1]],0)}</span>
+            <span style={{color:(this.state.record[index][2] ? 'green' : 'red')}}>{this.state.record[index][1]}</span>
+            <span>{this.splitCarrotReturn(this.state.dialogues[i[randomExerciseCounter]][typeAttributes[1]],3)}</span>
+          </div>
+          <div>
+            {this.state.dialogues[i[randomExerciseCounter]]['speaker']=='b' ?
+              <span style={{paddingRight:'5px'}}><Icon name='volume up' color='black' onClick={()=>{this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}} /></span>
+              :
+              null
+            }
+            <span>{this.state.dialogues[i[randomExerciseCounter]]['yup']}</span>               
+            {this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a' ? 
+              <span style={{paddingLeft:'5px'}}><Icon name='volume up' color='black' onClick={()=>{this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}} /></span>
+              :
+              null
+            }
+          </div>
+          <div style={{color:'#b9b9b9',fontWeight:'200'}}>{this.underlineRegion(this.state.dialogues[i[randomExerciseCounter]]['eng'])}</div>
+          {i.length > 0 ? this.displayAlternates(i, index, randomExerciseCounter, index):null}
+        </div>
+    } else if (ind == -2) {
+      return <div style={{padding:'10px',fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'left':'right')}}>
+              <div>
+                {this.state.dialogues[i[randomExerciseCounter]]['speaker']=='b' ?
+                  <span style={{paddingRight:'5px'}}><Icon name='volume up' color='black' onClick={()=>{this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}} /></span>
+                  :
+                  null
+                }
+                <span>{this.state.dialogues[i[randomExerciseCounter]]['yup']}</span>               
+                {this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a' ? 
+                  <span style={{paddingLeft:'5px'}}><Icon name='volume up' color='black' onClick={()=>{this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}} /></span>
+                  :
+                  null
+                }
+              </div>
+              <div style={{color:'#b9b9b9',fontWeight:'200'}}>{this.state.dialogues[i[randomExerciseCounter]]['eng']}</div>
+              {i.map((k,kindex)=>{
+                let optionsTried = []
+                if (index < this.state.record.length) {
+                  optionsTried = this.state.record[index][1]
+                }
+                return <div> 
+                <Button style={{backgroundColor:(optionsTried.includes(kindex) && kindex == randomExerciseCounter ? 'green' : (optionsTried.includes(kindex) ? 'red' : null ) )}} onClick={this.checkSelectCorrect.bind(this,i,randomExerciseCounter,randomExerciseCounter,kindex,i.length)}>
+                {this.state.dialogues[k]['yup']}
+                </Button>
+                </div>
+              })}
+            </div>
+    } else if (ind == -3) {
       return <div style={{padding:'10px',fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'left':'right')}}>
         <div style={{color:(this.state.record[index][2] ? 'green' : 'red')}}>{this.state.record[index][1]}</div>
         <div>
@@ -248,65 +478,27 @@ class Dialogues extends Component {
         </div>
         <div style={{color:'#b9b9b9',fontWeight:'200'}}>{this.state.dialogues[i[randomExerciseCounter]]['eng']}</div>
       </div>
-    } else if (ind == 1) {
-      return <div style={{padding:'10px',fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'left':'right')}}>
-        <div>
-        <span>{this.state.dialogues[i[randomExerciseCounter]][typeAttributes[1]].split('_')[0]}</span>
-        <span style={{color:(this.state.record[index][2] ? 'green' : 'red')}}>{this.state.record[index][1]}</span>
-        <span>{this.state.dialogues[i[randomExerciseCounter]][typeAttributes[1]].split('_')[1]}</span>
-        </div>
-        <div>
-        {this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a' ?
-          null
-          :
-          <span style={{paddingRight:'5px'}}><Icon name='volume up' color='black' onClick={()=>{this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}} /></span>
-        }
-        <span>{this.state.dialogues[i[randomExerciseCounter]]['yup']}</span>
-        {this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a' ? 
-          <span style={{paddingLeft:'5px'}}><Icon name='volume up' color='black' onClick={()=>{this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}} /></span>
-          :
-          null
-        }
-        </div>
-        <div style={{color:'#b9b9b9',fontWeight:'200'}}>{this.state.dialogues[i[randomExerciseCounter]]['eng']}</div>
-      </div>
-    } else if (ind == 2) {
-      return <div style={{padding:'10px',fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'left':'right')}}>
-        <div style={{display:'flex',alignItems:'center',justifyContent:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'flex-start':'flex-end'),fontFamily:"Lato,Helvetica Neue,Arial,Helvetica,sans-serif"}}>
-          <span>{this.state.dialogues[i[randomExerciseCounter]]['endingYupik'].split('_')[0]}</span>
-          <span style={{width:this.state.dialogues[i[randomExerciseCounter]]['endingYupikChoose'][0].length}}>{'_'}</span>
-          <span>{this.state.dialogues[i[randomExerciseCounter]]['endingYupik'].split('_')[1]}</span>
-        </div>
-        {this.state.randomCounters['chooseEndingOptionsRandom'][i[randomExerciseCounter]].map((k)=>
-        {
-          let optionsTried = []
-          if (index < this.state.record.length) {
-            optionsTried = this.state.record[index][1]
-          }
-          return <div> 
-          <Button style={{backgroundColor:(optionsTried.includes(k) && k == 0 ? 'green' : (optionsTried.includes(k) ? 'red' : null ) )}} onClick={this.checkSelectCorrect.bind(this,0,k,this.state.randomCounters['chooseEndingOptionsRandom'][i[randomExerciseCounter]].length)}>
-          {this.state.dialogues[i[randomExerciseCounter]]['endingYupikChoose'][k]}
-          </Button>
+    } else if (ind == -4) {
+      return <div style={{padding:'10px',fontFamily:"Lato,Helvetica Neue,Arial,Helvetica,sans-serif",fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'left':'right')}}>
+          <div style={{display:'flex',alignItems:'center',justifyContent:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'flex-start':'flex-end')}}>
+            <span style={{color:(this.state.record[index][2] ? 'green' : 'red')}}>{this.state.record[index][1]}</span>
           </div>
-        })}
-        <div style={{color:'#b9b9b9',fontWeight:'200'}}>{this.underlineRegion(this.state.dialogues[i[randomExerciseCounter]]['endingEnglish'])}</div>
-        {i.length > 0 ? this.displayAlternates(i, index, randomExerciseCounter, index):null}
-      </div>
-    } else if (ind == 3) {
-      return <div style={{padding:'10px',fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'left':'right')}}>
-        {i.map((k,kindex)=>{
-          let optionsTried = []
-          if (this.state.currentCounter < this.state.record.length) {
-            optionsTried = this.state.record[this.state.currentCounter][1]
-          }
-          return <div> 
-          <Button style={{backgroundColor:(optionsTried.includes(kindex) && kindex == randomExerciseCounter ? 'green' : (optionsTried.includes(kindex) ? 'red' : null ) )}} onClick={this.checkSelectCorrect.bind(this,randomExerciseCounter,kindex,i.length)}>
-          {this.state.dialogues[k]['yup']}
-          </Button>
-          </div>
-        })}
-        <div style={{color:'#b9b9b9',fontWeight:'200'}}>{this.state.dialogues[i[randomExerciseCounter]]['eng']}</div>
-      </div>
+          <div>
+            {this.state.dialogues[i[randomExerciseCounter]]['speaker']=='b' ?
+              <span style={{paddingRight:'5px'}}><Icon name='volume up' color='black' onClick={()=>{this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}} /></span>
+              :
+              null
+            }
+            <span>{this.state.dialogues[i[randomExerciseCounter]]['yup']}</span>               
+            {this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a' ? 
+              <span style={{paddingLeft:'5px'}}><Icon name='volume up' color='black' onClick={()=>{this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}} /></span>
+              :
+              null
+            }
+          </div>          
+          <div style={{color:'#b9b9b9',fontWeight:'200'}}>{this.state.dialogues[i[randomExerciseCounter]]['eng']}</div>
+          {i.length > 0 ? this.displayAlternates(i, index, randomExerciseCounter, index):null}
+        </div>
     }
 
 
@@ -343,17 +535,66 @@ class Dialogues extends Component {
     let typeQuestion = '';
     let typeAnswer = '';
     let typeChoose = [];
+    let typeRandom = ''
     //fillinblank = 1
     if (exerciseType == 'fillinblank-endingYupik') {
+      exerciseNum = 0
+      typeQuestion = 'endingYupik'
+      typeAnswer = 'endingEnglish'
+      typeChoose = 'endingYupikChoose'
+    } else if (exerciseType == 'fillinblank-baseYupik') {
+      exerciseNum = 0
+      typeQuestion = 'baseYupik'
+      typeAnswer = 'baseEnglish'
+      typeChoose = 'baseYupikChoose'
+    } else if (exerciseType == 'chooseoption-endingYupik') {
       exerciseNum = 1
       typeQuestion = 'endingYupik'
       typeAnswer = 'endingEnglish'
       typeChoose = 'endingYupikChoose'
-    } else if (exerciseType == 'chooseoption-full') {
+      typeRandom = 'endingChooseRandom'
+    } else if (exerciseType == 'chooseoption-baseYupik') {
+      exerciseNum = 1
+      typeQuestion = 'baseYupik'
+      typeAnswer = 'baseEnglish'
+      typeChoose = 'baseYupikChoose'
+      typeRandom = 'baseChooseRandom'
+    } else if (exerciseType == 'chooseoption-endingEnglish') {
+      exerciseNum = 2
+      typeQuestion = 'endingEnglish'
+      typeAnswer = 'endingYupik'
+      typeChoose = 'endingEnglishChoose'
+      typeRandom = 'endingChooseRandom'
+    } else if (exerciseType == 'chooseoption-baseEnglish') {
+      exerciseNum = 2
+      typeQuestion = 'baseEnglish'
+      typeAnswer = 'baseYupik'
+      typeChoose = 'baseEnglishChoose'
+      typeRandom = 'baseChooseRandom'
+    } else if (exerciseType == 'listenchoose-baseYupik') {
       exerciseNum = 3
+      typeQuestion = 'baseYupik'
+      typeAnswer = 'baseEnglish'
+      typeChoose = 'baseYupikChoose'
+      typeRandom = 'baseChooseRandom'
+    } else if (exerciseType == 'listenchoose-endingYupik') {
+      exerciseNum = 3
+      typeQuestion = 'endingYupik'
+      typeAnswer = 'endingEnglish'
+      typeChoose = 'endingYupikChoose'
+      typeRandom = 'endingChooseRandom'
+    } else if (exerciseType == 'chooseoption-full') {
+      exerciseNum = -2
+    } else if (exerciseType == 'fillinblank-full') {
+      exerciseNum = -3
+    } else if (exerciseType == 'listenchoose-full') {
+      exerciseNum = -4
+    } else if (exerciseType == 'fillinblank1' || exerciseType == 'fillinblank2') {
+      exerciseNum = 4
+      typeQuestion = exerciseType
     }
 
-    return [exerciseNum, typeQuestion, typeAnswer, typeChoose]
+    return [exerciseNum, typeQuestion, typeAnswer, typeChoose, typeRandom]
   }
 
   render() {
@@ -374,7 +615,7 @@ class Dialogues extends Component {
         exerciseNum = typeAttributes[0]
       }      
     }
-    // console.log(exerciseType, finished, exerciseNum)
+    console.log(exerciseType, finished, exerciseNum)
     console.log(this.state)
     return (
       <Container>
@@ -405,7 +646,6 @@ class Dialogues extends Component {
                 :
                 null
               }
-              {i.length > 0 ? this.displayAlternates(i, index, randomExerciseCounter, index):null}
               </span>
               }
             )}
@@ -415,7 +655,6 @@ class Dialogues extends Component {
             <div>
               {this.state.lessons[this.state.currentLesson].dialogues.map((i,index)=>{
                 randomExerciseCounter = this.state.randomCounters['randomExerciseCounter'][index]
-                console.log(i[randomExerciseCounter])
                 return <div>
                 {index < this.state.currentCounter ?
                   <span>
@@ -469,7 +708,313 @@ class Dialogues extends Component {
                   null
                 }
 
-                {exerciseNum === 0 ?
+
+              {exerciseNum === 0 ?
+                <div>
+                  {index == this.state.currentCounter ?
+
+
+                  <div style={{padding:'10px',fontFamily:"Lato,Helvetica Neue,Arial,Helvetica,sans-serif",fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'left':'right')}}>
+                    <div style={{display:'flex',alignItems:'center',justifyContent:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'flex-start':'flex-end')}}>
+                      <span>{this.splitCarrotReturn(this.state.dialogues[i[randomExerciseCounter]][typeAttributes[1]],0)}</span>
+                      {this.state.showCurrent ? 
+                        <span style={{color:(this.state.record[index][2] ? 'green' : 'red')}}>{this.state.record[index][1]}</span>
+                        :
+                        <Form autoComplete="off" onSubmit={this.handleFormSubmit.bind(this,i,randomExerciseCounter,this.splitCarrotReturn(this.state.dialogues[i[randomExerciseCounter]][typeAttributes[1]],2))}>
+                            <Form.Input autoFocus="autoFocus" placeholder='' value={this.state.inputtedWords} onChange={this.inputtedWord.bind(this)} />
+                            <script type="text/javascript">document.theFormID.theFieldID.focus();</script>
+                        </Form>
+                      }
+                      <span>{this.splitCarrotReturn(this.state.dialogues[i[randomExerciseCounter]][typeAttributes[1]],3)}</span>
+                    </div>
+                    {this.state.showCurrent ? 
+                      <div>
+                        {this.state.dialogues[i[randomExerciseCounter]]['speaker']=='b' ?
+                          <span style={{paddingRight:'5px'}}><Icon name='volume up' color='black' onClick={()=>{this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}} /></span>
+                          :
+                          null
+                        }
+                        <span>{this.state.dialogues[i[randomExerciseCounter]]['yup']}</span>               
+                        {this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a' ? 
+                          <span style={{paddingLeft:'5px'}}><Icon name='volume up' color='black' onClick={()=>{this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}} /></span>
+                          :
+                          null
+                        }
+                      </div>
+                      :
+                      null
+                    }                  
+                    <div style={{color:'#b9b9b9',fontWeight:'200'}}>{this.underlineRegion(this.state.dialogues[i[randomExerciseCounter]][typeAttributes[2]])}</div>
+                    {i.length > 0 ? this.displayAlternates(i, index, randomExerciseCounter, index):null}
+                  </div>
+
+
+                  :
+                  null
+                }
+                {this.state.showCurrent && index == this.state.currentCounter ?
+                  <div style={{padding:'10px',fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'right':'left')}}>
+                    <Button onClick={()=>{this.setState({showCurrent:false,currentCounter:this.state.currentCounter+1})}}>{'Show Next'}</Button>
+                  </div>
+                  :
+                  null
+                }
+                </div>
+                :
+                null
+              }
+
+              {exerciseNum === 1 ?
+                <div>
+                  {index == this.state.currentCounter ?
+                  <div style={{padding:'10px',fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'left':'right')}}>
+                    <div style={{display:'flex',alignItems:'center',justifyContent:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'flex-start':'flex-end'),fontFamily:"Lato,Helvetica Neue,Arial,Helvetica,sans-serif"}}>
+                      {this.state.dialogues[i[randomExerciseCounter]]['speaker']=='b' && this.state.showCurrent ?
+                        <span style={{paddingRight:'5px'}}><Icon name='volume up' color='black' onClick={()=>{this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}} /></span>
+                        :
+                        null
+                      }
+                      <span>{this.splitCarrot(this.state.dialogues[i[randomExerciseCounter]][typeAttributes[1]],this.state.showCurrent)}</span>
+                      {this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a' && this.state.showCurrent ? 
+                        <span style={{paddingLeft:'5px'}}><Icon name='volume up' color='black' onClick={()=>{this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}} /></span>
+                        :
+                        null
+                      }
+                    </div>
+                    <div style={{color:'#b9b9b9',fontWeight:'200'}}>{this.underlineRegion(this.state.dialogues[i[randomExerciseCounter]][typeAttributes[2]])}</div>
+                    {this.state.randomCounters[typeAttributes[4]][i[randomExerciseCounter]].map((k)=>
+                    {
+                      let optionsTried = []
+                      if (this.state.currentCounter < this.state.record.length) {
+                        optionsTried = this.state.record[this.state.currentCounter][1]
+                      }
+                      return <div> 
+                      <Button style={{backgroundColor:(optionsTried.includes(k) && k == 0 ? 'green' : (optionsTried.includes(k) ? 'red' : null ) )}} onClick={this.checkSelectCorrect.bind(this,i,randomExerciseCounter,0,k,this.state.randomCounters[typeAttributes[4]][i[randomExerciseCounter]].length)}>
+                      {this.state.dialogues[i[randomExerciseCounter]][typeAttributes[3]][k]}
+                      </Button>
+                      </div>
+                    })}
+                    {i.length > 0 ? this.displayAlternates(i, index, randomExerciseCounter, index):null}
+                  </div>
+                  :
+                  null
+                }
+                {this.state.showCurrent && index == this.state.currentCounter ?
+                  <div style={{padding:'10px',fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'right':'left')}}>
+                    <Button onClick={()=>{this.setState({showCurrent:false,currentCounter:this.state.currentCounter+1})}}>{'Show Next'}</Button>
+                  </div>
+                  :
+                  null
+                }
+                </div>
+                :
+                null
+              }
+
+              {exerciseNum === 2 ?
+                <div>
+                  {index == this.state.currentCounter ?
+                  <div style={{padding:'10px',fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'left':'right')}}>
+                    <div style={{display:'flex',alignItems:'center',justifyContent:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'flex-start':'flex-end'),fontFamily:"Lato,Helvetica Neue,Arial,Helvetica,sans-serif"}}>
+                      {this.state.dialogues[i[randomExerciseCounter]]['speaker']=='b' && this.state.showCurrent ?
+                        <span style={{paddingRight:'5px'}}><Icon name='volume up' color='black' onClick={()=>{this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}} /></span>
+                        :
+                        null
+                      }
+                      <span>{this.underlineRegion(this.state.dialogues[i[randomExerciseCounter]][typeAttributes[2]])}</span>
+                      {this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a' && this.state.showCurrent ? 
+                        <span style={{paddingLeft:'5px'}}><Icon name='volume up' color='black' onClick={()=>{this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}} /></span>
+                        :
+                        null
+                      }
+                    </div>
+                    <div style={{color:'#b9b9b9',fontWeight:'200'}}>
+                      {this.splitCarrot(this.state.dialogues[i[randomExerciseCounter]][typeAttributes[1]],this.state.showCurrent)}
+                    </div>
+                    {this.state.randomCounters[typeAttributes[4]][i[randomExerciseCounter]].map((k)=>
+                    {
+                      let optionsTried = []
+                      if (this.state.currentCounter < this.state.record.length) {
+                        optionsTried = this.state.record[this.state.currentCounter][1]
+                      }
+                      return <div> 
+                      <Button style={{backgroundColor:(optionsTried.includes(k) && k == 0 ? 'green' : (optionsTried.includes(k) ? 'red' : null ) )}} onClick={this.checkSelectCorrect.bind(this,i,randomExerciseCounter,0,k,this.state.randomCounters[typeAttributes[4]][i[randomExerciseCounter]].length)}>
+                      {this.state.dialogues[i[randomExerciseCounter]][typeAttributes[3]][k]}
+                      </Button>
+                      </div>
+                    })}
+                    {i.length > 0 ? this.displayAlternates(i, index, randomExerciseCounter, index):null}
+                  </div>
+                  :
+                  null
+                }
+                {this.state.showCurrent && index == this.state.currentCounter ?
+                  <div style={{padding:'10px',fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'right':'left')}}>
+                    <Button onClick={()=>{this.setState({showCurrent:false,currentCounter:this.state.currentCounter+1})}}>{'Show Next'}</Button>
+                  </div>
+                  :
+                  null
+                }
+                </div>
+                :
+                null
+              }
+
+              {exerciseNum === 3 ?
+                <div>
+                  {index == this.state.currentCounter ?
+                  <div style={{padding:'10px',fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'left':'right')}}>
+                    <div style={{display:'flex',alignItems:'center',justifyContent:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'flex-start':'flex-end'),fontFamily:"Lato,Helvetica Neue,Arial,Helvetica,sans-serif"}}>
+                      {this.state.dialogues[i[randomExerciseCounter]]['speaker']=='b' ?
+                        <span style={{paddingRight:'5px'}}><Icon name='volume up' color='black' onClick={()=>{this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}} /></span>
+                        :
+                        null
+                      }
+                      <span>{this.splitCarrot(this.state.dialogues[i[randomExerciseCounter]][typeAttributes[1]],this.state.showCurrent)}</span>
+                      {this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a' ? 
+                        <span style={{paddingLeft:'5px'}}><Icon name='volume up' color='black' onClick={()=>{this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}} /></span>
+                        :
+                        null
+                      }
+                    </div>
+                    {this.state.showCurrent ? 
+                      <div style={{color:'#b9b9b9',fontWeight:'200'}}>{this.underlineRegion(this.state.dialogues[i[randomExerciseCounter]][typeAttributes[2]])}</div>
+                      :
+                      null
+                    }
+                    {this.state.randomCounters[typeAttributes[4]][i[randomExerciseCounter]].map((k)=>
+                    {
+                      let optionsTried = []
+                      if (this.state.currentCounter < this.state.record.length) {
+                        optionsTried = this.state.record[this.state.currentCounter][1]
+                      }
+                      return <div> 
+                      <Button style={{backgroundColor:(optionsTried.includes(k) && k == 0 ? 'green' : (optionsTried.includes(k) ? 'red' : null ) )}} onClick={this.checkSelectCorrect.bind(this,i,randomExerciseCounter,0,k,this.state.randomCounters[typeAttributes[4]][i[randomExerciseCounter]].length)}>
+                      {this.state.dialogues[i[randomExerciseCounter]][typeAttributes[3]][k]}
+                      </Button>
+                      </div>
+                    })}
+                    {i.length > 0 ? this.displayAlternates(i, index, randomExerciseCounter, index):null}
+                  </div>
+                  :
+                  null
+                }
+                {this.state.showCurrent && index == this.state.currentCounter ?
+                  <div style={{padding:'10px',fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'right':'left')}}>
+                    <Button onClick={()=>{this.setState({showCurrent:false,currentCounter:this.state.currentCounter+1})}}>{'Show Next'}</Button>
+                  </div>
+                  :
+                  null
+                }
+                </div>
+                :
+                null
+              }
+
+              {exerciseNum === 4 ?
+                <div>
+                  {index == this.state.currentCounter ?
+                  <div style={{padding:'10px',fontFamily:"Lato,Helvetica Neue,Arial,Helvetica,sans-serif",fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'left':'right')}}>
+                    <div style={{display:'flex',alignItems:'center',justifyContent:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'flex-start':'flex-end')}}>
+                      <span>{this.splitCarrotReturn(this.state.dialogues[i[randomExerciseCounter]][typeAttributes[1]],0)}</span>
+                      {this.state.showCurrent ? 
+                        <span style={{color:(this.state.record[index][2] ? 'green' : 'red')}}>{this.state.record[index][1]}</span>
+                        :
+                        <Form autoComplete="off" onSubmit={this.handleFormSubmit.bind(this,i,randomExerciseCounter,this.splitCarrotReturn(this.state.dialogues[i[randomExerciseCounter]][typeAttributes[1]],2))}>
+                            <Form.Input autoFocus="autoFocus" placeholder='' value={this.state.inputtedWords} onChange={this.inputtedWord.bind(this)} />
+                            <script type="text/javascript">document.theFormID.theFieldID.focus();</script>
+                        </Form>
+                      }
+                      <span>{this.splitCarrotReturn(this.state.dialogues[i[randomExerciseCounter]][typeAttributes[1]],3)}</span>
+                    </div>
+                    {this.state.showCurrent ? 
+                      <div>
+                        {this.state.dialogues[i[randomExerciseCounter]]['speaker']=='b' ?
+                          <span style={{paddingRight:'5px'}}><Icon name='volume up' color='black' onClick={()=>{this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}} /></span>
+                          :
+                          null
+                        }
+                        <span>{this.state.dialogues[i[randomExerciseCounter]]['yup']}</span>               
+                        {this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a' ? 
+                          <span style={{paddingLeft:'5px'}}><Icon name='volume up' color='black' onClick={()=>{this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}} /></span>
+                          :
+                          null
+                        }
+                      </div>
+                      :
+                      null
+                    }                  
+                    <div style={{color:'#b9b9b9',fontWeight:'200'}}>{this.underlineRegion(this.state.dialogues[i[randomExerciseCounter]]['eng'])}</div>
+                    {i.length > 0 ? this.displayAlternates(i, index, randomExerciseCounter, index):null}
+                  </div>
+                  :
+                  null
+                }
+
+
+                {this.state.showCurrent && index == this.state.currentCounter ?
+                  <div style={{padding:'10px',fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'right':'left')}}>
+                    <Button onClick={()=>{this.setState({showCurrent:false,currentCounter:this.state.currentCounter+1})}}>{'Show Next'}</Button>
+                  </div>
+                  :
+                  null
+                }
+                </div>
+                :
+                null
+              }
+
+
+              {exerciseNum === -2 ?
+                <div>
+                  {index == this.state.currentCounter ?
+                  <div style={{padding:'10px',fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'left':'right')}}>
+                    {this.state.showCurrent ?
+                      <div>
+                        {this.state.dialogues[i[randomExerciseCounter]]['speaker']=='b' ?
+                          <span style={{paddingRight:'5px'}}><Icon name='volume up' color='black' onClick={()=>{this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}} /></span>
+                          :
+                          null
+                        }
+                        <span>{this.state.dialogues[i[randomExerciseCounter]]['yup']}</span>               
+                        {this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a' ? 
+                          <span style={{paddingLeft:'5px'}}><Icon name='volume up' color='black' onClick={()=>{this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}} /></span>
+                          :
+                          null
+                        }
+                      </div>
+                      :
+                      null
+                    }
+                    <div style={{color:'#b9b9b9',fontWeight:'200'}}>{this.state.dialogues[i[randomExerciseCounter]]['eng']}</div>
+                    {i.map((k,kindex)=>{
+                      let optionsTried = []
+                      if (this.state.currentCounter < this.state.record.length) {
+                        optionsTried = this.state.record[this.state.currentCounter][1]
+                      }
+                      return <div> 
+                      <Button style={{backgroundColor:(optionsTried.includes(kindex) && kindex == randomExerciseCounter ? 'green' : (optionsTried.includes(kindex) ? 'red' : null ) )}} onClick={this.checkSelectCorrect.bind(this,i,randomExerciseCounter,randomExerciseCounter,kindex,i.length)}>
+                      {this.state.dialogues[k]['yup']}
+                      </Button>
+                      </div>
+                    })}
+                  </div>
+                  :
+                  null
+                }
+                {this.state.showCurrent && index == this.state.currentCounter ?
+                  <div style={{padding:'10px',fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'right':'left')}}>
+                    <Button onClick={()=>{this.setState({showCurrent:false,currentCounter:this.state.currentCounter+1})}}>{'Show Next'}</Button>
+                  </div>
+                  :
+                  null
+                }
+                </div>
+                :
+                null
+              }
+
+                {exerciseNum === -3 ?
                 <div>
                   {index == this.state.currentCounter ?
                   <div style={{padding:'10px',fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'left':'right')}}>
@@ -497,96 +1042,45 @@ class Dialogues extends Component {
                 null
               }
 
-              {exerciseNum === 1 ?
+              {exerciseNum === -4 ?
                 <div>
                   {index == this.state.currentCounter ?
-                  <div style={{padding:'10px',fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'left':'right')}}>
-                    <div style={{display:'flex',alignItems:'center',justifyContent:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'flex-start':'flex-end'),fontFamily:"Lato,Helvetica Neue,Arial,Helvetica,sans-serif"}}>
-                      <span>{this.state.dialogues[i[randomExerciseCounter]][typeAttributes[1]].split('_')[0]}</span>
-                      <Form autoComplete="off" onSubmit={this.handleFormSubmit.bind(this,i,randomExerciseCounter,this.state.dialogues[i[randomExerciseCounter]][typeAttributes[3]][0])}>
-                          <Form.Input autoFocus="autoFocus" placeholder='' value={this.state.inputtedWords} onChange={this.inputtedWord.bind(this)} />
-                          <script type="text/javascript">document.theFormID.theFieldID.focus();</script>
-                      </Form>
-                      <span>{this.state.dialogues[i[randomExerciseCounter]][typeAttributes[1]].split('_')[1]}</span>
-
-                    </div>
-                    <div style={{color:'#b9b9b9',fontWeight:'200'}}>{this.underlineRegion(this.state.dialogues[i[randomExerciseCounter]][typeAttributes[2]])}</div>
-                    {i.length > 0 ? this.displayAlternates(i, index, randomExerciseCounter, index):null}
-                  </div>
-                  :
-                  null
-                }
-                {this.state.showCurrent && index == this.state.currentCounter ?
-                  <div style={{padding:'10px',fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'right':'left')}}>
-                    <Button onClick={()=>{this.setState({showCurrent:false,currentCounter:this.state.currentCounter+1})}}>{'Show Next'}</Button>
-                  </div>
-                  :
-                  null
-                }
-                </div>
-                :
-                null
-              }
-
-              {exerciseNum === 2 ?
-                <div>
-                  {index == this.state.currentCounter ?
-                  <div style={{padding:'10px',fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'left':'right')}}>
-                    <div style={{display:'flex',alignItems:'center',justifyContent:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'flex-start':'flex-end'),fontFamily:"Lato,Helvetica Neue,Arial,Helvetica,sans-serif"}}>
-                      <span>{this.state.dialogues[i[randomExerciseCounter]]['endingYupik'].split('_')[0]}</span>
-                      <span style={{width:this.state.dialogues[i[randomExerciseCounter]]['endingYupikChoose'][0].length}}>{'_'}</span>
-                      <span>{this.state.dialogues[i[randomExerciseCounter]]['endingYupik'].split('_')[1]}</span>
-                    </div>
-                    {this.state.randomCounters['chooseEndingOptionsRandom'][i[randomExerciseCounter]].map((k)=>
-                    {
-                      let optionsTried = []
-                      if (this.state.currentCounter < this.state.record.length) {
-                        optionsTried = this.state.record[this.state.currentCounter][1]
+                  <div style={{padding:'10px',fontFamily:"Lato,Helvetica Neue,Arial,Helvetica,sans-serif",fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'left':'right')}}>
+                    <div style={{display:'flex',alignItems:'center',justifyContent:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'flex-start':'flex-end')}}>
+                      {this.state.showCurrent ? 
+                        <span style={{color:(this.state.record[index][2] ? 'green' : 'red')}}>{this.state.record[index][1]}</span>
+                        :
+                        <Form autoComplete="off" onSubmit={this.handleFormSubmit.bind(this,i,randomExerciseCounter,this.state.dialogues[i[randomExerciseCounter]]['yup'])}>
+                            <Form.Input autoFocus="autoFocus" placeholder='' value={this.state.inputtedWords} onChange={this.inputtedWord.bind(this)} />
+                            <script type="text/javascript">document.theFormID.theFieldID.focus();</script>
+                        </Form>
                       }
-                      return <div> 
-                      <Button style={{backgroundColor:(optionsTried.includes(k) && k == 0 ? 'green' : (optionsTried.includes(k) ? 'red' : null ) )}} onClick={this.checkSelectCorrect.bind(this,0,k,this.state.randomCounters['chooseEndingOptionsRandom'][i[randomExerciseCounter]].length)}>
-                      {this.state.dialogues[i[randomExerciseCounter]]['endingYupikChoose'][k]}
-                      </Button>
+                    </div>
+                    {this.state.showCurrent ? 
+                      <div>
+                        {this.state.dialogues[i[randomExerciseCounter]]['speaker']=='b' ?
+                          <span style={{paddingRight:'5px'}}><Icon name='volume up' color='black' onClick={()=>{this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}} /></span>
+                          :
+                          null
+                        }
+                        <span>{this.state.dialogues[i[randomExerciseCounter]]['yup']}</span>               
+                        {this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a' ? 
+                          <span style={{paddingLeft:'5px'}}><Icon name='volume up' color='black' onClick={()=>{this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}} /></span>
+                          :
+                          null
+                        }
                       </div>
-                    })}
-                    <div style={{color:'#b9b9b9',fontWeight:'200'}}>{this.underlineRegion(this.state.dialogues[i[randomExerciseCounter]]['endingEnglish'])}</div>
-                    {i.length > 0 ? this.displayAlternates(i, index, randomExerciseCounter, index):null}
-                  </div>
-                  :
-                  null
-                }
-                {this.state.showCurrent && index == this.state.currentCounter ?
-                  <div style={{padding:'10px',fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'right':'left')}}>
-                    <Button onClick={()=>{this.setState({showCurrent:false,currentCounter:this.state.currentCounter+1})}}>{'Show Next'}</Button>
-                  </div>
-                  :
-                  null
-                }
-                </div>
-                :
-                null
-              }
-
-              {exerciseNum === 3 ?
-                <div>
-                  {index == this.state.currentCounter ?
-                  <div style={{padding:'10px',fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'left':'right')}}>
-                    {i.map((k,kindex)=>{
-                      let optionsTried = []
-                      if (this.state.currentCounter < this.state.record.length) {
-                        optionsTried = this.state.record[this.state.currentCounter][1]
-                      }
-                      return <div> 
-                      <Button style={{backgroundColor:(optionsTried.includes(kindex) && kindex == randomExerciseCounter ? 'green' : (optionsTried.includes(kindex) ? 'red' : null ) )}} onClick={this.checkSelectCorrect.bind(this,randomExerciseCounter,kindex,i.length)}>
-                      {this.state.dialogues[k]['yup']}
-                      </Button>
-                      </div>
-                    })}
+                      :
+                      null
+                    }                  
                     <div style={{color:'#b9b9b9',fontWeight:'200'}}>{this.state.dialogues[i[randomExerciseCounter]]['eng']}</div>
+                    {this.state.showCurrent && i.length > 0 ? this.displayAlternates(i, index, randomExerciseCounter, index):null}
                   </div>
                   :
                   null
                 }
+
+
                 {this.state.showCurrent && index == this.state.currentCounter ?
                   <div style={{padding:'10px',fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'right':'left')}}>
                     <Button onClick={()=>{this.setState({showCurrent:false,currentCounter:this.state.currentCounter+1})}}>{'Show Next'}</Button>
@@ -601,6 +1095,7 @@ class Dialogues extends Component {
 
               </div>
             })}
+
 
 
 
