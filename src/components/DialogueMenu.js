@@ -38,22 +38,34 @@ class DialogueMenu extends Component {
         <Container>
           {this.state.lessons.map((i,index)=>
             <div>
-              <div>{i.title}:{i.context}</div>
-              <Link to={{pathname: 'dialogues/'+ index, state: {exerciseNumber:-1}}}>
-              <Button style={{marginBottom:'5px'}}>
-              {'Read Only'}
-              </Button>
-              </Link>
-              <Link to={{pathname: 'dialogues/'+ index, state: {exerciseNumber:0}}}>
-              <Button style={{marginBottom:'5px'}}>
-              {'Exercise 1'}
-              </Button>
-              </Link>
-              <Link to={{pathname: 'dialogues/'+ index, state: {exerciseNumber:1}}}>
-              <Button style={{marginBottom:'5px'}}>
-              {'Exercise 2'}
-              </Button>
-              </Link>
+              {i.context === "chunk" ?
+                <div style={{padding:'10px',fontSize:'20px'}}>
+                  {i.title}
+                </div>
+              :
+                <div>
+                  <div>{i.title}</div>
+                  <Link to={{pathname: 'dialogues/'+ index, state: {exerciseNumber:-1}}}>
+                  <Button style={{marginBottom:'5px'}}>
+                  {'Read Only'}
+                  </Button>
+                  </Link>
+                  {i.exercises[0][0] !== "" && 
+                    <Link to={{pathname: 'dialogues/'+ index, state: {exerciseNumber:0}}}>
+                    <Button style={{marginBottom:'5px'}}>
+                    {'Exercise 1'}
+                    </Button>
+                    </Link>
+                  }
+                  {i.exercises[1][0] !== "" && 
+                    <Link to={{pathname: 'dialogues/'+ index, state: {exerciseNumber:1}}}>
+                    <Button style={{marginBottom:'5px'}}>
+                    {'Exercise 2'}
+                    </Button>
+                    </Link>
+                  }
+                </div>
+              }
             </div>
             )}
         </Container>
