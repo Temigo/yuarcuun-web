@@ -65,19 +65,25 @@ class Dialogues extends Component {
   componentWillMount() {
     let randomCounters = {}
     let randomExerciseCounter = []
-    let baseChooseRandom = {}
-    let endingChooseRandom = {}
+    let baseYupikChooseRandom = {}
+    let baseEnglishChooseRandom = {}
+    let endingYupikChooseRandom = {}
+    let endingEnglishChooseRandom = {}
     this.state.lessons[this.state.currentLesson]['dialogues'].map((k)=>{
       randomExerciseCounter = randomExerciseCounter.concat(Math.floor(Math.random()*k.length))
       k.map((j)=>{
-        baseChooseRandom[j] = this.shuffle(Array.from({length: this.state.dialogues[j]['baseYupikChoose'].length}, (v, i) => i))
-        endingChooseRandom[j] = this.shuffle(Array.from({length: this.state.dialogues[j]['endingYupikChoose'].length}, (v, i) => i))
+        baseYupikChooseRandom[j] = this.shuffle(Array.from({length: this.state.dialogues[j]['baseYupikChoose'].length}, (v, i) => i))
+        baseEnglishChooseRandom[j] = this.shuffle(Array.from({length: this.state.dialogues[j]['baseEnglishChoose'].length}, (v, i) => i))
+        endingYupikChooseRandom[j] = this.shuffle(Array.from({length: this.state.dialogues[j]['endingYupikChoose'].length}, (v, i) => i))
+        endingEnglishChooseRandom[j] = this.shuffle(Array.from({length: this.state.dialogues[j]['endingEnglishChoose'].length}, (v, i) => i))
       })
     })
 
     randomCounters['randomExerciseCounter']=randomExerciseCounter
-    randomCounters['baseChooseRandom']=baseChooseRandom
-    randomCounters['endingChooseRandom']=endingChooseRandom
+    randomCounters['baseYupikChooseRandom']=baseYupikChooseRandom
+    randomCounters['baseEnglishChooseRandom']=baseEnglishChooseRandom
+    randomCounters['endingYupikChooseRandom']=endingYupikChooseRandom
+    randomCounters['endingEnglishChooseRandom']=endingEnglishChooseRandom
     this.setState({randomCounters:randomCounters})
   }
 
@@ -274,7 +280,7 @@ class Dialogues extends Component {
     // let ind = this.state.record[index][0]
     typeAttributes = this.retrieveContent(this.state.record[index][0])
     let ind = typeAttributes[0]
-    console.log(ind, index, i, randomExerciseCounter, typeAttributes)
+    // console.log(ind, index, i, randomExerciseCounter, typeAttributes)
 
     if (ind == -1) {
       return <div style={{padding:'10px',fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'left':'right')}}>
@@ -505,7 +511,7 @@ class Dialogues extends Component {
   }
 
   displayAlternates = (i, ind, randomExerciseCounter, currentCounter) => {
-    console.log(i, ind, randomExerciseCounter, currentCounter)
+    // console.log(i, ind, randomExerciseCounter, currentCounter)
     return <span>{i.map((k,index)=> 
       randomExerciseCounter !== index && currentCounter === ind ?
         <div style={{padding:'10px',fontSize:'20px',textAlign:(this.state.dialogues[i[index]]['speaker']=='a'?'left':'right')}}>
@@ -552,37 +558,37 @@ class Dialogues extends Component {
       typeQuestion = 'endingYupik'
       typeAnswer = 'endingEnglish'
       typeChoose = 'endingYupikChoose'
-      typeRandom = 'endingChooseRandom'
+      typeRandom = 'endingYupikChooseRandom'
     } else if (exerciseType == 'chooseoption-baseYupik') {
       exerciseNum = 1
       typeQuestion = 'baseYupik'
       typeAnswer = 'baseEnglish'
       typeChoose = 'baseYupikChoose'
-      typeRandom = 'baseChooseRandom'
+      typeRandom = 'baseYupikChooseRandom'
     } else if (exerciseType == 'chooseoption-endingEnglish') {
       exerciseNum = 2
       typeQuestion = 'endingEnglish'
       typeAnswer = 'endingYupik'
       typeChoose = 'endingEnglishChoose'
-      typeRandom = 'endingChooseRandom'
+      typeRandom = 'endingEnglishChooseRandom'
     } else if (exerciseType == 'chooseoption-baseEnglish') {
       exerciseNum = 2
       typeQuestion = 'baseEnglish'
       typeAnswer = 'baseYupik'
       typeChoose = 'baseEnglishChoose'
-      typeRandom = 'baseChooseRandom'
+      typeRandom = 'baseEnglishChooseRandom'
     } else if (exerciseType == 'listenchoose-baseYupik') {
       exerciseNum = 3
       typeQuestion = 'baseYupik'
       typeAnswer = 'baseEnglish'
       typeChoose = 'baseYupikChoose'
-      typeRandom = 'baseChooseRandom'
+      typeRandom = 'baseYupikChooseRandom'
     } else if (exerciseType == 'listenchoose-endingYupik') {
       exerciseNum = 3
       typeQuestion = 'endingYupik'
       typeAnswer = 'endingEnglish'
       typeChoose = 'endingYupikChoose'
-      typeRandom = 'endingChooseRandom'
+      typeRandom = 'endingYupikChooseRandom'
     } else if (exerciseType == 'chooseoption-full') {
       exerciseNum = -2
     } else if (exerciseType == 'fillinblank-full') {
@@ -615,7 +621,7 @@ class Dialogues extends Component {
         exerciseNum = typeAttributes[0]
       }      
     }
-    console.log(exerciseType, finished, exerciseNum)
+    // console.log(exerciseType, finished, exerciseNum)
     console.log(this.state)
     return (
       <Container>

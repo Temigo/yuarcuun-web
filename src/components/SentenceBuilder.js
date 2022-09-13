@@ -12,6 +12,7 @@ import fuzzysort from 'fuzzysort'
 import now from 'performance-now';
 import ReactGA from 'react-ga';
 // import SentenceTemplates from './SentenceTemplates.js'
+import SentenceTemplates from "./SentenceTemplates.js";
 import { sentenceTemplates } from './constants/sentence_templates.js'
 
 
@@ -144,6 +145,7 @@ class OneVerbWordBuilder extends Component {
 				'mvnObliques000.ps':'#c51818',
 				'mvnObliques000.pd':'#d23636',
 				'mvnObliques000.c':'#9c9c9c',
+				'mvnObliques000.1':'#69b4b4',
 
 				'mvnObliques100.b':'#000000',
 				'mvnObliques100.ps':'#c51818',
@@ -161,6 +163,7 @@ class OneVerbWordBuilder extends Component {
 				'npn00.ps':'#c51818',
 				'npn00.1':'#69b4b4',
 				'npn00.2':'#e02323',
+				'npn00.c':'#9c9c9c',
 
 
 				'mvns00.b':'#852828',
@@ -3407,16 +3410,7 @@ class OneVerbWordBuilder extends Component {
 
 				<div style={{height:'15px'}} />
 
-          <Segment vertical style={{fontSize:22,padding:0,marginTop:20,maxHeight:245,overflow: 'auto',borderBottom:0}}>
-	          <div>
-	            {Object.keys(sentenceTemplates).map((k)=>
-	              <Button basic onClick={()=>this.backEndCall(sentenceTemplates[k][2],true)}>
-	                <div>{sentenceTemplates[k][0]}</div>
-	                <div>{sentenceTemplates[k][1]}</div>
-	              </Button>             
-	            )}
-	          </div>
-          </Segment>
+          	<SentenceTemplates backEndCall={this.backEndCall.bind(this)} />
 				</div>
 
 
