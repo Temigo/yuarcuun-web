@@ -1,7 +1,12 @@
-
-
-
 import {dialogueList} from "./dialogueList.js";
+
+const lessonChunks = {
+	0:"Test", 
+	1:"Introductions",
+	2:"Beginner 1",
+	3:"Beginner 2"
+};
+
 
 function dialogueGenerator() {
 	var lessons = [];
@@ -64,7 +69,15 @@ function dialogueGenerator() {
 		}
 		else if (currentLesson !== lesson) {
 			const matching = matchingYug_out.length === 1 ? [] : [matchingYug_out,matchingEng_out]
-			lessons.push({"order":order_out, "title":title_out, "context":context_out, "dialogues":lessonDialogues, "exercises":lessonExercises, "matching":matching});
+			
+			lessons.push({
+				"order":order_out, 
+				"title":title_out, 
+				"context":context_out, 
+				"dialogues":lessonDialogues, 
+				"exercises":lessonExercises, 
+				"matching":matching});
+
 			currentLesson = lesson;
 			lessonDialogues = [];
 			lessonExercises = [];
@@ -112,7 +125,25 @@ function dialogueGenerator() {
 	}
 	lessons = lessons.filter(a => a.order !== undefined)
 	lessons = lessons.sort((a,b) => (a.order > b.order) ? 1 : -1);
+	lessons = addHeaders(lessons)
 	return {lessons, dialogues};
+}
+
+function addHeaders(lsns) {
+	var lsns_out = [];
+	var currChunk = -1;
+	for (let l in lsns) {
+		const newChunk = Math.floor(lsns[l].order/100)
+		if (newChunk !== currChunk) {
+			currChunk = newChunk
+			lsns_out.push({
+				"title":lessonChunks[currChunk],
+				"context":"chunk"
+			})
+		}
+		lsns_out.push(lsns[l])
+	}
+	return lsns_out
 }
 
 export default dialogueGenerator;
