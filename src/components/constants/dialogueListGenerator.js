@@ -51,14 +51,17 @@ function dialogueGenerator() {
 		const endingEng = dialogueList[d][17]
 		const endingEngCh = dialogueList[d][18]
 		// Fill-in-Blank 1	Fill-in-Blank 2	
-		const matchingYug = dialogueList[d][19]
-		const matchingEng = dialogueList[d][20]
+		const fib1 = dialogueList[d][19]
+		const fib2 = dialogueList[d][20]		
+		// Matching-Yugtun	Matching-English
+		const matchingYug = dialogueList[d][21]
+		const matchingEng = dialogueList[d][22]
 		// Exercise 1	Exercise 2
-		const exercise1 = dialogueList[d][21]
-		const exercise2 = dialogueList[d][22]
-		// fib1 fib2
-		const fib1 = dialogueList[d][23]
-		const fib2 = dialogueList[d][24]
+		const exercise1 = dialogueList[d][23]
+		const exercise2 = dialogueList[d][24]
+		const exercise3 = dialogueList[d][25]
+		const exercise4 = dialogueList[d][26]
+
 
 
 		const lesson = `${ch}-${lsn}-${num}`;
@@ -101,7 +104,7 @@ function dialogueGenerator() {
 			lessonDialogues[lessonDialogues.length-1].push(dialogue)
 		} else {
 			lessonDialogues.push([dialogue,])
-			lessonExercises.push([exercise1,exercise2])
+			lessonExercises.push([exercise1,exercise2,exercise3,exercise4])
 			previousDialogue = dialogue;
 			dialogueIndex = 2
 		}

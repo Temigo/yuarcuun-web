@@ -38,6 +38,7 @@ class DialogueMenu extends Component {
         <Container>
           {this.state.lessons.map((i,index)=>
             <div>
+              {console.log(i)}
               {i.context === "chunk" ?
                 <div style={{padding:'10px',fontSize:'20px'}}>
                   {i.title}
@@ -57,10 +58,24 @@ class DialogueMenu extends Component {
                     </Button>
                     </Link>
                   }
-                  {i.exercises[1][0] !== "" && 
+                  {i.exercises[0][1] !== "" && 
                     <Link to={{pathname: 'dialogues/'+ index, state: {exerciseNumber:1}}}>
                     <Button style={{marginBottom:'5px'}}>
                     {'Exercise 2'}
+                    </Button>
+                    </Link>
+                  }
+                  {i.exercises[0][2] !== "" && 
+                    <Link to={{pathname: 'dialogues/'+ index, state: {exerciseNumber:2}}}>
+                    <Button style={{marginBottom:'5px'}}>
+                    {'Exercise 3'}
+                    </Button>
+                    </Link>
+                  }
+                  {i.exercises[0][3] !== "" && 
+                    <Link to={{pathname: 'dialogues/'+ index, state: {exerciseNumber:3}}}>
+                    <Button style={{marginBottom:'5px'}}>
+                    {'Exercise 4'}
                     </Button>
                     </Link>
                   }
