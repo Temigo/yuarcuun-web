@@ -66,7 +66,7 @@ class SentenceTemplates extends PureComponent {
               </Accordion.Title>
               <Accordion.Content active={activeIndexes.includes(pindex)}>
                 {Object.keys(sentenceTemplates).map((k)=>
-                  <Button basic onClick={()=>this.props.backEndCall(sentenceTemplates[k][2],true)}>
+                  <Button fluid basic onClick={()=>this.props.backEndCall(sentenceTemplates[k][2],true)}>
                     <div>{sentenceTemplates[k][0]}</div>
                     <div>{sentenceTemplates[k][1]}</div>
                   </Button>             
