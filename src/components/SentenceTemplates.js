@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Segment, Table, Accordion, Icon, Button} from 'semantic-ui-react';
+import { Container, Segment, Table, Accordion, Icon, Button} from 'semantic-ui-react';
 import '../semantic/dist/semantic.min.css';
 import { Link } from 'react-router-dom';
 import {withRouter} from 'react-router';
@@ -7,16 +7,38 @@ import { sentenceTemplates } from './constants/sentence_templates.js'
 
 
 let accordionTitles = [
-  'Noun Phrases',
-  'Verb (+Noun)'
+  {
+    key:'noun phrase only',
+    values:[
+      {key:'simple',values:['simple','possession','oblique nouns','descriptors']},
+      {key:'postbases',values:['noun-noun postbases','verb-noun postbases']}
+    ]
+  },
+  {
+    key:'verb (+ noun) sentence',
+    values:[
+      {key:'statement sentence',values:['subject only','subject with object not marked on verb','subject and object marked on verb','verb + oblique noun']},
+      {key:'postbases',values:['verb-verb postbases','noun-verb postbases']},
+      {key:'question sentence',values:['yes-no question','wh-question']},
+      {key:'command sentence',values:['optative','subordinative','subject only','subject and object marked']}
+    ],
+  },
+  {
+    key:'verb + verb phrase sentence',
+    values:[
+      {key:'connective verb',values:['before...','because...','whenever...','even though...','if, when in the future...','when in the past...','while...']},
+      {key:'subordinative verb',values:['adjectival',]}
+    ]
+  }
 ]
+
 class SentenceTemplates extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       // entries: props.entries,
       // mood: props.mood,
-      activeIndexes: [],
+      activeIndexes: [0,],
 
     };
   }
@@ -51,6 +73,7 @@ class SentenceTemplates extends PureComponent {
   render() {
     console.log(this.state)
     console.log(this.state.activeIndexes)
+    console.log(sentenceTemplates)
     const {activeIndexes} = this.state;
     return (
         <Accordion style={{ fontSize: 16 }} fluid styled>
@@ -62,15 +85,34 @@ class SentenceTemplates extends PureComponent {
                 onClick={this.handleClick}
               >
                 <Icon name="dropdown" />
-                {p}
+                {p.key}
               </Accordion.Title>
               <Accordion.Content active={activeIndexes.includes(pindex)}>
-                {Object.keys(sentenceTemplates).map((k)=>
-                  <Button fluid basic onClick={()=>this.props.backEndCall(sentenceTemplates[k][2],true)}>
-                    <div>{sentenceTemplates[k][0]}</div>
-                    <div>{sentenceTemplates[k][1]}</div>
-                  </Button>             
-                )}                
+                {p.values.map((q, qindex) =>
+                  <div style={{fontVariant:'small-caps',fontSize:'20px',color:"#929292"}}>
+                    {q.key}
+                    <div>
+                      {q.values.map((r, rindex) => 
+                        <div>
+                          <div style ={{fontVariant:'none',fontSize:'16px',color:"#4C77B6",backgroundColor:"#F0F0F0"}}>
+                          <span style={{paddingLeft:'2px'}}>{r}</span>
+                          </div>
+                          <div>
+                            {Object.keys(sentenceTemplates).map((k)=>
+                              {return sentenceTemplates[k][3] === p.key && sentenceTemplates[k][4] === q.key && sentenceTemplates[k][5] === r
+                              ? 
+                                <Button fluid basic onClick={()=> {this.props.backEndCall(sentenceTemplates[k][2],true);this.setState({activeIndexes: []})}}>
+                                  <div style={{textAlign:'left'}}>{sentenceTemplates[k][0]}</div>
+                                  <div style={{textAlign:'left'}}>{sentenceTemplates[k][1]}</div>
+                                </Button> 
+                              : null }            
+                            )}
+                          </div> 
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}               
               </Accordion.Content>
             </div>
           )}
