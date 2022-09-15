@@ -2029,25 +2029,25 @@ class OneVerbWordBuilder extends Component {
 		} else if (type==='changeQuestiontype') {
 	    return <Dropdown item text='Change Question Type'>
 	      <Dropdown.Menu>
-	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg0',isOpen: false},()=>{this.backEndCall([["Insert",["mv","qWord"],['Intrg0',1]]])})}}>who is (subject)...?</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg0',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg0']])})}}>who is (subject)...?</Dropdown.Item>
 	        {this.state.mvvBase[1] != 'i' ?
-	        	<Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg1',isOpen: false},()=>{this.backEndCall([["Insert",["mv","qWord"],['Intrg1',1]]])})}}>to whom (object)...?</Dropdown.Item>
+	        	<Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg1',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg1']])})}}>to whom (object)...?</Dropdown.Item>
 	        	:
 	        	null
 	        }
-	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg2',isOpen: false},()=>{this.backEndCall([["Insert",["mv","qWord"],['Intrg2',1]]])})}}>what is (subject)...?</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg2',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg2']])})}}>what is (subject)...?</Dropdown.Item>
 	        {this.state.mvvBase[1] != 'i' ?
-	        	<Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg3',isOpen: false},()=>{this.backEndCall([["Insert",["mv","qWord"],['Intrg3',1]]])})}}>to what (object)...?</Dropdown.Item>
+	        	<Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg3',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg3']])})}}>to what (object)...?</Dropdown.Item>
 	        	:
 	        	null
 	        }
-	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg4',isOpen: false},()=>{this.backEndCall([["Insert",["mv","qWord"],['Intrg4',1]]])})}}>when did...?</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg5',isOpen: false},()=>{this.backEndCall([["Insert",["mv","qWord"],['Intrg5',1]]])})}}>when will...?</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg6',isOpen: false},()=>{this.backEndCall([["Insert",["mv","qWord"],['Intrg6',1]]])})}}>where is...?</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg7',isOpen: false},()=>{this.backEndCall([["Insert",["mv","qWord"],['Intrg7',1]]])})}}>from where is...?</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg8',isOpen: false},()=>{this.backEndCall([["Insert",["mv","qWord"],['Intrg8',1]]])})}}>to where is...?</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg9',isOpen: false},()=>{this.backEndCall([["Insert",["mv","qWord"],['Intrg9',1]]])})}}>why is...?</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'IntrgA',isOpen: false},()=>{this.backEndCall([["Insert",["mv","qWord"],['IntrgA',1]]])})}}>how is...?</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg4',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg4']])})}}>when did...?</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg5',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg5']])})}}>when will...?</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg6',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg6']])})}}>where is...?</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg7',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg7']])})}}>from where is...?</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg8',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg8']])})}}>to where is...?</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg9',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg9']])})}}>why is...?</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'IntrgA',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'IntrgA']])})}}>how is...?</Dropdown.Item>
 	      </Dropdown.Menu>
 	    </Dropdown>					
 		} else if (type == 'changeRequiredPostbase') {
@@ -2375,7 +2375,7 @@ class OneVerbWordBuilder extends Component {
 	}
 
 	getColor = (pos) => {
-		console.log(pos, this.state)
+		// console.log(pos, this.state)
 
 		// console.log(this.state.npn[this.state.npn.length-1][0][0], this.state.npn[this.state.npn.length-1][0][0] === 1)
 		let grey = '#5c5c5c'
