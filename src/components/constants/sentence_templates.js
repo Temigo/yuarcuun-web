@@ -70,7 +70,7 @@ export const sentenceTemplates = {
 
 
 66:["kaigtuten-qaa?","are you hungry?",[["Insert", ["mv"], [[["kaig-", 0, 0, 0]], "i", "Ind", "qaa"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) questions","question sentence","yes-no question"],
-67:["ayallruuq-qaa?","did he go?",[["Insert", ["mv"], [[["tai-", 0, 0, 0]], "i", "Ind", "qaa"]], ["Update", ["mv", "vs"], [3, 1, 1]]],"verb (+ noun) questions","question sentence","yes-no question"],
+67:["ayallruuq-qaa?","did he go?",[["Insert", ["mv"], [[["ayag¹-", 0, 0, 0], ["-llru¹-", 0, 0, 0]], "i", "Ind", "qaa"]], ["Update", ["mv", "vs"], [3, 1, 1]]],"verb (+ noun) questions","question sentence","yes-no question"],
 
 69:["kina taiga?","who is coming?",[["Insert", ["mv"], [[["tai-", 0, 0, 0]], "i", "Intrg", "Intrg0"]], ["Update", ["mv", "vs"], [3, 1, 1]]],"verb (+ noun) questions","question sentence","wh-question"],
 70:["kia nerellruagu akutaqa?","who ate my akutaq?",[["Insert", ["mv"], [[["nere-", 0, 2, 0], ["-llru¹-", 0, 0, 0]], "t", "Intrg", "Intrg0"]], ["Update", ["mv", "vs"], [3, 1, 1]], ["Update", ["mv", "vo"], [3, 1, 3]], ["Insert", ["mv", "no"], [[["akutaq", 0, 0, 1]], [1, 1, 0, 1]]]],"verb (+ noun) questions","question sentence","wh-question"],
