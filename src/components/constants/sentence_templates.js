@@ -1,3 +1,7 @@
+
+
+
+
 export const sentenceTemplates = {
 1:["qimugta","the dog",[["Insert", ["np"], [[["qimugta", 0, 0, 0]], [0, 0, 0, 1], "Abs"]]],"noun phrase only","simple","simple"],
 
@@ -27,93 +31,93 @@ export const sentenceTemplates = {
 26:["pissulleq","the act or state of hunting",[["Insert", ["np"], [[["pissur-", 0, 0, 0], ["-lleq¹", 0, 1, 0]], [0, 0, 0, 1], "Abs"]]],"noun phrase only","postbases","verb-noun postbases"],
 
 
-28:["ner'uq","he is eating",[["Insert", ["mv"], [[["nere-", 0, 0, 0]], "i", "Ind"]]],"verb (+ noun) sentence","statement sentence","subject only"],
-29:["piipiq ner'uq","the baby is eating",[["Insert", ["mv"], [[["nere-", 0, 0, 0]], "i", "Ind"]], ["Insert", ["mv", "ns"], [[["piipiq", 0, 0, 0]], [0, 0, 0, 1]]]],"verb (+ noun) sentence","statement sentence","subject only"],
+28:["ner'uq","he is eating",[["Insert", ["mv"], [[["nere-", 0, 0, 0]], "i", "Ind"]]],"verb (+ noun) statements","statement sentence","subject only"],
+29:["piipiq ner'uq","the baby is eating",[["Insert", ["mv"], [[["nere-", 0, 0, 0]], "i", "Ind"]], ["Insert", ["mv", "ns"], [[["piipiq", 0, 0, 0]], [0, 0, 0, 1]]]],"verb (+ noun) statements","statement sentence","subject only"],
 
-31:["ner'uq","he is eating something",[["Insert", ["mv"], [[["nere-", 0, 1, 0]], "it", "Ind"]]],"verb (+ noun) sentence","statement sentence","subject with object not marked on verb"],
-32:["piipiq ner'uq","the baby is eathing something",[["Insert", ["mv"], [[["nere-", 0, 1, 0]], "it", "Ind"]], ["Insert", ["mv", "ns"], [[["piipiq", 0, 0, 0]], [0, 0, 0, 1]]]],"verb (+ noun) sentence","statement sentence","subject with object not marked on verb"],
-33:["ner'uq akutamek","he is eating some akutaq",[["Insert", ["mv"], [[["nere-", 0, 1, 0]], "it", "Ind"]], ["Insert", ["mv", "no"], [[["akutaq", 0, 0, 1]], [0, 0, 0, 1]]]],"verb (+ noun) sentence","statement sentence","subject with object not marked on verb"],
-34:["piipiq ner'uq akutamek","the baby is eating some akutaq",[["Insert", ["mv"], [[["nere-", 0, 1, 0]], "it", "Ind"]], ["Insert", ["mv", "ns"], [[["piipiq", 0, 0, 0]], [0, 0, 0, 1]]], ["Insert", ["mv", "no"], [[["akutaq", 0, 0, 1]], [0, 0, 0, 1]]]],"verb (+ noun) sentence","statement sentence","subject with object not marked on verb"],
+31:["ner'uq","he is eating something",[["Insert", ["mv"], [[["nere-", 0, 1, 0]], "it", "Ind"]]],"verb (+ noun) statements","statement sentence","subject with object not marked on verb"],
+32:["piipiq ner'uq","the baby is eathing something",[["Insert", ["mv"], [[["nere-", 0, 1, 0]], "it", "Ind"]], ["Insert", ["mv", "ns"], [[["piipiq", 0, 0, 0]], [0, 0, 0, 1]]]],"verb (+ noun) statements","statement sentence","subject with object not marked on verb"],
+33:["ner'uq akutamek","he is eating some akutaq",[["Insert", ["mv"], [[["nere-", 0, 1, 0]], "it", "Ind"]], ["Insert", ["mv", "no"], [[["akutaq", 0, 0, 1]], [0, 0, 0, 1]]]],"verb (+ noun) statements","statement sentence","subject with object not marked on verb"],
+34:["piipiq ner'uq akutamek","the baby is eating some akutaq",[["Insert", ["mv"], [[["nere-", 0, 1, 0]], "it", "Ind"]], ["Insert", ["mv", "ns"], [[["piipiq", 0, 0, 0]], [0, 0, 0, 1]]], ["Insert", ["mv", "no"], [[["akutaq", 0, 0, 1]], [0, 0, 0, 1]]]],"verb (+ noun) statements","statement sentence","subject with object not marked on verb"],
 
-36:["neraa","he is eating it",[["Insert", ["mv"], [[["nere-", 0, 2, 0]], "t", "Ind"]]],"verb (+ noun) sentence","statement sentence","subject and object marked on verb"],
-37:["piipim neraa","the baby is eating it",[["Insert", ["mv"], [[["nere-", 0, 2, 0]], "t", "Ind"]], ["Insert", ["mv", "ns"], [[["piipiq", 0, 0, 0]], [0, 0, 0, 1]]]],"verb (+ noun) sentence","statement sentence","subject and object marked on verb"],
-38:["neraa akutaq","he is eating the akutaq",[["Insert", ["mv"], [[["nere-", 0, 2, 0]], "t", "Ind"]], ["Insert", ["mv", "no"], [[["akutaq", 0, 0, 1]], [0, 0, 0, 1]]]],"verb (+ noun) sentence","statement sentence","subject and object marked on verb"],
-39:["piipim neraa akutaq","the baby is eating the akutaq",[["Insert", ["mv"], [[["nere-", 0, 2, 0]], "t", "Ind"]], ["Insert", ["mv", "ns"], [[["piipiq", 0, 0, 0]], [0, 0, 0, 1]]], ["Insert", ["mv", "no"], [[["akutaq", 0, 0, 1]], [0, 0, 0, 1]]]],"verb (+ noun) sentence","statement sentence","subject and object marked on verb"],
+36:["neraa","he is eating it",[["Insert", ["mv"], [[["nere-", 0, 2, 0]], "t", "Ind"]]],"verb (+ noun) statements","statement sentence","subject and object marked on verb"],
+37:["piipim neraa","the baby is eating it",[["Insert", ["mv"], [[["nere-", 0, 2, 0]], "t", "Ind"]], ["Insert", ["mv", "ns"], [[["piipiq", 0, 0, 0]], [0, 0, 0, 1]]]],"verb (+ noun) statements","statement sentence","subject and object marked on verb"],
+38:["neraa akutaq","he is eating the akutaq",[["Insert", ["mv"], [[["nere-", 0, 2, 0]], "t", "Ind"]], ["Insert", ["mv", "no"], [[["akutaq", 0, 0, 1]], [0, 0, 0, 1]]]],"verb (+ noun) statements","statement sentence","subject and object marked on verb"],
+39:["piipim neraa akutaq","the baby is eating the akutaq",[["Insert", ["mv"], [[["nere-", 0, 2, 0]], "t", "Ind"]], ["Insert", ["mv", "ns"], [[["piipiq", 0, 0, 0]], [0, 0, 0, 1]]], ["Insert", ["mv", "no"], [[["akutaq", 0, 0, 1]], [0, 0, 0, 1]]]],"verb (+ noun) statements","statement sentence","subject and object marked on verb"],
 
-41:["ner'uq natermi","he is sitting at/on the floor",[["Insert", ["mv"], [[["nere-", 0, 0, 0]], "i", "Ind"]], ["Insert", ["mv", "nObliques"], [[["nateq", 0, 0, 0]], [0, 0, 0, 1], "Loc"]]],"verb (+ noun) sentence","statement sentence","verb + oblique noun"],
-42:["ayagtuq Mamterillermun","he is going to Bethel",[["Insert", ["mv"], [[["ayag¹-", 0, 0, 0]], "i", "Ind"]], ["Insert", ["mv", "nObliques"], [[["Mamterilleq", 0, 0, 0]], [0, 0, 0, 1], "Ter"]]],"verb (+ noun) sentence","statement sentence","verb + oblique noun"],
-43:["utertuq elitnaurvigmek","he is returning from the school",[["Insert", ["mv"], [[["uterte-", 0, 0, 0]], "i", "Ind"]], ["Insert", ["mv", "nObliques"], [[["elitnaurvik", 0, 0, 0]], [0, 0, 0, 1], "Abl_Mod", "from"]]],"verb (+ noun) sentence","statement sentence","verb + oblique noun"],
-44:["ayagtuq tengssuutekun","he is going using/via airplane",[["Insert", ["mv"], [[["ayag¹-", 0, 0, 0]], "i", "Ind"]], ["Insert", ["mv", "nObliques"], [[["tengssuun", 0, 0, 0]], [0, 0, 0, 1], "Via"]]],"verb (+ noun) sentence","statement sentence","verb + oblique noun"],
-45:["pangalegtuq qimugtetun","he is running on fours like a dog",[["Insert", ["mv"], [[["pangaleg-", 0, 0, 0]], "i", "Ind"]], ["Insert", ["mv", "nObliques"], [[["qimugta", 0, 0, 0]], [0, 0, 0, 1], "Equ"]]],"verb (+ noun) sentence","statement sentence","verb + oblique noun"],
+41:["ner'uq natermi","he is sitting at/on the floor",[["Insert", ["mv"], [[["nere-", 0, 0, 0]], "i", "Ind"]], ["Insert", ["mv", "nObliques"], [[["nateq", 0, 0, 0]], [0, 0, 0, 1], "Loc"]]],"verb (+ noun) statements","statement sentence","verb + oblique noun"],
+42:["ayagtuq Mamterillermun","he is going to Bethel",[["Insert", ["mv"], [[["ayag¹-", 0, 0, 0]], "i", "Ind"]], ["Insert", ["mv", "nObliques"], [[["Mamterilleq", 0, 0, 0]], [0, 0, 0, 1], "Ter"]]],"verb (+ noun) statements","statement sentence","verb + oblique noun"],
+43:["utertuq elitnaurvigmek","he is returning from the school",[["Insert", ["mv"], [[["uterte-", 0, 0, 0]], "i", "Ind"]], ["Insert", ["mv", "nObliques"], [[["elitnaurvik", 0, 0, 0]], [0, 0, 0, 1], "Abl_Mod", "from"]]],"verb (+ noun) statements","statement sentence","verb + oblique noun"],
+44:["ayagtuq tengssuutekun","he is going using/via airplane",[["Insert", ["mv"], [[["ayag¹-", 0, 0, 0]], "i", "Ind"]], ["Insert", ["mv", "nObliques"], [[["tengssuun", 0, 0, 0]], [0, 0, 0, 1], "Via"]]],"verb (+ noun) statements","statement sentence","verb + oblique noun"],
+45:["pangalegtuq qimugtetun","he is running on fours like a dog",[["Insert", ["mv"], [[["pangaleg-", 0, 0, 0]], "i", "Ind"]], ["Insert", ["mv", "nObliques"], [[["qimugta", 0, 0, 0]], [0, 0, 0, 1], "Equ"]]],"verb (+ noun) statements","statement sentence","verb + oblique noun"],
 
-47:["nerciquq","he will eat",[["Insert", ["mv"], [[["nere-", 0, 0, 0], ["+ciqe-|@ciiqe-", 0, 0, 0]], "i", "Ind"]]],"verb (+ noun) sentence","postbases","verb-verb postbases"],
-48:["nerenrituq","he is not eating",[["Insert", ["mv"], [[["nere-", 0, 0, 0], ["-nrite-", 0, 0, 0]], "i", "Ind"]]],"verb (+ noun) sentence","postbases","verb-verb postbases"],
-49:["neryugtuq","he wants to eat",[["Insert", ["mv"], [[["nere-", 0, 0, 0], ["@~+yug-,+(r)yug-", 0, 1, 0]], "i", "Ind"]]],"verb (+ noun) sentence","postbases","verb-verb postbases"],
-50:["neryugngauq","he can eat",[["Insert", ["mv"], [[["nere-", 0, 0, 0], ["@~+yugnga-", 0, 0, 0]], "i", "Ind"]]],"verb (+ noun) sentence","postbases","verb-verb postbases"],
-51:["nerengnaquq","he is trying to eat",[["Insert", ["mv"], [[["nere-", 0, 0, 0], ["-ngnaqe-", 0, 0, 0]], "i", "Ind"]]],"verb (+ noun) sentence","postbases","verb-verb postbases"],
-52:["nerlartuq","he regularly eats",[["Insert", ["mv"], [[["nere-", 0, 0, 0], ["~+lar-,@~+lar-,-lar-", 0, 2, 0]], "i", "Ind"]]],"verb (+ noun) sentence","postbases","verb-verb postbases"],
-53:["neryugnarquq","he is probably eating",[["Insert", ["mv"], [[["nere-", 0, 0, 0], ["@~+yugnarqe¹-", 0, 0, 0]], "i", "Ind"]]],"verb (+ noun) sentence","postbases","verb-verb postbases"],
-54:["nerrsiyaagtuq","he is excessively eating",[["Insert", ["mv"], [[["nere-", 0, 0, 0], ["-ssiyaag-", 0, 0, 0]], "i", "Ind"]]],"verb (+ noun) sentence","postbases","verb-verb postbases"],
+47:["nerciquq","he will eat",[["Insert", ["mv"], [[["nere-", 0, 0, 0], ["+ciqe-|@ciiqe-", 0, 0, 0]], "i", "Ind"]]],"verb (+ noun) statements","postbases","verb-verb postbases"],
+48:["nerenrituq","he is not eating",[["Insert", ["mv"], [[["nere-", 0, 0, 0], ["-nrite-", 0, 0, 0]], "i", "Ind"]]],"verb (+ noun) statements","postbases","verb-verb postbases"],
+49:["neryugtuq","he wants to eat",[["Insert", ["mv"], [[["nere-", 0, 0, 0], ["@~+yug-,+(r)yug-", 0, 1, 0]], "i", "Ind"]]],"verb (+ noun) statements","postbases","verb-verb postbases"],
+50:["neryugngauq","he can eat",[["Insert", ["mv"], [[["nere-", 0, 0, 0], ["@~+yugnga-", 0, 0, 0]], "i", "Ind"]]],"verb (+ noun) statements","postbases","verb-verb postbases"],
+51:["nerengnaquq","he is trying to eat",[["Insert", ["mv"], [[["nere-", 0, 0, 0], ["-ngnaqe-", 0, 0, 0]], "i", "Ind"]]],"verb (+ noun) statements","postbases","verb-verb postbases"],
+52:["nerlartuq","he regularly eats",[["Insert", ["mv"], [[["nere-", 0, 0, 0], ["~+lar-,@~+lar-,-lar-", 0, 2, 0]], "i", "Ind"]]],"verb (+ noun) statements","postbases","verb-verb postbases"],
+53:["neryugnarquq","he is probably eating",[["Insert", ["mv"], [[["nere-", 0, 0, 0], ["@~+yugnarqe¹-", 0, 0, 0]], "i", "Ind"]]],"verb (+ noun) statements","postbases","verb-verb postbases"],
+54:["nerrsiyaagtuq","he is excessively eating",[["Insert", ["mv"], [[["nere-", 0, 0, 0], ["-ssiyaag-", 0, 0, 0]], "i", "Ind"]]],"verb (+ noun) statements","postbases","verb-verb postbases"],
 
-56:["angyangqertuq","he has a boat",[["Insert", ["mv"], [[["angyaq,angyar-", 0, 0, 0], ["-ngqerr-", 0, 1, 0]], "i", "Ind"]]],"verb (+ noun) sentence","postbases","noun-verb postbases"],
-57:["angyanguq","he acquired a boat",[["Insert", ["mv"], [[["angyaq,angyar-", 0, 0, 0], ["-nge-", 0, 0, 0]], "i", "Ind"]]],"verb (+ noun) sentence","postbases","noun-verb postbases"],
-58:["angyaliuq","he is making a boat",[["Insert", ["mv"], [[["angyaq,angyar-", 0, 0, 0], ["-li²-", 0, 0, 0]], "i", "Ind"]]],"verb (+ noun) sentence","postbases","noun-verb postbases"],
-59:["angyalirtuq","he has lots of boats",[["Insert", ["mv"], [[["angyaq,angyar-", 0, 0, 0], ["-lir-", 0, 0, 0]], "i", "Ind"]]],"verb (+ noun) sentence","postbases","noun-verb postbases"],
-60:["tuntussurtuq","he is hunting caribou",[["Insert", ["mv"], [[["tuntu", 0, 0, 0], ["+ssur-", 0, 0, 0]], "i", "Ind"]]],"verb (+ noun) sentence","postbases","noun-verb postbases"],
-61:["tuntuturtuq","he is eating caribou",[["Insert", ["mv"], [[["tuntu", 0, 0, 0], ["+tur²-", 0, 0, 0]], "i", "Ind"]]],"verb (+ noun) sentence","postbases","noun-verb postbases"],
-
-
+56:["angyangqertuq","he has a boat",[["Insert", ["mv"], [[["angyaq,angyar-", 0, 0, 0], ["-ngqerr-", 0, 1, 0]], "i", "Ind"]]],"verb (+ noun) statements","postbases","noun-verb postbases"],
+57:["angyanguq","he acquired a boat",[["Insert", ["mv"], [[["angyaq,angyar-", 0, 0, 0], ["-nge-", 0, 0, 0]], "i", "Ind"]]],"verb (+ noun) statements","postbases","noun-verb postbases"],
+58:["angyaliuq","he is making a boat",[["Insert", ["mv"], [[["angyaq,angyar-", 0, 0, 0], ["-li²-", 0, 0, 0]], "i", "Ind"]]],"verb (+ noun) statements","postbases","noun-verb postbases"],
+59:["angyalirtuq","he has lots of boats",[["Insert", ["mv"], [[["angyaq,angyar-", 0, 0, 0], ["-lir-", 0, 0, 0]], "i", "Ind"]]],"verb (+ noun) statements","postbases","noun-verb postbases"],
+60:["tuntussurtuq","he is hunting caribou",[["Insert", ["mv"], [[["tuntu", 0, 0, 0], ["+ssur-", 0, 0, 0]], "i", "Ind"]]],"verb (+ noun) statements","postbases","noun-verb postbases"],
+61:["tuntuturtuq","he is eating caribou",[["Insert", ["mv"], [[["tuntu", 0, 0, 0], ["+tur²-", 0, 0, 0]], "i", "Ind"]]],"verb (+ noun) statements","postbases","noun-verb postbases"],
 
 
 
 
+66:["kaigtuten-qaa?","are you hungry?",[["Insert", ["mv"], [[["kaig-", 0, 0, 0]], "i", "Ind", "qaa"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) questions","question sentence","yes-no question"],
+67:["ayallruuq-qaa?","did he go?",[["Insert", ["mv"], [[["tai-", 0, 0, 0]], "i", "Ind", "qaa"]], ["Update", ["mv", "vs"], [3, 1, 1]]],"verb (+ noun) questions","question sentence","yes-no question"],
 
-69:["kina taiga?","who is coming?",[["Insert", ["mv"], [[["tai-", 0, 0, 0]], "i", "Intrg", "Intrg0"]], ["Update", ["mv", "vs"], [3, 1, 1]]],"verb (+ noun) sentence","question sentence","wh-question"],
-70:["kia nerellruagu akutaqa?","who ate my akutaq?",[["Insert", ["mv"], [[["nere-", 0, 2, 0], ["-llru¹-", 0, 0, 0]], "t", "Intrg", "Intrg0"]], ["Update", ["mv", "vs"], [3, 1, 1]], ["Update", ["mv", "vo"], [3, 1, 3]], ["Insert", ["mv", "no"], [[["akutaq", 0, 0, 1]], [1, 1, 0, 1]]]],"verb (+ noun) sentence","question sentence","wh-question"],
+69:["kina taiga?","who is coming?",[["Insert", ["mv"], [[["tai-", 0, 0, 0]], "i", "Intrg", "Intrg0"]], ["Update", ["mv", "vs"], [3, 1, 1]]],"verb (+ noun) questions","question sentence","wh-question"],
+70:["kia nerellruagu akutaqa?","who ate my akutaq?",[["Insert", ["mv"], [[["nere-", 0, 2, 0], ["-llru¹-", 0, 0, 0]], "t", "Intrg", "Intrg0"]], ["Update", ["mv", "vs"], [3, 1, 1]], ["Update", ["mv", "vo"], [3, 1, 3]], ["Insert", ["mv", "no"], [[["akutaq", 0, 0, 1]], [1, 1, 0, 1]]]],"verb (+ noun) questions","question sentence","wh-question"],
 
-72:["kitumek tangercit?","who (non-specific) do you see?",[["Insert", ["mv"], [[["tangerr-", 0, 1, 0]], "it", "Intrg", "Intrg1"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) sentence","question sentence","wh-question"],
-73:["kina tangerciu?","who (specific) do you see?",[["Insert", ["mv"], [[["tangerr-", 0, 2, 0]], "t", "Intrg", "Intrg1"]], ["Update", ["mv", "vs"], [2, 1, 0]], ["Update", ["mv", "vo"], [3, 1, 1]]],"verb (+ noun) sentence","question sentence","wh-question"],
-74:["ca igta?","what fell?",[["Insert", ["mv"], [[["igte-", 0, 0, 0]], "i", "Intrg", "Intrg2"]], ["Update", ["mv", "vs"], [3, 1, 3]]],"verb (+ noun) sentence","question sentence","wh-question"],
-
-
-77:["camek kiputellrusit?","what did you buy?",[["Insert", ["mv"], [[["kipute-", 0, 1, 0], ["-llru¹-", 0, 0, 0]], "it", "Intrg", "Intrg3"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) sentence","question sentence","wh-question"],
-78:["camek tangercit?","what do you see?",[["Insert", ["mv"], [[["tangerr-", 0, 1, 0]], "it", "Intrg", "Intrg3"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) sentence","question sentence","wh-question"],
-79:["nani iqvallrusit?","at where did you pick berries?",[["Insert", ["mv"], [[["iqvaq,iqvar-", 0, 1, 0], ["-llru¹-", 0, 0, 0]], "i", "Intrg", "Intrg6"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) sentence","question sentence","wh-question"],
-80:["naken taillrusit?","from where did you come?",[["Insert", ["mv"], [[["tai-", 0, 0, 0], ["-llru¹-", 0, 0, 0]], "i", "Intrg", "Intrg7"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) sentence","question sentence","wh-question"],
-81:["natmun ayagcit?","toward where are you going?",[["Insert", ["mv"], [[["ayag¹-", 0, 0, 0]], "i", "Intrg", "Intrg8"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) sentence","question sentence","wh-question"],
-82:["qangvaq tekitellrusit?","when (past) did you arrive?",[["Insert", ["mv"], [[["tekite-", 0, 0, 0], ["-llru¹-", 0, 0, 0]], "i", "Intrg", "Intrg4"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) sentence","question sentence","wh-question"],
-83:["qaku ayagciqsit?","when (future) will you go?",[["Insert", ["mv"], [[["ayag¹-", 0, 0, 0], ["+ciqe-|@ciiqe-", 0, 0, 0]], "i", "Intrg", "Intrg5"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) sentence","question sentence","wh-question"],
-84:["ciin qavarnisit?","why are you sleepy?",[["Insert", ["mv"], [[["qavarni-", 0, 0, 0]], "i", "Intrg", "Intrg9"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) sentence","question sentence","wh-question"],
-85:["qaillun akngirtellrusit?","how did you get hurt?",[["Insert", ["mv"], [[["akngirte-,aknirte-", 0, 0, 0], ["-llru¹-", 0, 0, 0]], "i", "Intrg", "IntrgA"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) sentence","question sentence","wh-question"],
+72:["kitumek tangercit?","who (non-specific) do you see?",[["Insert", ["mv"], [[["tangerr-", 0, 1, 0]], "it", "Intrg", "Intrg1"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) questions","question sentence","wh-question"],
+73:["kina tangerciu?","who (specific) do you see?",[["Insert", ["mv"], [[["tangerr-", 0, 2, 0]], "t", "Intrg", "Intrg1"]], ["Update", ["mv", "vs"], [2, 1, 0]], ["Update", ["mv", "vo"], [3, 1, 1]]],"verb (+ noun) questions","question sentence","wh-question"],
+74:["ca igta?","what fell?",[["Insert", ["mv"], [[["igte-", 0, 0, 0]], "i", "Intrg", "Intrg2"]], ["Update", ["mv", "vs"], [3, 1, 3]]],"verb (+ noun) questions","question sentence","wh-question"],
 
 
-88:["neri","eat!",[["Insert", ["mv"], [[["nere-", 0, 0, 0]], "i", "Opt][PRS"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) sentence","command sentence","optative"],
-89:["taikina","come (in the future)!",[["Insert", ["mv"], [[["tai-", 0, 0, 0]], "i", "Opt][FUT"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) sentence","command sentence","optative"],
-90:["usviipiiqnak","stop being crazy!",[["Insert", ["mv"], [[["usviite-", 0, 0, 0]], "i", "Opt][PRS][NEG"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) sentence","command sentence","optative"],
-91:["kuingiryaqunak","don't smoke!",[["Insert", ["mv"], [[["kuingiq,kuiniq,kuingir-,kuinir-", 0, 1, 0]], "i", "Opt][FUT][NEG"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) sentence","command sentence","optative"],
+77:["camek kiputellrusit?","what did you buy?",[["Insert", ["mv"], [[["kipute-", 0, 1, 0], ["-llru¹-", 0, 0, 0]], "it", "Intrg", "Intrg3"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) questions","question sentence","wh-question"],
+78:["camek tangercit?","what do you see?",[["Insert", ["mv"], [[["tangerr-", 0, 1, 0]], "it", "Intrg", "Intrg3"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) questions","question sentence","wh-question"],
+79:["nani iqvallrusit?","at where did you pick berries?",[["Insert", ["mv"], [[["iqvaq,iqvar-", 0, 1, 0], ["-llru¹-", 0, 0, 0]], "i", "Intrg", "Intrg6"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) questions","question sentence","wh-question"],
+80:["naken taillrusit?","from where did you come?",[["Insert", ["mv"], [[["tai-", 0, 0, 0], ["-llru¹-", 0, 0, 0]], "i", "Intrg", "Intrg7"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) questions","question sentence","wh-question"],
+81:["natmun ayagcit?","toward where are you going?",[["Insert", ["mv"], [[["ayag¹-", 0, 0, 0]], "i", "Intrg", "Intrg8"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) questions","question sentence","wh-question"],
+82:["qangvaq tekitellrusit?","when (past) did you arrive?",[["Insert", ["mv"], [[["tekite-", 0, 0, 0], ["-llru¹-", 0, 0, 0]], "i", "Intrg", "Intrg4"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) questions","question sentence","wh-question"],
+83:["qaku ayagciqsit?","when (future) will you go?",[["Insert", ["mv"], [[["ayag¹-", 0, 0, 0], ["+ciqe-|@ciiqe-", 0, 0, 0]], "i", "Intrg", "Intrg5"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) questions","question sentence","wh-question"],
+84:["ciin qavarnisit?","why are you sleepy?",[["Insert", ["mv"], [[["qavarni-", 0, 0, 0]], "i", "Intrg", "Intrg9"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) questions","question sentence","wh-question"],
+85:["qaillun akngirtellrusit?","how did you get hurt?",[["Insert", ["mv"], [[["akngirte-,aknirte-", 0, 0, 0], ["-llru¹-", 0, 0, 0]], "i", "Intrg", "IntrgA"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) questions","question sentence","wh-question"],
+
+
+88:["neri","eat!",[["Insert", ["mv"], [[["nere-", 0, 0, 0]], "i", "Opt][PRS"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) commands","command sentence","optative"],
+89:["taikina","come (in the future)!",[["Insert", ["mv"], [[["tai-", 0, 0, 0]], "i", "Opt][FUT"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) commands","command sentence","optative"],
+90:["usviipiiqnak","stop being crazy!",[["Insert", ["mv"], [[["usviite-", 0, 0, 0]], "i", "Opt][PRS][NEG"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) commands","command sentence","optative"],
+91:["kuingiryaqunak","don't smoke!",[["Insert", ["mv"], [[["kuingiq,kuiniq,kuingir-,kuinir-", 0, 1, 0]], "i", "Opt][FUT][NEG"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) commands","command sentence","optative"],
 
 
 
-95:["teguqerru","please take it",[["Insert", ["mv"], [[["tegu-", 0, 0, 0], ["-qar-", 0, 0, 0]], "t", "Opt][PRS"]], ["Update", ["mv", "vs"], [2, 1, 0]], ["Update", ["mv", "vo"], [3, 1, 3]]],"verb (+ noun) sentence","command sentence","optative"],
+95:["teguqerru","please take it",[["Insert", ["mv"], [[["tegu-", 0, 0, 0], ["-qar-", 0, 0, 0]], "t", "Opt][PRS"]], ["Update", ["mv", "vs"], [2, 1, 0]], ["Update", ["mv", "vo"], [3, 1, 3]]],"verb (+ noun) commands","command sentence","optative"],
 
-97:["aqumluten","please sit down",[["Insert", ["mv"], [[["aqume-", 0, 0, 0]], "i", "Sbrd"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) sentence","command sentence","subordinative"],
-98:["alingevkenak","don't be scared",[["Insert", ["mv"], [[["alinge-", 0, 0, 0], ["+peke-|+vke-,+pege-|+vke-", 0, 0, 0]], "i", "Sbrd"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) sentence","command sentence","subordinative"],
+97:["aqumluten","please sit down",[["Insert", ["mv"], [[["aqume-", 0, 0, 0]], "i", "Sbrd"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) commands","command sentence","subordinative"],
+98:["alingevkenak","don't be scared",[["Insert", ["mv"], [[["alinge-", 0, 0, 0], ["+peke-|+vke-,+pege-|+vke-", 0, 0, 0]], "i", "Sbrd"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) commands","command sentence","subordinative"],
 
-100:["neri","eat",[["Insert", ["mv"], [[["nere-", 0, 0, 0]], "i", "Opt][PRS"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) sentence","command sentence","subject only"],
-101:["nerkina","eat (in the future)",[["Insert", ["mv"], [[["nere-", 0, 0, 0]], "i", "Opt][FUT"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) sentence","command sentence","subject only"],
-102:["nerviiqnak","stop eating",[["Insert", ["mv"], [[["nere-", 0, 0, 0]], "i", "Opt][PRS][NEG"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) sentence","command sentence","subject only"],
-103:["neryaqunak","don't eat",[["Insert", ["mv"], [[["nere-", 0, 0, 0]], "i", "Opt][FUT][NEG"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) sentence","command sentence","subject only"],
-104:["nerqaa","please eat",[["Insert", ["mv"], [[["nere-", 0, 0, 0], ["-qar-", 0, 0, 0]], "i", "Opt][PRS"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) sentence","command sentence","subject only"],
-105:["nerluten","please eat",[["Insert", ["mv"], [[["nere-", 0, 0, 0]], "i", "Sbrd"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) sentence","command sentence","subject only"],
-106:["nerevkenak","please don't eat",[["Insert", ["mv"], [[["nere-", 0, 0, 0], ["+peke-|+vke-,+pege-|+vke-", 0, 0, 0]], "i", "Sbrd", "neg"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) sentence","command sentence","subject only"],
+100:["neri","eat",[["Insert", ["mv"], [[["nere-", 0, 0, 0]], "i", "Opt][PRS"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) commands","command sentence","subject only"],
+101:["nerkina","eat (in the future)",[["Insert", ["mv"], [[["nere-", 0, 0, 0]], "i", "Opt][FUT"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) commands","command sentence","subject only"],
+102:["nerviiqnak","stop eating",[["Insert", ["mv"], [[["nere-", 0, 0, 0]], "i", "Opt][PRS][NEG"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) commands","command sentence","subject only"],
+103:["neryaqunak","don't eat",[["Insert", ["mv"], [[["nere-", 0, 0, 0]], "i", "Opt][FUT][NEG"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) commands","command sentence","subject only"],
+104:["nerqaa","please eat",[["Insert", ["mv"], [[["nere-", 0, 0, 0], ["-qar-", 0, 0, 0]], "i", "Opt][PRS"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) commands","command sentence","subject only"],
+105:["nerluten","please eat",[["Insert", ["mv"], [[["nere-", 0, 0, 0]], "i", "Sbrd"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) commands","command sentence","subject only"],
+106:["nerevkenak","please don't eat",[["Insert", ["mv"], [[["nere-", 0, 0, 0], ["+peke-|+vke-,+pege-|+vke-", 0, 0, 0]], "i", "Sbrd", "neg"]], ["Update", ["mv", "vs"], [2, 1, 0]]],"verb (+ noun) commands","command sentence","subject only"],
 
-108:["taisgu","bring it here",[["Insert", ["mv"], [[["taite²-", 0, 3, 0]], "t", "Opt][PRS"]], ["Update", ["mv", "vs"], [2, 1, 0]], ["Update", ["mv", "vo"], [3, 1, 3]]],"verb (+ noun) sentence","command sentence","subject and object marked"],
-109:["taiskiu","bring it here (in the future)",[["Insert", ["mv"], [[["taite²-", 0, 3, 0]], "t", "Opt][FUT"]], ["Update", ["mv", "vs"], [2, 1, 0]], ["Update", ["mv", "vo"], [3, 1, 3]]],"verb (+ noun) sentence","command sentence","subject and object marked"],
-110:["taipiiqnaku","stop bringing it here",[["Insert", ["mv"], [[["taite²-", 0, 3, 0]], "t", "Opt][PRS][NEG"]], ["Update", ["mv", "vs"], [2, 1, 0]], ["Update", ["mv", "vo"], [3, 1, 3]]],"verb (+ noun) sentence","command sentence","subject and object marked"],
-111:["taicaqunaku","don't bring it here",[["Insert", ["mv"], [[["taite²-", 0, 3, 0]], "t", "Opt][FUT][NEG"]], ["Update", ["mv", "vs"], [2, 1, 0]], ["Update", ["mv", "vo"], [3, 1, 3]]],"verb (+ noun) sentence","command sentence","subject and object marked"],
-112:["taiteqerru","please bring it here",[["Insert", ["mv"], [[["taite²-", 0, 3, 0], ["-qar-", 0, 0, 0]], "t", "Opt][PRS"]], ["Update", ["mv", "vs"], [2, 1, 0]], ["Update", ["mv", "vo"], [3, 1, 3]]],"verb (+ noun) sentence","command sentence","subject and object marked"],
-113:["tailluku","please bring it here",[["Insert", ["mv"], [[["taite²-", 0, 3, 0]], "t", "Sbrd"]], ["Update", ["mv", "vs"], [2, 1, 0]], ["Update", ["mv", "vo"], [3, 1, 3]]],"verb (+ noun) sentence","command sentence","subject and object marked"],
-114:["taitevkenaku","please don't bring it here",[["Insert", ["mv"], [[["taite²-", 0, 3, 0], ["+peke-|+vke-,+pege-|+vke-", 0, 0, 0]], "t", "Sbrd", "neg"]], ["Update", ["mv", "vs"], [2, 1, 0]], ["Update", ["mv", "vo"], [3, 1, 3]]],"verb (+ noun) sentence","command sentence","subject and object marked"],
+108:["taisgu","bring it here",[["Insert", ["mv"], [[["taite²-", 0, 3, 0]], "t", "Opt][PRS"]], ["Update", ["mv", "vs"], [2, 1, 0]], ["Update", ["mv", "vo"], [3, 1, 3]]],"verb (+ noun) commands","command sentence","subject and object marked"],
+109:["taiskiu","bring it here (in the future)",[["Insert", ["mv"], [[["taite²-", 0, 3, 0]], "t", "Opt][FUT"]], ["Update", ["mv", "vs"], [2, 1, 0]], ["Update", ["mv", "vo"], [3, 1, 3]]],"verb (+ noun) commands","command sentence","subject and object marked"],
+110:["taipiiqnaku","stop bringing it here",[["Insert", ["mv"], [[["taite²-", 0, 3, 0]], "t", "Opt][PRS][NEG"]], ["Update", ["mv", "vs"], [2, 1, 0]], ["Update", ["mv", "vo"], [3, 1, 3]]],"verb (+ noun) commands","command sentence","subject and object marked"],
+111:["taicaqunaku","don't bring it here",[["Insert", ["mv"], [[["taite²-", 0, 3, 0]], "t", "Opt][FUT][NEG"]], ["Update", ["mv", "vs"], [2, 1, 0]], ["Update", ["mv", "vo"], [3, 1, 3]]],"verb (+ noun) commands","command sentence","subject and object marked"],
+112:["taiteqerru","please bring it here",[["Insert", ["mv"], [[["taite²-", 0, 3, 0], ["-qar-", 0, 0, 0]], "t", "Opt][PRS"]], ["Update", ["mv", "vs"], [2, 1, 0]], ["Update", ["mv", "vo"], [3, 1, 3]]],"verb (+ noun) commands","command sentence","subject and object marked"],
+113:["tailluku","please bring it here",[["Insert", ["mv"], [[["taite²-", 0, 3, 0]], "t", "Sbrd"]], ["Update", ["mv", "vs"], [2, 1, 0]], ["Update", ["mv", "vo"], [3, 1, 3]]],"verb (+ noun) commands","command sentence","subject and object marked"],
+114:["taitevkenaku","please don't bring it here",[["Insert", ["mv"], [[["taite²-", 0, 3, 0], ["+peke-|+vke-,+pege-|+vke-", 0, 0, 0]], "t", "Sbrd", "neg"]], ["Update", ["mv", "vs"], [2, 1, 0]], ["Update", ["mv", "vo"], [3, 1, 3]]],"verb (+ noun) commands","command sentence","subject and object marked"],
 
 
 117:["ayagpailgan payugeskiu","before he leaves, take some food to her",[["Insert", ["mv"], [[["payugte-", 0, 0, 0]], "t", "Opt][FUT"]], ["Update", ["mv", "vs"], [2, 1, 0]], ["Update", ["mv", "vo"], [3, 1, 2]], ["Insert", ["cv"], [[["ayag¹-", 0, 0, 0]], "i", "Prec"]], ["Update", ["cv", "vs"], [3, 1, 2]]],"verb + verb phrase sentence","connective verb","before..."],
@@ -180,3 +184,902 @@ export const sentenceTemplates = {
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

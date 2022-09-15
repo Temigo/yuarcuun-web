@@ -15,11 +15,21 @@ let accordionTitles = [
     ]
   },
   {
-    key:'verb (+ noun) sentence',
+    key:'verb (+ noun) statements',
     values:[
       {key:'statement sentence',values:['subject only','subject with object not marked on verb','subject and object marked on verb','verb + oblique noun']},
       {key:'postbases',values:['verb-verb postbases','noun-verb postbases']},
+    ],
+  },
+  {
+    key:'verb (+ noun) questions',
+    values:[
       {key:'question sentence',values:['yes-no question','wh-question']},
+    ],
+  },
+  {
+    key:'verb (+ noun) commands',
+    values:[
       {key:'command sentence',values:['optative','subordinative','subject only','subject and object marked']}
     ],
   },
@@ -38,7 +48,7 @@ class SentenceTemplates extends PureComponent {
     this.state = {
       // entries: props.entries,
       // mood: props.mood,
-      activeIndexes: [0,],
+      activeIndexes: [],
 
     };
   }
