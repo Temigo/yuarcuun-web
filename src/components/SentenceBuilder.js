@@ -44,7 +44,13 @@ let requirePostbasesDictionary = {
 
 }
 
-
+let pastTensePostbases = [
+	'-llru¹-',
+]
+let futureTensePostbases = [
+	'+ciqe-|@ciiqe-',
+	'-qatar-',
+]
 const optionsFuzzy = {
   keys: ['yupikword', 'englishnorm'],
   limit: 10, // don't return more results than you need!
@@ -577,6 +583,9 @@ class OneVerbWordBuilder extends Component {
 
 
 	    if (this.state.mvvo.length > 0) {
+	    	if (this.state.mvvMood == 'Intrg') {
+    			subjDontAllow = subjDontAllow.concat([0,6,10])	    		
+	    	}
 	      if (this.state.mvvs[0] == 1) {
     			objDontAllow = objDontAllow.concat([0,6,10])
 
@@ -2396,6 +2405,27 @@ class OneVerbWordBuilder extends Component {
 				if (pos === 'mvqWord' && (this.state.mvvType === 'Intrg1' || this.state.mvvType === 'Intrg3')) {
 					return colorsList[this.state.colorScheme]['mvv.o']	
 				}
+
+	  		if (pos == 'mvv.1') {
+	  			if (pastTensePostbases.includes(this.state.mv['vBase'][0][this.state.mv['vBase'][0].length-1][0])) {
+		  			return colorsList[this.state.colorScheme]['past']	
+	  			} else if (futureTensePostbases.includes(this.state.mv['vBase'][0][this.state.mv['vBase'][0].length-1][0])) {
+		  			return colorsList[this.state.colorScheme]['future']	
+	  			}
+	  		} else if (pos == 'cvv.1') {
+	  			if (pastTensePostbases.includes(this.state.cv['vBase'][0][this.state.cv['vBase'][0].length-1][0])) {
+		  			return colorsList[this.state.colorScheme]['past']	
+	  			} else if (futureTensePostbases.includes(this.state.cv['vBase'][0][this.state.cv['vBase'][0].length-1][0])) {
+		  			return colorsList[this.state.colorScheme]['future']	
+	  			}
+	  		} else if (pos == 'svv.1') {
+	  			if (pastTensePostbases.includes(this.state.sv['vBase'][0][this.state.sv['vBase'][0].length-1][0])) {
+		  			return colorsList[this.state.colorScheme]['past']	
+	  			} else if (futureTensePostbases.includes(this.state.sv['vBase'][0][this.state.sv['vBase'][0].length-1][0])) {
+		  			return colorsList[this.state.colorScheme]['future']	
+	  			}
+	  		}
+
 				if (!(pos in colorsList[this.state.colorScheme])) {
 					return grey
 				} else {
@@ -2817,10 +2847,10 @@ class OneVerbWordBuilder extends Component {
 												<span>
 												{xind === 0 ?
 													<span>
-														{this.state.mvvBase[1] == 'it' && this.arraysEqual(this.state.mvno[0][0],[0,0,0,1]) ?
-															null
-															:
+														{this.state.mvvBase[1] == 'it' && !this.arraysEqual(this.state.mvno[0][0],[0,0,0,1]) ?
 															<span style={{color:this.getColor('mvns00.c')}}>{'(some) '}</span>
+															:
+															null
 														}
 														{this.state.mvvBase[1] == 'it' && xind === this.state.mvnoSegments.length-1?
 														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('mvno'+(this.state.mvnoSegments.length-1-xind).toString()+'0.ps'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","no",this.state.mvnoSegments.length-1,0],(data.value+this.state.mvno[this.state.mvnoSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.mvno[this.state.mvnoSegments.length-1][0].slice(0, -1).join("")} options={this.state.nounOptionsMVAblPossessors1} />
@@ -3208,10 +3238,10 @@ class OneVerbWordBuilder extends Component {
 												<span>
 												{xind === 0 ?
 													<span>
-														{this.state.cvvBase[1] == 'it' && this.arraysEqual(this.state.cvno[0][0],[0,0,0,1]) ?
-															null
-															:
+														{this.state.cvvBase[1] == 'it' && !this.arraysEqual(this.state.cvno[0][0],[0,0,0,1]) ?
 															<span style={{color:this.getColor('cvns00.c')}}>{'(some) '}</span>
+															:
+															null
 														}
 
 														{this.state.cvvBase[1] == 'it' && xind === this.state.cvnoSegments.length-1 ?
@@ -3406,10 +3436,10 @@ class OneVerbWordBuilder extends Component {
 												<span>
 												{xind === 0 ?
 													<span>
-														{this.state.svvBase[1] == 'it' && this.arraysEqual(this.state.svno[0][0],[0,0,0,1]) ?
-															null
-															:
+														{this.state.svvBase[1] == 'it' && !this.arraysEqual(this.state.svno[0][0],[0,0,0,1]) ?
 															<span style={{color:this.getColor('svns00.c')}}>{'(some) '}</span>
+															:
+															null
 														}
 
 														{this.state.svvBase[1] == 'it' && xind === this.state.svnoSegments.length-1 ?
