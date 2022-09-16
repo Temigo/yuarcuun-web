@@ -4,7 +4,7 @@ import '../semantic/dist/semantic.min.css';
 import { Link } from 'react-router-dom';
 import {withRouter} from 'react-router';
 import { sentenceTemplates } from './constants/sentence_templates.js'
-
+import { colorsList } from './constants/newconstants.js'
 
 let accordionTitles = [
   {
@@ -80,6 +80,10 @@ class SentenceTemplates extends PureComponent {
     this.setState({ activeIndexes: newIndex });
   };
 
+  getColor = (pos) => {
+    return colorsList[0][pos]  
+  }
+
   render() {
     console.log(this.state)
     console.log(this.state.activeIndexes)
@@ -112,8 +116,16 @@ class SentenceTemplates extends PureComponent {
                               {return sentenceTemplates[k][3] === p.key && sentenceTemplates[k][4] === q.key && sentenceTemplates[k][5] === r
                               ? 
                                 <Button fluid basic onClick={()=> {this.props.backEndCall(sentenceTemplates[k][2],true);this.setState({activeIndexes: []})}}>
-                                  <div style={{textAlign:'left'}}>{sentenceTemplates[k][0]}</div>
-                                  <div style={{textAlign:'left'}}>{sentenceTemplates[k][1]}</div>
+                                  <div style={{textAlign:'left'}}>
+                                    {sentenceTemplates[k][6][0].map((t)=>
+                                      <span style={{color:this.getColor(t[1])}}>{t[0]}</span>
+                                    )}
+                                  </div>
+                                  <div style={{textAlign:'left'}}>
+                                    {sentenceTemplates[k][6][1].map((t)=>
+                                      <span style={{color:this.getColor(t[1])}}>{t[0]}</span>
+                                    )}
+                                  </div>
                                 </Button> 
                               : null }            
                             )}
