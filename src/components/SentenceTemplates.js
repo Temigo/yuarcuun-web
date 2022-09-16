@@ -85,9 +85,9 @@ class SentenceTemplates extends PureComponent {
   }
 
   render() {
-    console.log(this.state)
-    console.log(this.state.activeIndexes)
-    console.log(sentenceTemplates)
+    // console.log(this.state)
+    // console.log(this.state.activeIndexes)
+    // console.log(sentenceTemplates)
     const {activeIndexes} = this.state;
     return (
         <Accordion style={{ fontSize: 16 }} fluid styled>

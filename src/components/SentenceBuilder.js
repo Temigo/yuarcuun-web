@@ -83,6 +83,7 @@ let vEnglish = [
 	'mvEnglish2',
 	'mvEnglish3',
 	'mvEnglishAbl',
+	'mvEnglishQaa',
 	'mvnsEnglish1',
 	'mvnsEnglish2',
 	'mvnoEnglish1',
@@ -257,6 +258,7 @@ class OneVerbWordBuilder extends Component {
 			mvEnglish2: [],
 			mvEnglish3: [],
 			mvEnglishAbl: [],
+			mvEnglishQaa: [],
 			svEnglishAbl: [],
 
 			mvnsEnglish1: [],
@@ -787,6 +789,7 @@ class OneVerbWordBuilder extends Component {
       	mvEnglish2: [],
       	mvEnglish3: [],
       	mvEnglishAbl: [],
+      	mvEnglishQaa: [],
       	mvqWord: [],
       	mvqWordSegments: [],
       	mvvType:'',
@@ -1335,6 +1338,8 @@ class OneVerbWordBuilder extends Component {
   		return this.contentDisplay(this.state.mvEnglish2, 5)
 		} else if (type==='mvEnglishAbl') {
   		return this.contentDisplay(this.state.mvEnglishAbl, 5)
+		} else if (type==='mvEnglishQaa') {
+  		return this.contentDisplay(this.state.mvEnglishQaa, 5)
 		} else if (type==='npnEnglish1') {
   		return this.contentDisplay(this.state.npnEnglish1, 5)
 		} else if (type==='cvEnglish1') {
@@ -1445,6 +1450,10 @@ class OneVerbWordBuilder extends Component {
 				return <Menu vertical>
 						{this.state.mvvo.length > 0 && this.state.mvno.length == 0 && this.state.mvvType !== 'Intrg1' && this.state.mvvType !== 'Intrg3' ? this.menuItem('BaseChooser','Add Noun Object','mvnoinsert',null) : null}
 			    	</Menu>  			
+  		} else if (type === 'mvEnglishQaa') {
+				return <Menu vertical>
+						{this.menuItem('Update','Remove Yes or No Question',null,null,[["Update",["mv","vType"],'']])}
+			    	</Menu>  			
   		} else if (type === 'defaultcv') {
 				return <Menu vertical>
 						{this.state.cvvs.length > 0 && this.state.cvns.length == 0 ? this.menuItem('BaseChooser','Add Connective Noun Subject','cvnsinsert',null) : null}
@@ -1476,6 +1485,15 @@ class OneVerbWordBuilder extends Component {
 			      {this.menuItem('BaseChooser','Change Main Verb','mvupdate',null)}
 			      {this.state.requirePostbase.length > 0 ?
 			      	this.subMenuItem('changeRequiredPostbase')
+			      	:
+			      	null
+			      }
+			      {this.state.mvvMood == 'Ind'  ?
+			      	(this.state.mvvType !== 'qaa' ?
+			      		this.menuItem('Update','Make Yes or No Question',null,null,[["Update",["mv","vType"],'qaa']])
+			      		:
+			      		null
+			      		) 
 			      	:
 			      	null
 			      }
@@ -2129,6 +2147,18 @@ class OneVerbWordBuilder extends Component {
 		        </Menu.Item>			
 		}
 
+		if (type === 'Update') {
+			return <Menu.Item
+		          name='messages'
+		          // active={this.state.activeItem === 'messages'}
+		          style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}
+							onClick={()=>{this.setState({ isOpen: false },()=>{this.backEndCall(backEnd)})}}
+		        >
+		          <div>{text}</div>
+	        		<Icon name='chevron right' />
+		        </Menu.Item>			
+		}
+
 		if (type === 'Delete') {
 			return <Menu.Item
 		          name='messages'
@@ -2406,25 +2436,32 @@ class OneVerbWordBuilder extends Component {
 					return colorsList[this.state.colorScheme]['mvv.o']	
 				}
 
-	  		if (pos == 'mvv.1') {
-	  			if (pastTensePostbases.includes(this.state.mv['vBase'][0][this.state.mv['vBase'][0].length-1][0])) {
-		  			return colorsList[this.state.colorScheme]['past']	
-	  			} else if (futureTensePostbases.includes(this.state.mv['vBase'][0][this.state.mv['vBase'][0].length-1][0])) {
-		  			return colorsList[this.state.colorScheme]['future']	
-	  			}
-	  		} else if (pos == 'cvv.1') {
-	  			if (pastTensePostbases.includes(this.state.cv['vBase'][0][this.state.cv['vBase'][0].length-1][0])) {
-		  			return colorsList[this.state.colorScheme]['past']	
-	  			} else if (futureTensePostbases.includes(this.state.cv['vBase'][0][this.state.cv['vBase'][0].length-1][0])) {
-		  			return colorsList[this.state.colorScheme]['future']	
-	  			}
-	  		} else if (pos == 'svv.1') {
-	  			if (pastTensePostbases.includes(this.state.sv['vBase'][0][this.state.sv['vBase'][0].length-1][0])) {
-		  			return colorsList[this.state.colorScheme]['past']	
-	  			} else if (futureTensePostbases.includes(this.state.sv['vBase'][0][this.state.sv['vBase'][0].length-1][0])) {
-		  			return colorsList[this.state.colorScheme]['future']	
-	  			}
+				if (this.state.mvvBase.length > 0) {
+					if (pos == 'mvv.'+(this.state.mvvBase[0].length-1).toString()) {
+		  			if (pastTensePostbases.includes(this.state.mv['vBase'][0][this.state.mv['vBase'][0].length-1][0])) {
+			  			return colorsList[this.state.colorScheme]['past']	
+		  			} else if (futureTensePostbases.includes(this.state.mv['vBase'][0][this.state.mv['vBase'][0].length-1][0])) {
+			  			return colorsList[this.state.colorScheme]['future']	
+		  			}
+		  		}
+	  		} else if (this.state.cvvBase.length > 0) {
+					if (pos == 'cvv.'+(this.state.mvvBase[0].length-1).toString()) {
+		  			if (pastTensePostbases.includes(this.state.cv['vBase'][0][this.state.cv['vBase'][0].length-1][0])) {
+			  			return colorsList[this.state.colorScheme]['past']	
+		  			} else if (futureTensePostbases.includes(this.state.cv['vBase'][0][this.state.cv['vBase'][0].length-1][0])) {
+			  			return colorsList[this.state.colorScheme]['future']	
+		  			}
+		  		}
+	  		} else if (this.state.svvBase.length > 0) {
+					if (pos == 'svv.'+(this.state.mvvBase[0].length-1).toString()) {
+		  			if (pastTensePostbases.includes(this.state.sv['vBase'][0][this.state.sv['vBase'][0].length-1][0])) {
+			  			return colorsList[this.state.colorScheme]['past']	
+		  			} else if (futureTensePostbases.includes(this.state.sv['vBase'][0][this.state.sv['vBase'][0].length-1][0])) {
+			  			return colorsList[this.state.colorScheme]['future']	
+		  			}
+		  		}
 	  		}
+
 
 				if (!(pos in colorsList[this.state.colorScheme])) {
 					return grey
@@ -2923,11 +2960,16 @@ class OneVerbWordBuilder extends Component {
 
 
 								{this.state.mvEnglish3.length > 0 ?
-									<span> {this.state.mvEnglish3.map((w,wind)=><span style={{color:this.getColor(w[1])}}>{w[0]+" "}</span>)} </span>  		
+									this.editMenu('mvEnglishQaa',-1)
 									:
 									null
 								}
 
+								{this.state.mvEnglishQaa.length > 0 ? 
+									<span> {this.state.mvEnglish3.map((w,wind)=><span style={{color:this.getColor(w[1])}}>{w[0]+" "}</span>)} </span>  		
+									:
+									null
+								}
 								</div>
 
 								{this.state.mvvs.length === 0 && this.state.npn.length === 0 ?
