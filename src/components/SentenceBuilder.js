@@ -1040,10 +1040,10 @@ class OneVerbWordBuilder extends Component {
 			        // })      				
       			}
       		})
-      		if (this.state.svvType.length > 0) {
-      			updateDict['svEnglish1']=[[this.state.svvType, 'svv.e']].concat(updateDict['svEnglish1'])
+      		// if (this.state.svvType.length > 0) {
+      			// updateDict['svEnglish1']=[[this.state.svvType, 'svv.e']].concat(updateDict['svEnglish1'])
       			// this.setState({svEnglish1:[[this.state.svvType, 'svv.e']].concat(this.state.svEnglish1)})
-      		}
+      		// }
       	} else {
       		this.initialize('sv')
       	}
@@ -2421,7 +2421,7 @@ class OneVerbWordBuilder extends Component {
 	  return true;
 	}
 
-	getColor = (pos,test) => {
+	getColor = (pos,template,test) => {
 		// console.log(pos, this.state)
 
 		// console.log(this.state.npn[this.state.npn.length-1][0][0], this.state.npn[this.state.npn.length-1][0][0] === 1)
@@ -2430,9 +2430,18 @@ class OneVerbWordBuilder extends Component {
 		// console.log(test)
 		// console.log(tensesSentenceTemplates.includes(test))
 
-		if (tensesSentenceTemplates.includes(test)) {
-			return colorsList[this.state.colorScheme]['future']	
+		if (template) {
+			if (tensesSentenceTemplates.includes(test)) {
+				return colorsList[this.state.colorScheme]['future']	
+			} else {
+				if (!(pos in colorsList[this.state.colorScheme])) {
+					return grey
+				} else {
+					return colorsList[this.state.colorScheme][pos]				
+				}		
+			}			
 		}
+
 
 		if (this.state.colorScheme === -1) {
 			return '#000000'
@@ -2460,7 +2469,7 @@ class OneVerbWordBuilder extends Component {
 		  			}
 		  		}
 	  		} else if (this.state.cvvBase.length > 0) {
-					if (pos == 'cvv.'+(this.state.mvvBase[0].length-1).toString()) {
+					if (pos == 'cvv.'+(this.state.cvvBase[0].length-1).toString()) {
 		  			if (pastTensePostbases.includes(this.state.cvvBase[0][this.state.cvvBase[0].length-1][0])) {
 			  			return colorsList[this.state.colorScheme]['past']	
 		  			} else if (futureTensePostbases.includes(this.state.cvvBase[0][this.state.cvvBase[0].length-1][0])) {
@@ -2468,7 +2477,7 @@ class OneVerbWordBuilder extends Component {
 		  			}
 		  		}
 	  		} else if (this.state.svvBase.length > 0) {
-					if (pos == 'svv.'+(this.state.mvvBase[0].length-1).toString()) {
+					if (pos == 'svv.'+(this.state.svvBase[0].length-1).toString()) {
 		  			if (pastTensePostbases.includes(this.state.svvBase[0][this.state.svvBase[0].length-1][0])) {
 			  			return colorsList[this.state.colorScheme]['past']	
 		  			} else if (futureTensePostbases.includes(this.state.svvBase[0][this.state.svvBase[0].length-1][0])) {
