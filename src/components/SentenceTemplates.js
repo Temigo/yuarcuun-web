@@ -80,9 +80,9 @@ class SentenceTemplates extends PureComponent {
     this.setState({ activeIndexes: newIndex });
   };
 
-  getColor = (pos) => {
-    return colorsList[0][pos]  
-  }
+  // getColor = (pos) => {
+  //   return colorsList[0][pos]  
+  // }
 
   render() {
     // console.log(this.state)
@@ -118,12 +118,12 @@ class SentenceTemplates extends PureComponent {
                                 <Button fluid basic onClick={()=> {this.props.backEndCall(sentenceTemplates[k][2],true);this.setState({activeIndexes: []})}}>
                                   <div style={{textAlign:'left'}}>
                                     {sentenceTemplates[k][6][0].map((t)=>
-                                      <span style={{color:this.getColor(t[1])}}>{t[0]}</span>
+                                      <span style={{color:this.props.getColor(t[1],t[0])}}>{t[0]}</span>
                                     )}
                                   </div>
                                   <div style={{textAlign:'left'}}>
                                     {sentenceTemplates[k][6][1].map((t)=>
-                                      <span style={{color:this.getColor(t[1])}}>{t[0]}</span>
+                                      <span style={{color:this.props.getColor(t[1])}}>{t[0]+' '}</span>
                                     )}
                                   </div>
                                 </Button> 

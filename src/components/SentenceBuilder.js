@@ -18,6 +18,12 @@ import { sentenceTemplates } from './constants/sentence_templates.js'
 
 let customFontFam = "Roboto,'Helvetica Neue',Arial,Helvetica,sans-serif"
 
+let tensesSentenceTemplates = [
+	'llru',
+	'ciq',
+	'ksail',
+]
+
 let requirePostbasesDictionary = {
 
 	'Intrg4': [
@@ -2413,20 +2419,27 @@ class OneVerbWordBuilder extends Component {
 	  return true;
 	}
 
-	getColor = (pos) => {
+	getColor = (pos,test) => {
 		// console.log(pos, this.state)
 
 		// console.log(this.state.npn[this.state.npn.length-1][0][0], this.state.npn[this.state.npn.length-1][0][0] === 1)
 		let grey = '#5c5c5c'
 		let black = '#000000'
+		// console.log(test)
+		// console.log(tensesSentenceTemplates.includes(test))
+
+		if (tensesSentenceTemplates.includes(test)) {
+			return colorsList[this.state.colorScheme]['future']	
+		}
+
 		if (this.state.colorScheme === -1) {
 			return '#000000'
 		} else if (this.state.colorScheme === 0) {
-				if (pos === 'mvno00.ps' && this.state.mv['vBase'][1] === 'it' && this.arraysEqual(this.state.mvno[0][0],[0,0,0,1])) {
+				if (pos === 'mvno00.ps' && this.state.mvvBase[1] === 'it' && this.arraysEqual(this.state.mvno[0][0],[0,0,0,1])) {
 					return colorsList[this.state.colorScheme]['mvns00.c']	
-				} else if (pos === 'cvno00.ps' && this.state.cv['vBase'][1] === 'it' && this.arraysEqual(this.state.cvno[0][0],[0,0,0,1])) {
+				} else if (pos === 'cvno00.ps' && this.state.cvvBase[1] === 'it' && this.arraysEqual(this.state.cvno[0][0],[0,0,0,1])) {
 					return colorsList[this.state.colorScheme]['cvns00.c']	
-				} else if (pos === 'svno00.ps' && this.state.sv['vBase'][1] === 'it' && this.arraysEqual(this.state.svno[0][0],[0,0,0,1])) {
+				} else if (pos === 'svno00.ps' && this.state.svvBase[1] === 'it' && this.arraysEqual(this.state.svno[0][0],[0,0,0,1])) {
 					return colorsList[this.state.colorScheme]['svns00.c']	
 				} 
 				if (pos === 'mvqWord' && (this.state.mvvType === 'Intrg0' || this.state.mvvType === 'Intrg2')) {
@@ -2438,25 +2451,25 @@ class OneVerbWordBuilder extends Component {
 
 				if (this.state.mvvBase.length > 0) {
 					if (pos == 'mvv.'+(this.state.mvvBase[0].length-1).toString()) {
-		  			if (pastTensePostbases.includes(this.state.mv['vBase'][0][this.state.mv['vBase'][0].length-1][0])) {
+		  			if (pastTensePostbases.includes(this.state.mvvBase[0][this.state.mvvBase[0].length-1][0])) {
 			  			return colorsList[this.state.colorScheme]['past']	
-		  			} else if (futureTensePostbases.includes(this.state.mv['vBase'][0][this.state.mv['vBase'][0].length-1][0])) {
+		  			} else if (futureTensePostbases.includes(this.state.mvvBase[0][this.state.mvvBase[0].length-1][0])) {
 			  			return colorsList[this.state.colorScheme]['future']	
 		  			}
 		  		}
 	  		} else if (this.state.cvvBase.length > 0) {
 					if (pos == 'cvv.'+(this.state.mvvBase[0].length-1).toString()) {
-		  			if (pastTensePostbases.includes(this.state.cv['vBase'][0][this.state.cv['vBase'][0].length-1][0])) {
+		  			if (pastTensePostbases.includes(this.state.cvvBase[0][this.state.cvvBase[0].length-1][0])) {
 			  			return colorsList[this.state.colorScheme]['past']	
-		  			} else if (futureTensePostbases.includes(this.state.cv['vBase'][0][this.state.cv['vBase'][0].length-1][0])) {
+		  			} else if (futureTensePostbases.includes(this.state.cvvBase[0][this.state.cvvBase[0].length-1][0])) {
 			  			return colorsList[this.state.colorScheme]['future']	
 		  			}
 		  		}
 	  		} else if (this.state.svvBase.length > 0) {
 					if (pos == 'svv.'+(this.state.mvvBase[0].length-1).toString()) {
-		  			if (pastTensePostbases.includes(this.state.sv['vBase'][0][this.state.sv['vBase'][0].length-1][0])) {
+		  			if (pastTensePostbases.includes(this.state.svvBase[0][this.state.svvBase[0].length-1][0])) {
 			  			return colorsList[this.state.colorScheme]['past']	
-		  			} else if (futureTensePostbases.includes(this.state.sv['vBase'][0][this.state.sv['vBase'][0].length-1][0])) {
+		  			} else if (futureTensePostbases.includes(this.state.svvBase[0][this.state.svvBase[0].length-1][0])) {
 			  			return colorsList[this.state.colorScheme]['future']	
 		  			}
 		  		}
@@ -3622,7 +3635,7 @@ class OneVerbWordBuilder extends Component {
 
 
 				<div style={{height:'15px'}} />
-          	<SentenceTemplates backEndCall={this.backEndCall.bind(this)} />
+          	<SentenceTemplates backEndCall={this.backEndCall.bind(this)} getColor={this.getColor.bind(this)} />
 				</div>
 
 
