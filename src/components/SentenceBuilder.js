@@ -362,9 +362,9 @@ class OneVerbWordBuilder extends Component {
 			svno:[],				
 			svns:[],
 			svvMood:"",
+			svvType:'',
 			svvs:[],
 			svvo:[],
-			svvCase:'',
 
 			svvSegments:"",
 			svnsSegments:[],
@@ -812,6 +812,7 @@ class OneVerbWordBuilder extends Component {
 				cvno:[],				
 				cvns:[],
 				cvvMood:"",
+      	cvvType:'',
 				cvvs:[],
 				cvvo:[],
 				cvnObliques:[],
@@ -823,7 +824,6 @@ class OneVerbWordBuilder extends Component {
       	cvEnglish2: [],
       	cvEnglish3: [],
       	cvEnglishAbl: [],
-      	cvvType:'',
       	cv:{},
       	requirePostbase:'',
 			})			
@@ -835,6 +835,7 @@ class OneVerbWordBuilder extends Component {
 				svno:[],				
 				svns:[],
 				svvMood:"",
+				svvType:"",
 				svvs:[],
 				svvo:[],
 				svnObliques:[],
@@ -925,6 +926,7 @@ class OneVerbWordBuilder extends Component {
 			if (this.state.svno.length > 0) {sv['no']=this.state.svno}
 			if (this.state.svns.length > 0) {sv['ns']=this.state.svns}
 			if (this.state.svvMood.length > 0) {sv['vMood']=this.state.svvMood}
+			if (this.state.svvType.length > 0) {sv['vType']=this.state.svvType}
 			if (this.state.svvs.length > 0) {sv['vs']=this.state.svvs}
 			if (this.state.svvo.length > 0) {sv['vo']=this.state.svvo}
 			if (this.state.svnObliques.length > 0) {sv['nObliques']=this.state.svnObliques}
@@ -1038,9 +1040,9 @@ class OneVerbWordBuilder extends Component {
 			        // })      				
       			}
       		})
-      		if (this.state.svvCase.length > 0) {
-      			updateDict['svEnglish1']=[[this.state.svvCase, 'svv.e']].concat(updateDict['svEnglish1'])
-      			// this.setState({svEnglish1:[[this.state.svvCase, 'svv.e']].concat(this.state.svEnglish1)})
+      		if (this.state.svvType.length > 0) {
+      			updateDict['svEnglish1']=[[this.state.svvType, 'svv.e']].concat(updateDict['svEnglish1'])
+      			// this.setState({svEnglish1:[[this.state.svvType, 'svv.e']].concat(this.state.svEnglish1)})
       		}
       	} else {
       		this.initialize('sv')
@@ -1792,13 +1794,13 @@ class OneVerbWordBuilder extends Component {
   	} else if (this.state.currentEditMode==='mvinsert') {
   		return this.baseChooser(["Insert",["mv"]],'v','insert','Ind')
   	} else if (this.state.currentEditMode==='cvinsert') {
-  		return this.baseChooser(["Insert",["cv"]],'v','insert',this.state.cvvMood)
+  		return this.baseChooser(["Insert",["cv"]],'v','insert',this.state.cvvMood,this.state.cvvType)
   	} else if (this.state.currentEditMode==='questionInsert') {
   		return this.baseChooser(["Insert",["mv"]],'v','insert','Intrg',this.state.mvvType)
   	} else if (this.state.currentEditMode==='commandInsert') {
   		return this.baseChooser(["Insert",["mv"]],'v','insert',this.state.optCase,this.state.mvvType)
   	} else if (this.state.currentEditMode==='svinsert') {
-  		return this.baseChooser(["Insert",["sv"]],'v','insert','Sbrd',this.state.svvCase)
+  		return this.baseChooser(["Insert",["sv"]],'v','insert','Sbrd',this.state.svvType)
   	} else if (this.state.currentEditMode==='mvupdate') {
   		return this.baseChooser(["Update",["mv","vBase"]],'v','update')
   	} else if (this.state.currentEditMode==='svupdate') {
@@ -1955,15 +1957,15 @@ class OneVerbWordBuilder extends Component {
 		if (type==='addCV') {
 	    return <Dropdown item text='Add Connective Verb Phrase'>
 	      <Dropdown.Menu>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Prec',mvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>before...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cnsq',mvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>because...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cont',mvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>whenever...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Conc',mvvType:'eventhough'},()=>{this.menuSelect('cvinsert',-1)})}}>even though...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Conc',mvvType:'evenif'},()=>{this.menuSelect('cvinsert',-1)})}}>even if...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cond',mvvType:'if'},()=>{this.menuSelect('cvinsert',-1)})}}>if...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cond',mvvType:'wheninthefuture'},()=>{this.menuSelect('cvinsert',-1)})}}>when (in the future)...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'CtmpI',mvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>when (in the past)...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'CtmpII',mvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>while...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Prec',cvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>before...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cnsq',cvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>because...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cont',cvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>whenever...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Conc',cvvType:'eventhough'},()=>{this.menuSelect('cvinsert',-1)})}}>even though...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Conc',cvvType:'evenif'},()=>{this.menuSelect('cvinsert',-1)})}}>even if...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cond',cvvType:'if'},()=>{this.menuSelect('cvinsert',-1)})}}>if...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cond',cvvType:'wheninthefuture'},()=>{this.menuSelect('cvinsert',-1)})}}>when (in the future)...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'CtmpI',cvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>when (in the past)...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'CtmpII',cvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>while...</Dropdown.Item>
 	      </Dropdown.Menu>
 	    </Dropdown>			
 		} else if (type==='addQuestion') {
@@ -2041,22 +2043,22 @@ class OneVerbWordBuilder extends Component {
 		} else if (type==='addSV') {
 	    return <Dropdown item text='Add Subordinative Verb Phrase'>
 	      <Dropdown.Menu>
-	        <Dropdown.Item onClick={()=>{this.setState({svvCase:'by'},()=>{this.menuSelect('svinsert',-1)})}}>By...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({svvCase:'being'},()=>{this.menuSelect('svinsert',-1)})}}>Being...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({svvType:'by'},()=>{this.menuSelect('svinsert',-1)})}}>By...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({svvType:'being'},()=>{this.menuSelect('svinsert',-1)})}}>Being...</Dropdown.Item>
 	      </Dropdown.Menu>
 	    </Dropdown>					
 		} else if (type==='changeCVtype') {
 	    return <Dropdown item text='Change Connective Verb Phrase'>
 	      <Dropdown.Menu>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Prec',mvvType:'',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>before...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cnsq',mvvType:'',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>because...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cont',mvvType:'',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>whenever...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Conc',mvvType:'eventhough',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>even though...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Conc',mvvType:'evenif',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>even if...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cond',mvvType:'if',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>if...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cond',mvvType:'wheninthefuture',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>when (in the future)...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'CtmpI',mvvType:'',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>when (in the past)...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'CtmpII',mvvType:'',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>while...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Prec',cvvType:'',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>before...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cnsq',cvvType:'',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>because...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cont',cvvType:'',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>whenever...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Conc',cvvType:'eventhough',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>even though...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Conc',cvvType:'evenif',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>even if...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cond',cvvType:'if',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>if...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cond',cvvType:'wheninthefuture',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>when (in the future)...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'CtmpI',cvvType:'',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>when (in the past)...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'CtmpII',cvvType:'',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>while...</Dropdown.Item>
 	      </Dropdown.Menu>
 	    </Dropdown>					
 		} else if (type==='changeQuestiontype') {
