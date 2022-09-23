@@ -2,10 +2,20 @@ import {dialogueList} from "./dialogueList.js";
 
 const lessonChunks = {
 	0:"Test", 
-	1:"Introductions",
-	2:"Beginner 1",
-	3:"Beginner 2"
+	1:"Basic Questions",
+	2:"Introductions",
+	3:"At Home",
+	4:"Talking to Others",
+	5:"At School",
+	6:"Gathering",
+	7:"Hunting",
+	8:"Fishing",
+	9:"Vehicles",
 };
+
+
+
+
 
 
 function dialogueGenerator() {
