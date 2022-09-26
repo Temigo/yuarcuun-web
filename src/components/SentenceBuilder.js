@@ -140,6 +140,9 @@ class OneVerbWordBuilder extends Component {
 			filteredDictVit: this.props.filteredDictVit,
 			filteredDictN: this.props.filteredDictN,
 
+			filteredDictVVfuture:{},
+			filteredDictVVpast:{},
+			filteredDictVVall:{},
 			otherBases: [],
 			colorScheme: 0,
 			// colorsList: {
@@ -531,14 +534,28 @@ class OneVerbWordBuilder extends Component {
 
           // this.setState({ usageDictionary: usageDictionary});
 
-          let filteredDictV = usageDictionary.filter(entry => (entry.type.includes('i')||entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')||entry.type.includes('[V→V]')) )
+          let filteredDictV = usageDictionary.filter(entry => (entry.type.includes('i')||entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')) )
           let filteredDictN = usageDictionary.filter(entry => (entry.type.includes('n')||entry.type.includes('[V→N]')||entry.type.includes('[N→N]')))
-          let filteredDictVit = usageDictionary.filter(entry => (entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')||entry.type.includes('[V→V]')))
+          let filteredDictVit = usageDictionary.filter(entry => (entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')))
 
-          this.setState({ usageDictionary: usageDictionary, filteredDictV: filteredDictV, filteredDictVit: filteredDictVit, filteredDictN: filteredDictN});
+          let filteredDictVVnofuture = usageDictionary.filter(entry => (entry.type.includes('[V→V]') && !entry.properties.includes('future')))
+          let filteredDictVVnopast = usageDictionary.filter(entry => (entry.type.includes('[V→V]') && !entry.properties.includes('past')))
+          let filteredDictVVnotime = usageDictionary.filter(entry => (entry.type.includes('[V→V]') && !entry.properties.includes('past')  && !entry.properties.includes('future')))
+          let filteredDictVVall = usageDictionary.filter(entry => (entry.type.includes('[V→V]')))
+
+          this.setState({ usageDictionary: usageDictionary, filteredDictV: filteredDictV, filteredDictVit: filteredDictVit, filteredDictN: filteredDictN, filteredDictVVnofuture: filteredDictVVnofuture, filteredDictVVnopast: filteredDictVVnopast, filteredDictVVnotime:filteredDictVVnotime, filteredDictVVall: filteredDictVVall});
         });
     } else {
-      this.setState({ usageDictionary: usageDictionary});      
+          let filteredDictV = usageDictionary.filter(entry => (entry.type.includes('i')||entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')) )
+          let filteredDictN = usageDictionary.filter(entry => (entry.type.includes('n')||entry.type.includes('[V→N]')||entry.type.includes('[N→N]')))
+          let filteredDictVit = usageDictionary.filter(entry => (entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')))
+
+          let filteredDictVVnofuture = usageDictionary.filter(entry => (entry.type.includes('[V→V]') && !entry.properties.includes('future')))
+          let filteredDictVVnopast = usageDictionary.filter(entry => (entry.type.includes('[V→V]') && !entry.properties.includes('past')))
+          let filteredDictVVnotime = usageDictionary.filter(entry => (entry.type.includes('[V→V]') && !entry.properties.includes('past')  && !entry.properties.includes('future')))
+          let filteredDictVVall = usageDictionary.filter(entry => (entry.type.includes('[V→V]')))
+
+          this.setState({ usageDictionary: usageDictionary, filteredDictV: filteredDictV, filteredDictVit: filteredDictVit, filteredDictN: filteredDictN, filteredDictVVnofuture: filteredDictVVnofuture, filteredDictVVnopast: filteredDictVVnopast, filteredDictVVnotime:filteredDictVVnotime, filteredDictVVall: filteredDictVVall});
     }
 
 }
@@ -633,6 +650,11 @@ class OneVerbWordBuilder extends Component {
           }
         })
 	    }
+
+    	if (this.state.mvvMood == 'Sbrd') {
+  			subjDontAllow = subjDontAllow.concat([0,2,3,4,6,8,10,12])	    		
+    	}
+
       mvSubjectOptions.map((k)=>{
         if (!subjDontAllow.includes(k['id'])) {
           mvSubjectOptions1 = mvSubjectOptions1.concat(k)
@@ -1247,12 +1269,29 @@ class OneVerbWordBuilder extends Component {
 		let word = data.value
 		let wordsList
 		let filteredDictV = {}
+		let noFuture = false
+		let noPast = false
+		if (this.state.cvvMood == 'CtmpI' || this.state.cvvMood == 'CtmpII' || this.state.mvvType == 'Intrg4' || this.state.mvvMood == 'Sbrd' || this.state.mvvMood.includes('Opt')) {
+			noFuture = true
+		}
+		if (this.state.mvvMood == 'Sbrd' || this.state.mvvMood.includes('Opt') || this.state.mvvType == 'Intrg5') {
+			noPast = true
+		}
 		if (this.state.mvvType == 'Intrg1' || this.state.mvvType == 'Intrg3') {
 			filteredDictV = this.state.filteredDictVit
 		} else {
 			filteredDictV = this.state.filteredDictV
 		}
-		console.log(this.state)
+		if (noFuture && noPast) {
+			filteredDictV = Object.keys(this.state.filteredDictVVnotime).map(key => filteredDictV[key]=this.state.filteredDictVVnotime[key])
+		} else if (noFuture) {
+			filteredDictV = Object.keys(this.state.filteredDictVVnofuture).map(key => filteredDictV[key]=this.state.filteredDictVVnofuture[key])
+		} else if (noPast) {
+			filteredDictV = Object.keys(this.state.filteredDictVVnopast).map(key => filteredDictV[key]=this.state.filteredDictVVnopast[key])
+		} else {
+			filteredDictV = Object.keys(this.state.filteredDictVVall).map(key => filteredDictV[key]=this.state.filteredDictVVall[key])
+		}
+
 		if (this.state.endingAdjusted == 'n') {
 	    	wordsList = fuzzysort.go(word, this.state.filteredDictN, optionsFuzzy).map(({ obj }) => (obj));
 	    	this.setState({ wordsList: wordsList, searchQuery: word });
@@ -1440,6 +1479,7 @@ class OneVerbWordBuilder extends Component {
 
   contentItems = (type,ind) => {
   	// console.log('content',type,ind)
+
   	if (this.state.currentEditMode==='default') {
   		if (type === 'default') {
   			return <Menu vertical>
@@ -1940,7 +1980,7 @@ class OneVerbWordBuilder extends Component {
       on='click'
       open={this.state.isOpen && this.state.currentlyOpen === typeInd}
       onOpen={()=>{this.setState({isOpen:false,currentEditMode:'default'},()=>{this.handleOpen(typeInd)})}}
-      onClose={()=>{this.setState({isOpen:false,currentEditMode:'default'})}}
+      onClose={()=>{this.setState({isOpen:false,currentEditMode:'default',searchQuery:'',wordsList:[]})}}
       position='bottom center'
       style={{
       	height:(this.returnHeight(this.state.currentEditMode)),
@@ -2196,6 +2236,7 @@ class OneVerbWordBuilder extends Component {
 		          // active={this.state.activeItem === 'messages'}
 		          style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}
 		          onClick={()=>{this.menuSelect(endRequirement)}}
+		          // onClose={()=>{this.setState({searchQuery:'',wordsList:[]})}}
 		        >
 		          <div>{text}</div>
           		<Icon name='chevron right' />
@@ -2306,7 +2347,7 @@ class OneVerbWordBuilder extends Component {
 		         return <Grid style={{height:'400px',width:'505px'}}>
 		                	<Grid.Row columns={2} style={{paddingBottom:'0px'}}divided>
 		                	<Grid.Column >
-		                		<Button onClick={()=>{this.menuSelect('default')}} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingLeft:'13px',marginBottom:'10px'}}>
+		                		<Button onClick={()=>{this.menuSelect('default'); this.setState({searchQuery:'',wordsList:[]})}} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingLeft:'13px',marginBottom:'10px'}}>
 		                			<Icon name='chevron left' />
 		                			<div style={{color:'#666666'}}>{'Back'}</div>
 		                		</Button>
@@ -2319,6 +2360,7 @@ class OneVerbWordBuilder extends Component {
 									      style={{width:'220px'}}
 									 		  onChange={this.onChangeBaseSearch.bind(this,endingNeeded)}
 						            value={this.state.searchQuery}
+						            // onClose={()=>{this.setState({searchQuery:'',wordsList:[]})}}
 						            />
 									      <Segment vertical style={{height:255,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
 									      <List selection>
@@ -2983,17 +3025,20 @@ class OneVerbWordBuilder extends Component {
 
 
 
+
+
 								{this.state.mvEnglish3.length > 0 ?
-									this.editMenu('mvEnglishQaa',-1)
+									<span> {this.state.mvEnglish3.map((w,wind)=><span style={{color:this.getColor(w[1])}}>{w[0]+" "}</span>)} </span>  		
 									:
 									null
 								}
 
 								{this.state.mvEnglishQaa.length > 0 ? 
-									<span> {this.state.mvEnglish3.map((w,wind)=><span style={{color:this.getColor(w[1])}}>{w[0]+" "}</span>)} </span>  		
+									this.editMenu('mvEnglishQaa',-1)
 									:
 									null
 								}
+
 								</div>
 
 								{this.state.mvvs.length === 0 && this.state.npn.length === 0 ?
