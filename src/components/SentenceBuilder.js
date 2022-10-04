@@ -2596,107 +2596,21 @@ class OneVerbWordBuilder extends Component {
       <Grid.Row  style={{height:40,paddingBottom:0}}>
       <Grid.Column style={{ maxWidth: 800, padding: 10 }} textAlign='left'>
 
-			<div style={{display:'flex',textDecoration:'underline'}}>
-	      <div style={{flex:1,justifyContent:'flex-start'}}>
-					<Link to={{pathname: '/'}}>
-					Back to Search
-					</Link>
-	      </div>
-
-
-	      <div style={{flex:1,display:'flex',justifyContent:'flex-end',paddingLeft:5,textDecoration:'underline'}}>
-					<Link to={{pathname: '/'+ this.state.entryUrl}}>
-					<span>
-
-					{'See Dictionary Entry: '}
-					</span>
-					<span style={{fontWeight:'500'}}>
-					{this.state.entryUrl}
-					</span>
-					</Link>
-				</div>
-			</div>
-
-
-			<Button onClick={()=>this.setState({showShortcuts:!this.state.showShortcuts})}>show shortcuts</Button>
-			{this.state.showShortcuts ?
-				<div>
-					<Button onClick={()=>{this.backEndCall([["Insert",["mv",],[[["pitalqegte-,pitacqegte-",0,2,0],],"t","Ind"]]])}}>Add mv</Button>
-					<Button onClick={()=>{this.backEndCall([["Insert",["mv",],[[["pitalqegte-,pitacqegte-",0,2,0],["-laag-",0,0,0],["~+lar-,@~+lar-,-lar-",0,2,0],],"t","Ind"]]])}}>Add mv</Button>
-					<Button onClick={()=>{this.backEndCall([["Insert",["mv",],[[["pissur-",0,0,0],["-curlak,-curlag-",0,1,0],["-cuar(aq*)",0,0,0],["+ci-",0,0,0],["@~+yug-,+(r)yug-",0,1,0],["~+lar-,@~+lar-,-lar-",0,2,0],],"i","Ind"]]])}}>Add mv vv nv boat</Button>
-					<Button onClick={()=>{this.backEndCall([["Insert",["mv",],[[["angyaq,angyar-",0,0,0],["+ci-",0,0,0],],"i","Ind"]]])}}>Add mv nv boat</Button>
-					<Button onClick={()=>{this.backEndCall([["Insert",["mv",],[[["pissur-",0,0,0],["-curlak,-curlag-",0,1,0],["+ci-",0,0,0],["@~+yug-,+(r)yug-",0,1,0],],"i","Ind"]]])}}>Add mv vv nv boat</Button>
-					<Button onClick={()=>{this.backEndCall([["Insert",["mv",],[[["angyaq,angyar-",0,0,0],["+ci-",0,0,0],["@~+yug-,+(r)yug-",0,1,0],["-laag-",0,0,0]],"i","Ind"]]])}}>Add mv vv nv boat</Button>
-					<Button onClick={()=>{this.backEndCall([["Insert",["mv",],[[["angyaq,angyar-",0,0,0],["+ci-",0,0,0],["-laag-",0,0,0]],"i","Ind"]]])}}>Add mv vv nv boat</Button>
-					<Button onClick={()=>{this.backEndCall([["Insert",["mv","ns"],[[["kuik",0,0,0],],[0,0,0,1]]]])}}>Add subject</Button>
-					<Button onClick={()=>{this.backEndCall([["Insert",["mv","ns"],[[["pissur-",0,0,0],["-curlak,-curlag-",0,1,0]],[0,0,0,1]]]])}}>Add subject</Button>
-					<Button onClick={()=>{this.backEndCall([["Insert",["mv","no"],[[["pissur-",0,0,0],["-curlak,-curlag-",0,1,0]],[0,0,0,1]]]])}}>Add object</Button>
-					<Button onClick={()=>{this.backEndCall([[ "Insert", ["np"], 	[[["kuik",0,0,0],["-cuar(aq*)",0,0,0]],[0,0,0,1],"Equ"] ]])}}>Add np equalis equ</Button>
-					<Button onClick={()=>{this.backEndCall([[ "Insert", ["np"], 	[[["kuik",0,0,0],["-cuar(aq*)",0,0,0]],[0,0,0,1],"Abs"] ]])}}>Add np equalis abs</Button>
-					<Button onClick={()=>{this.backEndCall([[ "Insert", ["np","n",-1], 	[[["angun",0,0,1],],[0,0,0,1]] ]])}}>Add np equalis possessor</Button>
-					<Button onClick={()=>{this.backEndCall([[ "Insert", ["np","n",0,-1], 	[[["tungulria",0,0,0]],[0,0,0,1]] ]])}}>Add np equalis appositive</Button>
-					<Button onClick={()=>{this.backEndCall([[ "Insert", ["np","n",1,-1], 	[[["qatellria,qatelria",0,0,0]],[0,0,0,1]] ]])}}>Add np equalis appositive</Button>
-					<Button onClick={()=>{this.backEndCall([[ "Insert", ["np","n",0,-1], 	[[["arnaq",0,0,0],],[0,0,0,1]] ]])}}>Add np equalis</Button>
-					<Button onClick={()=>{this.backEndCall([[ "Insert", ["np","n",0,0,-1], 	[[["arnaq",0,0,0],],[0,0,0,1],] ]])}}>Add np equalis</Button>
-
-					<Button onClick={()=>{this.backEndCall([[ "Insert", ["np"], 	[["arnar","–yagar*[N→N]"],[0,0,0,1]] ]])}}>Add np arnayagaq</Button>
-					<Button onClick={()=>{this.backEndCall([["Insert",["mv",],[[["aqume-",0,0,0],["-a-|-ar-|-aa-|+a-|+aar-",0,0,0],],"i","Ind"]]])}}>Add mv</Button>
-					<Button onClick={()=>{this.backEndCall([["Insert",["mv","nObliques"],[[["kuik",0,0,0],["-cuar(aq*)",0,0,0]],[0,0,0,1],"Equ"]]])}}>Add mv noblique</Button>
-					<Button onClick={()=>{this.backEndCall([["Insert",["mv","nObliques",-1],[["arnar"],[0,0,0,1],"Equ"]]])}}>Add new oblique noun</Button>
-					<Button onClick={()=>{this.backEndCall([["Insert",["mv","nObliques",0,-1],[["paluqtar*"],[0,0,0,1]]]])}}>Add possessor</Button>
-					<Button onClick={()=>{this.backEndCall([["Insert",["mv","nObliques",0,0],[["angute"],[0,0,0,1]]]])}}>Add possessed</Button>
-					<Button onClick={()=>{this.backEndCall([["Insert",["mv","nObliques",0,0,-1],[["kameksag"],[0,0,0,1]]]])}}>Add add appositive</Button>
-
-					<Button onClick={()=>{this.backEndCall([["Delete",["mv","nObliques",0,0],-1]])}}>Delete full 0 index</Button>
-					<Button onClick={()=>{this.backEndCall([["Delete",["mv","nObliques",0,1],-1]])}}>Delete full 1 index</Button>
-
-					<Button onClick={()=>{this.backEndCall([["Delete",["mv","nObliques",0,0,0],-1]])}}>Delete  0 0 0index</Button>
-					<Button onClick={()=>{this.backEndCall([["Update",["mv","nObliques",0,'nBases',0,0],["kuig"]]])}}>Change possessor</Button>
-					<Button onClick={()=>{this.backEndCall([["Insert",["cv",],[["nere"],"t","Prec"]]])}}>Add cv</Button>
-					<Button onClick={()=>{this.backEndCall([["Update",["cv","vs"],[4,1,0]]])}}>Make 4th s cv</Button>
-					<Button onClick={()=>{this.backEndCall([["Update",["cv","vo"],[4,1,0]]])}}>Make 4th o cv</Button>
-
-					<Button onClick={()=>{this.backEndCall([["Insert",["sv",],[[["utaqa-",0,2,0]],"t","Sbrd"]]])}}>Add sv</Button>
-
-					<Button onClick={()=>{this.backEndCall([["Update",["sv","vBase"],[["utaqa"],"t"]]])}}>Change sv trans</Button>
-					<Button onClick={()=>{this.backEndCall([["Update",["sv","vo"],[1,1,0]]])}}>change sv object to 1st person</Button>
-
-					<Button onClick={()=>{this.backEndCall([[ "Update",["mv","vBase"],[["nere","–llru[V→V]"],"i"]]])}}>Change mv</Button>
-					<Button onClick={()=>{this.backEndCall([[ "Delete", ["mv"],	-1 ],])}}>Delete mv</Button>
-					<Button onClick={()=>{this.backEndCall([[ "Delete", ["mv","ns",0,0],	-1 ],])}}>Delete mv ns 0 0</Button>
-					<Button onClick={()=>{this.backEndCall([[ "Delete", ["mv","no",0,0],	-1 ],])}}>Delete mv no 0 0</Button>
-					<Button onClick={()=>{this.backEndCall([[ "Delete", ["mv","ns",1,0],	-1 ],])}}>Delete mv ns 1 0</Button>
-
-					<Button onClick={()=>{this.backEndCall([[ "Delete", ["np","n",0,0],	-1 ],])}}>Delete np 0 0</Button>
-					<Button onClick={()=>{this.backEndCall([[ "Delete", ["np"],	-1 ],])}}>Delete np</Button>
-
-					<Button onClick={()=>{this.backEndCall([["Update",["mv","vBase"],[["nere","–llru[V→V]"],"t"]]])}}>Change mv transitive</Button>
-					<Button onClick={()=>{this.backEndCall([["Insert",["cv","ns",0,0],[["angute",],[0,0,0,1]]]])}}>Add connective subject</Button>
-
-					<Button onClick={()=>{this.backEndCall([["Insert",["mv","ns"],[[["kuik",0,0,0],["-cuar(aq*)",0,0,0]],[0,0,0,1]]]])}}>Add subject</Button>
-					<Button onClick={()=>{this.backEndCall([["Insert",["cv","ns",0,0],[["angute",],[0,0,0,1]]]])}}>Add cv subject</Button>
-					<Button onClick={()=>{this.backEndCall([["Insert",["cv","ns",0,0],[["angute",],[0,0,0,1]]]])}}>Add cv subject</Button>
-
-					<Button onClick={()=>{this.backEndCall([["Insert",["mv","ns",0,1],[[["tungulria",0,0,0]],[0,0,0,1]]]])}}>Add subject appositive</Button>
-					
-					<Button onClick={()=>{this.backEndCall([["Update",["mv","nsBases",0,0],["qimugte",]]])}}>Update subject</Button>
-
-					<Button onClick={()=>{this.backEndCall([["Insert",["mv","ns",-1],[[["arnar",0,0,0]],[0,0,0,1]]]])}}>Add subject woman possessor</Button>
-					<Button onClick={()=>{this.backEndCall([["Insert",["mv","ns",0],[["qimugte",],[0,0,0,1]]]])}}>Add subject dog possessed</Button>
-
-					<Button onClick={()=>{this.backEndCall([["Insert",["mv","no",0,0],[["tuntu",],[0,0,0,1]]]])}}>Add object</Button>
-					<Button onClick={()=>{this.backEndCall([["Insert",["mv","no",0,1],[["tungulria",],[0,0,0,1]]]])}}>Add object appositive</Button>
-					<Button onClick={()=>{this.backEndCall([["Insert",["mv","no",-1],[["kuig",],[0,0,0,1]]]])}}>Add object river possessor</Button>
-					<Button onClick={()=>{this.backEndCall([["Insert",["mv","no",0],[["piipir",],[0,0,0,1]]]])}}>Add object babies possessor</Button>
-				</div>
-			:
-			null
-		}
+      {this.state.from === '/' ?
+        <Link to={{pathname: "/", state: { history:this.state.history }}} >
+          <Icon circular style={{margin:0,color:'#B1B1B1',cursor:'pointer',fontSize:'22px'}}  name='chevron left' />
+        </Link>
+        :
+        <Icon onClick={()=>{this.props.history.goBack()}} circular style={{margin:0,color:'#B1B1B1',cursor:'pointer',fontSize:'22px'}} name='chevron left' />
+      }
+      <Link to={{pathname: "/"}}>
+      <Icon circular style={{margin:0,marginLeft:5,color:'#B1B1B1',cursor:'pointer',fontSize:'22px'}} name='search' />
+      </Link>     
 
 					<div style={{border:'1px solid #E3E3E3',marginTop:'20px'}}>
 
 					<div className='hierarchymain'>
-					<span className='span2'>Word Builder</span>
+					<span className='span1'>Word Builder</span>
 					</div>
 
 

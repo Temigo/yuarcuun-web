@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import '../App.css';
 import '../semantic/dist/semantic.min.css';
-import { Container, Dropdown, Icon, Button } from 'semantic-ui-react';
+import { Container, Dropdown, Icon, Button, Divider } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../App.js';
 import YupikEntry from './YupikEntry.js';
 import {withRouter} from 'react-router';
 import StickyMenu from './common/StickyMenu.js';
-import {nounOptionsMVPossessors, mvSubject4thPersonCalls, mvObject4thPersonCalls,nObject4thPersonCalls, nounOptionsMVPossessorsThe, mvSubjectOptionsWho, mvSubjectOptionsWhat, mvObjectOptionsWhom, mvObjectOptionsWhomAbl, mvObjectOptionsWhat, mvObjectOptionsWhatAbl,retrieveMoodEnglish, nounOptionsPossessorsNo4th, mvSubjectOptionsOnly2nd, nounOptionsNumbers, nounoptionsmodalis, mvSubjectOptions, mvObjectOptions, mvSubjectOptionsEnglish, verbPostbases, nounPostbases, VVpostbases, NNpostbases} from './constants/newconstants.js'
+import {nounOptionsMVPossessors,colorsList, mvSubject4thPersonCalls, mvObject4thPersonCalls,nObject4thPersonCalls, nounOptionsMVPossessorsThe, mvSubjectOptionsWho, mvSubjectOptionsWhat, mvObjectOptionsWhom, mvObjectOptionsWhomAbl, mvObjectOptionsWhat, mvObjectOptionsWhatAbl,retrieveMoodEnglish, nounOptionsPossessorsNo4th, mvSubjectOptionsOnly2nd, nounOptionsNumbers, nounoptionsmodalis, mvSubjectOptions, mvObjectOptions, mvSubjectOptionsEnglish, verbPostbases, nounPostbases, VVpostbases, NNpostbases} from './constants/newconstants.js'
 
 let customFontFam = "Roboto,'Helvetica Neue',Arial,Helvetica,sans-serif"
 const options = [
@@ -94,7 +94,7 @@ class SimpleWordBuilderUpdated extends Component {
       mvvBase:[],
       mvvMood:"",
       mvvSegments:"",
-
+      colorScheme:0,
       colorsList: {
         'mvv.b':'#000000',
         'mvv.e':'#852828',
@@ -188,7 +188,7 @@ class SimpleWordBuilderUpdated extends Component {
         np:np,
       })
       .then(response => {
-        console.log(response.data)
+        // console.log(response.data)
         let vkey, nkey
         let updateDict = {}
         if ("english" in response.data) {
@@ -1037,10 +1037,10 @@ class SimpleWordBuilderUpdated extends Component {
 
 
   render() {
-    console.log(this.state)
+    // console.log(this.state)
 
-    console.log(mvSubjectOptions)
-    console.log(mvObjectOptions)
+    // console.log(mvSubjectOptions)
+    // console.log(mvObjectOptions)
 
     // let numEntries = Object.keys(this.state.fullWord).filter((entryNumber) => {
     //   return entryNumber !== 'english' && entryNumber !== 'yupik';
@@ -1049,50 +1049,54 @@ class SimpleWordBuilderUpdated extends Component {
       <div>
 
       {this.state.mvvBase.length > 0 && this.state.mvvSegments.length > 0 ?
-        <div>
-        <div style={{marginBottom:10,fontSize:'20px',color:'#000000',fontWeight:'400'}}>
+        <div style={{textAlign:'center',marginTop:'13px', marginBottom:'20px'}}>
+        <div style={{marginBottom:10,fontSize:'22px',color:'#000000',fontWeight:'400'}}>
           <div style={{cursor:'pointer',lineHeight:'35px'}}>
             {this.state.mvvSegments.map((t)=>
-              <span style={{color:this.state.colorsList[t[1]]}}>{t[0]}</span>
+              <span style={{color:colorsList[this.state.colorScheme][t[1]]}}>{t[0]}</span>
             )}
           </div>
         </div>
 
+        <div style={{marginTop:'10px', marginBottom:'20px',fontSize:'18px',color:'#0D0D0D',fontWeight:'300'}}>          
         {this.state.mvEnglish1.map((w,wind)=>{
-          return <span style={{color:this.state.colorsList[w[1]]}}>{w[0]+" "}</span>
+          return <span style={{color:colorsList[this.state.colorScheme][w[1]]}}>{w[0]+" "}</span>
         })}
         {this.state.mvvs.length > 0 ?
-          <Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={(event,data)=>{this.backEndCall([["Update",["mv","vs"],data.value.split('').map(Number)]])}}  value={this.state.mvvs.join("")} options={this.state.mvSubjectOptions1} />
+          <Dropdown inline scrolling style={{border:'solid 1px #22242626',color:'#852828',fontSize:'18px',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","vs"],data.value.split('').map(Number)]])}}  value={this.state.mvvs.join("")} options={this.state.mvSubjectOptions1} />
           :
           null
         }
         {this.state.mvEnglish2.map((w,wind)=>{
-          return <span style={{color:this.state.colorsList[w[1]]}}>{w[0]+" "}</span>
+          return <span style={{color:colorsList[this.state.colorScheme][w[1]]}}>{w[0]+" "}</span>
         })}   
 
         {this.state.mvvo.length > 0 ?
           (this.state.mvvBase[1] == 'it' ?
             (this.state.mvEnglishAbl.map((w,wind)=>
-              <span style={{color:this.state.colorsList[w[1]]}}>{w[0]}</span>
+              <span style={{color:colorsList[this.state.colorScheme][w[1]]}}>{w[0]}</span>
             ))
             :
-            <Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#961616',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={(event,data)=>{this.backEndCall([["Update",["mv","vo"],data.value.split('').map(Number)]])}}  value={this.state.mvvo.join("")} options={this.state.mvObjectOptions1} />
+            <Dropdown inline scrolling style={{border:'solid 1px #22242626',color:'#c84141',fontSize:'18px',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","vo"],data.value.split('').map(Number)]])}}  value={this.state.mvvo.join("")} options={this.state.mvObjectOptions1} />
           )
           :
           null
         }
 
         {this.state.mvEnglish3.map((w,wind)=>{
-          return <span style={{color:this.state.colorsList[w[1]]}}>{w[0]+" "}</span>
+          return <span style={{color:colorsList[this.state.colorScheme][w[1]]}}>{w[0]+" "}</span>
         })}
+        </div>
 
+        <div style={{}}>
         <Link to={{pathname: '/sentencebuilder/2', state: { mv: this.state.mv }}}>
-          <Button basic compact style={{fontSize:'16px',fontWeight:'300',marginBottom:'10px'}}>
+          <Button basic compact style={{fontSize:'16px',fontWeight:'300'}}>
           <div style={{display:'flex',flexDirection:'column',fontFamily:customFontFam}}>
           Try Word Builder
           </div>
           </Button>
         </Link>
+        </div>
 
         </div>
         :
@@ -1100,45 +1104,47 @@ class SimpleWordBuilderUpdated extends Component {
       }
 
 
-                {this.state.npnSegments.length > 0 && this.state.npnSegments.length === this.state.npn.length ?
-                  <div>
-                    <div style={{marginBottom:10,fontSize:'20px',color:'#000000',fontWeight:'400'}}>
-                      <div style={{display:'flex',flexDirection:'row', lineHeight:'35px'}}>
+      {this.state.npnSegments.length > 0 && this.state.npnSegments.length === this.state.npn.length ?
+        <div style={{textAlign:'center',marginTop:'13px', marginBottom:'20px'}}>
+          <div style={{marginBottom:10,fontSize:'22px',fontWeight:'400'}}>
+            <div style={{lineHeight:'35px'}}>
 
-                        {this.state.npnSegments.slice().reverse()[0][0].map((t)=>
-                          <span style={{color:this.state.colorsList[t[1]]}}>{t[0]}</span>
-                        )}
+              {this.state.npnSegments.slice().reverse()[0][0].map((t)=>
+                <span style={{color:colorsList[this.state.colorScheme][t[1]]}}>{t[0]}</span>
+              )}
 
-                      </div>
-                    </div>
+            </div>
+          </div>
 
 
 
-                    <span>          
-                          <span>
-                            {this.state.npnEnglish1.map((w,wind)=>
-                              <span style={{color:this.state.colorsList[w[1]]}}>{w[0]+" "}</span>
-                              )}
-                            <Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#852828',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["np","n",this.state.npnSegments.length-1,0],(data.value+this.state.npn[this.state.npnSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.npn[this.state.npnSegments.length-1][0].slice(0, -1).join("")} options={nounOptionsMVPossessorsThe} />
-                            <Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:'#961616',fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["np","n",this.state.npnSegments.length-1,0],this.state.npn[this.state.npnSegments.length-1][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.npn[this.state.npnSegments.length-1][0].slice(-1).join("")} options={nounOptionsNumbers} />                                
-                            {this.state.npnEnglish2[0].map((w,wind)=>
-                              (w.map((t)=> <span style={{color:this.state.colorsList[t[1]]}}>{t[0]+" "}</span>))
-                              )}
-                          </span>
-                    </span>
+          <span>
+            <div style={{marginTop:'10px', marginBottom:'20px',fontSize:'18px',color:'#0D0D0D',fontWeight:'300'}}>          
+            {this.state.npnEnglish1.map((w,wind)=>
+              <span style={{color:colorsList[this.state.colorScheme][w[1]]}}>{w[0]+" "}</span>
+              )}
+            <Dropdown inline scrolling style={{border:'solid 1px #22242626',color:'#5c5c5c',fontSize:'18px',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["np","n",this.state.npnSegments.length-1,0],(data.value+this.state.npn[this.state.npnSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.npn[this.state.npnSegments.length-1][0].slice(0, -1).join("")} options={nounOptionsMVPossessorsThe} />
+            <Dropdown inline scrolling style={{border:'solid 1px #22242626',color:'#852828',fontSize:'18px',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["np","n",this.state.npnSegments.length-1,0],this.state.npn[this.state.npnSegments.length-1][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.npn[this.state.npnSegments.length-1][0].slice(-1).join("")} options={nounOptionsNumbers} />                                
+            {this.state.npnEnglish2[0].map((w,wind)=>
+              (w.map((t)=> <span style={{color:colorsList[this.state.colorScheme][t[1]]}}>{t[0]+" "}</span>))
+              )}
+            </div>
+          </span>
 
-                    <Link to={{pathname: '/sentencebuilder/2', state: { np: this.state.np }}}>
-                      <Button basic compact style={{fontSize:'16px',fontWeight:'300',marginBottom:'10px'}}>
-                      <div style={{display:'flex',flexDirection:'column',fontFamily:customFontFam}}>
-                      Try Word Builder
-                      </div>
-                      </Button>
-                    </Link>
-                  </div>
+          <div style={{}}>
+          <Link to={{pathname: '/sentencebuilder/2', state: { np: this.state.np }}}>
+            <Button basic compact style={{fontSize:'16px',fontWeight:'300'}}>
+            <div style={{display:'flex',flexDirection:'column',fontFamily:customFontFam}}>
+            Try Word Builder
+            </div>
+            </Button>
+          </Link>
+          </div>
+        </div>
 
-                    :
-                    null
-                }
+          :
+          null
+      }
 
 
 

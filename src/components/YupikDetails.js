@@ -51,14 +51,14 @@ class YupikDetails extends Component {
     //   return entryNumber !== 'english' && entryNumber !== 'yupik';
     // }).length;
     return (
-      <div>
-      <StickyMenu
+      <Container style={{margin:0,padding:0}} text>
+{/*      <StickyMenu
         word={this.state.currentWord.replaceAll(',',', ')}
         goBack={() => { this.props.history.push({pathname: '/', state: this.props.location.state }) }}
         displaySimple
         {...this.props}
-      />
       <Container text style={{ marginTop: '7em'}}>
+      />*/}
 {/*        {Object.keys(this.state.fullWord).map((entryNumber) => {
           if (entryNumber === 'english' || entryNumber === 'yupik') {
             return '';
@@ -73,7 +73,6 @@ class YupikDetails extends Component {
           }
         })}*/}
       </Container>
-      </div>
     );
   }
 }

@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import { Segment, List, Header, Label, Grid , Icon, Divider, Table} from 'semantic-ui-react';
+import { Segment, List, Header, Label, Grid , Icon, Divider, Table, Transition, Image} from 'semantic-ui-react';
 import '../App.css';
 import '../semantic/dist/semantic.min.css';
 import { Link } from 'react-router-dom';
 import {withRouter} from 'react-router';
-import { TagColors, WordItem } from './SearchPageHelpers.js';
+import { TagColors, WordItemLikeInup } from './SearchPageHelpers.js';
 import SimpleWordBuilder from './SimpleWordBuilder.js';
 import SimpleWordBuilderUpdated from './SimpleWordBuilderUpdated.js';
 import {DialectDictionary} from './constants/DialectDictionary.js';
 
+let customFontFam = "Roboto,'Helvetica Neue',Arial,Helvetica,sans-serif"
 
 class YupikEntry extends Component {
   constructor(props) {
@@ -70,6 +71,15 @@ class YupikEntry extends Component {
     }
   }
 
+  retrieveDialects = (dialects) => {
+    let dialectList = []
+    dialects.map((dialect)=>{
+      if (dialect in DialectDictionary) {
+        dialectList.push(DialectDictionary[dialect])
+      }
+    })
+    return dialectList.join(', ')
+  }
   processStyledText = (sentence) => {     
     sentence = sentence.replace("⟨","").replace("⟩","")
     let matches = sentence.match(/\⎡.*?\⎤/g)
@@ -165,354 +175,520 @@ class YupikEntry extends Component {
     let postbaseTableOn = false
     let postbaseExampleOn = false
     return (
-      <Segment style={{fontSize:'1em'}}>
-      <Grid>
 
-      {this.state.entry !== "" ?
-      <Grid.Row>
-        <Grid.Column>
+    <div style={{padding: 0, margin:0, fontFamily:customFontFam}}>
+      <Transition visible={this.state.loaded} animation='fade' duration={300}>
+        <Grid textAlign='center'>
 
-          {this.state.entry.keySplit.map((key) => {
-            return <div>
-            {this.state.entry.pos.map((descriptor) => 
-              {return <TagColors key={descriptor} word={descriptor} padding={0} />}
-            )}
-            <span style={{fontSize:'23px',fontWeight:'500',marginLeft:'15px'}}>{key[0]}</span>
-            {key[1][0] !== '' ?
-              (key[1].map((dialect)=> 
-                <Label horizontal>{dialect}</Label>
-              ))
+        {this.state.entry !== "" ?
+        <Grid.Row  style={{height:40,paddingBottom:0}}>
+          <Grid.Column style={{ maxWidth: 800, padding: 0, margin:0 }} textAlign='left'>
+
+            {this.state.from === '/' ?
+              <Link to={{pathname: "/", state: { history:this.state.history }}} >
+                <Icon circular style={{margin:0,color:'#B1B1B1',cursor:'pointer',fontSize:'22px'}}  name='chevron left' />
+              </Link>
               :
-              null
-              }
+              <Icon onClick={()=>{this.props.history.goBack()}} circular style={{margin:0,color:'#B1B1B1',cursor:'pointer',fontSize:'22px'}} name='chevron left' />
+            }
+            <Link to={{pathname: "/"}}>
+            <Icon circular style={{margin:0,marginLeft:5,color:'#B1B1B1',cursor:'pointer',fontSize:'22px'}} name='search' />
+            </Link>     
 
-
-
+            <div style={{fontSize:'25px',marginTop:'20px',fontFamily:customFontFam}}>
+            {this.state.entry.keySplit.map((key) => {
+              return <div>
+              <span style={{fontWeight:'500',marginRight:'15px'}}>{key[0]}</span>
+              {key[1][0] !== '' ?
+                (key[1].map((dialect)=> 
+                  <Label horizontal>{dialect}</Label>
+                ))
+                :
+                null
+                }
+              {this.state.entry.pos.map((descriptor) => 
+                {return <TagColors key={descriptor} word={descriptor} padding={0} />}
+              )}
+              </div>
+            })}
             </div>
-          })}
 
-          {this.state.entry.definition.map((entry,i) => {
-            return <div style={{marginLeft:'11px'}}>
-            <span style={{marginLeft:'10px',color:'#777777',fontSize:'20px','fontWeight':'300'}}>{'○'}</span>
-            <span style={{marginLeft:'20px',color:'#000000',fontSize:'18px',lineHeight:'24px','fontWeight':'300'}}>{this.processStyledText(entry[0])}</span>
-            {entry[1][0] !== '' ?
-              <Label horizontal>{entry[1]}</Label>
-              :
-              null
-              }
-            </div>;
-          })}
+          <div style={{border:'1px solid #E3E3E3',marginTop:'10px'}}>
 
+          <div className='hierarchymain'>
+          <span className='span1'>Definition</span>
+          </div>
 
-        {this.state.entry.verbkeyString.keyString.length !== 0 ?
-          <div>
-            <Divider />
-
-          {this.state.entry.verbkeyString.keySplit.map((key) => {
-            return <div>
-            {this.state.entry.verbkeyString.pos.map((descriptor) => 
-              {return <TagColors key={descriptor} word={descriptor} padding={0} />}
-            )}
-            <span style={{fontSize:'23px',fontWeight:'500',marginLeft:'15px'}}>{key[0]}</span>
-            {key[1][0] !== '' ?
-              (key[1].map((dialect)=> 
-                <Label horizontal>{dialect}</Label>
-              ))
-              :
-              null
-              }
-            </div>
-          })}
-
-
-
-          {this.state.entry.verbkeyString.definition.map((entry,i) => {
-            return <div style={{marginLeft:'11px'}}>
-            <span style={{marginLeft:'10px',color:'#777777',fontSize:'18px','fontWeight':'300'}}>{'○'}</span>
-            <span style={{marginLeft:'20px',color:'#000000',fontSize:'18px',lineHeight:'24px','fontWeight':'300'}}>{this.processStyledText(entry[0])}</span>
-            {entry[1][0] !== '' ?
-              <Label horizontal>{entry[1]}</Label>
-              :
-              null
-              }
-            </div>;
-          })}
-
+            {this.state.entry.definition.map((entry,i) => {
+              return <div style={{display:'flex',flexDirection:'row',marginTop:'8px',marginBottom:'8px'}}>
+              <div style={{marginLeft:'10px',color:'#777777',fontSize:'18px','fontWeight':'300'}}>{'○'}</div>
+              <div style={{marginLeft:'20px',color:'#000000cc',fontSize:'18px',lineHeight:'27px'}}>{this.processStyledText(entry[0])}</div>
+              {entry[1][0] !== '' ?
+                <Label horizontal>{entry[1]}</Label>
+                :
+                null
+                }
+              </div>;
+            })}
 
           </div>
-          :
-          null
-        }
 
-{/*        {this.state.entry.usagekeys.length !== 0 ?
-          <div className='hierarchy'>
-          <Header as='h2'>Usage</Header>
-          {this.state.entry.usagekeys.map((entry,i) => {
-            return <div>
-            <div style={{marginRight:'10px'}}>
-              {this.state.entry.usagekeys[i].map((e,k) => {
-                return e
+
+          {this.state.entry.verbkeyString.keyString.length !== 0  && this.state.entry.usage.length !== 0 ?
+            <div style={{border:'1px solid #E3E3E3',marginTop:'10px'}}>
+            {this.state.entry.usage.map((entry,i) => {
+              if (entry[3].constructor === Array) {
+                return entry[3].map((k,index) => <span>
+                  {index === 0 ? 
+                    <div className='hierarchymain'>
+                      <span className='span1'>Usage</span>
+                    </div>
+                    :
+                    null
+                  }
+                  <SimpleWordBuilderUpdated entry={entry} index={i} definitionIndex={index} word={this.state.word} />
+                  {entry[3].length-1 != index && k[2].length !== 0 ? <Divider style={{margin:0}}/> : null}
+                  </span>
+                  )
+              }
+            })}
+            </div>
+            :
+            (this.state.entry.usage.length !== 0 ? 
+              <div style={{border:'1px solid #E3E3E3',marginTop:'10px'}}>
+              {this.state.entry.usage.map((entry,i) => {
+                console.log(entry,i)
+                if (entry[3].constructor === Array) {
+                  return entry[3].map((k,index) => <span>
+                    {index === 0 ? 
+                      <div className='hierarchymain'>
+                        <span className='span1'>Usage</span>
+                      </div>
+                      :
+                      null
+                    }
+                    <SimpleWordBuilderUpdated entry={entry} index={i} definitionIndex={index} word={this.state.word} />
+                      {entry[3].length-1 != index && k[2].length !== 0 ? <Divider style={{margin:0}}/> : null}
+                    </span>
+                    )
+                } else {
+                  return <span>
+                  {i === 0 ? 
+                    <div className='hierarchymain'>
+                      <span className='span1'>Usage</span>
+                    </div>
+                    :
+                    null
+                  }
+                  <SimpleWordBuilderUpdated entry={entry} index={i} word={this.state.word} /> 
+                  {this.state.entry.usage.length-1 != i ? <Divider style={{margin:0}}/> : null}
+                  </span>
+                }
               })}
+              </div>
+              :
+              null
+            )
+          }
+
+
+
+
+          {this.state.entry.verbkeyString.keyString.length !== 0 ?
+            <div>
+            
+            <div style={{fontSize:'25px',marginTop:'20px',fontFamily:customFontFam}}>
+            {this.state.entry.verbkeyString.keySplit.map((key) => {
+              return <div>
+              <span style={{fontSize:'25px',marginRight:'15px'}}>{key[0]}</span>
+              {key[1][0] !== '' ?
+                (key[1].map((dialect)=> 
+                  <Label horizontal>{dialect}</Label>
+                ))
+                :
+                null
+                }
+              {this.state.entry.verbkeyString.pos.map((descriptor) => 
+                {return <TagColors key={descriptor} word={descriptor} padding={0} />}
+              )}
+              </div>
+            })}
             </div>
-            <div style={{marginRight:'10px'}}>
-              {this.state.entry.usagedefinitions[i].map((e,k) => {
-                return e
+
+            <div style={{border:'1px solid #E3E3E3',marginTop:'10px'}}>
+
+            <div className='hierarchymain'>
+            <span className='span1'>Definition</span>
+            </div>
+
+            {this.state.entry.verbkeyString.definition.map((entry,i) => {
+              return <div style={{marginTop:'8px',marginBottom:'8px'}}>
+              <span style={{marginLeft:'10px',color:'#777777',fontSize:'18px','fontWeight':'300'}}>{'○'}</span>
+              <span style={{marginLeft:'20px',color:'#000000',fontSize:'18px',lineHeight:'24px'}}>{this.processStyledText(entry[0])}</span>
+              {entry[1][0] !== '' ?
+                <Label horizontal>{entry[1]}</Label>
+                :
+                null
+                }
+              </div>;
+            })}
+            </div>
+
+            {this.state.entry.usage.length !== 0 ?
+              <div style={{border:'1px solid #E3E3E3',marginTop:'10px'}}>
+                <div className='hierarchymain'>
+                  <span className='span1'>Usage</span>
+                </div>
+              {this.state.entry.usage.map((entry,i) => {
+                if (entry[3].constructor !== Array) {
+                  return <span>
+                  <SimpleWordBuilderUpdated entry={entry} index={i} word={this.state.word} /> 
+                  {this.state.entry.usage.length-1 != i ? <Divider style={{margin:0}} /> : null}
+                  </span>
+                }
               })}
+              </div>
+              :
+              null
+            }
+
+
+
             </div>
+            :
+            null
+          }
+
+          <div style={{border:'1px solid #E3E3E3',marginTop:'10px'}}>
+
+  {/*        {this.state.entry.usagekeys.length !== 0 ?
+            <div className='hierarchy'>
+            <Header as='h2'>Usage</Header>
+            {this.state.entry.usagekeys.map((entry,i) => {
+              return <div>
+              <div style={{marginRight:'10px'}}>
+                {this.state.entry.usagekeys[i].map((e,k) => {
+                  return e
+                })}
+              </div>
+              <div style={{marginRight:'10px'}}>
+                {this.state.entry.usagedefinitions[i].map((e,k) => {
+                  return e
+                })}
+              </div>
+              </div>
+            })}
             </div>
-          })}
-          </div>
-          :
-          null
-        }
+            :
+            null
+          }
+  */}
+
+
+{/*
+          {this.state.entry.usage.length !== 0 ?
+            <div>
+            {this.state.entry.usage.map((entry,i) => {
+              console.log(entry,i)
+              if (entry[3].constructor === Array) {
+                return entry[3].map((k,index) => <span>
+                  {index === 0 ? 
+                    <div className='hierarchymain'>
+                    <span className='span1'>Usage</span>
+                    </div>
+                    :
+                    null
+                  }
+                  <SimpleWordBuilderUpdated entry={entry} index={i} definitionIndex={index} word={this.state.word} />
+                  {this.state.entry.usage.length-1 != i ? <Divider /> : null}
+                  </span>
+                  )
+              } else {
+                return <span>
+                <SimpleWordBuilderUpdated entry={entry} index={i} word={this.state.word} /> 
+                {this.state.entry.usage.length-1 != i ? <Divider /> : null}
+                </span>
+              }
+            })}
+            </div>
+            :
+            null
+          }
 */}
 
-        {this.state.entry.usage.length !== 0 ?
-          <div className='hierarchy'>
-          <Header as='h2'>Usage</Header>
-          {this.state.entry.usage.map((entry,i) => {
-            if (entry[3].constructor === Array) {
-              return entry[3].map((k,index) => <SimpleWordBuilderUpdated entry={entry} index={i} definitionIndex={index} word={this.state.word} />)
-            } else {
-              return <SimpleWordBuilderUpdated entry={entry} index={i} word={this.state.word} />
-            }
-          })}
-          </div>
-          :
-          null
-        }
+          {this.state.entry.entryDialect.length !== 0 ?
+            <div>
+              <div className='hierarchymain'>
+              <span className='span1'>Dialect</span>
+              </div>
+
+              <div style={{padding:10,fontSize:'16px',color:'#000000cc'}}><span>{this.retrieveDialects(this.state.entry.entryDialect)}</span></div>
+
+            </div>
+            :
+            null
+          }
 
 
-        {this.state.entry.entryDialect.length !== 0 ?
-          <div className='hierarchy'>
-          <Header as='h2'>Dialect</Header>
-          {this.state.entry.entryDialect.map((entry,i) => {
-            return <div style={{paddingLeft:8}}><span>{this.retrieveDialect(entry)}</span></div>
-          })}
-          </div>
-          :
-          null
-        }
+          {this.state.entry.additionalInfoNearDefinition.length !== 0 ?
+            <div>
+              <div className='hierarchymain'>
+              <span className='span1'>Additional Information</span>
+              </div>
+            {this.state.entry.additionalInfoNearDefinition.map((entry,i) => {
+              return <div style={{padding:10,fontSize:'16px',color:'#000000cc'}}><span>{entry}</span></div>
+            })}
+            </div>
+            :
+            null
+          }
 
 
-        {this.state.entry.additionalInfoNearDefinition.length !== 0 ?
-          <div className='hierarchy'>
-          <Header as='h2'>Additional Info Near Definition</Header>
-          {this.state.entry.additionalInfoNearDefinition.map((entry,i) => {
-            return <div style={{paddingLeft:8}}><span>{entry}</span></div>
-          })}
-          </div>
-          :
-          null
-        }
 
+          {this.state.entry.baseExamples.length !== 0 ?
+            <div>
+              <div className='hierarchymain'>
+              <span className='span1'>Example Sentences</span>
+              </div>
+              <div style={{paddingTop:'5px',paddingBottom:'5px'}}>
+              {this.state.entry.baseExamples.map((sentence) => {
+                return (
+                  <List.Item style={{paddingTop:'11px',paddingBottom:'11px',paddingLeft:'10px',paddingRight:'5px'}} key={sentence[0]}>
+                    <List.Header style={{paddingBottom:'7px'}}>
+                      <Link to={{pathname:'/', state: {...this.props.location.state, updateSearchEntry:true, search: sentence[0], newSearchList: sentence[0].split(" "), activeTabIndex:1}}}>
+                        <span style={{fontSize:'18px',color:'black',fontWeight:'400',borderBottom:'1px solid #858585',paddingBottom:'2px',fontWeight:'400',}}>
+                        {sentence[0]}
+                        </span>
+                      </Link>
+                    </List.Header>
+                    <List.Description style={{fontSize:'18px',fontWeight:'200'}}>{sentence[1]}</List.Description>
+                  </List.Item>
+                 );
+              })
+                }
+              </div>
+            </div>
+            :
+            null
+          }
 
-        {this.state.entry.baseExamples.length !== 0 ?
-          <div className='hierarchy'>
-            <Header as='h2'>Example Sentences</Header>
-            {this.state.entry.baseExamples.map((sentence) => {
-              return (
-                <List.Item style={{paddingBottom:'10px', paddingLeft:'8px'}} key={sentence[0]}>
-                  <List.Header>
-                <Link to={{pathname:'/', state: {...this.props.location.state, updateSearchEntry:true, search: sentence[0], newSearchList: sentence[0].split(" "), activeTabIndex:1}}}>
-                  <span style={{textDecoration:'underline'}}>
-                  {sentence[0]}
-                  </span>
-                </Link>
-                  </List.Header>
-                  <List.Description>{sentence[1]}</List.Description>
-                </List.Item>
-               );
-            })
-              }
-          </div>
-          :
-          null
-        }
+          {this.state.entry.postbaseExamples.length !== 0 ?
+            <div>
+              <div className='hierarchymain'>
+              <span className='span1'>Postbase Examples</span>
+              </div>
 
-        {this.state.entry.postbaseExamples.length !== 0 ?
-          <div className='hierarchy'>
-          <Header as='h2'>Postbase Examples</Header>
-
-            {this.state.entry.postbaseExamples.map((entry,i) => {
-              if (postbaseTableOn) {
-                if (entry == '</table>') {
-                  postbaseTableOn = false
-                } else {
-                  let items = []
-                  if (entry.split("\"").length > 1) {
-                    entry = entry.replace("\",\"","@@").replace(",\"","@@").replace("\",","@@").replaceAll("\"","")
-                    items = entry.split('@@') ;                 
+              {this.state.entry.postbaseExamples.map((entry,i) => {
+                if (postbaseTableOn) {
+                  if (entry == '</table>') {
+                    postbaseTableOn = false
                   } else {
-                    items = entry.split(',')
+                    let items = []
+                    if (entry.split("\"").length > 1) {
+                      entry = entry.replace("\",\"","@@").replace(",\"","@@").replace("\",","@@").replaceAll("\"","")
+                      items = entry.split('@@') ;                 
+                    } else {
+                      items = entry.split(',')
+                    }
+
+                    let rightside = items[1].split(';');
+                    return <div style={{margin:10,color:'#000000cc',display:'flex'}}>
+                            <div style={{flex:1}}>
+                              {this.processPostbaseTableRow(items[0])}
+                            </div>
+                            <div style={{flex:1}}>
+                              {rightside.map((k)=>{
+                                return <div>{this.processPostbaseTableRow(k)}</div>
+                              })}
+                            </div>
+                          </div> 
                   }
-
-                  let rightside = items[1].split(';');
-                  return <div style={{display:'flex'}}>
-                          <div style={{flex:1}}>
-                            {this.processPostbaseTableRow(items[0])}
-                          </div>
-                          <div style={{flex:1}}>
-                            {rightside.map((k)=>{
-                              return <div>{this.processPostbaseTableRow(k)}</div>
-                            })}
-                          </div>
-                        </div> 
-                }
-              } else if (postbaseExampleOn) {
-                if (entry == '</example>') { 
-                  postbaseExampleOn = false                  
+                } else if (postbaseExampleOn) {
+                  if (entry == '</example>') { 
+                    postbaseExampleOn = false                  
+                  } else {
+                    return <div style={{display:'flex'}}>{this.processPostbaseExampleRow(entry)}</div> 
+                  }
                 } else {
-                  return <div style={{display:'flex'}}>{this.processPostbaseExampleRow(entry)}</div> 
+                  if (entry == '<table>') {              
+                    postbaseTableOn = true
+                  } else if (entry == '<example>') { 
+                    postbaseExampleOn = true       
+                    return <div style={{marginTop:'20px',marginBottom:'20px'}}><span style={{fontStyle:'italic'}}>{'Example Sentences'}</span></div>           
+                  } else {
+                    return <div style={{marginTop:'20px',marginBottom:'20px'}}><span style={{fontStyle:'italic'}}>{entry}</span></div>                                                    
+                  }               
                 }
-              } else {
-                if (entry == '<table>') {              
-                  postbaseTableOn = true
-                } else if (entry == '<example>') { 
-                  postbaseExampleOn = true       
-                  return <div style={{marginTop:'20px',marginBottom:'20px'}}><span style={{fontStyle:'italic'}}>{'Example Sentences'}</span></div>           
-                } else {
-                  return <div style={{marginTop:'20px',marginBottom:'20px'}}><span style={{fontStyle:'italic'}}>{entry}</span></div>                                                    
-                }               
-              }
+              })}
+            </div>
+            :
+            null
+          }
+
+          {this.state.entry.additionalInfo.length !== 0 ?
+            <div>
+              <div className='hierarchymain'>
+              <span className='span1'>Additional Information</span>
+              </div>
+              {this.state.entry.additionalInfo.map((entry,i) => {
+                return <div style={{padding:10,fontSize:'16px',color:'#000000cc'}}><span>{'- '+entry}</span></div>
+              })}
+            </div>
+            :
+            null
+          }
+
+
+          {Object.keys(this.state.entry.childrenEntries).length !== 0 ?
+            <div>
+              <div className='hierarchymain'>
+              <span className='span1'>Related Entries</span>
+              </div>
+                <List>
+                {Object.keys(this.state.entry.childrenEntries).map((word, index) =>
+                  (Object.keys(this.state.entry.childrenEntries[word]).length !== 0 ?
+                    <WordItemLikeInup paddingLeft={15} key={word} word={this.state.entry.childrenEntries[word]} />
+                    :
+                    this.unlinked(word)               
+                  )
+                )}
+                </List>
+            </div>
+            :
+            null
+          }
+
+
+          {Object.keys(this.state.entry.synonyms).length !== 0 ?
+            <div>
+              <div className='hierarchymain'>
+              <span className='span1'>Synonyms</span>
+              </div>
+                <List divided>
+                {Object.keys(this.state.entry.synonyms).map((word, index) =>
+                  (Object.keys(this.state.entry.synonyms[word]).length !== 0 ?
+                    <WordItemLikeInup paddingLeft={15} key={word} word={this.state.entry.synonyms[word]} />
+                    :
+                    this.unlinked(word)
+                  )
+                  )}
+                </List>
+            </div>
+            :
+            null
+          }
+
+          {Object.keys(this.state.entry.questionablyrelated).length !== 0 ?
+            <div>
+              <div className='hierarchymain'>
+              <span className='span1'>Possibly Related</span>
+              </div>
+                <List style={{marginTop:0}} divided>
+                {Object.keys(this.state.entry.questionablyrelated).map((word, index) =>
+                  (Object.keys(this.state.entry.questionablyrelated[word]).length !== 0 ?
+                    <WordItemLikeInup paddingLeft={15} key={word} word={this.state.entry.questionablyrelated[word]} />
+                    :
+                    this.unlinked(word)               
+                  )
+                  )}
+                </List>
+            </div>
+            :
+            null
+          }
+
+
+
+
+
+          {this.state.entry.fromLanguage.length !== 0 ?
+            <div>
+              <div className='hierarchymain'>
+              <span className='span1'>Language Origin</span>
+              </div>
+            {this.state.entry.fromLanguage.map((entry) => {
+              return <div style={{padding:10,fontSize:'16px',color:'#000000cc'}}><span>{entry}</span></div>
             })}
-          </div>
-          :
-          null
-        }
+            </div>
+            :
+            null
+          }
 
-        {this.state.entry.additionalInfo.length !== 0 ?
-          <div className='hierarchy'>
-          <Header as='h2'>Additional Information</Header>
-            {this.state.entry.additionalInfo.map((entry,i) => {
-              return <div style={{paddingLeft:8}}><span>{'- '+entry}</span></div>
+
+
+          {Object.keys(this.state.entry.etymology).length !== 0 ?
+            <div>
+              <div className='hierarchymain'>
+              <span className='span1'>Etymology</span>
+              </div>
+                <List>
+                {Object.keys(this.state.entry.etymology).map((key, index) =>
+                  (this.state.entry.etymology[key].map((word,i)=>
+                      <WordItemLikeInup paddingLeft={15*i+15} key={word} word={this.state.entry.etymology[key][i]} />
+                    ))
+                  )}
+                </List>
+            </div>
+            :
+            null
+          }
+
+
+          {this.state.entry.protolessthan.length !== 0 ?
+            <div>
+              <div className='hierarchymain'>
+              <span className='span1'>Proto-Etymology</span>
+              </div>
+            {this.state.entry.protolessthan.map((entry) => {
+              return <div style={{padding:10,fontSize:'16px',color:'#000000cc'}}><span>{entry}</span></div>
             })}
+            </div>
+            :
+            null
+          }
+
+          {this.state.entry.extra.length !== 0 ?
+            <div>
+              <div className='hierarchymain'>
+              <span className='span1'>Extra Information</span>
+              </div>
+            {this.state.entry.extra.map((entry) => {
+              return <div style={{padding:10,fontSize:'16px',color:'#000000cc'}}><span>{entry}</span></div>
+            })}
+            </div>
+            :
+            null
+          }
+
           </div>
-          :
-          null
+
+
+
+          <div>
+          <div style={{margin:'10px'}}>
+            <a href="https://goo.gl/forms/be5L5cgSQmCJeVDl1" target="_blank" rel="noopener noreferrer">
+              <Icon style={{marginBottom:'2px'}} inverted name='exclamation circle' color='grey' size='large' />
+              <span style={{color:'grey'}}>Report a mistake</span>
+            </a>
+          </div>
+          <div style={{display:'flex',justifyContent:'space-evenly',alignItems:'center',height:60,paddingBottom:16,paddingTop:10}}>
+            <Image style={{height:'30px',opacity:0.7}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+            <Image style={{height:'30px',opacity:0.7}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+            <Image style={{height:'30px',opacity:0.7}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+            <Image style={{height:'30px',opacity:0.7}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+          </div>
+          </div>
+
+          </Grid.Column>
+        </Grid.Row>
+        :
+        null
         }
 
 
-        {Object.keys(this.state.entry.childrenEntries).length !== 0 ?
-          <div className='hierarchy'>
-            <Header as='h2'>Related Entries</Header>
-              <List style={{marginTop:0}} divided selection>
-              {Object.keys(this.state.entry.childrenEntries).map((word, index) =>
-                (Object.keys(this.state.entry.childrenEntries[word]).length !== 0 ?
-                  <WordItem key={word} word={this.state.entry.childrenEntries[word]} />
-                  :
-                  this.unlinked(word)               
-                )
-              )}
-              </List>
-          </div>
-          :
-          null
-        }
-
-
-        {Object.keys(this.state.entry.synonyms).length !== 0 ?
-          <div className='hierarchy'>
-            <Header as='h2'>Synonyms</Header>
-              <List style={{marginTop:0}} divided selection>
-              {Object.keys(this.state.entry.synonyms).map((word, index) =>
-                (Object.keys(this.state.entry.synonyms[word]).length !== 0 ?
-                  <WordItem key={word} word={this.state.entry.synonyms[word]} />
-                  :
-                  this.unlinked(word)
-                )
-                )}
-              </List>
-          </div>
-          :
-          null
-        }
-
-        {Object.keys(this.state.entry.questionablyrelated).length !== 0 ?
-          <div className='hierarchy'>
-            <Header as='h2'>Possibly Related</Header>
-              <List style={{marginTop:0}} divided selection>
-              {Object.keys(this.state.entry.questionablyrelated).map((word, index) =>
-                (Object.keys(this.state.entry.questionablyrelated[word]).length !== 0 ?
-                  <WordItem key={word} word={this.state.entry.questionablyrelated[word]} />
-                  :
-                  this.unlinked(word)               
-                )
-                )}
-              </List>
-          </div>
-          :
-          null
-        }
-
-
-
-
-
-        {this.state.entry.fromLanguage.length !== 0 ?
-          <div className='hierarchy'>
-        <Header as='h2'>Language Origin</Header>
-          {this.state.entry.fromLanguage.map((entry) => {
-            return <div style={{paddingLeft:8}}><span>{entry}</span></div>
-          })}
-          </div>
-          :
-          null
-        }
-
-
-
-        {Object.keys(this.state.entry.etymology).length !== 0 ?
-          <div className='hierarchy'>
-            <Header as='h2'>Etymology</Header>
-              <List style={{marginTop:0}} divided selection>
-              {Object.keys(this.state.entry.etymology).map((key, index) =>
-                (this.state.entry.etymology[key].map((word,i)=>
-                    <WordItem paddingLeft={15*i} key={word} word={this.state.entry.etymology[key][i]} />
-                  ))
-                )}
-              </List>
-          </div>
-          :
-          null
-        }
-
-
-        {this.state.entry.protolessthan.length !== 0 ?
-          <div className='hierarchy'>
-        <Header as='h2'>Proto-Etymology</Header>
-          {this.state.entry.protolessthan.map((entry) => {
-            return <div style={{paddingLeft:8}}><span>{entry}</span></div>
-          })}
-          </div>
-          :
-          null
-        }
-
-        {this.state.entry.extra.length !== 0 ?
-          <div className='hierarchy'>
-
-        <Header as='h2'>Extra Information</Header>
-          {this.state.entry.extra.map((entry) => {
-            return <div style={{paddingLeft:8}}><span>{entry}</span></div>
-          })}
-          </div>
-          :
-          null
-        }
-
-        </Grid.Column>
-      </Grid.Row>
-      :
-      null
-      }
-      <a href="https://goo.gl/forms/be5L5cgSQmCJeVDl1" target="_blank" rel="noopener noreferrer">
-        <Icon inverted name='exclamation circle' color='grey' size='large' />
-        <span style={{color:'grey'}}>Report a mistake</span>
-      </a>
-
-      </Grid>
-      </Segment>
+        </Grid>
+      </Transition>
+    </div>
     );
   }
 }

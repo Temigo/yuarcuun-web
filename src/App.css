@@ -29,6 +29,27 @@
   
 }
 
+.hierarchymain {
+  display:flex;
+  align-items:center;
+  height:45px;
+  background-color:#F3F3F3;
+}
+
+
+.hierarchymain .span1 {
+  margin-left:12px;
+  color:#0D0D0D;
+  font-size:16px;
+}
+
+.hierarchymain .span2 {
+  margin-left:10px;
+  color:#777777;
+  font-size:16px;
+  font-style:italic;
+}
+
 .hierarchy {
   padding-top: 20px;
 }
@@ -37,6 +58,7 @@
   line-height: 20px;
   font-size: 18px;
 }
+
 
 .ui.input.fill-in-blanks>input  {
   margin-left: 2px;
@@ -109,6 +131,8 @@
 
 .ui.inline.dropdown>.text {
   font-weight: 300;
+   line-height: 0;
+
 }
 
 
