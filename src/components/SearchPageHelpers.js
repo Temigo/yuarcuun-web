@@ -39,7 +39,7 @@ export const TagColors = (props) => {
   let isNoun2 = props.word == 'n';
 
   return (
-      <span style={{ 'marginLeft': props.padding}}>  
+      <span style={{ display:'flex', height:'20px','marginLeft': props.padding}}>  
         {isNoun ? <Label size='mini' style={{backgroundColor:'#7F90B0',color:'white'}}>NOUN</Label> : ''}
         {isNoun2 ? <Label size='mini' style={{backgroundColor:'#7F90B0',color:'white'}}>NOUN</Label> : ''}
         {isVerb ? <Label size='mini' style={{backgroundColor:'#B07F7F',color:'white'}}>VERB</Label> : ''}
@@ -105,9 +105,9 @@ export const WordItemLikeInup = (props) => {
   // console.log(props.word)
   if (isUnlinked) {
     return (
-      <List.Item key={props.word.keyString}>
+      <List.Item key={props.word.keyString} style={{}}>
         <List.Content>
-          <List.Header style={{display:'flex',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'16px',paddingBottom:'4px'}}>
+          <List.Header style={{display:'flex',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'16px'}}>
             {props.word.keyString}
             <span style={{ 'marginLeft': '15px'}}>  
               <Label size='mini'>UNLINKED</Label>
@@ -118,24 +118,24 @@ export const WordItemLikeInup = (props) => {
       )
   } else {
   return (
-    <List.Item style={{'paddingLeft':props.paddingLeft,marginTop:'12px',marginBottom:'12px'}} key={props.word.keyString}>
+    <List.Item style={{'paddingLeft':props.paddingLeft,paddingTop:5,paddingBottom:8}} key={props.word.keyString}>
     
       <Link to={{pathname: '/' + props.word.url, state: { entry: props.entry, word: props.word, search: props.search, wordsList: props.wordsList, yugtunAnalyzer: false, parses: [], segments: [],endingrule: []}}}>
         <List.Content floated='right'>
-          <Icon circular style={{marginTop:'5px', color:'#8f8f8f',fontSize:'22px'}} size='large' name='chevron right' />
+          <Icon circular style={{marginTop:'5px', marginRight:'5px',color:'#8f8f8f',fontSize:'22px'}} size='large' name='chevron right' />
         </List.Content>
       </Link>
 
       <List.Content>
-        <List.Header style={{display:'flex',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'16px',paddingBottom:'10px'}}>
+        <List.Header style={{display:'flex',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'18px',paddingBottom:'10px',paddingTop:'5px'}}>
           {/*{console.log(props.word.keySplit)}*/}
           {props.word.keySplit.map((w,index) => 
-              <Link style={{fontSize:'18px',color:'#306190','paddingRight':'3px',fontWeight:'400',borderBottom:'1px solid #858585',paddingBottom:'1px',}} to={{pathname: '/' + props.word.url, state: { entry: props.entry, word: props.word, search: props.search, wordsList: props.wordsList, yugtunAnalyzer: false, parses: [], segments: [],endingrule: []}}}>
-              <span>
+              <Link style={{fontSize:'18px',color:'#306190','paddingRight':'3px',fontWeight:'400',borderBottom:'1px solid #306190',paddingBottom:'1px',}} to={{pathname: '/' + props.word.url, state: { entry: props.entry, word: props.word, search: props.search, wordsList: props.wordsList, yugtunAnalyzer: false, parses: [], segments: [],endingrule: []}}}>
+              <span style={{display:'flex'}}>
                 {w[0]}
               {/*{console.log(w)}*/}
               {w[1][0] !== '' ?
-                  <Label style={{'marginLeft':'5px',marginRight:'5px'}} size='mini' color='white'>{w[1].join(', ')}</Label>
+                  <Label style={{'marginLeft':'5px',marginRight:(index === props.word.keySplit.length-1 ? '0px' : '5px')}} size='mini' color='white'>{w[1].join(', ')}</Label>
                 :
                 (index == props.word.keySplit.length-1 ?
                   ''
@@ -147,7 +147,7 @@ export const WordItemLikeInup = (props) => {
               </Link>
             )}
 
-          <span style={{ 'marginLeft': '18px'}}>  
+          <span style={{ display:'flex', height:'20px','marginLeft': '18px'}}>  
             {isNoun ? <Label size='mini' style={{backgroundColor:'#7F90B0',color:'white'}}>NOUN</Label> : ''}
             {isVerb ? <Label size='mini' style={{backgroundColor:'#B07F7F',color:'white'}}>VERB</Label> : ''}
             {isParticle ? <Label size='mini'>PARTICLE</Label> : ''}
@@ -164,7 +164,7 @@ export const WordItemLikeInup = (props) => {
 
           </span>
         </List.Header>
-        <List.Description style={{fontSize:'16px',fontWeight:'400',lineHeight:'22px',color:'#000000cc'}}>{props.word.definitionString}</List.Description>
+        <List.Description style={{fontSize:'16px',fontWeight:'400',lineHeight:'22px',color:'#000000b3'}}>{props.word.definitionString}</List.Description>
       </List.Content>
     </List.Item>
     );

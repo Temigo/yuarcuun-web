@@ -12,7 +12,7 @@ import fuzzysort from 'fuzzysort'
 // import now from 'performance-now';
 // import ReactGA from 'react-ga';
 // import GitHubForkRibbon from 'react-github-fork-ribbon';
-import { WordItem } from './SearchPageHelpers.js';
+import { WordItem, WordItemLikeInup } from './SearchPageHelpers.js';
 // import TableEntry from './TableEntry.js';
 // import {demPro, perPro} from './constants/pronounEndings.js';
 // import {endingRules} from './constants/endingRules.js';
@@ -419,7 +419,7 @@ class SearchPageDictionary extends Component {
   // }
 
   render() {
-    console.log("SearchPage state: ", this.state);
+    // console.log("SearchPage state: ", this.state);
     // console.log("props:",this.props)
     // console.log("dictionary: ",dictionary_dict);
     // console.log("fuse.js: ",fuse.search('pissur'))
@@ -445,8 +445,8 @@ class SearchPageDictionary extends Component {
 
     return (
           <Grid>
-            <Grid.Row >
-              <Grid.Column style={{ flex: 1, paddingTop:0 }}>
+            <Grid.Row style={{paddingBottom:14,}}>
+              <Grid.Column style={{ flex: 1, paddingLeft:0,paddingRight:0}}>
               <Input
                 ref={this.handleRef}
                 placeholder='Search a word...'
@@ -468,14 +468,14 @@ class SearchPageDictionary extends Component {
               </Grid.Column>
             </Grid.Row>
 
-            <Grid.Row style={{display:'flex',justifyContent:'center',padding:0,paddingLeft:14,paddingRight:14}}>
-            <List divided selection>
+            <Grid.Row style={{display:'flex',justifyContent:'center',padding:0,paddingLeft:(window.innerWidth < 480 ? 7:14),paddingRight:(window.innerWidth < 480 ? 7:14)}}>
+            <List style={{width:'100%',}} divided>
             {displayList  ? 
                 wordsList.map((word) => 
-                <WordItem key={word} word={word} search={this.state.search} wordsList={this.state.wordsList} />)
+                <WordItemLikeInup key={word} word={word} search={this.state.search} wordsList={this.state.wordsList} />)
               : 
               (this.state.search.length === 0 ?
-                <div style={{display:'flex',justifyContent:'center'}}>
+                <div style={{display:'flex',justifyContent:'center',paddingLeft:(window.innerWidth < 480 ? 7:0),paddingRight:(window.innerWidth < 480 ? 7:0)}}>
                   <div style={{fontSize:'1.2rem',color:'#666',lineHeight:1.6,maxWidth:500}}>
                     <div>
                     <div style={{textDecoration:'underline',marginBottom:10,marginTop:15}}> Dictionary </div>
@@ -500,7 +500,7 @@ class SearchPageDictionary extends Component {
             }
             {displayList ? 
               <div>
-              <Divider style={{paddingBottom:0}} />
+              <Divider style={{paddingBottom:0,marginTop:'3px'}} />
               <div style={{display:'flex',justifyContent:'space-evenly',alignItems:'center',height:60,paddingBottom:16}}>
                 <Image style={{height:'30px',opacity:0.7}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
                 <Image style={{height:'30px',opacity:0.7}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>

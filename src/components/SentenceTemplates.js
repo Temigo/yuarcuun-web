@@ -6,6 +6,8 @@ import {withRouter} from 'react-router';
 import { sentenceTemplates } from './constants/sentence_templates.js'
 import { colorsList } from './constants/newconstants.js'
 
+let customFontFam = "Roboto,'Helvetica Neue',Arial,Helvetica,sans-serif"
+
 let accordionTitles = [
   {
     key:'noun phrase only',
@@ -92,7 +94,7 @@ class SentenceTemplates extends PureComponent {
     return (
         <Accordion style={{ fontSize: 16 }} fluid styled>
           {accordionTitles.map((p, pindex) => 
-            <div>
+            <div style={{ fontFamily:customFontFam}}>
               <Accordion.Title
                 active={activeIndexes.includes(pindex)}
                 index={pindex}
@@ -101,29 +103,29 @@ class SentenceTemplates extends PureComponent {
                 <Icon name="dropdown" />
                 {p.key}
               </Accordion.Title>
-              <Accordion.Content active={activeIndexes.includes(pindex)}>
+              <Accordion.Content style={{paddingTop:0,}} active={activeIndexes.includes(pindex)}>
                 {p.values.map((q, qindex) =>
-                  <div style={{fontVariant:'small-caps',fontSize:'20px',color:"#929292"}}>
+                  <div style={{fontVariant:'small-caps',fontWeight:'500',fontSize:'20px',color:"#000000cc",marginTop:'5px'}}>
                     {q.key}
                     <div>
                       {q.values.map((r, rindex) => 
                         <div>
-                          <div style ={{fontVariant:'none',fontSize:'16px',color:"#4C77B6",backgroundColor:"#F0F0F0"}}>
-                          <span style={{paddingLeft:'2px'}}>{r}</span>
+                          <div style ={{textAlign:'center',borderRadius:'3px',marginTop:'10px',fontVariant:'none',fontSize:'15px',padding:'5px',color:"#000000bc",backgroundColor:"#F0F0F0"}}>
+                          <span style={{paddingLeft:'2px',fontWeight:'400'}}>{r}</span>
                           </div>
                           <div>
                             {Object.keys(sentenceTemplates).map((k)=>
                               {return sentenceTemplates[k][3] === p.key && sentenceTemplates[k][4] === q.key && sentenceTemplates[k][5] === r
                               ? 
                                 <Button fluid basic onClick={()=> {this.props.backEndCall(sentenceTemplates[k][2],true);this.setState({activeIndexes: []})}}>
-                                  <div style={{textAlign:'left'}}>
+                                  <div style={{textAlign:'left',fontSize:'16px',paddingTop:'2px',paddingBottom:'6px',fontFamily:customFontFam}}>
                                     {sentenceTemplates[k][6][0].map((t)=>
                                       <span style={{color:this.props.getColor(t[1],true,t[0])}}>{t[0]}</span>
                                     )}
                                   </div>
-                                  <div style={{textAlign:'left'}}>
+                                  <div style={{textAlign:'left',lineHeight:'16px',fontFamily:customFontFam}}>
                                     {sentenceTemplates[k][6][1].map((t)=>
-                                      <span style={{color:this.props.getColor(t[1],true,t[0])}}>{t[0]+' '}</span>
+                                      <span style={{color:this.props.getColor(t[1],true,t[0]),fontWeight:'200',fontSize:'16px'}}>{t[0]+' '}</span>
                                     )}
                                   </div>
                                 </Button> 

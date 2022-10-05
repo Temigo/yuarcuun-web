@@ -104,7 +104,7 @@ class SearchPage extends Component {
       showMoreEnding: false,
       moreIndex: -1,
       updateSearchEntry: props.location.state === undefined ? false : props.location.state.updateSearchEntry,
-      activeTabIndex: props.location.state === undefined ? 0 : props.location.state.activeTabIndex,
+      // activeTabIndex: props.location.state === undefined ? 0 : props.location.state.activeTabIndex,
 
       // exampleSentenceSearch: props.location.state === undefined ? false : props.location.state.exampleSentenceSearch,
       newSearchList: props.location.state === undefined ? [] : props.location.state.newSearchList,
@@ -127,10 +127,11 @@ class SearchPage extends Component {
 
   componentDidMount() {
     // let start = now();
-    console.log('before',this.state)
+    // console.log('before',this.state)
+    // console.log(this.props)
     this.resetAll();
     
-    if (this.state.updateSearchEntry) {
+    if (this.state.updateSearchEntry && !this.props.fromTab) {
       this.inputClicked();
       this.setState({ updateSearchEntry: false });
     }
@@ -563,6 +564,7 @@ class SearchPage extends Component {
   }
 
   resetAll = (e, data) => {
+    console.log('hello???')
     this.setState({
       search: "",
       newSearchList: [],
@@ -575,7 +577,7 @@ class SearchPage extends Component {
       links: [],
       searchWord: "",
       notFirstParse: false,
-    },()=>{console.log('after',this.state)});
+    });
   };
 
   // handleTabChange = (e,data) => {
@@ -670,9 +672,9 @@ class SearchPage extends Component {
 
     return (
       <div>
-        <Grid style={{ paddingTop: "14px" }} stackable>
-          <Grid.Row>
-            <Grid.Column>
+        <Grid style={{ paddingTop: "14px" }} >
+          <Grid.Row style={{paddingBottom:10,}}>
+            <Grid.Column style={{paddingLeft:0,paddingRight:0}}>
               <Input
                 ref={this.handleRef}
                 placeholder="Search by Yugtun..."
@@ -849,7 +851,7 @@ class SearchPage extends Component {
                                   notFirstParse: this.state.notFirstParse,
                                   searchWord: this.state.searchWord,
                                   activeSentenceIndex: this.state.activeSentenceIndex,
-                                  activeTabIndex: this.state.activeTabIndex,
+                                  // activeTabIndex: this.state.activeTabIndex,
                                 },
                               }}
                             >
@@ -1328,7 +1330,7 @@ class SearchPage extends Component {
                           this.setState({
                             search: "elitnaurvigmi",
                             yugtunAnalyzer: true,
-                            activeTabIndex: 1,
+                            // activeTabIndex: 1,
                             parses: [],
                             segments: [],
                             endingIndexes: [],
@@ -1350,7 +1352,7 @@ class SearchPage extends Component {
                           this.setState({
                             search: "piipiqa popsicle-aamek ner'uq",
                             yugtunAnalyzer: true,
-                            activeTabIndex: 1,
+                            // activeTabIndex: 1,
                             parses: [],
                             segments: [],
                             endingIndexes: [],
@@ -1372,7 +1374,7 @@ class SearchPage extends Component {
                           this.setState({
                             search: "ellami-lli assirpaa",
                             yugtunAnalyzer: true,
-                            activeTabIndex: 1,
+                            // activeTabIndex: 1,
                             parses: [],
                             segments: [],
                             endingIndexes: [],

@@ -35,6 +35,7 @@ class SearchPage extends Component {
       audiolibrary: props.audiolibrary,
       dictionary_dict: props.dictionary_dict,
       reset: true,
+      fromTab: false,
       // dictionaryNouns: [],
       // dictionaryVerbs: [],
       // wordsList: [],
@@ -469,9 +470,12 @@ class SearchPage extends Component {
   handleTabChange = (e,data) => {
     // console.log(data.activeIndex, this.state.activeTabIndex)
     if (this.state.activeTabIndex !== data.activeIndex) {
-      console.log('hi')
+      console.log('tested',data.activeIndex)
       this.resetAll();
-      this.setState({ activeTabIndex:data.activeIndex})
+      this.setState({ 
+        activeTabIndex:data.activeIndex,
+        fromTab:true,
+      })
     }
     // } else if (data.activeIndex === 1 && this.state.activeTabIndex !== 1) {
     //   // if (!this.state.yugtunAnalyzer) {
@@ -488,7 +492,11 @@ class SearchPage extends Component {
 
   handleTabChange2 = (e, {value}) => {
     if (this.state.activeTabIndex !== value) {
-      this.setState({ activeTabIndex:value})
+      console.log(value)
+      this.setState({ 
+        activeTabIndex:value,
+        fromTab:true,
+      })
     }
     // } else if (value === 1 && this.state.activeTabIndex !== 1) {
     //   // if (!this.state.yugtunAnalyzer) {
@@ -587,7 +595,7 @@ class SearchPage extends Component {
     },
     {
       key: 1,
-      text: <div><span>Word Builder</span></div>,
+      text: <div><span>Yugtun to English</span></div>,
       value: 1,
     },
     {
@@ -622,7 +630,7 @@ class SearchPage extends Component {
           	<Grid stackable>
 
           {window.innerWidth < 480 ?
-            <Dropdown compact selection className='frontpage' value={this.state.activeTabIndex} onChange={this.handleTabChange2} options={tabOptions} />
+            <Dropdown selection compact className='frontpage' value={this.state.activeTabIndex} onChange={this.handleTabChange2} options={tabOptions} />
             :
             <Tab style={{paddingTop:10}} activeIndex={this.state.activeTabIndex} menu={{ secondary: true, pointing: true, size:'huge' }} panes={panes} onTabChange={this.handleTabChange} />
           }
@@ -630,17 +638,17 @@ class SearchPage extends Component {
 
             </Grid>
             {this.state.activeTabIndex === 0 ? 
-              <SearchPageDictionary dictionary={this.state.dictionary} dictionary_dict={this.state.dictionary_dict} reset={this.state.reset} {...this.props} />
+              <SearchPageDictionary fromTab={this.state.fromTab} dictionary={this.state.dictionary} dictionary_dict={this.state.dictionary_dict} reset={this.state.reset} {...this.props} />
               :
               null
             }
             {this.state.activeTabIndex === 1 ? 
-              <SearchPageYugtunToEnglish dictionary={this.state.dictionary} dictionary_dict={this.state.dictionary_dict} reset={this.state.reset} {...this.props} />
+              <SearchPageYugtunToEnglish fromTab={this.state.fromTab} dictionary={this.state.dictionary} dictionary_dict={this.state.dictionary_dict} reset={this.state.reset} {...this.props} />
               :
               null
             }
             {this.state.activeTabIndex === 2 ? 
-              <SearchPageAudioLibrary audiolibrary={this.state.audiolibrary} reset={this.state.reset} {...this.props} />
+              <SearchPageAudioLibrary fromTab={this.state.fromTab} audiolibrary={this.state.audiolibrary} reset={this.state.reset} {...this.props} />
               :
               null
             }

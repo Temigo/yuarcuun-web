@@ -848,9 +848,9 @@ class SearchPage extends Component {
 
     return (
           <Grid>
-            <Grid.Row >
-              <Grid.Column style={{ flex: 1, paddingTop:0 }}>
-              <Input
+            <Grid.Row style={{paddingBottom:14,}}>
+              <Grid.Column style={{paddingLeft:0,paddingRight:0}}>
+                <Input
                 ref={this.handleRef}
                 placeholder='Search a word...'
                 // action={{ icon: (this.state.yugtunAnalyzer ? 'search' : null), transparent:true,size:'huge', onClick: () => 
@@ -866,10 +866,10 @@ class SearchPage extends Component {
               </Grid.Column>
             </Grid.Row>
             <Grid.Row style={{display:'flex',justifyContent:'center',padding:0,paddingLeft:14,paddingRight:14}}>
-            <List style={{width:'100%'}} divided selection>
+            <List style={{width:'100%'}} divided>
             {displayList  ? 
                 wordsList.map((word, index) => 
-                <List.Item >
+                <List.Item style={{paddingTop:'10px',paddingBottom:'10px'}}>
                   <Button style={{float:'left', color:'#8F8F8F',cursor:'pointer'}} circular basic icon='volume up' onClick={()=>this.repeatAudio(word)} />
                   <Button style={{float:'right', color:'#8F8F8F',cursor:'pointer'}} basic icon='dropdown' onClick={()=>this.setActiveAudioIndex(word,index)} />
                   <List.Content>

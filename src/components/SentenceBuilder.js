@@ -2447,6 +2447,114 @@ class OneVerbWordBuilder extends Component {
 
 	}
 
+
+	baseChooser2 = (itemUpdating,endingNeeded,update,mood,submood) => {
+		console.log(itemUpdating,endingNeeded,update,mood,submood)
+		console.log(this.state)
+		// console.log(this.state.currentEditMode, itemUpdating,endingNeeded,update,mood,submood)
+		         return <Grid style={{height:'400px',width:'505px'}}>
+		                	<Grid.Row columns={2} style={{paddingBottom:'0px'}}divided>
+		                	<Grid.Column >
+		                		<Button onClick={()=>{this.menuSelect('default'); this.setState({searchQuery:'',wordsList:[]})}} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingLeft:'13px',marginBottom:'10px'}}>
+		                			<Icon name='chevron left' />
+		                			<div style={{color:'#666666'}}>{'Back'}</div>
+		                		</Button>
+									      <Input 
+									      icon='search' 
+									      iconPosition='left' 
+									      name='search'     
+									      disabled={this.state.lockSubmit}
+									      // width='100%'
+									      style={{width:'220px'}}
+									 		  onChange={this.onChangeBaseSearch.bind(this,endingNeeded)}
+						            value={this.state.searchQuery}
+						            // onClose={()=>{this.setState({searchQuery:'',wordsList:[]})}}
+						            />
+									      <Segment vertical style={{height:255,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
+									      <List selection>
+										    {this.state.wordsList.map((k)=>{return <List.Item onClick={()=>{
+										    	// if (k['type']=='[→V]' || k['type']=='[V→V]')
+										    	console.log(k)
+										    	this.setState({
+										    		searchQuery:'',
+										    		wordsList:[],
+										    		candidateBase:this.state.candidateBase.concat(k),
+										    	},()=>{
+										    		this.updateCandidateCall(endingNeeded,update,mood,submood)
+										    	})
+
+										    }} style={{cursor:'pointer',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'15px',padding:5}}>
+											        <List.Description style={{paddingBottom:'4px'}}>{k['yupikword']}</List.Description>
+											        <List.Header style={{fontWeight:'400'}}>{this.processStyledText(k['englishraw'])}</List.Header>
+											      </List.Item>				      	
+										      })}
+									    	</List>
+									      </Segment>
+									      {this.state.wordsList.length > 0 ?
+										      <div style={{textAlign:'center'}}>
+											      <Icon color='grey' name='chevron down' />
+										      </div>
+										      :
+										      null
+										    }
+
+										  </Grid.Column>
+										  <Grid.Column style={{display:'flex',flexDirection:'column'}}>
+									  
+									        <div style={{color:'#666666'}}>{'Candidate (English Order)'}</div>
+									        <Segment style={{height:290,overflow: 'auto',padding:10}}>
+									        	<List divided>
+									        	{this.state.cvvMood.length > 0 && this.state.currentEditMode == 'cvupdate' ?
+										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
+										        		<div style={{flex:1}}>
+											        		<div style={{color:'#000000b3'}}>{retrieveMoodEnglish[this.state.cvvMood]['fst']}</div>
+											        		<div style={{fontWeight:''}}>{retrieveMoodEnglish[this.state.cvvMood]['english']+' '}<span style={{fontStyle:'italic'}}>{mvSubjectOptionsEnglish[this.state.cvvs.join("")]}</span></div>
+										        		</div>
+										        		</List.Item>
+									        		:
+									        		null
+									        	}
+									        	{this.state.candidateBase.map((k,kindex)=>{return (kindex===this.state.candidateBase.length-1 ?
+										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
+										        		<div style={{flex:1}}>
+											        		<div style={{color:'#000000b3'}}>{k['yupikword']}</div>
+											        		<div style={{fontWeight:''}}>{this.processStyledText(k['englishraw'])}</div>
+										        		</div>
+										        		<Icon circular onClick={()=>{this.setState({candidateBase:this.state.candidateBase.slice(0,-1)},()=>{this.updateCandidateCall(endingNeeded,update,mood,submood)})}} style={{cursor:'pointer',width:30}} name='x' />
+										        		</List.Item>
+									        			:
+										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
+										        		<div style={{flex:1}}>										        		
+											        		<div style={{color:'#000000b3'}}>{k['yupikword']}</div>
+											        		<div style={{fontWeight:''}}>{this.processStyledText(k['englishraw'])}</div>
+										        		</div>
+										        		<div style={{width:30}} />
+										        		</List.Item>
+									        			)
+									        	})}
+									        	</List>
+								        	</Segment>
+									      <div style={{paddingBottom:10}}>  
+		                		<Button color='blue' onClick={()=>{
+		                			if (mood === 'Intrg') {
+		                				this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Insert",["mv","qWord"],[submood,1]]]); 		                				
+		                			} else {
+		                				console.log([[itemUpdating[0],itemUpdating[1],this.state.candidateCall]])
+		                				this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall]]); 		                						                				
+		                			}
+		                			this.setState({isOpen:false,currentEditMode:'default',searchQuery:'',wordsList:[],candidateBase:[],lockSubmit:false}) 
+		                		}} disabled={!this.state.lockSubmit} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}>
+		                			<div>{'Submit'}</div>
+		                			<Icon name='chevron right' />
+		                		</Button>
+		                		</div>
+
+		                	</Grid.Column>
+		                	</Grid.Row>
+									    </Grid>
+
+	}
+
 	arraysEqual = (a, b) => {
 	  if (a === b) return true;
 	  if (a == null || b == null) return false;
@@ -2590,11 +2698,12 @@ class OneVerbWordBuilder extends Component {
 		console.log(this.state)
 
 		return (
+			<Container style={{ margin: 0, padding: 0 }} text>
 			<div style={{fontFamily:customFontFam}}>
 
       <Grid textAlign='center'>
       <Grid.Row  style={{height:40,paddingBottom:0}}>
-      <Grid.Column style={{ maxWidth: 800, padding: 10 }} textAlign='left'>
+      <Grid.Column style={{ maxWidth: 800, padding: 0 }} textAlign='left'>
 
       {this.state.from === '/' ?
         <Link to={{pathname: "/", state: { history:this.state.history }}} >
@@ -2618,7 +2727,7 @@ class OneVerbWordBuilder extends Component {
 				<Container>
 					<div>
 
-							<div style={{marginTop:'30px',}}>
+							<div style={{marginTop:'30px',marginBottom:'30px'}}>
 
 							 	{this.state.mvnsBases.length > 0 ? 
 									<div>
@@ -2633,8 +2742,7 @@ class OneVerbWordBuilder extends Component {
 														return <span>{this.editMenu('mvnsappositive',[kind,qind])}</span>												
 													}
 												})}
-												</div>												
-
+												</div>
 											)}
 											</div>	
 
@@ -3603,9 +3711,11 @@ class OneVerbWordBuilder extends Component {
 
 
 
+				<div className='hierarchymain'>
+				<span className='span1'>Sentence Templates</span>
+				</div>
 
-				<div style={{height:'15px'}} />
-          	<SentenceTemplates backEndCall={this.backEndCall.bind(this)} getColor={this.getColor.bind(this)} />
+        <SentenceTemplates backEndCall={this.backEndCall.bind(this)} getColor={this.getColor.bind(this)} />
 				</div>
 
 
@@ -3616,6 +3726,7 @@ class OneVerbWordBuilder extends Component {
 			</Grid.Row>
 			</Grid>
 			</div>
+			</Container>
 		);
 	}
 }

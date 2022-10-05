@@ -1049,9 +1049,9 @@ class SimpleWordBuilderUpdated extends Component {
       <div>
 
       {this.state.mvvBase.length > 0 && this.state.mvvSegments.length > 0 ?
-        <div style={{textAlign:'center',marginTop:'13px', marginBottom:'20px'}}>
+        <div style={{marginTop:'13px', marginBottom:'20px',marginLeft:'15px'}}>
         <div style={{marginBottom:10,fontSize:'22px',color:'#000000',fontWeight:'400'}}>
-          <div style={{cursor:'pointer',lineHeight:'35px'}}>
+          <div style={{cursor:'pointer',lineHeight:'35px',marginLeft:'2px'}}>
             {this.state.mvvSegments.map((t)=>
               <span style={{color:colorsList[this.state.colorScheme][t[1]]}}>{t[0]}</span>
             )}
@@ -1105,9 +1105,9 @@ class SimpleWordBuilderUpdated extends Component {
 
 
       {this.state.npnSegments.length > 0 && this.state.npnSegments.length === this.state.npn.length ?
-        <div style={{textAlign:'center',marginTop:'13px', marginBottom:'20px'}}>
+        <div style={{marginTop:'13px', marginBottom:'20px',marginLeft:'15px'}}>
           <div style={{marginBottom:10,fontSize:'22px',fontWeight:'400'}}>
-            <div style={{lineHeight:'35px'}}>
+            <div style={{lineHeight:'35px',marginLeft:'2px'}}>
 
               {this.state.npnSegments.slice().reverse()[0][0].map((t)=>
                 <span style={{color:colorsList[this.state.colorScheme][t[1]]}}>{t[0]}</span>
