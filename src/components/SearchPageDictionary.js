@@ -468,7 +468,7 @@ class SearchPageDictionary extends Component {
               </Grid.Column>
             </Grid.Row>
 
-            <Grid.Row style={{display:'flex',justifyContent:'center',padding:0,paddingLeft:(window.innerWidth < 480 ? 7:14),paddingRight:(window.innerWidth < 480 ? 7:14)}}>
+            <Grid.Row style={{display:'flex',justifyContent:'center',padding:0,paddingLeft:(window.innerWidth < 480 ? 7:16),paddingRight:(window.innerWidth < 480 ? 7:16)}}>
             <List style={{width:'100%',}} divided>
             {displayList  ? 
                 wordsList.map((word) => 

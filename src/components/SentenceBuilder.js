@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Container, Header, Button, Icon, Divider, Image, Grid, Dropdown, List, Label, Input, Segment, Popup, Menu } from 'semantic-ui-react';
+import { Container, Header, Button, Icon, Divider, Image, Grid, Dropdown, List, Label, Input, Segment, Popup, Accordion, Menu } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { API_URL } from '../App.js';
 import axios from 'axios';
-import {nounOptionsMVPossessors, colorsList,  mvSubject4thPersonCalls, mvObject4thPersonCalls,nObject4thPersonCalls, mvSubjectOptionsWho, mvSubjectOptionsWhat, mvObjectOptionsWhom, mvObjectOptionsWhomAbl, mvObjectOptionsWhat, mvObjectOptionsWhatAbl,retrieveMoodEnglish, nounOptionsPossessorsNo4th, mvSubjectOptionsOnly2nd, nounOptionsNumbers, nounoptionsmodalis, mvSubjectOptions, mvObjectOptions, mvSubjectOptionsEnglish, verbPostbases, nounPostbases, VVpostbases, NNpostbases} from './constants/newconstants.js'
+import {nounOptionsMVPossessors, popularPostbases, colorsList,  mvSubject4thPersonCalls, mvObject4thPersonCalls,nObject4thPersonCalls, mvSubjectOptionsWho, mvSubjectOptionsWhat, mvObjectOptionsWhom, mvObjectOptionsWhomAbl, mvObjectOptionsWhat, mvObjectOptionsWhatAbl,retrieveMoodEnglish, nounOptionsPossessorsNo4th, mvSubjectOptionsOnly2nd, nounOptionsNumbers, nounoptionsmodalis, mvSubjectOptions, mvObjectOptions, mvSubjectOptionsEnglish, verbPostbases, nounPostbases, VVpostbases, NNpostbases} from './constants/newconstants.js'
+import {newpostbases} from './constants/newpostbases.js'
 import {ending_underlying} from './constants/ending_underlying.js'
 import palette from 'google-palette';
 import shuffle from 'shuffle-array';
@@ -140,11 +141,13 @@ class OneVerbWordBuilder extends Component {
 			filteredDictVit: this.props.filteredDictVit,
 			filteredDictN: this.props.filteredDictN,
 
-			filteredDictVVfuture:{},
-			filteredDictVVpast:{},
+			// filteredDictVVfuture:{},
+			// filteredDictVVpast:{},
 			filteredDictVVall:{},
 			otherBases: [],
 			colorScheme: 0,
+			activeIndexes:[],
+			addSubject:false,
 			// colorsList: {
 			// 	'mvv.b':'#000000',
 			// 	'mvv.e':'#852828',
@@ -531,7 +534,6 @@ class OneVerbWordBuilder extends Component {
           // let filteredDictN = usageDictionary.filter(entry => (entry.type.includes('n')||entry.type.includes('[V→N]')||entry.type.includes('[N→N]')))
           // let filteredDictVit = usageDictionary.filter(entry => (entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')||entry.type.includes('[V→V]')))
 
-
           // this.setState({ usageDictionary: usageDictionary});
 
           let filteredDictV = usageDictionary.filter(entry => (entry.type.includes('i')||entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')) )
@@ -546,6 +548,7 @@ class OneVerbWordBuilder extends Component {
           this.setState({ usageDictionary: usageDictionary, filteredDictV: filteredDictV, filteredDictVit: filteredDictVit, filteredDictN: filteredDictN, filteredDictVVnofuture: filteredDictVVnofuture, filteredDictVVnopast: filteredDictVVnopast, filteredDictVVnotime:filteredDictVVnotime, filteredDictVVall: filteredDictVVall});
         });
     } else {
+    			usageDictionary = this.state.usageDictionary
           let filteredDictV = usageDictionary.filter(entry => (entry.type.includes('i')||entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')) )
           let filteredDictN = usageDictionary.filter(entry => (entry.type.includes('n')||entry.type.includes('[V→N]')||entry.type.includes('[N→N]')))
           let filteredDictVit = usageDictionary.filter(entry => (entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')))
@@ -1283,13 +1286,13 @@ class OneVerbWordBuilder extends Component {
 			filteredDictV = this.state.filteredDictV
 		}
 		if (noFuture && noPast) {
-			filteredDictV = Object.keys(this.state.filteredDictVVnotime).map(key => filteredDictV[key]=this.state.filteredDictVVnotime[key])
+			Object.keys(this.state.filteredDictVVnotime).map(key => filteredDictV[key]=this.state.filteredDictVVnotime[key])
 		} else if (noFuture) {
-			filteredDictV = Object.keys(this.state.filteredDictVVnofuture).map(key => filteredDictV[key]=this.state.filteredDictVVnofuture[key])
+			Object.keys(this.state.filteredDictVVnofuture).map(key => filteredDictV[key]=this.state.filteredDictVVnofuture[key])
 		} else if (noPast) {
-			filteredDictV = Object.keys(this.state.filteredDictVVnopast).map(key => filteredDictV[key]=this.state.filteredDictVVnopast[key])
+			Object.keys(this.state.filteredDictVVnopast).map(key => filteredDictV[key]=this.state.filteredDictVVnopast[key])
 		} else {
-			filteredDictV = Object.keys(this.state.filteredDictVVall).map(key => filteredDictV[key]=this.state.filteredDictVVall[key])
+			Object.keys(this.state.filteredDictVVall).map(key => filteredDictV[key]=this.state.filteredDictVVall[key])
 		}
 
 		if (this.state.endingAdjusted == 'n') {
@@ -1530,13 +1533,13 @@ class OneVerbWordBuilder extends Component {
 			    	</Menu>  			
   		} else if (type === 'mv' || type == 'mvEnglish2') {
 				return <Menu vertical>
-			      {this.menuItem('BaseChooser','Change Main Verb','mvupdate',null)}
+			      {this.menuItem('BaseChooser','Edit Verb','mvupdate',null)}
 			      {this.state.requirePostbase.length > 0 ?
 			      	this.subMenuItem('changeRequiredPostbase')
 			      	:
 			      	null
 			      }
-			      {this.state.mvvMood == 'Ind'  ?
+{/*			      {this.state.mvvMood == 'Ind'  ?
 			      	(this.state.mvvType !== 'qaa' ?
 			      		this.menuItem('Update','Make Yes or No Question',null,null,[["Update",["mv","vType"],'qaa']])
 			      		:
@@ -1544,13 +1547,15 @@ class OneVerbWordBuilder extends Component {
 			      		) 
 			      	:
 			      	null
-			      }
+			      }*/}
 			      {this.state.optCase.length > 0 ?
 			      	this.subMenuItem('switchOptative')
 			      	:
 			      	null
 			      }
-			      {this.menuItem('Delete','Delete Main Verb',null,null,[["Delete",["mv",],-1]])}
+			      {this.subMenuItem('addnOblique')}
+			      {this.menuItem('Delete','Delete Verb',null,null,[["Delete",["mv",],-1]])}
+
 			    	</Menu>
  			} else if (type === 'mvqWord' || type == 'mvEnglish1') {
 				return <Menu vertical>
@@ -1833,6 +1838,8 @@ class OneVerbWordBuilder extends Component {
   		return this.baseChooser(["Update",["sv","nObliques",ind[0],'nBases',ind[1],ind[2]]],'n','updatebase','Ind')
   	} else if (this.state.currentEditMode==='mvinsert') {
   		return this.baseChooser(["Insert",["mv"]],'v','insert','Ind')
+  	} else if (this.state.currentEditMode==='mvinsertqaa') {
+  		return this.baseChooser(["Insert",["mv"]],'v','insert','Ind')
   	} else if (this.state.currentEditMode==='cvinsert') {
   		return this.baseChooser(["Insert",["cv"]],'v','insert',this.state.cvvMood,this.state.cvvType)
   	} else if (this.state.currentEditMode==='questionInsert') {
@@ -1963,6 +1970,43 @@ class OneVerbWordBuilder extends Component {
     	
   }
 
+editSubjectMenu = (name) => {
+	return <Popup
+			      trigger={									
+							<span style={{border:'solid 1px #22242626',color:this.getColor('mvv.s'),fontSize:'18px',padding:'8px 2px 8px 5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}>{mvSubjectOptionsEnglish[this.state.mvvs.join("")]}<Icon style={{color:this.getColor('mvv.s'),fontSize:'16px',margin:0}} name='dropdown' /></span>
+			      }
+			      on='click'
+			      position='bottom center'
+			      open={this.state.currentlyOpen === name}
+			      style={{height:295}}
+			      onOpen={()=>{this.setState({currentlyOpen:name})}}
+			      onClose={()=>{this.setState({currentlyOpen:'', addSubject:false})}}
+			      content={
+			      	<div>
+			      	{this.state.addSubject ?
+				      	this.baseChooser(["Insert",["mv","ns"]],'n','insert','Ind')
+				      	:
+				      	<div style={{display:'flex',flexDirection:'column',justifyContent:'center'}}>
+					      	<Button basic onClick={()=>this.setState({addSubject:true})}>Add a Subject</Button>
+					      	<Segment style={{height:200,overflow:'auto',padding:0,marginBottom:8}}>
+						      <Button.Group style={{border:0}} basic vertical>
+						      	{this.state.mvSubjectOptions1.map((k)=>
+						      		<Button active={k['value']==this.state.mvvs.join("")} onClick={()=>{this.setState({currentlyOpen:''},()=>this.backEndCall([["Update",["mv","vs"],k['value'].split('').map(Number)]]))}}>{k['text']}</Button>
+						      	)}
+					      	</Button.Group>
+					      	</Segment>
+						      <div style={{textAlign:'center'}}>
+							      <Icon color='grey' name='chevron down' />
+						      </div>
+				      	</div>
+				      }
+			      	</div>
+			      	}
+			     />
+}
+
+														
+
 	editMenu = (type,ind) => {
 
 		// if (mind) {
@@ -1992,25 +2036,61 @@ class OneVerbWordBuilder extends Component {
 
 	}
 
+  handleClick = (index) => {
+    // console.log(e,titleProps.id)
+    // this.setState({ loaderOn: true });
+    // const index = titleProps.id;
+    const { activeIndexes } = this.state;
+    const newIndex = this.state.activeIndexes.slice()
+    // const newIndex = activeIndex === index ? -1 : index;
+
+    const currentIndexPosition = activeIndexes.indexOf(index);
+
+    console.log(currentIndexPosition, activeIndexes, index)
+    if (currentIndexPosition > -1) {
+      newIndex.splice(currentIndexPosition, 1);
+    } else {
+      newIndex.push(index);
+    }
+
+    console.log(newIndex)
+
+    // let mood = moods[index];
+    // if (newIndex !== -1) {   
+      // this.getEndings(this.state.parses[currentIndex], mood);
+    // }
+    this.setState({ activeIndexes: newIndex });
+  };
 
 	subMenuItem=(type, ind1, ind2)=> {
 		if (type==='addCV') {
-	    return <Dropdown item text='Add Connective Verb Phrase'>
-	      <Dropdown.Menu>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Prec',cvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>before...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cnsq',cvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>because...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cont',cvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>whenever...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Conc',cvvType:'eventhough'},()=>{this.menuSelect('cvinsert',-1)})}}>even though...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Conc',cvvType:'evenif'},()=>{this.menuSelect('cvinsert',-1)})}}>even if...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cond',cvvType:'if'},()=>{this.menuSelect('cvinsert',-1)})}}>if...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cond',cvvType:'wheninthefuture'},()=>{this.menuSelect('cvinsert',-1)})}}>when (in the future)...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'CtmpI',cvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>when (in the past)...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'CtmpII',cvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>while...</Dropdown.Item>
-	      </Dropdown.Menu>
-	    </Dropdown>			
+	    return <Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
+	    		<Accordion.Title
+	    			id={type}
+	    			active={this.state.activeIndexes.includes(type)}
+            onClick={()=>{this.handleClick('addCV')}}
+	    		>
+	    			<Icon name="dropdown" />
+	    			{'Add Connective Verb'}
+	    		</Accordion.Title>
+	    		<Accordion.Content active={this.state.activeIndexes.includes(type)}>
+	    		<Button.Group vertical basic fluid>
+		        <Button onClick={()=>{this.setState({cvvMood:'Prec',cvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>before...</Button>
+		        <Button onClick={()=>{this.setState({cvvMood:'Cnsq',cvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>because...</Button>
+		        <Button onClick={()=>{this.setState({cvvMood:'Cont',cvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>whenever...</Button>
+		        <Button onClick={()=>{this.setState({cvvMood:'Conc',cvvType:'eventhough'},()=>{this.menuSelect('cvinsert',-1)})}}>even though...</Button>
+		        <Button onClick={()=>{this.setState({cvvMood:'Conc',cvvType:'evenif'},()=>{this.menuSelect('cvinsert',-1)})}}>even if...</Button>
+		        <Button onClick={()=>{this.setState({cvvMood:'Cond',cvvType:'if'},()=>{this.menuSelect('cvinsert',-1)})}}>if...</Button>
+		        <Button onClick={()=>{this.setState({cvvMood:'Cond',cvvType:'wheninthefuture'},()=>{this.menuSelect('cvinsert',-1)})}}>when (in the future)...</Button>
+		        <Button onClick={()=>{this.setState({cvvMood:'CtmpI',cvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>when (in the past)...</Button>
+		        <Button onClick={()=>{this.setState({cvvMood:'CtmpII',cvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>while...</Button>
+	    		</Button.Group>
+	    		</Accordion.Content>
+	    </Accordion>				
 		} else if (type==='addQuestion') {
 	    return <Dropdown item text='Ask a Question'>
 	      <Dropdown.Menu>
+	        <Dropdown.Item onClick={()=>{this.setState({mvvMood:'Ind',mvvType:'qaa'},()=>{this.menuSelect('mvinsertqaa',-1)})}}>yes or no question...?</Dropdown.Item>
 	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg0'},()=>{this.menuSelect('questionInsert',-1)})}}>who is (subject)...?</Dropdown.Item>
 	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg1'},()=>{this.menuSelect('questionInsert',-1)})}}>to whom (object)...?</Dropdown.Item>
 	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg2'},()=>{this.menuSelect('questionInsert',-1)})}}>what is (subject)...?</Dropdown.Item>
@@ -2048,16 +2128,27 @@ class OneVerbWordBuilder extends Component {
 	      </Dropdown.Menu>
 	    </Dropdown>			
 		} else if (type==='addnOblique') {
-	    return <Dropdown item text='Add Noun Obliques'>
-	      <Dropdown.Menu>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'from'},()=>{this.menuSelect('nObliqueInsert',-1)})}}>from...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'io'},()=>{this.menuSelect('nObliqueInsert',-1)})}}>a or some...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Loc',npCaseType:''},()=>{this.menuSelect('nObliqueInsert',-1)})}}>in, at...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Ter',npCaseType:''},()=>{this.menuSelect('nObliqueInsert',-1)})}}>toward...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Via',npCaseType:''},()=>{this.menuSelect('nObliqueInsert',-1)})}}>through, using...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Equ',npCaseType:''},()=>{this.menuSelect('nObliqueInsert',-1)})}}>like, similar to...</Dropdown.Item>
-	      </Dropdown.Menu>
-	    </Dropdown>			
+	    return <Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
+	    		<Accordion.Title
+	    			id={type}
+	    			style={{paddingBottom:'2px'}}
+	    			active={this.state.activeIndexes.includes(type)}
+            onClick={()=>{this.handleClick('addnOblique')}}
+	    		>
+	    			<Icon name="dropdown" />
+	    			{'Add location, direction, etc.'}
+	    		</Accordion.Title>
+	    		<Accordion.Content active={this.state.activeIndexes.includes(type)}>
+	    		<Button.Group vertical basic fluid>
+		        <Button onClick={()=>{this.setState({npCase:'Loc',npCaseType:''},()=>{this.menuSelect('nObliqueInsert',-1)})}}>in or at the...</Button>
+		        <Button onClick={()=>{this.setState({npCase:'Ter',npCaseType:''},()=>{this.menuSelect('nObliqueInsert',-1)})}}>toward the...</Button>
+		        <Button onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'from'},()=>{this.menuSelect('nObliqueInsert',-1)})}}>from the...</Button>
+		        <Button onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'io'},()=>{this.menuSelect('nObliqueInsert',-1)})}}>a or some...</Button>
+		        <Button onClick={()=>{this.setState({npCase:'Via',npCaseType:''},()=>{this.menuSelect('nObliqueInsert',-1)})}}>through, using...</Button>
+		        <Button onClick={()=>{this.setState({npCase:'Equ',npCaseType:''},()=>{this.menuSelect('nObliqueInsert',-1)})}}>like a...</Button>
+	    		</Button.Group>
+	    		</Accordion.Content>
+	    </Accordion>			
 		} else if (type==='caddnOblique') {
 	    return <Dropdown item text='Add Noun Obliques'>
 	      <Dropdown.Menu>
@@ -2191,7 +2282,6 @@ class OneVerbWordBuilder extends Component {
 							onClick={()=>{this.setState({ isOpen: false },()=>{this.backEndCall(backEnd)})}}
 		        >
 		          <div>{text}</div>
-          		<Icon name='chevron right' />
 		        </Menu.Item>			
 		}
 
@@ -2203,7 +2293,6 @@ class OneVerbWordBuilder extends Component {
 							onClick={()=>{this.setState({ isOpen: false },()=>{this.backEndCall(backEnd)})}}
 		        >
 		          <div>{text}</div>
-	        		<Icon name='chevron right' />
 		        </Menu.Item>			
 		}
 
@@ -2215,7 +2304,6 @@ class OneVerbWordBuilder extends Component {
 							onClick={()=>{this.setState({ isOpen: false },()=>{this.backEndCall(backEnd)})}}
 		        >
 		          <div>{text}</div>
-	        		<Icon name='chevron right' />
 		        </Menu.Item>			
 		}
 
@@ -2227,7 +2315,6 @@ class OneVerbWordBuilder extends Component {
 		          onClick={()=>{this.menuSelect(endRequirement)}}
 		        >
 		          <div>Change Main Verb</div>
-          		<Icon name='chevron right' />
 		        </Menu.Item>			
 		}
 		if (type === 'BaseChooser') {
@@ -2239,7 +2326,6 @@ class OneVerbWordBuilder extends Component {
 		          // onClose={()=>{this.setState({searchQuery:'',wordsList:[]})}}
 		        >
 		          <div>{text}</div>
-          		<Icon name='chevron right' />
 		        </Menu.Item>			
 		}
 
@@ -2342,60 +2428,22 @@ class OneVerbWordBuilder extends Component {
 
 	baseChooser = (itemUpdating,endingNeeded,update,mood,submood) => {
 		console.log(itemUpdating,endingNeeded,update,mood,submood)
-		console.log(this.state)
+		let key;
+		let currentTense;
+		// console.log(this.state)
 		// console.log(this.state.currentEditMode, itemUpdating,endingNeeded,update,mood,submood)
-		         return <Grid style={{height:'400px',width:'505px'}}>
-		                	<Grid.Row columns={2} style={{paddingBottom:'0px'}}divided>
+		         return <Grid style={{height:'400px',width:'300px'}}>
+		                	<Grid.Row columns={1} style={{paddingBottom:'0px'}}divided>
 		                	<Grid.Column >
 		                		<Button onClick={()=>{this.menuSelect('default'); this.setState({searchQuery:'',wordsList:[]})}} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingLeft:'13px',marginBottom:'10px'}}>
 		                			<Icon name='chevron left' />
 		                			<div style={{color:'#666666'}}>{'Back'}</div>
 		                		</Button>
-									      <Input 
-									      icon='search' 
-									      iconPosition='left' 
-									      name='search'     
-									      disabled={this.state.lockSubmit}
-									      // width='100%'
-									      style={{width:'220px'}}
-									 		  onChange={this.onChangeBaseSearch.bind(this,endingNeeded)}
-						            value={this.state.searchQuery}
-						            // onClose={()=>{this.setState({searchQuery:'',wordsList:[]})}}
-						            />
-									      <Segment vertical style={{height:255,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
-									      <List selection>
-										    {this.state.wordsList.map((k)=>{return <List.Item onClick={()=>{
-										    	// if (k['type']=='[→V]' || k['type']=='[V→V]')
-										    	console.log(k)
-										    	this.setState({
-										    		searchQuery:'',
-										    		wordsList:[],
-										    		candidateBase:this.state.candidateBase.concat(k),
-										    	},()=>{
-										    		this.updateCandidateCall(endingNeeded,update,mood,submood)
-										    	})
 
-										    }} style={{cursor:'pointer',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'15px',padding:5}}>
-											        <List.Description style={{paddingBottom:'4px'}}>{k['yupikword']}</List.Description>
-											        <List.Header style={{fontWeight:'400'}}>{this.processStyledText(k['englishraw'])}</List.Header>
-											      </List.Item>				      	
-										      })}
-									    	</List>
-									      </Segment>
-									      {this.state.wordsList.length > 0 ?
-										      <div style={{textAlign:'center'}}>
-											      <Icon color='grey' name='chevron down' />
-										      </div>
-										      :
-										      null
-										    }
 
-										  </Grid.Column>
-										  <Grid.Column style={{display:'flex',flexDirection:'column'}}>
-									  
-									        <div style={{color:'#666666'}}>{'Candidate (English Order)'}</div>
-									        <Segment style={{height:290,overflow: 'auto',padding:10}}>
-									        	<List divided>
+									        <Segment style={{overflow: 'auto',padding:0}}>
+									        	<List divided style={{margin:0,padding:0,}}>
+									        	<List.Item style={{color:'#545454',fontFamily:"Lato,'Helvetica Neue',Arial,Helvetica,sans-serif",padding:'8px 15px',backgroundColor:'#f7f7f7'}}>{'he'}<span style={{color:'#bdbdbd'}}>{'...'}</span></List.Item>
 									        	{this.state.cvvMood.length > 0 && this.state.currentEditMode == 'cvupdate' ?
 										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
 										        		<div style={{flex:1}}>
@@ -2407,40 +2455,151 @@ class OneVerbWordBuilder extends Component {
 									        		null
 									        	}
 									        	{this.state.candidateBase.map((k,kindex)=>{return (kindex===this.state.candidateBase.length-1 ?
-										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
+										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center',padding:'8px 15px',backgroundColor:'#f7f7f7'}}>
 										        		<div style={{flex:1}}>
-											        		<div style={{color:'#000000b3'}}>{k['yupikword']}</div>
-											        		<div style={{fontWeight:''}}>{this.processStyledText(k['englishraw'])}</div>
+											        		<div style={{color:'#545454',fontFamily:"Lato,'Helvetica Neue',Arial,Helvetica,sans-serif"}}>{this.processStyledText(newpostbases[k[0]][k[1]])}<span style={{color:'#bdbdbd'}}>{'...'}</span></div>
+											        		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200'}}>{newpostbases[k[0]]['exp']}</div>
 										        		</div>
 										        		<Icon circular onClick={()=>{this.setState({candidateBase:this.state.candidateBase.slice(0,-1)},()=>{this.updateCandidateCall(endingNeeded,update,mood,submood)})}} style={{cursor:'pointer',width:30}} name='x' />
 										        		</List.Item>
 									        			:
-										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
+										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center',padding:'8px 15px',backgroundColor:'#f7f7f7'}}>
 										        		<div style={{flex:1}}>										        		
-											        		<div style={{color:'#000000b3'}}>{k['yupikword']}</div>
-											        		<div style={{fontWeight:''}}>{this.processStyledText(k['englishraw'])}</div>
+											        		<div style={{color:'#545454',fontFamily:"Lato,'Helvetica Neue',Arial,Helvetica,sans-serif"}}>{this.processStyledText(newpostbases[k[0]][k[1]])}<span style={{color:'#bdbdbd'}}>{'...'}</span></div>
+											        		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200'}}>{newpostbases[k[0]]['exp']}</div>
 										        		</div>
 										        		<div style={{width:30}} />
 										        		</List.Item>
 									        			)
 									        	})}
 									        	</List>
-								        	</Segment>
-									      <div style={{paddingBottom:10}}>  
-		                		<Button color='blue' onClick={()=>{
-		                			if (mood === 'Intrg') {
-		                				this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Insert",["mv","qWord"],[submood,1]]]); 		                				
-		                			} else {
-		                				console.log([[itemUpdating[0],itemUpdating[1],this.state.candidateCall]])
-		                				this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall]]); 		                						                				
-		                			}
-		                			this.setState({isOpen:false,currentEditMode:'default',searchQuery:'',wordsList:[],candidateBase:[],lockSubmit:false}) 
-		                		}} disabled={!this.state.lockSubmit} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}>
-		                			<div>{'Submit'}</div>
-		                			<Icon name='chevron right' />
-		                		</Button>
-		                		</div>
 
+
+
+									        	{this.state.lockSubmit ?
+												      <div style={{paddingBottom:10}}>  
+					                		<Button size='small' color='blue' onClick={()=>{
+					                			if (mood === 'Intrg') {
+					                				this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Insert",["mv","qWord"],[submood,1]]]); 		                				
+					                			} else {
+					                				console.log([[itemUpdating[0],itemUpdating[1],this.state.candidateCall]])
+					                				this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall]]); 		                						                				
+					                			}
+					                			this.setState({isOpen:false,currentEditMode:'default',searchQuery:'',wordsList:[],candidateBase:[],lockSubmit:false}) 
+					                		}} disabled={!this.state.lockSubmit} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}>
+					                			<div>{'Submit'}</div>
+					                			<Icon name='chevron right' />
+					                		</Button>
+					                		</div>
+					                		:
+
+
+									        <div style={{padding:0,margin:0}}>
+													<Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
+											    		<Accordion.Title
+											    			id={'verb'}
+											    			style={{paddingBottom:'2px'}}
+											    			active={this.state.activeIndexes.includes('vvpostbases')}
+										            onClick={()=>{this.handleClick('vvpostbases')}}
+											    		>
+											    			<Icon name="dropdown" />
+											    			{'Common Postbases'}
+											    		</Accordion.Title>
+											    		<Accordion.Content active={this.state.activeIndexes.includes('vvpostbases')}>
+											    		<Button.Group vertical basic fluid>
+												      	{Object.keys(popularPostbases).map((p,index)=>{
+												      		key = popularPostbases[p]['expression']
+												      		if (this.state.candidateBase.length === 0) {
+												      			currentTense = 'description'
+												      		} else {
+												      			currentTense = 'description'												      			
+												      		}
+												      	
+												      		return <Button style={{textAlign:'left',padding:'10px'}} onClick={()=>{this.handleClick('vvpostbases'); this.setState({candidateBase:this.state.candidateBase.concat([[popularPostbases[p]['expression'],currentTense]])})}}>
+													      		<div>
+														      		<div style={{marginBottom:'5px',color:'#545454'}}>
+														      		{this.state.candidateBase.length === 0 && newpostbases[key]['is'] ?
+														      			<span>{'is '}</span>
+															      		:
+															      		null
+															      	}
+														      		{this.state.candidateBase.length === 0 && newpostbases[key]['has'] ?
+														      			<span>{'has '}</span>
+															      		:
+															      		null
+															      	}
+														      		<span>{newpostbases[key]['description']}</span>
+														      		<span style={{color:'#bdbdbd'}}>{'...'}</span></div>
+														      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200'}}>{newpostbases[key]['exp']}</div>
+													      		</div>
+												      		</Button>
+												      	})}
+											    		</Button.Group>
+											    		</Accordion.Content>
+											    </Accordion>	
+
+									        
+													<Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
+											    		<Accordion.Title
+											    			id={'verb'}
+											    			style={{paddingBottom:'2px'}}
+											    			active={this.state.activeIndexes.includes('verbs')}
+										            onClick={()=>{this.handleClick('verbs')}}
+											    		>
+											    			<Icon name="dropdown" />
+											    			{'Common Bases'}
+											    		</Accordion.Title>
+											    		<Accordion.Content active={this.state.activeIndexes.includes('verbs')}>
+											    		<Button.Group vertical basic fluid>
+												      	{Object.keys(popularPostbases).map((p)=>{
+												      		return <Button onClick={()=>{this.handleClick('verbs'); this.setState({candidateBase:this.state.candidateBase.concat(popularPostbases[p])})}}>{popularPostbases[p]['englishnorm']}</Button>
+												      	})}
+											    		</Button.Group>
+											    		</Accordion.Content>
+											    </Accordion>	
+		                		
+											      <Input 
+											      icon='search' 
+											      iconPosition='left' 
+											      name='search'     
+											      disabled={this.state.lockSubmit}
+											      // width='100%'
+											      style={{width:'100%',padding:'5px 5px'}}
+											 		  onChange={this.onChangeBaseSearch.bind(this,endingNeeded)}
+								            value={this.state.searchQuery}
+								            // onClose={()=>{this.setState({searchQuery:'',wordsList:[]})}}
+								            />
+								            {this.state.wordsList.length > 0 ?
+												      <Segment vertical style={{maxHeight:255,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
+												      <List selection>
+													    {this.state.wordsList.map((k)=>{return <List.Item onClick={()=>{
+													    	this.setState({
+													    		searchQuery:'',
+													    		wordsList:[],
+													    		candidateBase:this.state.candidateBase.concat(k),
+													    	},()=>{
+													    		this.updateCandidateCall(endingNeeded,update,mood,submood)
+													    	})
+
+													    }} style={{cursor:'pointer',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'15px',padding:5}}>
+														        <List.Description style={{paddingBottom:'4px'}}>{k['yupikword']}</List.Description>
+														        <List.Header style={{fontWeight:'400'}}>{this.processStyledText(k['englishraw'])}</List.Header>
+														      </List.Item>				      	
+													      })}
+												    	</List>
+												      </Segment>
+												      :
+												      null
+												    }
+												    </div>
+					                	}
+								        	</Segment>
+
+
+
+
+
+							
 		                	</Grid.Column>
 		                	</Grid.Row>
 									    </Grid>
@@ -2449,8 +2608,8 @@ class OneVerbWordBuilder extends Component {
 
 
 	baseChooser2 = (itemUpdating,endingNeeded,update,mood,submood) => {
-		console.log(itemUpdating,endingNeeded,update,mood,submood)
-		console.log(this.state)
+		// console.log(itemUpdating,endingNeeded,update,mood,submood)
+		// console.log(this.state)
 		// console.log(this.state.currentEditMode, itemUpdating,endingNeeded,update,mood,submood)
 		         return <Grid style={{height:'400px',width:'505px'}}>
 		                	<Grid.Row columns={2} style={{paddingBottom:'0px'}}divided>
@@ -2694,6 +2853,10 @@ class OneVerbWordBuilder extends Component {
 		}
 	}
 
+	getDropdownStyle=(color)=>{
+		return {border:'solid 1px #22242626',color:this.getColor(color),fontSize:'18px',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}
+	}
+
 	render() {
 		console.log(this.state)
 
@@ -2724,10 +2887,10 @@ class OneVerbWordBuilder extends Component {
 
 
 
-				<Container>
+				<Container style={{marginTop:'30px',marginBottom:'30px'}}>
 					<div>
 
-							<div style={{marginTop:'30px',marginBottom:'30px'}}>
+							<div style={{marginBottom:'30px'}}>
 
 							 	{this.state.mvnsBases.length > 0 ? 
 									<div>
@@ -2874,7 +3037,7 @@ class OneVerbWordBuilder extends Component {
 									:
 									null
 								}
-
+{/*
 
 								{this.state.mvvs.length > 0 ?
 									<div style={{display:'flex',justifyContent:'center',paddingBottom:10}}>
@@ -2883,9 +3046,9 @@ class OneVerbWordBuilder extends Component {
 									:
 									null
 								}
+*/}
 
-
-								<div style={{textAlign:'center',fontSize:'18px',fontWeight:'300'}}>
+								<div style={{textAlign:'center',fontSize:'18px',fontWeight:'300',marginTop:'20px'}}>
 								{this.state.mvEnglish1.length > 0 ?
 									this.editMenu('mvEnglish1',-1)
 									:
@@ -2900,8 +3063,8 @@ class OneVerbWordBuilder extends Component {
 												<span>
 												{xind === 0 ?
 													<span>
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('mvns'+(this.state.mvnsSegments.length-1-xind).toString()+'0.ps'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","ns",this.state.mvnsSegments.length-1,0],(data.value+this.state.mvns[this.state.mvnsSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.mvns[this.state.mvnsSegments.length-1][0].slice(0, -1).join("")} options={nounOptionsPossessorsNo4th} />
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('mvns'+(this.state.mvnsSegments.length-1-xind).toString()+'0.pd'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","ns",this.state.mvnsSegments.length-1,0],this.state.mvns[this.state.mvnsSegments.length-1][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.mvns[this.state.mvnsSegments.length-1][0].slice(-1).join("")} options={nounOptionsNumbers} />																
+														<Dropdown inline scrolling style={this.getDropdownStyle('mvns'+(this.state.mvnsSegments.length-1-xind).toString()+'0.ps')} onChange={(event,data)=>{this.backEndCall([["Update",["mv","ns",this.state.mvnsSegments.length-1,0],(data.value+this.state.mvns[this.state.mvnsSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.mvns[this.state.mvnsSegments.length-1][0].slice(0, -1).join("")} options={nounOptionsPossessorsNo4th} />
+														<Dropdown inline scrolling style={this.getDropdownStyle('mvns'+(this.state.mvnsSegments.length-1-xind).toString()+'0.pd')} onChange={(event,data)=>{this.backEndCall([["Update",["mv","ns",this.state.mvnsSegments.length-1,0],this.state.mvns[this.state.mvnsSegments.length-1][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.mvns[this.state.mvnsSegments.length-1][0].slice(-1).join("")} options={nounOptionsNumbers} />																
 														{x.map((k,kind)=>
 															{if (kind === x.length-1) {
 																return <span>
@@ -2917,7 +3080,7 @@ class OneVerbWordBuilder extends Component {
 													</span>
 													:
 													<span>
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('mvns'+(this.state.mvnsSegments.length-1-xind).toString()+'0.pd'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","ns",this.state.mvnsSegments.length-1-xind,0],this.state.mvns[this.state.mvnsSegments.length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.mvns[this.state.mvnsSegments.length-1-xind][0].slice(-1).join("")}  options={nounOptionsNumbers} />								
+														<Dropdown inline scrolling style={this.getDropdownStyle('mvns'+(this.state.mvnsSegments.length-1-xind).toString()+'0.pd')} onChange={(event,data)=>{this.backEndCall([["Update",["mv","ns",this.state.mvnsSegments.length-1-xind,0],this.state.mvns[this.state.mvnsSegments.length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.mvns[this.state.mvnsSegments.length-1-xind][0].slice(-1).join("")}  options={nounOptionsNumbers} />								
 														{x.map((k,kind)=>
 															{if (kind === x.length-1) {
 																return <span>
@@ -2938,15 +3101,15 @@ class OneVerbWordBuilder extends Component {
 										:
 										<span>
 											{this.state.mvvMood == "Opt][PRS][NEG" || this.state.mvvMood == "Opt][FUT][NEG" ?
-												<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('mvv.s'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={(event,data)=>{this.backEndCall([["Update",["mv","vs"],data.value.split('').map(Number)]])}}  value={this.state.mvvs.join("")} options={mvSubjectOptionsOnly2nd} />
+												<Dropdown inline scrolling style={this.getDropdownStyle('mvv.s')} onChange={(event,data)=>{this.backEndCall([["Update",["mv","vs"],data.value.split('').map(Number)]])}}  value={this.state.mvvs.join("")} options={mvSubjectOptionsOnly2nd} />
 												:
 												(this.state.mvvType == 'Intrg0' ?
-													<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('mvv.s'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={(event,data)=>{this.backEndCall([["Update",["mv","vs"],data.value.split('').map(Number)]])}}  value={this.state.mvvs.join("")} options={mvSubjectOptionsWho} />
+													<Dropdown inline scrolling style={this.getDropdownStyle('mvv.s')} onChange={(event,data)=>{this.backEndCall([["Update",["mv","vs"],data.value.split('').map(Number)]])}}  value={this.state.mvvs.join("")} options={mvSubjectOptionsWho} />
 													:
 													(this.state.mvvType == 'Intrg2' ?
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('mvv.s'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={(event,data)=>{this.backEndCall([["Update",["mv","vs"],data.value.split('').map(Number)]])}}  value={this.state.mvvs.join("")} options={mvSubjectOptionsWhat} />
+														<Dropdown inline scrolling style={this.getDropdownStyle('mvv.s')} onChange={(event,data)=>{this.backEndCall([["Update",["mv","vs"],data.value.split('').map(Number)]])}}  value={this.state.mvvs.join("")} options={mvSubjectOptionsWhat} />
 														:
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('mvv.s'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={(event,data)=>{this.backEndCall([["Update",["mv","vs"],data.value.split('').map(Number)]])}}  value={this.state.mvvs.join("")} options={this.state.mvSubjectOptions1} />
+														this.editSubjectMenu('mvSubject')
 														)
 													)
 											}
@@ -2978,11 +3141,11 @@ class OneVerbWordBuilder extends Component {
 															null
 														}
 														{this.state.mvvBase[1] == 'it' && xind === this.state.mvnoSegments.length-1?
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('mvno'+(this.state.mvnoSegments.length-1-xind).toString()+'0.ps'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","no",this.state.mvnoSegments.length-1,0],(data.value+this.state.mvno[this.state.mvnoSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.mvno[this.state.mvnoSegments.length-1][0].slice(0, -1).join("")} options={this.state.nounOptionsMVAblPossessors1} />
+														<Dropdown inline scrolling style={this.getDropdownStyle('mvno'+(this.state.mvnoSegments.length-1-xind).toString()+'0.ps')} onChange={(event,data)=>{this.backEndCall([["Update",["mv","no",this.state.mvnoSegments.length-1,0],(data.value+this.state.mvno[this.state.mvnoSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.mvno[this.state.mvnoSegments.length-1][0].slice(0, -1).join("")} options={this.state.nounOptionsMVAblPossessors1} />
 														:
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('mvno'+(this.state.mvnoSegments.length-1-xind).toString()+'0.ps'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","no",this.state.mvnoSegments.length-1,0],(data.value+this.state.mvno[this.state.mvnoSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.mvno[this.state.mvnoSegments.length-1][0].slice(0, -1).join("")} options={this.state.nounOptionsMVPossessors1} />
+														<Dropdown inline scrolling style={this.getDropdownStyle('mvno'+(this.state.mvnoSegments.length-1-xind).toString()+'0.ps')} onChange={(event,data)=>{this.backEndCall([["Update",["mv","no",this.state.mvnoSegments.length-1,0],(data.value+this.state.mvno[this.state.mvnoSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.mvno[this.state.mvnoSegments.length-1][0].slice(0, -1).join("")} options={this.state.nounOptionsMVPossessors1} />
 														}
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('mvno'+(this.state.mvnoSegments.length-1-xind).toString()+'0.pd'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","no",this.state.mvnoSegments.length-1,0],this.state.mvno[this.state.mvnoSegments.length-1][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.mvno[this.state.mvnoSegments.length-1][0].slice(-1).join("")} options={nounOptionsNumbers} />																
+														<Dropdown inline scrolling style={this.getDropdownStyle('mvno'+(this.state.mvnoSegments.length-1-xind).toString()+'0.pd')} onChange={(event,data)=>{this.backEndCall([["Update",["mv","no",this.state.mvnoSegments.length-1,0],this.state.mvno[this.state.mvnoSegments.length-1][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.mvno[this.state.mvnoSegments.length-1][0].slice(-1).join("")} options={nounOptionsNumbers} />																
 														{x.map((k,kind)=>
 															{if (kind === x.length-1) {
 																return <span>
@@ -2998,7 +3161,7 @@ class OneVerbWordBuilder extends Component {
 													</span>
 													:
 													<span>
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('mvno'+(this.state.mvnoSegments.length-1-xind).toString()+'0.pd'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","no",this.state.mvnoSegments.length-1-xind,0],this.state.mvno[this.state.mvnoSegments.length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.mvno[this.state.mvnoSegments.length-1-xind][0].slice(-1).join("")}  options={nounOptionsNumbers} />								
+														<Dropdown inline scrolling style={this.getDropdownStyle('mvno'+(this.state.mvnoSegments.length-1-xind).toString()+'0.pd')} onChange={(event,data)=>{this.backEndCall([["Update",["mv","no",this.state.mvnoSegments.length-1-xind,0],this.state.mvno[this.state.mvnoSegments.length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.mvno[this.state.mvnoSegments.length-1-xind][0].slice(-1).join("")}  options={nounOptionsNumbers} />								
 														{x.map((k,kind)=>
 															{if (kind === x.length-1) {
 																return <span>
@@ -3019,22 +3182,22 @@ class OneVerbWordBuilder extends Component {
 										<span>
 											{this.state.mvvBase[1] == 'it' ?
 												(this.state.mvvType == 'Intrg1' ?
-													<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('mvv.o'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={(event,data)=>{this.backEndCall([["Update",["mv","vo"],data.value.split('').map(Number)]])}}  value={this.state.mvvo.join("")} options={mvObjectOptionsWhomAbl} />		
+													<Dropdown inline scrolling style={this.getDropdownStyle('mvv.o')} onChange={(event,data)=>{this.backEndCall([["Update",["mv","vo"],data.value.split('').map(Number)]])}}  value={this.state.mvvo.join("")} options={mvObjectOptionsWhomAbl} />		
 													:
 													(this.state.mvvType == 'Intrg3' ?
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('mvv.o'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={(event,data)=>{this.backEndCall([["Update",["mv","vo"],data.value.split('').map(Number)]])}}  value={this.state.mvvo.join("")} options={mvObjectOptionsWhatAbl} />		
+														<Dropdown inline scrolling style={this.getDropdownStyle('mvv.o')} onChange={(event,data)=>{this.backEndCall([["Update",["mv","vo"],data.value.split('').map(Number)]])}}  value={this.state.mvvo.join("")} options={mvObjectOptionsWhatAbl} />		
 														:
 														(this.editMenu('mvEnglishAbl',-1))
 														)
 													)
 												:
 												(this.state.mvvType == 'Intrg1' ?
-													<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('mvv.o'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={(event,data)=>{this.backEndCall([["Update",["mv","vo"],data.value.split('').map(Number)]])}}  value={this.state.mvvo.join("")} options={mvObjectOptionsWhom} />		
+													<Dropdown inline scrolling style={this.getDropdownStyle('mvv.o')} onChange={(event,data)=>{this.backEndCall([["Update",["mv","vo"],data.value.split('').map(Number)]])}}  value={this.state.mvvo.join("")} options={mvObjectOptionsWhom} />		
 													:
 													(this.state.mvvType == 'Intrg3' ?
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('mvv.o'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={(event,data)=>{this.backEndCall([["Update",["mv","vo"],data.value.split('').map(Number)]])}}  value={this.state.mvvo.join("")} options={mvObjectOptionsWhat} />		
+														<Dropdown inline scrolling style={this.getDropdownStyle('mvv.o')} onChange={(event,data)=>{this.backEndCall([["Update",["mv","vo"],data.value.split('').map(Number)]])}}  value={this.state.mvvo.join("")} options={mvObjectOptionsWhat} />		
 														:
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('mvv.o'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={(event,data)=>{this.backEndCall([["Update",["mv","vo"],data.value.split('').map(Number)]])}}  value={this.state.mvvo.join("")} options={this.state.mvObjectOptions1} />		
+														<Dropdown inline scrolling style={this.getDropdownStyle('mvv.o')} onChange={(event,data)=>{this.backEndCall([["Update",["mv","vo"],data.value.split('').map(Number)]])}}  value={this.state.mvvo.join("")} options={this.state.mvObjectOptions1} />		
 														)
 													)										
 											}
@@ -3087,11 +3250,11 @@ class OneVerbWordBuilder extends Component {
 													<span>
 														{this.editMenu('mvnObliquesEnglish1',obliqueind)}		
 														{obliques['nCase'] == 'Equ' || obliques['nCase'] == 'Via' || obliques['nType'] == 'io' ? 
-															<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('mvnObliques'+obliqueind.toString()+(obliques['n'].length-1-xind).toString()+'0.ps'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","nObliques",obliqueind,'n',obliques['n'].length-1-xind,0],(data.value+this.state.mvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.mvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(0, -1).join("")} options={this.state.nounOptionsMVAblPossessors1} />
+															<Dropdown inline scrolling style={this.getDropdownStyle('mvnObliques'+obliqueind.toString()+(obliques['n'].length-1-xind).toString()+'0.ps')} onChange={(event,data)=>{this.backEndCall([["Update",["mv","nObliques",obliqueind,'n',obliques['n'].length-1-xind,0],(data.value+this.state.mvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.mvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(0, -1).join("")} options={this.state.nounOptionsMVAblPossessors1} />
 															:
-															<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('mvnObliques'+obliqueind.toString()+(obliques['n'].length-1-xind).toString()+'0.ps'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","nObliques",obliqueind,'n',obliques['n'].length-1-xind,0],(data.value+this.state.mvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.mvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(0, -1).join("")} options={this.state.nounOptionsMVPossessors1} />
+															<Dropdown inline scrolling style={this.getDropdownStyle('mvnObliques'+obliqueind.toString()+(obliques['n'].length-1-xind).toString()+'0.ps')} onChange={(event,data)=>{this.backEndCall([["Update",["mv","nObliques",obliqueind,'n',obliques['n'].length-1-xind,0],(data.value+this.state.mvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.mvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(0, -1).join("")} options={this.state.nounOptionsMVPossessors1} />
 														}					
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('mvnObliques'+obliqueind.toString()+(obliques['n'].length-1-xind).toString()+'0.pd'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","nObliques",obliqueind,'n',obliques['n'].length-1-xind,0],this.state.mvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.mvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(-1).join("")} options={nounOptionsNumbers} />																
+														<Dropdown inline scrolling style={this.getDropdownStyle('mvnObliques'+obliqueind.toString()+(obliques['n'].length-1-xind).toString()+'0.pd')} onChange={(event,data)=>{this.backEndCall([["Update",["mv","nObliques",obliqueind,'n',obliques['n'].length-1-xind,0],this.state.mvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.mvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(-1).join("")} options={nounOptionsNumbers} />																
 														{x.map((k,kind)=>
 															{if (kind === x.length-1) {
 																return <span>
@@ -3106,7 +3269,7 @@ class OneVerbWordBuilder extends Component {
 													</span>
 													:
 													<span>
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('mvnObliques'+obliqueind.toString()+(obliques['n'].length-1-xind).toString()+'0.pd'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["mv","nObliques",obliqueind,'n',obliques['n'].length-1-xind,0],this.state.mvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.mvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(-1).join("")} options={nounOptionsNumbers} />																
+														<Dropdown inline scrolling style={this.getDropdownStyle('mvnObliques'+obliqueind.toString()+(obliques['n'].length-1-xind).toString()+'0.pd')} onChange={(event,data)=>{this.backEndCall([["Update",["mv","nObliques",obliqueind,'n',obliques['n'].length-1-xind,0],this.state.mvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.mvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(-1).join("")} options={nounOptionsNumbers} />																
 														{x.map((k,kind)=>
 															{if (kind === x.length-1) {
 																return <span>
@@ -3143,11 +3306,11 @@ class OneVerbWordBuilder extends Component {
 														null
 													}
 													{this.state.npnCase == 'Equ' || this.state.npnCase == 'Via' || this.state.npCaseType == 'io' ? 
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('npn'+(this.state.npnSegments.length-1-xind).toString()+'0.ps'), fontSize:'18px',fontWeight:'500',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["np","n",this.state.npnSegments.length-1,0],(data.value+this.state.npn[this.state.npnSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.npn[this.state.npnSegments.length-1][0].slice(0, -1).join("")} options={this.state.nounOptionsMVAblPossessors1} />
+														<Dropdown inline scrolling style={this.getDropdownStyle('npn'+(this.state.npnSegments.length-1-xind).toString()+'0.ps')} onChange={(event,data)=>{this.backEndCall([["Update",["np","n",this.state.npnSegments.length-1,0],(data.value+this.state.npn[this.state.npnSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.npn[this.state.npnSegments.length-1][0].slice(0, -1).join("")} options={this.state.nounOptionsMVAblPossessors1} />
 														:
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('npn'+(this.state.npnSegments.length-1-xind).toString()+'0.ps'),fontSize:'18px',fontWeight:'500',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["np","n",this.state.npnSegments.length-1,0],(data.value+this.state.npn[this.state.npnSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.npn[this.state.npnSegments.length-1][0].slice(0, -1).join("")} options={this.state.nounOptionsMVPossessors1} />
+														<Dropdown inline scrolling style={this.getDropdownStyle('npn'+(this.state.npnSegments.length-1-xind).toString()+'0.ps')} onChange={(event,data)=>{this.backEndCall([["Update",["np","n",this.state.npnSegments.length-1,0],(data.value+this.state.npn[this.state.npnSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.npn[this.state.npnSegments.length-1][0].slice(0, -1).join("")} options={this.state.nounOptionsMVPossessors1} />
 													}
-													<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('npn'+(this.state.npnSegments.length-1-xind).toString()+'0.pd'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["np","n",this.state.npnSegments.length-1,0],this.state.npn[this.state.npnSegments.length-1][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.npn[this.state.npnSegments.length-1][0].slice(-1).join("")} options={nounOptionsNumbers} />																
+													<Dropdown inline scrolling style={this.getDropdownStyle('npn'+(this.state.npnSegments.length-1-xind).toString()+'0.pd')} onChange={(event,data)=>{this.backEndCall([["Update",["np","n",this.state.npnSegments.length-1,0],this.state.npn[this.state.npnSegments.length-1][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.npn[this.state.npnSegments.length-1][0].slice(-1).join("")} options={nounOptionsNumbers} />																
 
 													{x.map((k,kind)=>
 														{if (kind === x.length-1) {
@@ -3164,7 +3327,7 @@ class OneVerbWordBuilder extends Component {
 													)
 													:
 													<span>
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('npn'+(this.state.npnSegments.length-1-xind).toString()+'0.pd'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["np","n",this.state.npnSegments.length-1-xind,0],this.state.npn[this.state.npnSegments.length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.npn[this.state.npnSegments.length-1-xind][0].slice(-1).join("")}  options={nounOptionsNumbers} />								
+														<Dropdown inline scrolling style={this.getDropdownStyle('npn'+(this.state.npnSegments.length-1-xind).toString()+'0.pd')} onChange={(event,data)=>{this.backEndCall([["Update",["np","n",this.state.npnSegments.length-1-xind,0],this.state.npn[this.state.npnSegments.length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.npn[this.state.npnSegments.length-1-xind][0].slice(-1).join("")}  options={nounOptionsNumbers} />								
 														{x.map((k,kind)=>
 															{if (kind === x.length-1) {
 																return <span>
@@ -3315,8 +3478,8 @@ class OneVerbWordBuilder extends Component {
 												<span>
 												{xind === 0 ?
 													<span>
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('cvns'+(this.state.cvnsSegments.length-1-xind).toString()+'0.ps'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{console.log(event,data);this.backEndCall([["Update",["cv","ns",this.state.cvnsSegments.length-1,0],(data.value+this.state.cvns[this.state.cvnsSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.cvns[this.state.cvnsSegments.length-1][0].slice(0, -1).join("")} options={nounOptionsPossessorsNo4th} />
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('cvns'+(this.state.cvnsSegments.length-1-xind).toString()+'0.pd'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{console.log(event,data);this.backEndCall([["Update",["cv","ns",this.state.cvnsSegments.length-1,0],this.state.cvns[this.state.cvnsSegments.length-1][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.cvns[this.state.cvnsSegments.length-1][0].slice(-1).join("")} options={nounOptionsNumbers} />																
+														<Dropdown inline scrolling style={this.getDropdownStyle('cvns'+(this.state.cvnsSegments.length-1-xind).toString()+'0.ps')} onChange={(event,data)=>{console.log(event,data);this.backEndCall([["Update",["cv","ns",this.state.cvnsSegments.length-1,0],(data.value+this.state.cvns[this.state.cvnsSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.cvns[this.state.cvnsSegments.length-1][0].slice(0, -1).join("")} options={nounOptionsPossessorsNo4th} />
+														<Dropdown inline scrolling style={this.getDropdownStyle('cvns'+(this.state.cvnsSegments.length-1-xind).toString()+'0.pd')} onChange={(event,data)=>{console.log(event,data);this.backEndCall([["Update",["cv","ns",this.state.cvnsSegments.length-1,0],this.state.cvns[this.state.cvnsSegments.length-1][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.cvns[this.state.cvnsSegments.length-1][0].slice(-1).join("")} options={nounOptionsNumbers} />																
 														{x.map((k,kind)=>
 															{if (kind === x.length-1) {
 																return <span>
@@ -3331,7 +3494,7 @@ class OneVerbWordBuilder extends Component {
 													</span>
 													:
 													<span>
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('cvns'+(this.state.cvnsSegments.length-1-xind).toString()+'0.pd'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{console.log(event,data);this.backEndCall([["Update",["cv","ns",this.state.cvnsSegments.length-1-xind,0],this.state.cvns[this.state.cvnsSegments.length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.cvns[this.state.cvnsSegments.length-1-xind][0].slice(-1).join("")}  options={nounOptionsNumbers} />								
+														<Dropdown inline scrolling style={this.getDropdownStyle('cvns'+(this.state.cvnsSegments.length-1-xind).toString()+'0.pd')} onChange={(event,data)=>{console.log(event,data);this.backEndCall([["Update",["cv","ns",this.state.cvnsSegments.length-1-xind,0],this.state.cvns[this.state.cvnsSegments.length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.cvns[this.state.cvnsSegments.length-1-xind][0].slice(-1).join("")}  options={nounOptionsNumbers} />								
 														{x.map((k,kind)=>
 															{if (kind === x.length-1) {
 																return <span>
@@ -3350,7 +3513,7 @@ class OneVerbWordBuilder extends Component {
 										</span>
 										:
 										<span>
-											<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('cvv.s'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={(event,data)=>{console.log(data.value[0]===4);if (data.value[0] === 4) {this.backEndCall([["Update",["cv","vs"],[4,1,["mv","vs"]]]])} else {this.backEndCall([["Update",["cv","vs"],data.value.split('').map(Number)]])}}}  value={this.state.cvvs.join("")} options={this.state.cvSubjectOptions1} />
+											<Dropdown inline scrolling style={this.getDropdownStyle('cvv.s')} onChange={(event,data)=>{console.log(data.value[0]===4);if (data.value[0] === 4) {this.backEndCall([["Update",["cv","vs"],[4,1,["mv","vs"]]]])} else {this.backEndCall([["Update",["cv","vs"],data.value.split('').map(Number)]])}}}  value={this.state.cvvs.join("")} options={this.state.cvSubjectOptions1} />
 										</span>
 										)
 									:
@@ -3378,11 +3541,11 @@ class OneVerbWordBuilder extends Component {
 														}
 
 														{this.state.cvvBase[1] == 'it' && xind === this.state.cvnoSegments.length-1 ?
-															<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('cvno'+(this.state.cvnoSegments.length-1-xind).toString()+'0.ps'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["cv","no",this.state.cvnoSegments.length-1,0],(data.value+this.state.cvno[this.state.cvnoSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.cvno[this.state.cvnoSegments.length-1][0].slice(0, -1).join("")} options={this.state.nounOptionsCVAblPossessors1} />
+															<Dropdown inline scrolling style={this.getDropdownStyle('cvno'+(this.state.cvnoSegments.length-1-xind).toString()+'0.ps')} onChange={(event,data)=>{this.backEndCall([["Update",["cv","no",this.state.cvnoSegments.length-1,0],(data.value+this.state.cvno[this.state.cvnoSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.cvno[this.state.cvnoSegments.length-1][0].slice(0, -1).join("")} options={this.state.nounOptionsCVAblPossessors1} />
 															:
-															<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('cvno'+(this.state.cvnoSegments.length-1-xind).toString()+'0.ps'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["cv","no",this.state.cvnoSegments.length-1,0],(data.value+this.state.cvno[this.state.cvnoSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.cvno[this.state.cvnoSegments.length-1][0].slice(0, -1).join("")} options={this.state.nounOptionsCVPossessors1} />
+															<Dropdown inline scrolling style={this.getDropdownStyle('cvno'+(this.state.cvnoSegments.length-1-xind).toString()+'0.ps')} onChange={(event,data)=>{this.backEndCall([["Update",["cv","no",this.state.cvnoSegments.length-1,0],(data.value+this.state.cvno[this.state.cvnoSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.cvno[this.state.cvnoSegments.length-1][0].slice(0, -1).join("")} options={this.state.nounOptionsCVPossessors1} />
 														}
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('cvno'+(this.state.cvnoSegments.length-1-xind).toString()+'0.pd'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["cv","no",this.state.cvnoSegments.length-1,0],this.state.cvno[this.state.cvnoSegments.length-1][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.cvno[this.state.cvnoSegments.length-1][0].slice(-1).join("")} options={nounOptionsNumbers} />																
+														<Dropdown inline scrolling style={this.getDropdownStyle('cvno'+(this.state.cvnoSegments.length-1-xind).toString()+'0.pd')} onChange={(event,data)=>{this.backEndCall([["Update",["cv","no",this.state.cvnoSegments.length-1,0],this.state.cvno[this.state.cvnoSegments.length-1][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.cvno[this.state.cvnoSegments.length-1][0].slice(-1).join("")} options={nounOptionsNumbers} />																
 														{x.map((k,kind)=>
 															{if (kind === x.length-1) {
 																return <span>
@@ -3397,7 +3560,7 @@ class OneVerbWordBuilder extends Component {
 													</span>
 													:
 													<span>
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('cvno'+(this.state.cvnoSegments.length-1-xind).toString()+'0.pd'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["cv","no",this.state.cvnoSegments.length-1-xind,0],this.state.cvno[this.state.cvnoSegments.length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.cvno[this.state.cvnoSegments.length-1-xind][0].slice(-1).join("")}  options={nounOptionsNumbers} />								
+														<Dropdown inline scrolling style={this.getDropdownStyle('cvno'+(this.state.cvnoSegments.length-1-xind).toString()+'0.pd')} onChange={(event,data)=>{this.backEndCall([["Update",["cv","no",this.state.cvnoSegments.length-1-xind,0],this.state.cvno[this.state.cvnoSegments.length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.cvno[this.state.cvnoSegments.length-1-xind][0].slice(-1).join("")}  options={nounOptionsNumbers} />								
 														{x.map((k,kind)=>
 															{if (kind === x.length-1) {
 																return <span>
@@ -3419,7 +3582,7 @@ class OneVerbWordBuilder extends Component {
 											{this.state.cvvBase[1] == 'it' ?
 												(this.editMenu('cvEnglishAbl',-1))	
 												:
-												<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('cvv.o'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}   onChange={(event,data)=>{if (data.value === 'mvsubject') {this.backEndCall([["Update",["cv","vo"],[4,1,["mv","vs"]]]])} else {this.backEndCall([["Update",["cv","vo"],data.value.split('').map(Number)]])}}}  value={this.state.cvvo.join("")} options={this.state.cvObjectOptions1} />								
+												<Dropdown inline scrolling style={this.getDropdownStyle('cvv.o')} onChange={(event,data)=>{if (data.value === 'mvsubject') {this.backEndCall([["Update",["cv","vo"],[4,1,["mv","vs"]]]])} else {this.backEndCall([["Update",["cv","vo"],data.value.split('').map(Number)]])}}}  value={this.state.cvvo.join("")} options={this.state.cvObjectOptions1} />								
 											}
 										</span>
 									)
@@ -3444,11 +3607,11 @@ class OneVerbWordBuilder extends Component {
 													<span>
 														{this.editMenu('cvnObliquesEnglish1',obliqueind)}												
 															{obliques['nCase'] == 'Equ' || obliques['nCase'] == 'Via' || obliques['nType'] == 'io' ? 
-																<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('cvnObliques'+obliqueind.toString()+(obliques['n'].length-1-xind).toString()+'0.ps'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["cv","nObliques",obliqueind,'n',obliques['n'].length-1-xind,0],(data.value+this.state.cvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.cvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(0, -1).join("")} options={this.state.nounOptionsCVAblPossessors1} />
+																<Dropdown inline scrolling style={this.getDropdownStyle('cvnObliques'+obliqueind.toString()+(obliques['n'].length-1-xind).toString()+'0.ps')} onChange={(event,data)=>{this.backEndCall([["Update",["cv","nObliques",obliqueind,'n',obliques['n'].length-1-xind,0],(data.value+this.state.cvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.cvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(0, -1).join("")} options={this.state.nounOptionsCVAblPossessors1} />
 																:
-																<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('cvnObliques'+obliqueind.toString()+(obliques['n'].length-1-xind).toString()+'0.ps'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["cv","nObliques",obliqueind,'n',obliques['n'].length-1-xind,0],(data.value+this.state.cvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.cvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(0, -1).join("")} options={this.state.nounOptionsCVPossessors1} />
+																<Dropdown inline scrolling style={this.getDropdownStyle('cvnObliques'+obliqueind.toString()+(obliques['n'].length-1-xind).toString()+'0.ps')} onChange={(event,data)=>{this.backEndCall([["Update",["cv","nObliques",obliqueind,'n',obliques['n'].length-1-xind,0],(data.value+this.state.cvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.cvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(0, -1).join("")} options={this.state.nounOptionsCVPossessors1} />
 															}
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('cvnObliques'+obliqueind.toString()+(obliques['n'].length-1-xind).toString()+'0.pd'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["cv","nObliques",obliqueind,'n',obliques['n'].length-1-xind,0],this.state.cvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.cvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(-1).join("")} options={nounOptionsNumbers} />																
+														<Dropdown inline scrolling style={this.getDropdownStyle('cvnObliques'+obliqueind.toString()+(obliques['n'].length-1-xind).toString()+'0.pd')} onChange={(event,data)=>{this.backEndCall([["Update",["cv","nObliques",obliqueind,'n',obliques['n'].length-1-xind,0],this.state.cvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.cvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(-1).join("")} options={nounOptionsNumbers} />																
 														{x.map((k,kind)=>
 															{if (kind === x.length-1) {
 																return <span>
@@ -3463,7 +3626,7 @@ class OneVerbWordBuilder extends Component {
 													</span>
 													:
 													<span>
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('cvnObliques'+obliqueind.toString()+(obliques['n'].length-1-xind).toString()+'0.pd'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["cv","nObliques",obliqueind,'n',obliques['n'].length-1-xind,0],this.state.cvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.cvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(-1).join("")} options={nounOptionsNumbers} />																
+														<Dropdown inline scrolling style={this.getDropdownStyle('cvnObliques'+obliqueind.toString()+(obliques['n'].length-1-xind).toString()+'0.pd')} onChange={(event,data)=>{this.backEndCall([["Update",["cv","nObliques",obliqueind,'n',obliques['n'].length-1-xind,0],this.state.cvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.cvnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(-1).join("")} options={nounOptionsNumbers} />																
 														{x.map((k,kind)=>
 															{if (kind === x.length-1) {
 																return <span>
@@ -3576,11 +3739,11 @@ class OneVerbWordBuilder extends Component {
 														}
 
 														{this.state.svvBase[1] == 'it' && xind === this.state.svnoSegments.length-1 ?
-															<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('svno'+(this.state.svnoSegments.length-1-xind).toString()+'0.ps'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["sv","no",this.state.svnoSegments.length-1,0],(data.value+this.state.svno[this.state.svnoSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.svno[this.state.svnoSegments.length-1][0].slice(0, -1).join("")} options={this.state.nounOptionsSVAblPossessors1} />
+															<Dropdown inline scrolling style={this.getDropdownStyle('svno'+(this.state.svnoSegments.length-1-xind).toString()+'0.ps')} onChange={(event,data)=>{this.backEndCall([["Update",["sv","no",this.state.svnoSegments.length-1,0],(data.value+this.state.svno[this.state.svnoSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.svno[this.state.svnoSegments.length-1][0].slice(0, -1).join("")} options={this.state.nounOptionsSVAblPossessors1} />
 															:
-															<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('svno'+(this.state.svnoSegments.length-1-xind).toString()+'0.ps'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["sv","no",this.state.svnoSegments.length-1,0],(data.value+this.state.svno[this.state.svnoSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.svno[this.state.svnoSegments.length-1][0].slice(0, -1).join("")} options={this.state.nounOptionsSVPossessors1} />
+															<Dropdown inline scrolling style={this.getDropdownStyle('svno'+(this.state.svnoSegments.length-1-xind).toString()+'0.ps')} onChange={(event,data)=>{this.backEndCall([["Update",["sv","no",this.state.svnoSegments.length-1,0],(data.value+this.state.svno[this.state.svnoSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.svno[this.state.svnoSegments.length-1][0].slice(0, -1).join("")} options={this.state.nounOptionsSVPossessors1} />
 														}
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('svno'+(this.state.svnoSegments.length-1-xind).toString()+'0.pd'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["sv","no",this.state.svnoSegments.length-1,0],this.state.svno[this.state.svnoSegments.length-1][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.svno[this.state.svnoSegments.length-1][0].slice(-1).join("")} options={nounOptionsNumbers} />																
+														<Dropdown inline scrolling style={this.getDropdownStyle('svno'+(this.state.svnoSegments.length-1-xind).toString()+'0.pd')} onChange={(event,data)=>{this.backEndCall([["Update",["sv","no",this.state.svnoSegments.length-1,0],this.state.svno[this.state.svnoSegments.length-1][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.svno[this.state.svnoSegments.length-1][0].slice(-1).join("")} options={nounOptionsNumbers} />																
 														{x.map((k,kind)=>
 															{if (kind === x.length-1) {
 																return <span>
@@ -3595,7 +3758,7 @@ class OneVerbWordBuilder extends Component {
 													</span>
 													:
 													<span>
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('svno'+(this.state.svnoSegments.length-1-xind).toString()+'0.pd'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["sv","no",this.state.svnoSegments.length-1-xind,0],this.state.svno[this.state.svnoSegments.length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.svno[this.state.svnoSegments.length-1-xind][0].slice(-1).join("")}  options={nounOptionsNumbers} />								
+														<Dropdown inline scrolling style={this.getDropdownStyle('svno'+(this.state.svnoSegments.length-1-xind).toString()+'0.pd')} onChange={(event,data)=>{this.backEndCall([["Update",["sv","no",this.state.svnoSegments.length-1-xind,0],this.state.svno[this.state.svnoSegments.length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.svno[this.state.svnoSegments.length-1-xind][0].slice(-1).join("")}  options={nounOptionsNumbers} />								
 														{x.map((k,kind)=>
 															{if (kind === x.length-1) {
 																return <span>
@@ -3617,7 +3780,7 @@ class OneVerbWordBuilder extends Component {
 											{this.state.svvBase[1] == 'it' ?
 												(this.editMenu('svEnglishAbl',-1))		
 												:
-												<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('svv.o'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}  onChange={(event,data)=>{this.backEndCall([["Update",["sv","vo"],data.value.split('').map(Number)]])}}  value={this.state.svvo.join("")} options={this.state.svObjectOptions1} />							
+												<Dropdown inline scrolling style={this.getDropdownStyle('svv.o')} onChange={(event,data)=>{this.backEndCall([["Update",["sv","vo"],data.value.split('').map(Number)]])}}  value={this.state.svvo.join("")} options={this.state.svObjectOptions1} />							
 											}
 										</span>
 									)
@@ -3635,11 +3798,11 @@ class OneVerbWordBuilder extends Component {
 													<span>
 														{this.editMenu('svnObliquesEnglish1',obliqueind)}														
 															{obliques['nCase'] == 'Equ' || obliques['nCase'] == 'Via' || obliques['nType'] == 'io' ? 
-																<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('svnObliques'+obliqueind.toString()+(obliques['n'].length-1-xind).toString()+'0.pd'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["sv","nObliques",obliqueind,'n',obliques['n'].length-1-xind,0],(data.value+this.state.svnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.svnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(0, -1).join("")} options={this.state.nounOptionsSVAblPossessors1} />
+																<Dropdown inline scrolling style={this.getDropdownStyle('svnObliques'+obliqueind.toString()+(obliques['n'].length-1-xind).toString()+'0.pd')} onChange={(event,data)=>{this.backEndCall([["Update",["sv","nObliques",obliqueind,'n',obliques['n'].length-1-xind,0],(data.value+this.state.svnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.svnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(0, -1).join("")} options={this.state.nounOptionsSVAblPossessors1} />
 																:
-																<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('svnObliques'+obliqueind.toString()+(obliques['n'].length-1-xind).toString()+'0.pd'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["sv","nObliques",obliqueind,'n',obliques['n'].length-1-xind,0],(data.value+this.state.svnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.svnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(0, -1).join("")} options={this.state.nounOptionsSVPossessors1} />
+																<Dropdown inline scrolling style={this.getDropdownStyle('svnObliques'+obliqueind.toString()+(obliques['n'].length-1-xind).toString()+'0.pd')} onChange={(event,data)=>{this.backEndCall([["Update",["sv","nObliques",obliqueind,'n',obliques['n'].length-1-xind,0],(data.value+this.state.svnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.svnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(0, -1).join("")} options={this.state.nounOptionsSVPossessors1} />
 															}
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('svnObliques'+obliqueind.toString()+(obliques['n'].length-1-xind).toString()+'0.ps'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["sv","nObliques",obliqueind,'n',obliques['n'].length-1-xind,0],this.state.svnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.svnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(-1).join("")} options={nounOptionsNumbers} />																
+														<Dropdown inline scrolling style={this.getDropdownStyle('svnObliques'+obliqueind.toString()+(obliques['n'].length-1-xind).toString()+'0.ps')} onChange={(event,data)=>{this.backEndCall([["Update",["sv","nObliques",obliqueind,'n',obliques['n'].length-1-xind,0],this.state.svnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.svnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(-1).join("")} options={nounOptionsNumbers} />																
 														{x.map((k,kind)=>
 															{if (kind === x.length-1) {
 																return <span>
@@ -3654,7 +3817,7 @@ class OneVerbWordBuilder extends Component {
 													</span>
 													:
 													<span>
-														<Dropdown inline scrolling style={{backgroundColor:'#F3F3F3',color:this.getColor('svnObliques'+obliqueind.toString()+(obliques['n'].length-1-xind).toString()+'0.ps'),fontSize:'18px',fontWeight:'300',padding:'5px',borderRadius:'5px',marginRight:'4px'}} onChange={(event,data)=>{this.backEndCall([["Update",["sv","nObliques",obliqueind,'n',obliques['n'].length-1-xind,0],this.state.svnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.svnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(-1).join("")} options={nounOptionsNumbers} />																
+														<Dropdown inline scrolling style={this.getDropdownStyle('svnObliques'+obliqueind.toString()+(obliques['n'].length-1-xind).toString()+'0.ps')} onChange={(event,data)=>{this.backEndCall([["Update",["sv","nObliques",obliqueind,'n',obliques['n'].length-1-xind,0],this.state.svnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.svnObliques[obliqueind]['n'][obliques['n'].length-1-xind][0].slice(-1).join("")} options={nounOptionsNumbers} />																
 														{x.map((k,kind)=>
 															{if (kind === x.length-1) {
 																return <span>
