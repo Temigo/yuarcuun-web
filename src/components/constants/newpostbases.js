@@ -12,7 +12,11 @@ export const newpostbases = {
         "inf_preverb": "repeatedly",
         "ger_preverb": "repeatedly",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "-a-|-ar-|-aa-|+a-|+aar-",
+            0
+        ]
     },
     "+`(g)aqe[V\u2192V]": {
         "exp": "+`(g)aqe[V\u2192V]",
@@ -27,7 +31,11 @@ export const newpostbases = {
         "inf_preverb": "repeatedly",
         "ger_preverb": "repeatedly",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "+'(g)aqe-",
+            0
+        ]
     },
     "+`(g)ar(ar)[V\u2192V]": {
         "exp": "+`(g)ar(ar)[V\u2192V]",
@@ -42,7 +50,11 @@ export const newpostbases = {
         "inf_preverb": "just barely",
         "ger_preverb": "just barely",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "+'(g)ar(ar)-",
+            2
+        ]
     },
     "@+(g)ar(ar)te\u00b9[V\u2192V]": {
         "exp": "@+(g)ar(ar)te\u00b9[V\u2192V]",
@@ -57,7 +69,11 @@ export const newpostbases = {
         "inf_preverb": "suddenly",
         "ger_preverb": "suddenly",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "@+(g)ar(ar)te\u00b9-",
+            0
+        ]
     },
     "+`(g)arkau[V\u2192V]": {
         "exp": "+`(g)arkau[V\u2192V]",
@@ -77,7 +93,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "eventually (in the future)",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+'(g)arkau-",
+            0
+        ]
     },
     "+`(g)arkaunrir[V\u2192V]": {
         "exp": "+`(g)arkaunrir[V\u2192V]",
@@ -98,7 +118,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "being able to now",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+'(g)arkaunrir-",
+            0
+        ]
     },
     "+aur(ar)[V\u2192V]": {
         "exp": "+aur(ar)[V\u2192V]",
@@ -117,7 +141,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "continuing (over a period of time) to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+aur(ar)-",
+            0
+        ]
     },
     "@~+caar(ar)[V\u2192V]": {
         "exp": "@~+caar(ar)[V\u2192V]",
@@ -136,7 +164,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "endeavoring to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+caar(ar)-",
+            0
+        ]
     },
     "+(s)ciigali[V\u2192V]": {
         "exp": "+(s)ciigali[V\u2192V]",
@@ -156,7 +188,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "being no longer able to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+(s)ciigali-,+(s)ciigalli-",
+            0
+        ]
     },
     "+(s)ciigalli[V\u2192V]": {
         "exp": "+(s)ciigalli[V\u2192V]",
@@ -176,7 +212,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "being no longer able to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+(s)ciigali-,+(s)ciigalli-",
+            0
+        ]
     },
     "+(s)ciigate[V\u2192V]": {
         "exp": "+(s)ciigate[V\u2192V]",
@@ -196,7 +236,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "being not able to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+(s)ciigate-",
+            0
+        ]
     },
     "\u2013cilli[V\u2192V]": {
         "exp": "\u2013cilli[V\u2192V]",
@@ -215,7 +259,11 @@ export const newpostbases = {
         "inf_preverb_after": "g",
         "ger_preverb": "appearing to have been",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-cilli-",
+            0
+        ]
     },
     "+ciqe|@ciiqe[V\u2192V]": {
         "exp": "+ciqe|@ciiqe[V\u2192V]",
@@ -235,7 +283,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "(in the future)",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+ciqe-|@ciiqe-",
+            0
+        ]
     },
     "+ciqiar|@ciiqiar[V\u2192V]": {
         "exp": "+ciqiar|@ciiqiar[V\u2192V]",
@@ -255,7 +307,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "being about to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+ciqiar-|@ciiqiar-",
+            0
+        ]
     },
     "@~+cir\u00b9[V\u2192V]": {
         "exp": "@~+cir\u00b9[V\u2192V]",
@@ -275,7 +331,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+cir\u00b9-",
+            0
+        ]
     },
     "+(s)cir\u00b2[V\u2192V]": {
         "exp": "+(s)cir\u00b2[V\u2192V]",
@@ -294,7 +354,11 @@ export const newpostbases = {
         "inf_preverb_after": "pp",
         "ger_preverb": "having been (detrimentally)",
         "ger_preverb_after": "pp",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+(s)cir\u00b2-",
+            0
+        ]
     },
     "+(s)ciryar[V\u2192V]": {
         "exp": "+(s)ciryar[V\u2192V]",
@@ -313,7 +377,11 @@ export const newpostbases = {
         "inf_preverb_after": "pp",
         "ger_preverb": "being easily",
         "ger_preverb_after": "pp",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+(s)ciryar-",
+            0
+        ]
     },
     "+cite\u00b2[V\u2192V]": {
         "exp": "+cite\u00b2[V\u2192V]",
@@ -332,7 +400,11 @@ export const newpostbases = {
         "inf_preverb_after": "g",
         "ger_preverb": "having the quality of",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+cite\u00b2-",
+            1
+        ]
     },
     "+(s)ciur[V\u2192V]": {
         "exp": "+(s)ciur[V\u2192V]",
@@ -352,7 +424,11 @@ export const newpostbases = {
         "inf_preverb_after": "pp",
         "ger_preverb": "having been (detrimentally)",
         "ger_preverb_after": "pp",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+(s)ciur-",
+            0
+        ]
     },
     "\u2013curlag[V\u2192V]": {
         "exp": "\u2013curlag[V\u2192V]",
@@ -360,7 +436,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "with unsatisfactory results",
         "postverb": "with unsatisfactory results",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-curlak,-curlag-",
+            1
+        ]
     },
     "@~+(ng)iinar[V\u2192V]": {
         "exp": "@~+(ng)iinar[V\u2192V]",
@@ -368,7 +448,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "more and more",
         "postverb": "more and more",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "@~+(ng)iinar-",
+            0
+        ]
     },
     ":(ng)illiqe[V\u2192V]": {
         "exp": "%:(ng)illiqe[V\u2192V]",
@@ -387,7 +471,11 @@ export const newpostbases = {
         "inf_preverb_after": "g",
         "ger_preverb": "suffering from the lack of",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            ":(ng)illiqe-",
+            1
+        ]
     },
     "\u2013inar[V\u2192V]": {
         "exp": "\u2013inar[V\u2192V]",
@@ -402,7 +490,11 @@ export const newpostbases = {
         "inf_preverb": "finally",
         "ger_preverb": "finally",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "-inar-",
+            0
+        ]
     },
     ":(ng)ite\u00b9[V\u2192V]": {
         "exp": "%:(ng)ite\u00b9[V\u2192V]",
@@ -421,7 +513,11 @@ export const newpostbases = {
         "inf_preverb_after": "g",
         "ger_preverb": "lacking",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            ":(ng)ite\u00b9-",
+            1
+        ]
     },
     "+kanir[V\u2192V]": {
         "exp": "+kanir[V\u2192V]",
@@ -429,7 +525,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "more with greater intensity",
         "postverb": "more with greater intensity",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "+kanir-",
+            0
+        ]
     },
     "+kanir(ar)[V\u2192V]": {
         "exp": "+kanir(ar)[V\u2192V]",
@@ -437,7 +537,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "more and more, with greater intensity",
         "postverb": "more and more, with greater intensity",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "+kanir(ar)-",
+            0
+        ]
     },
     "\u2013@kaunrir[V\u2192V]": {
         "exp": "\u2013@kaunrir[V\u2192V]",
@@ -457,7 +561,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "being unable to (due to an inhibiting factor)",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-@kaunrir-",
+            0
+        ]
     },
     "\u2013knig[V\u2192V]": {
         "exp": "\u2013knig[V\u2192V]",
@@ -472,7 +580,11 @@ export const newpostbases = {
         "inf_preverb": "suddenly (in motion)",
         "ger_preverb": "suddenly (in motion)",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "-knig-",
+            0
+        ]
     },
     "\u2013ksaar(ar)[V\u2192V]": {
         "exp": "\u2013ksaar(ar)[V\u2192V]",
@@ -480,7 +592,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "in a small and unnoticeable way",
         "postverb": "in a small and unnoticeable way",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-ksaar(ar)-",
+            0
+        ]
     },
     "\u2013ksaite[V\u2192V]": {
         "exp": "\u2013ksaite[V\u2192V]",
@@ -501,7 +617,11 @@ export const newpostbases = {
         "inf_preverb_after": "pp",
         "ger_preverb": "having not",
         "ger_preverb_after": "pp",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-ksaite-",
+            0
+        ]
     },
     "\u2013ksaitelar[V\u2192V]": {
         "exp": "\u2013ksaitelar[V\u2192V]",
@@ -522,7 +642,11 @@ export const newpostbases = {
         "inf_preverb_after": "pp",
         "ger_preverb": "having never",
         "ger_preverb_after": "pp",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-ksaitelar-,-ksaitlar-",
+            0
+        ]
     },
     "\u2013ksaitlar[V\u2192V]": {
         "exp": "\u2013ksaitlar[V\u2192V]",
@@ -543,7 +667,11 @@ export const newpostbases = {
         "inf_preverb_after": "pp",
         "ger_preverb": "having never",
         "ger_preverb_after": "pp",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-ksaitelar-,-ksaitlar-",
+            0
+        ]
     },
     "\u2013ksuar(ar)[V\u2192V]": {
         "exp": "\u2013ksuar(ar)[V\u2192V]",
@@ -551,7 +679,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "in a small and not very noticeable way",
         "postverb": "in a small and not very noticeable way",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-ksuar(ar)-,-ksuar(ar)-",
+            0
+        ]
     },
     "\u2013kugte[V\u2192V]": {
         "exp": "\u2013kugte[V\u2192V]",
@@ -571,7 +703,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "being about to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-kugte-",
+            0
+        ]
     },
     "\u2013kuna[V\u2192V]": {
         "exp": "\u2013kuna[V\u2192V]",
@@ -591,7 +727,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "planning to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-kuna-",
+            0
+        ]
     },
     "\u2013kunayaaqe[V\u2192V]": {
         "exp": "\u2013kunayaaqe[V\u2192V]",
@@ -611,7 +751,11 @@ export const newpostbases = {
         "inf_preverb_after": "g",
         "ger_preverb": "considering",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-kunayaaqe-",
+            0
+        ]
     },
     "\u2013kutag[V\u2192V]": {
         "exp": "\u2013kutag[V\u2192V]",
@@ -619,7 +763,7 @@ export const newpostbases = {
         "type": "VV",
         "tense": "future",
         "subj": "he",
-        "is": false,
+        "is": true,
         "has": false,
         "description": "probably",
         "gen_preverb": "probably",
@@ -627,7 +771,11 @@ export const newpostbases = {
         "inf_preverb": "probably",
         "ger_preverb": "probably",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "-kutag-",
+            0
+        ]
     },
     "\u2013kutar(ar)[V\u2192V]": {
         "exp": "\u2013kutar(ar)[V\u2192V]",
@@ -647,7 +795,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "planning to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-kutar(ar)-",
+            0
+        ]
     },
     "\u2013laag[V\u2192V]": {
         "exp": "\u2013laag[V\u2192V]",
@@ -662,7 +814,11 @@ export const newpostbases = {
         "inf_preverb": "quickly",
         "ger_preverb": "quickly",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "-laag-",
+            0
+        ]
     },
     "~+lallru[V\u2192V]": {
         "exp": "~+lallru[V\u2192V]",
@@ -682,7 +838,11 @@ export const newpostbases = {
         "inf_preverb_after": "pp",
         "ger_preverb": "having formerly regularly",
         "ger_preverb_after": "pp",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "~+lallru-,@~+lallru-,-lallru-",
+            0
+        ]
     },
     "@~+lallru[V\u2192V]": {
         "exp": "@~+lallru[V\u2192V]",
@@ -702,7 +862,11 @@ export const newpostbases = {
         "inf_preverb_after": "pp",
         "ger_preverb": "having formerly regularly",
         "ger_preverb_after": "pp",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "~+lallru-,@~+lallru-,-lallru-",
+            0
+        ]
     },
     "\u2013lallru[V\u2192V]": {
         "exp": "\u2013lallru[V\u2192V]",
@@ -722,7 +886,11 @@ export const newpostbases = {
         "inf_preverb_after": "pp",
         "ger_preverb": "having formerly regularly",
         "ger_preverb_after": "pp",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "~+lallru-,@~+lallru-,-lallru-",
+            0
+        ]
     },
     "~+lar[V\u2192V]": {
         "exp": "~+lar[V\u2192V]",
@@ -737,7 +905,11 @@ export const newpostbases = {
         "inf_preverb": "regularly",
         "ger_preverb": "regularly",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "~+lar-,@~+lar-,-lar-",
+            0
+        ]
     },
     "@~+lar[V\u2192V]": {
         "exp": "@~+lar[V\u2192V]",
@@ -752,7 +924,11 @@ export const newpostbases = {
         "inf_preverb": "regularly",
         "ger_preverb": "regularly",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "~+lar-,@~+lar-,-lar-",
+            0
+        ]
     },
     "\u2013lar[V\u2192V]": {
         "exp": "\u2013lar[V\u2192V]",
@@ -767,7 +943,11 @@ export const newpostbases = {
         "inf_preverb": "regularly",
         "ger_preverb": "regularly",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "~+lar-,@~+lar-,-lar-",
+            0
+        ]
     },
     "~+laryaaqe[V\u2192V]": {
         "exp": "~+laryaaqe[V\u2192V]",
@@ -782,7 +962,11 @@ export const newpostbases = {
         "inf_preverb": "usually (though not at this time)",
         "ger_preverb": "usually (though not at this time)",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "~+laryaaqe-,@~+laryaaqe-,-laryaaqe-",
+            0
+        ]
     },
     "@~+laryaaqe[V\u2192V]": {
         "exp": "@~+laryaaqe[V\u2192V]",
@@ -797,7 +981,11 @@ export const newpostbases = {
         "inf_preverb": "usually (though not at this time)",
         "ger_preverb": "usually (though not at this time)",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "~+laryaaqe-,@~+laryaaqe-,-laryaaqe-",
+            0
+        ]
     },
     "\u2013laryaaqe[V\u2192V]": {
         "exp": "\u2013laryaaqe[V\u2192V]",
@@ -812,7 +1000,11 @@ export const newpostbases = {
         "inf_preverb": "usually (though not at this time)",
         "ger_preverb": "usually (though not at this time)",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "~+laryaaqe-,@~+laryaaqe-,-laryaaqe-",
+            0
+        ]
     },
     "\u2013ler[V\u2192V]": {
         "exp": "\u2013ler[V\u2192V]",
@@ -820,7 +1012,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "suddenly and willfully",
         "postverb": "suddenly and willfully",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-ler-,~+ler-",
+            0
+        ]
     },
     "~+ler[V\u2192V]": {
         "exp": "~+ler[V\u2192V]",
@@ -828,7 +1024,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "suddenly and willfully",
         "postverb": "suddenly and willfully",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-ler-,~+ler-",
+            0
+        ]
     },
     "\u2013leryag[V\u2192V]": {
         "exp": "\u2013leryag[V\u2192V]",
@@ -836,7 +1036,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "abruptly",
         "postverb": "abruptly",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-leryag-,~+leryag-",
+            0
+        ]
     },
     "~+leryag[V\u2192V]": {
         "exp": "~+leryag[V\u2192V]",
@@ -844,7 +1048,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "abruptly",
         "postverb": "abruptly",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-leryag-,~+leryag-",
+            0
+        ]
     },
     "\u2013lgu[V\u2192V]": {
         "exp": "\u2013lgu[V\u2192V]",
@@ -859,7 +1067,11 @@ export const newpostbases = {
         "inf_preverb": "always",
         "ger_preverb": "always",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "-lgu-",
+            0
+        ]
     },
     "\u2013lguir[V\u2192V]": {
         "exp": "\u2013lguir[V\u2192V]",
@@ -879,7 +1091,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "having stopped being able to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-lguir-",
+            0
+        ]
     },
     "\u2013lguirute[V\u2192V]": {
         "exp": "\u2013lguirute[V\u2192V]",
@@ -899,7 +1115,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "being no longer able to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-lguirute-",
+            0
+        ]
     },
     "\u2013lguite[V\u2192V]": {
         "exp": "\u2013lguite[V\u2192V]",
@@ -919,7 +1139,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "being unable to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-lguite-",
+            0
+        ]
     },
     "\u2013lguri[V\u2192V]": {
         "exp": "\u2013lguri[V\u2192V]",
@@ -938,7 +1162,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "having become able to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-lguri-",
+            0
+        ]
     },
     "\u2013\u2013liyar[V\u2192V]": {
         "exp": "\u2013\u2013liyar[V\u2192V]",
@@ -957,7 +1185,11 @@ export const newpostbases = {
         "inf_preverb_after": "g",
         "ger_preverb": "going to participate in",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-liyar-,-liar-",
+            2
+        ]
     },
     "\u2013liar[V\u2192V]": {
         "exp": "\u2013liar[V\u2192V]",
@@ -976,7 +1208,11 @@ export const newpostbases = {
         "inf_preverb_after": "g",
         "ger_preverb": "going to participate in",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-liyar-,-liar-",
+            2
+        ]
     },
     "\u2013lkia[V\u2192V]": {
         "exp": "\u2013lkia[V\u2192V]",
@@ -995,7 +1231,11 @@ export const newpostbases = {
         "inf_preverb_after": "g",
         "ger_preverb": "giving evidence of",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-lkia-",
+            1
+        ]
     },
     "\u2013llag[V\u2192V]": {
         "exp": "\u2013llag[V\u2192V]",
@@ -1003,7 +1243,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "suddenly and surprisingly",
         "postverb": "suddenly and surprisingly",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-llag-",
+            0
+        ]
     },
     "\u2013llgu[V\u2192V]": {
         "exp": "\u2013llgu[V\u2192V]",
@@ -1022,7 +1266,11 @@ export const newpostbases = {
         "inf_preverb_after": "g",
         "ger_preverb": "being good at",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-llgu-",
+            0
+        ]
     },
     "\u2013lli[V\u2192V]": {
         "exp": "\u2013lli[V\u2192V]",
@@ -1037,7 +1285,11 @@ export const newpostbases = {
         "inf_preverb": "maybe",
         "ger_preverb": "maybe",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "-lli-",
+            0
+        ]
     },
     "\u2013llini[V\u2192V]": {
         "exp": "\u2013llini[V\u2192V]",
@@ -1045,7 +1297,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "evidently",
         "postverb": "evidently",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-llini-",
+            0
+        ]
     },
     "\u2013llru\u00b9[V\u2192V]": {
         "exp": "\u2013llru\u00b9[V\u2192V]",
@@ -1065,7 +1321,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "(in the past)",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-llru\u00b9-",
+            0
+        ]
     },
     "\u2013llrunrite[V\u2192V]": {
         "exp": "\u2013llrunrite[V\u2192V]",
@@ -1086,7 +1346,11 @@ export const newpostbases = {
         "inf_preverb_after": "pp",
         "ger_preverb": "having not",
         "ger_preverb_after": "pp",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-llrunrite-",
+            0
+        ]
     },
     "\u2013llrurte[V\u2192V]": {
         "exp": "\u2013llrurte[V\u2192V]",
@@ -1106,7 +1370,11 @@ export const newpostbases = {
         "inf_preverb_after": "pp",
         "ger_preverb": "having already",
         "ger_preverb_after": "pp",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-llrurte-",
+            0
+        ]
     },
     "\u2013llugtur[V\u2192V]": {
         "exp": "\u2013llugtur[V\u2192V]",
@@ -1114,7 +1382,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "quickly",
         "postverb": "quickly",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-llugtur-",
+            0
+        ]
     },
     "\u2013lngu[V\u2192V]": {
         "exp": "\u2013lngu[V\u2192V]",
@@ -1133,7 +1405,11 @@ export const newpostbases = {
         "inf_preverb_after": "g",
         "ger_preverb": "being tired of",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-lngu-",
+            0
+        ]
     },
     "\u2013luaqar[V\u2192V]": {
         "exp": "\u2013luaqar[V\u2192V]",
@@ -1141,7 +1417,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "well",
         "postverb": "well",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-luaqar-",
+            0
+        ]
     },
     ":(u|i)ma[V\u2192V]": {
         "exp": "%:(u|i)ma[V\u2192V]",
@@ -1161,7 +1441,11 @@ export const newpostbases = {
         "inf_preverb_after": "g",
         "ger_preverb": "being in a state of",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            ":(u|i)ma-",
+            0
+        ]
     },
     ":(u|i)maar[V\u2192V]": {
         "exp": "%:(u|i)maar[V\u2192V]",
@@ -1169,7 +1453,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "for a short duration or without making a big deal of it",
         "postverb": "for a short duration or without making a big deal of it",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            ":(u|i)maar-",
+            0
+        ]
     },
     ":(u|i)maar(ar)[V\u2192V]": {
         "exp": "%:(u|i)maar(ar)[V\u2192V]",
@@ -1177,7 +1465,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "slowly",
         "postverb": "slowly",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            ":(u|i)maar(ar)-",
+            0
+        ]
     },
     ":(u|i)mari[V\u2192V]": {
         "exp": "%:(u|i)mari[V\u2192V]",
@@ -1197,7 +1489,11 @@ export const newpostbases = {
         "inf_preverb_after": "pp",
         "ger_preverb": "having already",
         "ger_preverb_after": "pp",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            ":(u|i)mari-",
+            0
+        ]
     },
     "\u2013mcaugar[V\u2192V]": {
         "exp": "\u2013mcaugar[V\u2192V]",
@@ -1205,7 +1501,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "in a small way",
         "postverb": "in a small way",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-mcaugar-",
+            0
+        ]
     },
     "\u2013mciur(ar)[V\u2192V]": {
         "exp": "\u2013mciur(ar)[V\u2192V]",
@@ -1213,7 +1513,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "a little at a time",
         "postverb": "a little at a time",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-mciur(ar)-",
+            0
+        ]
     },
     "\u2013mcuar(ar)[V\u2192V]": {
         "exp": "\u2013mcuar(ar)[V\u2192V]",
@@ -1221,7 +1525,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "a little",
         "postverb": "a little",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-mcuar(ar)-",
+            0
+        ]
     },
     "\u2013mcugte[V\u2192V]": {
         "exp": "\u2013mcugte[V\u2192V]",
@@ -1229,7 +1537,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "to a small degree",
         "postverb": "to a small degree",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-mcugte-,-mssugte-,-myugte-",
+            0
+        ]
     },
     "\u2013mssugte[V\u2192V]": {
         "exp": "\u2013mssugte[V\u2192V]",
@@ -1237,7 +1549,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "in a small way",
         "postverb": "in a small way",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-mssugte-",
+            0
+        ]
     },
     "@~+mi[V\u2192V]": {
         "exp": "@~+mi[V\u2192V]",
@@ -1245,7 +1561,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "also",
         "postverb": "also",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "@~+mi-",
+            0
+        ]
     },
     "+milli[V\u2192V]": {
         "exp": "+milli[V\u2192V]",
@@ -1260,7 +1580,11 @@ export const newpostbases = {
         "inf_preverb": "probably also",
         "ger_preverb": "probably also",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "+milli-",
+            0
+        ]
     },
     "\u2013mli[V\u2192V]": {
         "exp": "\u2013mli[V\u2192V]",
@@ -1268,7 +1592,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "casually",
         "postverb": "casually",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-mli-",
+            0
+        ]
     },
     "\u2013mssag[V\u2192V]": {
         "exp": "\u2013mssag[V\u2192V]",
@@ -1276,7 +1604,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "in a small way",
         "postverb": "in a small way",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-mssag-",
+            0
+        ]
     },
     "\u2013myugte[V\u2192V]": {
         "exp": "\u2013myugte[V\u2192V]",
@@ -1284,7 +1616,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "in a small way",
         "postverb": "in a small way",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-myugte-",
+            0
+        ]
     },
     "@~+naciar[V\u2192V]": {
         "exp": "@~+naciar[V\u2192V]",
@@ -1292,7 +1628,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "late",
         "postverb": "late",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "@~+naciar-",
+            0
+        ]
     },
     "@~+nanrir[V\u2192V]": {
         "exp": "@~+nanrir[V\u2192V]",
@@ -1311,7 +1651,11 @@ export const newpostbases = {
         "inf_preverb_after": "g",
         "ger_preverb": "ceasing",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+nanrir-",
+            0
+        ]
     },
     "@~+naqsaaqe[V\u2192V]": {
         "exp": "@~+naqsaaqe[V\u2192V]",
@@ -1330,7 +1674,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "being now feasible to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+naqsaaqe-",
+            0
+        ]
     },
     "@~+nari[V\u2192V]": {
         "exp": "@~+nari[V\u2192V]",
@@ -1349,7 +1697,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "being time to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+nari-",
+            0
+        ]
     },
     "@~+naur[V\u2192V]": {
         "exp": "@~+naur[V\u2192V]",
@@ -1364,7 +1716,11 @@ export const newpostbases = {
         "inf_preverb": "habitually",
         "ger_preverb": "habitually",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "@~+naur-",
+            0
+        ]
     },
     "@\u2013nerkite[V\u2192V]": {
         "exp": "@\u2013nerkite[V\u2192V]",
@@ -1379,7 +1735,11 @@ export const newpostbases = {
         "inf_preverb": "habitually (only a little bit)",
         "ger_preverb": "habitually (only a little bit)",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "@-nerkite-",
+            0
+        ]
     },
     "\u2013nerrar[V\u2192V]": {
         "exp": "\u2013nerrar[V\u2192V]",
@@ -1399,7 +1759,11 @@ export const newpostbases = {
         "inf_preverb_after": "pp",
         "ger_preverb": "having recently",
         "ger_preverb_after": "pp",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-nerraq*,-nerrar(aq*),-nerar(aq*),-nerrar-,-nerrar(ar)-,-nerar(ar)-",
+            3
+        ]
     },
     "\u2013nerrar(ar)[V\u2192V]": {
         "exp": "\u2013nerrar(ar)[V\u2192V]",
@@ -1419,7 +1783,11 @@ export const newpostbases = {
         "inf_preverb_after": "pp",
         "ger_preverb": "having recently",
         "ger_preverb_after": "pp",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-nerraq*,-nerrar(aq*),-nerar(aq*),-nerrar-,-nerrar(ar)-,-nerar(ar)-",
+            3
+        ]
     },
     "\u2013nerar(ar)[V\u2192V]": {
         "exp": "\u2013nerar(ar)[V\u2192V]",
@@ -1439,7 +1807,11 @@ export const newpostbases = {
         "inf_preverb_after": "pp",
         "ger_preverb": "having recently",
         "ger_preverb_after": "pp",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-nerraq*,-nerrar(aq*),-nerar(aq*),-nerrar-,-nerrar(ar)-,-nerar(ar)-",
+            3
+        ]
     },
     "@\u2013nerrlugte[V\u2192V]": {
         "exp": "@\u2013nerrlugte[V\u2192V]",
@@ -1458,7 +1830,11 @@ export const newpostbases = {
         "inf_preverb_after": "g",
         "ger_preverb": "having trouble with ^his^",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@-nerrlugte-",
+            0
+        ]
     },
     "@\u2013nertu[V\u2192V]": {
         "exp": "@\u2013nertu[V\u2192V]",
@@ -1473,7 +1849,11 @@ export const newpostbases = {
         "inf_preverb": "habitually (a lot)",
         "ger_preverb": "habitually (a lot)",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "@-nertu-",
+            0
+        ]
     },
     "@nga[V\u2192V]": {
         "exp": "@nga[V\u2192V]",
@@ -1493,7 +1873,11 @@ export const newpostbases = {
         "inf_preverb_after": "pp",
         "ger_preverb": "being in a state of having",
         "ger_preverb_after": "pp",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@nga-",
+            0
+        ]
     },
     "@~+ngair(ar)te[V\u2192V]": {
         "exp": "@~+ngair(ar)te[V\u2192V]",
@@ -1514,7 +1898,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "being no longer going to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+ngair(ar)te-",
+            0
+        ]
     },
     "@~+ngairute[V\u2192V]": {
         "exp": "@~+ngairute[V\u2192V]",
@@ -1535,7 +1923,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "not (in the future ever)",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+ngairute-",
+            0
+        ]
     },
     "@~+ngaite[V\u2192V]": {
         "exp": "@~+ngaite[V\u2192V]",
@@ -1556,7 +1948,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "not (in the future)",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+ngaite-",
+            0
+        ]
     },
     "@~+ngate[V\u2192V]": {
         "exp": "@~+ngate[V\u2192V]",
@@ -1575,7 +1971,11 @@ export const newpostbases = {
         "inf_preverb_after": "g",
         "ger_preverb": "seeming to be",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+ngate-,+ngate-",
+            1
+        ]
     },
     "\u2013nge[V\u2192V]": {
         "exp": "\u2013nge[V\u2192V]",
@@ -1594,7 +1994,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "beginning to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-nge-",
+            1
+        ]
     },
     "@~+ngiate[V\u2192V]": {
         "exp": "@~+ngiate[V\u2192V]",
@@ -1613,7 +2017,11 @@ export const newpostbases = {
         "inf_preverb_after": "g",
         "ger_preverb": "being inept at",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+ngiate-",
+            0
+        ]
     },
     "@~+ngig[V\u2192V]": {
         "exp": "@~+ngig[V\u2192V]",
@@ -1632,7 +2040,11 @@ export const newpostbases = {
         "inf_preverb_after": "g",
         "ger_preverb": "being adept at",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+ngig-",
+            0
+        ]
     },
     "@~+nginar[V\u2192V]": {
         "exp": "@~+nginar[V\u2192V]",
@@ -1647,7 +2059,11 @@ export const newpostbases = {
         "inf_preverb": "merely (with no attendant complications)",
         "ger_preverb": "merely (with no attendant complications)",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "@~+nginar-",
+            0
+        ]
     },
     "\u2013ngnagar[V\u2192V]": {
         "exp": "\u2013ngnagar[V\u2192V]",
@@ -1655,7 +2071,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "in an irritating way",
         "postverb": "in an irritating way",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-ngnagaq,-ngnagar-",
+            1
+        ]
     },
     "\u2013ngnaqe[V\u2192V]": {
         "exp": "\u2013ngnaqe[V\u2192V]",
@@ -1674,7 +2094,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "trying to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-ngnaqe-",
+            0
+        ]
     },
     "\u2013ngnaqsaaqe[V\u2192V]": {
         "exp": "\u2013ngnaqsaaqe[V\u2192V]",
@@ -1693,7 +2117,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "trying unsuccessfully to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-ngnaqsaaqe-",
+            0
+        ]
     },
     "\u2013ngnatug[V\u2192V]": {
         "exp": "\u2013ngnatug[V\u2192V]",
@@ -1712,7 +2140,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "trying hard to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-ngnatug-",
+            0
+        ]
     },
     "@\u2013ngqa[V\u2192V]": {
         "exp": "@\u2013ngqa[V\u2192V]",
@@ -1732,7 +2164,11 @@ export const newpostbases = {
         "inf_preverb_after": "g",
         "ger_preverb": "being in a state of",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@-ngqa-",
+            0
+        ]
     },
     "\u2013ngssaar(ar)[V\u2192V]": {
         "exp": "\u2013ngssaar(ar)[V\u2192V]",
@@ -1740,7 +2176,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "secretively, unnoticeably",
         "postverb": "secretively, unnoticeably",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-ngssaar(aq*),-ngssaar(ar)-",
+            1
+        ]
     },
     "\u2013ngssag[V\u2192V]": {
         "exp": "\u2013ngssag[V\u2192V]",
@@ -1748,7 +2188,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "to no particular end",
         "postverb": "to no particular end",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-ngssak,-ngssag-",
+            1
+        ]
     },
     "\u2013ngssi[V\u2192V]": {
         "exp": "\u2013ngssi[V\u2192V]",
@@ -1756,7 +2200,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "to no particular end",
         "postverb": "to no particular end",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-ngssi-",
+            0
+        ]
     },
     "@~\u2013nguar[V\u2192V]": {
         "exp": "@~\u2013nguar[V\u2192V]",
@@ -1775,7 +2223,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "pretending to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-nguaq,@~-nguar-",
+            1
+        ]
     },
     "@~+niar[V\u2192V]": {
         "exp": "@~+niar[V\u2192V]",
@@ -1795,7 +2247,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "(in the future, suggestion)",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+niar-",
+            0
+        ]
     },
     "@~+niarar[V\u2192V]": {
         "exp": "@~+niarar[V\u2192V]",
@@ -1815,7 +2271,11 @@ export const newpostbases = {
         "inf_preverb_after": "g",
         "ger_preverb": "soon being going",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+niarar-",
+            0
+        ]
     },
     "\u2013nqegcaar(ar)[V\u2192V]": {
         "exp": "\u2013nqegcaar(ar)[V\u2192V]",
@@ -1823,7 +2283,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "completely, thoroughly",
         "postverb": "completely, thoroughly",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-nqegcaar(aq*),-nqegcaar(ar)-",
+            1
+        ]
     },
     "\u2013nqigte[V\u2192V]": {
         "exp": "\u2013nqigte[V\u2192V]",
@@ -1831,7 +2295,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "again",
         "postverb": "again",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-nqigte-",
+            0
+        ]
     },
     "\u2013nricen\u0304ar[V\u2192V]": {
         "exp": "\u2013nricen\u0304ar[V\u2192V]",
@@ -1847,7 +2315,11 @@ export const newpostbases = {
         "inf_preverb": "not (having changed his mind)",
         "ger_preverb": "not (having changed his mind)",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "-nricen\u0304ar-",
+            0
+        ]
     },
     "\u2013nrilkurte[V\u2192V]": {
         "exp": "\u2013nrilkurte[V\u2192V]",
@@ -1866,7 +2338,11 @@ export const newpostbases = {
         "inf_preverb_after": "g",
         "ger_preverb": "keeping ^himself^ from",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-nrilkurte-",
+            0
+        ]
     },
     "\u2013nrir[V\u2192V]": {
         "exp": "\u2013nrir[V\u2192V]",
@@ -1882,7 +2358,11 @@ export const newpostbases = {
         "inf_preverb": "no longer",
         "ger_preverb": "no longer",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "-nrir-",
+            0
+        ]
     },
     "\u2013nritar(ar)[V\u2192V]": {
         "exp": "\u2013nritar(ar)[V\u2192V]",
@@ -1897,7 +2377,11 @@ export const newpostbases = {
         "inf_preverb": "almost",
         "ger_preverb": "almost",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "-nritar(ar)-",
+            0
+        ]
     },
     "\u2013nrite[V\u2192V]": {
         "exp": "\u2013nrite[V\u2192V]",
@@ -1913,7 +2397,11 @@ export const newpostbases = {
         "inf_preverb": "not",
         "ger_preverb": "not",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "-nrite-",
+            0
+        ]
     },
     "\u2013nru[V\u2192V]": {
         "exp": "\u2013nru[V\u2192V]",
@@ -1921,7 +2409,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "moreso",
         "postverb": "moreso",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-nru-",
+            0
+        ]
     },
     "@+paalug|~vaalug[V\u2192V]": {
         "exp": "@+paalug|~vaalug[V\u2192V]",
@@ -1929,7 +2421,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "for the first time",
         "postverb": "for the first time",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "@+paalug-|~vaalug-,@+pailug-|~vailug-",
+            0
+        ]
     },
     "@+pailug|~vailug[V\u2192V]": {
         "exp": "@+pailug|~vailug[V\u2192V]",
@@ -1937,7 +2433,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "for the first time",
         "postverb": "for the first time",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "@+paalug-|~vaalug-,@+pailug-|~vailug-",
+            0
+        ]
     },
     "\u2013pacug[V\u2192V]": {
         "exp": "\u2013pacug[V\u2192V]",
@@ -1945,7 +2445,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "poorly, dearly",
         "postverb": "poorly, dearly",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-pacug-",
+            0
+        ]
     },
     "@+pag|~vag\u00b9[V\u2192V]": {
         "exp": "@+pag|~vag\u00b9[V\u2192V]",
@@ -1953,7 +2457,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "so well",
         "postverb": "so well",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "@+pag-|~vag\u00b9-",
+            0
+        ]
     },
     "@+pakar|~vakar[V\u2192V]": {
         "exp": "@+pakar|~vakar[V\u2192V]",
@@ -1961,7 +2469,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "so much",
         "postverb": "so much",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "@+pakar-|~vakar-,-qpakar-",
+            0
+        ]
     },
     "\u2013qpakar[V\u2192V]": {
         "exp": "\u2013qpakar[V\u2192V]",
@@ -1969,7 +2481,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "so much",
         "postverb": "so much",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "@+pakar-|~vakar-,-qpakar-",
+            0
+        ]
     },
     "@+pallag|~vallag[V\u2192V]": {
         "exp": "@+pallag|~vallag[V\u2192V]",
@@ -1977,7 +2493,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "intensely",
         "postverb": "intensely",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "@+pallag-|~vallag-",
+            0
+        ]
     },
     "@+pallug|~vallug[V\u2192V]": {
         "exp": "@+pallug|~vallug[V\u2192V]",
@@ -1985,7 +2505,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "the most",
         "postverb": "the most",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "@+pallug-|~vallug-,@+pallur-|~vallur-",
+            0
+        ]
     },
     "@+pallur|~vallur[V\u2192V]": {
         "exp": "@+pallur|~vallur[V\u2192V]",
@@ -1993,7 +2517,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "the most",
         "postverb": "the most",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "@+pallug-|~vallug-,@+pallur-|~vallur-",
+            0
+        ]
     },
     "+peke|.vke[V\u2192V]": {
         "exp": "+peke|.vke[V\u2192V]",
@@ -2013,7 +2541,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "not",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+peke-|+vke-,+pege-|+vke-",
+            0
+        ]
     },
     "+pege|.vke[V\u2192V]": {
         "exp": "+pege|.vke[V\u2192V]",
@@ -2029,7 +2561,11 @@ export const newpostbases = {
         "inf_preverb": "not",
         "ger_preverb": "not",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "+peke-|+vke-,+pege-|+vke-",
+            0
+        ]
     },
     "+pigainar[V\u2192V]": {
         "exp": "+pigainar[V\u2192V]",
@@ -2044,7 +2580,11 @@ export const newpostbases = {
         "inf_preverb": "actually (surprisingly)",
         "ger_preverb": "actually (surprisingly)",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "+pigainar-,-pigainar-",
+            0
+        ]
     },
     "\u2013pigainar[V\u2192V]": {
         "exp": "\u2013pigainar[V\u2192V]",
@@ -2059,7 +2599,11 @@ export const newpostbases = {
         "inf_preverb": "actually (surprisingly)",
         "ger_preverb": "actually (surprisingly)",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "+pigainar-,-pigainar-",
+            0
+        ]
     },
     "\u2013pig[V\u2192V]": {
         "exp": "\u2013pig[V\u2192V]",
@@ -2074,7 +2618,11 @@ export const newpostbases = {
         "inf_preverb": "really",
         "ger_preverb": "really",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "-pik\u00b9,-piaq,-pigaq,-pig-,-piar-,-pigar-",
+            3
+        ]
     },
     "\u2013piar[V\u2192V]": {
         "exp": "\u2013piar[V\u2192V]",
@@ -2089,7 +2637,11 @@ export const newpostbases = {
         "inf_preverb": "really",
         "ger_preverb": "really",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "-pik\u00b9,-piaq,-pigaq,-pig-,-piar-,-pigar-",
+            3
+        ]
     },
     "\u2013pigar[V\u2192V]": {
         "exp": "\u2013pigar[V\u2192V]",
@@ -2097,7 +2649,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "very much so",
         "postverb": "very much so",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-pik\u00b9,-piaq,-pigaq,-pig-,-piar-,-pigar-",
+            3
+        ]
     },
     "\u2013qaci[V\u2192V]": {
         "exp": "\u2013qaci[V\u2192V]",
@@ -2105,7 +2661,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "in a minor way",
         "postverb": "in a minor way",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-qaci-",
+            0
+        ]
     },
     "\u2013qainar[V\u2192V]": {
         "exp": "\u2013qainar[V\u2192V]",
@@ -2120,7 +2680,11 @@ export const newpostbases = {
         "inf_preverb": "merely",
         "ger_preverb": "merely",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "-qainaq,-qainar-",
+            1
+        ]
     },
     "\u2013qainaurte[V\u2192V]": {
         "exp": "\u2013qainaurte[V\u2192V]",
@@ -2139,7 +2703,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "being ready to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-qainaurte-",
+            0
+        ]
     },
     "\u2013qapiar(ar)[V\u2192V]": {
         "exp": "\u2013qapiar(ar)[V\u2192V]",
@@ -2147,7 +2715,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "very much so",
         "postverb": "very much so",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-qapiar(ar)-",
+            0
+        ]
     },
     "\u2013qapigte[V\u2192V]": {
         "exp": "\u2013qapigte[V\u2192V]",
@@ -2155,7 +2727,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "very much so",
         "postverb": "very much so",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-qapigte-",
+            0
+        ]
     },
     "\u2013qaqe\u00b9[V\u2192V]": {
         "exp": "\u2013qaqe\u00b9[V\u2192V]",
@@ -2163,7 +2739,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "intermittently",
         "postverb": "intermittently",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-qaqe\u00b9-",
+            0
+        ]
     },
     "@qaqe\u00b2[V\u2192V]": {
         "exp": "@qaqe\u00b2[V\u2192V]",
@@ -2171,7 +2751,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "one after another",
         "postverb": "one after another",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "@qaqe\u00b2-",
+            0
+        ]
     },
     "\u2013qaqu[V\u2192V]": {
         "exp": "\u2013qaqu[V\u2192V]",
@@ -2179,7 +2763,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "now and then",
         "postverb": "now and then",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-qaqur(ar)-,-qaqu-",
+            0
+        ]
     },
     "\u2013qaqur(ar)[V\u2192V]": {
         "exp": "\u2013qaqur(ar)[V\u2192V]",
@@ -2187,7 +2775,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "now and then",
         "postverb": "now and then",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-qaqur(ar)-,-qaqu-",
+            0
+        ]
     },
     "\u2013qar[V\u2192V]": {
         "exp": "\u2013qar[V\u2192V]",
@@ -2195,7 +2787,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "please",
         "postverb": "please",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-qar-",
+            0
+        ]
     },
     "\u2013qataar(ar)[V\u2192V]": {
         "exp": "\u2013qataar(ar)[V\u2192V]",
@@ -2214,7 +2810,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "slowly starting to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-qataar(ar)-",
+            0
+        ]
     },
     "\u2013qatar[V\u2192V]": {
         "exp": "\u2013qatar[V\u2192V]",
@@ -2234,7 +2834,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "being about to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-qatar-",
+            0
+        ]
     },
     "\u2013qcaar(ar)[V\u2192V]": {
         "exp": "\u2013qcaar(ar)[V\u2192V]",
@@ -2253,7 +2857,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "trying (despite difficulties) to ",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-qcaar(ar)-",
+            0
+        ]
     },
     "\u2013qerte[V\u2192V]": {
         "exp": "\u2013qerte[V\u2192V]",
@@ -2261,7 +2869,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "suddenly, hurriedly",
         "postverb": "suddenly, hurriedly",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-qerte-",
+            0
+        ]
     },
     "\u2013qetaar[V\u2192V]": {
         "exp": "\u2013qetaar[V\u2192V]",
@@ -2269,7 +2881,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "repeatedly at intervals",
         "postverb": "repeatedly at intervals",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-qetaaq,-qetaar-",
+            1
+        ]
     },
     "@\u2013qtaar[V\u2192V]": {
         "exp": "@\u2013qtaar[V\u2192V]",
@@ -2277,7 +2893,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "repeatedly at intervals",
         "postverb": "repeatedly at intervals",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "@-qtaar-",
+            0
+        ]
     },
     "\u2013qtar[V\u2192V]": {
         "exp": "\u2013qtar[V\u2192V]",
@@ -2285,7 +2905,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "weakly, helplessly, dearly",
         "postverb": "weakly, helplessly, dearly",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-qtaq*,-qtar-",
+            1
+        ]
     },
     "\u2013qtarar(ar)[V\u2192V]": {
         "exp": "\u2013qtarar(ar)[V\u2192V]",
@@ -2293,7 +2917,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "slowly and with difficulty because of disability",
         "postverb": "slowly and with difficulty because of disability",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-qtarar(ar)-",
+            0
+        ]
     },
     "\u2013qu\u00b9[V\u2192V]": {
         "exp": "\u2013qu\u00b9[V\u2192V]",
@@ -2301,7 +2929,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "one after another",
         "postverb": "one after another",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-qu\u00b9-",
+            0
+        ]
     },
     "@\u2013qur[V\u2192V]": {
         "exp": "@\u2013qur[V\u2192V]",
@@ -2309,7 +2941,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "using repeated action to accomplish the act",
         "postverb": "using repeated action to accomplish the act",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "@-qur-",
+            0
+        ]
     },
     "\u2013rpaga[V\u2192V]": {
         "exp": "\u2013rpaga[V\u2192V]",
@@ -2317,7 +2953,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "hard at intervals",
         "postverb": "hard at intervals",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-rpaga-",
+            0
+        ]
     },
     "\u2013rpag[V\u2192V]": {
         "exp": "\u2013rpag[V\u2192V]",
@@ -2325,7 +2965,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "hard",
         "postverb": "hard",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-rpak,-rpag-",
+            1
+        ]
     },
     "\u2013rpakar[V\u2192V]": {
         "exp": "\u2013rpakar[V\u2192V]",
@@ -2333,7 +2977,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "so much, for so long",
         "postverb": "so much, for so long",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-rpakar-",
+            0
+        ]
     },
     "@\u2013rqe\u00b9[V\u2192V]": {
         "exp": "@\u2013rqe\u00b9[V\u2192V]",
@@ -2341,7 +2989,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "one after another",
         "postverb": "one after another",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "@-rqe\u00b9-",
+            0
+        ]
     },
     "\u2013rrar[V\u2192V]": {
         "exp": "\u2013rrar[V\u2192V]",
@@ -2349,7 +3001,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "just barely",
         "postverb": "just barely",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-rraq*,-rrar-",
+            1
+        ]
     },
     "\u2013rraar[V\u2192V]": {
         "exp": "\u2013rraar[V\u2192V]",
@@ -2357,7 +3013,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "first",
         "postverb": "first",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-rraar-",
+            0
+        ]
     },
     "\u2013rrlainar[V\u2192V]": {
         "exp": "\u2013rrlainar[V\u2192V]",
@@ -2372,7 +3032,11 @@ export const newpostbases = {
         "inf_preverb": "constantly",
         "ger_preverb": "constantly",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "-rrlainaq*,-rrlainar-",
+            1
+        ]
     },
     "\u2013rrluar(ar)[V\u2192V]": {
         "exp": "\u2013rrluar(ar)[V\u2192V]",
@@ -2380,7 +3044,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "a little bit",
         "postverb": "a little bit",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-rrluar(ar)-",
+            0
+        ]
     },
     "\u2013rrlug[V\u2192V]": {
         "exp": "\u2013rrlug[V\u2192V]",
@@ -2395,7 +3063,11 @@ export const newpostbases = {
         "inf_preverb": "somewhat",
         "ger_preverb": "somewhat",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "-rrluk,-rrlug-,-rrlugte-",
+            1
+        ]
     },
     "\u2013rrlugte[V\u2192V]": {
         "exp": "\u2013rrlugte[V\u2192V]",
@@ -2410,7 +3082,11 @@ export const newpostbases = {
         "inf_preverb": "somewhat",
         "ger_preverb": "somewhat",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "-rrluk,-rrlug-,-rrlugte-",
+            1
+        ]
     },
     "\u2013q(ur)lur[V\u2192V]": {
         "exp": "\u2013q(ur)lur[V\u2192V]",
@@ -2418,7 +3094,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "poorly, dearly",
         "postverb": "poorly, dearly",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-r(ur)luq*,-q(ur)lur-",
+            1
+        ]
     },
     "\u2013rvaar[V\u2192V]": {
         "exp": "\u2013rvaar[V\u2192V]",
@@ -2426,7 +3106,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "very much so",
         "postverb": "very much so",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-rvaar-",
+            0
+        ]
     },
     "\u2013rvag[V\u2192V]": {
         "exp": "\u2013rvag[V\u2192V]",
@@ -2434,7 +3118,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "very much so",
         "postverb": "very much so",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-rvag-",
+            0
+        ]
     },
     "\u2013sciigate[V\u2192V]": {
         "exp": "\u2013sciigate[V\u2192V]",
@@ -2453,7 +3141,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "being unable to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-sciigate-",
+            0
+        ]
     },
     "\u2013ssaag\u00b9[V\u2192V]": {
         "exp": "\u2013ssaag\u00b9[V\u2192V]",
@@ -2472,7 +3164,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "trying to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-ssaag\u00b9-",
+            0
+        ]
     },
     "\u2013ssaag\u00b3[V\u2192V]": {
         "exp": "\u2013ssaag\u00b3[V\u2192V]",
@@ -2480,7 +3176,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "too much",
         "postverb": "too much",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-ssaag\u00b3-",
+            0
+        ]
     },
     "\u2013ssiyaag[V\u2192V]": {
         "exp": "\u2013ssiyaag[V\u2192V]",
@@ -2488,7 +3188,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "too much",
         "postverb": "too much",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-ssiyaag-",
+            0
+        ]
     },
     "@+ta\u00b2[V\u2192V]": {
         "exp": "@+ta\u00b2[V\u2192V]",
@@ -2496,7 +3200,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "to a certain degree",
         "postverb": "to a certain degree",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "@+ta\u00b2-",
+            0
+        ]
     },
     "+taagute[V\u2192V]": {
         "exp": "+taagute[V\u2192V]",
@@ -2504,7 +3212,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "back and forth",
         "postverb": "back and forth",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "+taagute-",
+            0
+        ]
     },
     "@+taar\u00b9[V\u2192V]": {
         "exp": "@+taar\u00b9[V\u2192V]",
@@ -2523,7 +3235,11 @@ export const newpostbases = {
         "inf_preverb_after": "g",
         "ger_preverb": "acting so as to try to make others feel that ^he^ is",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@+taar\u00b9-",
+            0
+        ]
     },
     "+tar\u00b9[V\u2192V]": {
         "exp": "+tar\u00b9[V\u2192V]",
@@ -2542,7 +3258,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "tending to often",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+tar\u00b9-",
+            0
+        ]
     },
     "+ter[V\u2192V]": {
         "exp": "+ter[V\u2192V]",
@@ -2550,7 +3270,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "suddenly and willfully",
         "postverb": "suddenly and willfully",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "+ter-",
+            0
+        ]
     },
     "\u2013tngurte[V\u2192V]": {
         "exp": "\u2013tngurte[V\u2192V]",
@@ -2558,7 +3282,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "unexpectedly",
         "postverb": "unexpectedly",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-tngurte-,-tmurte\u00b2-",
+            0
+        ]
     },
     "\u2013tmurte\u00b2[V\u2192V]": {
         "exp": "\u2013tmurte\u00b2[V\u2192V]",
@@ -2566,7 +3294,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "unexpectedly",
         "postverb": "unexpectedly",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-tngurte-,-tmurte\u00b2-",
+            0
+        ]
     },
     "\u2013tu[V\u2192V]": {
         "exp": "\u2013tu[V\u2192V]",
@@ -2574,7 +3306,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "customarily",
         "postverb": "customarily",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "+tu-,-tu-",
+            1
+        ]
     },
     "+tuinar[V\u2192V]": {
         "exp": "+tuinar[V\u2192V]",
@@ -2589,7 +3325,11 @@ export const newpostbases = {
         "inf_preverb": "always",
         "ger_preverb": "always",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "+tuinar-",
+            0
+        ]
     },
     "\u2013turnir[V\u2192V]": {
         "exp": "\u2013turnir[V\u2192V]",
@@ -2608,7 +3348,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "being proficiently able to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-turnir-",
+            0
+        ]
     },
     "@~+(ng)uar[V\u2192V]": {
         "exp": "@~+(ng)uar[V\u2192V]",
@@ -2627,7 +3371,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "pretending to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+(ng)uaq,@~+(ng)uar-",
+            1
+        ]
     },
     "@+`(g|t)ur(ar)[V\u2192V]": {
         "exp": "@+`(g|t)ur(ar)[V\u2192V]",
@@ -2646,7 +3394,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "continuing to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@+'(g|t)ur(ar)-",
+            0
+        ]
     },
     "@+`(g|t)urainar[V\u2192V]": {
         "exp": "@+`(g|t)urainar[V\u2192V]",
@@ -2661,7 +3413,11 @@ export const newpostbases = {
         "inf_preverb": "finally (after desiring to but not being able to)",
         "ger_preverb": "finally (after desiring to but not being able to)",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "@+'(g|t)urainar-",
+            0
+        ]
     },
     "@+`(g|t)uralar[V\u2192V]": {
         "exp": "@+`(g|t)uralar[V\u2192V]",
@@ -2676,7 +3432,11 @@ export const newpostbases = {
         "inf_preverb": "always",
         "ger_preverb": "always",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "@+'(g|t)uralar-,@+'(g|t)ur(ar)lar-,@+'(g|t)uratu-",
+            0
+        ]
     },
     "@+`(g|t)ur(ar)lar[V\u2192V]": {
         "exp": "@+`(g|t)ur(ar)lar[V\u2192V]",
@@ -2691,7 +3451,11 @@ export const newpostbases = {
         "inf_preverb": "always",
         "ger_preverb": "always",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "@+'(g|t)uralar-,@+'(g|t)ur(ar)lar-,@+'(g|t)uratu-",
+            0
+        ]
     },
     "@+`(g|t)uratu[V\u2192V]": {
         "exp": "@+`(g|t)uratu[V\u2192V]",
@@ -2706,7 +3470,11 @@ export const newpostbases = {
         "inf_preverb": "always",
         "ger_preverb": "always",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "@+'(g|t)uralar-,@+'(g|t)ur(ar)lar-,@+'(g|t)uratu-",
+            0
+        ]
     },
     "\u2013vguar(ar)[V\u2192V]": {
         "exp": "\u2013vguar(ar)[V\u2192V]",
@@ -2714,7 +3482,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "a little bit",
         "postverb": "a little bit",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-vguar(ar)-",
+            0
+        ]
     },
     "\u2013vialug[V\u2192V]": {
         "exp": "\u2013vialug[V\u2192V]",
@@ -2722,7 +3494,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "clumsily",
         "postverb": "clumsily",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-vialuk,-vialug-",
+            1
+        ]
     },
     "\u2013viite[V\u2192V]": {
         "exp": "\u2013viite[V\u2192V]",
@@ -2741,7 +3517,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "leaving no room or place to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-viite-",
+            0
+        ]
     },
     "\u2013vlaag[V\u2192V]": {
         "exp": "\u2013vlaag[V\u2192V]",
@@ -2749,7 +3529,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "insufficiently",
         "postverb": "insufficiently",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-vlaag-",
+            0
+        ]
     },
     "\u2013vlugte[V\u2192V]": {
         "exp": "\u2013vlugte[V\u2192V]",
@@ -2757,7 +3541,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "sloppily",
         "postverb": "sloppily",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-vlugte-",
+            0
+        ]
     },
     "\u2013vsiar[V\u2192V]": {
         "exp": "\u2013vsiar[V\u2192V]",
@@ -2765,7 +3553,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "even more to completion",
         "postverb": "even more to completion",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-vsiar-,-vyiar-",
+            0
+        ]
     },
     "\u2013vyiar[V\u2192V]": {
         "exp": "\u2013vyiar[V\u2192V]",
@@ -2773,7 +3565,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "even more to completion",
         "postverb": "even more to completion",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-vsiar-,-vyiar-",
+            0
+        ]
     },
     "\u2013vyirte[V\u2192V]": {
         "exp": "\u2013vyirte[V\u2192V]",
@@ -2781,7 +3577,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "around here and there",
         "postverb": "around here and there",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-vyirte-",
+            0
+        ]
     },
     "@~+yaaqe[V\u2192V]": {
         "exp": "@~+yaaqe[V\u2192V]",
@@ -2789,7 +3589,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "in vain (fruitlessly)",
         "postverb": "in vain (fruitlessly)",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "@~+yaaqe-",
+            0
+        ]
     },
     "\u2013ya(g)ar[V\u2192V]": {
         "exp": "\u2013ya(g)ar[V\u2192V]",
@@ -2804,7 +3608,11 @@ export const newpostbases = {
         "inf_preverb": "very cutely or dearly",
         "ger_preverb": "very cutely or dearly",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "-ya(g)aq*,-yagaq*,-ya(g)ar-,-yagar-",
+            2
+        ]
     },
     "\u2013yagar[V\u2192V]": {
         "exp": "\u2013yagar[V\u2192V]",
@@ -2819,7 +3627,11 @@ export const newpostbases = {
         "inf_preverb": "very cutely or dearly",
         "ger_preverb": "very cutely or dearly",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "-ya(g)aq*,-yagaq*,-ya(g)ar-,-yagar-",
+            2
+        ]
     },
     "@~+yalqar[V\u2192V]": {
         "exp": "@~+yalqar[V\u2192V]",
@@ -2827,7 +3639,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "without recompense",
         "postverb": "without recompense",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "@~+yalqar-",
+            0
+        ]
     },
     "@~+yaqlir[V\u2192V]": {
         "exp": "@~+yaqlir[V\u2192V]",
@@ -2842,7 +3658,11 @@ export const newpostbases = {
         "inf_preverb": "finally",
         "ger_preverb": "finally",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "@~+yaqlir-",
+            0
+        ]
     },
     "@~+yarar[V\u2192V]": {
         "exp": "@~+yarar[V\u2192V]",
@@ -2850,7 +3670,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "early",
         "postverb": "early",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "@~+yarar-",
+            0
+        ]
     },
     "@~+yarar(ar)[V\u2192V]": {
         "exp": "@~+yarar(ar)[V\u2192V]",
@@ -2858,7 +3682,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "very early",
         "postverb": "very early",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "@~+yarar(ar)-",
+            0
+        ]
     },
     "@~+yarpiar[V\u2192V]": {
         "exp": "@~+yarpiar[V\u2192V]",
@@ -2873,7 +3701,11 @@ export const newpostbases = {
         "inf_preverb": "almost",
         "ger_preverb": "almost",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "@~+yarpiar-,~+yarpigar-",
+            0
+        ]
     },
     "~+yarpigar[V\u2192V]": {
         "exp": "~+yarpigar[V\u2192V]",
@@ -2888,7 +3720,11 @@ export const newpostbases = {
         "inf_preverb": "almost",
         "ger_preverb": "almost",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "@~+yarpiar-,~+yarpigar-",
+            0
+        ]
     },
     "@~+yartur[V\u2192V]": {
         "exp": "@~+yartur[V\u2192V]",
@@ -2907,7 +3743,11 @@ export const newpostbases = {
         "inf_preverb_after": "g",
         "ger_preverb": "going",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+yartur-",
+            0
+        ]
     },
     "@~+yaurciiqe[V\u2192V]": {
         "exp": "@~+yaurciiqe[V\u2192V]",
@@ -2926,7 +3766,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "starting and continuing to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+yaurciiqe-",
+            0
+        ]
     },
     "@~+yaurte[V\u2192V]": {
         "exp": "@~+yaurte[V\u2192V]",
@@ -2945,7 +3789,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "being now able to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+yaurte-",
+            0
+        ]
     },
     "@~\u2013yu[V\u2192V]": {
         "exp": "@~\u2013yu[V\u2192V]",
@@ -2964,7 +3812,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "being well able to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~-yu-",
+            0
+        ]
     },
     "@~+yuar[V\u2192V]": {
         "exp": "@~+yuar[V\u2192V]",
@@ -2983,7 +3835,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+yuar-",
+            0
+        ]
     },
     "@~+yug[V\u2192V]": {
         "exp": "@~+yug[V\u2192V]",
@@ -3002,7 +3858,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "wanting to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+yug-,+(r)yug-",
+            1
+        ]
     },
     "@~+yugar[V\u2192V]": {
         "exp": "@~+yugar[V\u2192V]",
@@ -3021,7 +3881,11 @@ export const newpostbases = {
         "inf_preverb_after": "g",
         "ger_preverb": "enjoying ^his^",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+yugar-",
+            0
+        ]
     },
     "@~+yugcali[V\u2192V]": {
         "exp": "@~+yugcali[V\u2192V]",
@@ -3029,7 +3893,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "heartily",
         "postverb": "heartily",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "@~+yugcali-",
+            0
+        ]
     },
     "@~+yugnairute[V\u2192V]": {
         "exp": "@~+yugnairute[V\u2192V]",
@@ -3049,7 +3917,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "being definitely no longer going to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+yugnairute-",
+            0
+        ]
     },
     "@~+yugnaite\u00b9[V\u2192V]": {
         "exp": "@~+yugnaite\u00b9[V\u2192V]",
@@ -3069,7 +3941,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "being definitely not going to ",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+yugnaite\u00b9-",
+            0
+        ]
     },
     "@~+yugnarqe\u00b9[V\u2192V]": {
         "exp": "@~+yugnarqe\u00b9[V\u2192V]",
@@ -3077,7 +3953,11 @@ export const newpostbases = {
         "type": "VV",
         "description": "probably",
         "postverb": "probably",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "@~+yugnarqe\u00b9-",
+            0
+        ]
     },
     "@~+yugnarqe\u00b2[V\u2192V]": {
         "exp": "@~+yugnarqe\u00b2[V\u2192V]",
@@ -3096,7 +3976,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "being such as to make one want to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+yugnarqe\u00b2-",
+            0
+        ]
     },
     "@~+yugnga[V\u2192V]": {
         "exp": "@~+yugnga[V\u2192V]",
@@ -3115,7 +3999,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "being able to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+yugnga-",
+            0
+        ]
     },
     "@~+yugyaaqe[V\u2192V]": {
         "exp": "@~+yugyaaqe[V\u2192V]",
@@ -3134,7 +4022,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "wanting (provided it is all right) to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+yugyaaqe-",
+            0
+        ]
     },
     "@~\u2013yuirute[V\u2192V]": {
         "exp": "@~\u2013yuirute[V\u2192V]",
@@ -3154,7 +4046,11 @@ export const newpostbases = {
         "inf_preverb_after": "g",
         "ger_preverb": "being no longer",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~-yuirute-",
+            0
+        ]
     },
     "@~\u2013yuite[V\u2192V]": {
         "exp": "@~\u2013yuite[V\u2192V]",
@@ -3170,7 +4066,11 @@ export const newpostbases = {
         "inf_preverb": "never",
         "ger_preverb": "never",
         "match_case": true,
-        "gen_preverb_after": "g"
+        "gen_preverb_after": "g",
+        "keylookup": [
+            "@~-yuite-",
+            0
+        ]
     },
     "@~+yukaar(ar)[V\u2192V]": {
         "exp": "@~+yukaar(ar)[V\u2192V]",
@@ -3189,7 +4089,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "being ready to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+yukaar(ar)-",
+            0
+        ]
     },
     "@~\u2013yunaite[V\u2192V]": {
         "exp": "@~\u2013yunaite[V\u2192V]",
@@ -3208,7 +4112,11 @@ export const newpostbases = {
         "inf_preverb_after": "pp",
         "ger_preverb": "being impossible to be",
         "ger_preverb_after": "pp",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~-yunaite-",
+            0
+        ]
     },
     "@~\u2013yunarqe[V\u2192V]": {
         "exp": "@~\u2013yunarqe[V\u2192V]",
@@ -3227,7 +4135,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "being possible to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~-yunarqe-",
+            0
+        ]
     },
     "@~+yunqegg[V\u2192V]": {
         "exp": "@~+yunqegg[V\u2192V]",
@@ -3246,7 +4158,11 @@ export const newpostbases = {
         "inf_preverb_after": "g",
         "ger_preverb": "loving",
         "ger_preverb_after": "g",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+yunqegg-",
+            0
+        ]
     },
     "@~+yunrite[V\u2192V]": {
         "exp": "@~+yunrite[V\u2192V]",
@@ -3266,7 +4182,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "continuing not to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+yunrite-",
+            0
+        ]
     },
     "@~+yuuma[V\u2192V]": {
         "exp": "@~+yuuma[V\u2192V]",
@@ -3285,7 +4205,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "being able to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+yuuma-",
+            0
+        ]
     },
     "@~+yuumiir(ar)te[V\u2192V]": {
         "exp": "@~+yuumiir(ar)te[V\u2192V]",
@@ -3305,7 +4229,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "no longer wanting to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+yuumiir(ar)te-",
+            0
+        ]
     },
     "@~+yuumiite[V\u2192V]": {
         "exp": "@~+yuumiite[V\u2192V]",
@@ -3325,7 +4253,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "not caring to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+yuumiite-",
+            0
+        ]
     },
     "@~+yuumir[V\u2192V]": {
         "exp": "@~+yuumir[V\u2192V]",
@@ -3344,7 +4276,11 @@ export const newpostbases = {
         "inf_preverb_after": "i",
         "ger_preverb": "yearning to",
         "ger_preverb_after": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+yuumir-",
+            0
+        ]
     },
     "\u2013lria|@ngur*[V\u2192N]": {
         "exp": "\u2013lria|@ngur*[V\u2192N]",
@@ -3354,7 +4290,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "that are",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-lria",
+            0
+        ]
     },
     "+`(g)ar\u00b9[V\u2192N]": {
         "exp": "+`(g)ar\u00b9[V\u2192N]",
@@ -3364,7 +4304,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "past",
         "pluralDefinition": "that have been",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+'(g)aq\u00b9",
+            0
+        ]
     },
     "+`(g)arkar[V\u2192N]": {
         "exp": "+`(g)arkar[V\u2192N]",
@@ -3374,7 +4318,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "past",
         "pluralDefinition": "that have to be",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+'(g)arkaq",
+            0
+        ]
     },
     "+`(g)arkaqenrilke[V\u2192N]": {
         "exp": "+`(g)arkaqenrilke[V\u2192N]",
@@ -3384,7 +4332,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "i",
         "pluralDefinition": "that possessor must or should not",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+'(g)arkaqenrilka\u1d49",
+            0
+        ]
     },
     "@~+cetaar[V\u2192N]": {
         "exp": "@~+cetaar[V\u2192N]",
@@ -3393,7 +4345,11 @@ export const newpostbases = {
         "singularDefinition": "used to cause one to",
         "type": "VN",
         "verbType": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+cetaaq,@~+cetaar-",
+            1
+        ]
     },
     "@:(u)cir[V\u2192N]": {
         "exp": "@%:(u)cir[V\u2192N]",
@@ -3403,7 +4359,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "conditions of possessor with respect to",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@:(u)ciq",
+            0
+        ]
     },
     "@:(u)cirkar[V\u2192N]": {
         "exp": "@%:(u)cirkar[V\u2192N]",
@@ -3413,7 +4373,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "future conditions of possessor with respect to",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@:(u)cirkaq",
+            0
+        ]
     },
     "@~+citaar[V\u2192N]": {
         "exp": "@~+citaar[V\u2192N]",
@@ -3422,7 +4386,11 @@ export const newpostbases = {
         "singularDefinition": "used to cause one to",
         "type": "VN",
         "verbType": "i",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+citaaq,@~+citaar-",
+            1
+        ]
     },
     "\u2013curlag[V\u2192N]": {
         "exp": "\u2013curlag[V\u2192N]",
@@ -3432,7 +4400,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "misfortunes in",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-curlak,-curlag-",
+            1
+        ]
     },
     "+cuute|+ssuute[V\u2192N]": {
         "exp": "+cuute|+ssuute[V\u2192N]",
@@ -3442,7 +4414,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "devices for",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+cuun|+ssuun",
+            0
+        ]
     },
     "+(s)kar(ar*)\u00b2[V\u2192N]": {
         "exp": "+(s)kar(ar*)\u00b2[V\u2192N]",
@@ -3452,7 +4428,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "present",
         "pluralDefinition": "only one who",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+(s)kar(aq*)\u00b2",
+            0
+        ]
     },
     "@~\u2013ke\u00b9[V\u2192N]": {
         "exp": "@~\u2013ke\u00b9[V\u2192N]",
@@ -3462,7 +4442,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "that the possessor is",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~-ka\u1d49,@~-ke\u00b9-",
+            0
+        ]
     },
     "@~\u2013kengar[V\u2192N]": {
         "exp": "@~\u2013kengar[V\u2192N]",
@@ -3472,7 +4456,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "past",
         "pluralDefinition": "that are being",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~-kengaq",
+            0
+        ]
     },
     "+li\u00b9[V\u2192N]": {
         "exp": "+li\u00b9[V\u2192N]",
@@ -3482,7 +4470,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "present",
         "pluralDefinition": "who",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+li\u00b9,+liq",
+            2
+        ]
     },
     "+lir[V\u2192N]": {
         "exp": "+lir[V\u2192N]",
@@ -3492,7 +4484,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "present",
         "pluralDefinition": "who",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+li\u00b9,+liq",
+            2
+        ]
     },
     "\u2013ller\u00b9[V\u2192N]": {
         "exp": "\u2013ller\u00b9[V\u2192N]",
@@ -3502,7 +4498,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "acts or states of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-lleq\u00b9",
+            1
+        ]
     },
     "@ller\u00b2[V\u2192N]": {
         "exp": "@ller\u00b2[V\u2192N]",
@@ -3511,7 +4511,11 @@ export const newpostbases = {
         "singularDefinition": "more (compared to possessor)",
         "type": "VN",
         "pluralDefinition": "more (compared to possessor)",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@lleq\u00b2",
+            0
+        ]
     },
     "\u2013llerkar[V\u2192N]": {
         "exp": "\u2013llerkar[V\u2192N]",
@@ -3521,7 +4525,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "future acts of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-llerkaq",
+            0
+        ]
     },
     "\u2013llgute[V\u2192N]": {
         "exp": "\u2013llgute[V\u2192N]",
@@ -3531,7 +4539,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "partners in",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-llgun",
+            0
+        ]
     },
     "\u2013lqurrar*[V\u2192N]": {
         "exp": "\u2013lqurrar*[V\u2192N]",
@@ -3540,7 +4552,11 @@ export const newpostbases = {
         "singularDefinition": "most",
         "type": "VN",
         "pluralDefinition": "most",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-lqurraq*",
+            0
+        ]
     },
     "@:(u)te[V\u2192N]": {
         "exp": "@%:(u)te[V\u2192N]",
@@ -3550,7 +4566,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "instruments or devices for",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@(u)n,@(u)taq",
+            0
+        ]
     },
     "@~+natkar[V\u2192N]": {
         "exp": "@~+natkar[V\u2192N]",
@@ -3560,7 +4580,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "future times of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+natkaq",
+            0
+        ]
     },
     "@~+ner\u00b9[V\u2192N]": {
         "exp": "@~+ner\u00b9[V\u2192N]",
@@ -3570,7 +4594,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "things that result from",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+neq\u00b9",
+            0
+        ]
     },
     "@\u2013ner\u00b2[V\u2192N]": {
         "exp": "@\u2013ner\u00b2[V\u2192N]",
@@ -3580,7 +4608,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "activities, arts, or processes of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@-neq\u00b2",
+            0
+        ]
     },
     "\u2013ner\u00b3[V\u2192N]": {
         "exp": "\u2013ner\u00b3[V\u2192N]",
@@ -3589,7 +4621,11 @@ export const newpostbases = {
         "singularDefinition": "more (compared to possessor)",
         "type": "VN",
         "pluralDefinition": "more (compared to possessor)",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-neq\u00b3",
+            0
+        ]
     },
     "\u2013nerrar*[V\u2192N]": {
         "exp": "\u2013nerrar*[V\u2192N]",
@@ -3599,7 +4635,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "past",
         "pluralDefinition": "that have recently",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-nerraq*,-nerrar(aq*),-nerar(aq*),-nerrar-,-nerrar(ar)-,-nerar(ar)-",
+            3
+        ]
     },
     "\u2013nerrar(ar*)[V\u2192N]": {
         "exp": "\u2013nerrar(ar*)[V\u2192N]",
@@ -3609,7 +4649,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "past",
         "pluralDefinition": "that have recently",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-nerraq*,-nerrar(aq*),-nerar(aq*),-nerrar-,-nerrar(ar)-,-nerar(ar)-",
+            3
+        ]
     },
     "\u2013nerar(ar*)[V\u2192N]": {
         "exp": "\u2013nerar(ar*)[V\u2192N]",
@@ -3619,7 +4663,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "past",
         "pluralDefinition": "that have recently",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-nerraq*,-nerrar(aq*),-nerar(aq*),-nerrar-,-nerrar(ar)-,-nerar(ar)-",
+            3
+        ]
     },
     "@~+ngalngur*[V\u2192N]": {
         "exp": "@~+ngalngur*[V\u2192N]",
@@ -3629,7 +4677,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "that seem to be",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+ngalnguq*,+ngalnguq*",
+            0
+        ]
     },
     "\u2013ngssag[V\u2192N]": {
         "exp": "\u2013ngssag[V\u2192N]",
@@ -3639,7 +4691,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "small non-vital",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-ngssak,-ngssag-",
+            1
+        ]
     },
     "\u2013nguar[V\u2192N]": {
         "exp": "\u2013nguar[V\u2192N]",
@@ -3649,7 +4705,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "devices for inauthentic",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-nguaq,@~-nguar-",
+            1
+        ]
     },
     "\u2013nqegcaar(ar*)[V\u2192N]": {
         "exp": "\u2013nqegcaar(ar*)[V\u2192N]",
@@ -3659,7 +4719,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "i",
         "pluralDefinition": "that thoroughly",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-nqegcaar(aq*),-nqegcaar(ar)-",
+            1
+        ]
     },
     "\u2013nqurrar*[V\u2192N]": {
         "exp": "\u2013nqurrar*[V\u2192N]",
@@ -3668,7 +4732,11 @@ export const newpostbases = {
         "singularDefinition": "most",
         "type": "VN",
         "pluralDefinition": "most",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-nqurraq*",
+            0
+        ]
     },
     "\u2013piar[V\u2192N]": {
         "exp": "\u2013piar[V\u2192N]",
@@ -3677,7 +4745,11 @@ export const newpostbases = {
         "singularDefinition": "who is really",
         "type": "VN",
         "pluralDefinition": "that are really",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-pik\u00b9,-piaq,-pigaq,-pig-,-piar-,-pigar-",
+            3
+        ]
     },
     "@+piiner|~viiner[V\u2192N]": {
         "exp": "@+piiner|~viiner[V\u2192N]",
@@ -3687,7 +4759,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "incidents of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@+piineq|~viineq",
+            0
+        ]
     },
     "\u2013qetaar[V\u2192N]": {
         "exp": "\u2013qetaar[V\u2192N]",
@@ -3697,7 +4773,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "present",
         "pluralDefinition": "devices that alternately (and in reverse)",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-qetaaq,-qetaar-",
+            1
+        ]
     },
     "\u2013rraaner[V\u2192N]": {
         "exp": "\u2013rraaner[V\u2192N]",
@@ -3707,7 +4787,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "past times of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-rraaneq",
+            0
+        ]
     },
     "+ssuute[V\u2192N]": {
         "exp": "+ssuute[V\u2192N]",
@@ -3717,7 +4801,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "devices for",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+ssuun",
+            0
+        ]
     },
     "+(s)te[V\u2192N]": {
         "exp": "+(s)te[V\u2192N]",
@@ -3727,7 +4815,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "i",
         "pluralDefinition": "that (or by occupation)",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+(s)ta",
+            0
+        ]
     },
     "@+tacir[V\u2192N]": {
         "exp": "@+tacir[V\u2192N]",
@@ -3737,7 +4829,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "extents of possessor's",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@+taciq",
+            0
+        ]
     },
     "@:(u)tar\u00b9[V\u2192N]": {
         "exp": "@%:(u)tar\u00b9[V\u2192N]",
@@ -3747,7 +4843,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "devices for",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@:(u)taq\u00b9",
+            0
+        ]
     },
     "@+tate[V\u2192N]": {
         "exp": "@+tate[V\u2192N]",
@@ -3756,7 +4856,11 @@ export const newpostbases = {
         "singularDefinition": "who is (to the same extent as possessor)",
         "type": "VN",
         "pluralDefinition": "that are (to the same extent as possessor)",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@+tata\u1d49",
+            0
+        ]
     },
     "@:(u)tiir[V\u2192N]": {
         "exp": "@%:(u)tiir[V\u2192N]",
@@ -3766,7 +4870,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "celebrations of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@:(u)tiiq",
+            0
+        ]
     },
     "~:(u)tnguarkar[V\u2192N]": {
         "exp": "~%:(u)tnguarkar[V\u2192N]",
@@ -3776,7 +4884,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "potential or necessary aids to",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "~:(u)tnguarkaq",
+            0
+        ]
     },
     "\u2013tuke[V\u2192N]": {
         "exp": "\u2013tuke[V\u2192N]",
@@ -3786,7 +4898,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "i",
         "pluralDefinition": "possessor's regular or customary things to",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-tuka\u1d49",
+            0
+        ]
     },
     "\u2013tuli[V\u2192N]": {
         "exp": "\u2013tuli[V\u2192N]",
@@ -3796,7 +4912,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "that are fully capable of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+tuli,-tuli",
+            1
+        ]
     },
     "+(ng)uar[V\u2192N]": {
         "exp": "+(ng)uar[V\u2192N]",
@@ -3806,7 +4926,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "devices for inauthentic",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+(ng)uaq,@~+(ng)uar-",
+            1
+        ]
     },
     "@~+vig[V\u2192N]": {
         "exp": "@~+vig[V\u2192N]",
@@ -3816,7 +4940,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "i",
         "pluralDefinition": "places to",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+vik,+(r)vik",
+            0
+        ]
     },
     "+(r)vig[V\u2192N]": {
         "exp": "+(r)vig[V\u2192N]",
@@ -3826,7 +4954,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "places for",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+vik,+(r)vik",
+            0
+        ]
     },
     "@~+yailkutar[V\u2192N]": {
         "exp": "@~+yailkutar[V\u2192N]",
@@ -3836,7 +4968,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "devices for preventing",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+yailkutaq,@~+yailkun",
+            0
+        ]
     },
     "@~+yailkute[V\u2192N]": {
         "exp": "@~+yailkute[V\u2192N]",
@@ -3846,7 +4982,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "devices for preventing",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+yailkutaq,@~+yailkun",
+            0
+        ]
     },
     "+yag[V\u2192N]": {
         "exp": "+yag[V\u2192N]",
@@ -3856,7 +4996,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "things that act as if they were",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+yak",
+            1
+        ]
     },
     "@~+yaller[V\u2192N]": {
         "exp": "@~+yaller[V\u2192N]",
@@ -3866,7 +5010,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "periods of time when possessor is",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+yalleq",
+            0
+        ]
     },
     "@~+yarar[V\u2192N]": {
         "exp": "@~+yarar[V\u2192N]",
@@ -3876,7 +5024,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "ways of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+yaraq",
+            1
+        ]
     },
     "@~\u2013yuli[V\u2192N]": {
         "exp": "@~\u2013yuli[V\u2192N]",
@@ -3886,7 +5038,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "g",
         "pluralDefinition": "that are good at",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~-yuli",
+            0
+        ]
     },
     "@~+yunqeggli[V\u2192N]": {
         "exp": "@~+yunqeggli[V\u2192N]",
@@ -3896,7 +5052,11 @@ export const newpostbases = {
         "type": "VN",
         "verbType": "i",
         "pluralDefinition": "that love to",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+yunqeggli",
+            0
+        ]
     },
     "\u2013ar(ar*)[N\u2192N]": {
         "exp": "\u2013ar(ar*)[N\u2192N]",
@@ -3907,7 +5067,11 @@ export const newpostbases = {
         "pluralDefinition": "little pieces of",
         "postDefinition": "",
         "description": "little piece of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-ar(aq*)",
+            0
+        ]
     },
     "\u2013ciller[N\u2192N]": {
         "exp": "\u2013ciller[N\u2192N]",
@@ -3918,7 +5082,11 @@ export const newpostbases = {
         "pluralDefinition": "worthless",
         "postDefinition": "",
         "description": "worthless",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-cilleq",
+            0
+        ]
     },
     "\u2013cuar(ar*)[N\u2192N]": {
         "exp": "\u2013cuar(ar*)[N\u2192N]",
@@ -3929,7 +5097,11 @@ export const newpostbases = {
         "pluralDefinition": "small",
         "postDefinition": "",
         "description": "small",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-cuar(aq*)",
+            0
+        ]
     },
     "\u2013cug[N\u2192N]": {
         "exp": "\u2013cug[N\u2192N]",
@@ -3940,7 +5112,11 @@ export const newpostbases = {
         "pluralDefinition": "unpleasing",
         "postDefinition": "",
         "description": "unpleasing",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-cuk",
+            0
+        ]
     },
     "\u2013cungar[N\u2192N]": {
         "exp": "\u2013cungar[N\u2192N]",
@@ -3951,7 +5127,11 @@ export const newpostbases = {
         "pluralDefinition": "cute little",
         "postDefinition": "",
         "description": "cute little",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-cungaq",
+            0
+        ]
     },
     ":(ng)inar*[N\u2192N]": {
         "exp": "%:(ng)inar*[N\u2192N]",
@@ -3962,7 +5142,11 @@ export const newpostbases = {
         "pluralDefinition": "mere (and nothing more)",
         "postDefinition": "",
         "description": "mere (and nothing more)",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            ":(ng)inaq*",
+            0
+        ]
     },
     ":(ng)i:rute[N\u2192N]": {
         "exp": "%:(ng)i%:rute[N\u2192N]",
@@ -3973,7 +5157,11 @@ export const newpostbases = {
         "pluralDefinition": "late (deceased)",
         "postDefinition": "",
         "description": "late (deceased)",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            ":(ng)i:run",
+            0
+        ]
     },
     "\u2013kainer[N\u2192N]": {
         "exp": "\u2013kainer[N\u2192N]",
@@ -3984,7 +5172,11 @@ export const newpostbases = {
         "pluralDefinition": "little bits of",
         "postDefinition": "",
         "description": "little bit of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-kaineq",
+            0
+        ]
     },
     "+kar[N\u2192N]": {
         "exp": "+kar[N\u2192N]",
@@ -3995,7 +5187,11 @@ export const newpostbases = {
         "pluralDefinition": "future",
         "postDefinition": "",
         "description": "future",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "+kaq",
+            0
+        ]
     },
     "@kar(ar*)\u00b9[N\u2192N]": {
         "exp": "@kar(ar*)\u00b9[N\u2192N]",
@@ -4006,7 +5202,11 @@ export const newpostbases = {
         "pluralDefinition": "small",
         "postDefinition": "",
         "description": "small",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "@kar(aq*)\u00b9",
+            0
+        ]
     },
     "\u2013kcag[N\u2192N]": {
         "exp": "\u2013kcag[N\u2192N]",
@@ -4017,7 +5217,11 @@ export const newpostbases = {
         "pluralDefinition": "things that looks like a",
         "postDefinition": "",
         "description": "thing that looks like a",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-kcak",
+            0
+        ]
     },
     "\u2013kcuar(ar*)[N\u2192N]": {
         "exp": "\u2013kcuar(ar*)[N\u2192N]",
@@ -4028,7 +5232,11 @@ export const newpostbases = {
         "pluralDefinition": "small",
         "postDefinition": "",
         "description": "small",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-kcuar(aq*)",
+            0
+        ]
     },
     "\u2013kegtaar(ar*)[N\u2192N]": {
         "exp": "\u2013kegtaar(ar*)[N\u2192N]",
@@ -4039,7 +5247,11 @@ export const newpostbases = {
         "pluralDefinition": "good",
         "postDefinition": "",
         "description": "good",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-kegtaar(aq*)",
+            0
+        ]
     },
     "@\u2013ksagar[N\u2192N]": {
         "exp": "@\u2013ksagar[N\u2192N]",
@@ -4050,7 +5262,11 @@ export const newpostbases = {
         "pluralDefinition": "very ugly",
         "postDefinition": "",
         "description": "very ugly",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "@-ksagaq",
+            0
+        ]
     },
     "@ksuar(ar*)[N\u2192N]": {
         "exp": "@ksuar(ar*)[N\u2192N]",
@@ -4061,7 +5277,11 @@ export const newpostbases = {
         "pluralDefinition": "small",
         "postDefinition": "",
         "description": "small",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "@ksuar(aq*)",
+            0
+        ]
     },
     "+kuar[N\u2192N]": {
         "exp": "+kuar[N\u2192N]",
@@ -4072,7 +5292,11 @@ export const newpostbases = {
         "pluralDefinition": "leftover",
         "postDefinition": "",
         "description": "leftover",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "+kuaq",
+            0
+        ]
     },
     "\u2013kucir[N\u2192N]": {
         "exp": "\u2013kucir[N\u2192N]",
@@ -4083,7 +5307,11 @@ export const newpostbases = {
         "pluralDefinition": "of the same kind as",
         "postDefinition": "",
         "description": "of the same kind as",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-kuciq",
+            0
+        ]
     },
     "\u2013kuiner(ar*)[N\u2192N]": {
         "exp": "\u2013kuiner(ar*)[N\u2192N]",
@@ -4094,7 +5322,11 @@ export const newpostbases = {
         "pluralDefinition": "small amounts of",
         "postDefinition": "",
         "description": "small amount of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-kuiner(aq*),-kuinr(aq*),-kuineq",
+            0
+        ]
     },
     "\u2013kuinr(ar*)[N\u2192N]": {
         "exp": "\u2013kuinr(ar*)[N\u2192N]",
@@ -4105,7 +5337,11 @@ export const newpostbases = {
         "pluralDefinition": "small amounts of",
         "postDefinition": "",
         "description": "small amount of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-kuiner(aq*),-kuinr(aq*),-kuineq",
+            0
+        ]
     },
     "\u2013kuiner[N\u2192N]": {
         "exp": "\u2013kuiner[N\u2192N]",
@@ -4116,7 +5352,11 @@ export const newpostbases = {
         "pluralDefinition": "small amounts of",
         "postDefinition": "",
         "description": "small amount of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-kuiner(aq*),-kuinr(aq*),-kuineq",
+            0
+        ]
     },
     "\u2013kutar[N\u2192N]": {
         "exp": "\u2013kutar[N\u2192N]",
@@ -4127,7 +5367,11 @@ export const newpostbases = {
         "pluralDefinition": "things to be used as one would with",
         "postDefinition": "",
         "description": "thing to be used as one would with",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-kutaq,-kun",
+            0
+        ]
     },
     "\u2013kute[N\u2192N]": {
         "exp": "\u2013kute[N\u2192N]",
@@ -4138,7 +5382,11 @@ export const newpostbases = {
         "pluralDefinition": "things to be used as one would with",
         "postDefinition": "",
         "description": "thing to be used as one would with",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-kutaq,-kun",
+            0
+        ]
     },
     "\u2013kuyug[N\u2192N]": {
         "exp": "\u2013kuyug[N\u2192N]",
@@ -4149,7 +5397,11 @@ export const newpostbases = {
         "pluralDefinition": "small bits of",
         "postDefinition": "",
         "description": "small bit of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-kuyuk,-kuyugaq",
+            0
+        ]
     },
     "\u2013kuyugar[N\u2192N]": {
         "exp": "\u2013kuyugar[N\u2192N]",
@@ -4160,7 +5412,11 @@ export const newpostbases = {
         "pluralDefinition": "small bits of",
         "postDefinition": "",
         "description": "small bit of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-kuyuk,-kuyugaq",
+            0
+        ]
     },
     "\u2013leg[N\u2192N]": {
         "exp": "\u2013leg[N\u2192N]",
@@ -4171,7 +5427,11 @@ export const newpostbases = {
         "pluralDefinition": "with",
         "postDefinition": "",
         "description": "with",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-lek",
+            0
+        ]
     },
     "\u2013lgute[N\u2192N]": {
         "exp": "\u2013lgute[N\u2192N]",
@@ -4182,7 +5442,11 @@ export const newpostbases = {
         "pluralDefinition": "sharers of",
         "postDefinition": "",
         "description": "sharer of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-lgun",
+            0
+        ]
     },
     "+li\u00b9[N\u2192N]": {
         "exp": "+li\u00b9[N\u2192N]",
@@ -4193,7 +5457,11 @@ export const newpostbases = {
         "pluralDefinition": "similar to",
         "postDefinition": "",
         "description": "similar to",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "+li\u00b9,+liq",
+            2
+        ]
     },
     "+lir[N\u2192N]": {
         "exp": "+lir[N\u2192N]",
@@ -4204,7 +5472,11 @@ export const newpostbases = {
         "pluralDefinition": "similar to",
         "postDefinition": "",
         "description": "similar to",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "+li\u00b9,+liq",
+            2
+        ]
     },
     "\u2013\u2013liar[N\u2192N]": {
         "exp": "\u2013\u2013liar[N\u2192N]",
@@ -4215,7 +5487,11 @@ export const newpostbases = {
         "pluralDefinition": "made",
         "postDefinition": "",
         "description": "made",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-liaq",
+            0
+        ]
     },
     "\u2013\u2013linrar*[N\u2192N]": {
         "exp": "\u2013\u2013linrar*[N\u2192N]",
@@ -4226,7 +5502,11 @@ export const newpostbases = {
         "pluralDefinition": "products of",
         "postDefinition": "",
         "description": "product of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-linraq*,-linr(aq*)",
+            0
+        ]
     },
     "\u2013\u2013linr(ar*)[N\u2192N]": {
         "exp": "\u2013\u2013linr(ar*)[N\u2192N]",
@@ -4237,7 +5517,11 @@ export const newpostbases = {
         "pluralDefinition": "products of",
         "postDefinition": "",
         "description": "product of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-linraq*,-linr(aq*)",
+            0
+        ]
     },
     "\u2013lkug[N\u2192N]": {
         "exp": "\u2013lkug[N\u2192N]",
@@ -4248,7 +5532,11 @@ export const newpostbases = {
         "pluralDefinition": "no-good",
         "postDefinition": "",
         "description": "no-good",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-lkuk,-lkug-",
+            1
+        ]
     },
     "\u2013llar*[N\u2192N]": {
         "exp": "\u2013llar*[N\u2192N]",
@@ -4259,7 +5547,11 @@ export const newpostbases = {
         "pluralDefinition": "",
         "postDefinition": "(with reference to the past)",
         "description": "(with reference to the past)",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-llaq*",
+            0
+        ]
     },
     "\u2013ller(ar*)[N\u2192N]": {
         "exp": "\u2013ller(ar*)[N\u2192N]",
@@ -4270,7 +5562,11 @@ export const newpostbases = {
         "pluralDefinition": "shabby old",
         "postDefinition": "",
         "description": "shabby old",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-ller(aq*)",
+            0
+        ]
     },
     "@\u2013llug[N\u2192N]": {
         "exp": "@\u2013llug[N\u2192N]",
@@ -4281,7 +5577,11 @@ export const newpostbases = {
         "pluralDefinition": "bad",
         "postDefinition": "",
         "description": "bad",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "@-lluk,-llug-,-llugte-",
+            1
+        ]
     },
     "\u2013lqur[N\u2192N]": {
         "exp": "\u2013lqur[N\u2192N]",
@@ -4292,7 +5592,11 @@ export const newpostbases = {
         "pluralDefinition": "old broken pieces of",
         "postDefinition": "",
         "description": "old broken piece of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-lquq",
+            0
+        ]
     },
     "\u2013luatar[N\u2192N]": {
         "exp": "\u2013luatar[N\u2192N]",
@@ -4303,7 +5607,11 @@ export const newpostbases = {
         "pluralDefinition": "good",
         "postDefinition": "",
         "description": "good",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-luataq,-luatar-",
+            0
+        ]
     },
     "\u2013lugpiar[N\u2192N]": {
         "exp": "\u2013lugpiar[N\u2192N]",
@@ -4314,7 +5622,11 @@ export const newpostbases = {
         "pluralDefinition": "original",
         "postDefinition": "",
         "description": "original",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-lugpiaq",
+            0
+        ]
     },
     "+mig[N\u2192N]": {
         "exp": "+mig[N\u2192N]",
@@ -4325,7 +5637,11 @@ export const newpostbases = {
         "pluralDefinition": "things held in ^one's^",
         "postDefinition": "",
         "description": "thing held in ^one's^",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+mik,+miaq,+mig-",
+            2
+        ]
     },
     "+miar[N\u2192N]": {
         "exp": "+miar[N\u2192N]",
@@ -4336,7 +5652,11 @@ export const newpostbases = {
         "pluralDefinition": "things held in ^one's^",
         "postDefinition": "",
         "description": "thing held in ^one's^",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+mik,+miaq,+mig-",
+            2
+        ]
     },
     "~+miu[N\u2192N]": {
         "exp": "~+miu[N\u2192N]",
@@ -4347,7 +5667,11 @@ export const newpostbases = {
         "pluralDefinition": "inhabitants of",
         "postDefinition": "",
         "description": "inhabitant of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "~+miu",
+            0
+        ]
     },
     "~+miutar*[N\u2192N]": {
         "exp": "~+miutar*[N\u2192N]",
@@ -4358,7 +5682,11 @@ export const newpostbases = {
         "pluralDefinition": "whose place is",
         "postDefinition": "",
         "description": "whose place is",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "~+miutaq*",
+            0
+        ]
     },
     "+ner\u2074[N\u2192N]": {
         "exp": "+ner\u2074[N\u2192N]",
@@ -4369,7 +5697,11 @@ export const newpostbases = {
         "pluralDefinition": "areas of",
         "postDefinition": "",
         "description": "area of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+neq\u2074",
+            0
+        ]
     },
     "\u2013nerrar*[N\u2192N]": {
         "exp": "\u2013nerrar*[N\u2192N]",
@@ -4380,7 +5712,11 @@ export const newpostbases = {
         "pluralDefinition": "new",
         "postDefinition": "",
         "description": "new",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-nerraq*,-nerrar(aq*),-nerar(aq*),-nerrar-,-nerrar(ar)-,-nerar(ar)-",
+            3
+        ]
     },
     "\u2013nerrar(ar*)[N\u2192N]": {
         "exp": "\u2013nerrar(ar*)[N\u2192N]",
@@ -4391,7 +5727,11 @@ export const newpostbases = {
         "pluralDefinition": "new",
         "postDefinition": "",
         "description": "new",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-nerraq*,-nerrar(aq*),-nerar(aq*),-nerrar-,-nerrar(ar)-,-nerar(ar)-",
+            3
+        ]
     },
     "\u2013nerar(ar*)[N\u2192N]": {
         "exp": "\u2013nerar(ar*)[N\u2192N]",
@@ -4402,7 +5742,11 @@ export const newpostbases = {
         "pluralDefinition": "new",
         "postDefinition": "",
         "description": "new",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-nerraq*,-nerrar(aq*),-nerar(aq*),-nerrar-,-nerrar(ar)-,-nerar(ar)-",
+            3
+        ]
     },
     "\u2013ngirta'rrlugar*[N\u2192N]": {
         "exp": "\u2013ngirta'rrlugar*[N\u2192N]",
@@ -4413,7 +5757,11 @@ export const newpostbases = {
         "pluralDefinition": "good old (but perhaps decrepit)",
         "postDefinition": "",
         "description": "good old (but perhaps decrepit)",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-ngirta'rrlugaq*",
+            0
+        ]
     },
     "\u2013ngnagar[N\u2192N]": {
         "exp": "\u2013ngnagar[N\u2192N]",
@@ -4424,7 +5772,11 @@ export const newpostbases = {
         "pluralDefinition": "poor quality",
         "postDefinition": "",
         "description": "poor quality",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-ngnagaq,-ngnagar-",
+            1
+        ]
     },
     "\u2013ngssaar(ar*)[N\u2192N]": {
         "exp": "\u2013ngssaar(ar*)[N\u2192N]",
@@ -4435,7 +5787,11 @@ export const newpostbases = {
         "pluralDefinition": "secret",
         "postDefinition": "",
         "description": "secret",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-ngssaar(aq*),-ngssaar(ar)-",
+            1
+        ]
     },
     "\u2013nguar[N\u2192N]": {
         "exp": "\u2013nguar[N\u2192N]",
@@ -4446,7 +5802,11 @@ export const newpostbases = {
         "pluralDefinition": "fake",
         "postDefinition": "",
         "description": "fake",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-nguaq,@~-nguar-",
+            1
+        ]
     },
     "\u2013ngyaar(ar*)[N\u2192N]": {
         "exp": "\u2013ngyaar(ar*)[N\u2192N]",
@@ -4457,7 +5817,11 @@ export const newpostbases = {
         "pluralDefinition": "old (person)",
         "postDefinition": "",
         "description": "old (person)",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-ngyaar(aq*),-ngiar(aq*)",
+            0
+        ]
     },
     "\u2013ngiar(ar*)[N\u2192N]": {
         "exp": "\u2013ngiar(ar*)[N\u2192N]",
@@ -4468,7 +5832,11 @@ export const newpostbases = {
         "pluralDefinition": "old (person)",
         "postDefinition": "",
         "description": "old (person)",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-ngyaar(aq*),-ngiar(aq*)",
+            0
+        ]
     },
     "+nir\u00b2[N\u2192N]": {
         "exp": "+nir\u00b2[N\u2192N]",
@@ -4479,7 +5847,11 @@ export const newpostbases = {
         "pluralDefinition": "smells of",
         "postDefinition": "",
         "description": "smell of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+niq\u00b2",
+            0
+        ]
     },
     "\u2013paarrlug[N\u2192N]": {
         "exp": "\u2013paarrlug[N\u2192N]",
@@ -4490,7 +5862,11 @@ export const newpostbases = {
         "pluralDefinition": "big",
         "postDefinition": "",
         "description": "big",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-paarrluk",
+            0
+        ]
     },
     "\u2013pig\u00b9[N\u2192N]": {
         "exp": "\u2013pig\u00b9[N\u2192N]",
@@ -4501,7 +5877,11 @@ export const newpostbases = {
         "pluralDefinition": "genuine",
         "postDefinition": "",
         "description": "genuine",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-pik\u00b9,-piaq,-pigaq,-pig-,-piar-,-pigar-",
+            3
+        ]
     },
     "\u2013piar[N\u2192N]": {
         "exp": "\u2013piar[N\u2192N]",
@@ -4512,7 +5892,11 @@ export const newpostbases = {
         "pluralDefinition": "genuine",
         "postDefinition": "",
         "description": "genuine",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-pik\u00b9,-piaq,-pigaq,-pig-,-piar-,-pigar-",
+            3
+        ]
     },
     "\u2013pigar[N\u2192N]": {
         "exp": "\u2013pigar[N\u2192N]",
@@ -4523,7 +5907,11 @@ export const newpostbases = {
         "pluralDefinition": "genuine",
         "postDefinition": "",
         "description": "genuine",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-pik\u00b9,-piaq,-pigaq,-pig-,-piar-,-pigar-",
+            3
+        ]
     },
     "\u2013qainar[N\u2192N]": {
         "exp": "\u2013qainar[N\u2192N]",
@@ -4534,7 +5922,11 @@ export const newpostbases = {
         "pluralDefinition": "mere",
         "postDefinition": "",
         "description": "mere",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-qainaq,-qainar-",
+            1
+        ]
     },
     "\u2013qtar*[N\u2192N]": {
         "exp": "\u2013qtar*[N\u2192N]",
@@ -4545,7 +5937,11 @@ export const newpostbases = {
         "pluralDefinition": "weak helpless",
         "postDefinition": "",
         "description": "weak helpless",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-qtaq*,-qtar-",
+            1
+        ]
     },
     "\u2013qva[N\u2192N]": {
         "exp": "\u2013qva[N\u2192N]",
@@ -4556,7 +5952,11 @@ export const newpostbases = {
         "pluralDefinition": "areas far in the direction of",
         "postDefinition": "",
         "description": "area far in the direction of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-qva",
+            0
+        ]
     },
     "\u2013qvaar*[N\u2192N]": {
         "exp": "\u2013qvaar*[N\u2192N]",
@@ -4567,7 +5967,11 @@ export const newpostbases = {
         "pluralDefinition": "areas far in the direction of",
         "postDefinition": "",
         "description": "area far in the direction of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-qvaaq*",
+            0
+        ]
     },
     "\u2013r'aya'ar[N\u2192N]": {
         "exp": "\u2013r'aya'ar[N\u2192N]",
@@ -4578,7 +5982,11 @@ export const newpostbases = {
         "pluralDefinition": "multitudes of",
         "postDefinition": "",
         "description": "multitude of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-r'aya'aq",
+            0
+        ]
     },
     "\u2013rpaa(ar*)[N\u2192N]": {
         "exp": "\u2013rpaa(ar*)[N\u2192N]",
@@ -4589,7 +5997,11 @@ export const newpostbases = {
         "pluralDefinition": "great",
         "postDefinition": "",
         "description": "great",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-rpaa(aq*)",
+            0
+        ]
     },
     "\u2013rpag|@vag[N\u2192N]": {
         "exp": "\u2013rpag|@vag[N\u2192N]",
@@ -4600,7 +6012,11 @@ export const newpostbases = {
         "pluralDefinition": "large",
         "postDefinition": "",
         "description": "large",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "@vak|?vak",
+            0
+        ]
     },
     "\u2013rpallr(ar*)[N\u2192N]": {
         "exp": "\u2013rpallr(ar*)[N\u2192N]",
@@ -4611,7 +6027,11 @@ export const newpostbases = {
         "pluralDefinition": "very large",
         "postDefinition": "",
         "description": "very large",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-rpallr(aq*)",
+            0
+        ]
     },
     "\u2013rrar*[N\u2192N]": {
         "exp": "\u2013rrar*[N\u2192N]",
@@ -4622,7 +6042,11 @@ export const newpostbases = {
         "pluralDefinition": "little bits of",
         "postDefinition": "",
         "description": "little bit of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-rraq*,-rrar-",
+            1
+        ]
     },
     "\u2013rrlainar*[N\u2192N]": {
         "exp": "\u2013rrlainar*[N\u2192N]",
@@ -4633,7 +6057,11 @@ export const newpostbases = {
         "pluralDefinition": "areas with nothing but",
         "postDefinition": "",
         "description": "area with nothing but",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-rrlainaq*,-rrlainar-",
+            1
+        ]
     },
     "\u2013rrlugar*[N\u2192N]": {
         "exp": "\u2013rrlugar*[N\u2192N]",
@@ -4644,7 +6072,11 @@ export const newpostbases = {
         "pluralDefinition": "good old",
         "postDefinition": "",
         "description": "good old",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-rrlugaq*",
+            0
+        ]
     },
     "\u2013rrlug[N\u2192N]": {
         "exp": "\u2013rrlug[N\u2192N]",
@@ -4655,7 +6087,11 @@ export const newpostbases = {
         "pluralDefinition": "",
         "postDefinition": "that departed from a natural state (often undesirably)",
         "description": "that departed from a natural state (often undesirably)",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-rrluk,-rrlug-,-rrlugte-",
+            1
+        ]
     },
     "\u2013rugar*[N\u2192N]": {
         "exp": "\u2013rugar*[N\u2192N]",
@@ -4666,7 +6102,11 @@ export const newpostbases = {
         "pluralDefinition": "multitudes of",
         "postDefinition": "",
         "description": "multitudes of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-rugaq*",
+            0
+        ]
     },
     "\u2013r(ur)lur*[N\u2192N]": {
         "exp": "\u2013r(ur)lur*[N\u2192N]",
@@ -4677,7 +6117,11 @@ export const newpostbases = {
         "pluralDefinition": "poor dear",
         "postDefinition": "",
         "description": "poor dear",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-r(ur)luq*,-q(ur)lur-",
+            1
+        ]
     },
     "\u2013ssaarar[N\u2192N]": {
         "exp": "\u2013ssaarar[N\u2192N]",
@@ -4688,7 +6132,11 @@ export const newpostbases = {
         "pluralDefinition": "old",
         "postDefinition": "",
         "description": "old",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-ssaaraq",
+            0
+        ]
     },
     "+taleg[N\u2192N]": {
         "exp": "+taleg[N\u2192N]",
@@ -4699,7 +6147,11 @@ export const newpostbases = {
         "pluralDefinition": "places having",
         "postDefinition": "",
         "description": "place having",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+talek",
+            0
+        ]
     },
     "+tar\u00b2[N\u2192N]": {
         "exp": "+tar\u00b2[N\u2192N]",
@@ -4710,7 +6162,11 @@ export const newpostbases = {
         "pluralDefinition": "things pertaining to",
         "postDefinition": "",
         "description": "thing pertaining to",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+taq\u00b2",
+            0
+        ]
     },
     "+tar\u00b3[N\u2192N]": {
         "exp": "+tar\u00b3[N\u2192N]",
@@ -4721,7 +6177,11 @@ export const newpostbases = {
         "pluralDefinition": "caught (game animals)",
         "postDefinition": "",
         "description": "caught (game animal)",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+taq\u00b3",
+            0
+        ]
     },
     "+tar\u2075[N\u2192N]": {
         "exp": "+tar\u2075[N\u2192N]",
@@ -4732,7 +6192,11 @@ export const newpostbases = {
         "pluralDefinition": "",
         "postDefinition": "specifically",
         "description": "specifically",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+taq\u2075",
+            0
+        ]
     },
     "+tuli[N\u2192N]": {
         "exp": "+tuli[N\u2192N]",
@@ -4743,7 +6207,11 @@ export const newpostbases = {
         "pluralDefinition": "well endowed with",
         "postDefinition": "",
         "description": "well endowed with",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+tuli,-tuli",
+            1
+        ]
     },
     "+(ng)uar[N\u2192N]": {
         "exp": "+(ng)uar[N\u2192N]",
@@ -4754,7 +6222,11 @@ export const newpostbases = {
         "pluralDefinition": "imitation",
         "postDefinition": "",
         "description": "imitation",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "+(ng)uaq,@~+(ng)uar-",
+            1
+        ]
     },
     ":(ng)ute[N\u2192N]": {
         "exp": "%:(ng)ute[N\u2192N]",
@@ -4765,7 +6237,11 @@ export const newpostbases = {
         "pluralDefinition": "supplies of",
         "postDefinition": "",
         "description": "supply of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            ":(ng)un,:~(ng)un",
+            0
+        ]
     },
     ":~(ng)ute[N\u2192N]": {
         "exp": "%:~(ng)ute[N\u2192N]",
@@ -4776,7 +6252,11 @@ export const newpostbases = {
         "pluralDefinition": "supplies of",
         "postDefinition": "",
         "description": "supply of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            ":(ng)un,:~(ng)un",
+            0
+        ]
     },
     ":(ng)uteller[N\u2192N]": {
         "exp": "%:(ng)uteller[N\u2192N]",
@@ -4787,7 +6267,11 @@ export const newpostbases = {
         "pluralDefinition": "empty containers that held",
         "postDefinition": "",
         "description": "empty container that held",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            ":(ng)utelleq,:~(ng)utelleq",
+            0
+        ]
     },
     ":~(ng)uteller[N\u2192N]": {
         "exp": "%:~(ng)uteller[N\u2192N]",
@@ -4798,7 +6282,11 @@ export const newpostbases = {
         "pluralDefinition": "empty containers that held",
         "postDefinition": "",
         "description": "empty container that held",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            ":(ng)utelleq,:~(ng)utelleq",
+            0
+        ]
     },
     "\u2013vaarrlug[N\u2192N]": {
         "exp": "\u2013vaarrlug[N\u2192N]",
@@ -4809,7 +6297,11 @@ export const newpostbases = {
         "pluralDefinition": "big",
         "postDefinition": "",
         "description": "big",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-vaarrluk",
+            0
+        ]
     },
     "\u2013vialug[N\u2192N]": {
         "exp": "\u2013vialug[N\u2192N]",
@@ -4820,7 +6312,11 @@ export const newpostbases = {
         "pluralDefinition": "shabby",
         "postDefinition": "",
         "description": "shabby",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-vialuk,-vialug-",
+            1
+        ]
     },
     "@~+viutar[N\u2192N]": {
         "exp": "@~+viutar[N\u2192N]",
@@ -4831,7 +6327,11 @@ export const newpostbases = {
         "pluralDefinition": "containers for",
         "postDefinition": "",
         "description": "container for",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+viutaq",
+            0
+        ]
     },
     "\u2013ya(g)ar*[N\u2192N]": {
         "exp": "\u2013ya(g)ar*[N\u2192N]",
@@ -4842,7 +6342,11 @@ export const newpostbases = {
         "pluralDefinition": "baby or little",
         "postDefinition": "",
         "description": "baby or little",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-ya(g)aq*,-yagaq*,-ya(g)ar-,-yagar-",
+            2
+        ]
     },
     "\u2013yagar*[N\u2192N]": {
         "exp": "\u2013yagar*[N\u2192N]",
@@ -4853,7 +6357,11 @@ export const newpostbases = {
         "pluralDefinition": "baby or little",
         "postDefinition": "",
         "description": "baby or little",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-ya(g)aq*,-yagaq*,-ya(g)ar-,-yagar-",
+            2
+        ]
     },
     "+yag[N\u2192N]": {
         "exp": "+yag[N\u2192N]",
@@ -4864,7 +6372,11 @@ export const newpostbases = {
         "pluralDefinition": "things similar to",
         "postDefinition": "",
         "description": "thing similar to",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+yak",
+            1
+        ]
     },
     "@~+yarar[N\u2192N]": {
         "exp": "@~+yarar[N\u2192N]",
@@ -4875,7 +6387,11 @@ export const newpostbases = {
         "pluralDefinition": "ways of or devices dealing with",
         "postDefinition": "",
         "description": "way of or device dealing with",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+yaraq",
+            1
+        ]
     },
     "\u2013yaya(g)ar*[N\u2192N]": {
         "exp": "\u2013yaya(g)ar*[N\u2192N]",
@@ -4886,7 +6402,11 @@ export const newpostbases = {
         "pluralDefinition": "little baby",
         "postDefinition": "",
         "description": "little baby",
-        "match_case": true
+        "match_case": true,
+        "keylookup": [
+            "-yaya(g)aq*",
+            0
+        ]
     },
     "@~+ngari[N\u2192V]": {
         "type": "NV",
@@ -4902,7 +6422,11 @@ export const newpostbases = {
         "past": "began to be like",
         "inf_prenoun": "begin to be like",
         "ger_prenoun": "beginning to be like",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+ngari-",
+            1
+        ]
     },
     "+`(g)ar(ar)[N\u2192V]": {
         "type": "NV",
@@ -4918,7 +6442,11 @@ export const newpostbases = {
         "past": "went only with",
         "inf_prenoun": "go only with",
         "ger_prenoun": "going only with",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+'(g)ar(ar)-",
+            2
+        ]
     },
     "+arar(ar)[N\u2192V]": {
         "type": "NV",
@@ -4934,7 +6462,11 @@ export const newpostbases = {
         "past": "went only with",
         "inf_prenoun": "go only with",
         "ger_prenoun": "going only with",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+'(g)ar(ar)-",
+            2
+        ]
     },
     ":(ng)ar(ar)te\u00b2[N\u2192V]": {
         "type": "NV",
@@ -4950,7 +6482,11 @@ export const newpostbases = {
         "past": "got hit on ^its^",
         "inf_prenoun": "get hit on ^its^",
         "ger_prenoun": "getting hit on ^its^",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            ":(ng)ar(ar)te\u00b2-",
+            0
+        ]
     },
     "\u2013car(ar)te[N\u2192V]": {
         "type": "NV",
@@ -4966,7 +6502,11 @@ export const newpostbases = {
         "past": "got hit on ^its^",
         "inf_prenoun": "get hit on ^its^",
         "ger_prenoun": "getting hit on ^its^",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-car(ar)te-",
+            0
+        ]
     },
     "+ci[N\u2192V]": {
         "type": "NV",
@@ -4982,7 +6522,11 @@ export const newpostbases = {
         "past": "bought some",
         "inf_prenoun": "buy some",
         "ger_prenoun": "buying some",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+ci-",
+            0
+        ]
     },
     "+cite\u00b2[N\u2192V]": {
         "type": "NV",
@@ -4998,7 +6542,11 @@ export const newpostbases = {
         "past": "had the quality of",
         "inf_prenoun": "have the quality of",
         "ger_prenoun": "having the quality of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+cite\u00b2-",
+            1
+        ]
     },
     "@\u2013ckegg[N\u2192V]": {
         "type": "NV",
@@ -5014,7 +6562,11 @@ export const newpostbases = {
         "past": "had good",
         "inf_prenoun": "have good",
         "ger_prenoun": "having good",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@-ckegg-",
+            1
+        ]
     },
     "+cugninarqe[N\u2192V]": {
         "type": "NV",
@@ -5030,7 +6582,11 @@ export const newpostbases = {
         "past": "smelled or tasted like",
         "inf_prenoun": "smell or taste like",
         "ger_prenoun": "smelling or tasting like",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+cugninarqe-,+cugnilarqe-,-cugninarqe-",
+            0
+        ]
     },
     "+cugnilarqe[N\u2192V]": {
         "type": "NV",
@@ -5046,7 +6602,11 @@ export const newpostbases = {
         "past": "smelled or tasted like",
         "inf_prenoun": "smell or taste like",
         "ger_prenoun": "smelling or tasting like",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+cugninarqe-,+cugnilarqe-,-cugninarqe-",
+            0
+        ]
     },
     "\u2013cugninarqe[N\u2192V]": {
         "type": "NV",
@@ -5062,7 +6622,11 @@ export const newpostbases = {
         "past": "smelled or tasted like",
         "inf_prenoun": "smell or taste like",
         "ger_prenoun": "smelling or tasting like",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+cugninarqe-,+cugnilarqe-,-cugninarqe-",
+            0
+        ]
     },
     "+cugnite[N\u2192V]": {
         "type": "NV",
@@ -5078,7 +6642,11 @@ export const newpostbases = {
         "past": "smelled or tasted like",
         "inf_prenoun": "smell or taste like",
         "ger_prenoun": "smelling or tasting like",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+cugnite-",
+            0
+        ]
     },
     "\u2013culngu[N\u2192V]": {
         "type": "NV",
@@ -5094,7 +6662,11 @@ export const newpostbases = {
         "past": "unwell or unwilling with respect to ^its^",
         "inf_prenoun": "be unwell or unwilling with respect to ^its^",
         "ger_prenoun": "being unwell or unwilling with respect to ^its^",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-culngu-",
+            0
+        ]
     },
     "+cur|+ssur[N\u2192V]": {
         "type": "NV",
@@ -5110,7 +6682,11 @@ export const newpostbases = {
         "past": "hunted",
         "inf_prenoun": "hunt",
         "ger_prenoun": "hunting",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+cur-|+ssur-",
+            0
+        ]
     },
     ":(ng)icag[N\u2192V]": {
         "type": "NV",
@@ -5126,7 +6702,11 @@ export const newpostbases = {
         "past": "in need of",
         "inf_prenoun": "be in need of",
         "ger_prenoun": "being in need of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            ":(ng)icag-",
+            0
+        ]
     },
     ":(ng)illiqe[N\u2192V]": {
         "type": "NV",
@@ -5142,7 +6722,11 @@ export const newpostbases = {
         "past": "suffered from the lack of",
         "inf_prenoun": "suffer from the lack of",
         "ger_prenoun": "suffering from the lack of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            ":(ng)illiqe-",
+            1
+        ]
     },
     "\u2013ir\u00b9[N\u2192V]": {
         "type": "NV",
@@ -5158,7 +6742,11 @@ export const newpostbases = {
         "past": "provided with",
         "inf_prenoun": "be provided with",
         "ger_prenoun": "being provided with",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-ir\u00b9-",
+            0
+        ]
     },
     ":(ng)ir\u00b2[N\u2192V]": {
         "type": "NV",
@@ -5174,7 +6762,11 @@ export const newpostbases = {
         "past": "deprived of",
         "inf_prenoun": "be deprived of",
         "ger_prenoun": "being deprived of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            ":(ng)ir\u00b2-",
+            1
+        ]
     },
     ":(ng)ir(ar)[N\u2192V]": {
         "type": "NV",
@@ -5190,7 +6782,11 @@ export const newpostbases = {
         "past": "had cold",
         "inf_prenoun": "have cold",
         "ger_prenoun": "having cold",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            ":(ng)ir(ar)-",
+            0
+        ]
     },
     ":(ng)ir(ar)te[N\u2192V]": {
         "type": "NV",
@@ -5206,7 +6802,11 @@ export const newpostbases = {
         "past": "injured in ^its^",
         "inf_prenoun": "be injured in ^its^",
         "ger_prenoun": "being injured in ^its^",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            ":(ng)ir(ar)te-",
+            0
+        ]
     },
     ":(ng)i:rute[N\u2192V]": {
         "type": "NV",
@@ -5222,7 +6822,11 @@ export const newpostbases = {
         "past": "no longer had",
         "inf_prenoun": "no longer have",
         "ger_prenoun": "no longer having",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            ":(ng)i:rute-",
+            1
+        ]
     },
     ":(ng)ite\u00b9[N\u2192V]": {
         "type": "NV",
@@ -5238,7 +6842,11 @@ export const newpostbases = {
         "past": "lacked",
         "inf_prenoun": "lack",
         "ger_prenoun": "lacking",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            ":(ng)ite\u00b9-",
+            1
+        ]
     },
     "+karci[N\u2192V]": {
         "type": "NV",
@@ -5254,7 +6862,11 @@ export const newpostbases = {
         "past": "bought something to serve as ^its^",
         "inf_prenoun": "buy something to serve as ^its^",
         "ger_prenoun": "buying something to serve as ^its^",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+karci-",
+            0
+        ]
     },
     "\u2013kegci[N\u2192V]": {
         "type": "NV",
@@ -5270,7 +6882,11 @@ export const newpostbases = {
         "past": "had good",
         "inf_prenoun": "have good",
         "ger_prenoun": "having good",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-kegci-",
+            0
+        ]
     },
     "\u2013kegte[N\u2192V]": {
         "type": "NV",
@@ -5286,7 +6902,11 @@ export const newpostbases = {
         "past": "had good",
         "inf_prenoun": "have good",
         "ger_prenoun": "having good",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-kegte-",
+            0
+        ]
     },
     "\u2013kiirar[N\u2192V]": {
         "type": "NV",
@@ -5302,7 +6922,11 @@ export const newpostbases = {
         "past": "in (water, mud, tall grass, body part, etc.) up to ^its^",
         "inf_prenoun": "be in (water, mud, tall grass, body part, etc.) up to ^its^",
         "ger_prenoun": "being in (water, mud, tall grass, body part, etc.) up to ^its^",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-kiirar-,-kiir(ar)-,-kaar-",
+            0
+        ]
     },
     "\u2013kiir(ar)[N\u2192V]": {
         "type": "NV",
@@ -5318,7 +6942,11 @@ export const newpostbases = {
         "past": "in (water, mud, tall grass, body part, etc.) up to ^its^",
         "inf_prenoun": "be in (water, mud, tall grass, body part, etc.) up to ^its^",
         "ger_prenoun": "being in (water, mud, tall grass, body part, etc.) up to ^its^",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-kiirar-,-kiir(ar)-,-kaar-",
+            0
+        ]
     },
     "\u2013kaar[N\u2192V]": {
         "type": "NV",
@@ -5334,7 +6962,11 @@ export const newpostbases = {
         "past": "in (water, mud, tall grass, body part, etc.) up to ^its^",
         "inf_prenoun": "be in (water, mud, tall grass, body part, etc.) up to ^its^",
         "ger_prenoun": "being in (water, mud, tall grass, body part, etc.) up to ^its^",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-kiirar-,-kiir(ar)-,-kaar-",
+            0
+        ]
     },
     "+kiur[N\u2192V]": {
         "type": "NV",
@@ -5350,7 +6982,11 @@ export const newpostbases = {
         "past": "prepared something to be",
         "inf_prenoun": "prepare something to be",
         "ger_prenoun": "preparing something to be",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+kiur-",
+            0
+        ]
     },
     "\u2013knaggairute[N\u2192V]": {
         "type": "NV",
@@ -5366,7 +7002,11 @@ export const newpostbases = {
         "past": "had come to totally lack",
         "inf_prenoun": "have come to totally lack",
         "ger_prenoun": "having come to totally lack",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-knaggairute-",
+            0
+        ]
     },
     "\u2013knaggaite[N\u2192V]": {
         "type": "NV",
@@ -5382,7 +7022,11 @@ export const newpostbases = {
         "past": "totally lacked",
         "inf_prenoun": "totally lack",
         "ger_prenoun": "totally lacking",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-knaggaite-",
+            0
+        ]
     },
     "%kuir[N\u2192V]": {
         "type": "NV",
@@ -5398,7 +7042,11 @@ export const newpostbases = {
         "past": "went along",
         "inf_prenoun": "go along",
         "ger_prenoun": "going along",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "%kuir-",
+            0
+        ]
     },
     "\u2013laar(ar)[N\u2192V]": {
         "type": "NV",
@@ -5414,7 +7062,11 @@ export const newpostbases = {
         "past": "got new",
         "inf_prenoun": "get new",
         "ger_prenoun": "getting new",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-laar(ar)-",
+            0
+        ]
     },
     "\u2013lgir[N\u2192V]": {
         "type": "NV",
@@ -5430,7 +7082,11 @@ export const newpostbases = {
         "past": "took along",
         "inf_prenoun": "take along",
         "ger_prenoun": "taking along",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-lgir-",
+            0
+        ]
     },
     "\u2013\u2013li\u00b2[N\u2192V]": {
         "type": "NV",
@@ -5446,7 +7102,11 @@ export const newpostbases = {
         "past": "made",
         "inf_prenoun": "make",
         "ger_prenoun": "making",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-li\u00b2-",
+            0
+        ]
     },
     "\u2013\u2013linqigte[N\u2192V]": {
         "type": "NV",
@@ -5462,7 +7122,11 @@ export const newpostbases = {
         "past": "changed ^its^",
         "inf_prenoun": "change ^its^",
         "ger_prenoun": "changing ^its^",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-linqigte-",
+            0
+        ]
     },
     "\u2013\u2013liqe\u00b9[N\u2192V]": {
         "type": "NV",
@@ -5478,7 +7142,11 @@ export const newpostbases = {
         "past": "caught a lot of",
         "inf_prenoun": "catch a lot of",
         "ger_prenoun": "catching a lot of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-liqe\u00b9-",
+            0
+        ]
     },
     "\u2013\u2013liqe\u00b2[N\u2192V]": {
         "type": "NV",
@@ -5494,7 +7162,11 @@ export const newpostbases = {
         "past": "afflicted in ^its^",
         "inf_prenoun": "be afflicted in ^its^",
         "ger_prenoun": "being afflicted in ^its^",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-liqe\u00b2-",
+            0
+        ]
     },
     "\u2013\u2013lir[N\u2192V]": {
         "type": "NV",
@@ -5510,7 +7182,11 @@ export const newpostbases = {
         "past": "had lots of",
         "inf_prenoun": "have lots of",
         "ger_prenoun": "having lots of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-lir-",
+            0
+        ]
     },
     "\u2013\u2013liur[N\u2192V]": {
         "type": "NV",
@@ -5526,7 +7202,11 @@ export const newpostbases = {
         "past": "occupied with",
         "inf_prenoun": "be occupied with",
         "ger_prenoun": "being occupied with",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-liur-",
+            0
+        ]
     },
     "\u2013\u2013liyar[N\u2192V]": {
         "type": "NV",
@@ -5542,7 +7222,11 @@ export const newpostbases = {
         "past": "went to participate in",
         "inf_prenoun": "go to participate in",
         "ger_prenoun": "going to participate in",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-liyar-,-liar-",
+            2
+        ]
     },
     "\u2013liar[N\u2192V]": {
         "type": "NV",
@@ -5558,7 +7242,11 @@ export const newpostbases = {
         "past": "went to participate in",
         "inf_prenoun": "go to participate in",
         "ger_prenoun": "going to participate in",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-liyar-,-liar-",
+            2
+        ]
     },
     "\u2013lkia[N\u2192V]": {
         "type": "NV",
@@ -5574,7 +7262,11 @@ export const newpostbases = {
         "past": "gave evidence of",
         "inf_prenoun": "give evidence of",
         "ger_prenoun": "giving evidence of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-lkia-",
+            1
+        ]
     },
     "\u2013lkite[N\u2192V]": {
         "type": "NV",
@@ -5590,7 +7282,11 @@ export const newpostbases = {
         "past": "gave evidence of",
         "inf_prenoun": "give evidence of",
         "ger_prenoun": "giving evidence of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-lkite-",
+            0
+        ]
     },
     "+lliqe[N\u2192V]": {
         "type": "NV",
@@ -5606,7 +7302,11 @@ export const newpostbases = {
         "past": "had poor quality",
         "inf_prenoun": "have poor quality",
         "ger_prenoun": "having poor quality",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+lliqe-",
+            0
+        ]
     },
     "\u2013llug[N\u2192V]": {
         "type": "NV",
@@ -5622,7 +7322,11 @@ export const newpostbases = {
         "past": "had bad",
         "inf_prenoun": "have bad",
         "ger_prenoun": "having bad",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@-lluk,-llug-,-llugte-",
+            1
+        ]
     },
     "\u2013llugte[N\u2192V]": {
         "type": "NV",
@@ -5638,7 +7342,11 @@ export const newpostbases = {
         "past": "had bad",
         "inf_prenoun": "have bad",
         "ger_prenoun": "having bad",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@-lluk,-llug-,-llugte-",
+            1
+        ]
     },
     "+mig[N\u2192V]": {
         "type": "NV",
@@ -5654,7 +7362,11 @@ export const newpostbases = {
         "past": "put something in ^its^",
         "inf_prenoun": "put something in ^its^",
         "ger_prenoun": "putting something in ^its^",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+mik,+miaq,+mig-",
+            2
+        ]
     },
     "+miu[N\u2192V]": {
         "type": "NV",
@@ -5670,7 +7382,11 @@ export const newpostbases = {
         "past": "at",
         "inf_prenoun": "be at",
         "ger_prenoun": "being at",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+miu-",
+            0
+        ]
     },
     "+miuyaar[N\u2192V]": {
         "type": "NV",
@@ -5686,7 +7402,11 @@ export const newpostbases = {
         "past": "spoke the language or dialect of the residents of",
         "inf_prenoun": "speak the language or dialect of the residents of",
         "ger_prenoun": "speaking the language or dialect of the residents of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+miuyaar-",
+            0
+        ]
     },
     "+ngate[N\u2192V]": {
         "type": "NV",
@@ -5702,7 +7422,11 @@ export const newpostbases = {
         "past": "seemed like",
         "inf_prenoun": "seem like",
         "ger_prenoun": "seeming like",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+ngate-,+ngate-",
+            1
+        ]
     },
     "\u2013nge[N\u2192V]": {
         "type": "NV",
@@ -5718,7 +7442,11 @@ export const newpostbases = {
         "past": "had acquired",
         "inf_prenoun": "have acquired",
         "ger_prenoun": "having acquired",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-nge-",
+            1
+        ]
     },
     "\u2013ngqerr[N\u2192V]": {
         "type": "NV",
@@ -5734,7 +7462,11 @@ export const newpostbases = {
         "past": "had",
         "inf_prenoun": "have",
         "ger_prenoun": "having",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-ngqerr-",
+            0
+        ]
     },
     "@~+nialke[N\u2192V]": {
         "type": "NV",
@@ -5750,7 +7482,11 @@ export const newpostbases = {
         "past": "considered it to be an unpleasant",
         "inf_prenoun": "consider it to be an unpleasant",
         "ger_prenoun": "considering it to be an unpleasant",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+nialke-",
+            1
+        ]
     },
     "@~+niate[N\u2192V]": {
         "type": "NV",
@@ -5766,7 +7502,11 @@ export const newpostbases = {
         "past": "an unpleasant",
         "inf_prenoun": "be an unpleasant",
         "ger_prenoun": "being an unpleasant",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+niate-",
+            1
+        ]
     },
     "@~+niilke[N\u2192V]": {
         "type": "NV",
@@ -5782,7 +7522,11 @@ export const newpostbases = {
         "past": "considered it to be an unpleasant",
         "inf_prenoun": "consider it to be an unpleasant",
         "ger_prenoun": "considering it to be an unpleasant",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+niilke-",
+            1
+        ]
     },
     "@~+niite[N\u2192V]": {
         "type": "NV",
@@ -5798,7 +7542,11 @@ export const newpostbases = {
         "past": "an unpleasant",
         "inf_prenoun": "be an unpleasant",
         "ger_prenoun": "being an unpleasant",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+niite-",
+            1
+        ]
     },
     "@~+nike[N\u2192V]": {
         "type": "NV",
@@ -5814,7 +7562,11 @@ export const newpostbases = {
         "past": "considered it to be an unpleasant",
         "inf_prenoun": "consider it to be an unpleasant",
         "ger_prenoun": "considering it to be an unpleasant",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+nike-",
+            1
+        ]
     },
     "~+ninarqe[N\u2192V]": {
         "type": "NV",
@@ -5830,7 +7582,11 @@ export const newpostbases = {
         "past": "smelled or tasted like",
         "inf_prenoun": "smell or taste like",
         "ger_prenoun": "smelling or tasting like",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "~+ninarqe-,~+nilarqe-",
+            0
+        ]
     },
     "~+nilarqe[N\u2192V]": {
         "type": "NV",
@@ -5846,7 +7602,11 @@ export const newpostbases = {
         "past": "smelled or tasted like",
         "inf_prenoun": "smell or taste like",
         "ger_prenoun": "smelling or tasting like",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "~+ninarqe-,~+nilarqe-",
+            0
+        ]
     },
     "@~+nirqe[N\u2192V]": {
         "type": "NV",
@@ -5862,7 +7622,11 @@ export const newpostbases = {
         "past": "a pleasant",
         "inf_prenoun": "be a pleasant",
         "ger_prenoun": "being a pleasant",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+nirqe-",
+            1
+        ]
     },
     "+nite[N\u2192V]": {
         "type": "NV",
@@ -5878,7 +7642,11 @@ export const newpostbases = {
         "past": "smelled or tasted like",
         "inf_prenoun": "smell or taste like",
         "ger_prenoun": "smelling or tasting like",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+nite-",
+            0
+        ]
     },
     "\u2013qsig[N\u2192V]": {
         "type": "NV",
@@ -5894,7 +7662,11 @@ export const newpostbases = {
         "past": "far in the direction denoted by",
         "inf_prenoun": "be far in the direction denoted by",
         "ger_prenoun": "being far in the direction denoted by",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-qsig-",
+            0
+        ]
     },
     "\u2013qsigi[N\u2192V]": {
         "type": "NV",
@@ -5910,7 +7682,11 @@ export const newpostbases = {
         "past": "went farther in the direction denoted by",
         "inf_prenoun": "go farther in the direction denoted by",
         "ger_prenoun": "going farther in the direction denoted by",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-qsigi-",
+            0
+        ]
     },
     "\u2013qu\u00b2[N\u2192V]": {
         "type": "NV",
@@ -5926,7 +7702,11 @@ export const newpostbases = {
         "past": "hunted with or at",
         "inf_prenoun": "hunt with or at",
         "ger_prenoun": "hunting with or at",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-qu\u00b2-",
+            0
+        ]
     },
     "\u2013rpagninarqe[N\u2192V]": {
         "type": "NV",
@@ -5942,7 +7722,11 @@ export const newpostbases = {
         "past": "smelled strongly of",
         "inf_prenoun": "smell strongly of",
         "ger_prenoun": "smelling strongly of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-rpagninarqe-",
+            0
+        ]
     },
     "\u2013rpagnite[N\u2192V]": {
         "type": "NV",
@@ -5958,7 +7742,11 @@ export const newpostbases = {
         "past": "smelled or tasted strongly of",
         "inf_prenoun": "smell or taste strongly of",
         "ger_prenoun": "smelling or tasting strongly of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-rpagnite-",
+            0
+        ]
     },
     "\u2013rpau[N\u2192V]": {
         "type": "NV",
@@ -5974,7 +7762,11 @@ export const newpostbases = {
         "past": "a large",
         "inf_prenoun": "be a large",
         "ger_prenoun": "being a large",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-rpau-",
+            0
+        ]
     },
     "\u2013rpi[N\u2192V]": {
         "type": "NV",
@@ -5990,7 +7782,11 @@ export const newpostbases = {
         "past": "had a large",
         "inf_prenoun": "have a large",
         "ger_prenoun": "having a large",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-rpi-",
+            0
+        ]
     },
     "\u2013rrlug[N\u2192V]": {
         "type": "NV",
@@ -6006,7 +7802,11 @@ export const newpostbases = {
         "past": "dirtied with",
         "inf_prenoun": "be dirtied with",
         "ger_prenoun": "being dirtied with",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-rrluk,-rrlug-,-rrlugte-",
+            1
+        ]
     },
     "\u2013rrlugte[N\u2192V]": {
         "type": "NV",
@@ -6022,7 +7822,11 @@ export const newpostbases = {
         "past": "dirtied with",
         "inf_prenoun": "be dirtied with",
         "ger_prenoun": "being dirtied with",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-rrluk,-rrlug-,-rrlugte-",
+            1
+        ]
     },
     "\u2013(u)saar[N\u2192V]": {
         "type": "NV",
@@ -6038,7 +7842,11 @@ export const newpostbases = {
         "past": "spoke the language of",
         "inf_prenoun": "speak the language of",
         "ger_prenoun": "speaking the language of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-(u)saar-",
+            0
+        ]
     },
     "\u2013ssaag\u00b2[N\u2192V]": {
         "type": "NV",
@@ -6054,7 +7862,11 @@ export const newpostbases = {
         "past": "fetched (from an easily accessible place) some",
         "inf_prenoun": "fetch (from an easily accessible place) some",
         "ger_prenoun": "fetching (from an easily accessible place) some",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-ssaag\u00b2-",
+            0
+        ]
     },
     "\u2013ssaar[N\u2192V]": {
         "type": "NV",
@@ -6070,7 +7882,11 @@ export const newpostbases = {
         "past": "hunted",
         "inf_prenoun": "hunt",
         "ger_prenoun": "hunting",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-ssaar-",
+            0
+        ]
     },
     "+ssur[N\u2192V]": {
         "type": "NV",
@@ -6086,7 +7902,11 @@ export const newpostbases = {
         "past": "hunted",
         "inf_prenoun": "hunt",
         "ger_prenoun": "hunting",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+ssur-",
+            0
+        ]
     },
     "+tairute[N\u2192V]": {
         "type": "NV",
@@ -6102,7 +7922,11 @@ export const newpostbases = {
         "past": "had no more",
         "inf_prenoun": "have no more",
         "ger_prenoun": "having no more",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+tairute-",
+            0
+        ]
     },
     "+taite\u00b9[N\u2192V]": {
         "type": "NV",
@@ -6118,7 +7942,11 @@ export const newpostbases = {
         "past": "had no",
         "inf_prenoun": "have no",
         "ger_prenoun": "having no",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+taite\u00b9-",
+            0
+        ]
     },
     "+taknaggaite[N\u2192V]": {
         "type": "NV",
@@ -6134,7 +7962,11 @@ export const newpostbases = {
         "past": "had absolutely no",
         "inf_prenoun": "have absolutely no",
         "ger_prenoun": "having absolutely no",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+taknaggaite-",
+            0
+        ]
     },
     "+tange[N\u2192V]": {
         "type": "NV",
@@ -6150,7 +7982,11 @@ export const newpostbases = {
         "past": "now had",
         "inf_prenoun": "now have",
         "ger_prenoun": "now having",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+tange-",
+            0
+        ]
     },
     "+tangqerr[N\u2192V]": {
         "type": "NV",
@@ -6166,7 +8002,11 @@ export const newpostbases = {
         "past": "had",
         "inf_prenoun": "have",
         "ger_prenoun": "having",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+tangqerr-",
+            0
+        ]
     },
     "+tar\u00b3[N\u2192V]": {
         "type": "NV",
@@ -6182,7 +8022,11 @@ export const newpostbases = {
         "past": "had",
         "inf_prenoun": "have",
         "ger_prenoun": "having",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+tar\u00b3-",
+            0
+        ]
     },
     "+te\u00b9[N\u2192V]": {
         "type": "NV",
@@ -6198,7 +8042,11 @@ export const newpostbases = {
         "past": "caught, went to",
         "inf_prenoun": "catch, go to",
         "ger_prenoun": "catching, going to",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+te\u00b9-",
+            0
+        ]
     },
     "+te\u2075[N\u2192V]": {
         "type": "NV",
@@ -6214,7 +8062,11 @@ export const newpostbases = {
         "past": "made a noise like",
         "inf_prenoun": "make a noise like",
         "ger_prenoun": "making a noise like",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+te\u2075-",
+            0
+        ]
     },
     "\u2013tmurte\u00b9[N\u2192V]": {
         "type": "NV",
@@ -6230,7 +8082,11 @@ export const newpostbases = {
         "past": "went toward the direction of",
         "inf_prenoun": "go toward the direction of",
         "ger_prenoun": "going toward the direction of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-tmurte\u00b9-",
+            0
+        ]
     },
     "\u2013trute[N\u2192V]": {
         "type": "NV",
@@ -6246,7 +8102,11 @@ export const newpostbases = {
         "past": "missed by passing through the area of",
         "inf_prenoun": "miss by passing through the area of",
         "ger_prenoun": "missing by passing through the area of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "-trute-",
+            0
+        ]
     },
     "+tu[N\u2192V]": {
         "type": "NV",
@@ -6262,7 +8122,11 @@ export const newpostbases = {
         "past": "well endowed with",
         "inf_prenoun": "be well endowed with",
         "ger_prenoun": "being well endowed with",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+tu-,-tu-",
+            1
+        ]
     },
     "+tur\u00b2[N\u2192V]": {
         "type": "NV",
@@ -6278,7 +8142,11 @@ export const newpostbases = {
         "past": "ate (food), wore (clothing), used",
         "inf_prenoun": "eat (food), wear (clothing), use",
         "ger_prenoun": "eating (food), wearing (clothing), using",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+tur\u00b2-",
+            0
+        ]
     },
     "+(r)tuuma(r)[N\u2192V]": {
         "type": "NV",
@@ -6294,7 +8162,11 @@ export const newpostbases = {
         "past": "acted together with ^its^",
         "inf_prenoun": "act together with ^its^",
         "ger_prenoun": "acting together with ^its^",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+(r)tuuma(r)-",
+            0
+        ]
     },
     ":~(ng)u[N\u2192V]": {
         "type": "NV",
@@ -6310,7 +8182,11 @@ export const newpostbases = {
         "past": "",
         "inf_prenoun": "be",
         "ger_prenoun": "being",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            ":~(ng)u-",
+            0
+        ]
     },
     ":(ng)ucir[N\u2192V]": {
         "type": "NV",
@@ -6326,7 +8202,11 @@ export const newpostbases = {
         "past": "had lots of",
         "inf_prenoun": "have lots of",
         "ger_prenoun": "having lots of",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            ":(ng)ucir-",
+            0
+        ]
     },
     ":~(ng)urte[N\u2192V]": {
         "type": "NV",
@@ -6342,7 +8222,11 @@ export const newpostbases = {
         "past": "became",
         "inf_prenoun": "become",
         "ger_prenoun": "becoming",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            ":~(ng)urte-",
+            0
+        ]
     },
     "+yag[N\u2192V]": {
         "type": "NV",
@@ -6358,7 +8242,11 @@ export const newpostbases = {
         "past": "had many",
         "inf_prenoun": "have many",
         "ger_prenoun": "having many",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "+yag-",
+            0
+        ]
     },
     "+(r)yug[N\u2192V]": {
         "type": "NV",
@@ -6374,6 +8262,10 @@ export const newpostbases = {
         "past": "wanted",
         "inf_prenoun": "want",
         "ger_prenoun": "wanting",
-        "match_case": false
+        "match_case": false,
+        "keylookup": [
+            "@~+yug-,+(r)yug-",
+            1
+        ]
     }
 }

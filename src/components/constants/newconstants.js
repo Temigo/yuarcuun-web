@@ -22,6 +22,33 @@ export const inupiaqSpeakerIDs = {
 "Yaayuk (Bernadette Alvanna-Stimpfle)":8,    
 }
 
+export const popularBases = [
+  {
+    englishmain:"!is! hunting",
+    englishnorm:"hunt",
+    englishraw:"⟨hunt⟩",
+    englishtenses:['hunt', 'hunted', 'hunts', 'hunting', 'hunted'],
+    fsts:['pissur'],
+    key:"pissur-",
+    properties:[],
+    type:"i",
+    usageIndex:0,
+    yupikword:"pissurtuq",
+  },
+  {
+    englishmain:"!is! eating",
+    englishnorm:"eat",
+    englishraw:"⟨eat⟩",
+    englishtenses:['eat', 'ate', 'eats', 'eating', 'eaten'],
+    fsts:['nere'],
+    key:"nere-",
+    properties:[],
+    type:"i",
+    usageIndex:0,
+    yupikword:"ner'uq",
+  },
+]
+
 export const popularPostbases = [
 
 
@@ -32,7 +59,7 @@ export const popularPostbases = [
     // expression: '@~+yugnarqe¹[V→V]',
     // key:"@~+yugnarqe¹-",
     // priority: 1,
-    allowable_next_ids: [1],
+    allowable_next_ids: [1,0],
     expression:'@~+yugnarqe¹[V→V]',
     // key:"@~+yugnarqe¹-",
     // properties:[],
@@ -48,7 +75,7 @@ export const popularPostbases = [
     // expression: '–llini[V→V]',
     // key:'-llini-',
     // priority: 1,
-    allowable_next_ids: [0],
+    allowable_next_ids: [0,1],
     // englishnorm: "evidently (without being observed)",
     // englishraw: "evidently (without being observed)",
     expression: '–llini[V→V]',
@@ -65,7 +92,7 @@ export const popularPostbases = [
     expression: '–llru¹[V→V]',
     // key: "-llru¹-",
     // priority: 3,
-    // allowable_next_ids: [7]
+    allowable_next_ids: [7,5,8,9]
   },
   {
     id: 6,
@@ -74,7 +101,7 @@ export const popularPostbases = [
     expression: "–ksaite[V→V]",
     // key: "-ksaite-",
     // priority: 1,
-    allowable_next_ids: [0,1,7]
+    allowable_next_ids: [0,1,7,6]
   },
   {
     id: 7,
@@ -83,7 +110,7 @@ export const popularPostbases = [
     expression: '+ciqe|@ciiqe[V→V]',
     // key: "+ciqe-|@ciiqe-",
     // priority: 3,
-    allowable_next_ids: [0,1,5,10]
+    allowable_next_ids: [0,1,5,10,7]
   },
   {
     id: 8,
@@ -92,7 +119,7 @@ export const popularPostbases = [
     expression: '@~+ngaite[V→V]',
     // key: "@~+ngaite-",
     // priority: 3,
-    allowable_next_ids: [0,1,7,10]
+    allowable_next_ids: [0,1,7,10,8]
   },
   {
     id: 9,
@@ -101,7 +128,7 @@ export const popularPostbases = [
     key: "@~+niarar-",
     expression: '@~+niarar[V→V]',
     priority: 3,
-    allowable_next_ids: [0,1,5,6,7,10]
+    allowable_next_ids: [0,1,5,6,7,10,9]
   },
   {
     id: 10,
@@ -110,7 +137,7 @@ export const popularPostbases = [
     key: "-qatar-",
     expression:'–qatar[V→V]',
     priority: 1,
-    allowable_next_ids: [1,7]
+    allowable_next_ids: [1,7,10]
   },
 
   {
@@ -120,7 +147,7 @@ export const popularPostbases = [
     expression: "+(s)ciigali[V→V]",
     // key:"+(s)ciigali-,+(s)ciigalli-",
     // priority: 1,
-    allowable_next_ids: [1,3],
+    allowable_next_ids: [1,3,2],
 
 // englishnorm: "is no longer able to",
 // englishraw: "is no longer able to",
@@ -139,7 +166,7 @@ export const popularPostbases = [
     expression: '+(s)ciigate[V→V]',
     key:"+(s)ciigate-",
     priority: 1,
-    allowable_next_ids: [1,2]
+    allowable_next_ids: [1,2,3]
   },
   {
     id: 4,
@@ -148,7 +175,7 @@ export const popularPostbases = [
     expression: '@~+yugnga[V→V]',
     key: "@~+yugnga-",
     priority: 1,
-    allowable_next_ids: [0,1,6,7,8]
+    allowable_next_ids: [0,1,6,7,8,4]
   },
 
   {
@@ -158,7 +185,7 @@ export const popularPostbases = [
     expression: "–lar[V→V]",
     key:"~+lar-,@~+lar-,-lar-",
     priority: 1,
-    allowable_next_ids: [1]
+    allowable_next_ids: [1,11]
   },
   {
     id: 12,
@@ -167,7 +194,7 @@ export const popularPostbases = [
     expression: '–nqigte[V→V]',
     key:"-nqigte-",
     priority: 1,
-    allowable_next_ids: [1]
+    allowable_next_ids: [1,12]
   },
   {
     id: 13,
@@ -176,7 +203,7 @@ export const popularPostbases = [
     expression: '@~+yarpiar[V→V]',
     key:"@~+yarpiar-,~+yarpigar-",
     priority: 1,
-    allowable_next_ids: [1]
+    allowable_next_ids: [1,13]
   },
   {
     id: 14,
@@ -185,7 +212,7 @@ export const popularPostbases = [
     key:"@~-yuite-",
     expression: '@~–yuite[V→V]',
     priority: 1,
-    allowable_next_ids: [1]
+    allowable_next_ids: [1,14]
   },
   {
     id: 15,
@@ -194,7 +221,7 @@ export const popularPostbases = [
     expression: '–nrir[V→V]',
     key:"-nrir-",
     priority: 1,
-    allowable_next_ids: [0,1,27]
+    allowable_next_ids: [0,1,27,15]
   },
   {
     id: 16,
@@ -204,7 +231,7 @@ export const popularPostbases = [
     expression: '@~+yaaqe[V→V]',
     key: "@~+yaaqe-",
     priority: 1,
-    allowable_next_ids: [0,1,17,19]
+    allowable_next_ids: [0,1,17,19,16]
   },
   {
     id: 17,
@@ -214,7 +241,7 @@ export const popularPostbases = [
     expression: '–qcaar(ar)[V→V]',
     key:"-qcaar(ar)-",
     priority: 1,
-    allowable_next_ids: [0,1,16,18]
+    allowable_next_ids: [0,1,16,18,17]
   },
   {
     id: 18,
@@ -224,7 +251,7 @@ export const popularPostbases = [
     expression: '–ngnaqe[V→V]',
     key: "-ngnaqe-",
     priority: 1,
-    allowable_next_ids: [0,1,16,17]
+    allowable_next_ids: [0,1,16,17,18]
   },
   {
     id: 19,
@@ -233,7 +260,7 @@ export const popularPostbases = [
     expression: '–ssiyaag[V→V]',
     key: "-ssiyaag-",
     priority: 1,
-    allowable_next_ids: [1]
+    allowable_next_ids: [1,19]
   },
   {
     id: 20,
@@ -242,7 +269,7 @@ export const popularPostbases = [
     expression: '–nru[V→V]',
     key: "-nru-",
     priority: 1,
-    allowable_next_ids: [1]
+    allowable_next_ids: [1,20]
   },
   {
     id: 21,
@@ -252,7 +279,7 @@ export const popularPostbases = [
     expression: '@~+yunqegg[V→V]',
     key:"@~+yunqegg-",
     priority: 1,
-    allowable_next_ids: [0,1,7,8]
+    allowable_next_ids: [0,1,7,8,21]
   },
   {
     id: 22,
@@ -262,7 +289,7 @@ export const popularPostbases = [
     expression: '@~+yuumiir(ar)te[V→V]',
     key:"@~+yuumiir(ar)te-",
     priority: 1,
-    allowable_next_ids: [0,1,7,8]
+    allowable_next_ids: [0,1,7,8,22]
   },
   {
     id: 23,
@@ -272,7 +299,7 @@ export const popularPostbases = [
     expression: '@~+yuumiite[V→V]',
     key:"@~+yuumiite-",
     priority: 1,
-    allowable_next_ids: [0,1,7,8]
+    allowable_next_ids: [0,1,7,8,23]
   },
   {
     id: 24,
@@ -282,7 +309,7 @@ export const popularPostbases = [
     expression: '@~+yuumir[V→V]',
     key: "@~+yuumir-",
     priority: 1,
-    allowable_next_ids: [0,1,7,8]
+    allowable_next_ids: [0,1,7,8,24]
   },
   {
     id: 25,
@@ -292,7 +319,7 @@ export const popularPostbases = [
     expression: '@~+yug[V→V]',
     key:"@~+yug-,+(r)yug-",
     priority: 1,
-    allowable_next_ids: [0,1,7,8]
+    allowable_next_ids: [0,1,7,8,25]
   },
   {
     id: 26,
@@ -302,7 +329,7 @@ export const popularPostbases = [
     expression: '@~+yugar[V→V]',
     key:"@~+yugar-",
     priority: 1,
-    allowable_next_ids: [0,1,7,8]
+    allowable_next_ids: [0,1,7,8,26]
   },
   {
     id: 27,
@@ -311,7 +338,7 @@ export const popularPostbases = [
     expression: '–nrite[V→V]',
     key:"-nrite-",
     priority: 1,
-    allowable_next_ids: [0,1]
+    allowable_next_ids: [0,1,27]
   },
 
   {
@@ -321,7 +348,7 @@ export const popularPostbases = [
     expression: '@~+yartur[V→V]',
     key:"@~+yartur-",
     priority: 1,
-    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,19]
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,19,28]
   },
   {
     id: 29,
@@ -330,7 +357,7 @@ export const popularPostbases = [
     expression: '@~+yugnairute[V→V]',
     key:"@~+yugnairute-",
     priority: 1,
-    allowable_next_ids: [0,1,3,4,8,10], // only refers to the postbases, not the endings
+    allowable_next_ids: [0,1,3,4,8,10,29], // only refers to the postbases, not the endings
   }
 ];
 
@@ -2514,7 +2541,7 @@ export const VVpostbases = {
     "61": {
         "description": "probably", 
         "ger_preverb": "probably", 
-        "is": true, 
+        "is": false, 
         "inf_preverb": "probably", 
         "past_preverb": "probably", 
         "exp_display": "\u2013kutag", 

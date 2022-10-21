@@ -3,7 +3,7 @@ import { Container, Header, Button, Icon, Divider, Image, Grid, Dropdown, List, 
 import { Link } from 'react-router-dom';
 import { API_URL } from '../App.js';
 import axios from 'axios';
-import {nounOptionsMVPossessors, popularPostbases, colorsList,  mvSubject4thPersonCalls, mvObject4thPersonCalls,nObject4thPersonCalls, mvSubjectOptionsWho, mvSubjectOptionsWhat, mvObjectOptionsWhom, mvObjectOptionsWhomAbl, mvObjectOptionsWhat, mvObjectOptionsWhatAbl,retrieveMoodEnglish, nounOptionsPossessorsNo4th, mvSubjectOptionsOnly2nd, nounOptionsNumbers, nounoptionsmodalis, mvSubjectOptions, mvObjectOptions, mvSubjectOptionsEnglish, verbPostbases, nounPostbases, VVpostbases, NNpostbases} from './constants/newconstants.js'
+import {nounOptionsMVPossessors, popularPostbases, popularBases, colorsList,  mvSubject4thPersonCalls, mvObject4thPersonCalls,nObject4thPersonCalls, mvSubjectOptionsWho, mvSubjectOptionsWhat, mvObjectOptionsWhom, mvObjectOptionsWhomAbl, mvObjectOptionsWhat, mvObjectOptionsWhatAbl,retrieveMoodEnglish, nounOptionsPossessorsNo4th, mvSubjectOptionsOnly2nd, nounOptionsNumbers, nounoptionsmodalis, mvSubjectOptions, mvObjectOptions, mvSubjectOptionsEnglish, verbPostbases, nounPostbases, VVpostbases, NNpostbases} from './constants/newconstants.js'
 import {newpostbases} from './constants/newpostbases.js'
 import {ending_underlying} from './constants/ending_underlying.js'
 import palette from 'google-palette';
@@ -145,9 +145,13 @@ class OneVerbWordBuilder extends Component {
 			// filteredDictVVpast:{},
 			filteredDictVVall:{},
 			otherBases: [],
+			nextTenses: [],
+			unallowable_next_ids: [],
+
 			colorScheme: 0,
 			activeIndexes:[],
 			addSubject:false,
+			addIs:true,
 			// colorsList: {
 			// 	'mvv.b':'#000000',
 			// 	'mvv.e':'#852828',
@@ -423,6 +427,7 @@ class OneVerbWordBuilder extends Component {
 			svnObliques:[],
 
 			candidateBase:[],
+			candidateDisplay:[],
 			candidateFST:[],
 			candidateType:'',
 			showUnderlying:false,
@@ -1385,7 +1390,14 @@ class OneVerbWordBuilder extends Component {
   	} else if (type==='mvEnglish1') {
   		return this.contentDisplay(this.state.mvEnglish1, 5)
 		} else if (type==='mvEnglish2') {
-  		return this.contentDisplay(this.state.mvEnglish2, 5)
+			return <span>
+								{this.state.mvEnglish3.length > 0 ?
+									<span> {this.state.mvEnglish3.map((w,wind)=><span style={{color:this.getColor(w[1]),cursor:'pointer',paddingBottom:'1px',borderBottom:'1px solid '+this.getColor(w[1])}}>{w[0]+" "}</span>)} </span>
+									:
+									null
+								}
+								{this.contentDisplay(this.state.mvEnglish2, 5)}
+							</span>
 		} else if (type==='mvEnglishAbl') {
   		return this.contentDisplay(this.state.mvEnglishAbl, 5)
 		} else if (type==='mvEnglishQaa') {
@@ -2036,7 +2048,7 @@ editSubjectMenu = (name) => {
 
 	}
 
-  handleClick = (index) => {
+  handleClick = (index,allowAdd) => {
     // console.log(e,titleProps.id)
     // this.setState({ loaderOn: true });
     // const index = titleProps.id;
@@ -2046,14 +2058,19 @@ editSubjectMenu = (name) => {
 
     const currentIndexPosition = activeIndexes.indexOf(index);
 
-    console.log(currentIndexPosition, activeIndexes, index)
+    // console.log(currentIndexPosition, activeIndexes, index)
     if (currentIndexPosition > -1) {
       newIndex.splice(currentIndexPosition, 1);
     } else {
-      newIndex.push(index);
+    	if (allowAdd) {
+      	newIndex.push(index);    		
+    	}
     }
 
-    console.log(newIndex)
+    // console.log(newIndex)
+    // newIndex.map((k)=>{
+    // 	console.log()
+    // })
 
     // let mood = moods[index];
     // if (newIndex !== -1) {   
@@ -2068,7 +2085,7 @@ editSubjectMenu = (name) => {
 	    		<Accordion.Title
 	    			id={type}
 	    			active={this.state.activeIndexes.includes(type)}
-            onClick={()=>{this.handleClick('addCV')}}
+            onClick={()=>{this.handleClick('addCV',true)}}
 	    		>
 	    			<Icon name="dropdown" />
 	    			{'Add Connective Verb'}
@@ -2133,7 +2150,7 @@ editSubjectMenu = (name) => {
 	    			id={type}
 	    			style={{paddingBottom:'2px'}}
 	    			active={this.state.activeIndexes.includes(type)}
-            onClick={()=>{this.handleClick('addnOblique')}}
+            onClick={()=>{this.handleClick('addnOblique',true)}}
 	    		>
 	    			<Icon name="dropdown" />
 	    			{'Add location, direction, etc.'}
@@ -2332,33 +2349,46 @@ editSubjectMenu = (name) => {
 
 	}
 
-	updateCandidateCall=(type,update,mood,submood)=>{
+	updateCandidateCall=(type,update,mood,submood,pos)=>{
 
-		console.log(type, update, mood, submood)
-
+		console.log(type, update, mood, submood,this.state.candidateBase)
 
 		let lockSubmit = false
 		let candidateFST = []
 		let transitivity = ''
+
 		this.state.candidateBase.slice().reverse().map((x,xind)=>{
+			console.log(x,xind,pos)
 			if (xind === 0) {
-				console.log(x)
-				if (x['type'].length < 3) {
+				if (!Array.isArray(x)) {
 					lockSubmit = true
 					transitivity = x['type']
 					if (transitivity == 'n' && type == 'v') {
 						transitivity = 'i'
 					}			
-					this.setState({endingAdjusted:''})					
-				} else if (x['type'] == '[V→N]' || x['type'] == '[V→V]') {
-					lockSubmit = false
-					this.setState({endingAdjusted:'v'})
+					this.setState({endingAdjusted:''})
+					candidateFST.push([x['key'],0,x['usageIndex'],0])
 				} else {
-					lockSubmit = false
-					this.setState({endingAdjusted:'n'})					
+					if (!newpostbases[x[1]]['match_case']) {
+						this.setState({addIs:false})
+					}
+					if (newpostbases[x[1]]['type'] == 'VN' || newpostbases[x[1]]['type'] == 'VV') {
+						lockSubmit = false
+						this.setState({endingAdjusted:'v'})
+					} else {
+						lockSubmit = false
+						this.setState({endingAdjusted:'n'})					
+					}
+					candidateFST.push([x[0][0],0,x[0][1],0])
 				}
-			}
-			candidateFST.push([x['key'],0,x['usageIndex'],0])
+			}	else {
+				if (!Array.isArray(x)) {
+					candidateFST.push([x['key'],0,x['usageIndex'],0])
+				} else {
+					candidateFST.push([x[0][0],0,x[0][1],0])
+				}
+			}		
+			
 		})
 		// candidateFST = [candidateFST]
 		console.log(candidateFST, transitivity)
@@ -2420,16 +2450,213 @@ editSubjectMenu = (name) => {
 			}
 		}
 	
-
-	
-
-	
 	}
 
+
+	processStyledMainText = (key) => {
+		// console.log(key,this.state.addIs)
+		let sentence = key['englishmain']	
+		let verbAdd = ''
+
+
+		if (this.state.nextTenses.length > 0) {
+			if ((this.state.addIs && key['englishtenses'][2]=='is') || this.state.nextTenses[this.state.nextTenses.length-1] === 'gen') {
+				if (this.state.nextTenses[this.state.nextTenses.length-1] === 'p' || this.state.nextTenses[this.state.nextTenses.length-1] === 'pp') {
+					if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
+						sentence = sentence.replace('!is!','was')
+					} else if (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) {
+						sentence = sentence.replace('!is!','was')
+					} else {
+						sentence = sentence.replace('!is!','were')
+					}
+				} else {
+					if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
+						sentence = sentence.replace('!is!','am')
+					} else if (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) {
+						sentence = sentence.replace('!is!','is')
+					} else {
+						sentence = sentence.replace('!is!','are')
+					}
+				}
+			} else {
+				// console.log(this.state.nextTenses[this.state.nextTenses.length-1], key['englishtenses'], key['englishraw'])
+				if (this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
+					verbAdd = key['englishtenses'][1]
+				} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'g') {
+					verbAdd = key['englishtenses'][3]
+				} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'i') {
+					verbAdd = key['englishtenses'][0]
+				} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp') {
+					verbAdd = key['englishtenses'][4]
+				}			
+				sentence = key['englishraw']
+				let verbMatches = key['englishraw'].match(/\⟨.*?\⟩/g)
+				if (verbMatches !== null) {
+					verbMatches.map((m) => sentence = sentence.replace(m,verbAdd))	
+				}						
+			}
+	
+		} else {
+			// console.log(this.state.nextTenses[this.state.nextTenses.length-1])
+  	// 	if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp' || this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
+			// 	if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
+			// 		sentence = sentence.replace('!is!','was')
+			// 	} else if (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) {
+			// 		sentence = sentence.replace('!is!','was')
+			// 	} else {
+			// 		sentence = sentence.replace('!is!','were')
+			// 	}
+			// } else {
+				if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
+					sentence = sentence.replace('!is!','am')
+				} else if (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) {
+					sentence = sentence.replace('!is!','is')
+				} else {
+					sentence = sentence.replace('!is!','are')
+				}
+			// }
+		}
+
+		// if (!this.state.addIs && this.state.nextTenses.length > 0) {
+		// 	if (this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
+		// 		verbAdd = key['englishtenses'][1]
+		// 	} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'g') {
+		// 		verbAdd = key['englishtenses'][3]
+		// 	} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'i') {
+		// 		verbAdd = key['englishtenses'][0]
+		// 	} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp') {
+		// 		verbAdd = key['englishtenses'][4]
+		// 	}			
+		// 	sentence = key['englishraw']
+		// 	let verbMatches = key['englishraw'].match(/\⟨.*?\⟩/g)
+		// 	if (verbMatches !== null) {
+		// 		verbMatches.map((m) => sentence = sentence.replace(m,verbAdd))	
+		// 	}			
+		// } else {
+		// 	console.log(this.state.nextTenses[this.state.nextTenses.length-1])
+  // 		if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp' || this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
+		// 		if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
+		// 			sentence = sentence.replace('!is!','was')
+		// 		} else if (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) {
+		// 			sentence = sentence.replace('!is!','was')
+		// 		} else {
+		// 			sentence = sentence.replace('!is!','were')
+		// 		}
+		// 	} else {
+		// 		if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
+		// 			sentence = sentence.replace('!is!','am')
+		// 		} else if (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) {
+		// 			sentence = sentence.replace('!is!','is')
+		// 		} else {
+		// 			sentence = sentence.replace('!is!','are')
+		// 		}
+		// 	}
+		// }
+
+		// if (verbAdd.length > 0) {
+		// 	sentence = key['englishraw']	
+		// 	let verbMatches = key['englishraw'].match(/\⟨.*?\⟩/g)
+		// 	if (verbMatches !== null) {
+		// 		verbMatches.map((m) => sentence = sentence.replace(m,verbAdd))	
+		// 	}			
+		// }
+
+		// console.log(sentence)
+
+
+		let matches = sentence.match(/\<.*?\>/g)
+		if (matches !== null) {
+			matches.map((m) => sentence = sentence.replace(m,'<i>'+m.slice(1,-1)+'</i>'))		
+			return <span dangerouslySetInnerHTML={{__html: sentence.replace("⟨","").replace("⟩","")}} />		
+		} else {
+			return <span>{sentence.replace("⟨","").replace("⟩","")}</span>
+		}
+	}
+
+
+	processStyledPostbaseText = (key) => {
+		// console.log(newpostbases[key['expression']])
+		let sentence = newpostbases[key['expression']]['description']
+
+		if (key['id'] == 5) {
+			sentence = '<past tense>'
+		} else {
+			if (!newpostbases[key['expression']]['match_case']) {
+				if (this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
+					if (newpostbases[key['expression']]['past_preverb'].length == 0 && newpostbases[key['expression']]['was']) {
+						sentence = newpostbases[key['expression']]['description']						
+						if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
+							sentence = 'was '+sentence
+						} else if (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) {
+							sentence = 'was '+sentence
+						} else {
+							sentence = 'were '+sentence
+						}  
+					} else {
+						sentence = newpostbases[key['expression']]['past_preverb']						
+					}
+				} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'g') {
+					sentence = newpostbases[key['expression']]['ger_preverb']
+				} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'gen') {
+					sentence = newpostbases[key['expression']]['gen_preverb']
+				} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'i') {
+					sentence = newpostbases[key['expression']]['inf_preverb']
+				} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp') {
+					sentence = newpostbases[key['expression']]['past_preverb']
+				}
+			}
+		}
+		// console.log(key,sentence)
+
+  	if (newpostbases[key['expression']]['is'] && this.state.addIs) {
+  		// if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp' || this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
+				// if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
+				// 	sentence = 'was '+sentence
+				// } else if (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) {
+				// 	sentence = 'was '+sentence
+				// } else {
+				// 	sentence = 'were '+sentence
+				// }  
+  		// } else {
+				if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
+					sentence = 'am '+sentence
+				} else if (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) {
+					sentence = 'is '+sentence
+				} else {
+					sentence = 'are '+sentence
+				}  	  			
+  		// }
+			// this.setState({addIs:false})
+  	}
+
+  	if (newpostbases[key['expression']]['has'] && this.state.addIs) {
+  		if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp' || this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
+  			sentence = 'had '+sentence
+  		} else {
+				if (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) {
+					sentence = 'has '+sentence
+				} else {
+					sentence = 'have '+sentence
+				}  		  			
+  		}
+			// this.setState({addIs:false})
+  	}
+
+
+		let matches = sentence.match(/\<.*?\>/g)
+		if (matches !== null) {
+			matches.map((m) => sentence = sentence.replace(m,'<i>'+m.slice(1,-1)+'</i>'))		
+			return <span dangerouslySetInnerHTML={{__html: sentence.replace("⟨","").replace("⟩","")}} />		
+		} else {
+			return <span>{sentence.replace("⟨","").replace("⟩","")}</span>
+		}
+	}
+
+
 	baseChooser = (itemUpdating,endingNeeded,update,mood,submood) => {
-		console.log(itemUpdating,endingNeeded,update,mood,submood)
+		// console.log(itemUpdating,endingNeeded,update,mood,submood)
 		let key;
-		let currentTense;
+		// let currentTense;n
 		// console.log(this.state)
 		// console.log(this.state.currentEditMode, itemUpdating,endingNeeded,update,mood,submood)
 		         return <Grid style={{height:'400px',width:'300px'}}>
@@ -2439,11 +2666,9 @@ editSubjectMenu = (name) => {
 		                			<Icon name='chevron left' />
 		                			<div style={{color:'#666666'}}>{'Back'}</div>
 		                		</Button>
-
-
 									        <Segment style={{overflow: 'auto',padding:0}}>
 									        	<List divided style={{margin:0,padding:0,}}>
-									        	<List.Item style={{color:'#545454',fontFamily:"Lato,'Helvetica Neue',Arial,Helvetica,sans-serif",padding:'8px 15px',backgroundColor:'#f7f7f7'}}>{'he'}<span style={{color:'#bdbdbd'}}>{'...'}</span></List.Item>
+									        	<List.Item style={{color:'#545454',fontFamily:"Lato,'Helvetica Neue',Arial,Helvetica,sans-serif",padding:'8px 15px',backgroundColor:'#f7f7f7'}}>{mvSubjectOptionsEnglish[this.state.mvvs.join("")]}<span style={{color:'#bdbdbd'}}>{'...'}</span></List.Item>
 									        	{this.state.cvvMood.length > 0 && this.state.currentEditMode == 'cvupdate' ?
 										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
 										        		<div style={{flex:1}}>
@@ -2454,19 +2679,35 @@ editSubjectMenu = (name) => {
 									        		:
 									        		null
 									        	}
-									        	{this.state.candidateBase.map((k,kindex)=>{return (kindex===this.state.candidateBase.length-1 ?
+									        	{this.state.candidateDisplay.map((k,kindex)=>{return (kindex===this.state.candidateBase.length-1 ?
 										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center',padding:'8px 15px',backgroundColor:'#f7f7f7'}}>
 										        		<div style={{flex:1}}>
-											        		<div style={{color:'#545454',fontFamily:"Lato,'Helvetica Neue',Arial,Helvetica,sans-serif"}}>{this.processStyledText(newpostbases[k[0]][k[1]])}<span style={{color:'#bdbdbd'}}>{'...'}</span></div>
-											        		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200'}}>{newpostbases[k[0]]['exp']}</div>
+											        		<div style={{color:'#545454',fontFamily:"Lato,'Helvetica Neue',Arial,Helvetica,sans-serif"}}>{k[0]}<span style={{color:'#bdbdbd'}}>{'...'}</span></div>
+											        		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{k[1]}</div>
 										        		</div>
-										        		<Icon circular onClick={()=>{this.setState({candidateBase:this.state.candidateBase.slice(0,-1)},()=>{this.updateCandidateCall(endingNeeded,update,mood,submood)})}} style={{cursor:'pointer',width:30}} name='x' />
+										        		<Icon circular onClick={()=>{
+												      			// if (newpostbases[popularPostbases[p]['expression']]['type']=="VV") {
+												      			// 	if (!newpostbases[popularPostbases[p]['expression']]['match_case']) {
+												      			// 		this.setState({addIs:false})
+												      			// 	}
+												      			// }
+												      			this.handleClick('vvpostbases',false); 
+												      			this.handleClick('verbs',false); 
+
+											        			this.setState({
+											        				candidateBase:this.state.candidateBase.slice(0,-1),
+											        				candidateDisplay:this.state.candidateDisplay.slice(0,-1),
+											        				nextTenses:(this.state.lockSubmit ? this.state.nextTenses:this.state.nextTenses.slice(0,-1)),
+											        				unallowable_next_ids:(this.state.lockSubmit ? this.state.unallowable_next_ids:this.state.unallowable_next_ids.slice(0,-1)),
+											        				lockSubmit:false,
+											        			})
+										        			}} style={{cursor:'pointer',width:30}} name='x' />
 										        		</List.Item>
 									        			:
 										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center',padding:'8px 15px',backgroundColor:'#f7f7f7'}}>
 										        		<div style={{flex:1}}>										        		
-											        		<div style={{color:'#545454',fontFamily:"Lato,'Helvetica Neue',Arial,Helvetica,sans-serif"}}>{this.processStyledText(newpostbases[k[0]][k[1]])}<span style={{color:'#bdbdbd'}}>{'...'}</span></div>
-											        		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200'}}>{newpostbases[k[0]]['exp']}</div>
+											        		<div style={{color:'#545454',fontFamily:"Lato,'Helvetica Neue',Arial,Helvetica,sans-serif"}}>{k[0]}<span style={{color:'#bdbdbd'}}>{'...'}</span></div>
+											        		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{k[1]}</div>
 										        		</div>
 										        		<div style={{width:30}} />
 										        		</List.Item>
@@ -2482,10 +2723,9 @@ editSubjectMenu = (name) => {
 					                			if (mood === 'Intrg') {
 					                				this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Insert",["mv","qWord"],[submood,1]]]); 		                				
 					                			} else {
-					                				console.log([[itemUpdating[0],itemUpdating[1],this.state.candidateCall]])
 					                				this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall]]); 		                						                				
 					                			}
-					                			this.setState({isOpen:false,currentEditMode:'default',searchQuery:'',wordsList:[],candidateBase:[],lockSubmit:false}) 
+					                			this.setState({isOpen:false,currentEditMode:'default',searchQuery:'',wordsList:[],candidateBase:[],candidateDisplay:[],candidateCall:[],nextTenses:[],unallowable_next_ids:[],addIs:true,lockSubmit:false}) 
 					                		}} disabled={!this.state.lockSubmit} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}>
 					                			<div>{'Submit'}</div>
 					                			<Icon name='chevron right' />
@@ -2495,48 +2735,60 @@ editSubjectMenu = (name) => {
 
 
 									        <div style={{padding:0,margin:0}}>
-													<Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
-											    		<Accordion.Title
-											    			id={'verb'}
-											    			style={{paddingBottom:'2px'}}
-											    			active={this.state.activeIndexes.includes('vvpostbases')}
-										            onClick={()=>{this.handleClick('vvpostbases')}}
-											    		>
-											    			<Icon name="dropdown" />
-											    			{'Common Postbases'}
-											    		</Accordion.Title>
-											    		<Accordion.Content active={this.state.activeIndexes.includes('vvpostbases')}>
-											    		<Button.Group vertical basic fluid>
-												      	{Object.keys(popularPostbases).map((p,index)=>{
-												      		key = popularPostbases[p]['expression']
-												      		if (this.state.candidateBase.length === 0) {
-												      			currentTense = 'description'
-												      		} else {
-												      			currentTense = 'description'												      			
-												      		}
-												      	
-												      		return <Button style={{textAlign:'left',padding:'10px'}} onClick={()=>{this.handleClick('vvpostbases'); this.setState({candidateBase:this.state.candidateBase.concat([[popularPostbases[p]['expression'],currentTense]])})}}>
-													      		<div>
-														      		<div style={{marginBottom:'5px',color:'#545454'}}>
-														      		{this.state.candidateBase.length === 0 && newpostbases[key]['is'] ?
-														      			<span>{'is '}</span>
-															      		:
-															      		null
-															      	}
-														      		{this.state.candidateBase.length === 0 && newpostbases[key]['has'] ?
-														      			<span>{'has '}</span>
-															      		:
-															      		null
-															      	}
-														      		<span>{newpostbases[key]['description']}</span>
-														      		<span style={{color:'#bdbdbd'}}>{'...'}</span></div>
-														      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200'}}>{newpostbases[key]['exp']}</div>
-													      		</div>
-												      		</Button>
-												      	})}
-											    		</Button.Group>
-											    		</Accordion.Content>
-											    </Accordion>	
+									        {this.state.candidateBase.length < 2 ?
+														<Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
+												    		<Accordion.Title
+												    			id={'verb'}
+												    			style={{paddingBottom:'2px'}}
+												    			active={this.state.activeIndexes.includes('vvpostbases')}
+											            onClick={()=>{this.handleClick('vvpostbases',true)}}
+												    		>
+												    			<Icon name="dropdown" />
+												    			{'Common Postbases'}
+												    		</Accordion.Title>
+												    		<Accordion.Content active={this.state.activeIndexes.includes('vvpostbases')}>
+													      <Segment vertical style={{maxHeight:255,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
+												    		<Button.Group vertical basic fluid>
+													      	{Object.keys(popularPostbases).map((p,index)=>{
+													      		let removeItem = false
+													      		if (this.state.unallowable_next_ids.length > 0) {
+													      			removeItem = this.state.unallowable_next_ids[this.state.unallowable_next_ids.length-1][0].includes(popularPostbases[p]['id'])
+													      		}
+
+													      		if (!removeItem) {
+														      		return <Button style={{textAlign:'left',padding:'10px'}} onClick={()=>{
+														      			this.handleClick('vvpostbases',false); 
+														      			// this.handleClick('verbs',false); 
+														      			// if (newpostbases[popularPostbases[p]['expression']]['type']=="VV") {
+														      			// 	if (!newpostbases[popularPostbases[p]['expression']]['match_case']) {
+														      			// 		this.setState({addIs:false})
+														      			// 	}
+														      			// }
+														      			this.setState({
+														      				candidateBase:this.state.candidateBase.concat([[newpostbases[popularPostbases[p]['expression']]['keylookup'],popularPostbases[p]['expression']]]),
+																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledPostbaseText(popularPostbases[p]),newpostbases[popularPostbases[p]['expression']]['exp']]]),
+																	    		unallowable_next_ids: this.state.unallowable_next_ids.concat([[popularPostbases[p]['allowable_next_ids'],]]),
+																	    		nextTenses:(newpostbases[popularPostbases[p]['expression']]['match_case'] && !('gen_preverb_after' in newpostbases[popularPostbases[p]['expression']]) ? (this.state.nextTenses.length == 0 ? this.state.nextTenses.concat(['gen']):this.state.nextTenses.concat([this.state.nextTenses[this.state.nextTenses.length-1]])) : this.state.nextTenses.concat([newpostbases[popularPostbases[p]['expression']]['gen_preverb_after'],])),
+														      			},()=>{
+																	    		this.updateCandidateCall(endingNeeded,update,mood,submood,'p')
+																	    	})
+														      		}}>
+															      		<div>
+																      		<div style={{marginBottom:'5px',color:'#545454'}}>
+																      		<span>{this.processStyledPostbaseText(popularPostbases[p])}</span>
+																      		<span style={{color:'#bdbdbd'}}>{'...'}</span></div>
+																      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{newpostbases[popularPostbases[p]['expression']]['exp']}</div>
+															      		</div>
+														      		</Button>
+													      		}
+													      	})}
+												    		</Button.Group>
+												    		</Segment>
+												    		</Accordion.Content>
+												    </Accordion>	
+												    :
+												    null
+												  }
 
 									        
 													<Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
@@ -2544,17 +2796,38 @@ editSubjectMenu = (name) => {
 											    			id={'verb'}
 											    			style={{paddingBottom:'2px'}}
 											    			active={this.state.activeIndexes.includes('verbs')}
-										            onClick={()=>{this.handleClick('verbs')}}
+										            onClick={()=>{this.handleClick('verbs',true)}}
 											    		>
 											    			<Icon name="dropdown" />
 											    			{'Common Bases'}
 											    		</Accordion.Title>
 											    		<Accordion.Content active={this.state.activeIndexes.includes('verbs')}>
-											    		<Button.Group vertical basic fluid>
-												      	{Object.keys(popularPostbases).map((p)=>{
-												      		return <Button onClick={()=>{this.handleClick('verbs'); this.setState({candidateBase:this.state.candidateBase.concat(popularPostbases[p])})}}>{popularPostbases[p]['englishnorm']}</Button>
-												      	})}
-											    		</Button.Group>
+												      <Segment vertical style={{maxHeight:255,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
+												    		<Button.Group vertical basic fluid>
+													      	{Object.keys(popularBases).map((p)=>{
+													      		return <Button onClick={()=>{
+													      			// this.handleClick('vvpostbases',false); 
+													      			this.handleClick('verbs',false); 
+																    	this.setState({
+																    		searchQuery:'',
+																    		wordsList:[],
+																    		candidateBase:this.state.candidateBase.concat(popularBases[p]),
+																    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledMainText(popularBases[p]),popularBases[p]['fsts'].join(", ")]]),
+																    	},()=>{
+																    		this.updateCandidateCall(endingNeeded,update,mood,submood,'b')
+																    	})
+													      		 }}>
+															      		<div>
+																      		<div style={{marginBottom:'5px',color:'#545454'}}>
+																      		<span>{this.processStyledMainText(popularBases[p])}</span>
+																      		<span style={{color:'#bdbdbd'}}>{'.'}</span></div>
+																      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{popularBases[p]['key']}</div>
+															      		</div>
+													      		 </Button>
+													      	})}
+
+												    		</Button.Group>
+											    		</Segment>
 											    		</Accordion.Content>
 											    </Accordion>	
 		                		
@@ -2562,6 +2835,7 @@ editSubjectMenu = (name) => {
 											      icon='search' 
 											      iconPosition='left' 
 											      name='search'     
+											      autoComplete='off'
 											      disabled={this.state.lockSubmit}
 											      // width='100%'
 											      style={{width:'100%',padding:'5px 5px'}}
@@ -2571,22 +2845,39 @@ editSubjectMenu = (name) => {
 								            />
 								            {this.state.wordsList.length > 0 ?
 												      <Segment vertical style={{maxHeight:255,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
-												      <List selection>
-													    {this.state.wordsList.map((k)=>{return <List.Item onClick={()=>{
-													    	this.setState({
-													    		searchQuery:'',
-													    		wordsList:[],
-													    		candidateBase:this.state.candidateBase.concat(k),
-													    	},()=>{
-													    		this.updateCandidateCall(endingNeeded,update,mood,submood)
-													    	})
 
-													    }} style={{cursor:'pointer',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'15px',padding:5}}>
-														        <List.Description style={{paddingBottom:'4px'}}>{k['yupikword']}</List.Description>
-														        <List.Header style={{fontWeight:'400'}}>{this.processStyledText(k['englishraw'])}</List.Header>
-														      </List.Item>				      	
-													      })}
-												    	</List>
+											    		<Button.Group vertical basic fluid>
+												      	{this.state.wordsList.map((k,index)=>{												      	
+												      		return <Button style={{textAlign:'left',padding:'10px'}} onClick={()=>{
+												      			// this.handleClick('vvpostbases'); 
+												      			// this.setState({candidateBase:this.state.candidateBase.concat([[popularPostbases[p]['expression'],currentTense]])})
+
+												      			// this.setState({addIs:false})
+												      			// if (k['type']=="[V→V]") {
+												      			// 	if (!newpostbases[k['fsts'][0]]['match_case']) {
+												      			// 		this.setState({addIs:false})
+												      			// 	}
+												      			// }
+															    	this.setState({
+															    		searchQuery:'',
+															    		wordsList:[],
+															    		candidateBase:this.state.candidateBase.concat(k),
+															    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledMainText(k),k['fsts'].toString()]]),
+															    	},()=>{
+															    		this.updateCandidateCall(endingNeeded,update,mood,submood,'b')
+															    	})
+												      		}}>
+													      		<div>
+														      		<div style={{marginBottom:'5px',color:'#545454'}}>
+														      		<span>{this.processStyledMainText(k)}</span>
+														      		</div>
+														      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{k['fsts'].toString()}</div>
+													      		</div>
+												      		</Button>
+												      	})}
+											    		</Button.Group>
+
+
 												      </Segment>
 												      :
 												      null
@@ -2607,112 +2898,112 @@ editSubjectMenu = (name) => {
 	}
 
 
-	baseChooser2 = (itemUpdating,endingNeeded,update,mood,submood) => {
-		// console.log(itemUpdating,endingNeeded,update,mood,submood)
-		// console.log(this.state)
-		// console.log(this.state.currentEditMode, itemUpdating,endingNeeded,update,mood,submood)
-		         return <Grid style={{height:'400px',width:'505px'}}>
-		                	<Grid.Row columns={2} style={{paddingBottom:'0px'}}divided>
-		                	<Grid.Column >
-		                		<Button onClick={()=>{this.menuSelect('default'); this.setState({searchQuery:'',wordsList:[]})}} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingLeft:'13px',marginBottom:'10px'}}>
-		                			<Icon name='chevron left' />
-		                			<div style={{color:'#666666'}}>{'Back'}</div>
-		                		</Button>
-									      <Input 
-									      icon='search' 
-									      iconPosition='left' 
-									      name='search'     
-									      disabled={this.state.lockSubmit}
-									      // width='100%'
-									      style={{width:'220px'}}
-									 		  onChange={this.onChangeBaseSearch.bind(this,endingNeeded)}
-						            value={this.state.searchQuery}
-						            // onClose={()=>{this.setState({searchQuery:'',wordsList:[]})}}
-						            />
-									      <Segment vertical style={{height:255,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
-									      <List selection>
-										    {this.state.wordsList.map((k)=>{return <List.Item onClick={()=>{
-										    	// if (k['type']=='[→V]' || k['type']=='[V→V]')
-										    	console.log(k)
-										    	this.setState({
-										    		searchQuery:'',
-										    		wordsList:[],
-										    		candidateBase:this.state.candidateBase.concat(k),
-										    	},()=>{
-										    		this.updateCandidateCall(endingNeeded,update,mood,submood)
-										    	})
+	// baseChooser2 = (itemUpdating,endingNeeded,update,mood,submood) => {
+	// 	// console.log(itemUpdating,endingNeeded,update,mood,submood)
+	// 	// console.log(this.state)
+	// 	// console.log(this.state.currentEditMode, itemUpdating,endingNeeded,update,mood,submood)
+	// 	         return <Grid style={{height:'400px',width:'505px'}}>
+	// 	                	<Grid.Row columns={2} style={{paddingBottom:'0px'}}divided>
+	// 	                	<Grid.Column >
+	// 	                		<Button onClick={()=>{this.menuSelect('default'); this.setState({searchQuery:'',wordsList:[]})}} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingLeft:'13px',marginBottom:'10px'}}>
+	// 	                			<Icon name='chevron left' />
+	// 	                			<div style={{color:'#666666'}}>{'Back'}</div>
+	// 	                		</Button>
+	// 								      <Input 
+	// 								      icon='search' 
+	// 								      iconPosition='left' 
+	// 								      name='search'     
+	// 								      disabled={this.state.lockSubmit}
+	// 								      // width='100%'
+	// 								      style={{width:'220px'}}
+	// 								 		  onChange={this.onChangeBaseSearch.bind(this,endingNeeded)}
+	// 					            value={this.state.searchQuery}
+	// 					            // onClose={()=>{this.setState({searchQuery:'',wordsList:[]})}}
+	// 					            />
+	// 								      <Segment vertical style={{height:255,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
+	// 								      <List selection>
+	// 									    {this.state.wordsList.map((k)=>{return <List.Item onClick={()=>{
+	// 									    	// if (k['type']=='[→V]' || k['type']=='[V→V]')
+	// 									    	console.log(k)
+	// 									    	this.setState({
+	// 									    		searchQuery:'',
+	// 									    		wordsList:[],
+	// 									    		candidateBase:this.state.candidateBase.concat(k),
+	// 									    	},()=>{
+	// 									    		this.updateCandidateCall(endingNeeded,update,mood,submood)
+	// 									    	})
 
-										    }} style={{cursor:'pointer',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'15px',padding:5}}>
-											        <List.Description style={{paddingBottom:'4px'}}>{k['yupikword']}</List.Description>
-											        <List.Header style={{fontWeight:'400'}}>{this.processStyledText(k['englishraw'])}</List.Header>
-											      </List.Item>				      	
-										      })}
-									    	</List>
-									      </Segment>
-									      {this.state.wordsList.length > 0 ?
-										      <div style={{textAlign:'center'}}>
-											      <Icon color='grey' name='chevron down' />
-										      </div>
-										      :
-										      null
-										    }
+	// 									    }} style={{cursor:'pointer',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'15px',padding:5}}>
+	// 										        <List.Description style={{paddingBottom:'4px'}}>{k['yupikword']}</List.Description>
+	// 										        <List.Header style={{fontWeight:'400'}}>{this.processStyledText(k['englishraw'])}</List.Header>
+	// 										      </List.Item>				      	
+	// 									      })}
+	// 								    	</List>
+	// 								      </Segment>
+	// 								      {this.state.wordsList.length > 0 ?
+	// 									      <div style={{textAlign:'center'}}>
+	// 										      <Icon color='grey' name='chevron down' />
+	// 									      </div>
+	// 									      :
+	// 									      null
+	// 									    }
 
-										  </Grid.Column>
-										  <Grid.Column style={{display:'flex',flexDirection:'column'}}>
+	// 									  </Grid.Column>
+	// 									  <Grid.Column style={{display:'flex',flexDirection:'column'}}>
 									  
-									        <div style={{color:'#666666'}}>{'Candidate (English Order)'}</div>
-									        <Segment style={{height:290,overflow: 'auto',padding:10}}>
-									        	<List divided>
-									        	{this.state.cvvMood.length > 0 && this.state.currentEditMode == 'cvupdate' ?
-										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
-										        		<div style={{flex:1}}>
-											        		<div style={{color:'#000000b3'}}>{retrieveMoodEnglish[this.state.cvvMood]['fst']}</div>
-											        		<div style={{fontWeight:''}}>{retrieveMoodEnglish[this.state.cvvMood]['english']+' '}<span style={{fontStyle:'italic'}}>{mvSubjectOptionsEnglish[this.state.cvvs.join("")]}</span></div>
-										        		</div>
-										        		</List.Item>
-									        		:
-									        		null
-									        	}
-									        	{this.state.candidateBase.map((k,kindex)=>{return (kindex===this.state.candidateBase.length-1 ?
-										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
-										        		<div style={{flex:1}}>
-											        		<div style={{color:'#000000b3'}}>{k['yupikword']}</div>
-											        		<div style={{fontWeight:''}}>{this.processStyledText(k['englishraw'])}</div>
-										        		</div>
-										        		<Icon circular onClick={()=>{this.setState({candidateBase:this.state.candidateBase.slice(0,-1)},()=>{this.updateCandidateCall(endingNeeded,update,mood,submood)})}} style={{cursor:'pointer',width:30}} name='x' />
-										        		</List.Item>
-									        			:
-										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
-										        		<div style={{flex:1}}>										        		
-											        		<div style={{color:'#000000b3'}}>{k['yupikword']}</div>
-											        		<div style={{fontWeight:''}}>{this.processStyledText(k['englishraw'])}</div>
-										        		</div>
-										        		<div style={{width:30}} />
-										        		</List.Item>
-									        			)
-									        	})}
-									        	</List>
-								        	</Segment>
-									      <div style={{paddingBottom:10}}>  
-		                		<Button color='blue' onClick={()=>{
-		                			if (mood === 'Intrg') {
-		                				this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Insert",["mv","qWord"],[submood,1]]]); 		                				
-		                			} else {
-		                				console.log([[itemUpdating[0],itemUpdating[1],this.state.candidateCall]])
-		                				this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall]]); 		                						                				
-		                			}
-		                			this.setState({isOpen:false,currentEditMode:'default',searchQuery:'',wordsList:[],candidateBase:[],lockSubmit:false}) 
-		                		}} disabled={!this.state.lockSubmit} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}>
-		                			<div>{'Submit'}</div>
-		                			<Icon name='chevron right' />
-		                		</Button>
-		                		</div>
+	// 								        <div style={{color:'#666666'}}>{'Candidate (English Order)'}</div>
+	// 								        <Segment style={{height:290,overflow: 'auto',padding:10}}>
+	// 								        	<List divided>
+	// 								        	{this.state.cvvMood.length > 0 && this.state.currentEditMode == 'cvupdate' ?
+	// 									        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
+	// 									        		<div style={{flex:1}}>
+	// 										        		<div style={{color:'#000000b3'}}>{retrieveMoodEnglish[this.state.cvvMood]['fst']}</div>
+	// 										        		<div style={{fontWeight:''}}>{retrieveMoodEnglish[this.state.cvvMood]['english']+' '}<span style={{fontStyle:'italic'}}>{mvSubjectOptionsEnglish[this.state.cvvs.join("")]}</span></div>
+	// 									        		</div>
+	// 									        		</List.Item>
+	// 								        		:
+	// 								        		null
+	// 								        	}
+	// 								        	{this.state.candidateBase.map((k,kindex)=>{return (kindex===this.state.candidateBase.length-1 ?
+	// 									        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
+	// 									        		<div style={{flex:1}}>
+	// 										        		<div style={{color:'#000000b3'}}>{k['yupikword']}</div>
+	// 										        		<div style={{fontWeight:''}}>{this.processStyledText(k['englishraw'])}</div>
+	// 									        		</div>
+	// 									        		<Icon circular onClick={()=>{this.setState({candidateBase:this.state.candidateBase.slice(0,-1)},()=>{this.updateCandidateCall(endingNeeded,update,mood,submood)})}} style={{cursor:'pointer',width:30}} name='x' />
+	// 									        		</List.Item>
+	// 								        			:
+	// 									        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
+	// 									        		<div style={{flex:1}}>										        		
+	// 										        		<div style={{color:'#000000b3'}}>{k['yupikword']}</div>
+	// 										        		<div style={{fontWeight:''}}>{this.processStyledText(k['englishraw'])}</div>
+	// 									        		</div>
+	// 									        		<div style={{width:30}} />
+	// 									        		</List.Item>
+	// 								        			)
+	// 								        	})}
+	// 								        	</List>
+	// 							        	</Segment>
+	// 								      <div style={{paddingBottom:10}}>  
+	// 	                		<Button color='blue' onClick={()=>{
+	// 	                			if (mood === 'Intrg') {
+	// 	                				this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Insert",["mv","qWord"],[submood,1]]]); 		                				
+	// 	                			} else {
+	// 	                				console.log([[itemUpdating[0],itemUpdating[1],this.state.candidateCall]])
+	// 	                				this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall]]); 		                						                				
+	// 	                			}
+	// 	                			this.setState({isOpen:false,currentEditMode:'default',searchQuery:'',wordsList:[],candidateBase:[],lockSubmit:false}) 
+	// 	                		}} disabled={!this.state.lockSubmit} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}>
+	// 	                			<div>{'Submit'}</div>
+	// 	                			<Icon name='chevron right' />
+	// 	                		</Button>
+	// 	                		</div>
 
-		                	</Grid.Column>
-		                	</Grid.Row>
-									    </Grid>
+	// 	                	</Grid.Column>
+	// 	                	</Grid.Row>
+	// 								    </Grid>
 
-	}
+	// }
 
 	arraysEqual = (a, b) => {
 	  if (a === b) return true;
@@ -3120,8 +3411,6 @@ editSubjectMenu = (name) => {
 								}
 
 
-
-					
 								{this.state.mvEnglish2.length > 0 ?
 									this.editMenu('mvEnglish2',-1)
 									:
@@ -3212,11 +3501,6 @@ editSubjectMenu = (name) => {
 
 
 
-								{this.state.mvEnglish3.length > 0 ?
-									<span> {this.state.mvEnglish3.map((w,wind)=><span style={{color:this.getColor(w[1])}}>{w[0]+" "}</span>)} </span>  		
-									:
-									null
-								}
 
 								{this.state.mvEnglishQaa.length > 0 ? 
 									this.editMenu('mvEnglishQaa',-1)
