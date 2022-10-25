@@ -3,7 +3,7 @@ import { Container, Header, Button, Icon, Divider, Image, Grid, Dropdown, List, 
 import { Link } from 'react-router-dom';
 import { API_URL } from '../App.js';
 import axios from 'axios';
-import {nounOptionsMVPossessors, popularPostbases, popularBases, colorsList,  mvSubject4thPersonCalls, mvObject4thPersonCalls,nObject4thPersonCalls, mvSubjectOptionsWho, mvSubjectOptionsWhat, mvObjectOptionsWhom, mvObjectOptionsWhomAbl, mvObjectOptionsWhat, mvObjectOptionsWhatAbl,retrieveMoodEnglish, nounOptionsPossessorsNo4th, mvSubjectOptionsOnly2nd, nounOptionsNumbers, nounoptionsmodalis, mvSubjectOptions, mvObjectOptions, mvSubjectOptionsEnglish, verbPostbases, nounPostbases, VVpostbases, NNpostbases} from './constants/newconstants.js'
+import {nounOptionsMVPossessors, popularVPostbases,popularNPostbases, popularNouns, popularVerbs, npnEnglish, colorsList,  mvSubject4thPersonCalls, mvObject4thPersonCalls,nObject4thPersonCalls, mvSubjectOptionsWho, mvSubjectOptionsWhat, mvObjectOptionsWhom, mvObjectOptionsWhomAbl, mvObjectOptionsWhat, mvObjectOptionsWhatAbl,retrieveMoodEnglish, nounOptionsPossessorsNo4th, mvSubjectOptionsOnly2nd, nounOptionsNumbers, nounoptionsmodalis, mvSubjectOptions, mvObjectOptions, mvSubjectOptionsEnglish, verbPostbases, nounPostbases, VVpostbases, NNpostbases} from './constants/newconstants.js'
 import {newpostbases} from './constants/newpostbases.js'
 import {ending_underlying} from './constants/ending_underlying.js'
 import palette from 'google-palette';
@@ -58,11 +58,7 @@ let futureTensePostbases = [
 	'+ciqe-|@ciiqe-',
 	'-qatar-',
 ]
-const optionsFuzzy = {
-  keys: ['yupikword', 'englishnorm'],
-  limit: 10, // don't return more results than you need!
-  threshold: -10000, // don't return bad results
-};
+
 
 let vOptions = [
 	'vBase',
@@ -152,6 +148,7 @@ class OneVerbWordBuilder extends Component {
 			activeIndexes:[],
 			addSubject:false,
 			addIs:true,
+			nounNum:'s',
 			// colorsList: {
 			// 	'mvv.b':'#000000',
 			// 	'mvv.e':'#852828',
@@ -460,6 +457,8 @@ class OneVerbWordBuilder extends Component {
 			nounOptionsCVAblPossessors1:[{id: 0, value: '000', text:'a, some'}].concat(nounOptionsMVPossessors),
 			nounOptionsSVPossessors1:[{id: 0, value: '000', text:'the'}].concat(nounOptionsMVPossessors),
 			nounOptionsSVAblPossessors1:[{id: 0, value: '000', text:'a, some'}].concat(nounOptionsMVPossessors),
+
+			nounIndexChosen:0,
 
 
 		}
@@ -1279,6 +1278,26 @@ class OneVerbWordBuilder extends Component {
 		let filteredDictV = {}
 		let noFuture = false
 		let noPast = false
+		let optionsFuzzy = {
+		  keys: ['yupikword', 'base_case'],
+		  limit: 10, // don't return more results than you need!
+		  threshold: -10000, // don't return bad results
+		};
+
+		console.log((endingNeeded,event,data))
+		if (this.state.nextTenses.length > 0) {
+			if (this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
+				optionsFuzzy['keys'] = ['yupikword','past_preverb']
+			} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'g') {
+				optionsFuzzy['keys'] = ['yupikword','ger_preverb']
+			} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'i') {
+				optionsFuzzy['keys'] = ['yupikword','inf_preverb']
+			} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp') {
+				optionsFuzzy['keys'] = ['yupikword','past_preverb']
+			}	
+		}
+
+		console.log(optionsFuzzy)
 		if (this.state.cvvMood == 'CtmpI' || this.state.cvvMood == 'CtmpII' || this.state.mvvType == 'Intrg4' || this.state.mvvMood == 'Sbrd' || this.state.mvvMood.includes('Opt')) {
 			noFuture = true
 		}
@@ -1329,10 +1348,15 @@ class OneVerbWordBuilder extends Component {
   }
 
   returnHeight = (type) => {
+  	var height = 0
+  	height = document.getElementById('menuheight');
+  	console.log(height)
+  	// console.log(height.offsetHeight)
   	if (type === 'default') {
   		return 80
   	} else {
-  		return 406
+  		return 806
+  		// return document.getElementById.clientHeight('menuheight');
   	}
   }
 
@@ -1482,7 +1506,12 @@ class OneVerbWordBuilder extends Component {
 						 </Button>
   	} else if (fontType == 5) {
   		// console.log(data)
-			return <span> {data.map((w,wind)=><span style={{color:this.getColor(w[1]),cursor:'pointer',paddingBottom:'1px',borderBottom:'1px solid '+this.getColor(w[1])}}>{w[0]+" "}</span>)} </span>  		
+			return <span style={{border:'solid 1px #22242626',cursor:'pointer',fontSize:'18px',padding:'8px 5px 8px 5px',borderRadius:'5px'}}> 
+			{data.map((w,wind)=><span 
+				style={{color:this.getColor(w[1])}}
+				// {{color:this.getColor(w[1]),cursor:'pointer',paddingBottom:'1px',borderBottom:'1px solid '+this.getColor(w[1])}}
+				// {{border:'solid 1px #22242626',color:this.getColor(w[1]),fontSize:'18px',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px',}}
+				>{w[0]+" "}</span>)} </span>  		
   	} else if (fontType == 6) {
   		return 	<span> {data.map((w,wind)=>
 							(w.map((t)=> <span style={{color:this.getColor(t[1]),cursor:'pointer',paddingBottom:'1px',borderBottom:'1px solid '+this.getColor(t[1])}}>{t[0]+" "}</span>)))}
@@ -1985,12 +2014,12 @@ class OneVerbWordBuilder extends Component {
 editSubjectMenu = (name) => {
 	return <Popup
 			      trigger={									
-							<span style={{border:'solid 1px #22242626',color:this.getColor('mvv.s'),fontSize:'18px',padding:'8px 2px 8px 5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}}>{mvSubjectOptionsEnglish[this.state.mvvs.join("")]}<Icon style={{color:this.getColor('mvv.s'),fontSize:'16px',margin:0}} name='dropdown' /></span>
+							<span style={{border:'solid 1px #22242626',color:this.getColor('mvv.s'),fontSize:'18px',padding:'8px 2px 8px 5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px', cursor:'pointer'}}>{mvSubjectOptionsEnglish[this.state.mvvs.join("")]}<Icon style={{color:this.getColor('mvv.s'),fontSize:'16px',margin:0}} name='dropdown' /></span>
 			      }
 			      on='click'
 			      position='bottom center'
 			      open={this.state.currentlyOpen === name}
-			      style={{height:295}}
+			      style={{height:806}}
 			      onOpen={()=>{this.setState({currentlyOpen:name})}}
 			      onClose={()=>{this.setState({currentlyOpen:'', addSubject:false})}}
 			      content={
@@ -2377,7 +2406,8 @@ editSubjectMenu = (name) => {
 						this.setState({endingAdjusted:'v'})
 					} else {
 						lockSubmit = false
-						this.setState({endingAdjusted:'n'})					
+						this.setState({endingAdjusted:'n'})
+						this.setState({nounNum:newpostbases[x[1]]['nounNum']})			
 					}
 					candidateFST.push([x[0][0],0,x[0][1],0])
 				}
@@ -2454,115 +2484,71 @@ editSubjectMenu = (name) => {
 
 
 	processStyledMainText = (key) => {
-		// console.log(key,this.state.addIs)
-		let sentence = key['englishmain']	
+		// console.log(key)
 		let verbAdd = ''
+		let sentence = key['englishmain']	
 
-
-		if (this.state.nextTenses.length > 0) {
-			if ((this.state.addIs && key['englishtenses'][2]=='is') || this.state.nextTenses[this.state.nextTenses.length-1] === 'gen') {
-				if (this.state.nextTenses[this.state.nextTenses.length-1] === 'p' || this.state.nextTenses[this.state.nextTenses.length-1] === 'pp') {
-					if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
-						sentence = sentence.replace('!is!','was')
-					} else if (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) {
-						sentence = sentence.replace('!is!','was')
+		if (key['type'] == 'n') {
+			sentence = key['englishraw']
+			let verbMatches = key['englishraw'].match(/\⟨.*?\⟩/g)
+			if (this.state.nounNum == 'p') {
+				verbAdd = key['englishtenses'][this.state.nounIndexChosen][1]
+			} else {
+				verbAdd = key['englishtenses'][this.state.nounIndexChosen][0]
+			}
+			
+			if (verbMatches !== null) {
+				verbMatches.map((m) => sentence = sentence.replace(m,verbAdd))	
+			}
+		} else {
+			sentence = key['englishmain']	
+			if (this.state.nextTenses.length > 0) {
+				if ((this.state.addIs && key['englishtenses'][2]=='is') || this.state.nextTenses[this.state.nextTenses.length-1] === 'gen') {
+					if (this.state.nextTenses[this.state.nextTenses.length-1] === 'p' || this.state.nextTenses[this.state.nextTenses.length-1] === 'pp') {
+						if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
+							sentence = sentence.replace('!is!','was')
+						} else if ((this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) || this.state.mvvs.length === 0) {
+							sentence = sentence.replace('!is!','was')
+						} else {
+							sentence = sentence.replace('!is!','were')
+						}
 					} else {
-						sentence = sentence.replace('!is!','were')
+						if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
+							sentence = sentence.replace('!is!','am')
+						} else if ((this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) || this.state.mvvs.length === 0) {
+							sentence = sentence.replace('!is!','is')
+						} else {
+							sentence = sentence.replace('!is!','are')
+						}
 					}
 				} else {
-					if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
-						sentence = sentence.replace('!is!','am')
-					} else if (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) {
-						sentence = sentence.replace('!is!','is')
-					} else {
-						sentence = sentence.replace('!is!','are')
-					}
+					// console.log(this.state.nextTenses[this.state.nextTenses.length-1], key['englishtenses'], key['englishraw'])
+					if (this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
+						verbAdd = key['englishtenses'][1]
+					} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'g') {
+						verbAdd = key['englishtenses'][3]
+					} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'i') {
+						verbAdd = key['englishtenses'][0]
+					} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp') {
+						verbAdd = key['englishtenses'][4]
+					}			
+					sentence = key['englishraw']
+					let verbMatches = key['englishraw'].match(/\⟨.*?\⟩/g)
+					if (verbMatches !== null) {
+						verbMatches.map((m) => sentence = sentence.replace(m,verbAdd))	
+					}						
 				}
 			} else {
-				// console.log(this.state.nextTenses[this.state.nextTenses.length-1], key['englishtenses'], key['englishraw'])
-				if (this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
-					verbAdd = key['englishtenses'][1]
-				} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'g') {
-					verbAdd = key['englishtenses'][3]
-				} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'i') {
-					verbAdd = key['englishtenses'][0]
-				} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp') {
-					verbAdd = key['englishtenses'][4]
-				}			
-				sentence = key['englishraw']
-				let verbMatches = key['englishraw'].match(/\⟨.*?\⟩/g)
-				if (verbMatches !== null) {
-					verbMatches.map((m) => sentence = sentence.replace(m,verbAdd))	
-				}						
-			}
-	
-		} else {
-			// console.log(this.state.nextTenses[this.state.nextTenses.length-1])
-  	// 	if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp' || this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
-			// 	if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
-			// 		sentence = sentence.replace('!is!','was')
-			// 	} else if (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) {
-			// 		sentence = sentence.replace('!is!','was')
-			// 	} else {
-			// 		sentence = sentence.replace('!is!','were')
-			// 	}
-			// } else {
 				if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
 					sentence = sentence.replace('!is!','am')
-				} else if (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) {
+				} else if ((this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) || this.state.mvvs.length === 0) {
 					sentence = sentence.replace('!is!','is')
 				} else {
 					sentence = sentence.replace('!is!','are')
 				}
-			// }
+			}
+
 		}
-
-		// if (!this.state.addIs && this.state.nextTenses.length > 0) {
-		// 	if (this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
-		// 		verbAdd = key['englishtenses'][1]
-		// 	} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'g') {
-		// 		verbAdd = key['englishtenses'][3]
-		// 	} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'i') {
-		// 		verbAdd = key['englishtenses'][0]
-		// 	} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp') {
-		// 		verbAdd = key['englishtenses'][4]
-		// 	}			
-		// 	sentence = key['englishraw']
-		// 	let verbMatches = key['englishraw'].match(/\⟨.*?\⟩/g)
-		// 	if (verbMatches !== null) {
-		// 		verbMatches.map((m) => sentence = sentence.replace(m,verbAdd))	
-		// 	}			
-		// } else {
-		// 	console.log(this.state.nextTenses[this.state.nextTenses.length-1])
-  // 		if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp' || this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
-		// 		if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
-		// 			sentence = sentence.replace('!is!','was')
-		// 		} else if (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) {
-		// 			sentence = sentence.replace('!is!','was')
-		// 		} else {
-		// 			sentence = sentence.replace('!is!','were')
-		// 		}
-		// 	} else {
-		// 		if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
-		// 			sentence = sentence.replace('!is!','am')
-		// 		} else if (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) {
-		// 			sentence = sentence.replace('!is!','is')
-		// 		} else {
-		// 			sentence = sentence.replace('!is!','are')
-		// 		}
-		// 	}
-		// }
-
-		// if (verbAdd.length > 0) {
-		// 	sentence = key['englishraw']	
-		// 	let verbMatches = key['englishraw'].match(/\⟨.*?\⟩/g)
-		// 	if (verbMatches !== null) {
-		// 		verbMatches.map((m) => sentence = sentence.replace(m,verbAdd))	
-		// 	}			
-		// }
-
-		// console.log(sentence)
-
 
 		let matches = sentence.match(/\<.*?\>/g)
 		if (matches !== null) {
@@ -2573,102 +2559,214 @@ editSubjectMenu = (name) => {
 		}
 	}
 
+	returnTenseName = () => {
 
-	processStyledPostbaseText = (key) => {
-		// console.log(newpostbases[key['expression']])
-		let sentence = newpostbases[key['expression']]['description']
+	}
 
-		if (key['id'] == 5) {
-			sentence = '<past tense>'
-		} else {
-			if (!newpostbases[key['expression']]['match_case']) {
-				if (this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
-					if (newpostbases[key['expression']]['past_preverb'].length == 0 && newpostbases[key['expression']]['was']) {
-						sentence = newpostbases[key['expression']]['description']						
-						if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
-							sentence = 'was '+sentence
-						} else if (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) {
-							sentence = 'was '+sentence
-						} else {
-							sentence = 'were '+sentence
-						}  
-					} else {
-						sentence = newpostbases[key['expression']]['past_preverb']						
-					}
-				} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'g') {
-					sentence = newpostbases[key['expression']]['ger_preverb']
-				} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'gen') {
-					sentence = newpostbases[key['expression']]['gen_preverb']
-				} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'i') {
-					sentence = newpostbases[key['expression']]['inf_preverb']
-				} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp') {
-					sentence = newpostbases[key['expression']]['past_preverb']
-				}
-			}
+
+	processStyledPostbaseText = (key,i) => {
+		// console.log(key,i)
+		let lookup;
+		if (i === '1') {
+			lookup = key['expression']
+		} else if (i === '2') {
+			lookup = key
 		}
-		// console.log(key,sentence)
+		if (lookup in newpostbases) {
+			let sentence = ''
+			// console.log(sentence)
 
-  	if (newpostbases[key['expression']]['is'] && this.state.addIs) {
-  		// if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp' || this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
-				// if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
-				// 	sentence = 'was '+sentence
-				// } else if (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) {
-				// 	sentence = 'was '+sentence
-				// } else {
-				// 	sentence = 'were '+sentence
-				// }  
-  		// } else {
-				if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
-					sentence = 'am '+sentence
-				} else if (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) {
-					sentence = 'is '+sentence
+			if (newpostbases[lookup]['type'] === 'VV') {
+				sentence = newpostbases[lookup]['description']
+				if (key['id'] == 5) {
+					sentence = '<past tense>'
 				} else {
-					sentence = 'are '+sentence
-				}  	  			
-  		// }
-			// this.setState({addIs:false})
-  	}
+					if (!newpostbases[lookup]['match_case']) {
+						if (this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
+							if (newpostbases[lookup]['past_preverb'].length == 0 && newpostbases[lookup]['was']) {
+								sentence = newpostbases[lookup]['description']						
+								if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
+									sentence = 'was '+sentence
+								} else if ((this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) || this.state.mvvs.length === 0) {
+									sentence = 'was '+sentence
+								} else {
+									sentence = 'were '+sentence
+								}  
+							} else {
+								sentence = newpostbases[lookup]['past_preverb']						
+							}
+						} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'g') {
+							sentence = newpostbases[lookup]['ger_preverb']
+						} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'gen') {
+							sentence = newpostbases[lookup]['gen_preverb']
+						} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'i') {
+							sentence = newpostbases[lookup]['inf_preverb']
+						} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp') {
+							sentence = newpostbases[lookup]['past_preverb']
+						}
+					}				
+				}
+			} else if (newpostbases[lookup]['type'] === 'NV') {
+				sentence = newpostbases[lookup]['gen_prenoun']
+				if (!newpostbases[lookup]['match_case']) {
+					if (this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
+						if (newpostbases[lookup]['past'].length == 0 && newpostbases[lookup]['was']) {
+							sentence = newpostbases[lookup]['gen_prenoun']						
+							if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
+								sentence = 'was '+sentence
+							} else if ((this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) || this.state.mvvs.length === 0) {
+								sentence = 'was '+sentence
+							} else {
+								sentence = 'were '+sentence
+							}  
+						} else {
+							sentence = newpostbases[lookup]['past']						
+						}
+					} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'g') {
+						sentence = newpostbases[lookup]['ger_prenoun']
+					} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'gen') {
+						sentence = newpostbases[lookup]['gen_prenoun']
+					} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'i') {
+						sentence = newpostbases[lookup]['inf_prenoun']
+					} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp') {
+						sentence = newpostbases[lookup]['past']
+					}
+				}				
+			} else if (newpostbases[lookup]['type'] === 'NN') {
+					if (this.state.nounNum == 'p') {
+						sentence = newpostbases[lookup]['pluralDefinition']
+					} else {
+						sentence = newpostbases[lookup]['singularDefinition']
+					}
+			}
 
-  	if (newpostbases[key['expression']]['has'] && this.state.addIs) {
-  		if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp' || this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
-  			sentence = 'had '+sentence
-  		} else {
-				if (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) {
-					sentence = 'has '+sentence
-				} else {
-					sentence = 'have '+sentence
-				}  		  			
-  		}
-			// this.setState({addIs:false})
-  	}
+			// console.log(sentence)
+
+	  	if (newpostbases[lookup]['is'] && this.state.addIs) {
+	  		// if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp' || this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
+					// if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
+					// 	sentence = 'was '+sentence
+					// } else if (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) {
+					// 	sentence = 'was '+sentence
+					// } else {
+					// 	sentence = 'were '+sentence
+					// }  
+	  		// } else {
+					if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
+						sentence = 'am '+sentence
+					} else if ((this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) || this.state.mvvs.length === 0) {
+						sentence = 'is '+sentence
+					} else {
+						sentence = 'are '+sentence
+					}  	  			
+	  		// }
+				// this.setState({addIs:false})
+	  	}
+
+	  	if (newpostbases[lookup]['has'] && this.state.addIs) {
+	  		if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp' || this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
+	  			sentence = 'had '+sentence
+	  		} else {
+					if ((this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) || this.state.mvvs.length === 0) {
+						sentence = 'has '+sentence
+					} else {
+						sentence = 'have '+sentence
+					}  		  			
+	  		}
+				// this.setState({addIs:false})
+	  	}
 
 
-		let matches = sentence.match(/\<.*?\>/g)
-		if (matches !== null) {
-			matches.map((m) => sentence = sentence.replace(m,'<i>'+m.slice(1,-1)+'</i>'))		
-			return <span dangerouslySetInnerHTML={{__html: sentence.replace("⟨","").replace("⟩","")}} />		
+			let matches = sentence.match(/\<.*?\>/g)
+			if (matches !== null) {
+				matches.map((m) => sentence = sentence.replace(m,'<i>'+m.slice(1,-1)+'</i>'))		
+				return <span dangerouslySetInnerHTML={{__html: sentence.replace("⟨","").replace("⟩","")}} />		
+			} else {
+				return <span>{sentence.replace("⟨","").replace("⟩","")}</span>
+			}
+
+
 		} else {
-			return <span>{sentence.replace("⟨","").replace("⟩","")}</span>
+			console.log('not in',lookup)
+			return <span>{'not in lookup'}</span>
 		}
 	}
 
 
 	baseChooser = (itemUpdating,endingNeeded,update,mood,submood) => {
-		// console.log(itemUpdating,endingNeeded,update,mood,submood)
+		console.log(itemUpdating,endingNeeded,update,mood,submood)
 		let key;
+		let subject = '';
+		let popularPostbases = []
+		// this.setState({currentEnding:endingNeeded})
+		let popularBases = []
+		if (endingNeeded == 'n') {
+			popularPostbases = popularNPostbases
+			popularBases = popularNouns
+		} else {
+			popularPostbases = popularVPostbases
+			popularBases = popularVerbs
+		}
+
+		console.log(itemUpdating[1].join(""))
+
+		if (['mv','mvvBase'].includes(itemUpdating[1].join(""))) {
+			if (this.state.mvvs.length > 0) {
+				subject = mvSubjectOptionsEnglish[this.state.mvvs.join("")]
+			} else {
+				subject = 'he'				
+			}
+		} else if (['mvns'].includes(itemUpdating[1].join(""))) {
+			subject = 'the one _____ is'				
+		} else if (['mvno'].includes(itemUpdating[1].join(""))) {
+			subject = 'the one'				
+		} else if (itemUpdating[1][0]==='np') {
+			if (itemUpdating[1].length == 1) { //(['np'].includes(itemUpdating[1].join(""))) 
+				subject = 'the one'
+			} else if (itemUpdating[1].length == 3) { // add possessor or possessive ([npn-1','npn0'].includes(itemUpdating[1].join("")))
+				if (itemUpdating[1].join("") == 'npn-1') {
+					subject = "the one _____'s N"
+				} else {
+					subject = "N's one _____"
+				}
+			} else if (itemUpdating[1].length == 4) { 
+				if (itemUpdating[1][1] === 'nBases') { // update
+					if (itemUpdating[1][2] === this.state.npn.length-1) {
+						subject = npnEnglish[this.state.npn[itemUpdating[1][2]][0].slice(0, -1).join("")] + ' ' + npnEnglish[this.state.npn[itemUpdating[1][2]][0][3]]
+					} else {
+						subject = npnEnglish[this.state.npn[itemUpdating[1][2]][0][3]]
+					}
+				} else if (itemUpdating[1][1] === 'n') { // add descriptor
+					if (itemUpdating[1][2] === this.state.npn.length-1) {
+						subject = npnEnglish[this.state.npn[itemUpdating[1][2]][0].slice(0, -1).join("")] + ' ' + npnEnglish[this.state.npn[itemUpdating[1][2]][0][3]] + ' _____ N'
+					} else {
+						subject = npnEnglish[this.state.npn[itemUpdating[1][2]][0][3]] + ' _____ N'
+					}
+				}
+			}
+		}  
+
+		// if (['npnBases10'].includes(itemUpdating[1].join(""))) {
+		// 		subject = 'yes'				
+		// } else if (['npnBases00'].includes(itemUpdating[1].join(""))) {
+		// 		subject = '...'+this.state.npn[0][3]+'...'				
+		// }
+
+
+
 		// let currentTense;n
 		// console.log(this.state)
 		// console.log(this.state.currentEditMode, itemUpdating,endingNeeded,update,mood,submood)
 		         return <Grid style={{height:'400px',width:'300px'}}>
 		                	<Grid.Row columns={1} style={{paddingBottom:'0px'}}divided>
-		                	<Grid.Column >
+		                	<Grid.Column id='menuheight'>
 		                		<Button onClick={()=>{this.menuSelect('default'); this.setState({searchQuery:'',wordsList:[]})}} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingLeft:'13px',marginBottom:'10px'}}>
 		                			<Icon name='chevron left' />
 		                			<div style={{color:'#666666'}}>{'Back'}</div>
 		                		</Button>
 									        <Segment style={{overflow: 'auto',padding:0}}>
 									        	<List divided style={{margin:0,padding:0,}}>
-									        	<List.Item style={{color:'#545454',fontFamily:"Lato,'Helvetica Neue',Arial,Helvetica,sans-serif",padding:'8px 15px',backgroundColor:'#f7f7f7'}}>{mvSubjectOptionsEnglish[this.state.mvvs.join("")]}<span style={{color:'#bdbdbd'}}>{'...'}</span></List.Item>
+										        <List.Item style={{color:'#545454',fontFamily:"Lato,'Helvetica Neue',Arial,Helvetica,sans-serif",padding:'8px 15px',backgroundColor:'#f7f7f7'}}>{subject}<span style={{color:'#bdbdbd'}}>{'...'}</span></List.Item>
 									        	{this.state.cvvMood.length > 0 && this.state.currentEditMode == 'cvupdate' ?
 										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
 										        		<div style={{flex:1}}>
@@ -2718,19 +2816,7 @@ editSubjectMenu = (name) => {
 
 
 									        	{this.state.lockSubmit ?
-												      <div style={{paddingBottom:10}}>  
-					                		<Button size='small' color='blue' onClick={()=>{
-					                			if (mood === 'Intrg') {
-					                				this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Insert",["mv","qWord"],[submood,1]]]); 		                				
-					                			} else {
-					                				this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall]]); 		                						                				
-					                			}
-					                			this.setState({isOpen:false,currentEditMode:'default',searchQuery:'',wordsList:[],candidateBase:[],candidateDisplay:[],candidateCall:[],nextTenses:[],unallowable_next_ids:[],addIs:true,lockSubmit:false}) 
-					                		}} disabled={!this.state.lockSubmit} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}>
-					                			<div>{'Submit'}</div>
-					                			<Icon name='chevron right' />
-					                		</Button>
-					                		</div>
+									        		null
 					                		:
 
 
@@ -2754,19 +2840,12 @@ editSubjectMenu = (name) => {
 													      		if (this.state.unallowable_next_ids.length > 0) {
 													      			removeItem = this.state.unallowable_next_ids[this.state.unallowable_next_ids.length-1][0].includes(popularPostbases[p]['id'])
 													      		}
-
 													      		if (!removeItem) {
 														      		return <Button style={{textAlign:'left',padding:'10px'}} onClick={()=>{
 														      			this.handleClick('vvpostbases',false); 
-														      			// this.handleClick('verbs',false); 
-														      			// if (newpostbases[popularPostbases[p]['expression']]['type']=="VV") {
-														      			// 	if (!newpostbases[popularPostbases[p]['expression']]['match_case']) {
-														      			// 		this.setState({addIs:false})
-														      			// 	}
-														      			// }
 														      			this.setState({
 														      				candidateBase:this.state.candidateBase.concat([[newpostbases[popularPostbases[p]['expression']]['keylookup'],popularPostbases[p]['expression']]]),
-																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledPostbaseText(popularPostbases[p]),newpostbases[popularPostbases[p]['expression']]['exp']]]),
+																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledPostbaseText(popularPostbases[p],'1'),newpostbases[popularPostbases[p]['expression']]['exp']]]),
 																	    		unallowable_next_ids: this.state.unallowable_next_ids.concat([[popularPostbases[p]['allowable_next_ids'],]]),
 																	    		nextTenses:(newpostbases[popularPostbases[p]['expression']]['match_case'] && !('gen_preverb_after' in newpostbases[popularPostbases[p]['expression']]) ? (this.state.nextTenses.length == 0 ? this.state.nextTenses.concat(['gen']):this.state.nextTenses.concat([this.state.nextTenses[this.state.nextTenses.length-1]])) : this.state.nextTenses.concat([newpostbases[popularPostbases[p]['expression']]['gen_preverb_after'],])),
 														      			},()=>{
@@ -2775,7 +2854,7 @@ editSubjectMenu = (name) => {
 														      		}}>
 															      		<div>
 																      		<div style={{marginBottom:'5px',color:'#545454'}}>
-																      		<span>{this.processStyledPostbaseText(popularPostbases[p])}</span>
+																      		<span>{this.processStyledPostbaseText(popularPostbases[p],'1')}</span>
 																      		<span style={{color:'#bdbdbd'}}>{'...'}</span></div>
 																      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{newpostbases[popularPostbases[p]['expression']]['exp']}</div>
 															      		</div>
@@ -2784,52 +2863,59 @@ editSubjectMenu = (name) => {
 													      	})}
 												    		</Button.Group>
 												    		</Segment>
+												    		<div style={{textAlign:'center',color:'#252525'}}>
+												    		<Icon name="dropdown" />
+												    		</div>
 												    		</Accordion.Content>
 												    </Accordion>	
 												    :
 												    null
 												  }
 
-									        
-													<Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
-											    		<Accordion.Title
-											    			id={'verb'}
-											    			style={{paddingBottom:'2px'}}
-											    			active={this.state.activeIndexes.includes('verbs')}
-										            onClick={()=>{this.handleClick('verbs',true)}}
-											    		>
-											    			<Icon name="dropdown" />
-											    			{'Common Bases'}
-											    		</Accordion.Title>
-											    		<Accordion.Content active={this.state.activeIndexes.includes('verbs')}>
-												      <Segment vertical style={{maxHeight:255,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
-												    		<Button.Group vertical basic fluid>
-													      	{Object.keys(popularBases).map((p)=>{
-													      		return <Button onClick={()=>{
-													      			// this.handleClick('vvpostbases',false); 
-													      			this.handleClick('verbs',false); 
-																    	this.setState({
-																    		searchQuery:'',
-																    		wordsList:[],
-																    		candidateBase:this.state.candidateBase.concat(popularBases[p]),
-																    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledMainText(popularBases[p]),popularBases[p]['fsts'].join(", ")]]),
-																    	},()=>{
-																    		this.updateCandidateCall(endingNeeded,update,mood,submood,'b')
-																    	})
-													      		 }}>
-															      		<div>
-																      		<div style={{marginBottom:'5px',color:'#545454'}}>
-																      		<span>{this.processStyledMainText(popularBases[p])}</span>
-																      		<span style={{color:'#bdbdbd'}}>{'.'}</span></div>
-																      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{popularBases[p]['key']}</div>
-															      		</div>
-													      		 </Button>
-													      	})}
+									        <div style={{padding:0,margin:0}}>
+														<Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
+												    		<Accordion.Title
+												    			id={'verb'}
+												    			style={{paddingBottom:'2px'}}
+												    			active={this.state.activeIndexes.includes('verbs')}
+											            onClick={()=>{this.handleClick('verbs',true)}}
+												    		>
+												    			<Icon name="dropdown" />
+												    			{'Common Bases'}
+												    		</Accordion.Title>
+												    		<Accordion.Content active={this.state.activeIndexes.includes('verbs')}>
+													      <Segment vertical style={{maxHeight:255,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
+													    		<Button.Group vertical basic fluid>
+														      	{Object.keys(popularBases).map((p)=>{
+														      		return <Button style={{textAlign:'left',padding:'10px'}} onClick={()=>{
+														      			// this.handleClick('vvpostbases',false); 
+														      			this.handleClick('verbs',false); 
+																	    	this.setState({
+																	    		searchQuery:'',
+																	    		wordsList:[],
+																	    		candidateBase:this.state.candidateBase.concat(popularBases[p]),
+																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledMainText(popularBases[p]),popularBases[p]['fsts'].join(", ")]]),
+																	    	},()=>{
+																	    		this.updateCandidateCall(endingNeeded,update,mood,submood,'b')
+																	    	})
+														      		 }}>
+																      		<div>
+																	      		<div style={{marginBottom:'5px',color:'#545454'}}>
+																	      		<span>{this.processStyledMainText(popularBases[p])}</span>
+																	      		<span style={{color:'#bdbdbd'}}>{'.'}</span></div>
+																	      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{popularBases[p]['fstsDisplay']}</div>
+																      		</div>
+														      		 </Button>
+														      	})}
 
-												    		</Button.Group>
-											    		</Segment>
-											    		</Accordion.Content>
-											    </Accordion>	
+													    		</Button.Group>
+												    		</Segment>
+												    		<div style={{textAlign:'center',color:'#252525'}}>
+												    		<Icon name="dropdown" />
+												    		</div>
+												    		</Accordion.Content>
+												    </Accordion>	
+											    </div>
 		                		
 											      <Input 
 											      icon='search' 
@@ -2844,41 +2930,57 @@ editSubjectMenu = (name) => {
 								            // onClose={()=>{this.setState({searchQuery:'',wordsList:[]})}}
 								            />
 								            {this.state.wordsList.length > 0 ?
-												      <Segment vertical style={{maxHeight:255,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
+								            	<span>
+													      <Segment vertical style={{maxHeight:255,overflow: 'auto',padding:0,margin:"4px 9px",borderBottom:'0px solid #e2e2e2'}}>
 
-											    		<Button.Group vertical basic fluid>
-												      	{this.state.wordsList.map((k,index)=>{												      	
-												      		return <Button style={{textAlign:'left',padding:'10px'}} onClick={()=>{
-												      			// this.handleClick('vvpostbases'); 
-												      			// this.setState({candidateBase:this.state.candidateBase.concat([[popularPostbases[p]['expression'],currentTense]])})
+												    		<Button.Group vertical basic fluid>
+													      	{this.state.wordsList.map((k,index)=>{
+													      		if (k['type'].includes('→')) {
+														      		return <Button style={{textAlign:'left',padding:'10px'}} onClick={()=>{
+														      			this.setState({
+																	    		searchQuery:'',
+																	    		wordsList:[],
+														      				candidateBase:this.state.candidateBase.concat([[newpostbases[k['fsts']]['keylookup'],k['fsts']]]),
+																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledPostbaseText(k['fsts'],'2'),k['fsts']]]),
+																	    		nextTenses:(newpostbases[k['fsts']]['match_case'] && !('gen_preverb_after' in newpostbases[k['fsts']]) ? (this.state.nextTenses.length == 0 ? this.state.nextTenses.concat(['gen']):this.state.nextTenses.concat([this.state.nextTenses[this.state.nextTenses.length-1]])) : this.state.nextTenses.concat([newpostbases[k['fsts']]['gen_preverb_after'],])),
+														      			},()=>{
+																	    		this.updateCandidateCall(endingNeeded,update,mood,submood,'p')
+																	    	})
+														      		}}>
+															      		<div>
+																      		<div style={{marginBottom:'5px',color:'#545454'}}>
+																      		<span>{this.processStyledPostbaseText(k['fsts'],'2')}</span>
+																      		<span style={{color:'#bdbdbd'}}>{'...'}</span></div>
+																      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{k['fsts']}</div>
+															      		</div>
+														      		</Button>
 
-												      			// this.setState({addIs:false})
-												      			// if (k['type']=="[V→V]") {
-												      			// 	if (!newpostbases[k['fsts'][0]]['match_case']) {
-												      			// 		this.setState({addIs:false})
-												      			// 	}
-												      			// }
-															    	this.setState({
-															    		searchQuery:'',
-															    		wordsList:[],
-															    		candidateBase:this.state.candidateBase.concat(k),
-															    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledMainText(k),k['fsts'].toString()]]),
-															    	},()=>{
-															    		this.updateCandidateCall(endingNeeded,update,mood,submood,'b')
-															    	})
-												      		}}>
-													      		<div>
-														      		<div style={{marginBottom:'5px',color:'#545454'}}>
-														      		<span>{this.processStyledMainText(k)}</span>
-														      		</div>
-														      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{k['fsts'].toString()}</div>
-													      		</div>
-												      		</Button>
-												      	})}
-											    		</Button.Group>
-
-
-												      </Segment>
+													      		} else {
+														      		return <Button style={{textAlign:'left',padding:'10px'}} onClick={()=>{
+																	    	this.setState({
+																	    		searchQuery:'',
+																	    		wordsList:[],
+																	    		candidateBase:this.state.candidateBase.concat(k),
+																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledMainText(k),k['fsts'].toString()]]),
+																	    	},()=>{
+																	    		this.updateCandidateCall(endingNeeded,update,mood,submood,'b')
+																	    	})
+														      		}}>
+															      		<div>
+																      		<div style={{marginBottom:'5px',color:'#545454'}}>
+																      		<span>{this.processStyledMainText(k)}</span>
+																      		</div>
+																      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{k['fsts'].toString()}</div>
+															      		</div>
+														      		</Button>
+													      		}
+													      	})}
+												    		</Button.Group>
+													      </Segment>
+												    		<div style={{textAlign:'center',color:'#252525'}}>
+												    		<Icon name="dropdown" />
+												    		</div>
+												    	</span>
 												      :
 												      null
 												    }
@@ -2886,7 +2988,24 @@ editSubjectMenu = (name) => {
 					                	}
 								        	</Segment>
 
-
+											      <div style={{paddingBottom:10}}>  
+				                		<Button size='small' color='blue' onClick={()=>{
+				                			if (mood === 'Intrg') {
+				                				this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Insert",["mv","qWord"],[submood,1]]]); 		                				
+				                			} else {
+				                				this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall]]); 		                						                				
+				                			}
+				                			this.setState({isOpen:false,currentEditMode:'default',searchQuery:'',wordsList:[],candidateBase:[],candidateDisplay:[],candidateCall:[],nextTenses:[],nounNum:'s',unallowable_next_ids:[],addIs:true,lockSubmit:false}) 
+				                		}} disabled={!this.state.lockSubmit} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}>
+				                			<div>{'Submit'}</div>
+				                			<Icon name='chevron right' />
+				                		</Button>
+				                		</div>
+								        	{this.state.lockSubmit ?
+								        		null
+				                		:
+								        		<div style={{fontFamily:'Lato,Arial,Helvetica,sans-serif',color:'#c7c7c7'}}>You need at least one base</div>
+				                	}
 
 
 
@@ -3145,7 +3264,7 @@ editSubjectMenu = (name) => {
 	}
 
 	getDropdownStyle=(color)=>{
-		return {border:'solid 1px #22242626',color:this.getColor(color),fontSize:'18px',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px'}
+		return {border:'solid 1px #22242626',color:this.getColor(color),fontSize:'18px',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px',}
 	}
 
 	render() {
