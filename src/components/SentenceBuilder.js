@@ -2227,15 +2227,15 @@ editSubjectMenu = (name) => {
 		} else if (type==='changeCVtype') {
 	    return <Dropdown item text='Change Connective Verb Phrase'>
 	      <Dropdown.Menu>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Prec',cvvType:'',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>before...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cnsq',cvvType:'',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>because...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cont',cvvType:'',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>whenever...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Conc',cvvType:'eventhough',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>even though...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Conc',cvvType:'evenif',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>even if...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cond',cvvType:'if',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>if...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cond',cvvType:'wheninthefuture',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>when (in the future)...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'CtmpI',cvvType:'',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>when (in the past)...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'CtmpII',cvvType:'',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>while...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Prec',cvvType:'',isOpen: false},()=>{this.backEndCall([["Update",["cv","vMood"],"Prec"]])})}}>before...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cnsq',cvvType:'',isOpen: false},()=>{this.backEndCall([["Update",["cv","vMood"],"Cnsq"]])})}}>because...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cont',cvvType:'',isOpen: false},()=>{this.backEndCall([["Update",["cv","vMood"],"Cont"]])})}}>whenever...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Conc',cvvType:'eventhough',isOpen: false},()=>{this.backEndCall([["Update",["cv","vMood"],"Conc"],["Update",["cv","vType"],"eventhough"]])})}}>even though...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Conc',cvvType:'evenif',isOpen: false},()=>{this.backEndCall([["Update",["cv","vMood"],"Conc"],["Update",["cv","vType"],"evenif"]])})}}>even if...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cond',cvvType:'if',isOpen: false},()=>{this.backEndCall([["Update",["cv","vMood"],"Cond"],["Update",["cv","vType"],"if"]])})}}>if...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cond',cvvType:'wheninthefuture',isOpen: false},()=>{this.backEndCall([["Update",["cv","vMood"],"Cond"],["Update",["cv","vType"],"wheninthefuture"]])})}}>when (in the future)...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'CtmpI',cvvType:'',isOpen: false},()=>{this.backEndCall([["Update",["cv","vMood"],"CtmpI"]])})}}>when (in the past)...</Dropdown.Item>
+	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'CtmpII',cvvType:'',isOpen: false},()=>{this.backEndCall([["Update",["cv","vMood"],"CtmpII"]])})}}>while...</Dropdown.Item>
 	      </Dropdown.Menu>
 	    </Dropdown>					
 		} else if (type==='changeQuestiontype') {
