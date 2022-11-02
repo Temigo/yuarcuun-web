@@ -16,6 +16,10 @@ import { YugtunLoader, YugtunFooter, WordItem, AudioItem, tagColors } from './Se
 // import TableEntry from './TableEntry.js';
 // import {demPro, perPro} from './constants/pronounEndings.js';
 // import {endingRules} from './constants/endingRules.js';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+
+const WEB_URL = "http://localhost:3000";
+const KYUK_URL = 'https://www.inupiaqonline.com/'
 
 // Cache dictionary
 // let dictionary = [];
@@ -881,12 +885,38 @@ class SearchPage extends Component {
                       <List.Description>
                         <div style={{paddingTop:'14px',paddingBottom:'6px'}}>
                             <div style={{marginBottom:'10px',paddingLeft:'6px',borderLeft:'solid 2px grey'}}>
-                            <div>{'Speaker: '+this.state.activeAudioIndex[index]['content']['speaker']}</div>
-                            <div>{'Collection: '+this.state.activeAudioIndex[index]['content']['collection']}</div>
-                            <div>{'Source: '+this.state.activeAudioIndex[index]['content']['subtitleFilename']}</div>
+                              <div style={{display:'flex'}}>Speaker:
+                              {this.state.activeAudioIndex[index]['content']['speaker'].map((speaker,sindex) =>
+                                <span>
+                                <LazyLoadImage effect='blur' height={'75px'} width={'100px'} style={{borderRadius:'10px'}} src={WEB_URL +'/images/EldersPhotos/'+speaker[1]} />
+                                {speaker[0].includes('~') ?
+                                  <span>
+                                    <div style={{color:'#333333',display:'flex',justifyContent:'center',textAlign:'center',fontWeight:'bold'}}>{speaker[0].split('--')[0].split('~')[0]}</div>
+                                    <div style={{color:'#333333',display:'flex',justifyContent:'center',textAlign:'center'}}>{speaker[0].split('--')[0].split('~')[1]}</div>
+                                    <div style={{color:'#333333',display:'flex',justifyContent:'center',textAlign:'center'}}>{speaker[0].split('--')[1]}</div>
+                                  </span>
+                                  :
+                                  <span>
+                                    <div style={{color:'#333333',display:'flex',justifyContent:'center',textAlign:'center'}}>{speaker[0].split('--')[0]}</div>
+                                    <div style={{color:'#333333',display:'flex',justifyContent:'center',textAlign:'center'}}>{speaker[0].split('--')[1]}</div>
+                                  </span>
+                                }
+                                </span>
+                              )}
+                              </div>
+                              <div>{'Collection: '+this.state.activeAudioIndex[index]['content']['collection']}</div>
+                              <div>{'Source: '+this.state.activeAudioIndex[index]['content']['source']}</div>
+                              {console.log(word)}
+                              <div>PreviousAudio: <Button style={{color:'#8F8F8F',cursor:'pointer'}} circular basic icon='volume up' onClick={()=>this.repeatAudio({mp3:this.state.activeAudioIndex[index]['previousAudioKey']})} /></div>
+                              <div>NextAudio: <Button style={{color:'#8F8F8F',cursor:'pointer'}} circular basic icon='volume up' onClick={()=>this.repeatAudio({mp3:this.state.activeAudioIndex[index]['nextAudioKey']})} /></div>
                             </div>
                           {this.state.activeAudioIndex[index]['content']['link'].length !== 0 ?
-                            <div>{'Link: '+this.state.activeAudioIndex[index]['content']['link']}</div>
+                            <div>
+                            Link: 
+                            <a href={KYUK_URL+this.state.activeAudioIndex[index]['content']['link']} target="_blank">
+                            {KYUK_URL+this.state.activeAudioIndex[index]['content']['link']}
+                            </a>
+                            </div>
                             :
                             null
                           }                       
