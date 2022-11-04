@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 import { Container, Header, Grid, Input, List, Label, Icon, Image, Button, Accordion, Table, Segment, Loader, Divider, Tab, Dropdown } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { API_URL, TUTORIAL_URL, ICON_URL } from '../App.js';
 // import Fuse from 'fuse.js';
 // import fuzzysort from 'fuzzysort'
@@ -469,6 +469,10 @@ class SearchPage extends Component {
 
   handleTabChange = (e,data) => {
     // console.log(data.activeIndex, this.state.activeTabIndex)
+    // if (data.activeIndex == 3) {
+    //   console.log('hi')
+    //   return <Redirect push to='/dialogues' />
+    // }
     if (this.state.activeTabIndex !== data.activeIndex) {
       console.log('tested',data.activeIndex)
       this.resetAll();
@@ -491,6 +495,10 @@ class SearchPage extends Component {
   }
 
   handleTabChange2 = (e, {value}) => {
+    // if (value == 3) {
+    //   console.log('hi')
+    //   return <Redirect push to='/dialogues' />
+    // }
     if (this.state.activeTabIndex !== value) {
       console.log(value)
       this.setState({ 
@@ -585,6 +593,9 @@ class SearchPage extends Component {
     {
       menuItem: 'Audio Library',
     },
+    // {
+    //   menuItem: 'Sentence Builder',
+    // },
   ]
 
   const tabOptions = [
@@ -603,6 +614,11 @@ class SearchPage extends Component {
       text: <div><span>Audio Library</span></div>,
       value: 2,
     },
+    // {
+    //   key: 3,
+    //   text: <div><span>Sentence Builder</span></div>,
+    //   value: 3,
+    // },
   ]
 
     return (
@@ -616,6 +632,7 @@ class SearchPage extends Component {
         <List.Item> <a style={{textDecoration:'underline',color:'#000000de'}} href={TUTORIAL_URL} target="_blank">Tutorial</a> </List.Item>
         <List.Item> <Link style={{textDecoration:'underline',color:'#000000de'}} to='/about'>About</Link> </List.Item>
         <List.Item> <Link style={{textDecoration:'underline',color:'#000000de'}} to='/dialogues'>Dialogues</Link> </List.Item>
+        <List.Item> <Link style={{textDecoration:'underline',color:'#000000de'}} to='/sentencebuilder/1'>Sentence Builder</Link> </List.Item>
       </List>
       </div>
       </Grid.Column>

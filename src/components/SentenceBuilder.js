@@ -14,6 +14,7 @@ import now from 'performance-now';
 import ReactGA from 'react-ga';
 // import SentenceTemplates from './SentenceTemplates.js'
 import SentenceTemplates from "./SentenceTemplates.js";
+import SentenceGlossary from "./SentenceGlossary.js";
 import { sentenceTemplates } from './constants/sentence_templates.js'
 
 
@@ -143,12 +144,14 @@ class OneVerbWordBuilder extends Component {
 			otherBases: [],
 			nextTenses: [],
 			unallowable_next_ids: [],
+			startingCase:'',
 
 			colorScheme: 0,
 			activeIndexes:[],
 			addSubject:false,
 			addIs:true,
 			nounNum:'s',
+			mvvsPlanned: [],
 			// colorsList: {
 			// 	'mvv.b':'#000000',
 			// 	'mvv.e':'#852828',
@@ -429,6 +432,7 @@ class OneVerbWordBuilder extends Component {
 			candidateType:'',
 			showUnderlying:false,
 			lockSubmit:false,
+			glossary:false,
 
 			showShortcuts:false,
 			svvText:'',
@@ -462,8 +466,14 @@ class OneVerbWordBuilder extends Component {
 
 
 		}
-    if (decodeURI(props.match.params.num) == 2) {
+
+		this.fromEntry = false
+		console.log(decodeURI(props.match.params.num))
+		if (decodeURI(props.match.params.num) == 1) {
+				this.backEndCall([['Delete',['mv',],''],['Delete',['np',],'']])
+	  } else if (decodeURI(props.match.params.num) == 2) {
     	// console.log('hi',this.props.location.state)
+    	this.fromEntry = true;
 			this.backEndCall([],true,true)
     }
 
@@ -568,6 +578,12 @@ class OneVerbWordBuilder extends Component {
 }
 
   componentDidUpdate(prevProps, prevState) {
+  	if (this.props.match.params.num !== prevProps.match.params.num) {
+			if (decodeURI(this.props.match.params.num) == 1) {
+				this.fromEntry = false
+				this.backEndCall([['Delete',['mv',],''],['Delete',['np',],'']])
+	    }
+  	}
     if (prevState.mv !== this.state.mv || prevState.cv !== this.state.cv || prevState.sv !== this.state.sv || prevState.np !== this.state.np) {
 			console.log('changed')
 			this.update4thPersonAndAgreement()
@@ -1284,6 +1300,13 @@ class OneVerbWordBuilder extends Component {
 		  threshold: -10000, // don't return bad results
 		};
 
+		// if (word.length>0) {
+		// this.setState({ activeIndexes: [] });			
+		// }
+
+		let newSearch = word.replaceAll(/^is /g,'').replaceAll(/^am /g,'')
+
+
 		console.log((endingNeeded,event,data))
 		if (this.state.nextTenses.length > 0) {
 			if (this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
@@ -1294,7 +1317,7 @@ class OneVerbWordBuilder extends Component {
 				optionsFuzzy['keys'] = ['yupikword','inf_preverb']
 			} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp') {
 				optionsFuzzy['keys'] = ['yupikword','past_preverb']
-			}	
+			}
 		}
 
 		console.log(optionsFuzzy)
@@ -1320,17 +1343,17 @@ class OneVerbWordBuilder extends Component {
 		}
 
 		if (this.state.endingAdjusted == 'n') {
-	    	wordsList = fuzzysort.go(word, this.state.filteredDictN, optionsFuzzy).map(({ obj }) => (obj));
+	    	wordsList = fuzzysort.go(newSearch, this.state.filteredDictN, optionsFuzzy).map(({ obj }) => (obj));
 	    	this.setState({ wordsList: wordsList, searchQuery: word });
 		} else if (this.state.endingAdjusted == 'v') {
-	    	wordsList = fuzzysort.go(word, filteredDictV, optionsFuzzy).map(({ obj }) => (obj));
+	    	wordsList = fuzzysort.go(newSearch, filteredDictV, optionsFuzzy).map(({ obj }) => (obj));
 	    	this.setState({ wordsList: wordsList, searchQuery: word });
 		} else {
 			if (endingNeeded === 'v') {
-	    	wordsList = fuzzysort.go(word, filteredDictV, optionsFuzzy).map(({ obj }) => (obj));
+	    	wordsList = fuzzysort.go(newSearch, filteredDictV, optionsFuzzy).map(({ obj }) => (obj));
 	    	this.setState({ wordsList: wordsList, searchQuery: word });
 			} else if (endingNeeded === 'n') {
-	    	wordsList = fuzzysort.go(word, this.state.filteredDictN, optionsFuzzy).map(({ obj }) => (obj));
+	    	wordsList = fuzzysort.go(newSearch, this.state.filteredDictN, optionsFuzzy).map(({ obj }) => (obj));
 	    	this.setState({ wordsList: wordsList, searchQuery: word });
 			}
 		}
@@ -1348,14 +1371,20 @@ class OneVerbWordBuilder extends Component {
   }
 
   returnHeight = (type) => {
-  	var height = 0
-  	height = document.getElementById('menuheight');
-  	console.log(height)
-  	// console.log(height.offsetHeight)
+  	// var height = 0
+  	// console.log(type)
+  	// height = document.getElementById('tester');
+  	// if (height) {
+  	// 	console.log(height.offsetHeight)  		
+  	// } else {
+  	// 	console.log('null')
+  	// }
   	if (type === 'default') {
-  		return 80
+  		return
+  	} else if (type === 'mvinsert' || type === 'mvupdate') {
+  		return 616
   	} else {
-  		return 806
+  		return 616
   		// return document.getElementById.clientHeight('menuheight');
   	}
   }
@@ -1416,11 +1445,10 @@ class OneVerbWordBuilder extends Component {
 		} else if (type==='mvEnglish2') {
 			return <span>
 								{this.state.mvEnglish3.length > 0 ?
-									<span> {this.state.mvEnglish3.map((w,wind)=><span style={{color:this.getColor(w[1]),cursor:'pointer',paddingBottom:'1px',borderBottom:'1px solid '+this.getColor(w[1])}}>{w[0]+" "}</span>)} </span>
+									this.contentDisplay([this.state.mvEnglish3,this.state.mvEnglish2], 8)
 									:
-									null
+									this.contentDisplay(this.state.mvEnglish2, 5)
 								}
-								{this.contentDisplay(this.state.mvEnglish2, 5)}
 							</span>
 		} else if (type==='mvEnglishAbl') {
   		return this.contentDisplay(this.state.mvEnglishAbl, 5)
@@ -1433,7 +1461,13 @@ class OneVerbWordBuilder extends Component {
 		} else if (type==='cvEnglishAbl') {
   		return this.contentDisplay(this.state.cvEnglishAbl, 5)
 		} else if (type==='cvEnglish2') {
-  		return this.contentDisplay(this.state.cvEnglish2, 5)
+  		return <span>
+								{this.state.mvEnglish3.length > 0 ?
+									this.contentDisplay([this.state.cvEnglish3,this.state.cvEnglish2], 8)
+									:
+									this.contentDisplay(this.state.cvEnglish2, 5)
+								}
+							</span>
 		} else if (type==='svEnglishAbl') {
   		return this.contentDisplay(this.state.svEnglishAbl, 5)
 		} else if (type==='svEnglish2') {
@@ -1469,9 +1503,11 @@ class OneVerbWordBuilder extends Component {
 		} else if (type==='svnObliquesEnglish2' || type==='svnObliquesEnglish2appositive') {
   		return this.contentDisplay(this.state.svnObliquesEnglish2[ind[0]][this.state.svnObliquesEnglish2[ind[0]].length-1-ind[1]][this.state.svnObliquesEnglish2[ind[0]][this.state.svnObliquesEnglish2[ind[0]].length-1-ind[1]].length-1-ind[2]], 5)
 		} else if (type==='svEnglish1') {
-  		return <span> {this.state.svEnglish1.map((w,wind)=>{
-								return <span style={{color:this.getColor(w[1])}}>{this.state.svvText+w[0]+" "}</span>
-							})} </span>
+			return <span style={{border:'solid 1px #22242626',cursor:'pointer',fontSize:'18px',padding:'8px 5px 8px 5px',borderRadius:'5px'}}> 
+			{this.state.svEnglish1.map((w,wind)=>
+				<span style={{color:this.getColor(w[1])}}>{this.state.svvText+w[0]+" "}</span>
+				)} 
+			<Icon style={{fontSize:'16px',margin:0}} name='dropdown' /></span>  	
 		}
 		
   }
@@ -1482,47 +1518,57 @@ class OneVerbWordBuilder extends Component {
   	// console.log(data)
   	if (fontType == 1) {
 		return <div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
-							<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
+							<span style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
 								{data.map((t)=>
 									<span style={{color:this.getColor(t[1]),paddingBottom:'2px',borderBottom:'2px solid '+this.getColor(t[1])}}>{t[0]}</span>
 								)}
-							</div>
+							</span>
 						</div>								
   	} else if (fontType == 2) {
   		return 	<div style={{marginBottom:10,fontSize:'30px',fontWeight:'400'}}>
-								<div style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
+								<span style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
 									{data.map((t)=>
 										<span style={{color:this.getColor(t[1]),paddingBottom:'2px',borderBottom:'2px solid '+this.getColor(t[1])}}>{t[0]}</span>
 									)}
-								</div>
+								</span>
 							</div>  		
   	} else if (fontType == 3) {
-  		return <Button size='large' icon>
+  		return <Button size='large' basic icon>
 							 <Icon name='plus' />
 						 </Button>  		
   	} else if (fontType == 4) {
-  		return <Button size='small' icon>
+  		return <Button size='small' basic icon>
 							 <Icon name='plus' />
 						 </Button>
   	} else if (fontType == 5) {
   		// console.log(data)
+  		console.log('5')
 			return <span style={{border:'solid 1px #22242626',cursor:'pointer',fontSize:'18px',padding:'8px 5px 8px 5px',borderRadius:'5px'}}> 
 			{data.map((w,wind)=><span 
 				style={{color:this.getColor(w[1])}}
 				// {{color:this.getColor(w[1]),cursor:'pointer',paddingBottom:'1px',borderBottom:'1px solid '+this.getColor(w[1])}}
 				// {{border:'solid 1px #22242626',color:this.getColor(w[1]),fontSize:'18px',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px',}}
-				>{w[0]+" "}</span>)} </span>  		
+				>{w[0]+" "}</span>)} <Icon style={{fontSize:'16px',margin:0}} name='dropdown' /></span>  		
   	} else if (fontType == 6) {
+  		console.log('6')
   		return 	<span> {data.map((w,wind)=>
-							(w.map((t)=> <span style={{color:this.getColor(t[1]),cursor:'pointer',paddingBottom:'1px',borderBottom:'1px solid '+this.getColor(t[1])}}>{t[0]+" "}</span>)))}
+							(w.map((t)=> <span style={{color:this.getColor(t[1]),cursor:'pointer',paddingBottom:'1px',borderBottom:'1px solid '+this.getColor(t[1])}}>{t[0]+" "}<Icon style={{color:this.getColor(t[1]),fontSize:'16px',margin:0}} name='dropdown' /></span>)))}
   						</span>
   	} else if (fontType == 7) {
-  		return 	<span style={{color:this.getColor(data[1]),cursor:'pointer',paddingBottom:'1px',borderBottom:'1px solid '+this.getColor(data[1])}}>{data[0]+" "}</span>
+  		console.log('7')
+  		return 	<span style={{color:this.getColor(data[1]),cursor:'pointer',paddingBottom:'1px',borderBottom:'1px solid '+this.getColor(data[1])}}>{data[0]+" "}<Icon style={{color:this.getColor(data[1]),fontSize:'16px',margin:0}} name='dropdown' /></span>
+  	} else if (fontType == 8) {
+  		console.log('8')
+			return <span style={{border:'solid 1px #22242626',cursor:'pointer',fontSize:'18px',padding:'8px 5px 8px 5px',borderRadius:'5px'}}> 
+			{data[0].map((w,wind)=><span style={{color:this.getColor(w[1])}}>{w[0]+(w[0].length>0?" ":"")}</span>)} 
+			{data[1].map((w,wind)=><span style={{color:this.getColor(w[1])}}>{w[0]+(w[0].length>0 && wind !== data[1].length-1 ?" ":"")}</span>)} 
+			<Icon style={{color:this.getColor(data[1]),fontSize:'16px',margin:0}} name='dropdown' />
+			</span>  
   	}
   }													
 
   contentItems = (type,ind) => {
-  	// console.log('content',type,ind)
+  	// console.log(this.state.currentEditMode,type,ind)
 
   	if (this.state.currentEditMode==='default') {
   		if (type === 'default') {
@@ -1567,14 +1613,16 @@ class OneVerbWordBuilder extends Component {
 			    	</Menu>  			
   		} else if (type === 'defaultverbphrase' && this.state.cvvs.length === 0 ) {
 				return <Menu vertical>
-			      {this.subMenuItem('addCV')}
-			      {this.subMenuItem('addSV')}
+			      {this.subMenuItem('addnOblique')}
+			      {this.subMenuItem('addAnotherVerbPhrase')}
+			      {/*{this.subMenuItem('addCV')}*/}
+			      {/*{this.subMenuItem('addSV')}*/}
 						{/*{this.menuItem('BaseChooser','Add Connective Verb Phrase','mvcvinsert',null)}*/}
 						{/*{this.menuItem('BaseChooser','Add Subordinative Verb Phrase','mvcvinsert',null)}*/}
 			    	</Menu>  			
   		} else if (type === 'mv' || type == 'mvEnglish2') {
 				return <Menu vertical>
-			      {this.menuItem('BaseChooser','Edit Verb','mvupdate',null)}
+			      {this.menuItem('BaseChooser','Change Verb','mvupdate',null)}
 			      {this.state.requirePostbase.length > 0 ?
 			      	this.subMenuItem('changeRequiredPostbase')
 			      	:
@@ -1594,7 +1642,6 @@ class OneVerbWordBuilder extends Component {
 			      	:
 			      	null
 			      }
-			      {this.subMenuItem('addnOblique')}
 			      {this.menuItem('Delete','Delete Verb',null,null,[["Delete",["mv",],-1]])}
 
 			    	</Menu>
@@ -1605,7 +1652,6 @@ class OneVerbWordBuilder extends Component {
  			} else if (type === 'cv' || type === 'cvEnglish2') {
 				return <Menu vertical>
 			      {this.menuItem('BaseChooser','Change Connective Verb','cvupdate',null)}
-			      {this.subMenuItem('changeCVtype')}
 			      {this.menuItem('Delete','Delete Connective Verb',null,null,[["Delete",["cv",],-1]])}
 			    	</Menu>
  			} else if (type === 'cvEnglish1') {
@@ -1616,6 +1662,11 @@ class OneVerbWordBuilder extends Component {
 				return <Menu vertical>
 			      {this.menuItem('BaseChooser','Change Connective Verb','cvupdate',null)}
 			      {this.menuItem('Delete','Delete Connective Verb',null,null,[["Delete",["cv",],-1]])}
+			    	</Menu>
+ 			} else if (type === 'svEnglish1') {
+				return <Menu vertical>
+			      {this.menuItem('BaseChooser','Change Subordinative Verb','svupdate',null)}
+			      {this.menuItem('Delete','Delete Subordinative Verb',null,null,[["Delete",["sv",],-1]])}
 			    	</Menu>
  			} else if (type === 'sv') {
 				return <Menu vertical>
@@ -1809,7 +1860,7 @@ class OneVerbWordBuilder extends Component {
 						null
 						}
 			      {ind[1] == 0 ? this.menuItem('BaseChooser','Add Oblique Possessed Noun','mvnObliquepossessedinsert',null): null}
-			      {ind[1] == 0 ? this.subMenuItem('changeVObliquetype','mv',ind[0]): null}
+			      {/*{ind[1] == 0 ? this.subMenuItem('changeVObliquetype','mv',ind[0]): null}*/}
 						{this.menuItem('BaseChooser','Add Descriptor Noun','mvnObliqueappositiveinsert',null)}
 						{ind[1] == 0 ? 
 							(this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["mv","nObliques",ind[0],ind[1]],-1]]))
@@ -1827,7 +1878,7 @@ class OneVerbWordBuilder extends Component {
 						null
 						}
 			      {ind[1] == 0 ? this.menuItem('BaseChooser','Add Oblique Possessed Noun','cvnObliquepossessedinsert',null): null}
-			      {ind[1] == 0 ? this.subMenuItem('changeVObliquetype','cv',ind[0]): null}
+			      {/*{ind[1] == 0 ? this.subMenuItem('changeVObliquetype','cv',ind[0]): null}*/}
 						{this.menuItem('BaseChooser','Add Descriptor Noun','cvnObliqueappositiveinsert',null)}
 						{ind[1] == 0 ? 
 							(this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["cv","nObliques",ind[0],ind[1]],-1]]))
@@ -1850,7 +1901,7 @@ class OneVerbWordBuilder extends Component {
 						null
 						}
 			      {ind[1] == 0 ? this.menuItem('BaseChooser','Add Oblique Possessed Noun','svnObliquepossessedinsert',null): null}
-			      {ind[1] == 0 ? this.subMenuItem('changeVObliquetype','sv',ind[0]): null}
+			      {/*{ind[1] == 0 ? this.subMenuItem('changeVObliquetype','sv',ind[0]): null}*/}
 						{this.menuItem('BaseChooser','Add Descriptor Noun','svnObliqueappositiveinsert',null)}
 						{ind[1] == 0 ? 
 							(this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["sv","nObliques",ind[0],ind[1]],-1]]))
@@ -2011,28 +2062,36 @@ class OneVerbWordBuilder extends Component {
     	
   }
 
-editSubjectMenu = (name) => {
+editSubjectMenu = (nounInsert,subject, tag, statevvs, update, backendcall, value, options) => {
+	console.log(value,options)
 	return <Popup
 			      trigger={									
-							<span style={{border:'solid 1px #22242626',color:this.getColor('mvv.s'),fontSize:'18px',padding:'8px 2px 8px 5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px', cursor:'pointer'}}>{mvSubjectOptionsEnglish[this.state.mvvs.join("")]}<Icon style={{color:this.getColor('mvv.s'),fontSize:'16px',margin:0}} name='dropdown' /></span>
+							<span style={{border:'solid 1px #22242626',color:this.getColor(tag),fontSize:'18px',padding:'8px 2px 8px 5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px', cursor:'pointer'}}>{options.map((k)=>{return value == k['value'] ? k['text'] : null})}<Icon style={{color:this.getColor(tag),fontSize:'16px',margin:0}} name='dropdown' /></span>
 			      }
 			      on='click'
 			      position='bottom center'
-			      open={this.state.currentlyOpen === name}
-			      style={{height:806}}
-			      onOpen={()=>{this.setState({currentlyOpen:name})}}
+			      open={this.state.currentlyOpen === tag}
+			      style={{
+			      	// height:this.returnHeight(name),
+			      }}
+			      positionFixed
+			      onOpen={()=>{if (tag !== this.state.currentlyOpen) {this.setState({addSubject:false})}; this.setState({currentlyOpen:tag})}}
 			      onClose={()=>{this.setState({currentlyOpen:'', addSubject:false})}}
 			      content={
-			      	<div>
+			      	<div style={{paddingBottom:0}}>
 			      	{this.state.addSubject ?
-				      	this.baseChooser(["Insert",["mv","ns"]],'n','insert','Ind')
+				      	this.baseChooser(nounInsert,'n','insert','Ind')
 				      	:
-				      	<div style={{display:'flex',flexDirection:'column',justifyContent:'center'}}>
-					      	<Button basic onClick={()=>this.setState({addSubject:true})}>Add a Subject</Button>
+				      	<div id='tester' style={{display:'flex',flexDirection:'column',justifyContent:'center'}}>
+				      		{subject.length > 0 ?
+					      		<Button basic onClick={()=>this.setState({addSubject:true})}>{'Add '+subject}</Button>
+					      		:
+					      		null
+					      	}
 					      	<Segment style={{height:200,overflow:'auto',padding:0,marginBottom:8}}>
 						      <Button.Group style={{border:0}} basic vertical>
-						      	{this.state.mvSubjectOptions1.map((k)=>
-						      		<Button active={k['value']==this.state.mvvs.join("")} onClick={()=>{this.setState({currentlyOpen:''},()=>this.backEndCall([["Update",["mv","vs"],k['value'].split('').map(Number)]]))}}>{k['text']}</Button>
+						      	{options.map((k)=>
+						      		<Button active={k['value']==statevvs.join("")} onClick={()=>{this.setState({currentlyOpen:''},()=>this.backEndCall([[update,backendcall,k['value'].split('').map(Number)]]))}}>{k['text']}</Button>
 						      	)}
 					      	</Button.Group>
 					      	</Segment>
@@ -2046,6 +2105,69 @@ editSubjectMenu = (name) => {
 			     />
 }
 
+
+mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
+	return <Popup
+			      trigger={						
+							<Button style={{}} fluid basic>{name}</Button>
+			      }
+			      on='click'
+			      position='bottom center'
+			      open={this.state.currentlyOpen === name}
+			      style={{
+			      	height:this.returnHeight(currentEditMode),
+			      }}
+			      onOpen={()=>{
+		      		if (setState === 'npCase') {
+								this.setState({npCase:setStateTo[0],npCaseType:setStateTo[1]})
+							} else if (setState === 'mvvType') {
+								if (currentEditMode === 'questionInsert') {
+			      			if (setStateTo[0] === 'Intrg0' || setStateTo[0] === 'Intrg3' || setStateTo[0] === 'Intrg5' || setStateTo[0] === 'Intrg7' || setStateTo[0] === 'IntrgA') {
+			      				this.setState({mvvsPlanned:[3,1,1]})
+			      			} else if (setStateTo[0] === 'Intrg1' || setStateTo[0] === 'Intrg4' || setStateTo[0] === 'Intrg8') {
+			      				this.setState({mvvsPlanned:[3,1,2]})
+			      			} else if (setStateTo[0] === 'Intrg2' || setStateTo[0] === 'Intrg6' || setStateTo[0] === 'Intrg9') {
+										this.setState({mvvsPlanned:[3,1,3]})
+			      			}
+			      			if (setStateTo[0] === 'Intrg4' || setStateTo[0] === 'Intrg5') {
+			      				this.setState({startingCase:'i'})
+			      			} else if (setStateTo[0] === 'Intrg6' || setStateTo[0] === 'Intrg7' || setStateTo[0] === 'Intrg8' || setStateTo[0] === 'Intrg9' || setStateTo[0] === 'IntrgA') {
+			      				this.setState({startingCase:'g'})
+			      			}
+			      		} 
+								this.setState({mvvType:setStateTo[0]})
+							} else if (setState === 'cvvType') {
+								if (setStateTo[0] === 'Prec' || setStateTo[0] === 'Cont' || setStateTo[0] === 'Cond' || setStateTo[0] === 'Prec') {
+									this.setState({startingCase:'gen'})
+								} else if (setStateTo[0] === 'Cnsq' || setStateTo[0] === 'CtmpI' || setStateTo[0] === 'CtmpII') {
+									this.setState({startingCase:'p'})
+								}
+								this.setState({cvvMood:setStateTo[0] ,cvvType:setStateTo[1]})
+							} else if (setState === 'svvType') {
+			      		this.setState({startingCase:'g'})								
+								this.setState({svvType:setStateTo[0]})
+							} else if (setState === 'optCase') {
+								this.setState({startingCase:'i',optCase:setStateTo[0], mvvType:setStateTo[1]})
+							} else if (setState === 'he') {
+								this.setState({mvvsPlanned:[3,1,1]})
+							} else if (setState === 'she') {
+								this.setState({mvvsPlanned:[3,1,2]})
+							} else if (setState === 'it') {
+								this.setState({mvvsPlanned:[3,1,3]})
+							} else if (setState === 'they2') {
+								this.setState({mvvsPlanned:[3,2,0]})
+							} else if (setState === 'they3') {
+								this.setState({mvvsPlanned:[3,3,0]})
+							}
+			      	this.setState({currentlyOpen:name,currentEditMode:currentEditMode})
+			      }}
+     				onClose={()=>{this.setState({currentlyOpen:'',currentEditMode:'default',candidateCall:[],candidateBase:[],lockSubmit:false,nextTenses:[],candidateDisplay:[],searchQuery:'',wordsList:[]})}}
+			      content={
+			      	this.contentItems('default',-1)
+			      	}
+			     />
+}
+
 														
 
 	editMenu = (type,ind) => {
@@ -2053,7 +2175,7 @@ editSubjectMenu = (name) => {
 		// if (mind) {
 		// 	mind=mind.toString()			
 		// }
-		// console.log(type,ind)
+		console.log(type,ind)
 		let typeInd = type+(ind+1).toString()
 
 		// console.log(typeInd)
@@ -2065,11 +2187,12 @@ editSubjectMenu = (name) => {
       on='click'
       open={this.state.isOpen && this.state.currentlyOpen === typeInd}
       onOpen={()=>{this.setState({isOpen:false,currentEditMode:'default'},()=>{this.handleOpen(typeInd)})}}
-      onClose={()=>{this.setState({isOpen:false,currentEditMode:'default',searchQuery:'',wordsList:[]})}}
+      onClose={()=>{this.setState({isOpen:false,currentEditMode:'default',candidateCall:[],candidateBase:[],lockSubmit:false,nextTenses:[],candidateDisplay:[],searchQuery:'',wordsList:[]})}}
       position='bottom center'
       style={{
       	height:(this.returnHeight(this.state.currentEditMode)),
-      	padding:(this.state.currentEditMode==='default' ? 0 : null)}}
+      	padding:(this.state.currentEditMode==='default' ? 0 : null)
+      }}
       content={
       	this.contentItems(type,ind)
       }
@@ -2083,6 +2206,7 @@ editSubjectMenu = (name) => {
     // const index = titleProps.id;
     const { activeIndexes } = this.state;
     const newIndex = this.state.activeIndexes.slice()
+    // const newIndex = []
     // const newIndex = activeIndex === index ? -1 : index;
 
     const currentIndexPosition = activeIndexes.indexOf(index);
@@ -2093,9 +2217,13 @@ editSubjectMenu = (name) => {
     } else {
     	if (allowAdd) {
       	newIndex.push(index);    		
+      	this.setState({
+	    		searchQuery:'',
+	    		wordsList:[],      		
+      	})
     	}
     }
-
+ 
     // console.log(newIndex)
     // newIndex.map((k)=>{
     // 	console.log()
@@ -2113,8 +2241,9 @@ editSubjectMenu = (name) => {
 	    return <Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
 	    		<Accordion.Title
 	    			id={type}
+	    			style={{paddingBottom:'2px'}}
 	    			active={this.state.activeIndexes.includes(type)}
-            onClick={()=>{this.handleClick('addCV',true)}}
+            onClick={()=>{this.handleClick(type,true)}}
 	    		>
 	    			<Icon name="dropdown" />
 	    			{'Add Connective Verb'}
@@ -2127,59 +2256,116 @@ editSubjectMenu = (name) => {
 		        <Button onClick={()=>{this.setState({cvvMood:'Conc',cvvType:'eventhough'},()=>{this.menuSelect('cvinsert',-1)})}}>even though...</Button>
 		        <Button onClick={()=>{this.setState({cvvMood:'Conc',cvvType:'evenif'},()=>{this.menuSelect('cvinsert',-1)})}}>even if...</Button>
 		        <Button onClick={()=>{this.setState({cvvMood:'Cond',cvvType:'if'},()=>{this.menuSelect('cvinsert',-1)})}}>if...</Button>
-		        <Button onClick={()=>{this.setState({cvvMood:'Cond',cvvType:'wheninthefuture'},()=>{this.menuSelect('cvinsert',-1)})}}>when (in the future)...</Button>
-		        <Button onClick={()=>{this.setState({cvvMood:'CtmpI',cvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>when (in the past)...</Button>
+		        <Button onClick={()=>{this.setState({cvvMood:'Cond',cvvType:'wheninthefuture'},()=>{this.menuSelect('cvinsert',-1)})}}>when (in future)...</Button>
+		        <Button onClick={()=>{this.setState({cvvMood:'CtmpI',cvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>when (in past)...</Button>
 		        <Button onClick={()=>{this.setState({cvvMood:'CtmpII',cvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>while...</Button>
 	    		</Button.Group>
 	    		</Accordion.Content>
 	    </Accordion>				
+		} else if (type==='addAnotherVerbPhrase') {
+	    return <Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
+	    		<Accordion.Title
+	    			id={type}
+	    			style={{paddingBottom:'2px'}}
+	    			active={this.state.activeIndexes.includes(type)}
+            onClick={()=>{this.handleClick(type,true)}}
+	    		>
+	    			<Icon name="dropdown" />
+	    			{'Add another verb phrase'}
+	    		</Accordion.Title>
+	    		<Accordion.Content active={this.state.activeIndexes.includes(type)}>
+	    		<Button.Group vertical basic fluid>
+		        <Button onClick={()=>{this.setState({cvvMood:'Prec',cvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>before he...</Button>
+		        <Button onClick={()=>{this.setState({cvvMood:'Cnsq',cvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>because he...</Button>
+		        <Button onClick={()=>{this.setState({cvvMood:'Cont',cvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>whenever he...</Button>
+		        <Button onClick={()=>{this.setState({cvvMood:'Conc',cvvType:'eventhough'},()=>{this.menuSelect('cvinsert',-1)})}}>even though he...</Button>
+		        <Button onClick={()=>{this.setState({cvvMood:'Conc',cvvType:'evenif'},()=>{this.menuSelect('cvinsert',-1)})}}>even if he...</Button>
+		        <Button onClick={()=>{this.setState({cvvMood:'Cond',cvvType:'if'},()=>{this.menuSelect('cvinsert',-1)})}}>if he...</Button>
+		        <Button onClick={()=>{this.setState({cvvMood:'Cond',cvvType:'wheninthefuture'},()=>{this.menuSelect('cvinsert',-1)})}}>when (in future) he...</Button>
+		        <Button onClick={()=>{this.setState({cvvMood:'CtmpI',cvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>when (in past) he...</Button>
+		        <Button onClick={()=>{this.setState({cvvMood:'CtmpII',cvvType:''},()=>{this.menuSelect('cvinsert',-1)})}}>while he...</Button>
+			      <Button onClick={()=>{this.setState({svvType:'by'},()=>{this.menuSelect('svinsert',-1)})}}>by...</Button>
+			      <Button onClick={()=>{this.setState({svvType:'being'},()=>{this.menuSelect('svinsert',-1)})}}>being...</Button>
+	    		</Button.Group>
+	    		</Accordion.Content>
+	    </Accordion>				
 		} else if (type==='addQuestion') {
-	    return <Dropdown item text='Ask a Question'>
-	      <Dropdown.Menu>
-	        <Dropdown.Item onClick={()=>{this.setState({mvvMood:'Ind',mvvType:'qaa'},()=>{this.menuSelect('mvinsertqaa',-1)})}}>yes or no question...?</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg0'},()=>{this.menuSelect('questionInsert',-1)})}}>who is (subject)...?</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg1'},()=>{this.menuSelect('questionInsert',-1)})}}>to whom (object)...?</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg2'},()=>{this.menuSelect('questionInsert',-1)})}}>what is (subject)...?</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg3'},()=>{this.menuSelect('questionInsert',-1)})}}>to what (object)...?</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg4'},()=>{this.menuSelect('questionInsert',-1)})}}>when did...?</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg5'},()=>{this.menuSelect('questionInsert',-1)})}}>when will...?</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg6'},()=>{this.menuSelect('questionInsert',-1)})}}>where is...?</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg7'},()=>{this.menuSelect('questionInsert',-1)})}}>from where is...?</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg8'},()=>{this.menuSelect('questionInsert',-1)})}}>to where is...?</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg9'},()=>{this.menuSelect('questionInsert',-1)})}}>why is...?</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'IntrgA'},()=>{this.menuSelect('questionInsert',-1)})}}>how is...?</Dropdown.Item>
-	      </Dropdown.Menu>
-	    </Dropdown>			
+	    return <Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
+	    		<Accordion.Title
+	    			id={type}
+	    			active={this.state.activeIndexes.includes(type)}
+            onClick={()=>{this.handleClick(type,true)}}
+	    		>
+	    			<Icon name="dropdown" />
+	    			{'Ask a Question'}
+	    		</Accordion.Title>
+	    		<Accordion.Content active={this.state.activeIndexes.includes(type)}>
+	    		<Button.Group vertical basic fluid>
+		        <Button onClick={()=>{this.setState({mvvMood:'Ind',mvvType:'qaa'},()=>{this.menuSelect('mvinsertqaa',-1)})}}>yes or no question...?</Button>
+		        <Button onClick={()=>{this.setState({mvvType:'Intrg0'},()=>{this.menuSelect('questionInsert',-1)})}}>who is (subject)...?</Button>
+		        <Button onClick={()=>{this.setState({mvvType:'Intrg1'},()=>{this.menuSelect('questionInsert',-1)})}}>to whom (object)...?</Button>
+		        <Button onClick={()=>{this.setState({mvvType:'Intrg2'},()=>{this.menuSelect('questionInsert',-1)})}}>what is (subject)...?</Button>
+		        <Button onClick={()=>{this.setState({mvvType:'Intrg3'},()=>{this.menuSelect('questionInsert',-1)})}}>to what (object)...?</Button>
+		        <Button onClick={()=>{this.setState({mvvType:'Intrg4'},()=>{this.menuSelect('questionInsert',-1)})}}>when did...?</Button>
+		        <Button onClick={()=>{this.setState({mvvType:'Intrg5'},()=>{this.menuSelect('questionInsert',-1)})}}>when will...?</Button>
+		        <Button onClick={()=>{this.setState({mvvType:'Intrg6'},()=>{this.menuSelect('questionInsert',-1)})}}>where is...?</Button>
+		        <Button onClick={()=>{this.setState({mvvType:'Intrg7'},()=>{this.menuSelect('questionInsert',-1)})}}>from where is...?</Button>
+		        <Button onClick={()=>{this.setState({mvvType:'Intrg8'},()=>{this.menuSelect('questionInsert',-1)})}}>to where is...?</Button>
+		        <Button onClick={()=>{this.setState({mvvType:'Intrg9'},()=>{this.menuSelect('questionInsert',-1)})}}>why is...?</Button>
+		        <Button onClick={()=>{this.setState({mvvType:'IntrgA'},()=>{this.menuSelect('questionInsert',-1)})}}>how is...?</Button>
+	    		</Button.Group>
+	    		</Accordion.Content>
+	    </Accordion>				
 		} else if (type==='addCommand') {
-	    return <Dropdown item text='Make a Command'>
-	      <Dropdown.Menu>
-	        <Dropdown.Item onClick={()=>{this.setState({optCase:'Opt][PRS',mvvType:''},()=>{this.menuSelect('commandInsert',-1)})}}>command right now</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({optCase:'Opt][FUT',mvvType:''},()=>{this.menuSelect('commandInsert',-1)})}}>command in future</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({optCase:'Opt][PRS][NEG',mvvType:''},()=>{this.menuSelect('commandInsert',-1)})}}>do not ...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({optCase:'Opt][FUT][NEG',mvvType:''},()=>{this.menuSelect('commandInsert',-1)})}}>do not ... (future)</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({optCase:'Sbrd',mvvType:''},()=>{this.menuSelect('commandInsert',-1)})}}>polite request</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({optCase:'Sbrd',mvvType:'neg'},()=>{this.menuSelect('commandInsert',-1)})}}>polite do not...</Dropdown.Item>
-	      </Dropdown.Menu>
-	    </Dropdown>			
+	    return <Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
+	    		<Accordion.Title
+	    			id={type}
+	    			active={this.state.activeIndexes.includes(type)}
+            onClick={()=>{this.handleClick(type,true)}}
+	    		>
+	    			<Icon name="dropdown" />
+	    			{'Make a Command'}
+	    		</Accordion.Title>
+	    		<Accordion.Content active={this.state.activeIndexes.includes(type)}>
+	    		<Button.Group vertical basic fluid>
+	        <Button onClick={()=>{this.setState({optCase:'Opt][PRS',mvvType:''},()=>{this.menuSelect('commandInsert',-1)})}}>command right now</Button>
+	        <Button onClick={()=>{this.setState({optCase:'Opt][FUT',mvvType:''},()=>{this.menuSelect('commandInsert',-1)})}}>command in future</Button>
+	        <Button onClick={()=>{this.setState({optCase:'Opt][PRS][NEG',mvvType:''},()=>{this.menuSelect('commandInsert',-1)})}}>do not ...</Button>
+	        <Button onClick={()=>{this.setState({optCase:'Opt][FUT][NEG',mvvType:''},()=>{this.menuSelect('commandInsert',-1)})}}>do not ... (future)</Button>
+	        <Button onClick={()=>{this.setState({optCase:'Sbrd',mvvType:''},()=>{this.menuSelect('commandInsert',-1)})}}>polite request</Button>
+	        <Button onClick={()=>{this.setState({optCase:'Sbrd',mvvType:'neg'},()=>{this.menuSelect('commandInsert',-1)})}}>polite do not...</Button>
+	    		</Button.Group>
+	    		</Accordion.Content>
+	    </Accordion>				
 		} else if (type==='nounPhrase') {
-	    return <Dropdown item text='Add Noun Phrase'>
-	      <Dropdown.Menu>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Abs',npCaseType:''},()=>{this.menuSelect('nPhraseInsert',-1)})}}>the...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'from'},()=>{this.menuSelect('nPhraseInsert',-1)})}}>from...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'io'},()=>{this.menuSelect('nPhraseInsert',-1)})}}>a or some...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Loc',npCaseType:''},()=>{this.menuSelect('nPhraseInsert',-1)})}}>in, at...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Ter',npCaseType:''},()=>{this.menuSelect('nPhraseInsert',-1)})}}>toward...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Via',npCaseType:''},()=>{this.menuSelect('nPhraseInsert',-1)})}}>through, using...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Equ',npCaseType:''},()=>{this.menuSelect('nPhraseInsert',-1)})}}>like, similar to...</Dropdown.Item>
-	      </Dropdown.Menu>
-	    </Dropdown>			
+	    return <Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
+	    		<Accordion.Title
+	    			id={type}
+	    			active={this.state.activeIndexes.includes(type)}
+            onClick={()=>{this.handleClick(type,true)}}
+	    		>
+	    			<Icon name="dropdown" />
+	    			{'Make a noun phrase'}
+	    		</Accordion.Title>
+	    		<Accordion.Content active={this.state.activeIndexes.includes(type)}>
+	    		<Button.Group vertical basic fluid>
+	        <Button onClick={()=>{this.setState({npCase:'Abs',npCaseType:''},()=>{this.menuSelect('nPhraseInsert',-1)})}}>the...</Button>
+	        <Button onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'from'},()=>{this.menuSelect('nPhraseInsert',-1)})}}>from...</Button>
+	        <Button onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'io'},()=>{this.menuSelect('nPhraseInsert',-1)})}}>a or some...</Button>
+	        <Button onClick={()=>{this.setState({npCase:'Loc',npCaseType:''},()=>{this.menuSelect('nPhraseInsert',-1)})}}>in, at...</Button>
+	        <Button onClick={()=>{this.setState({npCase:'Ter',npCaseType:''},()=>{this.menuSelect('nPhraseInsert',-1)})}}>toward...</Button>
+	        <Button onClick={()=>{this.setState({npCase:'Via',npCaseType:''},()=>{this.menuSelect('nPhraseInsert',-1)})}}>through, using...</Button>
+	        <Button onClick={()=>{this.setState({npCase:'Equ',npCaseType:''},()=>{this.menuSelect('nPhraseInsert',-1)})}}>like, similar to...</Button>
+	    		</Button.Group>
+	    		</Accordion.Content>
+	    </Accordion>				
 		} else if (type==='addnOblique') {
 	    return <Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
 	    		<Accordion.Title
 	    			id={type}
 	    			style={{paddingBottom:'2px'}}
 	    			active={this.state.activeIndexes.includes(type)}
-            onClick={()=>{this.handleClick('addnOblique',true)}}
+            onClick={()=>{this.handleClick(type,true)}}
 	    		>
 	    			<Icon name="dropdown" />
 	    			{'Add location, direction, etc.'}
@@ -2196,118 +2382,188 @@ editSubjectMenu = (name) => {
 	    		</Accordion.Content>
 	    </Accordion>			
 		} else if (type==='caddnOblique') {
-	    return <Dropdown item text='Add Noun Obliques'>
-	      <Dropdown.Menu>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'from'},()=>{this.menuSelect('cnObliqueInsert',-1)})}}>from...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'io'},()=>{this.menuSelect('cnObliqueInsert',-1)})}}>a or some...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Loc',npCaseType:''},()=>{this.menuSelect('cnObliqueInsert',-1)})}}>in, at...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Ter',npCaseType:''},()=>{this.menuSelect('cnObliqueInsert',-1)})}}>toward...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Via',npCaseType:''},()=>{this.menuSelect('cnObliqueInsert',-1)})}}>through, using...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Equ',npCaseType:''},()=>{this.menuSelect('cnObliqueInsert',-1)})}}>like, similar to...</Dropdown.Item>
-	      </Dropdown.Menu>
-	    </Dropdown>			
+	    return <Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
+	    		<Accordion.Title
+	    			id={type}
+	    			style={{paddingBottom:'2px'}}
+	    			active={this.state.activeIndexes.includes(type)}
+            onClick={()=>{this.handleClick(type,true)}}
+	    		>
+	    			<Icon name="dropdown" />
+	    			{'Add location, direction, etc.'}
+	    		</Accordion.Title>
+	    		<Accordion.Content active={this.state.activeIndexes.includes(type)}>
+	    		<Button.Group vertical basic fluid>
+		        <Button onClick={()=>{this.setState({npCase:'Loc',npCaseType:''},()=>{this.menuSelect('cnObliqueInsert',-1)})}}>in or at the...</Button>
+		        <Button onClick={()=>{this.setState({npCase:'Ter',npCaseType:''},()=>{this.menuSelect('cnObliqueInsert',-1)})}}>toward the...</Button>
+		        <Button onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'from'},()=>{this.menuSelect('cnObliqueInsert',-1)})}}>from the...</Button>
+		        <Button onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'io'},()=>{this.menuSelect('cnObliqueInsert',-1)})}}>a or some...</Button>
+		        <Button onClick={()=>{this.setState({npCase:'Via',npCaseType:''},()=>{this.menuSelect('cnObliqueInsert',-1)})}}>through, using...</Button>
+		        <Button onClick={()=>{this.setState({npCase:'Equ',npCaseType:''},()=>{this.menuSelect('cnObliqueInsert',-1)})}}>like a...</Button>
+	    		</Button.Group>
+	    		</Accordion.Content>
+	    </Accordion>	
 		} else if (type==='saddnOblique') {
-	    return <Dropdown item text='Add Noun Obliques'>
-	      <Dropdown.Menu>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'from'},()=>{this.menuSelect('snObliqueInsert',-1)})}}>from...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'io'},()=>{this.menuSelect('snObliqueInsert',-1)})}}>a or some...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Loc',npCaseType:''},()=>{this.menuSelect('snObliqueInsert',-1)})}}>in, at...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Ter',npCaseType:''},()=>{this.menuSelect('snObliqueInsert',-1)})}}>toward...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Via',npCaseType:''},()=>{this.menuSelect('snObliqueInsert',-1)})}}>through, using...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Equ',npCaseType:''},()=>{this.menuSelect('snObliqueInsert',-1)})}}>like, similar to...</Dropdown.Item>
-	      </Dropdown.Menu>
-	    </Dropdown>			
+	    return <Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
+	    		<Accordion.Title
+	    			id={type}
+	    			style={{paddingBottom:'2px'}}
+	    			active={this.state.activeIndexes.includes(type)}
+            onClick={()=>{this.handleClick(type,true)}}
+	    		>
+	    			<Icon name="dropdown" />
+	    			{'Add location, direction, etc.'}
+	    		</Accordion.Title>
+	    		<Accordion.Content active={this.state.activeIndexes.includes(type)}>
+	    		<Button.Group vertical basic fluid>
+		        <Button onClick={()=>{this.setState({npCase:'Loc',npCaseType:''},()=>{this.menuSelect('snObliqueInsert',-1)})}}>in or at the...</Button>
+		        <Button onClick={()=>{this.setState({npCase:'Ter',npCaseType:''},()=>{this.menuSelect('snObliqueInsert',-1)})}}>toward the...</Button>
+		        <Button onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'from'},()=>{this.menuSelect('snObliqueInsert',-1)})}}>from the...</Button>
+		        <Button onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'io'},()=>{this.menuSelect('snObliqueInsert',-1)})}}>a or some...</Button>
+		        <Button onClick={()=>{this.setState({npCase:'Via',npCaseType:''},()=>{this.menuSelect('snObliqueInsert',-1)})}}>through, using...</Button>
+		        <Button onClick={()=>{this.setState({npCase:'Equ',npCaseType:''},()=>{this.menuSelect('snObliqueInsert',-1)})}}>like a...</Button>
+	    		</Button.Group>
+	    		</Accordion.Content>
+	    </Accordion>		
 		} else if (type==='addSV') {
-	    return <Dropdown item text='Add Subordinative Verb Phrase'>
-	      <Dropdown.Menu>
-	        <Dropdown.Item onClick={()=>{this.setState({svvType:'by'},()=>{this.menuSelect('svinsert',-1)})}}>By...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({svvType:'being'},()=>{this.menuSelect('svinsert',-1)})}}>Being...</Dropdown.Item>
-	      </Dropdown.Menu>
-	    </Dropdown>					
+	    return <Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
+		    		<Accordion.Title
+		    			id={type}
+	    				style={{paddingBottom:'2px'}}
+		    			active={this.state.activeIndexes.includes(type)}
+	            onClick={()=>{this.handleClick(type,true)}}
+		    		>
+		    			<Icon name="dropdown" />
+		    			{'Add Subordinative Verb'}
+		    		</Accordion.Title>
+		    		<Accordion.Content active={this.state.activeIndexes.includes(type)}>
+		    		<Button.Group vertical basic fluid>
+			        <Button onClick={()=>{this.setState({svvType:'by'},()=>{this.menuSelect('svinsert',-1)})}}>by...</Button>
+			        <Button onClick={()=>{this.setState({svvType:'being'},()=>{this.menuSelect('svinsert',-1)})}}>being...</Button>
+		    		</Button.Group>
+		    		</Accordion.Content>
+	    		</Accordion>		
 		} else if (type==='changeCVtype') {
-	    return <Dropdown item text='Change Connective Verb Phrase'>
-	      <Dropdown.Menu>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Prec',cvvType:'',isOpen: false},()=>{this.backEndCall([["Update",["cv","vMood"],"Prec"]])})}}>before...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cnsq',cvvType:'',isOpen: false},()=>{this.backEndCall([["Update",["cv","vMood"],"Cnsq"]])})}}>because...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cont',cvvType:'',isOpen: false},()=>{this.backEndCall([["Update",["cv","vMood"],"Cont"]])})}}>whenever...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Conc',cvvType:'eventhough',isOpen: false},()=>{this.backEndCall([["Update",["cv","vMood"],"Conc"],["Update",["cv","vType"],"eventhough"]])})}}>even though...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Conc',cvvType:'evenif',isOpen: false},()=>{this.backEndCall([["Update",["cv","vMood"],"Conc"],["Update",["cv","vType"],"evenif"]])})}}>even if...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cond',cvvType:'if',isOpen: false},()=>{this.backEndCall([["Update",["cv","vMood"],"Cond"],["Update",["cv","vType"],"if"]])})}}>if...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'Cond',cvvType:'wheninthefuture',isOpen: false},()=>{this.backEndCall([["Update",["cv","vMood"],"Cond"],["Update",["cv","vType"],"wheninthefuture"]])})}}>when (in the future)...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'CtmpI',cvvType:'',isOpen: false},()=>{this.backEndCall([["Update",["cv","vMood"],"CtmpI"]])})}}>when (in the past)...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({cvvMood:'CtmpII',cvvType:'',isOpen: false},()=>{this.backEndCall([["Update",["cv","vMood"],"CtmpII"]])})}}>while...</Dropdown.Item>
-	      </Dropdown.Menu>
-	    </Dropdown>					
+	    return <Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
+		    		<Accordion.Title
+		    			id={type}
+		    			active={true}
+		    		>
+		    			<Icon name="dropdown" />
+		    			{'Change Connective Verb Phrase'}
+		    		</Accordion.Title>
+		    		<Accordion.Content active={true}>
+		    		<Button.Group vertical basic fluid>
+	        <Button onClick={()=>{this.setState({cvvMood:'Prec',cvvType:'',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>before...</Button>
+	        <Button onClick={()=>{this.setState({cvvMood:'Cnsq',cvvType:'',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>because...</Button>
+	        <Button onClick={()=>{this.setState({cvvMood:'Cont',cvvType:'',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>whenever...</Button>
+	        <Button onClick={()=>{this.setState({cvvMood:'Conc',cvvType:'eventhough',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood,'eventhough']]])})}}>even though...</Button>
+	        <Button onClick={()=>{this.setState({cvvMood:'Conc',cvvType:'evenif',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood,'evenif']]])})}}>even if...</Button>
+	        <Button onClick={()=>{this.setState({cvvMood:'Cond',cvvType:'if',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood,'if']]])})}}>if...</Button>
+	        <Button onClick={()=>{this.setState({cvvMood:'Cond',cvvType:'wheninthefuture',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood,'wheninthefuture']]])})}}>when (in future)...</Button>
+	        <Button onClick={()=>{this.setState({cvvMood:'CtmpI',cvvType:'',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>when (in past)...</Button>
+	        <Button onClick={()=>{this.setState({cvvMood:'CtmpII',cvvType:'',isOpen: false},()=>{this.backEndCall([["Insert",["cv",],[this.state.cvvBase[0],this.state.cvvBase[1],this.state.cvvMood]]])})}}>while...</Button>
+		    		</Button.Group>
+		    		</Accordion.Content>
+	    		</Accordion>			
 		} else if (type==='changeQuestiontype') {
-	    return <Dropdown item text='Change Question Type'>
-	      <Dropdown.Menu>
-	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg0',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg0']])})}}>who is (subject)...?</Dropdown.Item>
-	        {this.state.mvvBase[1] != 'i' ?
-	        	<Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg1',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg1']])})}}>to whom (object)...?</Dropdown.Item>
-	        	:
-	        	null
-	        }
-	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg2',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg2']])})}}>what is (subject)...?</Dropdown.Item>
-	        {this.state.mvvBase[1] != 'i' ?
-	        	<Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg3',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg3']])})}}>to what (object)...?</Dropdown.Item>
-	        	:
-	        	null
-	        }
-	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg4',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg4']])})}}>when did...?</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg5',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg5']])})}}>when will...?</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg6',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg6']])})}}>where is...?</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg7',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg7']])})}}>from where is...?</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg8',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg8']])})}}>to where is...?</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'Intrg9',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg9']])})}}>why is...?</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({mvvType:'IntrgA',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'IntrgA']])})}}>how is...?</Dropdown.Item>
-	      </Dropdown.Menu>
-	    </Dropdown>					
-		} else if (type == 'changeRequiredPostbase') {
-	    return <Dropdown item text='Change Postbase'>
-	      <Dropdown.Menu>
-	      	{requirePostbasesDictionary[this.state.requirePostbase].map((x)=>{
-	      		if (x['fst'][0].toString() !== this.state.mvvBase[0][this.state.mvvBase[0].length-1].toString()) {
-	      			return <Dropdown.Item onClick={()=>{this.setState({isOpen: false},()=>{this.backEndCall([["Update",['mv','vBase'],[this.state.mvvBase[0].slice(0,-1).concat(x['fst']),this.state.mvvBase[1],]]]); })}}>{x['english']}</Dropdown.Item>
-	      		}
-	      	})
-	      	}
-	      </Dropdown.Menu>
-	    </Dropdown>						
+	    return <Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
+	    		<Accordion.Title
+	    			id={type}
+	    			style={{paddingBottom:'2px'}}
+		    		active={true}
+	    		>
+		    			<Icon name="dropdown" />
+		    			{'Change Question Type'}
+		    		</Accordion.Title>
+		    		<Accordion.Content active={true}>
+		    		<Button.Group vertical basic fluid>
+			        <Button onClick={()=>{this.setState({mvvType:'Intrg0',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg0']])})}}>who is (subject)...?</Button>
+			        {this.state.mvvBase[1] != 'i' ?
+			        	<Button onClick={()=>{this.setState({mvvType:'Intrg1',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg1']])})}}>to whom (object)...?</Button>
+			        	:
+			        	null
+			        }
+			        <Button onClick={()=>{this.setState({mvvType:'Intrg2',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg2']])})}}>what is (subject)...?</Button>
+			        {this.state.mvvBase[1] != 'i' ?
+			        	<Button onClick={()=>{this.setState({mvvType:'Intrg3',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg3']])})}}>to what (object)...?</Button>
+			        	:
+			        	null
+			        }
+			        <Button onClick={()=>{this.setState({mvvType:'Intrg4',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg4']])})}}>when did...?</Button>
+			        <Button onClick={()=>{this.setState({mvvType:'Intrg5',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg5']])})}}>when will...?</Button>
+			        <Button onClick={()=>{this.setState({mvvType:'Intrg6',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg6']])})}}>where is...?</Button>
+			        <Button onClick={()=>{this.setState({mvvType:'Intrg7',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg7']])})}}>from where is...?</Button>
+			        <Button onClick={()=>{this.setState({mvvType:'Intrg8',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg8']])})}}>to where is...?</Button>
+			        <Button onClick={()=>{this.setState({mvvType:'Intrg9',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg9']])})}}>why is...?</Button>
+			        <Button onClick={()=>{this.setState({mvvType:'IntrgA',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'IntrgA']])})}}>how is...?</Button>
+		    		</Button.Group>
+		    		</Accordion.Content>
+	    		</Accordion>				
 		} else if (type == 'switchOptative') {
-	    return <Dropdown item text='Change Command Type'>
-	      <Dropdown.Menu>
-	        <Dropdown.Item onClick={()=>{this.setState({optCase:'Opt][PRS',mvvType:'',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Opt][PRS']])})}}>command right now</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({optCase:'Opt][FUT',mvvType:'',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Opt][FUT']])})}}>command in future</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({optCase:'Opt][PRS][NEG',mvvType:'',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Opt][PRS][NEG']])})}}>do not ...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({optCase:'Opt][FUT][NEG',mvvType:'',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Opt][FUT][NEG']])})}}>do not ... (future)</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({optCase:'Sbrd',mvvType:'',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Sbrd']])})}}>polite request</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({optCase:'Sbrd',mvvType:'neg',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Sbrd'],["Insert",["mv"],[this.state.candidateCall[0].concat([['+peke-|+vke-,+pege-|+vke-', 0, 0, 0]]),this.state.candidateCall[1],'Sbrd']]])})}}>polite do not...</Dropdown.Item>
-	      </Dropdown.Menu>
-	    </Dropdown>		
+	    return <Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
+		    		<Accordion.Title
+		    			id={type}
+		    			active={true}
+		    		>
+		    			<Icon name="dropdown" />
+		    			{'Change Command Type'}
+		    		</Accordion.Title>
+		    		<Accordion.Content active={true}>
+		    		<Button.Group vertical basic fluid>
+			        <Button onClick={()=>{this.setState({optCase:'Opt][PRS',mvvType:'',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Opt][PRS']])})}}>command right now</Button>
+			        <Button onClick={()=>{this.setState({optCase:'Opt][FUT',mvvType:'',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Opt][FUT']])})}}>command in future</Button>
+			        <Button onClick={()=>{this.setState({optCase:'Opt][PRS][NEG',mvvType:'',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Opt][PRS][NEG']])})}}>do not ...</Button>
+			        <Button onClick={()=>{this.setState({optCase:'Opt][FUT][NEG',mvvType:'',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Opt][FUT][NEG']])})}}>do not ... (future)</Button>
+			        <Button onClick={()=>{this.setState({optCase:'Sbrd',mvvType:'',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Sbrd']])})}}>polite request</Button>
+			        <Button onClick={()=>{this.setState({optCase:'Sbrd',mvvType:'neg',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Sbrd'],["Insert",["mv"],[this.state.candidateCall[0].concat([['+peke-|+vke-,+pege-|+vke-', 0, 0, 0]]),this.state.candidateCall[1],'Sbrd']]])})}}>polite do not...</Button>
+		    		</Button.Group>
+		    		</Accordion.Content>
+	    		</Accordion>		
 		} else if (type == 'changeNPtype') {
-	    return <Dropdown item text='Change Noun Phrase Type'>
-	      <Dropdown.Menu>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Abs',npCaseType:'',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Abs']])})}}>the...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'from',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Abl_Mod'],["Update",["np","nType"],'from']])})}}>from...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'io',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Abl_Mod'],["Update",["np","nType"],'io']])})}}>a or some...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Loc',npCaseType:'',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Loc']])})}}>in or at...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Ter',npCaseType:'',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Ter']])})}}>toward...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Via',npCaseType:'',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Via']])})}}>through, using...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({npCase:'Equ',npCaseType:'',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Equ']])})}}>like, similar to...</Dropdown.Item>
-	      </Dropdown.Menu>
-	    </Dropdown>		
+	    return <Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
+		    		<Accordion.Title
+		    			id={type}
+		    			active={true}
+		    			// style={{paddingBottom:'2px'}}
+		    			// active={this.state.activeIndexes.includes(type)}
+	            // onClick={()=>{this.handleClick(type,true)}}
+		    		>
+		    			<Icon name="dropdown" />
+		    			{'Change Noun Phrase Type'}
+		    		</Accordion.Title>
+		    		<Accordion.Content active={true}>
+		    		<Button.Group vertical basic fluid>
+			        <Button onClick={()=>{this.setState({npCase:'Abs',npCaseType:'',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Abs']])})}}>the...</Button>
+			        <Button onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'from',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Abl_Mod'],["Update",["np","nType"],'from']])})}}>from...</Button>
+			        <Button onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'io',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Abl_Mod'],["Update",["np","nType"],'io']])})}}>a or some...</Button>
+			        <Button onClick={()=>{this.setState({npCase:'Loc',npCaseType:'',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Loc']])})}}>in or at...</Button>
+			        <Button onClick={()=>{this.setState({npCase:'Ter',npCaseType:'',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Ter']])})}}>toward...</Button>
+			        <Button onClick={()=>{this.setState({npCase:'Via',npCaseType:'',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Via']])})}}>through, using...</Button>
+			        <Button onClick={()=>{this.setState({npCase:'Equ',npCaseType:'',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Equ']])})}}>like, similar to...</Button>
+		    		</Button.Group>
+		    		</Accordion.Content>
+	    		</Accordion>		
 		} else if (type == 'changeVObliquetype') {
-	    return <Dropdown item text='Change Oblique Verb Type'>
-	      <Dropdown.Menu>
-	        <Dropdown.Item onClick={()=>{this.setState({isOpen:false},()=>{this.backEndCall([["Update",[ind1,"nObliques",ind2,'nCase'],'Abs']])})}}>the...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({isOpen:false},()=>{this.backEndCall([["Update",[ind1,"nObliques",ind2,'nCase'],'Abl_Mod'],["Update",[ind1,"nObliques",ind2,'nType'],'from']])})}}>from...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({isOpen:false},()=>{this.backEndCall([["Update",[ind1,"nObliques",ind2,'nCase'],'Abl_Mod'],["Update",[ind1,"nObliques",ind2,'nType'],'io']])})}}>a or some...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({isOpen:false},()=>{this.backEndCall([["Update",[ind1,"nObliques",ind2,'nCase'],'Loc']])})}}>in or at...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({isOpen:false},()=>{this.backEndCall([["Update",[ind1,"nObliques",ind2,'nCase'],'Ter']])})}}>toward...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({isOpen:false},()=>{this.backEndCall([["Update",[ind1,"nObliques",ind2,'nCase'],'Via']])})}}>through, using...</Dropdown.Item>
-	        <Dropdown.Item onClick={()=>{this.setState({isOpen:false},()=>{this.backEndCall([["Update",[ind1,"nObliques",ind2,'nCase'],'Equ']])})}}>like, similar to...</Dropdown.Item>
-	      </Dropdown.Menu>
-	    </Dropdown>		
+	    return <Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
+		    		<Accordion.Title
+		    			id={type}
+		    			active={true}
+		    		>
+		    			<Icon name="dropdown" />
+		    			{'Change Noun Type'}
+		    		</Accordion.Title>
+		    		<Accordion.Content active={true}>
+		    		<Button.Group vertical basic fluid>
+			        <Button onClick={()=>{this.setState({isOpen:false},()=>{this.backEndCall([["Update",[ind1,"nObliques",ind2,'nCase'],'Abl_Mod'],["Update",[ind1,"nObliques",ind2,'nType'],'from']])})}}>from...</Button>
+			        <Button onClick={()=>{this.setState({isOpen:false},()=>{this.backEndCall([["Update",[ind1,"nObliques",ind2,'nCase'],'Abl_Mod'],["Update",[ind1,"nObliques",ind2,'nType'],'io']])})}}>a or some...</Button>
+			        <Button onClick={()=>{this.setState({isOpen:false},()=>{this.backEndCall([["Update",[ind1,"nObliques",ind2,'nCase'],'Loc']])})}}>in or at...</Button>
+			        <Button onClick={()=>{this.setState({isOpen:false},()=>{this.backEndCall([["Update",[ind1,"nObliques",ind2,'nCase'],'Ter']])})}}>toward...</Button>
+			        <Button onClick={()=>{this.setState({isOpen:false},()=>{this.backEndCall([["Update",[ind1,"nObliques",ind2,'nCase'],'Via']])})}}>through, using...</Button>
+			        <Button onClick={()=>{this.setState({isOpen:false},()=>{this.backEndCall([["Update",[ind1,"nObliques",ind2,'nCase'],'Equ']])})}}>like, similar to...</Button>
+		    		</Button.Group>
+		    		</Accordion.Content>
+	    		</Accordion>		
 		}
 
 	}
@@ -2445,7 +2701,7 @@ editSubjectMenu = (name) => {
 			  	})							
 				} else if (mood ==='Intrg') {
 			  	this.setState({
-			  		candidateCall:[candidateFST,transitivity,mood],
+			  		candidateCall:[candidateFST,transitivity,mood,submood],
 			  		lockSubmit:lockSubmit,
 			  	})	
 				} else {
@@ -2489,17 +2745,18 @@ editSubjectMenu = (name) => {
 		let sentence = key['englishmain']	
 
 		if (key['type'] == 'n') {
-			sentence = key['englishraw']
-			let verbMatches = key['englishraw'].match(/\⟨.*?\⟩/g)
-			if (this.state.nounNum == 'p') {
-				verbAdd = key['englishtenses'][this.state.nounIndexChosen][1]
-			} else {
-				verbAdd = key['englishtenses'][this.state.nounIndexChosen][0]
-			}
+			sentence = key['base_case']
+			// sentence = key['englishraw']
+			// let verbMatches = key['englishraw'].match(/\⟨.*?\⟩/g)
+			// if (this.state.nounNum == 'p') {
+			// 	verbAdd = key['englishtenses'][this.state.nounIndexChosen][1]
+			// } else {
+			// 	verbAdd = key['englishtenses'][this.state.nounIndexChosen][0]
+			// }
 			
-			if (verbMatches !== null) {
-				verbMatches.map((m) => sentence = sentence.replace(m,verbAdd))	
-			}
+			// if (verbMatches !== null) {
+			// 	verbMatches.map((m) => sentence = sentence.replace(m,verbAdd))	
+			// }
 		} else {
 			sentence = key['englishmain']	
 			if (this.state.nextTenses.length > 0) {
@@ -2531,7 +2788,7 @@ editSubjectMenu = (name) => {
 						verbAdd = key['englishtenses'][0]
 					} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp') {
 						verbAdd = key['englishtenses'][4]
-					}			
+					}		
 					sentence = key['englishraw']
 					let verbMatches = key['englishraw'].match(/\⟨.*?\⟩/g)
 					if (verbMatches !== null) {
@@ -2539,15 +2796,34 @@ editSubjectMenu = (name) => {
 					}						
 				}
 			} else {
-				if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
-					sentence = sentence.replace('!is!','am')
-				} else if ((this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) || this.state.mvvs.length === 0) {
-					sentence = sentence.replace('!is!','is')
+				if (this.state.startingCase.length > 0) {
+					if (this.state.startingCase === 'p') {
+						verbAdd = key['englishtenses'][1]
+					} else if (this.state.startingCase === 'g') {
+						verbAdd = key['englishtenses'][3]
+					} else if (this.state.startingCase === 'i') {
+						verbAdd = key['englishtenses'][0]
+					} else if (this.state.startingCase === 'pp') {
+						verbAdd = key['englishtenses'][4]
+					} else if (this.state.startingCase === 'gen') {
+						verbAdd = key['englishtenses'][2]
+					}
+					sentence = key['englishraw']
+					let verbMatches = key['englishraw'].match(/\⟨.*?\⟩/g)
+					if (verbMatches !== null) {
+						verbMatches.map((m) => sentence = sentence.replace(m,verbAdd))	
+					}	
+					sentence = sentence.replace('!is!','')
 				} else {
-					sentence = sentence.replace('!is!','are')
+					if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
+						sentence = sentence.replace('!is!','am')
+					} else if ((this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) || this.state.mvvs.length === 0) {
+						sentence = sentence.replace('!is!','is')
+					} else {
+						sentence = sentence.replace('!is!','are')
+					}
 				}
 			}
-
 		}
 
 		let matches = sentence.match(/\<.*?\>/g)
@@ -2588,7 +2864,11 @@ editSubjectMenu = (name) => {
 								if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
 									sentence = 'was '+sentence
 								} else if ((this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) || this.state.mvvs.length === 0) {
-									sentence = 'was '+sentence
+									if (this.state.mvvsPlanned[1] !== 1) {
+										sentence = 'were '+sentence							
+									} else {
+										sentence = 'was '+sentence														
+									}
 								} else {
 									sentence = 'were '+sentence
 								}  
@@ -2615,7 +2895,11 @@ editSubjectMenu = (name) => {
 							if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
 								sentence = 'was '+sentence
 							} else if ((this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) || this.state.mvvs.length === 0) {
-								sentence = 'was '+sentence
+								if (this.state.mvvsPlanned[1] !== 1) {
+									sentence = 'were '+sentence							
+								} else {
+									sentence = 'was '+sentence														
+								}
 							} else {
 								sentence = 'were '+sentence
 							}  
@@ -2655,7 +2939,11 @@ editSubjectMenu = (name) => {
 					if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
 						sentence = 'am '+sentence
 					} else if ((this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) || this.state.mvvs.length === 0) {
-						sentence = 'is '+sentence
+						if (this.state.mvvsPlanned[1] !== 1) {
+							sentence = 'are '+sentence							
+						} else {
+							sentence = 'is '+sentence														
+						}
 					} else {
 						sentence = 'are '+sentence
 					}  	  			
@@ -2668,7 +2956,11 @@ editSubjectMenu = (name) => {
 	  			sentence = 'had '+sentence
 	  		} else {
 					if ((this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) || this.state.mvvs.length === 0) {
-						sentence = 'has '+sentence
+						if (this.state.mvvsPlanned[1] !== 1) {
+							sentence = 'have '+sentence							
+						} else {
+							sentence = 'has '+sentence														
+						}
 					} else {
 						sentence = 'have '+sentence
 					}  		  			
@@ -2692,29 +2984,17 @@ editSubjectMenu = (name) => {
 		}
 	}
 
-
-	baseChooser = (itemUpdating,endingNeeded,update,mood,submood) => {
-		console.log(itemUpdating,endingNeeded,update,mood,submood)
-		let key;
+	returnBaseChooserTitle = (itemUpdating,mood,submood) => {
 		let subject = '';
-		let popularPostbases = []
-		// this.setState({currentEnding:endingNeeded})
-		let popularBases = []
-		if (endingNeeded == 'n') {
-			popularPostbases = popularNPostbases
-			popularBases = popularNouns
-		} else {
-			popularPostbases = popularVPostbases
-			popularBases = popularVerbs
-		}
-
-		console.log(itemUpdating[1].join(""))
-
 		if (['mv','mvvBase'].includes(itemUpdating[1].join(""))) {
 			if (this.state.mvvs.length > 0) {
 				subject = mvSubjectOptionsEnglish[this.state.mvvs.join("")]
 			} else {
-				subject = 'he'				
+				if (this.state.mvvsPlanned.length > 0) {
+					subject = mvSubjectOptionsEnglish[this.state.mvvsPlanned.join("")]
+				} else {
+					subject = 'he'					
+				}
 			}
 		} else if (['mvns'].includes(itemUpdating[1].join(""))) {
 			subject = 'the one _____ is'				
@@ -2744,7 +3024,152 @@ editSubjectMenu = (name) => {
 					}
 				}
 			}
-		}  
+		}
+
+		let starters = {
+			'Loc':'in or at',
+			'Ter':'toward',
+			'from':'from',
+			'io':'a or some',
+			'Via':'through, using',
+			'Equ':'like',
+			'Prec':'before',
+			'Cnsq':'because',
+			'Cont':'whenever',
+			'CtmpI':'when (in past)',
+			'CtmpII':'while',
+			'eventhough':'even though',
+			'evenif':'even if',
+			'if':'if',
+			'wheninthefuture':'when (in future)',
+
+			'Intrg0':'who is he who _____?',
+			'Intrg1':'she _____ whom (object)?',
+			'Intrg2':'what is it that _____ ?',
+			'Intrg3':'he _____ what (object)?',
+			'Intrg4':'when did she _____?',
+			'Intrg5':'when will he _____?',
+			'Intrg6':'where is it _____?',
+			'Intrg7':'from where is he _____?',
+			'Intrg8':'to where is she _____?',
+			'Intrg9':'why is it _____?',
+			'IntrgA':'how is he _____?',
+
+			'Opt][PRS':'you, _____ (command)',
+			'Opt][FUT':'you, _____ (command in the future)',
+			'Opt][PRS][NEG':'you, do not _____',
+			'Opt][FUT][NEG':'you, do not _____ (future)',
+			'Sbrd':'you, ____ (polite request)',
+			'Sbrdneg':'you, do not ____ (polite request)',
+
+			'by':'by ____ ',
+			'being':'____',
+
+		}
+
+		console.log(mood,submood)
+
+		if (mood == 'Sbrd') {
+			if (submood == '') {
+				subject = starters['Sbrd']
+			} else if (submood == 'neg') {
+				subject = starters['Sbrdneg']
+			} else if (submood == 'by') {
+				subject = starters['by']
+			} else if (submood == 'being') {
+				subject = starters['being']
+			}				
+		} else if (mood == 'Intrg') {
+			subject = starters[submood]
+
+		} else if (mood == 'Loc' || mood == 'Ter' | mood == 'Via' || mood == 'Equ') {
+			subject = starters[mood]
+			if (itemUpdating[0] === 'Insert') {
+				subject = subject + ' the one _____'					
+			} else {
+
+			}
+		} else if (mood == 'Prec' || mood == 'Cnsq' || mood == 'Cont' || mood == 'CtmpI' || mood == 'CtmpII') {
+			subject = starters[mood]
+			if (itemUpdating[0] === 'Insert') {
+				subject = subject + ' he _____'
+			}
+		} else if (submood == 'eventhough' || submood == 'evenif' || submood == 'io'|| submood == 'from' || submood == 'if' || submood == 'wheninthefuture') {
+			subject = starters[submood]
+			if (submood == 'io') {
+				subject = subject + '_____'	
+			} else if (submood == 'from') {
+				subject = subject + ' the one _____'					
+			} else if (itemUpdating[0] === 'Insert') {
+				subject = subject + ' he _____'
+			}
+		} else {
+			//optative
+			if (mood in starters) {
+				subject = starters[mood]
+			}
+		}
+
+		
+// 'Loc',npCaseType:''},()=>{this.menuSelect('nObliqueInsert',-1)})}}>in or at the...</Button>
+// 'Ter',npCaseType:''},()=>{this.menuSelect('nObliqueInsert',-1)})}}>toward the...</Button>
+// 'Abl_Mod',npCaseType:'from'},()=>{this.menuSelect('nObliqueInsert',-1)})}}>from the...</Button>
+// 'Abl_Mod',npCaseType:'io'},()=>{this.menuSelect('nObliqueInsert',-1)})}}>a or some...</Button>
+// 'Via',npCaseType:''},()=>{this.menuSelect('nObliqueInsert',-1)})}}>through, using...</Button>
+// 'Equ',npCaseType:''},()=>{this.menuSelect('nObliqueInsert',-1)})}}>like a...</Button>
+		return subject
+	}
+
+	returnPlaceholder = (endingNeeded) => {
+		if (endingNeeded == 'n') {
+			if (this.state.endingAdjusted === 'v') {
+				if (this.state.startingCase == 'i') {
+					return 'hunt, be happy, etc.'
+				} else if (this.state.startingCase == 'g') {
+					return 'hunting, being happy, etc.'
+				} else if (this.state.mvvsPlanned[1] !== 1) {
+					return 'are hunting, happy, etc.'
+				} else {
+					return 'is hunting, happy, etc.'
+				}
+			} else {
+				return 'person, land, etc.'
+			}
+		} else if (endingNeeded == 'v') {
+			if (this.state.endingAdjusted === 'n') {
+				return 'person, land, etc.'
+			} else {
+				if (this.state.startingCase == 'i') {
+					return 'hunt, be happy, etc.'
+				} else if (this.state.startingCase == 'g') {
+					return 'hunting, being happy, etc.'
+				} else if (this.state.mvvsPlanned[1] !== 1) {
+					return 'are hunting, happy, etc.'
+				} else {
+					return 'is hunting, happy, etc.'
+				}
+			}
+		}
+	}
+
+
+	baseChooser = (itemUpdating,endingNeeded,update,mood,submood) => {
+		// console.log(itemUpdating,endingNeeded,update,mood,submood)
+		let key;
+		let popularPostbases = []
+		// this.setState({currentEnding:endingNeeded})
+		let popularBases = []
+		if (endingNeeded == 'n') {
+			popularPostbases = popularNPostbases
+			popularBases = popularNouns
+		} else {
+			popularPostbases = popularVPostbases
+			popularBases = popularVerbs
+		}
+
+		let subject = this.returnBaseChooserTitle(itemUpdating,mood,submood)
+
+
 
 		// if (['npnBases10'].includes(itemUpdating[1].join(""))) {
 		// 		subject = 'yes'				
@@ -2757,16 +3182,13 @@ editSubjectMenu = (name) => {
 		// let currentTense;n
 		// console.log(this.state)
 		// console.log(this.state.currentEditMode, itemUpdating,endingNeeded,update,mood,submood)
-		         return <Grid style={{height:'400px',width:'300px'}}>
+		         return <Grid style={{width:'300px'}}>
 		                	<Grid.Row columns={1} style={{paddingBottom:'0px'}}divided>
 		                	<Grid.Column id='menuheight'>
-		                		<Button onClick={()=>{this.menuSelect('default'); this.setState({searchQuery:'',wordsList:[]})}} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingLeft:'13px',marginBottom:'10px'}}>
-		                			<Icon name='chevron left' />
-		                			<div style={{color:'#666666'}}>{'Back'}</div>
-		                		</Button>
+
 									        <Segment style={{overflow: 'auto',padding:0}}>
 									        	<List divided style={{margin:0,padding:0,}}>
-										        <List.Item style={{color:'#545454',fontFamily:"Lato,'Helvetica Neue',Arial,Helvetica,sans-serif",padding:'8px 15px',backgroundColor:'#f7f7f7'}}>{subject}<span style={{color:'#bdbdbd'}}>{'...'}</span></List.Item>
+										        <List.Item style={{color:'#545454',fontFamily:"Lato,'Helvetica Neue',Arial,Helvetica,sans-serif",padding:'8px 15px',backgroundColor:'#f7f7f7'}}>{subject}</List.Item>
 									        	{this.state.cvvMood.length > 0 && this.state.currentEditMode == 'cvupdate' ?
 										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
 										        		<div style={{flex:1}}>
@@ -2789,7 +3211,7 @@ editSubjectMenu = (name) => {
 												      			// 		this.setState({addIs:false})
 												      			// 	}
 												      			// }
-												      			this.handleClick('vvpostbases',false); 
+												      			// this.handleClick('vvpostbases',false); 
 												      			this.handleClick('verbs',false); 
 
 											        			this.setState({
@@ -2821,6 +3243,76 @@ editSubjectMenu = (name) => {
 
 
 									        <div style={{padding:0,margin:0}}>
+		                		
+											      <Input 
+											      icon='search' 
+											      iconPosition='left' 
+											      name='search'     
+											      autoComplete='off'
+											      disabled={this.state.lockSubmit}
+											      placeholder={this.returnPlaceholder(endingNeeded)}
+											      // width='100%'
+											      style={{width:'100%',padding:'5px 5px'}}
+											 		  onChange={this.onChangeBaseSearch.bind(this,endingNeeded)}
+								            value={this.state.searchQuery}
+								            // onClose={()=>{this.setState({searchQuery:'',wordsList:[]})}}
+								            />
+								            {this.state.wordsList.length > 0 ?
+								            	<span>
+													      <Segment vertical style={{maxHeight:255,overflow: 'auto',padding:0,margin:"4px 9px",borderBottom:'0px solid #e2e2e2'}}>
+
+												    		<Button.Group vertical basic fluid>
+													      	{this.state.wordsList.map((k,index)=>{
+													      		if (k['type'].includes('→')) {
+														      		return <Button style={{textAlign:'left',padding:'10px'}} onClick={()=>{
+														      			this.setState({
+																	    		searchQuery:'',
+																	    		wordsList:[],
+														      				candidateBase:this.state.candidateBase.concat([[newpostbases[k['fsts']]['keylookup'],k['fsts']]]),
+																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledPostbaseText(k['fsts'],'2'),k['fsts']]]),
+																	    		nextTenses:(newpostbases[k['fsts']]['match_case'] && !('gen_preverb_after' in newpostbases[k['fsts']]) ? (this.state.nextTenses.length == 0 ? this.state.nextTenses.concat(['gen']):this.state.nextTenses.concat([this.state.nextTenses[this.state.nextTenses.length-1]])) : this.state.nextTenses.concat([newpostbases[k['fsts']]['gen_preverb_after'],])),
+														      			},()=>{
+																	    		this.updateCandidateCall(endingNeeded,update,mood,submood,'p')
+																	    	})
+														      		}}>
+															      		<div>
+																      		<div style={{marginBottom:'5px',color:'#545454'}}>
+																      		<span>{this.processStyledPostbaseText(k['fsts'],'2')}</span>
+																      		<span style={{color:'#bdbdbd'}}>{'...'}</span></div>
+																      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{k['fsts']}</div>
+															      		</div>
+														      		</Button>
+
+													      		} else {
+														      		return <Button style={{textAlign:'left',padding:'10px'}} onClick={()=>{
+																	    	this.setState({
+																	    		searchQuery:'',
+																	    		wordsList:[],
+																	    		candidateBase:this.state.candidateBase.concat(k),
+																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledMainText(k),k['fsts'].toString()]]),
+																	    	},()=>{
+																	    		this.updateCandidateCall(endingNeeded,update,mood,submood,'b')
+																	    	})
+														      		}}>
+															      		<div>
+																      		<div style={{marginBottom:'5px',color:'#545454'}}>
+																      		<span>{this.processStyledMainText(k)}</span>
+																      		</div>
+																      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{k['fsts'].toString()}</div>
+															      		</div>
+														      		</Button>
+													      		}
+													      	})}
+												    		</Button.Group>
+													      </Segment>
+												    		<div style={{textAlign:'center',color:'#252525'}}>
+												    		<Icon name="dropdown" />
+												    		</div>
+												    	</span>
+												      :
+												      null
+												    }
+
 									        {this.state.candidateBase.length < 2 ?
 														<Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
 												    		<Accordion.Title
@@ -2843,6 +3335,7 @@ editSubjectMenu = (name) => {
 													      		if (!removeItem) {
 														      		return <Button style={{textAlign:'left',padding:'10px'}} onClick={()=>{
 														      			this.handleClick('vvpostbases',false); 
+												      					// this.handleClick('verbs',false); 
 														      			this.setState({
 														      				candidateBase:this.state.candidateBase.concat([[newpostbases[popularPostbases[p]['expression']]['keylookup'],popularPostbases[p]['expression']]]),
 																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledPostbaseText(popularPostbases[p],'1'),newpostbases[popularPostbases[p]['expression']]['exp']]]),
@@ -2916,95 +3409,40 @@ editSubjectMenu = (name) => {
 												    		</Accordion.Content>
 												    </Accordion>	
 											    </div>
-		                		
-											      <Input 
-											      icon='search' 
-											      iconPosition='left' 
-											      name='search'     
-											      autoComplete='off'
-											      disabled={this.state.lockSubmit}
-											      // width='100%'
-											      style={{width:'100%',padding:'5px 5px'}}
-											 		  onChange={this.onChangeBaseSearch.bind(this,endingNeeded)}
-								            value={this.state.searchQuery}
-								            // onClose={()=>{this.setState({searchQuery:'',wordsList:[]})}}
-								            />
-								            {this.state.wordsList.length > 0 ?
-								            	<span>
-													      <Segment vertical style={{maxHeight:255,overflow: 'auto',padding:0,margin:"4px 9px",borderBottom:'0px solid #e2e2e2'}}>
 
-												    		<Button.Group vertical basic fluid>
-													      	{this.state.wordsList.map((k,index)=>{
-													      		if (k['type'].includes('→')) {
-														      		return <Button style={{textAlign:'left',padding:'10px'}} onClick={()=>{
-														      			this.setState({
-																	    		searchQuery:'',
-																	    		wordsList:[],
-														      				candidateBase:this.state.candidateBase.concat([[newpostbases[k['fsts']]['keylookup'],k['fsts']]]),
-																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledPostbaseText(k['fsts'],'2'),k['fsts']]]),
-																	    		nextTenses:(newpostbases[k['fsts']]['match_case'] && !('gen_preverb_after' in newpostbases[k['fsts']]) ? (this.state.nextTenses.length == 0 ? this.state.nextTenses.concat(['gen']):this.state.nextTenses.concat([this.state.nextTenses[this.state.nextTenses.length-1]])) : this.state.nextTenses.concat([newpostbases[k['fsts']]['gen_preverb_after'],])),
-														      			},()=>{
-																	    		this.updateCandidateCall(endingNeeded,update,mood,submood,'p')
-																	    	})
-														      		}}>
-															      		<div>
-																      		<div style={{marginBottom:'5px',color:'#545454'}}>
-																      		<span>{this.processStyledPostbaseText(k['fsts'],'2')}</span>
-																      		<span style={{color:'#bdbdbd'}}>{'...'}</span></div>
-																      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{k['fsts']}</div>
-															      		</div>
-														      		</Button>
 
-													      		} else {
-														      		return <Button style={{textAlign:'left',padding:'10px'}} onClick={()=>{
-																	    	this.setState({
-																	    		searchQuery:'',
-																	    		wordsList:[],
-																	    		candidateBase:this.state.candidateBase.concat(k),
-																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledMainText(k),k['fsts'].toString()]]),
-																	    	},()=>{
-																	    		this.updateCandidateCall(endingNeeded,update,mood,submood,'b')
-																	    	})
-														      		}}>
-															      		<div>
-																      		<div style={{marginBottom:'5px',color:'#545454'}}>
-																      		<span>{this.processStyledMainText(k)}</span>
-																      		</div>
-																      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{k['fsts'].toString()}</div>
-															      		</div>
-														      		</Button>
-													      		}
-													      	})}
-												    		</Button.Group>
-													      </Segment>
-												    		<div style={{textAlign:'center',color:'#252525'}}>
-												    		<Icon name="dropdown" />
-												    		</div>
-												    	</span>
-												      :
-												      null
-												    }
 												    </div>
 					                	}
+
+
+
 								        	</Segment>
 
 											      <div style={{paddingBottom:10}}>  
-				                		<Button size='small' color='blue' onClick={()=>{
-				                			if (mood === 'Intrg') {
-				                				this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Insert",["mv","qWord"],[submood,1]]]); 		                				
-				                			} else {
-				                				this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall]]); 		                						                				
-				                			}
-				                			this.setState({isOpen:false,currentEditMode:'default',searchQuery:'',wordsList:[],candidateBase:[],candidateDisplay:[],candidateCall:[],nextTenses:[],nounNum:'s',unallowable_next_ids:[],addIs:true,lockSubmit:false}) 
-				                		}} disabled={!this.state.lockSubmit} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}>
-				                			<div>{'Submit'}</div>
-				                			<Icon name='chevron right' />
-				                		</Button>
+											      <Link to={{pathname: '/sentencebuilder/2'}}>
+					                		<Button size='small' color='blue' onClick={()=>{
+					                			console.log(mood)
+					                			if (mood === 'Intrg') {
+					                				console.log([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Insert",["mv","qWord"],[submood,1]]])
+					                				this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Insert",["mv","qWord"],[submood,1]]]); 		                				
+					                			} else {
+				                					if (this.state.mvvsPlanned.length > 0) {
+				                						this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Update",["mv","vs"],[3,1,2]]])                						                									                						
+				                					} else {
+					                					this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall]]); 				                						
+				                					}
+					                			}
+					                			this.setState({isOpen:false,mvvsPlanned:[],activeIndexes:[],currentlyOpen:'',searchQuery:'',wordsList:[],candidateBase:[],candidateDisplay:[],candidateCall:[],nextTenses:[],nounNum:'s',unallowable_next_ids:[],addIs:true,lockSubmit:false}) 
+					                		}} disabled={!this.state.lockSubmit} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}>
+					                			<div>{'Submit'}</div>
+					                			<Icon name='chevron right' />
+					                		</Button>
+				                		</Link>
 				                		</div>
 								        	{this.state.lockSubmit ?
 								        		null
 				                		:
-								        		<div style={{fontFamily:'Lato,Arial,Helvetica,sans-serif',color:'#c7c7c7'}}>You need at least one base</div>
+								        		<div style={{fontFamily:'Lato,Arial,Helvetica,sans-serif',color:'#c7c7c7',marginBottom:'5px'}}>You need at least one base</div>
 				                	}
 
 
@@ -3140,6 +3578,10 @@ editSubjectMenu = (name) => {
 	  return true;
 	}
 
+	flipGlossary = (bool) => {
+		this.setState({glossary:bool})
+	}
+
 	getColor = (pos,template,test) => {
 		// console.log(pos, this.state)
 
@@ -3149,88 +3591,87 @@ editSubjectMenu = (name) => {
 		// console.log(test)
 		// console.log(tensesSentenceTemplates.includes(test))
 
+		let currentColorScheme = this.state.colorScheme
+
 		if (template) {
-			if (tensesSentenceTemplates.includes(test)) {
-				return colorsList[this.state.colorScheme]['future']	
-			} else {
-				if (!(pos in colorsList[this.state.colorScheme])) {
-					return grey
+				// console.log(pos,test)
+				if (!(pos in colorsList[1])) {
+					return black
 				} else {
-					return colorsList[this.state.colorScheme][pos]				
+					return colorsList[1][pos]				
 				}		
-			}			
 		}
 
 
-		if (this.state.colorScheme === -1) {
+		if (currentColorScheme === -1) {
 			return '#000000'
-		} else if (this.state.colorScheme === 0) {
+		} else if (currentColorScheme === 0) {
 				if (pos === 'mvno00.ps' && this.state.mvvBase[1] === 'it' && this.arraysEqual(this.state.mvno[0][0],[0,0,0,1])) {
-					return colorsList[this.state.colorScheme]['mvns00.c']	
+					return colorsList[currentColorScheme]['mvns00.c']	
 				} else if (pos === 'cvno00.ps' && this.state.cvvBase[1] === 'it' && this.arraysEqual(this.state.cvno[0][0],[0,0,0,1])) {
-					return colorsList[this.state.colorScheme]['cvns00.c']	
+					return colorsList[currentColorScheme]['cvns00.c']	
 				} else if (pos === 'svno00.ps' && this.state.svvBase[1] === 'it' && this.arraysEqual(this.state.svno[0][0],[0,0,0,1])) {
-					return colorsList[this.state.colorScheme]['svns00.c']	
+					return colorsList[currentColorScheme]['svns00.c']	
 				} 
 				if (pos === 'mvqWord' && (this.state.mvvType === 'Intrg0' || this.state.mvvType === 'Intrg2')) {
-					return colorsList[this.state.colorScheme]['mvv.s']	
+					return colorsList[currentColorScheme]['mvv.s']	
 				}
 				if (pos === 'mvqWord' && (this.state.mvvType === 'Intrg1' || this.state.mvvType === 'Intrg3')) {
-					return colorsList[this.state.colorScheme]['mvv.o']	
+					return colorsList[currentColorScheme]['mvv.o']	
 				}
 
 				if (this.state.mvvBase.length > 0) {
 					if (pos == 'mvv.'+(this.state.mvvBase[0].length-1).toString()) {
 		  			if (pastTensePostbases.includes(this.state.mvvBase[0][this.state.mvvBase[0].length-1][0])) {
-			  			return colorsList[this.state.colorScheme]['past']	
+			  			return colorsList[currentColorScheme]['past']	
 		  			} else if (futureTensePostbases.includes(this.state.mvvBase[0][this.state.mvvBase[0].length-1][0])) {
-			  			return colorsList[this.state.colorScheme]['future']	
+			  			return colorsList[currentColorScheme]['future']	
 		  			}
 		  		}
 	  		} else if (this.state.cvvBase.length > 0) {
 					if (pos == 'cvv.'+(this.state.cvvBase[0].length-1).toString()) {
 		  			if (pastTensePostbases.includes(this.state.cvvBase[0][this.state.cvvBase[0].length-1][0])) {
-			  			return colorsList[this.state.colorScheme]['past']	
+			  			return colorsList[currentColorScheme]['past']	
 		  			} else if (futureTensePostbases.includes(this.state.cvvBase[0][this.state.cvvBase[0].length-1][0])) {
-			  			return colorsList[this.state.colorScheme]['future']	
+			  			return colorsList[currentColorScheme]['future']	
 		  			}
 		  		}
 	  		} else if (this.state.svvBase.length > 0) {
 					if (pos == 'svv.'+(this.state.svvBase[0].length-1).toString()) {
 		  			if (pastTensePostbases.includes(this.state.svvBase[0][this.state.svvBase[0].length-1][0])) {
-			  			return colorsList[this.state.colorScheme]['past']	
+			  			return colorsList[currentColorScheme]['past']	
 		  			} else if (futureTensePostbases.includes(this.state.svvBase[0][this.state.svvBase[0].length-1][0])) {
-			  			return colorsList[this.state.colorScheme]['future']	
+			  			return colorsList[currentColorScheme]['future']	
 		  			}
 		  		}
 	  		}
 
 
-				if (!(pos in colorsList[this.state.colorScheme])) {
+				if (!(pos in colorsList[currentColorScheme])) {
 					return grey
 				} else {
-					return colorsList[this.state.colorScheme][pos]				
+					return colorsList[currentColorScheme][pos]				
 				}		
-		} else if (this.state.colorScheme === 1) {
+		} else if (currentColorScheme === 1) {
 
 			//IF 1st PERSON CHOOSE COLOR
 			//IF 2nd PERSON CHOOSE COLOR
 			//ALL OTHER COLORS BLACK
 
 
-		// } else if (this.state.colorScheme === 1) {
+		// } else if (currentColorScheme === 1) {
 		// 	if (pos === 'npn00.ps' || pos === 'npn10.ps') {
 		// 		if (this.arraysEqual(this.state.npn[this.state.npn.length-1][0],[0,0,0,1])) {
 		// 			return grey
 		// 		} else {
-		// 			return colorsList[this.state.colorScheme][pos]				
+		// 			return colorsList[currentColorScheme][pos]				
 		// 		}
 		// 	} else {
-		// 		// console.log(colorsList[this.state.colorScheme], pos)
-		// 		if (!(pos in colorsList[this.state.colorScheme])) {
+		// 		// console.log(colorsList[currentColorScheme], pos)
+		// 		if (!(pos in colorsList[currentColorScheme])) {
 		// 			return grey
 		// 		} else {
-		// 			return colorsList[this.state.colorScheme][pos]				
+		// 			return colorsList[currentColorScheme][pos]				
 		// 		}
 		// 	}
 		} else {
@@ -3239,25 +3680,25 @@ editSubjectMenu = (name) => {
 					return grey
 				} else if (this.state.npn[this.state.npn.length-1][0][0] === 1) {
 					// console.log('hi')
-					return colorsList[this.state.colorScheme]['1st-1']
+					return colorsList[currentColorScheme]['1st-1']
 				} else {
-					return colorsList[this.state.colorScheme][pos]				
+					return colorsList[currentColorScheme][pos]				
 				}
 			} else if (pos === 'npn00.pd') {
 				if (this.arraysEqual(this.state.npn[this.state.npn.length-1][0],[0,0,0,1])) {
-					return colorsList[this.state.colorScheme]['npn00.b']
+					return colorsList[currentColorScheme]['npn00.b']
 				} else if (this.state.npn[this.state.npn.length-1][0][0] === 1) {
 					// console.log('hi')
-					return colorsList[this.state.colorScheme]['1st-2']
+					return colorsList[currentColorScheme]['1st-2']
 				} else {
-					return colorsList[this.state.colorScheme][pos]				
+					return colorsList[currentColorScheme][pos]				
 				}
 			} else {
-				// console.log(colorsList[this.state.colorScheme], pos)
-				if (!(pos in colorsList[this.state.colorScheme])) {
+				// console.log(colorsList[currentColorScheme], pos)
+				if (!(pos in colorsList[currentColorScheme])) {
 					return '#000000'
 				} else {
-					return colorsList[this.state.colorScheme][pos]				
+					return colorsList[currentColorScheme][pos]				
 				}
 			}
 		}
@@ -3291,11 +3732,27 @@ editSubjectMenu = (name) => {
 
 					<div style={{border:'1px solid #E3E3E3',marginTop:'20px'}}>
 
+				{!this.fromEntry && this.state.mvvBase.length === 0 && this.state.npnBases.length === 0 ?
 					<div className='hierarchymain'>
-					<span className='span1'>Word Builder</span>
+					<span className='span1'>Build your own sentence!</span>
 					</div>
+					:
+					<div className='hierarchymain'>
+					<span className='span1'>Sentence Builder</span>
+					</div>
+				}
 
 
+
+				{!this.fromEntry && this.state.mvvBase.length === 0 && this.state.npnBases.length === 0 ?
+					null
+					:
+					<div style={{textAlign:'right'}}>
+					<Link to={{pathname: '/sentencebuilder/1'}}>
+	      		<Icon circular onClick={()=>{this.backEndCall([['Delete',['mv',],''],['Delete',['np',],'']])}} style={{margin:10,color:'#B1B1B1',cursor:'pointer',fontSize:'22px'}} name='x' />
+	      	</Link>
+	      	</div>
+				}
 
 				<Container style={{marginTop:'30px',marginBottom:'30px'}}>
 					<div>
@@ -3519,7 +3976,7 @@ editSubjectMenu = (name) => {
 													(this.state.mvvType == 'Intrg2' ?
 														<Dropdown inline scrolling style={this.getDropdownStyle('mvv.s')} onChange={(event,data)=>{this.backEndCall([["Update",["mv","vs"],data.value.split('').map(Number)]])}}  value={this.state.mvvs.join("")} options={mvSubjectOptionsWhat} />
 														:
-														this.editSubjectMenu('mvSubject')
+														this.editSubjectMenu(["Insert",["mv","ns"]],'a subject','mvv.s',this.state.mvvs,"Update",["mv","vs"],this.state.mvvs.join(""),this.state.mvSubjectOptions1)  
 														)
 													)
 											}
@@ -3605,7 +4062,7 @@ editSubjectMenu = (name) => {
 													(this.state.mvvType == 'Intrg3' ?
 														<Dropdown inline scrolling style={this.getDropdownStyle('mvv.o')} onChange={(event,data)=>{this.backEndCall([["Update",["mv","vo"],data.value.split('').map(Number)]])}}  value={this.state.mvvo.join("")} options={mvObjectOptionsWhat} />		
 														:
-														<Dropdown inline scrolling style={this.getDropdownStyle('mvv.o')} onChange={(event,data)=>{this.backEndCall([["Update",["mv","vo"],data.value.split('').map(Number)]])}}  value={this.state.mvvo.join("")} options={this.state.mvObjectOptions1} />		
+														this.editSubjectMenu(["Insert",["mv","no"]],'an object','mvv.o',this.state.mvvo,"Update",["mv","vo"],this.state.mvvo.join(""),this.state.mvObjectOptions1)														
 														)
 													)										
 											}
@@ -3627,11 +4084,98 @@ editSubjectMenu = (name) => {
 									null
 								}
 
+								{this.state.mvvMood === 'Intrg' ?
+									<span>{'?'}</span>
+									:
+									null
+								}
+
+
 								</div>
+
 
 								{this.state.mvvs.length === 0 && this.state.npn.length === 0 ?
 									<div style={{display:'flex',justifyContent:'center'}}>
-									{this.editMenu('default',-1)}
+										<div style={{width:'300px',display:'flex',flexDirection:'column'}}>
+										<Accordion style={{color:'000000de',padding:'4px 9px',paddingBottom:'9px'}}>
+							    		<Accordion.Title
+							    			id={'vPhraseInsert'}
+							    			active={this.state.activeIndexes.includes('vPhraseInsert')}
+						            onClick={()=>{this.handleClick('vPhraseInsert',true)}}
+							    		>
+							    			<Icon name="dropdown" />
+							    			{'Make a verb phrase'}
+							    		</Accordion.Title>
+							    		<Accordion.Content active={this.state.activeIndexes.includes('vPhraseInsert')}>
+							    		{this.mainScreenMenu('he is _____','mvinsert','he',[])}
+							    		{this.mainScreenMenu('she is _____','mvinsert','she',[])}
+							    		{this.mainScreenMenu('it is _____','mvinsert','it',[])}
+							    		{this.mainScreenMenu('the two of them are _____','mvinsert','they2',[])}
+							    		{this.mainScreenMenu('they all (3+) are _____','mvinsert','they3',[])}
+							    		</Accordion.Content>
+							    	</Accordion>				
+										<Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
+							    		<Accordion.Title
+							    			id={'nPhraseInsert'}
+							    			active={this.state.activeIndexes.includes('nPhraseInsert')}
+						            onClick={()=>{this.handleClick('nPhraseInsert',true)}}
+							    		>
+							    			<Icon name="dropdown" />
+							    			{'Make a noun phrase'}
+							    		</Accordion.Title>
+							    		<Accordion.Content active={this.state.activeIndexes.includes('nPhraseInsert')}>
+							    		{this.mainScreenMenu('the one _____','nPhraseInsert','npCase',['Abs',''])}
+							    		{this.mainScreenMenu('from the one _____','nPhraseInsert','npCase',['Abl_Mod','from'])}
+							    		{this.mainScreenMenu('a or some _____','nPhraseInsert','npCase',['Abl_Mod','io'])}
+							    		{this.mainScreenMenu('in or at the one _____','nPhraseInsert','npCase',['Loc',''])}
+							    		{this.mainScreenMenu('toward the one _____','nPhraseInsert','npCase',['Ter',''])}
+							    		{this.mainScreenMenu('through, using the one _____','nPhraseInsert','npCase',['Via',''])}
+							    		{this.mainScreenMenu('like, similar to the one _____','nPhraseInsert','npCase',['Equ',''])}
+							    		</Accordion.Content>
+							    	</Accordion>			
+										<Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
+							    		<Accordion.Title
+							    			id={'questionInsert'}
+							    			active={this.state.activeIndexes.includes('questionInsert')}
+						            onClick={()=>{this.handleClick('questionInsert',true)}}
+							    		>
+							    			<Icon name="dropdown" />
+							    			{'Ask a Question'}
+							    		</Accordion.Title>
+							    		<Accordion.Content active={this.state.activeIndexes.includes('questionInsert')}>
+							    		{this.mainScreenMenu('who is he who is _____?','questionInsert','mvvType',['Intrg0',''])}
+							    		{this.mainScreenMenu('she is _____ whom (object)?','questionInsert','mvvType',['Intrg1',''])}
+							    		{this.mainScreenMenu('what is it that is _____ ?','questionInsert','mvvType',['Intrg2',''])}
+							    		{this.mainScreenMenu('he is _____ what (object)?','questionInsert','mvvType',['Intrg3',''])}
+							    		{this.mainScreenMenu('when did she _____?','questionInsert','mvvType',['Intrg4',''])}
+							    		{this.mainScreenMenu('when will he _____?','questionInsert','mvvType',['Intrg5',''])}
+							    		{this.mainScreenMenu('where is it _____?','questionInsert','mvvType',['Intrg6',''])}
+							    		{this.mainScreenMenu('from where is he _____?','questionInsert','mvvType',['Intrg7',''])}
+							    		{this.mainScreenMenu('to where is she _____?','questionInsert','mvvType',['Intrg8',''])}
+							    		{this.mainScreenMenu('why is it _____?','questionInsert','mvvType',['Intrg9',''])}
+							    		{this.mainScreenMenu('how is he _____?','questionInsert','mvvType',['IntrgA',''])}
+							    		</Accordion.Content>
+							    	</Accordion>		
+
+										<Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
+							    		<Accordion.Title
+							    			id={'commandInsert'}
+							    			active={this.state.activeIndexes.includes('commandInsert')}
+						            onClick={()=>{this.handleClick('commandInsert',true)}}
+							    		>
+							    			<Icon name="dropdown" />
+							    			{'Make a Command'}
+							    		</Accordion.Title>
+							    		<Accordion.Content active={this.state.activeIndexes.includes('commandInsert')}>
+							    		{this.mainScreenMenu('command right now','commandInsert','optCase',['Opt][PRS',''])}
+							    		{this.mainScreenMenu('command future','commandInsert','optCase',['Opt][FUT',''])}
+							    		{this.mainScreenMenu('do not ____','commandInsert','optCase',['Opt][PRS][NEG',''])}
+							    		{this.mainScreenMenu('do not ____ (future)?','commandInsert','optCase',['Opt][FUT][NEG',''])}
+							    		{this.mainScreenMenu('polite request','commandInsert','optCase',['Sbrd',''])}
+							    		{this.mainScreenMenu('polite do not ____','commandInsert','optCase',['Sbrd','neg'])}
+							    		</Accordion.Content>
+							    	</Accordion>		
+										</div>
 									</div>
 									:
 									null
@@ -3703,11 +4247,7 @@ editSubjectMenu = (name) => {
 												<span>
 												{xind === 0 ? (
 													<span>
-													{this.state.npnEnglish1.length > 0 ?
-														this.editMenu('npnEnglish1',-1)
-														:
-														null
-													}
+													{this.editMenu('npnEnglish1',-1)}
 													{this.state.npnCase == 'Equ' || this.state.npnCase == 'Via' || this.state.npCaseType == 'io' ? 
 														<Dropdown inline scrolling style={this.getDropdownStyle('npn'+(this.state.npnSegments.length-1-xind).toString()+'0.ps')} onChange={(event,data)=>{this.backEndCall([["Update",["np","n",this.state.npnSegments.length-1,0],(data.value+this.state.npn[this.state.npnSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.npn[this.state.npnSegments.length-1][0].slice(0, -1).join("")} options={this.state.nounOptionsMVAblPossessors1} />
 														:
@@ -3858,14 +4398,14 @@ editSubjectMenu = (name) => {
 									)):null
 								}
 
-								{this.state.cvvs.length > 0 ?
+{/*								{this.state.cvvs.length > 0 ?
 									<div style={{display:'flex',justifyContent:'center',paddingBottom:10}}>
 									{this.editMenu('defaultcv',-1)}
 									</div>
 									:
 									null
 								}								
-
+*/}
 								<div style={{textAlign:'center',fontSize:'18px',fontWeight:'300'}}>
 
 								{this.state.cvEnglish1.length > 0 ?
@@ -3915,9 +4455,7 @@ editSubjectMenu = (name) => {
 											)}
 										</span>
 										:
-										<span>
-											<Dropdown inline scrolling style={this.getDropdownStyle('cvv.s')} onChange={(event,data)=>{console.log(data.value[0]===4);if (data.value[0] === 4) {this.backEndCall([["Update",["cv","vs"],[4,1,["mv","vs"]]]])} else {this.backEndCall([["Update",["cv","vs"],data.value.split('').map(Number)]])}}}  value={this.state.cvvs.join("")} options={this.state.cvSubjectOptions1} />
-										</span>
+										this.editSubjectMenu(["Insert",["cv","ns"]],'a subject','cvv.s',this.state.cvvs,"Update",["cv","vs"],this.state.cvvs.join(""),this.state.cvSubjectOptions1)
 										)
 									:
 									null
@@ -3985,7 +4523,7 @@ editSubjectMenu = (name) => {
 											{this.state.cvvBase[1] == 'it' ?
 												(this.editMenu('cvEnglishAbl',-1))	
 												:
-												<Dropdown inline scrolling style={this.getDropdownStyle('cvv.o')} onChange={(event,data)=>{if (data.value === 'mvsubject') {this.backEndCall([["Update",["cv","vo"],[4,1,["mv","vs"]]]])} else {this.backEndCall([["Update",["cv","vo"],data.value.split('').map(Number)]])}}}  value={this.state.cvvo.join("")} options={this.state.cvObjectOptions1} />								
+												this.editSubjectMenu(["Insert",["cv","no"]],'an object','cvv.o',this.state.cvvo,"Update",["cv","vo"],this.state.cvvo.join(""),this.state.cvObjectOptions1)
 											}
 										</span>
 									)
@@ -3993,13 +4531,8 @@ editSubjectMenu = (name) => {
 									null
 								}
 
-
-								{this.state.cvEnglish3.length > 0 ?
-									<span> {this.state.cvEnglish3.map((w,wind)=><span style={{color:this.getColor(w[1])}}>{w[0]+" "}</span>)} </span>  		
-
-									:
-									null
-								}
+{/*												<Dropdown inline scrolling style={this.getDropdownStyle('cvv.o')} onChange={(event,data)=>{if (data.value === 'mvsubject') {this.backEndCall([["Update",["cv","vo"],[4,1,["mv","vs"]]]])} else {this.backEndCall([["Update",["cv","vo"],data.value.split('').map(Number)]])}}}  value={this.state.cvvo.join("")} options={this.state.cvObjectOptions1} />								
+*/}
 
 								{this.state.cvnObliquesSegments.length > 0 && this.state.cvnObliquesSegments.length === this.state.cvnObliques.length ? 
 									(this.state.cvnObliques.map((obliques,obliqueind)=>
@@ -4243,14 +4776,6 @@ editSubjectMenu = (name) => {
 								}
 
 
-								{this.state.svvs.length > 0 ?
-									<div style={{display:'flex',justifyContent:'center',paddingBottom:10}}>
-									{this.editMenu('defaultsv',-1)}
-									</div>
-									:
-									null
-								}			
-
 						
 								{this.state.svEnglish2.length > 0 ?
 									this.editMenu('svEnglish2',-1)
@@ -4263,26 +4788,73 @@ editSubjectMenu = (name) => {
 
 
 							{this.state.mvvs.length > 0 && this.state.cvvBase.length == 0 && this.state.svvBase.length == 0 ?
-								<div style={{display:'flex',justifyContent:'center',paddingBottom:10}}>
-								{this.editMenu('defaultverbphrase',-1)}
-								</div>
+									<div style={{display:'flex',justifyContent:'center',marginTop:'50px'}}>
+										<div style={{width:'300px',display:'flex',flexDirection:'column'}}>
+										<Accordion style={{padding:'4px 9px',paddingBottom:'9px'}}>
+							    		<Accordion.Title
+							    			id={'nObliqueInsert'}
+                				style={{color:(this.state.activeIndexes.includes('nObliqueInsert') ? '#000000' : '#00000066')}}
+							    			active={this.state.activeIndexes.includes('nObliqueInsert')}
+						            onClick={()=>{this.handleClick('nObliqueInsert',true)}}
+							    		>
+							    			<Icon name="dropdown" />
+							    			{'Add location, direction, etc.'}
+							    		</Accordion.Title>
+							    		<Accordion.Content active={this.state.activeIndexes.includes('nObliqueInsert')}>
+							    		{this.mainScreenMenu('from the one _____','nObliqueInsert','npCase',['Abl_Mod','from'])}
+							    		{this.mainScreenMenu('a or some _____','nObliqueInsert','npCase',['Abl_Mod','io'])}
+							    		{this.mainScreenMenu('in or at the one _____','nObliqueInsert','npCase',['Loc',''])}
+							    		{this.mainScreenMenu('toward the one _____','nObliqueInsert','npCase',['Ter',''])}
+							    		{this.mainScreenMenu('through, using the one _____','nObliqueInsert','npCase',['Via',''])}
+							    		{this.mainScreenMenu('like, similar to the one _____','nObliqueInsert','npCase',['Equ',''])}
+							    		</Accordion.Content>
+							    		<Accordion.Title
+							    			id={'cvinsert'}
+                				style={{color:(this.state.activeIndexes.includes('nObliqueInsert') ? '#000000' : '#00000066')}}
+							    			active={this.state.activeIndexes.includes('cvinsert')}
+						            onClick={()=>{this.handleClick('cvinsert',true)}}
+							    		>
+							    			<Icon name="dropdown" />
+							    			{'Add an additional verb phrase'}
+							    		</Accordion.Title>
+							    		<Accordion.Content active={this.state.activeIndexes.includes('cvinsert')}>
+							    		{this.mainScreenMenu('before he _____','cvinsert','cvvType',['Prec',''])}
+							    		{this.mainScreenMenu('because he _____','cvinsert','cvvType',['Cnsq',''])}
+							    		{this.mainScreenMenu('whenever he _____','cvinsert','cvvType',['Cont',''])}
+							    		{this.mainScreenMenu('even though he _____','cvinsert','cvvType',['Conc',''])}
+							    		{this.mainScreenMenu('even if he _____','cvinsert','cvvType',['Conc','evenif'])}
+							    		{this.mainScreenMenu('if he _____','cvinsert','cvvType',['Cond','if'])}
+							    		{this.mainScreenMenu('when (in future) he _____','cvinsert','cvvType',['Cond','wheninthefuture'])}
+							    		{this.mainScreenMenu('when (in past) he _____','cvinsert','cvvType',['CtmpI',''])}
+							    		{this.mainScreenMenu('while he _____','cvinsert','cvvType',['CtmpII',''])}
+							    		{this.mainScreenMenu('by _____','svinsert','svvType',['by',''])}
+							    		{this.mainScreenMenu('being _____','svinsert','svvType',['being',''])}
+							    		</Accordion.Content>
+							    	</Accordion>		
+
+	
+										</div>
+									</div>
 								:
 								null
 							}
+
+				{!this.fromEntry && this.state.mvvBase.length === 0 && this.state.npnBases.length === 0 ?
+					(this.state.glossary ? 
+						<SentenceGlossary backEndCall={this.backEndCall.bind(this)} getColor={this.getColor.bind(this)} />
+						:
+	        	<SentenceTemplates flipGlossary={this.flipGlossary.bind(this)} backEndCall={this.backEndCall.bind(this)} getColor={this.getColor.bind(this)} />
+	        )
+					:
+					null
+				}
 
 
 					</div>
 				</Container>
 
 
-
-
-				<div className='hierarchymain'>
-				<span className='span1'>Sentence Templates</span>
-				</div>
-
-        <SentenceTemplates backEndCall={this.backEndCall.bind(this)} getColor={this.getColor.bind(this)} />
-				</div>
+			</div>
 
 
 

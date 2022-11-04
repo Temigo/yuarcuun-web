@@ -670,7 +670,7 @@ class Dialogues extends Component {
           setTimeout(function() {this.repeatAudio(this.state.dialogues[i[randomExerciseCounter]]['audio'])}.bind(this),150)
       }
       // this.iterateOne();
-      this.setState({inputtedWords: '',})
+      this.setState({inputtedWords: '',currentCounter: this.state.currentCounter+1})
   }
 
   checkSelectCorrect(i,randomExerciseCounter,correctIndex, index, lengthOfOptions, event, data) {
@@ -959,8 +959,8 @@ class Dialogues extends Component {
                 <div>
                   {index == this.state.currentCounter ?
 
-
                   <div style={{padding:'10px',fontFamily:"Lato,Helvetica Neue,Arial,Helvetica,sans-serif",fontSize:'20px',textAlign:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'left':'right')}}>
+                  {console.log('index:',index)}
                     <div style={{display:'flex',alignItems:'center',justifyContent:(this.state.dialogues[i[randomExerciseCounter]]['speaker']=='a'?'flex-start':'flex-end')}}>
                       <span>{this.splitCarrotReturn(this.state.dialogues[i[randomExerciseCounter]][typeAttributes[1]],0)}</span>
                       {this.state.showCurrent ? 

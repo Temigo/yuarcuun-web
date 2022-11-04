@@ -153,6 +153,20 @@ class SimpleWordBuilderUpdated extends Component {
     this.backEndCall(initializedCall, true)
   }
 
+  componentWillReceiveProps(nextProps) {
+    // backEndCall()
+    console.log(nextProps)
+    let initializedCall
+    if (nextProps.entry[0] == 'n') {
+      initializedCall = [["Insert",["np"],[[[nextProps.word,0,nextProps.index,nextProps.definitionIndex]],[0,0,0,1],"Abs"]]]
+    } else {
+      initializedCall = [["Insert",["mv"],[[[nextProps.word,0,nextProps.index,0]],nextProps.entry[0],"Ind"]]]
+    }
+
+    // [["Insert", ["mv"], [[["nere-", 0, 0, 0]], "i", "Ind"]]]]
+    this.backEndCall(initializedCall, true)
+  }
+
 
   backEndCall(keyChanged, eraseExisting) {
     console.log('backend',this.state)

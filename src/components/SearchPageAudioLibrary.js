@@ -874,7 +874,7 @@ class SearchPage extends Component {
             {displayList  ? 
                 wordsList.map((word, index) => 
                 <List.Item style={{paddingTop:'10px',paddingBottom:'10px'}}>
-                  <Button style={{float:'left', color:'#8F8F8F',cursor:'pointer'}} circular basic icon='volume up' onClick={()=>this.repeatAudio(word)} />
+                  <Button style={{float:'left', border:'solid 1px #dededf',backgroundColor:'white', color:'#4a80b5',cursor:'pointer'}} circular icon='volume up' onClick={()=>this.repeatAudio(word)} />
                   <Button style={{float:'right', color:'#8F8F8F',cursor:'pointer'}} basic icon='dropdown' onClick={()=>this.setActiveAudioIndex(word,index)} />
                   <List.Content>
                     <List.Header style={{width:'100%',display:'flex',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'16px',paddingBottom:'4px'}}>

@@ -7,8 +7,8 @@ import './style.css';
 import SearchPage from './components/SearchPage.js';
 import YupikDetails from './components/YupikDetails.js';
 import WordBuilder from './components/WordBuilder.js';
-import OneVerbWordBuilder from './components/OneVerbWordBuilder.js';
 import SentenceBuilder from './components/SentenceBuilder.js';
+import SentenceGlossary from './components/SentenceGlossary.js';
 import About from './components/About.js';
 import Dialogues from './components/Dialogues.js';
 import DialogueMenu from './components/DialogueMenu.js';
@@ -152,11 +152,11 @@ class App extends Component {
               <Route exact path='/support' component={Support} />
               <Route exact path='/privacy' component={Privacy} />
               <Route exact path='/symbols' component={Symbols} />
+              <Route exact path='/sentenceglossary' component={SentenceGlossary} />
               <Route path='/:word/:entry_id/:usage_id/modify' component={YupikModifyLayout} />
               <Route exact path='/:word' component={YupikDetails} />
               <Route exact path='/wordbuilder/:word' component={WordBuilder}></Route>
               <Route exact path='/sentencebuilder/:num' render={(props) => <SentenceBuilder audiolibrary={this.state.audiolibrary} usageDictionary={this.state.usageDictionary} dictionary_dict={this.state.dictionary_dict} dictionary={this.state.dictionary} filteredDictV={this.state.filteredDictV} filteredDictVit={this.state.filteredDictVit} filteredDictN={this.state.filteredDictN} {...props} />}/>
-              <Route exact path='/oneverbwordbuilder/:word' component={OneVerbWordBuilder}></Route>
             </Switch>       
             :
             null 
