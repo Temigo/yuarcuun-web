@@ -14,17 +14,23 @@ const lessonChunks = {
 };
 
 
-
-
-
-
-function dialogueGenerator() {
+export function dialogueGenerator() {
 	var lessons = [];
 	var dialogues = {};
+	var bagOfWords = {
+		'v':{'yup':new Set(),
+			 'eng':new Set()},
+		'n':{'yup':new Set(),
+			 'eng':new Set()},
+		'p':{'yup':new Set(),
+			 'eng':new Set()},
+		'e':{'yup':new Set(),
+			 'eng':new Set()},
+	};
 
 	var currentLesson = "";
 	var lessonDialogues = [];
-	var lessonExercises = [];
+	// var lessonExercises = [];
 
 	var previousDialogue = "";
 	var dialogueIndex = 2
@@ -32,8 +38,8 @@ function dialogueGenerator() {
 	var order_out;
 	var title_out = "";
 	var context_out = "";
-	var matchingYug_out = [];
-	var matchingEng_out = [];
+	// var matchingYug_out = [];
+	// var matchingEng_out = [];
 
 	for (const d in dialogueList) {
 		// Chapter	Lesson	Number	Turn	Person	
@@ -52,25 +58,27 @@ function dialogueGenerator() {
 		const context = dialogueList[d][10]
 		// Base-Yugtun	Base-Yugtun-Choose	Base-English	Base-English-Choose	
 		const baseYug = dialogueList[d][11]
-		const baseYugCh = dialogueList[d][12]
+		// const baseYugCh = dialogueList[d][12]
 		const baseEng = dialogueList[d][13]
-		const baseEngCh = dialogueList[d][14]
+		// const baseEngCh = dialogueList[d][14]
 		// Ending-Yugtun	Ending-Yugtun-Choose	Ending-English	Ending-English-Choose
-		const endingYug = dialogueList[d][15]
-		const endingYugCh = dialogueList[d][16]
-		const endingEng = dialogueList[d][17]
-		const endingEngCh = dialogueList[d][18]
+		// const endingYug = dialogueList[d][15]
+		// const endingYugCh = dialogueList[d][16]
+		// const endingEng = dialogueList[d][17]
+		// const endingEngCh = dialogueList[d][18]
 		// Fill-in-Blank 1	Fill-in-Blank 2	
-		const fib1 = dialogueList[d][19]
-		const fib2 = dialogueList[d][20]		
+		// const fib1 = dialogueList[d][19]
+		// const fib2 = dialogueList[d][20]		
 		// Matching-Yugtun	Matching-English
-		const matchingYug = dialogueList[d][21]
-		const matchingEng = dialogueList[d][22]
+		// const matchingYug = dialogueList[d][21]
+		// const matchingEng = dialogueList[d][22]
 		// Exercise 1	Exercise 2
-		const exercise1 = dialogueList[d][23]
-		const exercise2 = dialogueList[d][24]
-		const exercise3 = dialogueList[d][25]
-		const exercise4 = dialogueList[d][26]
+		// const exercise1 = dialogueList[d][23]
+		// const exercise2 = dialogueList[d][24]
+		// const exercise3 = dialogueList[d][25]
+		// const exercise4 = dialogueList[d][26]
+		// baseType
+		const baseType = dialogueList[d][27]
 
 
 
@@ -81,19 +89,20 @@ function dialogueGenerator() {
 			currentLesson = lesson;
 		}
 		else if (currentLesson !== lesson) {
-			const matching = matchingYug_out.length === 1 ? [] : [matchingYug_out,matchingEng_out]
+			// const matching = matchingYug_out.length === 1 ? [] : [matchingYug_out,matchingEng_out]
 			
 			lessons.push({
 				"order":order_out, 
 				"title":title_out, 
 				"context":context_out, 
 				"dialogues":lessonDialogues, 
-				"exercises":lessonExercises, 
-				"matching":matching});
+				// "exercises":lessonExercises, 
+				// "matching":matching
+			});
 
 			currentLesson = lesson;
 			lessonDialogues = [];
-			lessonExercises = [];
+			// lessonExercises = [];
 		}
 
 		// first line in lesson
@@ -104,8 +113,8 @@ function dialogueGenerator() {
 			}
 			context_out = context;
 			order_out = order;
-			matchingYug_out = matchingYug.split(";");
-			matchingEng_out = matchingEng.split(";");
+			// matchingYug_out = matchingYug.split(";");
+			// matchingEng_out = matchingEng.split(";");
 		}
 
 		if (dialogue === previousDialogue) {
@@ -114,32 +123,40 @@ function dialogueGenerator() {
 			lessonDialogues[lessonDialogues.length-1].push(dialogue)
 		} else {
 			lessonDialogues.push([dialogue,])
-			lessonExercises.push([exercise1,exercise2,exercise3,exercise4])
+			// lessonExercises.push([exercise1,exercise2,exercise3,exercise4])
 			previousDialogue = dialogue;
 			dialogueIndex = 2
 		}
 
+		// add to bag of words
+		const baseYug_bow = baseYug.match(/<.*?>/)[0].slice(1,-1)
+		const baseEng_bow = baseEng.match(/<.*?>/)[0].slice(1,-1)
+		bagOfWords[baseType]['yup'].add(baseYug_bow)
+		bagOfWords[baseType]['eng'].add(baseEng_bow)
+
 		dialogues[dialogue] = {
 			"speaker":per,
-			"yup":yug,
-			"eng":eng,
+			"yupik":yug,
+			"english":eng,
 			"audio":audio,
+			"baseType": baseType,
 			"baseYupik":baseYug,
-			"baseYupikChoose":baseYugCh.split(";"),
+			// "baseYupikChoose":baseYugCh.split(";"),
 			"baseEnglish":baseEng,
-			"baseEnglishChoose":baseEngCh.split(";"),
-			"endingYupik":endingYug,
-			"endingYupikChoose":endingYugCh.split(";"),
-			"endingEnglish":endingEng,
-			"endingEnglishChoose":endingEngCh.split(";"),
-			"fillinblank1":fib1,
-			"fillinblank2":fib2,
+			// "baseEnglishChoose":baseEngCh.split(";"),
+			// "endingYupik":endingYug,
+			// "endingYupikChoose":endingYugCh.split(";"),
+			// "endingEnglish":endingEng,
+			// "endingEnglishChoose":endingEngCh.split(";"),
+			// "fillinblank1":fib1,
+			// "fillinblank2":fib2,
 		}
 	}
 	lessons = lessons.filter(a => a.order !== undefined)
 	lessons = lessons.sort((a,b) => (a.order > b.order) ? 1 : -1);
 	lessons = addHeaders(lessons)
-	return {lessons, dialogues};
+	console.log("DialogueGenerator",{lessons, dialogues, bagOfWords});
+	return {lessons, dialogues, bagOfWords};
 }
 
 function addHeaders(lsns) {
@@ -158,5 +175,113 @@ function addHeaders(lsns) {
 	}
 	return lsns_out
 }
+
+
+
+export function exerciseGenerator(lesson,dialogueList,bagOfWords) {
+	var dialogues = {};
+
+	// ADD NEW
+	// 1. shuffle multi dialogues in lesson
+	// englishQuestion  ["Are you ",6,"?"]  (6 is length of hungry) (always have leftText, middleInt, rightText)
+	// englishQuestionOptions  ["happy", "come", "hungry", "go"] (4 RANDOMLY GENERATED)
+	// englishQuestionCorrect  "hungry"
+	// yupikQuestion  ["",4,"tuten-qaa?"] (always have leftText, middleInt, rightText)
+	// yupikQuestionOptions  ["Kaig", "Ane", "Ayag", "Tune"] (4 RANDOMLY GENERATED) (add capitalization fixes)
+	// yupikQuestionCorrect  "Kaig"
+
+	let shuffleArray = (array) => {
+	    for (let i = array.length - 1; i > 0; i--) {
+	        const j = Math.floor(Math.random() * (i + 1));
+	        [array[i], array[j]] = [array[j], array[i]];
+	    }
+	    return array;
+	}
+	let startsWithCapital = (word) => {
+    	return /[A-Z]/.test(word.charAt(0))
+	}
+	let capitalizeFirstLetter = (word) => {
+    	return word.charAt(0).toUpperCase() + word.slice(1)
+	}
+	let lowercaseFirstLetter = (word) => {
+    	return word.charAt(0).toLowerCase() + word.slice(1)
+	}
+
+
+	for (let d_list in lesson.dialogues) { // list
+		if (lesson.dialogues[d_list].length > 1) {
+			shuffleArray(lesson.dialogues[d_list])
+		}
+		for (let d in lesson.dialogues[d_list]) { // list
+			const dialogue = lesson.dialogues[d_list][d];
+
+			var dialogue_out = dialogueList[dialogue];
+			const yug_bow = dialogue_out.baseYupik.match(/<.*?>/)[0]
+			const eng_bow = dialogue_out.baseEnglish.match(/<.*?>/)[0]
+			var yug_span = dialogue_out.baseYupik.split(yug_bow)
+			if (yug_span.length === 1) {
+				yug_span.push('');
+			}
+			yug_span.splice(1,0,yug_bow.slice(1,-1).length);
+			var eng_span = dialogue_out.baseEnglish.split(eng_bow)
+			if (eng_span.length === 1) {
+				eng_span.push('');
+			}
+			eng_span.splice(1,0,eng_bow.slice(1,-1).length);
+
+			let yup_words = Array.from(bagOfWords[dialogue_out.baseType]['yup'].values());
+			var yup_options_all = shuffleArray(yup_words);
+			var yup_options = [yug_bow.slice(1,-1),];
+			for (let i in yup_options_all) {
+				if (yup_options.length >= 4) {
+					break
+				}
+				let correctWord = yug_bow.slice(1,-1);
+				var checkWord = "";
+				if (startsWithCapital(correctWord)) {
+					checkWord = capitalizeFirstLetter(yup_options_all[i])
+				} else {
+					checkWord = lowercaseFirstLetter(yup_options_all[i])
+				}
+				if (!yup_options.includes(checkWord)) {
+					yup_options.push(checkWord)
+				}
+			}
+			let eng_words = Array.from(bagOfWords[dialogue_out.baseType]['eng'].values())
+			let eng_options_all = shuffleArray(eng_words);
+			var eng_options = [eng_bow.slice(1,-1),];
+			for (let i in eng_options_all) {
+				if (eng_options.length >= 4) {
+					break
+				}
+				let correctWord = eng_bow.slice(1,-1);
+				var checkWord2 = "";
+				if (startsWithCapital(correctWord)) {
+					checkWord2 = capitalizeFirstLetter(eng_options_all[i])
+				} else {
+					checkWord2 = lowercaseFirstLetter(eng_options_all[i])
+				}
+				if (!eng_options.includes(checkWord2)) {
+					eng_options.push(checkWord2)
+				}
+			}
+
+			dialogue_out['yupikQuestion'] = yug_span;
+			dialogue_out['yupikQuestionOptions'] = shuffleArray(yup_options);
+			dialogue_out['yupikQuestionCorrect'] = yug_bow.slice(1,-1);
+			dialogue_out['englishQuestion'] = eng_span;
+			dialogue_out['englishQuestionOptions'] = shuffleArray(eng_options);
+			dialogue_out['englishQuestionCorrect'] = eng_bow.slice(1,-1);
+
+			dialogues[dialogue] = dialogue_out;
+		}
+
+	}
+
+	console.log("ExerciseGenerator",{lesson,dialogues});
+
+	return {lesson,dialogues}
+}
+
 
 export default dialogueGenerator;
