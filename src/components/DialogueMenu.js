@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Container, Header, Button, Icon, Divider, Form, Input } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { API_URL, TUTORIAL_URL, ICON_URL } from '../App.js';
-import {lessonsList, dialogueLibrary} from './constants/qaneryaurci.js';
-import dialogueGenerator from './constants/dialogueListGenerator.js';
+import { lessonsList, dialogueLibrary } from './constants/qaneryaurci.js';
+import { dialogueGenerator, exerciseGenerator } from './constants/dialogueListGenerator.js';
 import '../semantic/dist/semantic.min.css';
 
 
@@ -14,6 +14,7 @@ class DialogueMenu extends Component {
     this.state = {
       lessons: dialog_gen.lessons,
     }
+    const exercise_gen = exerciseGenerator(dialog_gen.lessons[12],dialog_gen.dialogues,dialog_gen.bagOfWords)
   }
 
 
@@ -38,7 +39,6 @@ class DialogueMenu extends Component {
         <Container>
           {this.state.lessons.map((i,index)=>
             <div>
-              {console.log(i)}
               {i.context === "chunk" ?
                 <div style={{padding:'10px',fontSize:'20px'}}>
                   {i.title}
@@ -51,34 +51,7 @@ class DialogueMenu extends Component {
                   {'Read Only'}
                   </Button>
                   </Link>
-                  {i.exercises[0][0] !== "" && 
-                    <Link to={{pathname: 'dialogues/'+ index, state: {exerciseNumber:0}}}>
-                    <Button style={{marginBottom:'5px'}}>
-                    {'Exercise 1'}
-                    </Button>
-                    </Link>
-                  }
-                  {i.exercises[0][1] !== "" && 
-                    <Link to={{pathname: 'dialogues/'+ index, state: {exerciseNumber:1}}}>
-                    <Button style={{marginBottom:'5px'}}>
-                    {'Exercise 2'}
-                    </Button>
-                    </Link>
-                  }
-                  {i.exercises[0][2] !== "" && 
-                    <Link to={{pathname: 'dialogues/'+ index, state: {exerciseNumber:2}}}>
-                    <Button style={{marginBottom:'5px'}}>
-                    {'Exercise 3'}
-                    </Button>
-                    </Link>
-                  }
-                  {i.exercises[0][3] !== "" && 
-                    <Link to={{pathname: 'dialogues/'+ index, state: {exerciseNumber:3}}}>
-                    <Button style={{marginBottom:'5px'}}>
-                    {'Exercise 4'}
-                    </Button>
-                    </Link>
-                  }
+                  
                 </div>
               }
             </div>
