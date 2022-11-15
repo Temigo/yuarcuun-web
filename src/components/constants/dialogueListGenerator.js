@@ -1,5 +1,8 @@
 import {dialogueList} from "./dialogueList.js";
 
+import * as Fin from "finnlp";
+import { Inflectors } from "en-inflectors";
+
 const lessonChunks = {
 	0:"Test", 
 	1:"Basic Questions",
@@ -263,6 +266,39 @@ export function exerciseGenerator(lesson,dialogueList,bagOfWords) {
 				}
 				if (!eng_options.includes(checkWord2)) {
 					eng_options.push(checkWord2)
+				}
+			}
+
+			// make smarter english options
+			if (dialogue_out.baseType === 'v') {
+
+				let processed = new Fin.Run(eng_options[0]);
+				let tag = processed.sentences[0].tags[0];
+				console.log('',eng_options[0],tag)
+				for (let i in eng_options) {
+					if (['VB','VBP'].includes(tag)) {
+						eng_options[i] = new Inflectors(eng_options[i]).conjugate("VBP"); // toPresent
+					} else if (tag === 'VBD') {
+						eng_options[i] = new Inflectors(eng_options[i]).conjugate("VBD"); // toPast
+					} else if (tag === 'VBN') {
+						eng_options[i] = new Inflectors(eng_options[i]).conjugate("VBN"); // toPastParticiple
+					} else if (tag === 'VBZ') {
+						eng_options[i] = new Inflectors(eng_options[i]).conjugate("VBZ"); // toPresentS
+					} else if (tag === 'VBG') {
+						eng_options[i] = new Inflectors(eng_options[i]).conjugate("VBG"); // toGerund
+					}
+				}
+
+			} else if (dialogue_out.baseType === 'n') {
+				let word = new Inflectors(eng_options[0]);
+				for (let i in eng_options) {
+					if (word.isSingular()) {
+						const instance = new Inflectors(eng_options[i]);
+						eng_options[i] = instance.toSingular();
+					} else {
+						const instance = new Inflectors(eng_options[i]);
+						eng_options[i] = instance.toPlural();
+					}
 				}
 			}
 
