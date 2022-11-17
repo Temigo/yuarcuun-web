@@ -1,5 +1,7 @@
 import {dialogueList} from "./dialogueList.js";
 
+// npm i --save finnlp
+// npm install en-inflectors --save
 import * as Fin from "finnlp";
 import { Inflectors } from "en-inflectors";
 
@@ -134,8 +136,8 @@ export function dialogueGenerator() {
 		// add to bag of words
 		const baseYug_bow = baseYug.match(/<.*?>/)[0].slice(1,-1)
 		const baseEng_bow = baseEng.match(/<.*?>/)[0].slice(1,-1)
-		bagOfWords[baseType]['yup'].add(baseYug_bow)
-		bagOfWords[baseType]['eng'].add(baseEng_bow)
+		bagOfWords[baseType]['yup'].add(baseYug_bow.toLowerCase())
+		bagOfWords[baseType]['eng'].add(baseEng_bow.toLowerCase())
 
 		dialogues[dialogue] = {
 			"speaker":per,
