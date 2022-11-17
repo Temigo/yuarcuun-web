@@ -277,6 +277,9 @@ class SearchPage extends Component {
       // possibleDefinition: ["","","","","","","","","",""],
       // moods: ["[Ind]","[Intrg]","[Opt]","[Sbrd]","[Ptcp]","[Prec]","[Cnsq]","[Cont]","[Conc]","[Cond]","[CtmpI]","[CtmpII]","[Abs]","[Rel]","[Abl_Mod]","[Loc]", "[Ter]","[Via]","[Equ]","%5BQuant_Qual%5D","[PerPro]","[PerPro]","[PerPro]","[PerPro]","[PerPro]","[PerPro]","[PerPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]",],
       activeAudioIndex: {},
+      playingAudio: false,
+      clickedAudioUrl: "",
+      clickedAudio: null,
     }
     // this.getParse = this.getParse.bind(this);
     this.onChangeSearch = this.onChangeSearch.bind(this);
@@ -372,6 +375,14 @@ class SearchPage extends Component {
     }
   }
 
+  componentWillUnmount() {
+    if (this.state.playingAudio) {
+      let audio = this.state.clickedAudio;
+      audio.pause();
+      audio.currentTime = 0;
+    }
+  }
+
   // getParse(word) {
   //   if (word === "") {
   //     this.setState({
@@ -451,6 +462,12 @@ class SearchPage extends Component {
 
     let wordsList = fuzzysort.go(new_search, this.props.audiolibrary, optionsFuzzy).map(({ obj }) => (obj));
     this.setState({ startingSearch: newStartingSearch, wordsList: wordsList, search: new_search });
+
+    if (this.state.playingAudio) {
+      let audio = this.state.clickedAudio;
+      audio.pause();
+      audio.currentTime = 0;
+    }
 
     // if (new_search.length >= 4 && !this.state.yugtunAnalyzer) {
     //   ReactGA.event({
@@ -659,6 +676,9 @@ class SearchPage extends Component {
   		search:'',
       wordsList: [],
       activeAudioIndex: {},
+      playingAudio: false,
+      clickedAudioUrl: "",
+      clickedAudio: null,
       // newSearchList:[],
       // parses:[],
       // segments:[],
@@ -745,15 +765,47 @@ class SearchPage extends Component {
     //     // this.setState({ dictionary: dictionary });
     //   });
 
-    let sound = new Audio(API_URL + "/audiolibrary/" +  audio.mp3);
-    this.setState({loadingTTS: true});
 
-    sound.play().then((e) => {
-        this.setState({loadingTTS: false})
-      }, (error) => {
-        this.setState({loadingTTS: false, canTTS: false});
-      }
-    )
+
+    let audioURL = API_URL + "/audiolibrary/" +  audio.mp3;
+
+    // stop audio on double click
+    if (this.state.playingAudio === true && this.state.clickedAudioUrl === audioURL) {
+      let audio = this.state.clickedAudio;
+      audio.pause();
+      audio.currentTime = 0;
+      this.setState({clickedAudio:audio, playingAudio: false})
+    }
+
+    // stop first audio then play new one
+    if (this.state.playingAudio === true && this.state.clickedAudioUrl !== audioURL) {
+      let firstAudio = this.state.clickedAudio;
+      firstAudio.pause();
+      firstAudio.currentTime = 0;
+
+      this.setState({playingAudio: true});
+      let secondAudio = new Audio(audioURL);
+      secondAudio.play();
+      this.setState({clickedAudioUrl:audioURL, clickedAudio:secondAudio})
+      secondAudio.onended=()=>{this.setState({playingAudio: false})};
+    }
+
+    // play audio again
+    if (this.state.playingAudio === false && this.state.clickedAudioUrl === audioURL) {
+      let audio = this.state.clickedAudio;
+      this.setState({playingAudio: true});
+      audio.play();
+      audio.onended=()=>{this.setState({playingAudio: false})};
+    }
+
+    // play new audio
+    if (this.state.playingAudio === false && this.state.clickedAudioUrl !== audioURL) {
+      this.setState({playingAudio: true});
+      let audio = new Audio(audioURL);
+      audio.play();
+      this.setState({clickedAudioUrl:audioURL, clickedAudio:audio})
+      audio.onended=()=>{this.setState({playingAudio: false})};
+    }
 
   }
 
