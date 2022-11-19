@@ -3,18 +3,19 @@ import { Container, Header, Button, Icon, Divider, Form, Input } from 'semantic-
 import { Link } from 'react-router-dom';
 import { API_URL, TUTORIAL_URL, ICON_URL } from '../App.js';
 import { lessonsList, dialogueLibrary } from './constants/qaneryaurci.js';
-import { dialogueGenerator, exerciseGenerator } from './constants/dialogueListGenerator.js';
+import { dialogueGenerator } from './constants/dialogueListGenerator.js';
 import '../semantic/dist/semantic.min.css';
 
+
+const dialog_gen = dialogueGenerator()
 
 class DialogueMenu extends Component {
   constructor(props) {
     super(props);
-    const dialog_gen = dialogueGenerator()
+    
     this.state = {
       lessons: dialog_gen.lessons,
     }
-    const exercise_gen = exerciseGenerator(dialog_gen.lessons[12],dialog_gen.dialogues,dialog_gen.bagOfWords)
   }
 
 
