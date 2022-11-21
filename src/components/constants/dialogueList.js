@@ -334,8 +334,8 @@ export const dialogueList = [
 [6,17,2,13,"a","Tua-i, wii uterrlii.","I guess I'll go home.","saayulriik-13.mp3",,"","","Tua-i, wii <uterr>lii.","","I guess I'll <go home>.","","","","","","","","","","","","","","v"],
 [6,17,2,14,"b","Ii-i, quyana taiqerluten. Taryaqvak nalluyagucaqunaku.","Okay, thanks for dropping by. Don't forget the salmon.","saayulriik-14.mp3",,"","","Ii-i, quyana taiqerluten. Taryaqvak <nalluyagu>caqunaku.","","Okay, thanks for dropping by. Don't <forget> the salmon.","","","","","","","","","","","","","","v"],
 [6,17,2,15,"a","Teguciqaqa. Quyanaqvaa.","I'll take it. Thank you very much.","saayulriik-15.mp3",,"","","<Tegu>ciqaqa. Quyanaqvaa.","","I'll <take> it. Thank you very much.","","","","","","","","","","","","","","v"],
+[0,0,0,0,"a","Dummy","Dummy","dummy.mp3",,"","","<Dummy>","","<Dummy>","","","","","","","","","","","","","","p"],
 ]
-
 
 
 
