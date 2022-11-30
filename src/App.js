@@ -139,7 +139,7 @@ class App extends Component {
   render() {
     console.log(this.state)
     return (
-      <div>
+      <div style={{margin:0,padding:0}}>
       <YugtunLoader criteria={this.state.dictionary.length === 0 && this.state.audiolibrary.length === 0 && this.state.usageDictionary.length === 0 && this.state.filteredDictV === 0 && this.state.filteredDictVit === 0 && this.state.filteredDictN === 0} />
         {
           this.state.audiolibrary.length !== 0 && this.state.dictionary.length !== 0 && this.state.usageDictionary !== 0 && this.state.filteredDictV !== 0 && this.state.filteredDictVit !== 0 && this.state.filteredDictN !== 0 ?

@@ -22,7 +22,7 @@ class DialogueMenu extends Component {
   render() {
     console.log(this.state)
     return (
-      <Container>
+      <div style={{paddingRight:5,paddingLeft:5}}>
         <div style={{justifyContent:'space-between',display:'flex'}}>
           <div>
           <Button primary icon circular onClick={this.props.history.goBack}>
@@ -48,17 +48,53 @@ class DialogueMenu extends Component {
                 <div>
                   <div>{i.title}</div>
                   <Link to={{pathname: 'dialogues/'+ index, state: {exerciseNumber:-1}}}>
-                  <Button style={{marginBottom:'5px'}}>
+                  <Button size='tiny' style={{marginBottom:'5px'}}>
                   {'Read Only'}
                   </Button>
                   </Link>
-                  
+
+                  <Link to={{pathname: 'dialogues/'+ index, state: {exerciseNumber:0}}}>
+                  <Button size='tiny' style={{marginBottom:'5px'}}>
+                  {"Guess Yup'ik"}
+                  </Button>
+                  </Link>
+
+                  <Link to={{pathname: 'dialogues/'+ index, state: {exerciseNumber:1}}}>
+                  <Button size='tiny' style={{marginBottom:'5px'}}>
+                  {"Fill-In Yup'ik"}
+                  </Button>
+                  </Link>
+
+                  <Link to={{pathname: 'dialogues/'+ index, state: {exerciseNumber:2}}}>
+                  <Button size='tiny' style={{marginBottom:'5px'}}>
+                  {"Select Yup'ik"}
+                  </Button>
+                  </Link>
+
+                  <Link to={{pathname: 'dialogues/'+ index, state: {exerciseNumber:3}}}>
+                  <Button size='tiny' style={{marginBottom:'5px'}}>
+                  {'Fill-In English'}
+                  </Button>
+                  </Link>
+
+                  <Link to={{pathname: 'dialogues/'+ index, state: {exerciseNumber:4}}}>
+                  <Button size='tiny' style={{marginBottom:'5px'}}>
+                  {'Select English'}
+                  </Button>
+                  </Link>
+
+                  <Link to={{pathname: 'dialogues/'+ index, state: {exerciseNumber:5}}}>
+                  <Button size='tiny' style={{marginBottom:'5px'}}>
+                  {"Listening Yup'ik"}
+                  </Button>
+                  </Link>
+
                 </div>
               }
             </div>
             )}
         </Container>
-      </Container>
+      </div>
     );
   }
 }

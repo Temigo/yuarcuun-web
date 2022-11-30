@@ -12591,6 +12591,15 @@
         "warning": "^4.0.1"
       }
     },
+    "react-scroll": {
+      "version": "1.8.8",
+      "resolved": "https://registry.npmjs.org/react-scroll/-/react-scroll-1.8.8.tgz",
+      "integrity": "sha512-RnU0wLaLozKIhLNAfoz6yxMus+PMypk7eBRfOitalYd2+qCiHrZdJ0MSDBs1Y23IFSfqSCdCEmENMJeSh0KoHA==",
+      "requires": {
+        "lodash.throttle": "^4.1.1",
+        "prop-types": "^15.7.2"
+      }
+    },
     "read-pkg": {
       "version": "1.1.0",
       "resolved": "https://registry.npmjs.org/read-pkg/-/read-pkg-1.1.0.tgz",
