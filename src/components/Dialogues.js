@@ -14,6 +14,7 @@ var scroll    = Scroll.animateScroll;
 class Dialogues extends Component {
   constructor(props) {
     super(props);
+    console.log(props)
     const currentLesson = decodeURI(props.match.params.num)
     const dialog_gen = dialogueGenerator()
     const exercise_gen = exerciseGenerator(dialog_gen.lessons[currentLesson],dialog_gen.dialogues,dialog_gen.bagOfWords)
@@ -21,6 +22,7 @@ class Dialogues extends Component {
       show: false,
       currentLesson: currentLesson,
       exerciseNumber: props.location.state === undefined ? -1 : props.location.state.exerciseNumber,
+      lessonIndex: props.location.state === undefined ? -1 : props.location.state.lessonIndex,
       exerciseNumberMatrix: [],
       currentCounter: -1,
       // questionMode:0,
@@ -650,6 +652,7 @@ class Dialogues extends Component {
   showContinue(index) {
       if (this.state.showContinue) {
         if (this.state.lesson.dialogues.length-1 === this.state.currentCounter) {
+        this.props.updateCompleted(this.state.lessonIndex,this.state.exerciseNumber)
         return <div>
             <div style={{display:'flex',justifyContent:'center'}}><Link to={{pathname:'/dialogues'}}><Button>Continue</Button></Link></div>
             <div style={{display:'flex',justifyContent:'center'}}><Button onClick={()=>{this.initialize()}}>Redo</Button></div>
@@ -675,6 +678,7 @@ class Dialogues extends Component {
 
   render() {
     console.log(this.state)
+    console.log(this.props)
     // let exerciseNum = this.state.exerciseNumber
     // if (exerciseNum == '10') {
     //   //alternate between exerciseNumbers
