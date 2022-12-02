@@ -43,7 +43,8 @@ class App extends Component {
       filteredDictV: [],
       filteredDictVit: [],
       filteredDictN: [],
-
+      completedExercises: [],
+      lessonsStarted: [],
     }
   }
 
@@ -136,6 +137,21 @@ class App extends Component {
     }
 
   }
+
+  updateCompleted = (lessonIndex, exerciseNumber, data,value) => {
+    // console.log(lessonIndex, exerciseNumber, data,value)
+    let completedExercises = this.state.completedExercises
+    let lessonsStarted = this.state.lessonsStarted
+    let newentry = lessonIndex.toString()+'%'+exerciseNumber.toString()
+    // console.log(completed, newentry, !completed.includes(newentry),completed.concat([newentry]))
+    if (!completedExercises.includes(newentry)) {
+      this.setState({completedExercises:completedExercises.concat([newentry])})
+    }
+    if (!lessonsStarted.includes(lessonIndex)) {
+      this.setState({lessonsStarted:lessonsStarted.concat([lessonIndex])})
+    }
+  }
+
   render() {
     console.log(this.state)
     return (
@@ -146,8 +162,8 @@ class App extends Component {
             <Switch>
               <Route exact path='/' render={(props) => <SearchPage audiolibrary={this.state.audiolibrary} dictionary_dict={this.state.dictionary_dict} usageDictionary={this.state.usageDictionary} dictionary={this.state.dictionary} filteredDictV={this.state.filteredDictV} filteredDictVit={this.state.filteredDictVit} filteredDictN={this.state.filteredDictN} {...props} />}/>
               <Route exact path='/about' component={About} />
-              <Route exact path='/dialogues/:num' component={Dialogues} />
-              <Route exact path='/dialogues' component={DialogueMenu} />
+              <Route exact path='/dialogues/:num' render={(props) => <Dialogues updateCompleted={this.updateCompleted} {...props} />}/>
+              <Route exact path='/dialogues' render={(props) => <DialogueMenu completedExercises={this.state.completedExercises} lessonsStarted={this.state.lessonsStarted} {...props} />}/>
               <Route exact path='/lksdreader' component={Lksdreader} />
               <Route exact path='/support' component={Support} />
               <Route exact path='/privacy' component={Privacy} />
