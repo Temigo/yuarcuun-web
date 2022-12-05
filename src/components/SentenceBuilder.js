@@ -19,6 +19,7 @@ import { sentenceTemplates } from './constants/sentence_templates.js'
 
 
 let customFontFam = "Roboto,'Helvetica Neue',Arial,Helvetica,sans-serif"
+const YUGTUNDOTCOM_URL = "https://www.yugtun.com/";
 
 let tensesSentenceTemplates = [
 	'llru',
@@ -124,7 +125,7 @@ let dictionary = [];
 let usageDictionary = [];
 let dictionary_dict = {};
 
-class OneVerbWordBuilder extends Component {
+class SentenceBuilder extends Component {
 	constructor(props) {
 		super(props);
 		console.log(this.props)
@@ -430,7 +431,6 @@ class OneVerbWordBuilder extends Component {
 			candidateDisplay:[],
 			candidateFST:[],
 			candidateType:'',
-			showUnderlying:false,
 			lockSubmit:false,
 			glossary:false,
 
@@ -464,6 +464,7 @@ class OneVerbWordBuilder extends Component {
 
 			nounIndexChosen:0,
 
+			parses:{},
 
 		}
 
@@ -927,7 +928,7 @@ class OneVerbWordBuilder extends Component {
 
 
 		if (eraseExisting) {
-			if (simpleCall) {
+			if (simpleCall && this.props.location.state !== undefined) {
 				if ('mv' in this.props.location.state) {
 					Object.keys(this.props.location.state['mv']).map((k)=>{
 						// console.log('entry',k)
@@ -1106,6 +1107,10 @@ class OneVerbWordBuilder extends Component {
       		})
       	} else {
       		this.initialize('np')
+      	}
+
+      	if ("parses" in response.data) {
+      		updateDict['parses'] = response.data.parses
       	}
 
       	if ("segments" in response.data) {
@@ -1402,43 +1407,37 @@ class OneVerbWordBuilder extends Component {
   		return this.contentDisplay([], 4)
   	} else if (type==='defaultsv') {
   		return this.contentDisplay([], 4)
-  	} else if (type==='mvns') {
+  	} else if (type === 'mvnsParser') {
   		return this.contentDisplay(this.state.mvnsSegments.slice().reverse()[ind[0]][ind[1]], 1)
-  	} else if (type==='mvnsappositive') {
+  	} else if (type==='mvnsappositiveParser') {
   		return this.contentDisplay(this.state.mvnsSegments.slice().reverse()[ind[0]][ind[1]], 1)		
-  	} else if (type==='mvno') {
+  	} else if (type==='mvnoParser') {
   		return this.contentDisplay(this.state.mvnoSegments.slice().reverse()[ind[0]][ind[1]], 1)		
-  	} else if (type==='mvnoappositive') {
+  	} else if (type==='mvnoappositiveParser') {
   		return this.contentDisplay(this.state.mvnoSegments.slice().reverse()[ind[0]][ind[1]], 1)			
-  	} else if (type==='cvns') {
+  	} else if (type === 'cvnsParser' || type === 'cvnsappositiveParser') {
   		return this.contentDisplay(this.state.cvnsSegments.slice().reverse()[ind[0]][ind[1]], 1)
-  	} else if (type==='cvnsappositive') {
-  		return this.contentDisplay(this.state.cvnsSegments.slice().reverse()[ind[0]][ind[1]], 1)
-  	} else if (type==='cvno') {
+  	} else if (type === 'cvnoParser' || type === 'cvnoappositiveParser') {
   		return this.contentDisplay(this.state.cvnoSegments.slice().reverse()[ind[0]][ind[1]], 1)		
-  	} else if (type==='svno') {
+  	} else if (type==='svnoParser' || type === 'svnoappositiveParser') {
   		return this.contentDisplay(this.state.svnoSegments.slice().reverse()[ind[0]][ind[1]], 1)		
-  	} else if (type==='svnoappositive') {
-  		return this.contentDisplay(this.state.svnoSegments.slice().reverse()[ind[0]][ind[1]], 1)		
-  	} else if (type==='cvnoappositive') {
+  	} else if (type==='cvnoappositiveParser') {
   		return this.contentDisplay(this.state.cvnoSegments.slice().reverse()[ind[0]][ind[1]], 1)		
-  	} else if (type==='mv' || type == 'mvQuestion') {
+  	} else if (type == 'mvQuestion' || type == 'mvParser') {
   		return this.contentDisplay(this.state.mvvSegments, 2)		
   	} else if (type==='mvqWord') {
   		return this.contentDisplay(this.state.mvqWordSegments, 2)		
-  	} else if (type==='cv') {
+  	} else if (type == 'cvParser') {
   		return this.contentDisplay(this.state.cvvSegments, 2)		
-  	} else if (type==='sv') {
+  	} else if (type == 'svParser') {
   		return this.contentDisplay(this.state.svvSegments, 2)		
-  	} else if (type==='npn') {
+  	} else if (type==='npnParser' || type==='npnappositiveParser') {
   		return this.contentDisplay(this.state.npnSegments.slice().reverse()[ind[0]][ind[1]], 1)		
-  	} else if (type==='npnappositive') {
-  		return this.contentDisplay(this.state.npnSegments.slice().reverse()[ind[0]][ind[1]], 1)		
-  	} else if (type==='mvnObliques' || type==='mvnObliquesAppositive') {
+  	} else if (type==='mvnObliquesParser' || type == 'mvnObliquesAppositiveParser') {
   		return this.contentDisplay(this.state.mvnObliquesSegments[ind[0]][ind[1]][ind[2]], 1)		
-  	} else if (type==='cvnObliques' || type==='cvnObliquesAppositive') {
+  	} else if (type==='cvnObliquesParser' || type==='cvnObliquesAppositiveParser') {
   		return this.contentDisplay(this.state.cvnObliquesSegments[ind[0]][ind[1]][ind[2]], 1)		
-  	} else if (type==='svnObliques' || type==='svnObliquesAppositive') {
+  	} else if (type==='svnObliquesParser' || type==='svnObliquesAppositiveParser') {
   		return this.contentDisplay(this.state.svnObliquesSegments[ind[0]][ind[1]][ind[2]], 1)
   	} else if (type==='mvEnglish1') {
   		return this.contentDisplay(this.state.mvEnglish1, 5)
@@ -1519,8 +1518,11 @@ class OneVerbWordBuilder extends Component {
   	if (fontType == 1) {
 		return <div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
 							<span style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
-								{data.map((t)=>
+{/*								{data.map((t)=>
 									<span style={{color:this.getColor(t[1]),paddingBottom:'2px',borderBottom:'2px solid '+this.getColor(t[1])}}>{t[0]}</span>
+								)}*/}
+								{data.map((t)=>
+									<span style={{color:this.getColor(t[1])}}>{t[0]}</span>
 								)}
 							</span>
 						</div>								
@@ -1528,7 +1530,7 @@ class OneVerbWordBuilder extends Component {
   		return 	<div style={{marginBottom:10,fontSize:'30px',fontWeight:'400'}}>
 								<span style={{cursor:'pointer',display:'flex',justifyContent:'center', lineHeight:'35px'}}>
 									{data.map((t)=>
-										<span style={{color:this.getColor(t[1]),paddingBottom:'2px',borderBottom:'2px solid '+this.getColor(t[1])}}>{t[0]}</span>
+										<span style={{color:this.getColor(t[1])}}>{t[0]}</span>
 									)}
 								</span>
 							</div>  		
@@ -1620,7 +1622,33 @@ class OneVerbWordBuilder extends Component {
 						{/*{this.menuItem('BaseChooser','Add Connective Verb Phrase','mvcvinsert',null)}*/}
 						{/*{this.menuItem('BaseChooser','Add Subordinative Verb Phrase','mvcvinsert',null)}*/}
 			    	</Menu>  			
-  		} else if (type === 'mv' || type == 'mvEnglish2') {
+  		} else if (type === 'mvParser') {
+  			return this.parserPopup(this.state.parses.mv.v)
+  		} else if (type === 'mvnsParser') {
+  			return this.parserPopup(this.state.parses.mv.ns[this.state.mvnsSegments.length-1-ind[0]][ind[1]])
+  		} else if (type === 'mvnoParser') {
+  			return this.parserPopup(this.state.parses.mv.no[this.state.mvnoSegments.length-1-ind[0]][ind[1]])
+  		} else if (type === 'mvnObliquesParser' || type === 'mvnObliquesAppositiveParser') {
+  			return this.parserPopup(this.state.parses.mv.nObliques[ind[0]][ind[1]][ind[2]])
+  		} else if (type === 'cvParser') {
+  			return this.parserPopup(this.state.parses.cv.v)
+  		} else if (type === 'cvnsParser') {
+  			return this.parserPopup(this.state.parses.cv.ns[this.state.cvnsSegments.length-1-ind[0]][ind[1]])
+  		} else if (type === 'cvnoParser') {
+  			return this.parserPopup(this.state.parses.cv.no[this.state.cvnoSegments.length-1-ind[0]][ind[1]])
+  		} else if (type === 'cvnObliquesParser' || type === 'cvnObliquesAppositiveParser') {
+  			return this.parserPopup(this.state.parses.cv.nObliques[ind[0]][ind[1]][ind[2]])
+  		} else if (type === 'svParser') {
+  			return this.parserPopup(this.state.parses.sv.v)
+  		} else if (type === 'svnoParser') {
+  			return this.parserPopup(this.state.parses.sv.no[this.state.svnoSegments.length-1-ind[0]][ind[1]])
+  		} else if (type === 'svnObliquesParser' || type === 'svnObliquesAppositiveParser') {
+  			return this.parserPopup(this.state.parses.sv.nObliques[ind[0]][ind[1]][ind[2]])
+  		} else if (type === 'npnParser' || type === 'npnappositiveParser') {
+  			return this.parserPopup(this.state.parses.np.n[this.state.npn.length-1-ind[0]][ind[1]])
+  		} 
+
+  		else if (type == 'mvEnglish2') {
 				return <Menu vertical>
 			      {this.menuItem('BaseChooser','Change Verb','mvupdate',null)}
 			      {this.state.requirePostbase.length > 0 ?
@@ -1649,7 +1677,7 @@ class OneVerbWordBuilder extends Component {
 				return <Menu vertical>
 			      {this.subMenuItem('changeQuestiontype')}
 			    	</Menu>
- 			} else if (type === 'cv' || type === 'cvEnglish2') {
+ 			} else if (type === 'cvEnglish2') {
 				return <Menu vertical>
 			      {this.menuItem('BaseChooser','Change Connective Verb','cvupdate',null)}
 			      {this.menuItem('Delete','Delete Connective Verb',null,null,[["Delete",["cv",],-1]])}
@@ -1668,25 +1696,6 @@ class OneVerbWordBuilder extends Component {
 			      {this.menuItem('BaseChooser','Change Subordinative Verb','svupdate',null)}
 			      {this.menuItem('Delete','Delete Subordinative Verb',null,null,[["Delete",["sv",],-1]])}
 			    	</Menu>
- 			} else if (type === 'sv') {
-				return <Menu vertical>
-			      {this.subMenuItem('changeSV')}
-			      {this.menuItem('BaseChooser','Change Subordinative Verb','svupdate',null)}
-			      {this.menuItem('Delete','Delete Subordinative Verb',null,null,[["Delete",["sv",],-1]])}
-			    	</Menu>
- 			} else if (type === 'svno') {
-				return <Menu vertical>
-						{this.menuItem('BaseChooser','Change Noun','svnoupdate',null)}
-						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun','svnopossessorinsert',null) : null}
-			      {ind[0] == this.state.svno.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun','svnopossessedinsert',null): null}
-						{this.menuItem('BaseChooser','Add Descriptor Noun','svnoappositiveinsert',null)}
-			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["sv","no",this.state.svno.length-1-ind[0]],-1]])}
-			    	</Menu>  			
- 			} else if (type === 'svnoappositive') {
-				return <Menu vertical>
-						{this.menuItem('BaseChooser','Change Descriptor Noun','cvnoupdate',null)}
-			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["sv","no",this.state.svno.length-1-ind[0],ind[1]],-1]])}
-			    	</Menu>  					
  			} else if (type === 'svnoEnglish2') {
 				return <Menu vertical>
 						{this.menuItem('BaseChooser','Change Noun','svnoupdateEnglish',null)}
@@ -1700,19 +1709,6 @@ class OneVerbWordBuilder extends Component {
 						{this.menuItem('BaseChooser','Change Descriptor Noun','svnoupdateEnglish',null)}
 			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["sv","no",ind[0],this.state.svno[ind[0]].length-1-ind[1]],-1]])}
 			    	</Menu>  					
- 			} else if (type === 'mvns') {
-				return <Menu vertical>
-						{this.menuItem('BaseChooser','Change Noun','mvnsupdate',null)}
-						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun','mvnspossessorinsert',null) : null}
-			      {ind[0] == this.state.mvns.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun','mvnspossessedinsert',null): null}
-						{this.menuItem('BaseChooser','Add Descriptor Noun','mvnsappositiveinsert',null)}
-			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["mv","ns",this.state.mvns.length-1-ind[0]],-1]])}
-			    	</Menu>  			
- 			} else if (type === 'mvnsappositive') {
-				return <Menu vertical>
-						{this.menuItem('BaseChooser','Change Descriptor Noun','mvnsupdate',null)}
-			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["mv","ns",this.state.mvns.length-1-ind[0],ind[1]],-1]])}
-			    	</Menu>  			
  			} else if (type == 'mvnsEnglish2') {
 				return <Menu vertical>
 						{this.menuItem('BaseChooser','Change Noun','mvnsupdateEnglish',null)}
@@ -1725,19 +1721,6 @@ class OneVerbWordBuilder extends Component {
 				return <Menu vertical>
 						{this.menuItem('BaseChooser','Change Descriptor Noun','mvnsupdateEnglish',null)}
 			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["mv","ns",ind[0],this.state.mvns[ind[0]].length-1-ind[1]],-1]])}
-			    	</Menu>  			
- 			} else if (type === 'mvno') {
-				return <Menu vertical>
-						{this.menuItem('BaseChooser','Change Noun','mvnoupdate',null)}
-						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun','mvnopossessorinsert',null) : null}
-			      {ind[0] == this.state.mvno.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun','mvnopossessedinsert',null): null}
-						{this.menuItem('BaseChooser','Add Descriptor Noun','mvnoappositiveinsert',null)}
-			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["mv","no",this.state.mvno.length-1-ind[0]],-1]])}
-			    	</Menu>  			
- 			} else if (type === 'mvnoappositive') {
-				return <Menu vertical>
-						{this.menuItem('BaseChooser','Change Descriptor Noun','mvnoupdate',null)}
-			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["mv","no",this.state.mvno.length-1-ind[0],ind[1]],-1]])}
 			    	</Menu>  			
  			} else if (type === 'mvnoEnglish2') {
 				return <Menu vertical>
@@ -1752,32 +1735,6 @@ class OneVerbWordBuilder extends Component {
 						{this.menuItem('BaseChooser','Change Descriptor Noun','mvnoupdateEnglish',null)}
 			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["mv","no",ind[0],this.state.mvno[ind[0]].length-1-ind[1]],-1]])}
 			    	</Menu>  			
- 			} else if (type === 'cvns') {
-				return <Menu vertical>
-						{this.menuItem('BaseChooser','Change Noun','cvnsupdate',null)}
-						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun','cvnspossessorinsert',null) : null}
-			      {ind[0] == this.state.cvns.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun','cvnspossessedinsert',null): null}
-						{this.menuItem('BaseChooser','Add Descriptor Noun','cvnsappositiveinsert',null)}
-			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["cv","ns",this.state.cvns.length-1-ind[0]],-1]])}
-			    	</Menu>  			
- 			} else if (type === 'cvno') {
-				return <Menu vertical>
-						{this.menuItem('BaseChooser','Change Noun','cvnoupdate',null)}
-						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun','cvnopossessorinsert',null) : null}
-			      {ind[0] == this.state.cvno.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun','cvnopossessedinsert',null): null}
-						{this.menuItem('BaseChooser','Add Descriptor Noun','cvnoappositiveinsert',null)}
-			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["cv","no",this.state.cvno.length-1-ind[0]],-1]])}
-			    	</Menu>  			
- 			} else if (type === 'cvnsappositive') {
-				return <Menu vertical>
-						{this.menuItem('BaseChooser','Change Descriptor Noun','cvnsupdate',null)}
-			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["cv","ns",this.state.cvns.length-1-ind[0],ind[1]],-1]])}
-			    	</Menu>  			
- 			} else if (type === 'cvnoappositive') {
-				return <Menu vertical>
-						{this.menuItem('BaseChooser','Change Descriptor Noun','cvnoupdate',null)}
-			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["cv","no",this.state.cvno.length-1-ind[0],ind[1]],-1]])}
-			    	</Menu>  					
  			} else if (type === 'cvnsEnglish2') {
 				return <Menu vertical>
 						{this.menuItem('BaseChooser','Change Noun','cvnsupdateEnglish',null)}
@@ -1804,20 +1761,6 @@ class OneVerbWordBuilder extends Component {
 						{this.menuItem('BaseChooser','Change Descriptor Noun','cvnoupdateEnglish',null)}
 			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["cv","no",ind[0],this.state.cvno[ind[0]].length-1-ind[1]],-1]])}
 			    	</Menu>  					
- 			} else if (type === 'npn') {
- 					return <Menu vertical>
-						{this.menuItem('BaseChooser','Change Noun','npnupdate',null)}
-						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun','npnpossessorinsert',null) : null}
-			      {ind[0] == this.state.npn.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun','npnpossessedinsert',null) : null}
-			      {ind[0] == this.state.npn.length-1 ? this.subMenuItem('changeNPtype'): null}
-						{this.menuItem('BaseChooser','Add Descriptor Noun','npnappositiveinsert',null)}
-						{this.menuItem('Delete','Delete Noun',null,null,[["Delete",["np","n",this.state.npn.length-1-ind[0]],-1]])}
-			    	</Menu>  
- 			} else if (type === 'npnappositive') {
-				return <Menu vertical>
-						{this.menuItem('BaseChooser','Change Noun','npnupdate',null)}
-				    {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["np","n",this.state.npn.length-1-ind[0],ind[1]],-1]])}
-			    	</Menu>  	
  			} else if (type === 'npnEnglish2') {
  				// console.log(ind, this.state.npnEnglish2[ind[0]].length-1)
  				console.log('content',type,ind)
@@ -1825,7 +1768,6 @@ class OneVerbWordBuilder extends Component {
 					{this.menuItem('BaseChooser','Change Noun','npnupdateEnglish',null)}
 					{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun','npnpossessorinsert',null) : null}
 		      {ind[0] == this.state.npnEnglish2.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun','npnpossessedinsert',null) : null}
-		      {ind[0] == this.state.npnEnglish2.length-1 ? this.subMenuItem('changeNPtype') : null}
 					{this.menuItem('BaseChooser','Add Descriptor Noun','npnappositiveinsert',null)}
 					{this.menuItem('Delete','Delete Noun',null,null,[["Delete",["np","n",ind[0]],-1]])}
 		    	</Menu>  
@@ -1851,7 +1793,7 @@ class OneVerbWordBuilder extends Component {
 				return <Menu vertical>
 			      {this.subMenuItem('changeVObliquetype','sv',ind)}
 			    	</Menu>  			
- 			} else if (type==='mvnObliques' || type ==='mvnObliquesEnglish2') {
+ 			} else if (type ==='mvnObliquesEnglish2') {
   					return <Menu vertical>
 						{this.menuItem('BaseChooser','Change Oblique Noun','mvnObliqueUpdate',null)}
 						{this.state.mvnObliques.length > 0 ?
@@ -1869,7 +1811,7 @@ class OneVerbWordBuilder extends Component {
 						}
 			      
 			    	</Menu> 
-	  	} else if (type==='cvnObliques' || type ==='cvnObliquesEnglish2') {
+	  	} else if (type ==='cvnObliquesEnglish2') {
   					return <Menu vertical>
 						{this.menuItem('BaseChooser','Change Oblique Noun','cvnObliqueUpdate',null)}
 						{this.state.cvnObliques.length > 0 ?
@@ -1887,12 +1829,12 @@ class OneVerbWordBuilder extends Component {
 						}
 			      
 			    	</Menu> 
-	  	} else if (type==='cvnObliquesAppositive'  || type ==='cvnObliquesEnglish2appositive') {
+	  	} else if (type ==='cvnObliquesEnglish2appositive') {
   					return <Menu vertical>
 						{this.menuItem('BaseChooser','Change Oblique Appositive Noun','cvnObliqueUpdate',null)}
 			      {this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["cv","nObliques",ind[0],ind[1],ind[2]],-1]])}
 			    	</Menu> 
-	  	} else if (type==='svnObliques' || type ==='svnObliquesEnglish2') {
+	  	} else if (type ==='svnObliquesEnglish2') {
   					return <Menu vertical>
 						{this.menuItem('BaseChooser','Change Oblique Noun','svnObliqueUpdate',null)}
 						{this.state.svnObliques.length > 0 ?
@@ -1910,12 +1852,12 @@ class OneVerbWordBuilder extends Component {
 						}
 			      
 			    	</Menu> 
-	  	} else if (type==='svnObliquesAppositive'  || type ==='svnObliquesEnglish2appositive') {
+	  	} else if (type ==='svnObliquesEnglish2appositive') {
   					return <Menu vertical>
 						{this.menuItem('BaseChooser','Change Oblique Appositive Noun','cvnObliqueUpdate',null)}
 			      {this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["cv","nObliques",ind[0],ind[1],ind[2]],-1]])}
 			    	</Menu> 
-	  	} else if (type==='mvnObliquesAppositive' || type ==='mvnObliquesEnglish2appositive') {
+	  	} else if (type ==='mvnObliquesEnglish2appositive') {
 	  				console.log(ind)
   					return <Menu vertical>
 						{this.menuItem('BaseChooser','Change Oblique Appositive Noun','mvnObliqueUpdate',null)}
@@ -1985,6 +1927,7 @@ class OneVerbWordBuilder extends Component {
   	} else if (this.state.currentEditMode==='npnpossessorinsert') {
   		return this.baseChooser(["Insert",["np","n",-1]],'n','insert')
   	} else if (this.state.currentEditMode==='npnappositiveinsert') {
+  		console.log(this.state.npn,ind)
   		return this.baseChooser(["Insert",["np","n",this.state.npn.length-1-ind[0],-1]],'n','insert')
   	} else if (this.state.currentEditMode==='npnpossessedinsert') {
   		return this.baseChooser(["Insert",["np","n",0]],'n','insert')
@@ -2375,7 +2318,6 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 		        <Button onClick={()=>{this.setState({npCase:'Loc',npCaseType:''},()=>{this.menuSelect('nObliqueInsert',-1)})}}>in or at the...</Button>
 		        <Button onClick={()=>{this.setState({npCase:'Ter',npCaseType:''},()=>{this.menuSelect('nObliqueInsert',-1)})}}>toward the...</Button>
 		        <Button onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'from'},()=>{this.menuSelect('nObliqueInsert',-1)})}}>from the...</Button>
-		        <Button onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'io'},()=>{this.menuSelect('nObliqueInsert',-1)})}}>a or some...</Button>
 		        <Button onClick={()=>{this.setState({npCase:'Via',npCaseType:''},()=>{this.menuSelect('nObliqueInsert',-1)})}}>through, using...</Button>
 		        <Button onClick={()=>{this.setState({npCase:'Equ',npCaseType:''},()=>{this.menuSelect('nObliqueInsert',-1)})}}>like a...</Button>
 	    		</Button.Group>
@@ -2397,7 +2339,6 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 		        <Button onClick={()=>{this.setState({npCase:'Loc',npCaseType:''},()=>{this.menuSelect('cnObliqueInsert',-1)})}}>in or at the...</Button>
 		        <Button onClick={()=>{this.setState({npCase:'Ter',npCaseType:''},()=>{this.menuSelect('cnObliqueInsert',-1)})}}>toward the...</Button>
 		        <Button onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'from'},()=>{this.menuSelect('cnObliqueInsert',-1)})}}>from the...</Button>
-		        <Button onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'io'},()=>{this.menuSelect('cnObliqueInsert',-1)})}}>a or some...</Button>
 		        <Button onClick={()=>{this.setState({npCase:'Via',npCaseType:''},()=>{this.menuSelect('cnObliqueInsert',-1)})}}>through, using...</Button>
 		        <Button onClick={()=>{this.setState({npCase:'Equ',npCaseType:''},()=>{this.menuSelect('cnObliqueInsert',-1)})}}>like a...</Button>
 	    		</Button.Group>
@@ -2419,7 +2360,6 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 		        <Button onClick={()=>{this.setState({npCase:'Loc',npCaseType:''},()=>{this.menuSelect('snObliqueInsert',-1)})}}>in or at the...</Button>
 		        <Button onClick={()=>{this.setState({npCase:'Ter',npCaseType:''},()=>{this.menuSelect('snObliqueInsert',-1)})}}>toward the...</Button>
 		        <Button onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'from'},()=>{this.menuSelect('snObliqueInsert',-1)})}}>from the...</Button>
-		        <Button onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'io'},()=>{this.menuSelect('snObliqueInsert',-1)})}}>a or some...</Button>
 		        <Button onClick={()=>{this.setState({npCase:'Via',npCaseType:''},()=>{this.menuSelect('snObliqueInsert',-1)})}}>through, using...</Button>
 		        <Button onClick={()=>{this.setState({npCase:'Equ',npCaseType:''},()=>{this.menuSelect('snObliqueInsert',-1)})}}>like a...</Button>
 	    		</Button.Group>
@@ -2535,6 +2475,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 		    		<Accordion.Content active={true}>
 		    		<Button.Group vertical basic fluid>
 			        <Button onClick={()=>{this.setState({npCase:'Abs',npCaseType:'',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Abs']])})}}>the...</Button>
+			        <Button onClick={()=>{this.setState({npCase:'Rel',npCaseType:'',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Rel']])})}}>the (relative)...</Button>
 			        <Button onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'from',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Abl_Mod'],["Update",["np","nType"],'from']])})}}>from...</Button>
 			        <Button onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'io',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Abl_Mod'],["Update",["np","nType"],'io']])})}}>a or some...</Button>
 			        <Button onClick={()=>{this.setState({npCase:'Loc',npCaseType:'',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Loc']])})}}>in or at...</Button>
@@ -3000,33 +2941,35 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 			subject = 'the one _____ is'				
 		} else if (['mvno'].includes(itemUpdating[1].join(""))) {
 			subject = 'the one'				
-		} else if (itemUpdating[1][0]==='np') {
-			if (itemUpdating[1].length == 1) { //(['np'].includes(itemUpdating[1].join(""))) 
-				subject = 'the one'
-			} else if (itemUpdating[1].length == 3) { // add possessor or possessive ([npn-1','npn0'].includes(itemUpdating[1].join("")))
-				if (itemUpdating[1].join("") == 'npn-1') {
-					subject = "the one _____'s N"
-				} else {
-					subject = "N's one _____"
-				}
-			} else if (itemUpdating[1].length == 4) { 
-				if (itemUpdating[1][1] === 'nBases') { // update
-					if (itemUpdating[1][2] === this.state.npn.length-1) {
-						subject = npnEnglish[this.state.npn[itemUpdating[1][2]][0].slice(0, -1).join("")] + ' ' + npnEnglish[this.state.npn[itemUpdating[1][2]][0][3]]
-					} else {
-						subject = npnEnglish[this.state.npn[itemUpdating[1][2]][0][3]]
-					}
-				} else if (itemUpdating[1][1] === 'n') { // add descriptor
-					if (itemUpdating[1][2] === this.state.npn.length-1) {
-						subject = npnEnglish[this.state.npn[itemUpdating[1][2]][0].slice(0, -1).join("")] + ' ' + npnEnglish[this.state.npn[itemUpdating[1][2]][0][3]] + ' _____ N'
-					} else {
-						subject = npnEnglish[this.state.npn[itemUpdating[1][2]][0][3]] + ' _____ N'
-					}
-				}
-			}
+		// } else if (itemUpdating[1][0]==='np') {
+		// 	if (itemUpdating[1].length == 1) { //(['np'].includes(itemUpdating[1].join(""))) 
+		// 		subject = 'the one'
+		// 	} else if (itemUpdating[1].length == 3) { // add possessor or possessive ([npn-1','npn0'].includes(itemUpdating[1].join("")))
+		// 		if (itemUpdating[1].join("") == 'npn-1') {
+		// 			subject = "the one _____'s N"
+		// 		} else {
+		// 			subject = "N's one _____"
+		// 		}
+		// 	} else if (itemUpdating[1].length == 4) { 
+		// 		if (itemUpdating[1][1] === 'nBases') { // update
+		// 			if (itemUpdating[1][2] === this.state.npn.length-1) {
+		// 				subject = npnEnglish[this.state.npn[itemUpdating[1][2]][0].slice(0, -1).join("")] + ' ' + npnEnglish[this.state.npn[itemUpdating[1][2]][0][3]]
+		// 			} else {
+		// 				subject = npnEnglish[this.state.npn[itemUpdating[1][2]][0][3]]
+		// 			}
+		// 		} else if (itemUpdating[1][1] === 'n') { // add descriptor
+		// 			console.log(npnEnglish, this.state.npn, itemUpdating)
+		// 			if (itemUpdating[1][2] === this.state.npn.length-1) {
+		// 				subject = npnEnglish[this.state.npn[itemUpdating[1][2]][0].slice(0, -1).join("")] + ' ' + npnEnglish[this.state.npn[itemUpdating[1][2]][0][3]] + ' _____ N'
+		// 			} else {
+		// 				subject = npnEnglish[this.state.npn[itemUpdating[1][2]][0][3]] + ' _____ N'
+		// 			}
+		// 		}
+		// 	}
 		}
 
 		let starters = {
+			// 'Abs':'the (absolutive)',
 			'Loc':'in or at',
 			'Ter':'toward',
 			'from':'from',
@@ -3582,6 +3525,40 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 		this.setState({glossary:bool})
 	}
 
+  parserPopup = (parses) => {
+  	console.log(parses)
+
+    return (
+      <div style={{padding:'11px 14px',fontFamily:"Lato,'Helvetica Neue',Arial,Helvetica,sans-serif"}}>
+        {parses['yugtun'].map((q,qindex) =>
+          <div style={{paddingBottom:(qindex !== parses['yugtun'].length-1 ? 15 : 0),paddingLeft:qindex*20,fontSize:'16px'}}>
+              <div>
+              <div style={{fontWeight:'bold',paddingBottom:'5px'}}>
+                {parses['link'][qindex] !== "" ?
+                <a style={{paddingBottom:'1px',borderBottom:'1px solid #4183c4'}} href={YUGTUNDOTCOM_URL+parses['link'][qindex]} target="_blank">
+                {q}
+                </a>
+                :
+                <span>
+                {q}
+                </span>
+                }
+              </div>                  
+              {parses.endingIndex === qindex ?
+              <div>
+              <div>{parses.english[qindex][0]}</div>
+              <div style={{color:'#00000066'}}>{parses.english[qindex][2]}</div>
+              </div>
+              :
+              parses.english[qindex]
+              }
+              </div>
+          </div>
+        )}     
+      </div>
+    )  		
+  }
+
 	getColor = (pos,template,test) => {
 		// console.log(pos, this.state)
 
@@ -3767,9 +3744,9 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 												<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
 												{k.map((q,qind)=> {
 													if (qind === 0) {
-														return <span>{this.editMenu('mvns',[kind,0])}</span>												
+														return <span>{this.editMenu('mvnsParser',[kind,0])}</span>												
 													} else {
-														return <span>{this.editMenu('mvnsappositive',[kind,qind])}</span>												
+														return <span>{this.editMenu('mvnsappositiveParser',[kind,qind])}</span>												
 													}
 												})}
 												</div>
@@ -3777,21 +3754,6 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 											</div>	
 
 										</div>
-										{this.state.showUnderlying ?
-											<div style={{display:'flex',justifyContent:'center',fontSize:'18px',marginBottom:'10px',fontWeight:'300'}}> 
-											{this.state.mvSubjectUnderlyingDisplay.map((y)=>
-													<span style={{padding:'8px'}}>
-													{y.map((z)=>
-														<span style={{padding:'8px'}}>
-														{z.map((x,xind)=> <span style={{opacity:0.6,borderBottom:'1px solid '+this.getColor(x[1]), color:this.getColor(x[1])}}>{x[0]}</span>)}
-														</span>
-													)}
-													</span>
-											)}
-											</div>
-											:
-											null
-										}
 									</div>
 									:
 									null
@@ -3805,7 +3767,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 								
 
 								{this.state.mvvBase.length > 0 && this.state.mvvSegments.length > 0 ?
-									this.editMenu('mv',-1)
+									this.editMenu('mvParser',-1)
 									:
 									null
 								}
@@ -3819,9 +3781,9 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 												<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
 												{k.map((q,qind)=> {
 													if (qind === 0) {
-														return <span>{this.editMenu('mvno',[kind,0])}</span>												
+														return <span>{this.editMenu('mvnoParser',[kind,0])}</span>												
 													} else {
-														return <span>{this.editMenu('mvnoappositive',[kind,qind])}</span>												
+														return <span>{this.editMenu('mvnoappositiveParser',[kind,qind])}</span>												
 													}
 												})}
 												</div>												
@@ -3829,17 +3791,6 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 											)}
 											</div>	
 										</div>
-										{this.state.showUnderlying ?
-											<div style={{display:'flex',justifyContent:'center',fontSize:'18px',marginBottom:'10px',fontWeight:'300'}}> 
-											{this.state.mvObjectUnderlyingDisplay.map((y)=>
-												<span style={{padding:'8px'}}>
-												{y.map((x,xind)=> <span style={{opacity:0.6,borderBottom:'1px solid '+this.getColor(x[1]), color:this.getColor(x[1])}}>{x[0]}</span>)}
-												</span>
-											)}
-											</div>		
-											:
-											null
-										}	
 									</div>
 									:
 									null
@@ -3856,9 +3807,9 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 													<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
 														{x.map((k,kind)=>
 														{if (kind === 0) {
-															return <span>{this.editMenu('mvnObliques',[obliqueind,obliques.length-1-xind,kind])}</span>												
+															return <span>{this.editMenu('mvnObliquesParser',[obliqueind,obliques.length-1-xind,kind])}</span>												
 														} else {
-															return <span>{this.editMenu('mvnObliquesAppositive',[obliqueind,obliques.length-1-xind,kind])}</span>												
+															return <span>{this.editMenu('mvnObliquesAppositiveParser',[obliqueind,obliques.length-1-xind,kind])}</span>												
 														}}
 														)}
 													</div>
@@ -3877,9 +3828,9 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 													<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
 													{x.map((k,kind)=>
 														{if (kind === 0) {
-															return <span>{this.editMenu('npn',[xind,kind])}</span>												
+															return <span>{this.editMenu('npnParser',[xind,kind])}</span>												
 														} else {
-															return <span>{this.editMenu('npnappositive',[xind,kind])}</span>												
+															return <span>{this.editMenu('npnappositiveParser',[xind,kind])}</span>												
 														}}											
 													)}
 													</div>
@@ -3892,18 +3843,6 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 								}
 
 
-
-								{this.state.showUnderlying ?
-									<div style={{display:'flex',justifyContent:'center',fontSize:'18px',marginBottom:'10px',fontWeight:'300'}}> 
-									{this.state.mvUnderlyingDisplay.map((y)=>
-										<span style={{padding:'8px'}}>
-										{y.map((x,xind)=> <span style={{opacity:0.6,borderBottom:'1px solid '+this.getColor(x[1]), color:this.getColor(x[1])}}>{x[0]}</span>)}
-										</span>
-									)}
-									</div>
-									:
-									null
-								}
 {/*
 
 								{this.state.mvvs.length > 0 ?
@@ -4126,11 +4065,13 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 							    		<Accordion.Content active={this.state.activeIndexes.includes('nPhraseInsert')}>
 							    		{this.mainScreenMenu('the one _____','nPhraseInsert','npCase',['Abs',''])}
 							    		{this.mainScreenMenu('from the one _____','nPhraseInsert','npCase',['Abl_Mod','from'])}
-							    		{this.mainScreenMenu('a or some _____','nPhraseInsert','npCase',['Abl_Mod','io'])}
 							    		{this.mainScreenMenu('in or at the one _____','nPhraseInsert','npCase',['Loc',''])}
 							    		{this.mainScreenMenu('toward the one _____','nPhraseInsert','npCase',['Ter',''])}
 							    		{this.mainScreenMenu('through, using the one _____','nPhraseInsert','npCase',['Via',''])}
 							    		{this.mainScreenMenu('like, similar to the one _____','nPhraseInsert','npCase',['Equ',''])}
+							    		<Divider />
+							    		{this.mainScreenMenu('a or some _____','nPhraseInsert','npCase',['Abl_Mod','io'])}
+							    		{this.mainScreenMenu('the one (relative case) _____','nPhraseInsert','npCase',['Rel',''])}
 							    		</Accordion.Content>
 							    	</Accordion>			
 										<Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
@@ -4240,6 +4181,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 
 
 								{this.state.npnSegments.length > 0 && this.state.npnSegments.length === this.state.npnEnglish2.length ? 
+									<div>
 										<span>					
 											{/*{console.log(this.state.npn[this.state.npn.length-1][0], this.arraysEqual(this.state.npn[this.state.npn.length-1][0], [0,0,0,1]))}*/}
 
@@ -4286,10 +4228,25 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 												}
 												</span>
 											)}
+
 										</span>
+										{this.state.npnCase === 'Rel' ?
+											<div style={{marginTop:'35px',fontSize:'12pt',color:'grey'}}>This ending (relative case) is used when the noun is a subject of a transitive verb or is the owner of something. By itself, it is likely a response to a question.</div>
+											:
+											null
+										}
+										{this.state.npnType === 'io' ?
+											<div style={{marginTop:'35px',fontSize:'12pt',color:'grey'}}>This ending (ablative-modalis case) is used when a noun is an indirect object. For example, "Tangertuq yaqulegmek - He saw [a] bird" versus "Tangraa yaqulek - He saw [the] bird". By itself, it is likely a response to a question.</div>
+											:
+											null
+										}
+										</div>
 										:
 										null
 								}
+
+
+								
 
 							</div>
 
@@ -4304,9 +4261,9 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 												<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
 												{k.map((q,qind)=> {
 													if (qind === 0) {
-														return <span>{this.editMenu('cvns',[kind,0])}</span>												
+														return <span>{this.editMenu('cvnsParser',[kind,0])}</span>												
 													} else {
-														return <span>{this.editMenu('cvnsappositive',[kind,qind])}</span>												
+														return <span>{this.editMenu('cvnsappositiveParser',[kind,qind])}</span>												
 													}
 												})}
 												</div>												
@@ -4315,28 +4272,13 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 											</div>	
 
 										</div>
-										{this.state.showUnderlying ?
-											<div style={{display:'flex',justifyContent:'center',fontSize:'18px',marginBottom:'10px',fontWeight:'300'}}> 
-											{this.state.mvSubjectUnderlyingDisplay.map((y)=>
-													<span style={{padding:'8px'}}>
-													{y.map((z)=>
-														<span style={{padding:'8px'}}>
-														{z.map((x,xind)=> <span style={{opacity:0.6,borderBottom:'1px solid '+this.getColor(x[1]), color:this.getColor(x[1])}}>{x[0]}</span>)}
-														</span>
-													)}
-													</span>
-											)}
-											</div>
-											:
-											null
-										}
 									</div>
 									:
 									null
 								}
 
 								{this.state.cvvBase.length > 0 && this.state.cvvSegments.length > 0 ?
-									this.editMenu('cv',-1)
+									this.editMenu('cvParser',-1)
 									:
 									null
 								}
@@ -4350,9 +4292,9 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 												<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
 												{k.map((q,qind)=> {
 													if (qind === 0) {
-														return <span>{this.editMenu('cvno',[kind,0])}</span>												
+														return <span>{this.editMenu('cvnoParser',[kind,0])}</span>												
 													} else {
-														return <span>{this.editMenu('cvnoappositive',[kind,qind])}</span>												
+														return <span>{this.editMenu('cvnoappositiveParser',[kind,qind])}</span>												
 													}
 												})}
 												</div>												
@@ -4360,17 +4302,6 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 											)}
 											</div>	
 										</div>
-										{this.state.showUnderlying ?
-											<div style={{display:'flex',justifyContent:'center',fontSize:'18px',marginBottom:'10px',fontWeight:'300'}}> 
-											{this.state.mvObjectUnderlyingDisplay.map((y)=>
-												<span style={{padding:'8px'}}>
-												{y.map((x,xind)=> <span style={{opacity:0.6,borderBottom:'1px solid '+this.getColor(x[1]), color:this.getColor(x[1])}}>{x[0]}</span>)}
-												</span>
-											)}
-											</div>		
-											:
-											null
-										}	
 									</div>
 									:
 									null
@@ -4385,9 +4316,9 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 													<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
 														{x.map((k,kind)=>
 														{if (kind === 0) {
-															return <span>{this.editMenu('cvnObliques',[obliqueind,obliques.length-1-xind,kind])}</span>												
+															return <span>{this.editMenu('cvnObliquesParser',[obliqueind,obliques.length-1-xind,kind])}</span>												
 														} else {
-															return <span>{this.editMenu('cvnObliquesAppositive',[obliqueind,obliques.length-1-xind,kind])}</span>												
+															return <span>{this.editMenu('cvnObliquesAppositiveParser',[obliqueind,obliques.length-1-xind,kind])}</span>												
 														}}
 														)}
 													</div>
@@ -4590,7 +4521,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 
 
 								{this.state.svvBase.length > 0 && this.state.svvSegments.length > 0 ?
-									this.editMenu('sv',-1)
+									this.editMenu('svParser',-1)
 									:
 									null
 								}
@@ -4606,9 +4537,9 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 												<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
 												{k.map((q,qind)=> {
 													if (qind === 0) {
-														return <span>{this.editMenu('svno',[kind,0])}</span>												
+														return <span>{this.editMenu('svnoParser',[kind,0])}</span>												
 													} else {
-														return <span>{this.editMenu('svnoappositive',[kind,qind])}</span>												
+														return <span>{this.editMenu('svnoappositiveParser',[kind,qind])}</span>												
 													}
 												})}
 												</div>												
@@ -4616,17 +4547,6 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 											)}
 											</div>	
 										</div>
-										{this.state.showUnderlying ?
-											<div style={{display:'flex',justifyContent:'center',fontSize:'18px',marginBottom:'10px',fontWeight:'300'}}> 
-											{this.state.svObjectUnderlyingDisplay.map((y)=>
-												<span style={{padding:'8px'}}>
-												{y.map((x,xind)=> <span style={{opacity:0.6,borderBottom:'1px solid '+this.getColor(x[1]), color:this.getColor(x[1])}}>{x[0]}</span>)}
-												</span>
-											)}
-											</div>		
-											:
-											null
-										}	
 									</div>
 									:
 									null
@@ -4642,9 +4562,9 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 													<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
 														{x.map((k,kind)=>
 														{if (kind === 0) {
-															return <span>{this.editMenu('svnObliques',[obliqueind,obliques.length-1-xind,kind])}</span>												
+															return <span>{this.editMenu('svnObliquesParser',[obliqueind,obliques.length-1-xind,kind])}</span>												
 														} else {
-															return <span>{this.editMenu('svnObliquesAppositive',[obliqueind,obliques.length-1-xind,kind])}</span>												
+															return <span>{this.editMenu('svnObliquesAppositiveParser',[obliqueind,obliques.length-1-xind,kind])}</span>												
 														}}
 														)}
 													</div>
@@ -4802,7 +4722,6 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 							    		</Accordion.Title>
 							    		<Accordion.Content active={this.state.activeIndexes.includes('nObliqueInsert')}>
 							    		{this.mainScreenMenu('from the one _____','nObliqueInsert','npCase',['Abl_Mod','from'])}
-							    		{this.mainScreenMenu('a or some _____','nObliqueInsert','npCase',['Abl_Mod','io'])}
 							    		{this.mainScreenMenu('in or at the one _____','nObliqueInsert','npCase',['Loc',''])}
 							    		{this.mainScreenMenu('toward the one _____','nObliqueInsert','npCase',['Ter',''])}
 							    		{this.mainScreenMenu('through, using the one _____','nObliqueInsert','npCase',['Via',''])}
@@ -4868,4 +4787,4 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 		);
 	}
 }
-export default OneVerbWordBuilder;
+export default SentenceBuilder;
