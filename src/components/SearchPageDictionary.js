@@ -23,7 +23,7 @@ import { WordItem, WordItemLikeInup } from './SearchPageHelpers.js';
 // let dictionary_dict = {};
 
 const optionsFuzzy = {
-  keys: ['definitionString', 'keyString'],
+  keys: ['keyString', 'definitionString'],
   limit: 50, // don't return more results than you need!
   threshold: -10000, // don't return bad results
 };
@@ -255,7 +255,7 @@ class SearchPageDictionary extends Component {
   onChangeSearch(event, data) {
     // this.setState({entries:undefined, activeIndex:-1, loaderOn: true, seeMoreActive:false,currentTableOpen: -1,})
     let newStartingSearch = event === undefined;
-    let new_search = data.value.replace("’","'");
+    let new_search = data.value.replace("’","'").replace("0","⁰").replace("1","¹").replace("2","²").replace("3","³").replace("4","⁴").replace("5","⁵").replace("6","⁶").replace("7","⁷").replace("8","⁸").replace("9","⁹");
     // console.log(new_search)
     // if (data.value === undefined) {new_search = this.state.search}
 

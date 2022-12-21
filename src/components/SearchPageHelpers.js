@@ -26,6 +26,7 @@ export const TagColors = (props) => {
   let isNoun = props.word.includes('noun');
   let isVerb = props.word.includes('verb');
   let isParticle = props.word.includes('particle');
+  let isRoot = props.word.includes('root');
   let isExclamation = props.word.includes('exclamation');
   let isConjunction = props.word.includes('conjunction');
   let isAdverb = props.word.includes('adverb');
@@ -46,6 +47,7 @@ export const TagColors = (props) => {
         {isIntransitive ? <Label size='mini' style={{backgroundColor:'#B07F7F',color:'white'}}>INTRANSITIVE VERB</Label> : ''}
         {isTransitive ? <Label size='mini' style={{backgroundColor:'#B07F7F',color:'white'}}>TRANSITIVE VERB</Label> : ''}
         {isParticle ? <Label size='mini'>PARTICLE</Label> : ''}
+        {isRoot ? <Label size='mini'>ROOT</Label> : ''}
         {isExclamation ? <Label size='mini'>EXCLAMATION</Label> : ''}
         {isConjunction ? <Label size='mini'>CONJUNCTION</Label> : ''}
         {isAdverb ? <Label size='mini'>ADVERB</Label> : ''}
@@ -86,6 +88,7 @@ export const WordItemLikeInup = (props) => {
   let isNoun = props.word.pos.includes('noun');
   let isVerb = props.word.pos.includes('verb');
   let isParticle = props.word.pos.includes('particle');
+  let isRoot = props.word.pos.includes('root');
   let isExclamation = props.word.pos.includes('exclamation');
   let isConjunction = props.word.pos.includes('conjunction');
   let isAdverb = props.word.pos.includes('adverb');
@@ -105,9 +108,9 @@ export const WordItemLikeInup = (props) => {
   // console.log(props.word)
   if (isUnlinked) {
     return (
-      <List.Item key={props.word.keyString} style={{}}>
+      <List.Item style={{'paddingLeft':props.paddingLeft,paddingTop:5,paddingBottom:8}} key={props.word.keyString}>
         <List.Content>
-          <List.Header style={{display:'flex',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'16px'}}>
+          <List.Header style={{display:'flex',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'18px'}}>
             {props.word.keyString}
             <span style={{ 'marginLeft': '15px'}}>  
               <Label size='mini'>UNLINKED</Label>
@@ -151,6 +154,7 @@ export const WordItemLikeInup = (props) => {
             {isNoun ? <Label size='mini' style={{backgroundColor:'#7F90B0',color:'white'}}>NOUN</Label> : ''}
             {isVerb ? <Label size='mini' style={{backgroundColor:'#B07F7F',color:'white'}}>VERB</Label> : ''}
             {isParticle ? <Label size='mini'>PARTICLE</Label> : ''}
+            {isRoot ? <Label size='mini'>ROOT</Label> : ''}
             {isExclamation ? <Label size='mini'>EXCLAMATION</Label> : ''}
             {isConjunction ? <Label size='mini'>CONJUNCTION</Label> : ''}
             {isAdverb ? <Label size='mini'>ADVERB</Label> : ''}
@@ -163,6 +167,13 @@ export const WordItemLikeInup = (props) => {
             {isEnclitic ? <Label size='mini' style={{backgroundColor:'#60bf76',color:'white'}}>ENCLITIC</Label> : ''}
 
           </span>
+
+          { props.word.entryDialect.length !== 0 ?
+            <Label style={{'marginLeft':'5px',marginRight:'5px'}} size='mini' color='white'>{props.word.entryDialect.join(', ')}</Label>
+          :
+          null
+          }
+
         </List.Header>
         <List.Description style={{fontSize:'16px',fontWeight:'400',lineHeight:'22px',color:'#000000b3'}}>{props.word.definitionString}</List.Description>
       </List.Content>
@@ -187,6 +198,7 @@ export const WordItem = (props) => {
   let isNoun = props.word.pos.includes('noun');
   let isVerb = props.word.pos.includes('verb');
   let isParticle = props.word.pos.includes('particle');
+  let isRoot = props.word.pos.includes('root');
   let isExclamation = props.word.pos.includes('exclamation');
   let isConjunction = props.word.pos.includes('conjunction');
   let isAdverb = props.word.pos.includes('adverb');
@@ -243,7 +255,8 @@ export const WordItem = (props) => {
           <span style={{ 'marginLeft': '18px'}}>  
             {isNoun ? <Label size='mini' style={{backgroundColor:'#7F90B0',color:'white'}}>NOUN</Label> : ''}
             {isVerb ? <Label size='mini' style={{backgroundColor:'#B07F7F',color:'white'}}>VERB</Label> : ''}
-            {isParticle ? <Label size='mini'>PARTICLE</Label> : ''}
+            {isParticle ? <Label size='mini'>PARTICLE</Label> : ''} 
+            {isRoot ? <Label size='mini'>ROOT</Label> : ''}
             {isExclamation ? <Label size='mini'>EXCLAMATION</Label> : ''}
             {isConjunction ? <Label size='mini'>CONJUNCTION</Label> : ''}
             {isAdverb ? <Label size='mini'>ADVERB</Label> : ''}

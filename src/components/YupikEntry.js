@@ -108,7 +108,7 @@ class YupikEntry extends Component {
     //   </div>
     // }
 
-    let matches = sentence.match(/\`.*?(\`|\')/g)
+    let matches = sentence.match(/\`.*(\`|\')/g)
     let matches2 = sentence.match(/\(.*?\)/g)
 
     console.log(matches2)
@@ -125,7 +125,84 @@ class YupikEntry extends Component {
     }
   }
 
+  processPostbaseTableRowHTML = (sentence) => {
+    let matchesNormal = sentence.match(/\‘.*?\’(?!\w)/g)
+    let matchesItalics = sentence.match(/\s\(.*?\)/g)
+
+    if (matchesNormal !== null || matchesItalics !== null) {
+      if (matchesNormal !== null) {
+        matchesNormal.map((m) => sentence = '<b style="color:black">'+sentence.replaceAll(m,'<span style="font-weight:normal;color:#000000b3">'+m+'</span>')+'</b>')
+      }
+      if (matchesItalics !== null) {
+        matchesItalics.map((m) => sentence = sentence.replaceAll(m,'<span style="font-weight:normal"><i>'+m+'</i></span>'))      
+      }
+      return sentence
+    } else {
+      return sentence
+    }
+  }
+
   processPostbaseTableRow = (sentence) => {     
+    let matchesBnL = sentence.match(/\{(.*?)\}⟨(.*?)⟩/g)
+    let splitSentence = []
+    let sentenceBank = []
+    let restOfSentence = sentence
+    if (matchesBnL !== null) {
+        let before = ''
+        let after = ''
+        matchesBnL.map((m) => {
+          before = restOfSentence.slice(0, restOfSentence.indexOf(m));
+          after = restOfSentence.slice(restOfSentence.indexOf(m)+m.length + 1);
+          sentenceBank.push(before)
+          restOfSentence = after
+        })
+        sentenceBank.push(after)
+        splitSentence = sentence.split(matchesBnL[0])
+        return <span>
+        <span dangerouslySetInnerHTML={{__html: this.processPostbaseTableRowHTML(sentenceBank[0])}} />
+          {matchesBnL.map((k,index)=><span>
+          <Link style={{color:'#306190'}} to={{pathname: k.match(/\⟨.*?\⟩/g)[0].slice(1,-1)}} onClick={()=>{this.setState({key:k.match(/\⟨.*?\⟩/g)[0].slice(1,-1), from:this.props.location.pathname})}}><b>{k.match(/\{.*?\}/g)[0].slice(1,-1)}</b></Link>
+          {' '}
+          <span dangerouslySetInnerHTML={{__html: this.processPostbaseTableRowHTML(sentenceBank[index+1])}} />      
+          </span>       
+        )}
+        </span>
+    } else {
+      return <span dangerouslySetInnerHTML={{__html: this.processPostbaseTableRowHTML(sentence)}} />    
+    }
+  }
+
+  processAdditionalInformationRow = (sentence) => {     
+    let matchesBnL = sentence.match(/⎡(.*?)⎤⟨(.*?)⟩/g)
+    let splitSentence = []
+    let sentenceBank = []
+    let restOfSentence = sentence
+    if (matchesBnL !== null) {
+        let before = ''
+        let after = ''
+        matchesBnL.map((m) => {
+          before = restOfSentence.slice(0, restOfSentence.indexOf(m));
+          after = restOfSentence.slice(restOfSentence.indexOf(m)+m.length + 1);
+          sentenceBank.push(before)
+          restOfSentence = after
+        })
+        sentenceBank.push(after)
+        splitSentence = sentence.split(matchesBnL[0])
+        return <span>
+          <span dangerouslySetInnerHTML={{__html: this.processPostbaseTableRowHTML(sentenceBank[0])}} />
+          {matchesBnL.map((k,index)=><span>
+          <Link style={{color:'#306190'}} to={{pathname: k.match(/\⟨.*?\⟩/g)[0].slice(1,-1)}} onClick={()=>{this.setState({key:k.match(/\⟨.*?\⟩/g)[0].slice(1,-1), from:this.props.location.pathname})}}>{k.match(/\⎡.*?\⎤/g)[0].slice(1,-1)}</Link>
+          {' '}
+          <span dangerouslySetInnerHTML={{__html: this.processPostbaseTableRowHTML(sentenceBank[index+1])}} />      
+          </span>       
+        )}
+        </span>
+    } else {
+      return <span dangerouslySetInnerHTML={{__html: this.processPostbaseTableRowHTML(sentence)}} />    
+    }
+  }
+
+  // processPostbaseTableRowHTML = (sentence) => {     
     // sentence = sentence.trim()
     // let words = sentence.trim().split(' ')
     // console.log(words)
@@ -141,21 +218,21 @@ class YupikEntry extends Component {
     //   </div>
     // }
 
-    let matches = sentence.match(/\‘.*?\’(?!\w)/g)
-    let matches2 = sentence.match(/\s\(.*?\)/g)
-    console.log(matches)
-    if (matches !== null) {
-      matches.map((m) => sentence = '<b style="color:black">'+sentence.replace(m,'<span style="font-weight:normal;color:#000000b3">'+m+'</span>'))+'</b>'
-    }
-    if (matches2 !== null) {
-      matches2.map((m) => sentence = sentence.replace(m,'<span style="font-weight:normal"><i>'+m+'</i></span>'))      
-    }
-    if (matches !== null || matches2 !== null) {
-      return <span dangerouslySetInnerHTML={{__html: sentence}} />          
-    } else {
-      return <span>{sentence}</span>
-    }
-  }
+  //   let matches = sentence.match(/\‘.*?\’(?!\w)/g)
+  //   let matches2 = sentence.match(/\s\(.*?\)/g)
+  //   console.log(matches)
+  //   if (matches !== null) {
+  //     matches.map((m) => sentence = '<b style="color:black">'+sentence.replace(m,'<span style="font-weight:normal;color:#000000b3">'+m+'</span>'))+'</b>'
+  //   }
+  //   if (matches2 !== null) {
+  //     matches2.map((m) => sentence = sentence.replace(m,'<span style="font-weight:normal"><i>'+m+'</i></span>'))      
+  //   }
+  //   if (matches !== null || matches2 !== null) {
+  //     return <span dangerouslySetInnerHTML={{__html: sentence}} />          
+  //   } else {
+  //     return <span>{sentence}</span>
+  //   }
+  // }
 
   unlinked = (word) => {
     return <List.Item key={word.keyString} style={{marginLeft:'15px',marginTop:'12px',marginBottom:'12px'}}>
@@ -222,7 +299,7 @@ class YupikEntry extends Component {
             {this.state.entry.definition.map((entry,i) => {
               return <div style={{display:'flex',flexDirection:'row',marginTop:'8px',marginBottom:'8px'}}>
               <div style={{marginLeft:'10px',color:'#000000',fontSize:'18px','fontWeight':'300'}}>{'○'}</div>
-              <div style={{marginLeft:'20px',color:'#000000',fontSize:'18px',lineHeight:'27px'}}>{this.processStyledText(entry[0])}</div>
+              <div style={{marginLeft:'20px',marginRight:'15px',color:'#000000',fontSize:'18px',lineHeight:'27px'}}>{this.processStyledText(entry[0])}</div>
               {entry[1][0] !== '' ?
                 <Label horizontal>{entry[1]}</Label>
                 :
@@ -296,11 +373,11 @@ class YupikEntry extends Component {
 
           {this.state.entry.verbkeyString.keyString.length !== 0 ?
             <div>
-            
+
             <div style={{fontSize:'25px',marginTop:'20px',fontFamily:customFontFam}}>
             {this.state.entry.verbkeyString.keySplit.map((key) => {
               return <div style={{display:'flex',alignItems:'center',flexDirection:'row'}}>
-              <span style={{fontSize:'25px',marginRight:'15px'}}>{key[0]}</span>
+              <span style={{fontWeight:'500',marginRight:'15px'}}>{key[0]}</span>
               {key[1][0] !== '' ?
                 (key[1].map((dialect)=> 
                   <Label horizontal>{dialect}</Label>
@@ -480,7 +557,7 @@ class YupikEntry extends Component {
 
               {this.state.entry.postbaseExamples.map((entry,i) => {
                 if (postbaseTableOn) {
-                  if (entry == '</table>') {
+                  if (entry === '</table>') {
                     postbaseTableOn = false
                   } else {
                     let items = []
@@ -504,22 +581,23 @@ class YupikEntry extends Component {
                           </div> 
                   }
                 } else if (postbaseExampleOn) {
-                  if (entry == '</example>') { 
+                  if (entry === '</example>') { 
                     postbaseExampleOn = false                  
                   } else {
-                    return <div style={{display:'flex'}}>{this.processPostbaseExampleRow(entry)}</div> 
+                    return <div style={{display:'flex',marginBottom:'5px',marginLeft:'15px',marginRight:'15px'}}>{this.processPostbaseExampleRow(entry)}</div> 
                   }
                 } else {
-                  if (entry == '<table>') {              
+                  if (entry === '<table>') {              
                     postbaseTableOn = true
-                  } else if (entry == '<example>') { 
+                  } else if (entry === '<example>') { 
                     postbaseExampleOn = true       
-                    return <div style={{marginTop:'20px',marginBottom:'20px'}}><span style={{fontStyle:'italic'}}>{'Example Sentences'}</span></div>           
+                    return <div style={{marginTop:'20px',marginBottom:'20px',marginLeft:'15px',marginRight:'15px'}}><span style={{fontStyle:'italic'}}>{'Example Sentences'}</span></div>           
                   } else {
-                    return <div style={{marginTop:'20px',marginBottom:'20px'}}><span style={{fontStyle:'italic'}}>{entry}</span></div>                                                    
+                    return <div style={{marginTop:'20px',marginBottom:'20px',marginLeft:'15px',marginRight:'15px'}}><span style={{fontStyle:'italic'}}>{this.processAdditionalInformationRow(entry)}</span></div>                                                    
                   }               
                 }
               })}
+              <div style={{marginBottom:'20px'}}></div>
             </div>
             :
             null
@@ -532,7 +610,7 @@ class YupikEntry extends Component {
               </div>
               <div style={{padding:5}}>
               {this.state.entry.additionalInfo.map((entry,i) => {
-                return <div style={{padding:10,fontSize:'16px',color:'#000000b3'}}><span>{'- '+entry}</span></div>
+                return <div style={{padding:10,fontSize:'16px',color:'#000000b3'}}><span>- {this.processAdditionalInformationRow(entry)}</span></div>
               })}
               </div>
             </div>
