@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Container, Header, Button, Icon, Divider, Image, Grid, Dropdown, List, Label, Input, Segment, Popup, Accordion, Menu } from 'semantic-ui-react';
+import { Container, Header, Button, Icon, Divider, Image, Grid, Dropdown, List, Label, Input, Segment, Accordion, Menu, Modal } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { API_URL } from '../App.js';
 import axios from 'axios';
-import {nounOptionsMVPossessors, popularVPostbases,popularNPostbases, popularNouns, popularVerbs, npnEnglish, colorsList,  mvSubject4thPersonCalls, mvObject4thPersonCalls,nObject4thPersonCalls, mvSubjectOptionsWho, mvSubjectOptionsWhat, mvObjectOptionsWhom, mvObjectOptionsWhomAbl, mvObjectOptionsWhat, mvObjectOptionsWhatAbl,retrieveMoodEnglish, nounOptionsPossessorsNo4th, mvSubjectOptionsOnly2nd, nounOptionsNumbers, nounoptionsmodalis, mvSubjectOptions, mvObjectOptions, mvSubjectOptionsEnglish, verbPostbases, nounPostbases, VVpostbases, NNpostbases} from './constants/newconstants.js'
+import {nounOptionsMVPossessors, popularVPostbases,popularNPostbases, popularNouns, popularVerbs, npnEnglish, npnEnglishself, colorsList,  mvSubject4thPersonCalls, mvObject4thPersonCalls,nObject4thPersonCalls, mvSubjectOptionsWho, mvSubjectOptionsWhat, mvObjectOptionsWhom, mvObjectOptionsWhomAbl, mvObjectOptionsWhat, mvObjectOptionsWhatAbl,retrieveMoodEnglish, nounOptionsPossessorsNo4th, mvSubjectOptionsOnly2nd, nounOptionsNumbers, nounoptionsmodalis, mvSubjectOptions, mvObjectOptions, mvSubjectOptionsEnglish, verbPostbases, nounPostbases, VVpostbases, NNpostbases} from './constants/newconstants.js'
 import {newpostbases} from './constants/newpostbases.js'
 import {ending_underlying} from './constants/ending_underlying.js'
 import palette from 'google-palette';
@@ -16,7 +16,8 @@ import ReactGA from 'react-ga';
 import SentenceTemplates from "./SentenceTemplates.js";
 import SentenceGlossary from "./SentenceGlossary.js";
 import { sentenceTemplates } from './constants/sentence_templates.js'
-
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
 
 let customFontFam = "Roboto,'Helvetica Neue',Arial,Helvetica,sans-serif"
 const YUGTUNDOTCOM_URL = "https://www.yugtun.com/";
@@ -146,9 +147,11 @@ class SentenceBuilder extends Component {
 			nextTenses: [],
 			unallowable_next_ids: [],
 			startingCase:'',
+			modalOpen:true,
 
 			colorScheme: 0,
 			activeIndexes:[],
+			activeIndexes1:[],
 			addSubject:false,
 			addIs:true,
 			nounNum:'s',
@@ -465,9 +468,15 @@ class SentenceBuilder extends Component {
 			nounIndexChosen:0,
 
 			parses:{},
+			switchedToEdit:false,
+			currentlyOpen:'',
+			recentlyOpen:'',
 
 		}
 
+		this.subjectMenu = {}
+		this.editMenuRef = {}
+		this.mainScreenMenuRef = {}
 		this.fromEntry = false
 		console.log(decodeURI(props.match.params.num))
 		if (decodeURI(props.match.params.num) == 1) {
@@ -586,9 +595,31 @@ class SentenceBuilder extends Component {
 	    }
   	}
     if (prevState.mv !== this.state.mv || prevState.cv !== this.state.cv || prevState.sv !== this.state.sv || prevState.np !== this.state.np) {
-			console.log('changed')
+			// console.log('changed')
 			this.update4thPersonAndAgreement()
     }
+
+    if (prevState.wordsList !== this.state.wordsList || prevState.activeIndexes !== this.state.activeIndexes) {
+    	let tag = this.state.currentlyOpen
+			this.setState({currentlyOpen:''},()=>{this.setState({currentlyOpen:tag})})
+    }
+
+    if (prevState.addSubject !== this.state.addSubject && this.state.recentlyOpen !== '') {
+    	this.openSubjectMenu(this.state.recentlyOpen)
+    	// this.subjectMenu.open();    		
+    }
+
+    if (prevState.currentEditMode !== this.state.currentEditMode && this.state.recentlyOpen !== '') {
+    	// console.log(this.state.recentlyOpen)
+    	this.openEditMenuRef(this.state.recentlyOpen)
+    	// this.openMainScreenMenuRef(this.state.recentlyOpen)
+    }
+
+
+
+    // if (prevState.currentEditMode !== this.state.currentEditMode) {
+    // 	this.editMenuRef.open();
+    // }
 
   }
 
@@ -606,6 +637,7 @@ class SentenceBuilder extends Component {
 		let nounOptionsSVAblPossessors1 = []
 
 		if (this.state.mvvs.length > 0) {
+			// console.log(this.state.mvvs.join(""))
 			let mvvalueSub = mvSubject4thPersonCalls[this.state.mvvs.join("")]
 			let mvvalueObj = mvObject4thPersonCalls[this.state.mvvs.join("")]
 			let npossvalue = nObject4thPersonCalls[this.state.mvvs.join("")]
@@ -1371,7 +1403,8 @@ class SentenceBuilder extends Component {
   }
   
   menuSelect = (direction) => {
-    this.setState({ isOpen: false },()=>{this.setState({currentEditMode:direction, isOpen: true})});
+  	this.closeEditMenuRef(direction[0],direction[1])
+    this.setState({ isOpen: false },()=>{this.setState({isOpen: true})});
     
   }
 
@@ -1425,7 +1458,7 @@ class SentenceBuilder extends Component {
   		return this.contentDisplay(this.state.cvnoSegments.slice().reverse()[ind[0]][ind[1]], 1)		
   	} else if (type == 'mvQuestion' || type == 'mvParser') {
   		return this.contentDisplay(this.state.mvvSegments, 2)		
-  	} else if (type==='mvqWord') {
+  	} else if (type==='mvqWord' || type==='mvqWordParser') {
   		return this.contentDisplay(this.state.mvqWordSegments, 2)		
   	} else if (type == 'cvParser') {
   		return this.contentDisplay(this.state.cvvSegments, 2)		
@@ -1502,7 +1535,7 @@ class SentenceBuilder extends Component {
 		} else if (type==='svnObliquesEnglish2' || type==='svnObliquesEnglish2appositive') {
   		return this.contentDisplay(this.state.svnObliquesEnglish2[ind[0]][this.state.svnObliquesEnglish2[ind[0]].length-1-ind[1]][this.state.svnObliquesEnglish2[ind[0]][this.state.svnObliquesEnglish2[ind[0]].length-1-ind[1]].length-1-ind[2]], 5)
 		} else if (type==='svEnglish1') {
-			return <span style={{border:'solid 1px #22242626',cursor:'pointer',fontSize:'18px',padding:'8px 5px 8px 5px',borderRadius:'5px'}}> 
+			return <span style={{border:'solid 1px #22242626',marginRight:'2px',marginLeft:'2px',cursor:'pointer',fontSize:'18px',padding:'8px 5px 8px 5px',borderRadius:'5px'}}> 
 			{this.state.svEnglish1.map((w,wind)=>
 				<span style={{color:this.getColor(w[1])}}>{this.state.svvText+w[0]+" "}</span>
 				)} 
@@ -1544,12 +1577,12 @@ class SentenceBuilder extends Component {
 						 </Button>
   	} else if (fontType == 5) {
   		// console.log(data)
-  		console.log('5')
-			return <span style={{border:'solid 1px #22242626',cursor:'pointer',fontSize:'18px',padding:'8px 5px 8px 5px',borderRadius:'5px'}}> 
+  		// console.log('5')
+			return <span style={{border:'solid 1px #22242626',marginRight:'2px',marginLeft:'2px',cursor:'pointer',fontSize:'18px',padding:'8px 5px 8px 5px',borderRadius:'5px'}}> 
 			{data.map((w,wind)=><span 
 				style={{color:this.getColor(w[1])}}
 				// {{color:this.getColor(w[1]),cursor:'pointer',paddingBottom:'1px',borderBottom:'1px solid '+this.getColor(w[1])}}
-				// {{border:'solid 1px #22242626',color:this.getColor(w[1]),fontSize:'18px',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px',}}
+				// {{border:'solid 1px #22242626',color:this.getColor(w[1]),fontSize:'18px',padding:'5px',borderRadius:'5px',marginRight:'2px',marginLeft:'2px',}}
 				>{w[0]+" "}</span>)} <Icon style={{fontSize:'16px',margin:0}} name='dropdown' /></span>  		
   	} else if (fontType == 6) {
   		console.log('6')
@@ -1561,7 +1594,7 @@ class SentenceBuilder extends Component {
   		return 	<span style={{color:this.getColor(data[1]),cursor:'pointer',paddingBottom:'1px',borderBottom:'1px solid '+this.getColor(data[1])}}>{data[0]+" "}<Icon style={{color:this.getColor(data[1]),fontSize:'16px',margin:0}} name='dropdown' /></span>
   	} else if (fontType == 8) {
   		console.log('8')
-			return <span style={{border:'solid 1px #22242626',cursor:'pointer',fontSize:'18px',padding:'8px 5px 8px 5px',borderRadius:'5px'}}> 
+			return <span style={{border:'solid 1px #22242626',marginRight:'2px',marginLeft:'2px',cursor:'pointer',fontSize:'18px',padding:'8px 5px 8px 5px',borderRadius:'5px'}}> 
 			{data[0].map((w,wind)=><span style={{color:this.getColor(w[1])}}>{w[0]+(w[0].length>0?" ":"")}</span>)} 
 			{data[1].map((w,wind)=><span style={{color:this.getColor(w[1])}}>{w[0]+(w[0].length>0 && wind !== data[1].length-1 ?" ":"")}</span>)} 
 			<Icon style={{color:this.getColor(data[1]),fontSize:'16px',margin:0}} name='dropdown' />
@@ -1569,52 +1602,60 @@ class SentenceBuilder extends Component {
   	}
   }													
 
-  contentItems = (type,ind) => {
-  	// console.log(this.state.currentEditMode,type,ind)
+  contentItems = (type,ind,mainscreen,forEnglish) => {
+  	// console.log(type,ind)
+  	let typeInd = type+(ind+1).toString()
+  	let currentEditMode = this.state.currentEditMode
+  	if (mainscreen) {
+  		currentEditMode = type
+  	}
 
-  	if (this.state.currentEditMode==='default') {
+  	// console.log(currentEditMode)
+
+
+  	if (currentEditMode==='default') {
   		if (type === 'default') {
-  			return <Menu vertical>
-			      {this.menuItem('BaseChooser','Make a Verb Statement','mvinsert',null,null)}
+  			return <Menu vertical style={{marginTop:10,marginBottom:10}}>
+			      {this.menuItem('BaseChooser','Make a Verb Statement',[typeInd,'mvinsert'],null,null)}
 			      {this.subMenuItem('nounPhrase')}
 			      {this.subMenuItem('addQuestion')}
 			      {this.subMenuItem('addCommand')}
 			    	</Menu>  			
   		} else if (type === 'defaultmv') {
-				return <Menu vertical>
-						{this.state.mvvs.length > 0 && this.state.mvns.length == 0 && this.state.mvvType !== 'Intrg0' && this.state.mvvType !== 'Intrg2' ? this.menuItem('BaseChooser','Add Noun Subject','mvnsinsert',null) : null}
-						{this.state.mvvo.length > 0 && this.state.mvno.length == 0 && this.state.mvvType !== 'Intrg1' && this.state.mvvType !== 'Intrg3' ? this.menuItem('BaseChooser','Add Noun Object','mvnoinsert',null) : null}
+				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
+						{this.state.mvvs.length > 0 && this.state.mvns.length == 0 && this.state.mvvType !== 'Intrg0' && this.state.mvvType !== 'Intrg2' ? this.menuItem('BaseChooser','Add Noun Subject',[typeInd,'mvnsinsert'],null) : null}
+						{this.state.mvvo.length > 0 && this.state.mvno.length == 0 && this.state.mvvType !== 'Intrg1' && this.state.mvvType !== 'Intrg3' ? this.menuItem('BaseChooser','Add Noun Object',[typeInd,'mvnoinsert'],null) : null}
 			      {this.subMenuItem('addnOblique')}
 			    	</Menu>  			
   		} else if (type === 'mvEnglishAbl') {
-				return <Menu vertical>
-						{this.state.mvvo.length > 0 && this.state.mvno.length == 0 && this.state.mvvType !== 'Intrg1' && this.state.mvvType !== 'Intrg3' ? this.menuItem('BaseChooser','Add Noun Object','mvnoinsert',null) : null}
+				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
+						{this.state.mvvo.length > 0 && this.state.mvno.length == 0 && this.state.mvvType !== 'Intrg1' && this.state.mvvType !== 'Intrg3' ? this.menuItem('BaseChooser','Add Noun Object',[typeInd,'mvnoinsert'],null) : null}
 			    	</Menu>  			
   		} else if (type === 'mvEnglishQaa') {
-				return <Menu vertical>
+				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
 						{this.menuItem('Update','Remove Yes or No Question',null,null,[["Update",["mv","vType"],'']])}
 			    	</Menu>  			
   		} else if (type === 'defaultcv') {
-				return <Menu vertical>
-						{this.state.cvvs.length > 0 && this.state.cvns.length == 0 ? this.menuItem('BaseChooser','Add Connective Noun Subject','cvnsinsert',null) : null}
-						{this.state.cvvo.length > 0 && this.state.cvno.length == 0 ? this.menuItem('BaseChooser','Add Connective Noun Object','cvnoinsert',null) : null}
+				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
+						{this.state.cvvs.length > 0 && this.state.cvns.length == 0 ? this.menuItem('BaseChooser','Add Connective Noun Subject',[typeInd,'cvnsinsert'],null) : null}
+						{this.state.cvvo.length > 0 && this.state.cvno.length == 0 ? this.menuItem('BaseChooser','Add Connective Noun Object',[typeInd,'cvnoinsert'],null) : null}
 			      {this.subMenuItem('caddnOblique')}
 			    	</Menu>  			
   		} else if (type === 'cvEnglishAbl') {
-				return <Menu vertical>
-						{this.state.cvvo.length > 0 && this.state.cvno.length == 0 ? this.menuItem('BaseChooser','Add Connective Noun Object','cvnoinsert',null) : null}
+				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
+						{this.state.cvvo.length > 0 && this.state.cvno.length == 0 ? this.menuItem('BaseChooser','Add Connective Noun Object',[typeInd,'cvnoinsert'],null) : null}
 			    	</Menu>  			
   		} else if (type === 'defaultsv') {
-				return <Menu vertical>
-						{this.state.svvo.length > 0 && this.state.svno.length == 0 ? this.menuItem('BaseChooser','Add Subordinative Noun Object','svnoinsert',null) : null}
+				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
+						{this.state.svvo.length > 0 && this.state.svno.length == 0 ? this.menuItem('BaseChooser','Add Subordinative Noun Object',[typeInd,'svnoinsert'],null) : null}
 			      {this.subMenuItem('saddnOblique')}
 			    	</Menu>  			
   		} else if (type === 'svEnglishAbl') {
-				return <Menu vertical>
-						{this.state.svvo.length > 0 && this.state.svno.length == 0 ? this.menuItem('BaseChooser','Add Subordinative Noun Object','svnoinsert',null) : null}
+				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
+						{this.state.svvo.length > 0 && this.state.svno.length == 0 ? this.menuItem('BaseChooser','Add Subordinative Noun Object',[typeInd,'svnoinsert'],null) : null}
 			    	</Menu>  			
   		} else if (type === 'defaultverbphrase' && this.state.cvvs.length === 0 ) {
-				return <Menu vertical>
+				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
 			      {this.subMenuItem('addnOblique')}
 			      {this.subMenuItem('addAnotherVerbPhrase')}
 			      {/*{this.subMenuItem('addCV')}*/}
@@ -1646,11 +1687,14 @@ class SentenceBuilder extends Component {
   			return this.parserPopup(this.state.parses.sv.nObliques[ind[0]][ind[1]][ind[2]])
   		} else if (type === 'npnParser' || type === 'npnappositiveParser') {
   			return this.parserPopup(this.state.parses.np.n[this.state.npn.length-1-ind[0]][ind[1]])
-  		} 
+  		} else if (type === 'mvqWordParser') {
+  			return this.parserPopup(this.state.parses.mv.qWord)
+  		}
 
   		else if (type == 'mvEnglish2') {
-				return <Menu vertical>
-			      {this.menuItem('BaseChooser','Change Verb','mvupdate',null)}
+				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
+			      {this.menuItem('BaseChooser','Change Verb',[typeInd,'mvupdate'],null)}
+			      {/*{this.menuItem('BaseChooser','Change Verb','mvupdate',null)}*/}
 			      {this.state.requirePostbase.length > 0 ?
 			      	this.subMenuItem('changeRequiredPostbase')
 			      	:
@@ -1673,137 +1717,137 @@ class SentenceBuilder extends Component {
 			      {this.menuItem('Delete','Delete Verb',null,null,[["Delete",["mv",],-1]])}
 
 			    	</Menu>
- 			} else if (type === 'mvqWord' || type == 'mvEnglish1') {
-				return <Menu vertical>
+ 			} else if (type == 'mvEnglish1') {
+				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
 			      {this.subMenuItem('changeQuestiontype')}
 			    	</Menu>
  			} else if (type === 'cvEnglish2') {
-				return <Menu vertical>
-			      {this.menuItem('BaseChooser','Change Connective Verb','cvupdate',null)}
+				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
+			      {this.menuItem('BaseChooser','Change Connective Verb',[typeInd,'cvupdate'],null)}
 			      {this.menuItem('Delete','Delete Connective Verb',null,null,[["Delete",["cv",],-1]])}
 			    	</Menu>
  			} else if (type === 'cvEnglish1') {
-				return <Menu vertical>
+				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
 			      {this.subMenuItem('changeCVtype')}
 			    	</Menu>
  			} else if (type === 'cvEnglish2') {
-				return <Menu vertical>
-			      {this.menuItem('BaseChooser','Change Connective Verb','cvupdate',null)}
+				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
+			      {this.menuItem('BaseChooser','Change Connective Verb',[typeInd,'cvupdate'],null)}
 			      {this.menuItem('Delete','Delete Connective Verb',null,null,[["Delete",["cv",],-1]])}
 			    	</Menu>
  			} else if (type === 'svEnglish1') {
-				return <Menu vertical>
-			      {this.menuItem('BaseChooser','Change Subordinative Verb','svupdate',null)}
+				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
+			      {this.menuItem('BaseChooser','Change Subordinative Verb',[typeInd,'svupdate'],null)}
 			      {this.menuItem('Delete','Delete Subordinative Verb',null,null,[["Delete",["sv",],-1]])}
 			    	</Menu>
  			} else if (type === 'svnoEnglish2') {
-				return <Menu vertical>
-						{this.menuItem('BaseChooser','Change Noun','svnoupdateEnglish',null)}
-						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun','svnopossessorinsert',null) : null}
-			      {ind[0] == this.state.svno.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun','svnopossessedinsert',null): null}
-						{this.menuItem('BaseChooser','Add Descriptor Noun','svnoappositiveinsert',null)}
+				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
+						{this.menuItem('BaseChooser','Change Noun',[typeInd,'svnoupdateEnglish'],null)}
+						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun',[typeInd,'svnopossessorinsert'],null) : null}
+			      {ind[0] == this.state.svno.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun',[typeInd,'svnopossessedinsert'],null): null}
+						{this.menuItem('BaseChooser','Add Descriptor Noun',[typeInd,'svnoappositiveinsert'],null)}
 			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["sv","no",ind[0]],-1]])}
 			    	</Menu>  			
  			} else if (type === 'svnoEnglish2appositive') {
-				return <Menu vertical>
-						{this.menuItem('BaseChooser','Change Descriptor Noun','svnoupdateEnglish',null)}
+				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
+						{this.menuItem('BaseChooser','Change Descriptor Noun',[typeInd,'svnoupdateEnglish'],null)}
 			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["sv","no",ind[0],this.state.svno[ind[0]].length-1-ind[1]],-1]])}
 			    	</Menu>  					
  			} else if (type == 'mvnsEnglish2') {
-				return <Menu vertical>
-						{this.menuItem('BaseChooser','Change Noun','mvnsupdateEnglish',null)}
-						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun','mvnspossessorinsert',null) : null}
-			      {ind[0] == this.state.mvns.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun','mvnspossessedinsert',null): null}
-						{this.menuItem('BaseChooser','Add Descriptor Noun','mvnsappositiveinsert',null)}
+				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
+						{this.menuItem('BaseChooser','Change Noun',[typeInd,'mvnsupdateEnglish'],null)}
+						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun',[typeInd,'mvnspossessorinsert'],null) : null}
+			      {ind[0] == this.state.mvns.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun',[typeInd,'mvnspossessedinsert'],null): null}
+						{this.menuItem('BaseChooser','Add Descriptor Noun',[typeInd,'mvnsappositiveinsert'],null)}
 			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["mv","ns",ind[0]],-1]])}
 			    	</Menu>  			
  			} else if (type == 'mvnsEnglish2appositive') {
-				return <Menu vertical>
-						{this.menuItem('BaseChooser','Change Descriptor Noun','mvnsupdateEnglish',null)}
+				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
+						{this.menuItem('BaseChooser','Change Descriptor Noun',[typeInd,'mvnsupdateEnglish'],null)}
 			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["mv","ns",ind[0],this.state.mvns[ind[0]].length-1-ind[1]],-1]])}
 			    	</Menu>  			
  			} else if (type === 'mvnoEnglish2') {
-				return <Menu vertical>
-						{this.menuItem('BaseChooser','Change Noun','mvnoupdateEnglish',null)}
-						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun','mvnopossessorinsert',null) : null}
-			      {ind[0] == this.state.mvno.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun','mvnopossessedinsert',null): null}
-						{this.menuItem('BaseChooser','Add Descriptor Noun','mvnoappositiveinsert',null)}
+				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
+						{this.menuItem('BaseChooser','Change Noun',[typeInd,'mvnoupdateEnglish'],null)}
+						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun',[typeInd,'mvnopossessorinsert'],null) : null}
+			      {ind[0] == this.state.mvno.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun',[typeInd,'mvnopossessedinsert'],null): null}
+						{this.menuItem('BaseChooser','Add Descriptor Noun',[typeInd,'mvnoappositiveinsert'],null)}
 			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["mv","no",ind[0]],-1]])}
 			    	</Menu>  			
  			} else if (type === 'mvnoEnglish2appositive') {
-				return <Menu vertical>
-						{this.menuItem('BaseChooser','Change Descriptor Noun','mvnoupdateEnglish',null)}
+				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
+						{this.menuItem('BaseChooser','Change Descriptor Noun',[typeInd,'mvnoupdateEnglish'],null)}
 			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["mv","no",ind[0],this.state.mvno[ind[0]].length-1-ind[1]],-1]])}
 			    	</Menu>  			
  			} else if (type === 'cvnsEnglish2') {
-				return <Menu vertical>
-						{this.menuItem('BaseChooser','Change Noun','cvnsupdateEnglish',null)}
-						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun','cvnspossessorinsert',null) : null}
-			      {ind[0] == this.state.cvns.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun','cvnspossessedinsert',null): null}
-						{this.menuItem('BaseChooser','Add Descriptor Noun','cvnsappositiveinsert',null)}
+				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
+						{this.menuItem('BaseChooser','Change Noun',[typeInd,'cvnsupdateEnglish'],null)}
+						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun',[typeInd,'cvnspossessorinsert'],null) : null}
+			      {ind[0] == this.state.cvns.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun',[typeInd,'cvnspossessedinsert'],null): null}
+						{this.menuItem('BaseChooser','Add Descriptor Noun',[typeInd,'cvnsappositiveinsert'],null)}
 			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["cv","ns",ind[0]],-1]])}
 			    	</Menu>  			
  			} else if (type === 'cvnoEnglish2') {
-				return <Menu vertical>
-						{this.menuItem('BaseChooser','Change Noun','cvnoupdateEnglish',null)}
-						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun','cvnopossessorinsert',null) : null}
-			      {ind[0] == this.state.cvno.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun','cvnopossessedinsert',null): null}
-						{this.menuItem('BaseChooser','Add Descriptor Noun','cvnoappositiveinsert',null)}
+				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
+						{this.menuItem('BaseChooser','Change Noun',[typeInd,'cvnoupdateEnglish'],null)}
+						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun',[typeInd,'cvnopossessorinsert'],null) : null}
+			      {ind[0] == this.state.cvno.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun',[typeInd,'cvnopossessedinsert'],null): null}
+						{this.menuItem('BaseChooser','Add Descriptor Noun',[typeInd,'cvnoappositiveinsert'],null)}
 			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["cv","no",ind[0]],-1]])}
 			    	</Menu>  			
  			} else if (type === 'cvnsEnglish2appositive') {
-				return <Menu vertical>
-						{this.menuItem('BaseChooser','Change Descriptor Noun','cvnsupdateEnglish',null)}
+				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
+						{this.menuItem('BaseChooser','Change Descriptor Noun',[typeInd,'cvnsupdateEnglish'],null)}
 			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["cv","ns",ind[0],this.state.cvns[ind[0]].length-1-ind[1]],-1]])}
 			    	</Menu>  			
  			} else if (type === 'cvnoEnglish2appositive') {
-				return <Menu vertical>
-						{this.menuItem('BaseChooser','Change Descriptor Noun','cvnoupdateEnglish',null)}
+				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
+						{this.menuItem('BaseChooser','Change Descriptor Noun',[typeInd,'cvnoupdateEnglish'],null)}
 			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["cv","no",ind[0],this.state.cvno[ind[0]].length-1-ind[1]],-1]])}
 			    	</Menu>  					
  			} else if (type === 'npnEnglish2') {
  				// console.log(ind, this.state.npnEnglish2[ind[0]].length-1)
  				console.log('content',type,ind)
-				return <Menu vertical>
-					{this.menuItem('BaseChooser','Change Noun','npnupdateEnglish',null)}
-					{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun','npnpossessorinsert',null) : null}
-		      {ind[0] == this.state.npnEnglish2.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun','npnpossessedinsert',null) : null}
-					{this.menuItem('BaseChooser','Add Descriptor Noun','npnappositiveinsert',null)}
+				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
+					{this.menuItem('BaseChooser','Change Noun',[typeInd,'npnupdateEnglish'],null)}
+					{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun',[typeInd,'npnpossessorinsert'],null) : null}
+		      {ind[0] == this.state.npnEnglish2.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun',[typeInd,'npnpossessedinsert'],null) : null}
+					{this.menuItem('BaseChooser','Add Descriptor Noun',[typeInd,'npnappositiveinsert'],null)}
 					{this.menuItem('Delete','Delete Noun',null,null,[["Delete",["np","n",ind[0]],-1]])}
 		    	</Menu>  
  			} else if (type === 'npnEnglish2appositive') {
  					console.log('content',type,ind)
- 					return <Menu vertical>
-						{this.menuItem('BaseChooser','Change Noun','npnupdateEnglish',null)}
+ 					return <Menu vertical style={{marginTop:10,marginBottom:10}}>
+						{this.menuItem('BaseChooser','Change Noun',[typeInd,'npnupdateEnglish'],null)}
 				    {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["np","n",ind[0],this.state.npnEnglish2[ind[0]].length-1-ind[1]],-1]])}
 			    	</Menu>   					
  			} else if (type === 'npnEnglish1') {
-				return <Menu vertical>
+				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
 			      {this.subMenuItem('changeNPtype')}
 			    	</Menu>  			
  			} else if (type==='mvnObliquesEnglish1') {
-				return <Menu vertical>
+				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
 			      {this.subMenuItem('changeVObliquetype','mv',ind)}
 			    	</Menu>  			
  			} else if (type==='cvnObliquesEnglish1') {
-				return <Menu vertical>
+				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
 			      {this.subMenuItem('changeVObliquetype','cv',ind)}
 			    	</Menu>  			
  			} else if (type==='svnObliquesEnglish1') {
-				return <Menu vertical>
+				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
 			      {this.subMenuItem('changeVObliquetype','sv',ind)}
 			    	</Menu>  			
  			} else if (type ==='mvnObliquesEnglish2') {
-  					return <Menu vertical>
-						{this.menuItem('BaseChooser','Change Oblique Noun','mvnObliqueUpdate',null)}
+  					return <Menu vertical style={{marginTop:10,marginBottom:10}}>
+						{this.menuItem('BaseChooser','Change Oblique Noun',[typeInd,'mvnObliqueUpdate'],null)}
 						{this.state.mvnObliques.length > 0 ?
-						(ind[1] == this.state.mvnObliques[ind[0]].n.length-1 ? this.menuItem('BaseChooser','Add Oblique Possessor Noun','mvnObliquepossessorinsert',null) : null)
+						(ind[1] == this.state.mvnObliques[ind[0]].n.length-1 ? this.menuItem('BaseChooser','Add Oblique Possessor Noun',[typeInd,'mvnObliquepossessorinsert'],null) : null)
 						:
 						null
 						}
-			      {ind[1] == 0 ? this.menuItem('BaseChooser','Add Oblique Possessed Noun','mvnObliquepossessedinsert',null): null}
+			      {ind[1] == 0 ? this.menuItem('BaseChooser','Add Oblique Possessed Noun',[typeInd,'mvnObliquepossessedinsert'],null): null}
 			      {/*{ind[1] == 0 ? this.subMenuItem('changeVObliquetype','mv',ind[0]): null}*/}
-						{this.menuItem('BaseChooser','Add Descriptor Noun','mvnObliqueappositiveinsert',null)}
+						{this.menuItem('BaseChooser','Add Descriptor Noun',[typeInd,'mvnObliqueappositiveinsert'],null)}
 						{ind[1] == 0 ? 
 							(this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["mv","nObliques",ind[0],ind[1]],-1]]))
 							:
@@ -1812,16 +1856,16 @@ class SentenceBuilder extends Component {
 			      
 			    	</Menu> 
 	  	} else if (type ==='cvnObliquesEnglish2') {
-  					return <Menu vertical>
-						{this.menuItem('BaseChooser','Change Oblique Noun','cvnObliqueUpdate',null)}
+  					return <Menu vertical style={{marginTop:10,marginBottom:10}}>
+						{this.menuItem('BaseChooser','Change Oblique Noun',[typeInd,'cvnObliqueUpdate'],null)}
 						{this.state.cvnObliques.length > 0 ?
-						(ind[1] == this.state.cvnObliques[ind[0]].n.length-1 ? this.menuItem('BaseChooser','Add Oblique Possessor Noun','cvnObliquepossessorinsert',null) : null)
+						(ind[1] == this.state.cvnObliques[ind[0]].n.length-1 ? this.menuItem('BaseChooser','Add Oblique Possessor Noun',[typeInd,'cvnObliquepossessorinsert'],null) : null)
 						:
 						null
 						}
-			      {ind[1] == 0 ? this.menuItem('BaseChooser','Add Oblique Possessed Noun','cvnObliquepossessedinsert',null): null}
+			      {ind[1] == 0 ? this.menuItem('BaseChooser','Add Oblique Possessed Noun',[typeInd,'cvnObliquepossessedinsert'],null): null}
 			      {/*{ind[1] == 0 ? this.subMenuItem('changeVObliquetype','cv',ind[0]): null}*/}
-						{this.menuItem('BaseChooser','Add Descriptor Noun','cvnObliqueappositiveinsert',null)}
+						{this.menuItem('BaseChooser','Add Descriptor Noun',[typeInd,'cvnObliqueappositiveinsert'],null)}
 						{ind[1] == 0 ? 
 							(this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["cv","nObliques",ind[0],ind[1]],-1]]))
 							:
@@ -1830,21 +1874,21 @@ class SentenceBuilder extends Component {
 			      
 			    	</Menu> 
 	  	} else if (type ==='cvnObliquesEnglish2appositive') {
-  					return <Menu vertical>
-						{this.menuItem('BaseChooser','Change Oblique Appositive Noun','cvnObliqueUpdate',null)}
+  					return <Menu vertical style={{marginTop:10,marginBottom:10}}>
+						{this.menuItem('BaseChooser','Change Oblique Appositive Noun',[typeInd,'cvnObliqueUpdate'],null)}
 			      {this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["cv","nObliques",ind[0],ind[1],ind[2]],-1]])}
 			    	</Menu> 
 	  	} else if (type ==='svnObliquesEnglish2') {
-  					return <Menu vertical>
-						{this.menuItem('BaseChooser','Change Oblique Noun','svnObliqueUpdate',null)}
+  					return <Menu vertical style={{marginTop:10,marginBottom:10}}>
+						{this.menuItem('BaseChooser','Change Oblique Noun',[typeInd,'svnObliqueUpdate'],null)}
 						{this.state.svnObliques.length > 0 ?
-						(ind[1] == this.state.svnObliques[ind[0]].n.length-1 ? this.menuItem('BaseChooser','Add Oblique Possessor Noun','svnObliquepossessorinsert',null) : null)
+						(ind[1] == this.state.svnObliques[ind[0]].n.length-1 ? this.menuItem('BaseChooser','Add Oblique Possessor Noun',[typeInd,'svnObliquepossessorinsert'],null) : null)
 						:
 						null
 						}
-			      {ind[1] == 0 ? this.menuItem('BaseChooser','Add Oblique Possessed Noun','svnObliquepossessedinsert',null): null}
+			      {ind[1] == 0 ? this.menuItem('BaseChooser','Add Oblique Possessed Noun',[typeInd,'svnObliquepossessedinsert'],null): null}
 			      {/*{ind[1] == 0 ? this.subMenuItem('changeVObliquetype','sv',ind[0]): null}*/}
-						{this.menuItem('BaseChooser','Add Descriptor Noun','svnObliqueappositiveinsert',null)}
+						{this.menuItem('BaseChooser','Add Descriptor Noun',[typeInd,'svnObliqueappositiveinsert'],null)}
 						{ind[1] == 0 ? 
 							(this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["sv","nObliques",ind[0],ind[1]],-1]]))
 							:
@@ -1853,188 +1897,219 @@ class SentenceBuilder extends Component {
 			      
 			    	</Menu> 
 	  	} else if (type ==='svnObliquesEnglish2appositive') {
-  					return <Menu vertical>
-						{this.menuItem('BaseChooser','Change Oblique Appositive Noun','cvnObliqueUpdate',null)}
+  					return <Menu vertical style={{marginTop:10,marginBottom:10}}>
+						{this.menuItem('BaseChooser','Change Oblique Appositive Noun',[typeInd,'cvnObliqueUpdate'],null)}
 			      {this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["cv","nObliques",ind[0],ind[1],ind[2]],-1]])}
 			    	</Menu> 
 	  	} else if (type ==='mvnObliquesEnglish2appositive') {
 	  				console.log(ind)
-  					return <Menu vertical>
-						{this.menuItem('BaseChooser','Change Oblique Appositive Noun','mvnObliqueUpdate',null)}
+  					return <Menu vertical style={{marginTop:10,marginBottom:10}}>
+						{this.menuItem('BaseChooser','Change Oblique Appositive Noun',[typeInd,'mvnObliqueUpdate'],null)}
 			      {this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["mv","nObliques",ind[0],ind[1],ind[2]],-1]])}
 			    	</Menu> 
 	  	}
-  	} else if (this.state.currentEditMode==='mvnObliqueUpdate') {
+  	} else if (currentEditMode==='mvnObliqueUpdate') {
   		return this.baseChooser(["Update",["mv","nObliques",ind[0],'nBases',ind[1],ind[2]]],'n','updatebase','Ind')
-  	} else if (this.state.currentEditMode==='cvnObliqueUpdate') {
+  	} else if (currentEditMode==='cvnObliqueUpdate') {
   		return this.baseChooser(["Update",["cv","nObliques",ind[0],'nBases',ind[1],ind[2]]],'n','updatebase','Ind')
-  	} else if (this.state.currentEditMode==='svnObliqueUpdate') {
+  	} else if (currentEditMode==='svnObliqueUpdate') {
   		return this.baseChooser(["Update",["sv","nObliques",ind[0],'nBases',ind[1],ind[2]]],'n','updatebase','Ind')
-  	} else if (this.state.currentEditMode==='mvinsert') {
-  		return this.baseChooser(["Insert",["mv"]],'v','insert','Ind')
-  	} else if (this.state.currentEditMode==='mvinsertqaa') {
-  		return this.baseChooser(["Insert",["mv"]],'v','insert','Ind')
-  	} else if (this.state.currentEditMode==='cvinsert') {
+  	} else if (currentEditMode==='mvinsert') {
+  		return this.baseChooser(["Insert",["mv"]],'v','insert','Ind',null,forEnglish)
+  	} else if (currentEditMode==='mvinsertqaa') {
+  		return this.baseChooser(["Insert",["mv"]],'v','insert','Ind',null)
+  	} else if (currentEditMode==='cvinsert') {
   		return this.baseChooser(["Insert",["cv"]],'v','insert',this.state.cvvMood,this.state.cvvType)
-  	} else if (this.state.currentEditMode==='questionInsert') {
-  		return this.baseChooser(["Insert",["mv"]],'v','insert','Intrg',this.state.mvvType)
-  	} else if (this.state.currentEditMode==='commandInsert') {
-  		return this.baseChooser(["Insert",["mv"]],'v','insert',this.state.optCase,this.state.mvvType)
-  	} else if (this.state.currentEditMode==='svinsert') {
+  	} else if (currentEditMode==='questionInsert') {
+  		return this.baseChooser(["Insert",["mv"]],'v','insert','Intrg',this.state.mvvType,forEnglish)
+  	} else if (currentEditMode==='commandInsert') {
+  		return this.baseChooser(["Insert",["mv"]],'v','insert',this.state.optCase,this.state.mvvType,forEnglish)
+  	} else if (currentEditMode==='svinsert') {
   		return this.baseChooser(["Insert",["sv"]],'v','insert','Sbrd',this.state.svvType)
-  	} else if (this.state.currentEditMode==='mvupdate') {
-  		return this.baseChooser(["Update",["mv","vBase"]],'v','update')
-  	} else if (this.state.currentEditMode==='svupdate') {
+  	} else if (currentEditMode==='mvupdate') {
+  		return this.baseChooser(["Update",["mv","vBase"]],'v','update',this.state.mvvMood)
+  	} else if (currentEditMode==='svupdate') {
   		return this.baseChooser(["Update",["sv","vBase"]],'v','update')
-  	} else if (this.state.currentEditMode==='nObliqueInsert') {
+  	} else if (currentEditMode==='nObliqueInsert') {
   		if (this.state.mvnObliques.length > 0) {
   		return this.baseChooser(["Insert",["mv","nObliques",-1]],'n','insert',this.state.npCase,this.state.npCaseType)
   		} else {
   		return this.baseChooser(["Insert",["mv","nObliques"]],'n','insert',this.state.npCase,this.state.npCaseType)  			
   		}
-  	} else if (this.state.currentEditMode==='nPhraseInsert') {
-  		return this.baseChooser(["Insert",["np"]],'n','insert',this.state.npCase,this.state.npCaseType)  			
-  	} else if (this.state.currentEditMode==='cnObliqueInsert') {
+  	} else if (currentEditMode==='nPhraseInsert') {
+  		return this.baseChooser(["Insert",["np"]],'n','insert',this.state.npCase,this.state.npCaseType,forEnglish)  			
+  	} else if (currentEditMode==='cnObliqueInsert') {
   		if (this.state.cvnObliques.length > 0) {
   		return this.baseChooser(["Insert",["cv","nObliques",-1]],'n','insert',this.state.npCase,this.state.npCaseType)
   		} else {
   		return this.baseChooser(["Insert",["cv","nObliques"]],'n','insert',this.state.npCase,this.state.npCaseType)  			
   		}
-  	} else if (this.state.currentEditMode==='snObliqueInsert') {
+  	} else if (currentEditMode==='snObliqueInsert') {
   		if (this.state.svnObliques.length > 0) {
   		return this.baseChooser(["Insert",["sv","nObliques",-1]],'n','insert',this.state.npCase,this.state.npCaseType)
   		} else {
   		return this.baseChooser(["Insert",["sv","nObliques"]],'n','insert',this.state.npCase,this.state.npCaseType)  			
   		}
-  	} else if (this.state.currentEditMode==='mvnObliquepossessorinsert') {
+  	} else if (currentEditMode==='mvnObliquepossessorinsert') {
   		return this.baseChooser(["Insert",["mv","nObliques",ind[0],-1]],'n','insert',this.state.npCase,this.state.npCaseType)
-  	} else if (this.state.currentEditMode==='mvnObliquepossessedinsert') {
+  	} else if (currentEditMode==='mvnObliquepossessedinsert') {
   		return this.baseChooser(["Insert",["mv","nObliques",ind[0],0]],'n','insert',this.state.npCase,this.state.npCaseType)
-  	} else if (this.state.currentEditMode==='cvnObliquepossessorinsert') {
+  	} else if (currentEditMode==='cvnObliquepossessorinsert') {
   		return this.baseChooser(["Insert",["cv","nObliques",ind[0],-1]],'n','insert',this.state.npCase,this.state.npCaseType)
-  	} else if (this.state.currentEditMode==='cvnObliquepossessedinsert') {
+  	} else if (currentEditMode==='cvnObliquepossessedinsert') {
   		return this.baseChooser(["Insert",["cv","nObliques",ind[0],0]],'n','insert',this.state.npCase,this.state.npCaseType)
-  	} else if (this.state.currentEditMode==='svnObliquepossessorinsert') {
+  	} else if (currentEditMode==='svnObliquepossessorinsert') {
   		return this.baseChooser(["Insert",["sv","nObliques",ind[0],-1]],'n','insert',this.state.npCase,this.state.npCaseType)
-  	} else if (this.state.currentEditMode==='svnObliquepossessedinsert') {
+  	} else if (currentEditMode==='svnObliquepossessedinsert') {
   		return this.baseChooser(["Insert",["sv","nObliques",ind[0],0]],'n','insert',this.state.npCase,this.state.npCaseType)
-  	} else if (this.state.currentEditMode==='npnupdate') {
+  	} else if (currentEditMode==='npnupdate') {
   		return this.baseChooser(["Update",["np","nBases",this.state.npn.length-1-ind[0],ind[1]]],'n','updatebase')
-  	} else if (this.state.currentEditMode==='npnupdateEnglish') {
-  		return this.baseChooser(["Update",["np","nBases",this.state.npn.length-1-ind[0],this.state.npn[this.state.npn.length-1-ind[0]].length-1-ind[1]]],'n','updatebase')
-  	} else if (this.state.currentEditMode==='npinsert') {
+  	} else if (currentEditMode==='npnupdateEnglish') {
+  		return this.baseChooser(["Update",["np","nBases",this.state.npn.length-1-ind[0],ind[1]]],'n','updatebase')
+  		// return this.baseChooser(["Update",["np","nBases",this.state.npn.length-1-ind[0],this.state.npn[this.state.npn.length-1-ind[0]].length-1-ind[1]]],'n','updatebase')
+  	} else if (currentEditMode==='npinsert') {
   		return this.baseChooser(["Insert",["np"]],'n','insert',this.state.npCase,this.state.npCaseType)
-  	} else if (this.state.currentEditMode==='npnpossessorinsert') {
+  	} else if (currentEditMode==='npnpossessorinsert') {
   		return this.baseChooser(["Insert",["np","n",-1]],'n','insert')
-  	} else if (this.state.currentEditMode==='npnappositiveinsert') {
+  	} else if (currentEditMode==='npnappositiveinsert') {
   		console.log(this.state.npn,ind)
   		return this.baseChooser(["Insert",["np","n",this.state.npn.length-1-ind[0],-1]],'n','insert')
-  	} else if (this.state.currentEditMode==='npnpossessedinsert') {
+  	} else if (currentEditMode==='npnpossessedinsert') {
   		return this.baseChooser(["Insert",["np","n",0]],'n','insert')
-  	} else if (this.state.currentEditMode==='mvnsinsert') {
-  		return this.baseChooser(["Insert",["mv","ns"]],'n','insert','Ind')
-  	} else if (this.state.currentEditMode==='mvnsupdate') {
+  	} else if (currentEditMode==='mvnsinsert') {
+  		return this.baseChooser(["Insert",["mv","ns"]],'n','insert','Rel')
+  	} else if (currentEditMode==='mvnsupdate') {
   		return this.baseChooser(["Update",["mv","nsBases",this.state.mvnsSegments.length-1-ind[0],ind[1]]],'n','updatebase')
-  	} else if (this.state.currentEditMode==='mvnsupdateEnglish' && ind !== -1) {
+  	} else if (currentEditMode==='mvnsupdateEnglish' && ind !== -1) {
   		return this.baseChooser(["Update",["mv","nsBases",this.state.mvnsSegments.length-1-ind[0],this.state.mvnsSegments[this.state.mvnsSegments.length-1-ind[0]].length-1-ind[1]]],'n','updatebase')
-  	} else if (this.state.currentEditMode==='mvnoupdateEnglish' && ind !== -1) {
+  	} else if (currentEditMode==='mvnoupdateEnglish' && ind !== -1) {
   		return this.baseChooser(["Update",["mv","noBases",this.state.mvnoSegments.length-1-ind[0],this.state.mvnoSegments[this.state.mvnoSegments.length-1-ind[0]].length-1-ind[1]]],'n','updatebase')
-  	} else if (this.state.currentEditMode==='mvnsappositiveinsert') {
+  	} else if (currentEditMode==='mvnsappositiveinsert') {
   		return this.baseChooser(["Insert",["mv","ns",this.state.mvnsSegments.length-1-ind[0],-1]],'n','insert')
-  	} else if (this.state.currentEditMode==='mvnObliqueappositiveinsert') {
+  	} else if (currentEditMode==='mvnObliqueappositiveinsert') {
   		return this.baseChooser(["Insert",["mv","nObliques",ind[0],ind[1],-1]],'n','insert')
-  	} else if (this.state.currentEditMode==='cvnObliqueappositiveinsert') {
+  	} else if (currentEditMode==='cvnObliqueappositiveinsert') {
   		return this.baseChooser(["Insert",["cv","nObliques",ind[0],ind[1],-1]],'n','insert')
-  	} else if (this.state.currentEditMode==='svnObliqueappositiveinsert') {
+  	} else if (currentEditMode==='svnObliqueappositiveinsert') {
   		return this.baseChooser(["Insert",["sv","nObliques",ind[0],ind[1],-1]],'n','insert')
-  	} else if (this.state.currentEditMode==='mvnspossessorinsert') {
+  	} else if (currentEditMode==='mvnspossessorinsert') {
   		return this.baseChooser(["Insert",["mv","ns",-1]],'n','insert')
-  	} else if (this.state.currentEditMode==='mvnspossessedinsert') {
+  	} else if (currentEditMode==='mvnspossessedinsert') {
   		return this.baseChooser(["Insert",["mv","ns",0]],'n','insert')
-  	} else if (this.state.currentEditMode==='mvnopossessedinsert') {
+  	} else if (currentEditMode==='mvnopossessedinsert') {
   		return this.baseChooser(["Insert",["mv","no",0]],'n','insert')
-  	} else if (this.state.currentEditMode==='mvnoinsert') {
-  		return this.baseChooser(["Insert",["mv","no"]],'n','insert','Ind')
-  	} else if (this.state.currentEditMode==='mvnoappositiveinsert') {
+  	} else if (currentEditMode==='mvnoinsert') {
+  		if (this.state.mvvBase[1] === 'it') {
+  			return this.baseChooser(["Insert",["mv","no"]],'n','insert','io')  			
+  		} else {
+  			return this.baseChooser(["Insert",["mv","no"]],'n','insert','Abs')  			
+  		}
+  	} else if (currentEditMode==='mvnoappositiveinsert') {
   		return this.baseChooser(["Insert",["mv","no",this.state.mvnoSegments.length-1-ind[0],-1]],'n','insert')
-  	} else if (this.state.currentEditMode==='mvnoupdate') {
+  	} else if (currentEditMode==='mvnoupdate') {
   		return this.baseChooser(["Update",["mv","noBases",this.state.mvnoSegments.length-1-ind[0],ind[1]]],'n','updatebase')
-  	} else if (this.state.currentEditMode==='mvnopossessorinsert') {
+  	} else if (currentEditMode==='mvnopossessorinsert') {
   		return this.baseChooser(["Insert",["mv","no",-1]],'n','insert',null)
-  	} else if (this.state.currentEditMode==='cvupdate') {
+  	} else if (currentEditMode==='cvupdate') {
   		return this.baseChooser(["Update",["cv","vBase"]],'v','update')
-  	} else if (this.state.currentEditMode==='cvnsinsert') {
+  	} else if (currentEditMode==='cvnsinsert') {
   		return this.baseChooser(["Insert",["cv","ns"]],'n','insert','Ind')
-  	} else if (this.state.currentEditMode==='cvnsupdate') {
+  	} else if (currentEditMode==='cvnsupdate') {
   		return this.baseChooser(["Update",["cv","nsBases",this.state.cvnsSegments.length-1-ind[0],ind[1]]],'n','updatebase')
-  	} else if (this.state.currentEditMode==='cvnsupdateEnglish' && ind !== -1) {
+  	} else if (currentEditMode==='cvnsupdateEnglish' && ind !== -1) {
   		return this.baseChooser(["Update",["cv","nsBases",this.state.cvnsSegments.length-1-ind[0],this.state.cvnsSegments[this.state.cvnsSegments.length-1-ind[0]].length-1-ind[1]]],'n','updatebase')
-  	} else if (this.state.currentEditMode==='cvnoupdateEnglish' && ind !== -1) {
+  	} else if (currentEditMode==='cvnoupdateEnglish' && ind !== -1) {
   		return this.baseChooser(["Update",["cv","noBases",this.state.cvnoSegments.length-1-ind[0],this.state.cvnoSegments[this.state.cvnoSegments.length-1-ind[0]].length-1-ind[1]]],'n','updatebase')
-  	} else if (this.state.currentEditMode==='svnoupdateEnglish' && ind !== -1) {
+  	} else if (currentEditMode==='svnoupdateEnglish' && ind !== -1) {
   		return this.baseChooser(["Update",["sv","noBases",this.state.svnoSegments.length-1-ind[0],this.state.svnoSegments[this.state.svnoSegments.length-1-ind[0]].length-1-ind[1]]],'n','updatebase')
-  	} else if (this.state.currentEditMode==='cvnsappositiveinsert') {
+  	} else if (currentEditMode==='cvnsappositiveinsert') {
   		return this.baseChooser(["Insert",["cv","ns",this.state.cvnsSegments.length-1-ind[0],-1]],'n','insert')
-  	} else if (this.state.currentEditMode==='cvnspossessorinsert') {
+  	} else if (currentEditMode==='cvnspossessorinsert') {
   		return this.baseChooser(["Insert",["cv","ns",-1]],'n','insert')
-  	} else if (this.state.currentEditMode==='cvnoinsert') {
+  	} else if (currentEditMode==='cvnoinsert') {
   		return this.baseChooser(["Insert",["cv","no"]],'n','insert','Ind')
-  	} else if (this.state.currentEditMode==='cvnoappositiveinsert') {
+  	} else if (currentEditMode==='cvnoappositiveinsert') {
   		return this.baseChooser(["Insert",["cv","no",this.state.cvnoSegments.length-1-ind[0],-1]],'n','insert')
-  	} else if (this.state.currentEditMode==='cvnoupdate') {
+  	} else if (currentEditMode==='cvnoupdate') {
   		return this.baseChooser(["Update",["cv","noBases",this.state.cvnoSegments.length-1-ind[0],ind[1]]],'n','updatebase')
-  	} else if (this.state.currentEditMode==='cvnopossessorinsert') {
+  	} else if (currentEditMode==='cvnopossessorinsert') {
   		return this.baseChooser(["Insert",["cv","no",-1]],'n','insert',null)
-  	} else if (this.state.currentEditMode==='cvnopossessedinsert') {
+  	} else if (currentEditMode==='cvnopossessedinsert') {
   		return this.baseChooser(["Insert",["cv","no",0]],'n','insert')
-  	} else if (this.state.currentEditMode==='cvnspossessedinsert') {
+  	} else if (currentEditMode==='cvnspossessedinsert') {
   		return this.baseChooser(["Insert",["cv","ns",0]],'n','insert')
-  	} else if (this.state.currentEditMode==='svnopossessedinsert') {
+  	} else if (currentEditMode==='svnopossessedinsert') {
   		return this.baseChooser(["Insert",["sv","no",0]],'n','insert')
-  	} else if (this.state.currentEditMode==='svnoinsert') {
+  	} else if (currentEditMode==='svnoinsert') {
   		return this.baseChooser(["Insert",["sv","no"]],'n','insert','Ind')
-  	} else if (this.state.currentEditMode==='svnoappositiveinsert') {
+  	} else if (currentEditMode==='svnoappositiveinsert') {
   		return this.baseChooser(["Insert",["sv","no",this.state.svnoSegments.length-1-ind[0],-1]],'n','insert')
-  	} else if (this.state.currentEditMode==='svnoupdate') {
+  	} else if (currentEditMode==='svnoupdate') {
   		return this.baseChooser(["Update",["sv","noBases",this.state.svnoSegments.length-1-ind[0],ind[1]]],'n','updatebase')
-  	} else if (this.state.currentEditMode==='svnopossessorinsert') {
+  	} else if (currentEditMode==='svnopossessorinsert') {
   		return this.baseChooser(["Insert",["sv","no",-1]],'n','insert',null)
-  	} else if (this.state.currentEditMode==='question') {
+  	} else if (currentEditMode==='question') {
   		return this.menuItem('Question','Make Command','command',null,null)
   	}
     	
   }
 
+
+closeSubjectMenu = (tag,addSubject) => {
+	console.log(tag, addSubject, this.state.recentlyOpen)
+	this.subjectMenu[tag].close()
+	this.setState({
+		recentlyOpen:tag,
+	},()=>{
+		this.setState({
+			addSubject:addSubject,
+		})
+	})
+}
+
+openSubjectMenu = (tag) => {
+	this.subjectMenu[tag].open()
+}
+
 editSubjectMenu = (nounInsert,subject, tag, statevvs, update, backendcall, value, options) => {
-	console.log(value,options)
+	// console.log(value,options)
 	return <Popup
 			      trigger={									
-							<span style={{border:'solid 1px #22242626',color:this.getColor(tag),fontSize:'18px',padding:'8px 2px 8px 5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px', cursor:'pointer'}}>{options.map((k)=>{return value == k['value'] ? k['text'] : null})}<Icon style={{color:this.getColor(tag),fontSize:'16px',margin:0}} name='dropdown' /></span>
+							<span style={{border:'solid 1px #22242626',marginRight:'2px',marginLeft:'2px',color:this.getColor(tag),fontSize:'18px',padding:'8px 2px 8px 5px',borderRadius:'5px',marginRight:'2px',marginLeft:'2px', cursor:'pointer'}}>{options.map((k)=>{return value == k['value'] ? k['text'] : null})}<Icon style={{color:this.getColor(tag),fontSize:'16px',margin:0}} name='dropdown' /></span>
 			      }
 			      on='click'
 			      position='bottom center'
-			      open={this.state.currentlyOpen === tag}
-			      style={{
+			      // positionFixed
+			      // open={this.state.currentlyOpen === tag}
+			      // style={{
 			      	// height:this.returnHeight(name),
-			      }}
-			      positionFixed
-			      onOpen={()=>{if (tag !== this.state.currentlyOpen) {this.setState({addSubject:false})}; this.setState({currentlyOpen:tag})}}
-			      onClose={()=>{this.setState({currentlyOpen:'', addSubject:false})}}
-			      content={
+			      // }}
+			      ref={(element)=>{this.subjectMenu[tag]=element;}}
+			      onOpen={()=>{this.setState({currentlyOpen:tag})}}
+			      onClose={()=>{this.setState({currentlyOpen:''})}}
+			      // content={
+			      	// }
+			    >
 			      	<div style={{paddingBottom:0}}>
 			      	{this.state.addSubject ?
-				      	this.baseChooser(nounInsert,'n','insert','Ind')
+			      		<div>
+					      	<Button basic style={{display:'flex',flexDirection:'row',alignItems:'center',paddingLeft:'13px',marginBottom:'5px',marginTop:'10px'}} onClick={()=>{this.closeSubjectMenu(tag,false);}}>
+              			<Icon name='chevron left' />
+               			<div style={{color:'#666666'}}>{'Back'}</div>
+					      	</Button>
+				      	{this.baseChooser(nounInsert,'n','insert','Abs','')}
+				      	</div>
 				      	:
-				      	<div id='tester' style={{display:'flex',flexDirection:'column',justifyContent:'center'}}>
+				      	<div id='tester' style={{display:'flex',flexDirection:'column',justifyContent:'center',marginTop:10}}>
 				      		{subject.length > 0 ?
-					      		<Button basic onClick={()=>this.setState({addSubject:true})}>{'Add '+subject}</Button>
+					      		<Button basic onClick={()=>{this.closeSubjectMenu(tag,true)}}>{'Add '+subject}</Button>
 					      		:
 					      		null
 					      	}
 					      	<Segment style={{height:200,overflow:'auto',padding:0,marginBottom:8}}>
 						      <Button.Group style={{border:0}} basic vertical>
 						      	{options.map((k)=>
-						      		<Button active={k['value']==statevvs.join("")} onClick={()=>{this.setState({currentlyOpen:''},()=>this.backEndCall([[update,backendcall,k['value'].split('').map(Number)]]))}}>{k['text']}</Button>
+						      		<Button active={k['value']==statevvs.join("")} onClick={()=>{this.closeSubjectMenu(tag,false); this.backEndCall([[update,backendcall,k['value'].split('').map(Number)]])}}>{k['text']}</Button>
 						      	)}
 					      	</Button.Group>
 					      	</Segment>
@@ -2044,81 +2119,124 @@ editSubjectMenu = (nounInsert,subject, tag, statevvs, update, backendcall, value
 				      	</div>
 				      }
 			      	</div>
-			      	}
-			     />
+			   	</Popup>
 }
 
+	closeMainScreenMenuRef = (name,currentEditMode) => {
+		console.log(currentEditMode)
+		this.mainScreenMenuRef[name].close()
+		if (currentEditMode !== 'default') {
+			this.setState({
+				recentlyOpen:name,
+			},()=>{
+				this.setState({
+					currentEditMode:currentEditMode,
+				})
+			})
+		} else {
+			this.setState({
+				recentlyOpen:'',
+			},()=>{
+				this.setState({
+					currentEditMode:currentEditMode,
+				})
+			})
+		}
+	}
 
-mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
-	return <Popup
-			      trigger={						
-							<Button style={{}} fluid basic>{name}</Button>
-			      }
-			      on='click'
-			      position='bottom center'
-			      open={this.state.currentlyOpen === name}
-			      style={{
-			      	height:this.returnHeight(currentEditMode),
-			      }}
+
+	openMainScreenMenuRef = (name) => {
+		if (name in this.mainScreenMenuRef) {
+			this.mainScreenMenuRef[name].open()
+		}
+	}
+
+mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
+	// console.log(name, currentEditMode,setState,setStateTo)
+	return   <Popup
+				    trigger={<div style={{
+				    	border:'solid 1px #22242626',
+				    	fontSize:'16px',
+				    	padding:'5px',
+				    	borderRadius:'5px',
+				    	marginRight:'2px',
+				    	marginLeft:'2px',
+				    	cursor:'pointer',
+				    	textAlign:'center',
+				    	color:'#00000099'
+				    }}>{name}</div>}
+				    position="bottom center"
+				    ref={(element)=>{this.mainScreenMenuRef[name]=element;}}
 			      onOpen={()=>{
+			      	console.log(currentEditMode)
 		      		if (setState === 'npCase') {
 								this.setState({npCase:setStateTo[0],npCaseType:setStateTo[1]})
 							} else if (setState === 'mvvType') {
-								if (currentEditMode === 'questionInsert') {
-			      			if (setStateTo[0] === 'Intrg0' || setStateTo[0] === 'Intrg3' || setStateTo[0] === 'Intrg5' || setStateTo[0] === 'Intrg7' || setStateTo[0] === 'IntrgA') {
-			      				this.setState({mvvsPlanned:[3,1,1]})
-			      			} else if (setStateTo[0] === 'Intrg1' || setStateTo[0] === 'Intrg4' || setStateTo[0] === 'Intrg8') {
-			      				this.setState({mvvsPlanned:[3,1,2]})
-			      			} else if (setStateTo[0] === 'Intrg2' || setStateTo[0] === 'Intrg6' || setStateTo[0] === 'Intrg9') {
-										this.setState({mvvsPlanned:[3,1,3]})
-			      			}
-			      			if (setStateTo[0] === 'Intrg4' || setStateTo[0] === 'Intrg5') {
-			      				this.setState({startingCase:'i'})
-			      			} else if (setStateTo[0] === 'Intrg6' || setStateTo[0] === 'Intrg7' || setStateTo[0] === 'Intrg8' || setStateTo[0] === 'Intrg9' || setStateTo[0] === 'IntrgA') {
-			      				this.setState({startingCase:'g'})
-			      			}
-			      		} 
 								this.setState({mvvType:setStateTo[0]})
 							} else if (setState === 'cvvType') {
-								if (setStateTo[0] === 'Prec' || setStateTo[0] === 'Cont' || setStateTo[0] === 'Cond' || setStateTo[0] === 'Prec') {
-									this.setState({startingCase:'gen'})
-								} else if (setStateTo[0] === 'Cnsq' || setStateTo[0] === 'CtmpI' || setStateTo[0] === 'CtmpII') {
-									this.setState({startingCase:'p'})
-								}
 								this.setState({cvvMood:setStateTo[0] ,cvvType:setStateTo[1]})
 							} else if (setState === 'svvType') {
-			      		this.setState({startingCase:'g'})								
 								this.setState({svvType:setStateTo[0]})
 							} else if (setState === 'optCase') {
-								this.setState({startingCase:'i',optCase:setStateTo[0], mvvType:setStateTo[1]})
-							} else if (setState === 'he') {
-								this.setState({mvvsPlanned:[3,1,1]})
-							} else if (setState === 'she') {
-								this.setState({mvvsPlanned:[3,1,2]})
-							} else if (setState === 'it') {
-								this.setState({mvvsPlanned:[3,1,3]})
-							} else if (setState === 'they2') {
-								this.setState({mvvsPlanned:[3,2,0]})
-							} else if (setState === 'they3') {
-								this.setState({mvvsPlanned:[3,3,0]})
-							}
-			      	this.setState({currentlyOpen:name,currentEditMode:currentEditMode})
+								this.setState({optCase:setStateTo[0], mvvType:setStateTo[1]})
+							} 
+							this.setState({currentlyOpen:name, currentEditMode:currentEditMode})
 			      }}
-     				onClose={()=>{this.setState({currentlyOpen:'',currentEditMode:'default',candidateCall:[],candidateBase:[],lockSubmit:false,nextTenses:[],candidateDisplay:[],searchQuery:'',wordsList:[]})}}
-			      content={
-			      	this.contentItems('default',-1)
-			      	}
-			     />
+     				onClose={()=>{this.setState({currentlyOpen:'',activeIndexes1:[],candidateCall:[],candidateBase:[],lockSubmit:false,nextTenses:[],candidateDisplay:[],searchQuery:'',wordsList:[]})}}
+  >
+  	{this.contentItems(currentEditMode,-1,true,forEnglish)}
+  </Popup>
+
 }
 
 														
+	closeEditMenuRef = (typeInd,currentEditMode) => {
+		console.log(typeInd,currentEditMode)
+		if (typeInd in this.editMenuRef) {
+			this.editMenuRef[typeInd].close()
+		}
+		if (currentEditMode !== 'default') {
+			this.setState({
+				recentlyOpen:typeInd,
+			},()=>{
+				this.setState({
+					currentEditMode:currentEditMode,
+				})
+			})
+		} else {
+			this.setState({
+				recentlyOpen:'',
+			},()=>{
+				this.setState({
+					currentEditMode:currentEditMode,
+				})
+			})
+		}
+		// console.log(typeInd)
+		// console.log(this.editMenuRef)
+		// this.editMenuRef[typeInd].close()
+		// this.setState({
+		// 	recentlyOpen:typeInd,
+		// },()=>{
+		// 	this.setState({
+		// 		currentEditMode:currentEditMode,
+		// 	})
+		// })
+	}
+
+
+	openEditMenuRef = (typeInd) => {
+		if (typeInd in this.editMenuRef) {
+			this.editMenuRef[typeInd].open()
+		}
+	}
 
 	editMenu = (type,ind) => {
 
 		// if (mind) {
 		// 	mind=mind.toString()			
 		// }
-		console.log(type,ind)
+		// console.log(type,ind)
 		let typeInd = type+(ind+1).toString()
 
 		// console.log(typeInd)
@@ -2127,19 +2245,35 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
       trigger={									
 				this.triggerItems(type,ind)
       }
-      on='click'
-      open={this.state.isOpen && this.state.currentlyOpen === typeInd}
-      onOpen={()=>{this.setState({isOpen:false,currentEditMode:'default'},()=>{this.handleOpen(typeInd)})}}
-      onClose={()=>{this.setState({isOpen:false,currentEditMode:'default',candidateCall:[],candidateBase:[],lockSubmit:false,nextTenses:[],candidateDisplay:[],searchQuery:'',wordsList:[]})}}
+      // offset={[0, 100]}
+      // on='click'
+      // open={this.state.isOpen && this.state.currentlyOpen === typeInd}
+      onOpen={()=>{this.setState({isOpen:false},()=>{this.handleOpen(typeInd)})}}
+      onClose={()=>{this.setState({isOpen:false,currentlyOpen:'',activeIndexes1:[],candidateCall:[],candidateBase:[],lockSubmit:false,nextTenses:[],candidateDisplay:[],searchQuery:'',wordsList:[]})}}
       position='bottom center'
-      style={{
-      	height:(this.returnHeight(this.state.currentEditMode)),
-      	padding:(this.state.currentEditMode==='default' ? 0 : null)
-      }}
-      content={
-      	this.contentItems(type,ind)
-      }
-      />
+
+      ref={(element)=>{this.editMenuRef[typeInd]=element;}}
+      // positionFixed
+      // style={{margin:0,padding:0}}
+      // 	// height:(this.returnHeight(this.state.currentEditMode)),
+      // 	padding:(this.state.currentEditMode==='default' ? 0 : null)
+      // }}
+      // content={
+      // 	this.contentItems(type,ind)
+      // }
+      >
+    	{this.state.currentEditMode !== 'default' ?
+    		<div>
+	      	<Button basic style={{display:'flex',flexDirection:'row',alignItems:'center',paddingLeft:'13px',marginBottom:'5px',marginTop:'10px'}} onClick={()=>{this.closeEditMenuRef(typeInd,'default')}}>
+      			<Icon name='chevron left' />
+       			<div style={{color:'#666666'}}>{'Back'}</div>
+	      	</Button>
+	      	{this.contentItems(type,ind,false)}
+	      </div>
+      	:
+	      this.contentItems(type,ind,false)
+	    }
+      </Popup>
 
 	}
 
@@ -2167,6 +2301,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
     	}
     }
  
+ 	// 	let tag = this.state.currentlyOpen
+		// this.setState({currentlyOpen:''},()=>{this.setState({currentlyOpen:tag})})
     // console.log(newIndex)
     // newIndex.map((k)=>{
     // 	console.log()
@@ -2178,6 +2314,45 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
     // }
     this.setState({ activeIndexes: newIndex });
   };
+
+  handleClick1 = (index,allowAdd) => {
+    // console.log(e,titleProps.id)
+    // this.setState({ loaderOn: true });
+    // const index = titleProps.id;
+    const { activeIndexes1 } = this.state;
+    const newIndex = this.state.activeIndexes1.slice()
+    // const newIndex = []
+    // const newIndex = activeIndex === index ? -1 : index;
+
+    const currentIndexPosition = activeIndexes1.indexOf(index);
+
+    // console.log(currentIndexPosition, activeIndexes, index)
+    if (currentIndexPosition > -1) {
+      newIndex.splice(currentIndexPosition, 1);
+    } else {
+    	if (allowAdd) {
+      	newIndex.push(index);    		
+      	this.setState({
+	    		searchQuery:'',
+	    		wordsList:[],      		
+      	})
+    	}
+    }
+ 
+ 	// 	let tag = this.state.currentlyOpen
+		// this.setState({currentlyOpen:''},()=>{this.setState({currentlyOpen:tag})})
+    // console.log(newIndex)
+    // newIndex.map((k)=>{
+    // 	console.log()
+    // })
+
+    // let mood = moods[index];
+    // if (newIndex !== -1) {   
+      // this.getEndings(this.state.parses[currentIndex], mood);
+    // }
+    this.setState({ activeIndexes1: newIndex });
+  };
+
 
 	subMenuItem=(type, ind1, ind2)=> {
 		if (type==='addCV') {
@@ -2444,12 +2619,13 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 	    return <Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
 		    		<Accordion.Title
 		    			id={type}
-		    			active={true}
+		    			active={this.state.activeIndexes.includes(type)}
+	            onClick={()=>{this.handleClick(type,true)}}
 		    		>
 		    			<Icon name="dropdown" />
 		    			{'Change Command Type'}
 		    		</Accordion.Title>
-		    		<Accordion.Content active={true}>
+		    		<Accordion.Content active={this.state.activeIndexes.includes(type)}>
 		    		<Button.Group vertical basic fluid>
 			        <Button onClick={()=>{this.setState({optCase:'Opt][PRS',mvvType:'',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Opt][PRS']])})}}>command right now</Button>
 			        <Button onClick={()=>{this.setState({optCase:'Opt][FUT',mvvType:'',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Opt][FUT']])})}}>command in future</Button>
@@ -2595,7 +2771,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 					this.setState({endingAdjusted:''})
 					candidateFST.push([x['key'],0,x['usageIndex'],0])
 				} else {
-					if (!newpostbases[x[1]]['match_case']) {
+					console.log(x[1],!newpostbases[x[1]]['match_case'])
+					if (!('post_verb' in newpostbases[x[1]])) {
 						this.setState({addIs:false})
 					}
 					if (newpostbases[x[1]]['type'] == 'VN' || newpostbases[x[1]]['type'] == 'VV') {
@@ -2680,10 +2857,16 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 	}
 
 
-	processStyledMainText = (key) => {
-		// console.log(key)
+	processStyledMainText = (key,forEnglish) => {
+		// console.log(key,this.state.startingCase,this.state.mvvs,this.state.mvvsPlanned,this.state.nextTenses)
 		let verbAdd = ''
 		let sentence = key['englishmain']	
+		let startingCase = ''
+		let mvvsPlanned = []
+		if (forEnglish !== undefined) {
+			startingCase = forEnglish[0]
+			mvvsPlanned = forEnglish[1]
+		}
 
 		if (key['type'] == 'n') {
 			sentence = key['base_case']
@@ -2737,16 +2920,16 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 					}						
 				}
 			} else {
-				if (this.state.startingCase.length > 0) {
-					if (this.state.startingCase === 'p') {
+				if (startingCase.length > 0) {
+					if (startingCase === 'p') {
 						verbAdd = key['englishtenses'][1]
-					} else if (this.state.startingCase === 'g') {
+					} else if (startingCase === 'g') {
 						verbAdd = key['englishtenses'][3]
-					} else if (this.state.startingCase === 'i') {
+					} else if (startingCase === 'i') {
 						verbAdd = key['englishtenses'][0]
-					} else if (this.state.startingCase === 'pp') {
+					} else if (startingCase === 'pp') {
 						verbAdd = key['englishtenses'][4]
-					} else if (this.state.startingCase === 'gen') {
+					} else if (startingCase === 'gen') {
 						verbAdd = key['englishtenses'][2]
 					}
 					sentence = key['englishraw']
@@ -2756,12 +2939,22 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 					}	
 					sentence = sentence.replace('!is!','')
 				} else {
-					if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
-						sentence = sentence.replace('!is!','am')
-					} else if ((this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) || this.state.mvvs.length === 0) {
-						sentence = sentence.replace('!is!','is')
+					if (this.state.mvvs.length > 0) {
+						if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
+							sentence = sentence.replace('!is!','am')
+						} else if ((this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) || this.state.mvvs.length === 0) {
+							sentence = sentence.replace('!is!','is')
+						} else {
+							sentence = sentence.replace('!is!','are')
+						}						
 					} else {
-						sentence = sentence.replace('!is!','are')
+						if (mvvsPlanned[0] == 1 && mvvsPlanned[1] == 1)	{
+							sentence = sentence.replace('!is!','am')
+						} else if ((mvvsPlanned[0] == 3 && mvvsPlanned[1] == 1) || mvvsPlanned.length === 0) {
+							sentence = sentence.replace('!is!','is')
+						} else {
+							sentence = sentence.replace('!is!','are')
+						}
 					}
 				}
 			}
@@ -2781,9 +2974,13 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 	}
 
 
-	processStyledPostbaseText = (key,i) => {
+	processStyledPostbaseText = (key,i,forEnglish) => {
 		// console.log(key,i)
 		let lookup;
+		let mvvsPlanned = []
+		if (forEnglish !== undefined) {
+			mvvsPlanned = forEnglish[1]
+		}
 		if (i === '1') {
 			lookup = key['expression']
 		} else if (i === '2') {
@@ -2794,18 +2991,31 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 			// console.log(sentence)
 
 			if (newpostbases[lookup]['type'] === 'VV') {
-				sentence = newpostbases[lookup]['description']
+				if (!newpostbases[lookup]['is'] && !newpostbases[lookup]['has']) {
+					if (mvvsPlanned[0] == 3 && mvvsPlanned[1] == 1 || this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) {
+						sentence = newpostbases[lookup]['description']
+					} else {
+						if ('inf_preverb' in newpostbases[lookup]) {
+							sentence = newpostbases[lookup]['inf_preverb']						
+						} else {
+							sentence = newpostbases[lookup]['description']
+						}
+					}
+				} else {
+					sentence = newpostbases[lookup]['description']
+				}
+
 				if (key['id'] == 5) {
 					sentence = '<past tense>'
 				} else {
 					if (!newpostbases[lookup]['match_case']) {
-						if (this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
+						if (this.state.nextTenses[this.state.nextTenses.length-1] === 'p' || this.state.nextTenses[this.state.nextTenses.length-1] === 'pp') {
 							if (newpostbases[lookup]['past_preverb'].length == 0 && newpostbases[lookup]['was']) {
 								sentence = newpostbases[lookup]['description']						
 								if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
 									sentence = 'was '+sentence
 								} else if ((this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) || this.state.mvvs.length === 0) {
-									if (this.state.mvvsPlanned[1] !== 1) {
+									if (mvvsPlanned[1] !== 1) {
 										sentence = 'were '+sentence							
 									} else {
 										sentence = 'was '+sentence														
@@ -2822,8 +3032,6 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 							sentence = newpostbases[lookup]['gen_preverb']
 						} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'i') {
 							sentence = newpostbases[lookup]['inf_preverb']
-						} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp') {
-							sentence = newpostbases[lookup]['past_preverb']
 						}
 					}				
 				}
@@ -2836,7 +3044,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 							if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
 								sentence = 'was '+sentence
 							} else if ((this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) || this.state.mvvs.length === 0) {
-								if (this.state.mvvsPlanned[1] !== 1) {
+								if (mvvsPlanned[1] !== 1) {
 									sentence = 'were '+sentence							
 								} else {
 									sentence = 'was '+sentence														
@@ -2867,6 +3075,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 
 			// console.log(sentence)
 
+
+
 	  	if (newpostbases[lookup]['is'] && this.state.addIs) {
 	  		// if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp' || this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
 					// if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
@@ -2877,17 +3087,27 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 					// 	sentence = 'were '+sentence
 					// }  
 	  		// } else {
-					if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
-						sentence = 'am '+sentence
-					} else if ((this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) || this.state.mvvs.length === 0) {
-						if (this.state.mvvsPlanned[1] !== 1) {
-							sentence = 'are '+sentence							
-						} else {
-							sentence = 'is '+sentence														
-						}
+
+					// if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
+					// 	sentence = 'am '+sentence
+					// } else if ((this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) || this.state.mvvs.length === 0) {
+					// 	if (mvvsPlanned[1] !== 1) {
+					// 		sentence = 'are '+sentence							
+					// 	} else {
+					// 		sentence = 'is '+sentence														
+					// 	}
+					// } else {
+					// 	sentence = 'are '+sentence
+					// }  	  			
+
+					if (mvvsPlanned[0] == 1 && mvvsPlanned[1] == 1)	{
+						sentence = 'am '+sentence							
+					} else if (mvvsPlanned.length === 0 || (mvvsPlanned[0] == 3 && mvvsPlanned[1] == 1)) {
+						sentence = 'is '+sentence														
 					} else {
-						sentence = 'are '+sentence
-					}  	  			
+						sentence = 'are '+sentence							
+					}		
+
 	  		// }
 				// this.setState({addIs:false})
 	  	}
@@ -2896,18 +3116,19 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 	  		if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp' || this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
 	  			sentence = 'had '+sentence
 	  		} else {
-					if ((this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) || this.state.mvvs.length === 0) {
-						if (this.state.mvvsPlanned[1] !== 1) {
-							sentence = 'have '+sentence							
-						} else {
-							sentence = 'has '+sentence														
-						}
+					if (mvvsPlanned[0] == 1 && mvvsPlanned[1] == 1)	{
+						sentence = 'have '+sentence							
+					} else if (mvvsPlanned.length === 0 || (mvvsPlanned[0] == 3 && mvvsPlanned[1] == 1)) {
+						sentence = 'has '+sentence														
 					} else {
-						sentence = 'have '+sentence
-					}  		  			
+						sentence = 'have '+sentence							
+					}		  			
 	  		}
 				// this.setState({addIs:false})
 	  	}
+
+
+			sentence = this.returnPossessor(sentence, forEnglish)
 
 
 			let matches = sentence.match(/\<.*?\>/g)
@@ -2918,6 +3139,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 				return <span>{sentence.replace("⟨","").replace("⟩","")}</span>
 			}
 
+			
+
 
 		} else {
 			console.log('not in',lookup)
@@ -2925,22 +3148,49 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 		}
 	}
 
-	returnBaseChooserTitle = (itemUpdating,mood,submood) => {
+	returnPossessor = (sentence, forEnglish) => {
+		let mvvs = this.state.mvvs
+		// let mvvsPlanned = []
+		// if (forEnglish !== undefined) {
+		// 	mvvsPlanned = forEnglish[0]
+		// }
+		// if (mvvsPlanned.length > 0) {
+		// 	mvvs = mvvsPlanned
+		// }
+		if (sentence.includes('^his^')) {
+			return sentence.replace('^his^',npnEnglish[mvvs.join("")])
+		} else if (sentence.includes('^himself^')) {
+			return sentence.replace('^himself^',npnEnglishself[mvvs.join("")])
+		} else if (sentence.includes('^he^')) {
+			return sentence.replace('^he^',mvSubjectOptionsEnglish[mvvs.join("")])
+		} else {			
+			return sentence
+		}
+	}
+
+	returnBaseChooserTitle = (itemUpdating,endingNeeded,mood,submood,forEnglish) => {
 		let subject = '';
-		if (['mv','mvvBase'].includes(itemUpdating[1].join(""))) {
-			if (this.state.mvvs.length > 0) {
-				subject = mvSubjectOptionsEnglish[this.state.mvvs.join("")]
-			} else {
-				if (this.state.mvvsPlanned.length > 0) {
-					subject = mvSubjectOptionsEnglish[this.state.mvvsPlanned.join("")]
-				} else {
-					subject = 'he'					
-				}
-			}
-		} else if (['mvns'].includes(itemUpdating[1].join(""))) {
-			subject = 'the one _____ is'				
-		} else if (['mvno'].includes(itemUpdating[1].join(""))) {
-			subject = 'the one'				
+		if (forEnglish === undefined) {
+			forEnglish = ['',[]]
+		}
+		// console.log(itemUpdating,endingNeeded,mood,submood)
+		// console.log(this.state.mvvsPlanned)
+
+		// if (['mv','mvvBase'].includes(itemUpdating[1].join(""))) {
+		// 	if (this.state.mvvs.length > 0) {
+		// 		subject = mvSubjectOptionsEnglish[this.state.mvvs.join("")] + ' _____'
+		// 	} else {
+		// 		if (this.state.mvvsPlanned.length > 0) {
+		// 			subject = mvSubjectOptionsEnglish[this.state.mvvsPlanned.join("")] + ' _____'
+		// 		} else {
+		// 			subject = 'he _____'					
+		// 		}
+		// 	}
+		// } else if (['mvns'].includes(itemUpdating[1].join(""))) {
+		// 	subject = 'the one _____ is'				
+		// } else if (['mvno'].includes(itemUpdating[1].join(""))) {
+		// 	subject = 'the one _____'				
+		// }
 		// } else if (itemUpdating[1][0]==='np') {
 		// 	if (itemUpdating[1].length == 1) { //(['np'].includes(itemUpdating[1].join(""))) 
 		// 		subject = 'the one'
@@ -2966,92 +3216,133 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 		// 			}
 		// 		}
 		// 	}
-		}
+		// }
 
 		let starters = {
-			// 'Abs':'the (absolutive)',
-			'Loc':'in or at',
-			'Ter':'toward',
-			'from':'from',
-			'io':'a or some',
-			'Via':'through, using',
-			'Equ':'like',
-			'Prec':'before',
-			'Cnsq':'because',
-			'Cont':'whenever',
-			'CtmpI':'when (in past)',
-			'CtmpII':'while',
-			'eventhough':'even though',
-			'evenif':'even if',
-			'if':'if',
-			'wheninthefuture':'when (in future)',
+			'Abs':'[the one] _____',
+			'Rel':'[the one] _____',
+			'Loc':'in or at [the one] _____',
+			'Ter':'toward [the one] _____',
+			'from':'from [the one] _____',
+			'io':'a _____',
+			'Via':'through, using [a] _____',
+			'Equ':'like [a] _____',
 
-			'Intrg0':'who is he who _____?',
-			'Intrg1':'she _____ whom (object)?',
-			'Intrg2':'what is it that _____ ?',
-			'Intrg3':'he _____ what (object)?',
-			'Intrg4':'when did she _____?',
-			'Intrg5':'when will he _____?',
-			'Intrg6':'where is it _____?',
-			'Intrg7':'from where is he _____?',
-			'Intrg8':'to where is she _____?',
-			'Intrg9':'why is it _____?',
-			'IntrgA':'how is he _____?',
+			'Prec':'before [] _____',
+			'Cnsq':'because [] _____',
+			'Cont':'whenever [] _____',
+			'CtmpI':'when (in past) [] _____',
+			'CtmpII':'while [] _____',
+			'Conc':'even though [] _____',
+			'evenif':'even if [] _____',
+			'if':'if [] _____',
+			'wheninthefuture':'when (in future) [] _____',
 
-			'Opt][PRS':'you, _____ (command)',
-			'Opt][FUT':'you, _____ (command in the future)',
-			'Opt][PRS][NEG':'you, do not _____',
-			'Opt][FUT][NEG':'you, do not _____ (future)',
-			'Sbrd':'you, ____ (polite request)',
-			'Sbrdneg':'you, do not ____ (polite request)',
+			'Intrg0':'who is [he] who _____?',
+			'Intrg1':'[she] _____ whom (object)?',
+			'Intrg2':'what is [it] that _____?',
+			'Intrg3':'[he] _____ what (object)?',
+			'Intrg4':'when did [she] _____?',
+			'Intrg5':'when will [he] _____?',
+			'Intrg6':'where is [it] _____?',
+			'Intrg7':'from where is [he] _____?',
+			'Intrg8':'to where is [she] _____?',
+			'Intrg9':'why is [it] _____?',
+			'IntrgA':'how is [he] _____?',
+
+			'Opt][PRS':'[you], _____ (command)',
+			'Opt][FUT':'[you], _____ (command in the future)',
+			'Opt][PRS][NEG':'[you], do not _____',
+			'Opt][FUT][NEG':'[you], do not _____ (future)',
+			'Sbrd':'[you], ____ (polite request)',
+			'neg':'[you], do not ____ (polite request)',
 
 			'by':'by ____ ',
-			'being':'____',
+			'being':'being ____',
 
 		}
 
-		console.log(mood,submood)
+		// console.log(subject, itemUpdating, mood,submood)
+		// console.log(itemUpdating, mood,submood)
+		// console.log(this.state)
 
-		if (mood == 'Sbrd') {
-			if (submood == '') {
-				subject = starters['Sbrd']
-			} else if (submood == 'neg') {
-				subject = starters['Sbrdneg']
-			} else if (submood == 'by') {
-				subject = starters['by']
-			} else if (submood == 'being') {
-				subject = starters['being']
-			}				
-		} else if (mood == 'Intrg') {
-			subject = starters[submood]
-
-		} else if (mood == 'Loc' || mood == 'Ter' | mood == 'Via' || mood == 'Equ') {
-			subject = starters[mood]
-			if (itemUpdating[0] === 'Insert') {
-				subject = subject + ' the one _____'					
+		if (itemUpdating[0]==='Insert') {
+			if (mood==='Ind') {
+				// if (this.state.mvvs.length > 0) {
+				// 	subject = mvSubjectOptionsEnglish[this.state.mvvs.join("")] + ' _____'
+				// } else {
+					if (forEnglish[1].length > 0) {
+						subject = mvSubjectOptionsEnglish[forEnglish[1].join("")] + ' _____'
+					} else {
+						subject = 'he _____'					
+					}
+				// }
+			// } else if (['mvns'].includes(itemUpdating[1].join(""))) {
+			// 	subject = 'the one _____ is'				
+			// } else if (['mvno'].includes(itemUpdating[1].join(""))) {
+			// 	subject = 'the one _____'				
+			} else if (itemUpdating[1][0]==='cv') {
+				if (submood != '') {
+					if (submood in starters) {
+						subject = starters[submood].replace('[]',mvSubjectOptionsEnglish[this.state.mvvs.join("")]) // if reflexive
+					}
+				} else {
+					if (mood in starters) {
+						subject = starters[mood].replace('[]',mvSubjectOptionsEnglish[this.state.mvvs.join("")]) // if reflexive
+					}
+				}			
+			} else if (submood != '') {
+				if (submood in starters) {
+					subject = starters[submood].replace('[','').replace(']','')
+				}
 			} else {
-
-			}
-		} else if (mood == 'Prec' || mood == 'Cnsq' || mood == 'Cont' || mood == 'CtmpI' || mood == 'CtmpII') {
-			subject = starters[mood]
-			if (itemUpdating[0] === 'Insert') {
-				subject = subject + ' he _____'
-			}
-		} else if (submood == 'eventhough' || submood == 'evenif' || submood == 'io'|| submood == 'from' || submood == 'if' || submood == 'wheninthefuture') {
-			subject = starters[submood]
-			if (submood == 'io') {
-				subject = subject + '_____'	
-			} else if (submood == 'from') {
-				subject = subject + ' the one _____'					
-			} else if (itemUpdating[0] === 'Insert') {
-				subject = subject + ' he _____'
-			}
-		} else {
-			//optative
-			if (mood in starters) {
-				subject = starters[mood]
+				if (mood in starters) {
+					subject = starters[mood].replace('[','').replace(']','')
+				}
 			}
 		}
+
+
+		// if (mood == 'Sbrd') {
+		// 	if (submood == '') {
+		// 		subject = starters['Sbrd']
+		// 	} else if (submood == 'neg') {
+		// 		subject = starters['Sbrdneg']
+		// 	} else if (submood == 'by') {
+		// 		subject = starters['by']
+		// 	} else if (submood == 'being') {
+		// 		subject = starters['being']
+		// 	}				
+		// } else if (mood == 'Intrg') {
+		// 	subject = starters[submood]
+
+		// } else if (mood == 'Loc' || mood == 'Ter' | mood == 'Via' || mood == 'Equ' || mood == 'Abs' || mood === 'Rel') {
+		// 	subject = starters[mood]
+		// 	if (itemUpdating[0] === 'Insert') {
+		// 		subject = subject + ' the one _____'					
+		// 	} else {
+
+		// 	}
+		// } else if (mood == 'Prec' || mood == 'Cnsq' || mood == 'Cont' || mood == 'CtmpI' || mood == 'CtmpII') {
+		// 	subject = starters[mood]
+		// 	if (itemUpdating[0] === 'Insert') {
+		// 		subject = subject + ' he _____'
+		// 	}
+		// } else if (submood == 'eventhough' || submood == 'evenif' || submood == 'io'|| submood == 'from' || submood == 'if' || submood == 'wheninthefuture') {
+		// 	subject = starters[submood]
+		// 	if (submood == 'io') {
+		// 		subject = subject + '_____'	
+		// 	} else if (submood == 'from') {
+		// 		subject = subject + ' the one _____'					
+		// 	} else if (itemUpdating[0] === 'Insert') {
+		// 		subject = subject + ' he _____'
+		// 	}
+		// } else {
+		// 	//optative
+		// 	if (mood in starters) {
+		// 		subject = starters[mood]
+		// 	}
+		// }
 
 		
 // 'Loc',npCaseType:''},()=>{this.menuSelect('nObliqueInsert',-1)})}}>in or at the...</Button>
@@ -3063,17 +3354,39 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 		return subject
 	}
 
-	returnPlaceholder = (endingNeeded) => {
+	returnPlaceholder = (endingNeeded, forEnglish) => {
+		// console.log(endingNeeded, this.state.endingAdjusted, this.state.startingCase, this.state.mvvsPlanned)
+
+		// console.log(endingNeeded, forEnglish)
+		let startingCase = ''
+		let mvvsPlanned = []
+		if (forEnglish !== undefined) {
+			startingCase = forEnglish[0]
+			mvvsPlanned = forEnglish[1]
+		}
+
 		if (endingNeeded == 'n') {
 			if (this.state.endingAdjusted === 'v') {
-				if (this.state.startingCase == 'i') {
+				if (startingCase == 'i') {
 					return 'hunt, be happy, etc.'
-				} else if (this.state.startingCase == 'g') {
+				} else if (startingCase == 'g') {
 					return 'hunting, being happy, etc.'
-				} else if (this.state.mvvsPlanned[1] !== 1) {
-					return 'are hunting, happy, etc.'
+				} else if (mvvsPlanned.length > 0) {
+					if (mvvsPlanned[0] == 1 && mvvsPlanned[1] == 1)	{
+						return 'am hunting, happy, etc.'
+					} else if (mvvsPlanned.length === 0 || (mvvsPlanned[0] == 3 && mvvsPlanned[1] == 1)) {
+						return 'is hunting, happy, etc.'
+					} else {
+						return 'are hunting, happy, etc.'
+					}
 				} else {
-					return 'is hunting, happy, etc.'
+					if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
+						return 'am hunting, happy, etc.'
+					} else if (this.state.mvvs.length === 0 || (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1)) {
+						return 'is hunting, happy, etc.'
+					} else {
+						return 'are hunting, happy, etc.'
+					}
 				}
 			} else {
 				return 'person, land, etc.'
@@ -3082,36 +3395,64 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 			if (this.state.endingAdjusted === 'n') {
 				return 'person, land, etc.'
 			} else {
-				if (this.state.startingCase == 'i') {
+				if (startingCase == 'i' || this.state.nextTenses[this.state.nextTenses.length-1] === 'i') {
 					return 'hunt, be happy, etc.'
-				} else if (this.state.startingCase == 'g') {
+				} else if (startingCase == 'g' || this.state.nextTenses[this.state.nextTenses.length-1] === 'g') {
 					return 'hunting, being happy, etc.'
-				} else if (this.state.mvvsPlanned[1] !== 1) {
-					return 'are hunting, happy, etc.'
+				} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'p' || this.state.nextTenses[this.state.nextTenses.length-1] === 'pp') {
+					return 'hunted, been happy, etc.'
+				} else if (mvvsPlanned.length > 0) {
+					if (mvvsPlanned[0] == 1 && mvvsPlanned[1] == 1)	{
+						return 'am hunting, happy, etc.'
+					} else if (mvvsPlanned.length === 0 || (mvvsPlanned[0] == 3 && mvvsPlanned[1] == 1)) {
+						return 'is hunting, happy, etc.'
+					} else {
+						return 'are hunting, happy, etc.'
+					}
 				} else {
-					return 'is hunting, happy, etc.'
+					if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
+						return 'am hunting, happy, etc.'
+					} else if (this.state.mvvs.length === 0 || (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1)) {
+						return 'is hunting, happy, etc.'
+					} else {
+						return 'are hunting, happy, etc.'
+					}
 				}
 			}
 		}
 	}
 
 
-	baseChooser = (itemUpdating,endingNeeded,update,mood,submood) => {
-		// console.log(itemUpdating,endingNeeded,update,mood,submood)
+	baseChooser = (itemUpdating,endingNeeded,update,mood,submood,forEnglish) => {
 		let key;
 		let popularPostbases = []
 		// this.setState({currentEnding:endingNeeded})
 		let popularBases = []
 		if (endingNeeded == 'n') {
-			popularPostbases = popularNPostbases
-			popularBases = popularNouns
+			if (this.state.endingAdjusted === 'v') {
+				popularPostbases = popularVPostbases
+				popularBases = popularVerbs
+			} else {
+				popularPostbases = popularNPostbases
+				popularBases = popularNouns				
+			}
 		} else {
-			popularPostbases = popularVPostbases
-			popularBases = popularVerbs
+			if (this.state.endingAdjusted === 'n') {
+				popularPostbases = popularNPostbases
+				popularBases = popularNouns		
+			} else {
+				popularPostbases = popularVPostbases
+				popularBases = popularVerbs
+			}
 		}
 
-		let subject = this.returnBaseChooserTitle(itemUpdating,mood,submood)
+		let mvvsPlanned = []
+		if (forEnglish !== undefined) {
+			mvvsPlanned = forEnglish[1]
+		}
 
+
+		let subject = this.returnBaseChooserTitle(itemUpdating,endingNeeded,mood,submood,forEnglish)
 
 
 		// if (['npnBases10'].includes(itemUpdating[1].join(""))) {
@@ -3126,12 +3467,17 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 		// console.log(this.state)
 		// console.log(this.state.currentEditMode, itemUpdating,endingNeeded,update,mood,submood)
 		         return <Grid style={{width:'300px'}}>
-		                	<Grid.Row columns={1} style={{paddingBottom:'0px'}}divided>
-		                	<Grid.Column id='menuheight'>
+		                	<Grid.Row columns={1} divided>
+		                	<Grid.Column style={{paddingTop:'10px'}}>
 
 									        <Segment style={{overflow: 'auto',padding:0}}>
 									        	<List divided style={{margin:0,padding:0,}}>
-										        <List.Item style={{color:'#545454',fontFamily:"Lato,'Helvetica Neue',Arial,Helvetica,sans-serif",padding:'8px 15px',backgroundColor:'#f7f7f7'}}>{subject}</List.Item>
+									        	{subject.length !== 0 ?
+											        <List.Item style={{color:'#545454',fontFamily:"Lato,'Helvetica Neue',Arial,Helvetica,sans-serif",padding:'8px 15px',backgroundColor:'#f7f7f7'}}>{subject}</List.Item>
+											        :
+											        null
+											      }
+
 									        	{this.state.cvvMood.length > 0 && this.state.currentEditMode == 'cvupdate' ?
 										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
 										        		<div style={{flex:1}}>
@@ -3145,7 +3491,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 									        	{this.state.candidateDisplay.map((k,kindex)=>{return (kindex===this.state.candidateBase.length-1 ?
 										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center',padding:'8px 15px',backgroundColor:'#f7f7f7'}}>
 										        		<div style={{flex:1}}>
-											        		<div style={{color:'#545454',fontFamily:"Lato,'Helvetica Neue',Arial,Helvetica,sans-serif"}}>{k[0]}<span style={{color:'#bdbdbd'}}>{'...'}</span></div>
+											        		<div style={{color:'#545454',fontFamily:"Lato,'Helvetica Neue',Arial,Helvetica,sans-serif"}}>{k[0]}</div>
 											        		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{k[1]}</div>
 										        		</div>
 										        		<Icon circular onClick={()=>{
@@ -3156,7 +3502,15 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 												      			// }
 												      			// this.handleClick('vvpostbases',false); 
 												      			this.handleClick('verbs',false); 
-
+												      			if (this.state.candidateBase.length === 1) {
+												      				this.setState({addIs:true})
+												      			} else {
+												      				if (!newpostbases[this.state.candidateBase[this.state.candidateBase.length-2][1]]['match_case']) {
+												      					this.setState({addIs:false})
+												      				} else {
+												      					this.setState({addIs:true})												      					
+												      				}
+												      			}
 											        			this.setState({
 											        				candidateBase:this.state.candidateBase.slice(0,-1),
 											        				candidateDisplay:this.state.candidateDisplay.slice(0,-1),
@@ -3169,7 +3523,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 									        			:
 										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center',padding:'8px 15px',backgroundColor:'#f7f7f7'}}>
 										        		<div style={{flex:1}}>										        		
-											        		<div style={{color:'#545454',fontFamily:"Lato,'Helvetica Neue',Arial,Helvetica,sans-serif"}}>{k[0]}<span style={{color:'#bdbdbd'}}>{'...'}</span></div>
+											        		<div style={{color:'#545454',fontFamily:"Lato,'Helvetica Neue',Arial,Helvetica,sans-serif"}}>{k[0]}</div>
 											        		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{k[1]}</div>
 										        		</div>
 										        		<div style={{width:30}} />
@@ -3192,8 +3546,9 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 											      iconPosition='left' 
 											      name='search'     
 											      autoComplete='off'
+											      autoFocus
 											      disabled={this.state.lockSubmit}
-											      placeholder={this.returnPlaceholder(endingNeeded)}
+											      placeholder={this.returnPlaceholder(endingNeeded,forEnglish)}
 											      // width='100%'
 											      style={{width:'100%',padding:'5px 5px'}}
 											 		  onChange={this.onChangeBaseSearch.bind(this,endingNeeded)}
@@ -3212,7 +3567,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 																	    		searchQuery:'',
 																	    		wordsList:[],
 														      				candidateBase:this.state.candidateBase.concat([[newpostbases[k['fsts']]['keylookup'],k['fsts']]]),
-																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledPostbaseText(k['fsts'],'2'),k['fsts']]]),
+																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledPostbaseText(k['fsts'],'2',forEnglish),k['fsts']]]),
 																	    		nextTenses:(newpostbases[k['fsts']]['match_case'] && !('gen_preverb_after' in newpostbases[k['fsts']]) ? (this.state.nextTenses.length == 0 ? this.state.nextTenses.concat(['gen']):this.state.nextTenses.concat([this.state.nextTenses[this.state.nextTenses.length-1]])) : this.state.nextTenses.concat([newpostbases[k['fsts']]['gen_preverb_after'],])),
 														      			},()=>{
 																	    		this.updateCandidateCall(endingNeeded,update,mood,submood,'p')
@@ -3220,7 +3575,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 														      		}}>
 															      		<div>
 																      		<div style={{marginBottom:'5px',color:'#545454'}}>
-																      		<span>{this.processStyledPostbaseText(k['fsts'],'2')}</span>
+																      		<span>{this.processStyledPostbaseText(k['fsts'],'2',forEnglish)}</span>
 																      		<span style={{color:'#bdbdbd'}}>{'...'}</span></div>
 																      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{k['fsts']}</div>
 															      		</div>
@@ -3232,14 +3587,14 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 																	    		searchQuery:'',
 																	    		wordsList:[],
 																	    		candidateBase:this.state.candidateBase.concat(k),
-																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledMainText(k),k['fsts'].toString()]]),
+																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledMainText(k,forEnglish),k['fsts'].toString()]]),
 																	    	},()=>{
 																	    		this.updateCandidateCall(endingNeeded,update,mood,submood,'b')
 																	    	})
 														      		}}>
 															      		<div>
 																      		<div style={{marginBottom:'5px',color:'#545454'}}>
-																      		<span>{this.processStyledMainText(k)}</span>
+																      		<span>{this.processStyledMainText(k,forEnglish)}</span>
 																      		</div>
 																      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{k['fsts'].toString()}</div>
 															      		</div>
@@ -3261,13 +3616,13 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 												    		<Accordion.Title
 												    			id={'verb'}
 												    			style={{paddingBottom:'2px'}}
-												    			active={this.state.activeIndexes.includes('vvpostbases')}
-											            onClick={()=>{this.handleClick('vvpostbases',true)}}
+												    			active={this.state.activeIndexes1.includes('vvpostbases')}
+											            onClick={()=>{this.handleClick1('vvpostbases',true)}}
 												    		>
 												    			<Icon name="dropdown" />
 												    			{'Common Postbases'}
 												    		</Accordion.Title>
-												    		<Accordion.Content active={this.state.activeIndexes.includes('vvpostbases')}>
+												    		<Accordion.Content active={this.state.activeIndexes1.includes('vvpostbases')}>
 													      <Segment vertical style={{maxHeight:255,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
 												    		<Button.Group vertical basic fluid>
 													      	{Object.keys(popularPostbases).map((p,index)=>{
@@ -3277,11 +3632,11 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 													      		}
 													      		if (!removeItem) {
 														      		return <Button style={{textAlign:'left',padding:'10px'}} onClick={()=>{
-														      			this.handleClick('vvpostbases',false); 
+														      			this.handleClick1('vvpostbases',false); 
 												      					// this.handleClick('verbs',false); 
 														      			this.setState({
 														      				candidateBase:this.state.candidateBase.concat([[newpostbases[popularPostbases[p]['expression']]['keylookup'],popularPostbases[p]['expression']]]),
-																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledPostbaseText(popularPostbases[p],'1'),newpostbases[popularPostbases[p]['expression']]['exp']]]),
+																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledPostbaseText(popularPostbases[p],'1',forEnglish),newpostbases[popularPostbases[p]['expression']]['exp']]]),
 																	    		unallowable_next_ids: this.state.unallowable_next_ids.concat([[popularPostbases[p]['allowable_next_ids'],]]),
 																	    		nextTenses:(newpostbases[popularPostbases[p]['expression']]['match_case'] && !('gen_preverb_after' in newpostbases[popularPostbases[p]['expression']]) ? (this.state.nextTenses.length == 0 ? this.state.nextTenses.concat(['gen']):this.state.nextTenses.concat([this.state.nextTenses[this.state.nextTenses.length-1]])) : this.state.nextTenses.concat([newpostbases[popularPostbases[p]['expression']]['gen_preverb_after'],])),
 														      			},()=>{
@@ -3290,7 +3645,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 														      		}}>
 															      		<div>
 																      		<div style={{marginBottom:'5px',color:'#545454'}}>
-																      		<span>{this.processStyledPostbaseText(popularPostbases[p],'1')}</span>
+																      		<span>{this.processStyledPostbaseText(popularPostbases[p],'1',forEnglish)}</span>
 																      		<span style={{color:'#bdbdbd'}}>{'...'}</span></div>
 																      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{newpostbases[popularPostbases[p]['expression']]['exp']}</div>
 															      		</div>
@@ -3313,31 +3668,31 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 												    		<Accordion.Title
 												    			id={'verb'}
 												    			style={{paddingBottom:'2px'}}
-												    			active={this.state.activeIndexes.includes('verbs')}
-											            onClick={()=>{this.handleClick('verbs',true)}}
+												    			active={this.state.activeIndexes1.includes('verbs')}
+											            onClick={()=>{this.handleClick1('verbs',true)}}
 												    		>
 												    			<Icon name="dropdown" />
 												    			{'Common Bases'}
 												    		</Accordion.Title>
-												    		<Accordion.Content active={this.state.activeIndexes.includes('verbs')}>
+												    		<Accordion.Content active={this.state.activeIndexes1.includes('verbs')}>
 													      <Segment vertical style={{maxHeight:255,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
 													    		<Button.Group vertical basic fluid>
 														      	{Object.keys(popularBases).map((p)=>{
 														      		return <Button style={{textAlign:'left',padding:'10px'}} onClick={()=>{
 														      			// this.handleClick('vvpostbases',false); 
-														      			this.handleClick('verbs',false); 
+														      			this.handleClick1('verbs',false); 
 																	    	this.setState({
 																	    		searchQuery:'',
 																	    		wordsList:[],
 																	    		candidateBase:this.state.candidateBase.concat(popularBases[p]),
-																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledMainText(popularBases[p]),popularBases[p]['fsts'].join(", ")]]),
+																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledMainText(popularBases[p],forEnglish),popularBases[p]['fsts'].join(", ")]]),
 																	    	},()=>{
 																	    		this.updateCandidateCall(endingNeeded,update,mood,submood,'b')
 																	    	})
 														      		 }}>
 																      		<div>
 																	      		<div style={{marginBottom:'5px',color:'#545454'}}>
-																	      		<span>{this.processStyledMainText(popularBases[p])}</span>
+																	      		<span>{this.processStyledMainText(popularBases[p],forEnglish)}</span>
 																	      		<span style={{color:'#bdbdbd'}}>{'.'}</span></div>
 																	      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{popularBases[p]['fstsDisplay']}</div>
 																      		</div>
@@ -3369,13 +3724,15 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 					                				console.log([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Insert",["mv","qWord"],[submood,1]]])
 					                				this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Insert",["mv","qWord"],[submood,1]]]); 		                				
 					                			} else {
-				                					if (this.state.mvvsPlanned.length > 0) {
-				                						this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Update",["mv","vs"],[3,1,2]]])                						                									                						
+				                					if (mvvsPlanned.length > 0) {
+				                						this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Update",["mv","vs"],mvvsPlanned]])                						                									                						
 				                					} else {
 					                					this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall]]); 				                						
 				                					}
 					                			}
-					                			this.setState({isOpen:false,mvvsPlanned:[],activeIndexes:[],currentlyOpen:'',searchQuery:'',wordsList:[],candidateBase:[],candidateDisplay:[],candidateCall:[],nextTenses:[],nounNum:'s',unallowable_next_ids:[],addIs:true,lockSubmit:false}) 
+					                			this.setState({isOpen:false,mvvsPlanned:[],activeIndexes:[],currentlyOpen:'',searchQuery:'',wordsList:[],candidateBase:[],candidateDisplay:[],candidateCall:[],nextTenses:[],nounNum:'s',unallowable_next_ids:[],addIs:true,lockSubmit:false});
+					                			console.log(this.state.recentlyOpen)
+					                			this.closeEditMenuRef(this.state.recentlyOpen,'default')
 					                		}} disabled={!this.state.lockSubmit} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}>
 					                			<div>{'Submit'}</div>
 					                			<Icon name='chevron right' />
@@ -3682,11 +4039,11 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 	}
 
 	getDropdownStyle=(color)=>{
-		return {border:'solid 1px #22242626',color:this.getColor(color),fontSize:'18px',padding:'5px',borderRadius:'5px',marginRight:'4px',marginLeft:'4px',}
+		return {border:'solid 1px #22242626',color:this.getColor(color),fontSize:'18px',padding:'5px',borderRadius:'5px',marginRight:'2px',marginLeft:'2px',}
 	}
 
 	render() {
-		console.log(this.state)
+		// console.log(this.state)
 
 		return (
 			<Container style={{ margin: 0, padding: 0 }} text>
@@ -3741,7 +4098,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 										<div style={{marginBottom:'5px',fontSize:'30px',fontWeight:'400'}}>
 											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
 											{this.state.mvnsSegments.slice().reverse().map((k,kind)=> 
-												<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
+												<div style={{paddingRight:10,paddingLeft:10}}>
 												{k.map((q,qind)=> {
 													if (qind === 0) {
 														return <span>{this.editMenu('mvnsParser',[kind,0])}</span>												
@@ -3760,14 +4117,31 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 								}
 
 								{this.state.mvqWordSegments.length > 0 ?
-									this.editMenu('mvqWord',-1)
+									<div>
+										<div style={{marginBottom:'5px',fontSize:'30px',fontWeight:'400'}}>
+											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
+												<div style={{paddingRight:10,paddingLeft:10}}>
+													{this.editMenu('mvqWordParser',-1)}
+												</div>
+											</div>
+										</div>
+									</div>
 									:
 									null
 								}
 								
 
 								{this.state.mvvBase.length > 0 && this.state.mvvSegments.length > 0 ?
-									this.editMenu('mvParser',-1)
+									<div>
+										<div style={{marginBottom:'5px',fontSize:'30px',fontWeight:'400'}}>
+											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
+												<div style={{paddingRight:10,paddingLeft:10}}>
+													{this.editMenu('mvParser',-1)}
+												</div>
+											</div>
+										</div>
+									</div>
+
 									:
 									null
 								}
@@ -3778,7 +4152,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 										<div style={{marginBottom:'5px',fontSize:'30px',fontWeight:'400'}}>
 											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
 											{this.state.mvnoSegments.slice().reverse().map((k,kind)=> 
-												<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
+												<div style={{paddingRight:10,paddingLeft:10}}>
 												{k.map((q,qind)=> {
 													if (qind === 0) {
 														return <span>{this.editMenu('mvnoParser',[kind,0])}</span>												
@@ -3804,7 +4178,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 											<div style={{marginBottom:'5px',fontSize:'30px',fontWeight:'400'}}>
 												<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
 													{obliques.slice().reverse().map((x,xind)=> 
-													<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
+													<div style={{paddingRight:10,paddingLeft:10}}>
 														{x.map((k,kind)=>
 														{if (kind === 0) {
 															return <span>{this.editMenu('mvnObliquesParser',[obliqueind,obliques.length-1-xind,kind])}</span>												
@@ -3825,7 +4199,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 										<div style={{marginBottom:'5px',fontSize:'30px',fontWeight:'400'}}>
 											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
 												{this.state.npnSegments.slice().reverse().map((x,xind)=> 
-													<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
+													<div style={{paddingRight:10,paddingLeft:10}}>
 													{x.map((k,kind)=>
 														{if (kind === 0) {
 															return <span>{this.editMenu('npnParser',[xind,kind])}</span>												
@@ -3864,7 +4238,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 
 								{this.state.mvvs.length > 0 ?
 									(this.state.mvnsSegments.length > 0 ? 
-										<span>					
+										<div style={{display:'flex',justifyContent:'center',alignItems:'flex-start',height:45,}}>
 											{this.state.mvnsSegments.slice().reverse().map((x,xind)=>
 												<span>
 												{xind === 0 ?
@@ -3903,7 +4277,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 												}
 												</span>
 											)}
-										</span>
+										</div>
 										:
 										<span>
 											{this.state.mvvMood == "Opt][PRS][NEG" || this.state.mvvMood == "Opt][FUT][NEG" ?
@@ -3927,20 +4301,28 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 
 
 								{this.state.mvEnglish2.length > 0 ?
-									this.editMenu('mvEnglish2',-1)
+									(this.state.mvnsSegments.length === 0 || (this.state.mvvo.length > 0 && this.state.mvnoSegments.length === 0) ?
+										<span style={{lineHeight:'45px'}}>
+										{this.editMenu('mvEnglish2',-1)}
+										</span>
+										:
+										<div style={{display:'flex',justifyContent:'center',alignItems:'center',height:45,}}>
+										{this.editMenu('mvEnglish2',-1)}
+										</div>
+										)
 									:
 									null
 								}
 
 								{this.state.mvvo.length > 0 ?
 									(this.state.mvnoSegments.length > 0 && this.state.mvnoSegments.length === this.state.mvno.length ? 
-										<span>					
+										<div style={{display:'flex',justifyContent:'center',alignItems:'flex-end',height:45,}}>
 											{this.state.mvnoSegments.slice().reverse().map((x,xind)=>
 												<span>
 												{xind === 0 ?
 													<span>
-														{this.state.mvvBase[1] == 'it' && !this.arraysEqual(this.state.mvno[0][0],[0,0,0,1]) ?
-															<span style={{color:this.getColor('mvns00.c')}}>{'(some) '}</span>
+														{this.state.mvvBase[1] == 'it' && !this.arraysEqual(this.state.mvno[0][0],[0,0,0,1]) && !this.arraysEqual(this.state.mvno[0][0],[0,0,0,2]) && !this.arraysEqual(this.state.mvno[0][0],[0,0,0,3]) ?
+															<span style={{color:this.getColor('mvns00.c')}}>{'(some of) '}</span>
 															:
 															null
 														}
@@ -3981,7 +4363,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 												}
 												</span>
 											)}
-										</span>
+										</div>
 										:
 										<span>
 											{this.state.mvvBase[1] == 'it' ?
@@ -4046,11 +4428,13 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 							    			{'Make a verb phrase'}
 							    		</Accordion.Title>
 							    		<Accordion.Content active={this.state.activeIndexes.includes('vPhraseInsert')}>
-							    		{this.mainScreenMenu('he is _____','mvinsert','he',[])}
-							    		{this.mainScreenMenu('she is _____','mvinsert','she',[])}
-							    		{this.mainScreenMenu('it is _____','mvinsert','it',[])}
-							    		{this.mainScreenMenu('the two of them are _____','mvinsert','they2',[])}
-							    		{this.mainScreenMenu('they all (3+) are _____','mvinsert','they3',[])}
+							    		{this.mainScreenMenu('I am _____','mvinsert','I',[],['',[1,1,0]])}
+							    		{this.mainScreenMenu('you are _____','mvinsert','you',[],['',[2,1,0]])}
+							    		{this.mainScreenMenu('he is _____','mvinsert','he',[],['',[3,1,1]])}
+							    		{this.mainScreenMenu('she is _____','mvinsert','she',[],['',[3,1,2]])}
+							    		{this.mainScreenMenu('it is _____','mvinsert','it',[],['',[3,1,3]])}
+							    		{this.mainScreenMenu('the two of them are _____','mvinsert','they2',[],['',[3,2,0]])}
+							    		{this.mainScreenMenu('they all (3+) are _____','mvinsert','they3',[],['',[3,3,0]])}
 							    		</Accordion.Content>
 							    	</Accordion>				
 										<Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
@@ -4063,15 +4447,15 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 							    			{'Make a noun phrase'}
 							    		</Accordion.Title>
 							    		<Accordion.Content active={this.state.activeIndexes.includes('nPhraseInsert')}>
-							    		{this.mainScreenMenu('the one _____','nPhraseInsert','npCase',['Abs',''])}
-							    		{this.mainScreenMenu('from the one _____','nPhraseInsert','npCase',['Abl_Mod','from'])}
-							    		{this.mainScreenMenu('in or at the one _____','nPhraseInsert','npCase',['Loc',''])}
-							    		{this.mainScreenMenu('toward the one _____','nPhraseInsert','npCase',['Ter',''])}
-							    		{this.mainScreenMenu('through, using the one _____','nPhraseInsert','npCase',['Via',''])}
-							    		{this.mainScreenMenu('like, similar to the one _____','nPhraseInsert','npCase',['Equ',''])}
+							    		{this.mainScreenMenu('the one _____','nPhraseInsert','npCase',['Abs',''],['',[]])}
+							    		{this.mainScreenMenu('from the one _____','nPhraseInsert','npCase',['Abl_Mod','from'],['',[]])}
+							    		{this.mainScreenMenu('in or at the one _____','nPhraseInsert','npCase',['Loc',''],['',[]])}
+							    		{this.mainScreenMenu('toward the one _____','nPhraseInsert','npCase',['Ter',''],['',[]])}
+							    		{this.mainScreenMenu('through, using the one _____','nPhraseInsert','npCase',['Via',''],['',[]])}
+							    		{this.mainScreenMenu('like, similar to the one _____','nPhraseInsert','npCase',['Equ',''],['',[]])}
 							    		<Divider />
-							    		{this.mainScreenMenu('a or some _____','nPhraseInsert','npCase',['Abl_Mod','io'])}
-							    		{this.mainScreenMenu('the one (relative case) _____','nPhraseInsert','npCase',['Rel',''])}
+							    		{this.mainScreenMenu('a or some _____','nPhraseInsert','npCase',['Abl_Mod','io'],['',[]])}
+							    		{this.mainScreenMenu('the one (relative case) _____','nPhraseInsert','npCase',['Rel',''],['',[]])}
 							    		</Accordion.Content>
 							    	</Accordion>			
 										<Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
@@ -4084,17 +4468,17 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 							    			{'Ask a Question'}
 							    		</Accordion.Title>
 							    		<Accordion.Content active={this.state.activeIndexes.includes('questionInsert')}>
-							    		{this.mainScreenMenu('who is he who is _____?','questionInsert','mvvType',['Intrg0',''])}
-							    		{this.mainScreenMenu('she is _____ whom (object)?','questionInsert','mvvType',['Intrg1',''])}
-							    		{this.mainScreenMenu('what is it that is _____ ?','questionInsert','mvvType',['Intrg2',''])}
-							    		{this.mainScreenMenu('he is _____ what (object)?','questionInsert','mvvType',['Intrg3',''])}
-							    		{this.mainScreenMenu('when did she _____?','questionInsert','mvvType',['Intrg4',''])}
-							    		{this.mainScreenMenu('when will he _____?','questionInsert','mvvType',['Intrg5',''])}
-							    		{this.mainScreenMenu('where is it _____?','questionInsert','mvvType',['Intrg6',''])}
-							    		{this.mainScreenMenu('from where is he _____?','questionInsert','mvvType',['Intrg7',''])}
-							    		{this.mainScreenMenu('to where is she _____?','questionInsert','mvvType',['Intrg8',''])}
-							    		{this.mainScreenMenu('why is it _____?','questionInsert','mvvType',['Intrg9',''])}
-							    		{this.mainScreenMenu('how is he _____?','questionInsert','mvvType',['IntrgA',''])}
+							    		{this.mainScreenMenu('who is he who is _____?','questionInsert','mvvType',['Intrg0',''],['',[3,1,1]])}
+							    		{this.mainScreenMenu('she is _____ whom (object)?','questionInsert','mvvType',['Intrg1',''],['',[3,1,2]])}
+							    		{this.mainScreenMenu('what is it that is _____ ?','questionInsert','mvvType',['Intrg2',''],['',[3,1,3]])}
+							    		{this.mainScreenMenu('he is _____ what (object)?','questionInsert','mvvType',['Intrg3',''],['',[3,1,1]])}
+							    		{this.mainScreenMenu('when did she _____?','questionInsert','mvvType',['Intrg4',''],['i',[3,1,2]])}
+							    		{this.mainScreenMenu('when will he _____?','questionInsert','mvvType',['Intrg5',''],['i',[3,1,1]])}
+							    		{this.mainScreenMenu('where is it _____?','questionInsert','mvvType',['Intrg6',''],['g',[3,1,3]])}
+							    		{this.mainScreenMenu('from where is he _____?','questionInsert','mvvType',['Intrg7',''],['g',[3,1,1]])}
+							    		{this.mainScreenMenu('to where is she _____?','questionInsert','mvvType',['Intrg8',''],['g',[3,1,2]])}
+							    		{this.mainScreenMenu('why is it _____?','questionInsert','mvvType',['Intrg9',''],['g',[3,1,3]])}
+							    		{this.mainScreenMenu('how is he _____?','questionInsert','mvvType',['IntrgA',''],['g',[3,1,1]])}
 							    		</Accordion.Content>
 							    	</Accordion>		
 
@@ -4108,12 +4492,12 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 							    			{'Make a Command'}
 							    		</Accordion.Title>
 							    		<Accordion.Content active={this.state.activeIndexes.includes('commandInsert')}>
-							    		{this.mainScreenMenu('command right now','commandInsert','optCase',['Opt][PRS',''])}
-							    		{this.mainScreenMenu('command future','commandInsert','optCase',['Opt][FUT',''])}
-							    		{this.mainScreenMenu('do not ____','commandInsert','optCase',['Opt][PRS][NEG',''])}
-							    		{this.mainScreenMenu('do not ____ (future)?','commandInsert','optCase',['Opt][FUT][NEG',''])}
-							    		{this.mainScreenMenu('polite request','commandInsert','optCase',['Sbrd',''])}
-							    		{this.mainScreenMenu('polite do not ____','commandInsert','optCase',['Sbrd','neg'])}
+							    		{this.mainScreenMenu('command right now','commandInsert','optCase',['Opt][PRS',''],['i',[]])}
+							    		{this.mainScreenMenu('command future','commandInsert','optCase',['Opt][FUT',''],['i',[]])}
+							    		{this.mainScreenMenu('do not ____','commandInsert','optCase',['Opt][PRS][NEG',''],['i',[]])}
+							    		{this.mainScreenMenu('do not ____ (future)?','commandInsert','optCase',['Opt][FUT][NEG',''],['i',[]])}
+							    		{this.mainScreenMenu('polite request','commandInsert','optCase',['Sbrd',''],['i',[]])}
+							    		{this.mainScreenMenu('polite do not ____','commandInsert','optCase',['Sbrd','neg'],['i',[]])}
 							    		</Accordion.Content>
 							    	</Accordion>		
 										</div>
@@ -4258,7 +4642,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 										<div style={{marginBottom:'5px',fontSize:'30px',fontWeight:'400'}}>
 											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
 											{this.state.cvnsSegments.slice().reverse().map((k,kind)=> 
-												<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
+												<div style={{paddingRight:10,paddingLeft:10}}>
 												{k.map((q,qind)=> {
 													if (qind === 0) {
 														return <span>{this.editMenu('cvnsParser',[kind,0])}</span>												
@@ -4289,7 +4673,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 										<div style={{marginBottom:'5px',fontSize:'30px',fontWeight:'400'}}>
 											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
 											{this.state.cvnoSegments.slice().reverse().map((k,kind)=> 
-												<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
+												<div style={{paddingRight:10,paddingLeft:10}}>
 												{k.map((q,qind)=> {
 													if (qind === 0) {
 														return <span>{this.editMenu('cvnoParser',[kind,0])}</span>												
@@ -4313,7 +4697,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 											<div style={{marginBottom:'5px',fontSize:'30px',fontWeight:'400'}}>
 												<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
 													{obliques.slice().reverse().map((x,xind)=> 
-													<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
+													<div style={{paddingRight:10,paddingLeft:10}}>
 														{x.map((k,kind)=>
 														{if (kind === 0) {
 															return <span>{this.editMenu('cvnObliquesParser',[obliqueind,obliques.length-1-xind,kind])}</span>												
@@ -4534,7 +4918,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 										<div style={{marginBottom:'5px',fontSize:'30px',fontWeight:'400'}}>
 											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
 											{this.state.svnoSegments.slice().reverse().map((k,kind)=> 
-												<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
+												<div style={{paddingRight:10,paddingLeft:10}}>
 												{k.map((q,qind)=> {
 													if (qind === 0) {
 														return <span>{this.editMenu('svnoParser',[kind,0])}</span>												
@@ -4559,7 +4943,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 											<div style={{marginBottom:'5px',fontSize:'30px',fontWeight:'400'}}>
 												<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
 													{obliques.slice().reverse().map((x,xind)=> 
-													<div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:10,}}>
+													<div style={{paddingRight:10,paddingLeft:10}}>
 														{x.map((k,kind)=>
 														{if (kind === 0) {
 															return <span>{this.editMenu('svnObliquesParser',[obliqueind,obliques.length-1-xind,kind])}</span>												
@@ -4721,11 +5105,11 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 							    			{'Add location, direction, etc.'}
 							    		</Accordion.Title>
 							    		<Accordion.Content active={this.state.activeIndexes.includes('nObliqueInsert')}>
-							    		{this.mainScreenMenu('from the one _____','nObliqueInsert','npCase',['Abl_Mod','from'])}
-							    		{this.mainScreenMenu('in or at the one _____','nObliqueInsert','npCase',['Loc',''])}
-							    		{this.mainScreenMenu('toward the one _____','nObliqueInsert','npCase',['Ter',''])}
-							    		{this.mainScreenMenu('through, using the one _____','nObliqueInsert','npCase',['Via',''])}
-							    		{this.mainScreenMenu('like, similar to the one _____','nObliqueInsert','npCase',['Equ',''])}
+							    		{this.mainScreenMenu('from the one _____','nObliqueInsert','npCase',['Abl_Mod','from'],['',[]])}
+							    		{this.mainScreenMenu('in or at the one _____','nObliqueInsert','npCase',['Loc',''],['',[]])}
+							    		{this.mainScreenMenu('toward the one _____','nObliqueInsert','npCase',['Ter',''],['',[]])}
+							    		{this.mainScreenMenu('through, using the one _____','nObliqueInsert','npCase',['Via',''],['',[]])}
+							    		{this.mainScreenMenu('like, similar to the one _____','nObliqueInsert','npCase',['Equ',''],['',[]])}
 							    		</Accordion.Content>
 							    		<Accordion.Title
 							    			id={'cvinsert'}
@@ -4737,25 +5121,23 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo) => {
 							    			{'Add an additional verb phrase'}
 							    		</Accordion.Title>
 							    		<Accordion.Content active={this.state.activeIndexes.includes('cvinsert')}>
-							    		{this.mainScreenMenu('before he _____','cvinsert','cvvType',['Prec',''])}
-							    		{this.mainScreenMenu('because he _____','cvinsert','cvvType',['Cnsq',''])}
-							    		{this.mainScreenMenu('whenever he _____','cvinsert','cvvType',['Cont',''])}
-							    		{this.mainScreenMenu('even though he _____','cvinsert','cvvType',['Conc',''])}
-							    		{this.mainScreenMenu('even if he _____','cvinsert','cvvType',['Conc','evenif'])}
-							    		{this.mainScreenMenu('if he _____','cvinsert','cvvType',['Cond','if'])}
-							    		{this.mainScreenMenu('when (in future) he _____','cvinsert','cvvType',['Cond','wheninthefuture'])}
-							    		{this.mainScreenMenu('when (in past) he _____','cvinsert','cvvType',['CtmpI',''])}
-							    		{this.mainScreenMenu('while he _____','cvinsert','cvvType',['CtmpII',''])}
-							    		{this.mainScreenMenu('by _____','svinsert','svvType',['by',''])}
-							    		{this.mainScreenMenu('being _____','svinsert','svvType',['being',''])}
+							    		{this.mainScreenMenu('before '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['Prec',''],['gen',[]])}
+							    		{this.mainScreenMenu('because '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['Cnsq',''],['p',[]])}
+							    		{this.mainScreenMenu('whenever '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['Cont',''],['gen',[]])}
+							    		{this.mainScreenMenu('even though '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['Conc',''],['g',[]])}
+							    		{this.mainScreenMenu('even if '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['Conc','evenif'],['g',[]])}
+							    		{this.mainScreenMenu('if '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['Cond','if'],['gen',[]])}
+							    		{this.mainScreenMenu('when (in future) '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['Cond','wheninthefuture'],['gen',[]])}
+							    		{this.mainScreenMenu('when (in past) '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['CtmpI',''],['p',[]])}
+							    		{this.mainScreenMenu('while '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['CtmpII',''],['p',[]])}
+							    		{this.mainScreenMenu('by _____','svinsert','svvType',['by',''],['g',[]])}
+							    		{this.mainScreenMenu('being _____','svinsert','svvType',['being',''],['g',[]])}
 							    		</Accordion.Content>
 							    	</Accordion>		
-
-	
 										</div>
 									</div>
 								:
-								null
+								<div style={{height:'40px'}} />
 							}
 
 				{!this.fromEntry && this.state.mvvBase.length === 0 && this.state.npnBases.length === 0 ?

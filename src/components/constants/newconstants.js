@@ -1234,6 +1234,7 @@ export const nounOptionsNumbers = [
 export const mvSubjectOptionsEnglish = {
   '110':'I', 
   '210':'you', 
+  '310':'it',
   '311':'he',
   '312':'she',
   '313':'it',
@@ -1266,6 +1267,25 @@ export const npnEnglish = {
   '330':'their (3+)',
 };
 
+export const npnEnglishself = {
+  '1':'itself', 
+  '2':'themselves', 
+  '3':'themselves',
+  '000':'itself',
+  '110':'myself',
+  '210':'yourself',
+  '311':'himself',
+  '312':'herself',
+  '313':'itself',
+  '120':'ourselves (two)',
+  '220':'yourself (two)',
+  '320':'themselves (two)',
+  '130':'ourselves (3+)',
+  '230':'yourselves (3+)',
+  '330':'themselves (3+)',
+};
+
+
 
 export const mvSubject4thPersonCalls = {
   '311':'he',
@@ -1284,11 +1304,14 @@ export const mvObject4thPersonCalls = {
 }
 
 export const nObject4thPersonCalls = {
+  '310':'its',
   '311':'his',
   '312':'her',
   '313':'its',
-  '320':'their (2)',
-  '330':'their (3+)',
+  // '320':'their (2)',
+  '321':'their (2)',
+  // '330':'their (3+)',
+  '331':'their (3+)',
 
   // '410':'its',
   // '420':'their (2)',

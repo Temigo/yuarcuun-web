@@ -932,53 +932,70 @@ class SearchPage extends Component {
                     <List.Header style={{width:'100%',display:'flex',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'16px',paddingBottom:'4px'}}>
                       {this.processUsageDefinition(word.y)}
                     </List.Header>
-                    <List.Description style={{fontSize:'16px',fontWeight:'400'}}>{this.processUsageDefinition(word.e)}</List.Description>
+                    <List.Description style={{fontSize:'16px',fontWeight:'400'}}>{this.processUsageDefinition(word.e)}</List.Description>                    
+                  </List.Content>
+                  <div>
                     {index in this.state.activeAudioIndex ?
-                      <List.Description>
-                        <div style={{paddingTop:'14px',paddingBottom:'6px'}}>
-                            <div style={{marginBottom:'10px',paddingLeft:'6px',borderLeft:'solid 2px grey'}}>
-                              <div style={{display:'flex'}}>Speaker:
-                              {this.state.activeAudioIndex[index]['content']['speaker'].map((speaker,sindex) =>
+                        <div style={{paddingTop:'14px',paddingBottom:'6px',fontSize:'14px'}}>
+                            <div style={{marginTop:'5px',marginBottom:'10px',paddingLeft:'6px',borderLeft:'solid 2px grey'}}>
+                              <div style={{display:'flex'}}>
+                              {this.state.activeAudioIndex[index]['content']['speaker'].length === 1 ?
+                                <span style={{marginRight:'10px'}}>Speaker:</span>
+                                :
+                                null
+                              }
+
+                              {this.state.activeAudioIndex[index]['content']['speaker'].length === 1 ?
                                 <span>
-                                <LazyLoadImage effect='blur' height={'75px'} width={'100px'} style={{borderRadius:'10px'}} src={WEB_URL +'/images/EldersPhotos/'+speaker[1]} />
-                                {speaker[0].includes('~') ?
+                                <LazyLoadImage effect='blur' height={'75px'} width={'100px'} style={{borderRadius:'10px'}} src={WEB_URL +'/images/EldersPhotos/'+this.state.activeAudioIndex[index]['content']['speaker'][0][1]} />
+                                {this.state.activeAudioIndex[index]['content']['speaker'][0][0].includes('~') ?
                                   <span>
-                                    <div style={{color:'#333333',display:'flex',justifyContent:'center',textAlign:'center',fontWeight:'bold'}}>{speaker[0].split('--')[0].split('~')[0]}</div>
-                                    <div style={{color:'#333333',display:'flex',justifyContent:'center',textAlign:'center'}}>{speaker[0].split('--')[0].split('~')[1]}</div>
-                                    <div style={{color:'#333333',display:'flex',justifyContent:'center',textAlign:'center'}}>{speaker[0].split('--')[1]}</div>
+                                    <div style={{color:'#333333',display:'flex',justifyContent:'center',textAlign:'center',fontWeight:'bold'}}>{this.state.activeAudioIndex[index]['content']['speaker'][0][0].split('--')[0].split('~')[0]}</div>
+                                    <div style={{color:'#333333',display:'flex',justifyContent:'center',textAlign:'center'}}>{this.state.activeAudioIndex[index]['content']['speaker'][0][0].split('--')[0].split('~')[1]}</div>
+                                    <div style={{color:'#333333',display:'flex',justifyContent:'center',textAlign:'center'}}>{this.state.activeAudioIndex[index]['content']['speaker'][0][0].split('--')[1]}</div>
                                   </span>
                                   :
                                   <span>
-                                    <div style={{color:'#333333',display:'flex',justifyContent:'center',textAlign:'center'}}>{speaker[0].split('--')[0]}</div>
-                                    <div style={{color:'#333333',display:'flex',justifyContent:'center',textAlign:'center'}}>{speaker[0].split('--')[1]}</div>
+                                    <div style={{color:'#333333',display:'flex',justifyContent:'center',textAlign:'center'}}>{this.state.activeAudioIndex[index]['content']['speaker'][0][0].split('--')[0]}</div>
+                                    <div style={{color:'#333333',display:'flex',justifyContent:'center',textAlign:'center'}}>{this.state.activeAudioIndex[index]['content']['speaker'][0][0].split('--')[1]}</div>
                                   </span>
                                 }
                                 </span>
-                              )}
+                                :
+                                null
+                              }
+
                               </div>
-                              <div>{'Collection: '+this.state.activeAudioIndex[index]['content']['collection']}</div>
-                              <div>{'Source: '+this.state.activeAudioIndex[index]['content']['source']}</div>
-                              {console.log(word)}
-                              <div>PreviousAudio: <Button style={{color:'#8F8F8F',cursor:'pointer'}} circular basic icon='volume up' onClick={()=>this.repeatAudio({mp3:this.state.activeAudioIndex[index]['previousAudioKey']})} /></div>
-                              <div>NextAudio: <Button style={{color:'#8F8F8F',cursor:'pointer'}} circular basic icon='volume up' onClick={()=>this.repeatAudio({mp3:this.state.activeAudioIndex[index]['nextAudioKey']})} /></div>
+                              <div>Context:</div>
+                              <div style={{padding:'12px'}}>
+                              <span>{'...'+this.state.activeAudioIndex[index]['content']['contextBeforeYup']}</span>
+                              <span style={{fontWeight:'bold'}}>{' '+this.state.activeAudioIndex[index]['yupik']+' '}</span>
+                              <span>{this.state.activeAudioIndex[index]['content']['contextAfterYup']+'...'}</span>
+                              </div>
+
+                              <div style={{padding:'12px',fontStyle:'italic'}}>
+                              <span>{'...'+this.state.activeAudioIndex[index]['content']['contextBeforeEng']}</span>
+                              <span style={{fontWeight:'bold'}}>{' '+this.state.activeAudioIndex[index]['english']+' '}</span>
+                              <span>{this.state.activeAudioIndex[index]['content']['contextAfterEng']+'..'}</span>
+                              </div>
+                              <div style={{paddingTop:'5px',paddingBottom:'5px'}}>{'Source: '+this.state.activeAudioIndex[index]['content']['source']}</div>
+                              {this.state.activeAudioIndex[index]['content']['link'].length !== 0 ?
+                                <div>
+                                {'Link: '}
+                                <a style={{color:'#4a80b5',textDecoration:'underline'}} href={KYUK_URL+this.state.activeAudioIndex[index]['content']['link']} target="_blank">
+                                {KYUK_URL+this.state.activeAudioIndex[index]['content']['link']}
+                                </a>
+                                </div>
+                                :
+                                null
+                              }   
                             </div>
-                          {this.state.activeAudioIndex[index]['content']['link'].length !== 0 ?
-                            <div>
-                            Link: 
-                            <a href={KYUK_URL+this.state.activeAudioIndex[index]['content']['link']} target="_blank">
-                            {KYUK_URL+this.state.activeAudioIndex[index]['content']['link']}
-                            </a>
-                            </div>
-                            :
-                            null
-                          }                       
+                    
                         </div>
-                      </List.Description>
                       :
                       null
                     }
-                    
-                  </List.Content>
+                  </div>
                 </List.Item>
                 )
               : 
