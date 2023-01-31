@@ -1512,7 +1512,7 @@ class SentenceBuilder extends Component {
   		return this.contentDisplay(this.state.cvEnglishAbl, 5)
 		} else if (type==='cvEnglish2') {
   		return <span>
-								{this.state.mvEnglish3.length > 0 ?
+								{this.state.cvEnglish3.length > 0 ?
 									this.contentDisplay([this.state.cvEnglish3,this.state.cvEnglish2], 8)
 									:
 									this.contentDisplay(this.state.cvEnglish2, 5)
@@ -1554,6 +1554,9 @@ class SentenceBuilder extends Component {
   		return this.contentDisplay(this.state.svnObliquesEnglish2[ind[0]][this.state.svnObliquesEnglish2[ind[0]].length-1-ind[1]][this.state.svnObliquesEnglish2[ind[0]][this.state.svnObliquesEnglish2[ind[0]].length-1-ind[1]].length-1-ind[2]], 5)
 		} else if (type==='svEnglish1') {
 			return <span style={{border:'solid 1px #22242626',marginRight:'2px',marginLeft:'2px',cursor:'pointer',fontSize:'18px',padding:'8px 5px 8px 5px',borderRadius:'5px'}}> 
+			{this.state.svEnglish2.map((w,wind)=>
+				<span style={{color:this.getColor(w[1])}}>{this.state.svvText+w[0]+" "}</span>
+				)} 
 			{this.state.svEnglish1.map((w,wind)=>
 				<span style={{color:this.getColor(w[1])}}>{this.state.svvText+w[0]+" "}</span>
 				)} 
@@ -1601,7 +1604,7 @@ class SentenceBuilder extends Component {
 				style={{color:this.getColor(w[1])}}
 				// {{color:this.getColor(w[1]),cursor:'pointer',paddingBottom:'1px',borderBottom:'1px solid '+this.getColor(w[1])}}
 				// {{border:'solid 1px #22242626',color:this.getColor(w[1]),fontSize:'18px',padding:'5px',borderRadius:'5px',marginRight:'2px',marginLeft:'2px',}}
-				>{w[0]+" "}</span>)} <Icon style={{fontSize:'16px',margin:0}} name='dropdown' /></span>  		
+				>{w[0].replaceAll("<","").replaceAll(">","")+" "}</span>)} <Icon style={{fontSize:'16px',margin:0}} name='dropdown' /></span>  		
   	} else if (fontType == 6) {
   		console.log('6')
   		return 	<span> {data.map((w,wind)=>
@@ -1828,7 +1831,7 @@ class SentenceBuilder extends Component {
 			    	</Menu>  					
  			} else if (type === 'npnEnglish2') {
  				// console.log(ind, this.state.npnEnglish2[ind[0]].length-1)
- 				console.log('content',type,ind)
+ 				// console.log('content',type,ind)
 				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
 					{this.menuItem('BaseChooser','Change Noun',[typeInd,'npnupdateEnglish'],null)}
 					{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun',[typeInd,'npnpossessorinsert'],null) : null}
@@ -2144,7 +2147,7 @@ editSubjectMenu = (nounInsert,subject, tag, statevvs, update, backendcall, value
 }
 
 	closeMainScreenMenuRef = (name,currentEditMode) => {
-		console.log(currentEditMode)
+		console.log(this.mainScreenMenuRef, name, currentEditMode)
 		if (name in this.mainScreenMenuRef) {
 			this.mainScreenMenuRef[name].close()
 		}
@@ -2191,7 +2194,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 				    position="bottom center"
 				    ref={(element)=>{this.mainScreenMenuRef[name]=element;}}
 			      onOpen={()=>{
-			      	// console.log(currentEditMode)
+			      	console.log('open', name, currentEditMode)
 		      		if (setState === 'npCase') {
 								this.setState({npCase:setStateTo[0],npCaseType:setStateTo[1]})
 							} else if (setState === 'mvvType') {
@@ -2203,7 +2206,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 							} else if (setState === 'optCase') {
 								this.setState({optCase:setStateTo[0], mvvType:setStateTo[1]})
 							} 
-							this.setState({currentlyOpen:name, currentEditMode:currentEditMode,overlayOn:true,})
+							this.setState({currentlyOpen:name, crecentlyOpen: name, currentEditMode:currentEditMode,overlayOn:true,})
 			      }}
      				onClose={()=>{this.setState({currentlyOpen:'',activeIndexes1:[],candidateCall:[],candidateBase:[],lockSubmit:false,nextTenses:[],candidateDisplay:[],searchQuery:'',wordsList:[]})}}
   >
@@ -2814,7 +2817,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		let transitivity = ''
 
 		this.state.candidateBase.slice().reverse().map((x,xind)=>{
-			console.log(x,xind,pos)
+			// console.log(x,xind,pos)
 			if (xind === 0) {
 				if (!Array.isArray(x)) {
 					lockSubmit = true
@@ -2848,6 +2851,9 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 			}		
 			
 		})
+		if (this.state.candidateBase.length === 0) {
+			this.setState({endingAdjusted:''})
+		}
 		// candidateFST = [candidateFST]
 		console.log(candidateFST, transitivity)
 
@@ -2966,6 +2972,10 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 						verbAdd = key['englishtenses'][0]
 					} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp') {
 						verbAdd = key['englishtenses'][4]
+					}	else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'past') {
+						verbAdd = key['englishtenses'][1]
+					}	else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'present') {
+						verbAdd = key['englishtenses'][2]
 					}		
 					sentence = key['englishraw']
 					let verbMatches = key['englishraw'].match(/\⟨.*?\⟩/g)
@@ -2985,7 +2995,11 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 						verbAdd = key['englishtenses'][4]
 					} else if (startingCase === 'gen') {
 						verbAdd = key['englishtenses'][2]
-					}
+					} else if (startingCase === 'past') {
+						verbAdd = key['englishtenses'][1]
+					}	else if (startingCase === 'present') {
+						verbAdd = key['englishtenses'][2]
+					}		
 					sentence = key['englishraw']
 					let verbMatches = key['englishraw'].match(/\⟨.*?\⟩/g)
 					if (verbMatches !== null) {
@@ -3062,8 +3076,9 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 				if (key['id'] == 5) {
 					sentence = '<past tense>'
 				} else {
+					// console.log(this.state.nextTenses[this.state.nextTenses.length-1])
 					if (!newpostbases[lookup]['match_case']) {
-						if (this.state.nextTenses[this.state.nextTenses.length-1] === 'p' || this.state.nextTenses[this.state.nextTenses.length-1] === 'pp') {
+						if (this.state.nextTenses[this.state.nextTenses.length-1] === 'p' || this.state.nextTenses[this.state.nextTenses.length-1] === 'pp' || this.state.nextTenses[this.state.nextTenses.length-1] === 'past') {
 							if (newpostbases[lookup]['past_preverb'].length == 0 && newpostbases[lookup]['was']) {
 								sentence = newpostbases[lookup]['description']						
 								if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
@@ -3086,6 +3101,10 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 							sentence = newpostbases[lookup]['gen_preverb']
 						} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'i') {
 							sentence = newpostbases[lookup]['inf_preverb']
+						}	else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'past') {
+							sentence = newpostbases[lookup]['past_preverb']
+						} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'present') {
+							sentence = newpostbases[lookup]['gen_preverb']
 						}
 					}				
 				}
@@ -3117,9 +3136,19 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 						sentence = newpostbases[lookup]['inf_prenoun']
 					} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp') {
 						sentence = newpostbases[lookup]['past']
+					} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'past') {
+						sentence = newpostbases[lookup]['past']
+					} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'present') {
+						sentence = newpostbases[lookup]['present']
 					}
 				}				
 			} else if (newpostbases[lookup]['type'] === 'NN') {
+					if (this.state.nounNum == 'p') {
+						sentence = newpostbases[lookup]['pluralDefinition']
+					} else {
+						sentence = newpostbases[lookup]['singularDefinition']
+					}
+			} else if (newpostbases[lookup]['type'] === 'VN') {
 					if (this.state.nounNum == 'p') {
 						sentence = newpostbases[lookup]['pluralDefinition']
 					} else {
@@ -3646,7 +3675,10 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 											        				nextTenses:(this.state.lockSubmit ? this.state.nextTenses:this.state.nextTenses.slice(0,-1)),
 											        				unallowable_next_ids:(this.state.lockSubmit ? this.state.unallowable_next_ids:this.state.unallowable_next_ids.slice(0,-1)),
 											        				lockSubmit:false,
-											        			})
+											        				// endingAdjusted:'',
+											        			},()=>{
+																	    this.updateCandidateCall(endingNeeded,update,mood,submood,'')
+																	  })
 										        			}} style={{cursor:'pointer',width:30}} name='x' />
 										        		</List.Item>
 									        			:
@@ -3698,12 +3730,26 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 													      	{this.state.wordsList.map((k,index)=>{
 													      		if (k['type'].includes('→')) {
 														      		return <Button style={{textAlign:'left',padding:'10px'}} onClick={()=>{
+														      			console.log(this.state.nextTenses, k, newpostbases[k['fsts']])
 														      			this.setState({
 																	    		searchQuery:'',
 																	    		wordsList:[],
 														      				candidateBase:this.state.candidateBase.concat([[newpostbases[k['fsts']]['keylookup'],k['fsts']]]),
 																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledPostbaseText(k['fsts'],'2',forEnglish),k['fsts']]]),
-																	    		nextTenses:(newpostbases[k['fsts']]['match_case'] && !('gen_preverb_after' in newpostbases[k['fsts']]) ? (this.state.nextTenses.length == 0 ? this.state.nextTenses.concat(['gen']):this.state.nextTenses.concat([this.state.nextTenses[this.state.nextTenses.length-1]])) : this.state.nextTenses.concat([newpostbases[k['fsts']]['gen_preverb_after'],])),
+																	    		nextTenses:(
+																	    			newpostbases[k['fsts']]['match_case'] && !('gen_preverb_after' in newpostbases[k['fsts']]) ? 
+																		    			(this.state.nextTenses.length == 0 ? 
+																		    				this.state.nextTenses.concat(['gen'])
+																		    				:
+																		    				this.state.nextTenses.concat([this.state.nextTenses[this.state.nextTenses.length-1]])
+																		    			) 
+																	    			: 
+																		    			('verbType' in newpostbases[k['fsts']] ?
+																			    			this.state.nextTenses.concat([newpostbases[k['fsts']]['verbType'],])
+																			    			:
+																			    			this.state.nextTenses.concat([newpostbases[k['fsts']]['gen_preverb_after'],])
+																		    			)
+																	    			),
 														      			},()=>{
 																	    		this.updateCandidateCall(endingNeeded,update,mood,submood,'p')
 																	    	})
@@ -3722,7 +3768,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 																	    		searchQuery:'',
 																	    		wordsList:[],
 																	    		candidateBase:this.state.candidateBase.concat(k),
-																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledMainText(k,forEnglish),k['fsts'].toString()]]),
+																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledMainText(k,forEnglish),k['fsts'].toString()+'-']]),
 																	    	},()=>{
 																	    		this.updateCandidateCall(endingNeeded,update,mood,submood,'b')
 																	    	})
@@ -3731,7 +3777,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 																      		<div style={{marginBottom:'5px',color:'#545454'}}>
 																      		<span>{this.processStyledMainText(k,forEnglish)}</span>
 																      		</div>
-																      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{k['fsts'].toString()}</div>
+																      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{k['fsts'].toString()+'-'}</div>
 															      		</div>
 														      		</Button>
 													      		}
@@ -3820,7 +3866,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 																	    		searchQuery:'',
 																	    		wordsList:[],
 																	    		candidateBase:this.state.candidateBase.concat(popularBases[p]),
-																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledMainText(popularBases[p],forEnglish),popularBases[p]['fsts'].join(", ")]]),
+																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledMainText(popularBases[p],forEnglish),popularBases[p]['fsts'].join("-, ")+'-']]),
 																	    	},()=>{
 																	    		this.updateCandidateCall(endingNeeded,update,mood,submood,'b')
 																	    	})
@@ -4177,6 +4223,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 	}
 
 	render() {
+		// console.log(this.state)
 		// console.log("mvv",this.state.mvvMood)
 		// console.log("mvvtype",this.state.mvvType)
 		// console.log("cvv",this.state.cvvMood)
@@ -4235,6 +4282,22 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 							<div style={{marginBottom:'30px'}}>
 
+
+								{this.state.mvqWordSegments.length > 0 ?
+									<div>
+										<div style={{marginBottom:'5px',fontSize:'30px',fontWeight:'400'}}>
+											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
+												<div style={{paddingRight:10,paddingLeft:10}}>
+													{this.editMenu('mvqWordParser',-1)}
+												</div>
+											</div>
+										</div>
+									</div>
+									:
+									null
+								}
+								
+
 							 	{this.state.mvnsBases.length > 0 ? 
 									<div>
 										<div style={{marginBottom:'5px',fontSize:'30px',fontWeight:'400'}}>
@@ -4257,21 +4320,6 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 									:
 									null
 								}
-
-								{this.state.mvqWordSegments.length > 0 ?
-									<div>
-										<div style={{marginBottom:'5px',fontSize:'30px',fontWeight:'400'}}>
-											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
-												<div style={{paddingRight:10,paddingLeft:10}}>
-													{this.editMenu('mvqWordParser',-1)}
-												</div>
-											</div>
-										</div>
-									</div>
-									:
-									null
-								}
-								
 
 								{this.state.mvvBase.length > 0 && this.state.mvvSegments.length > 0 ?
 									<div>
@@ -4373,7 +4421,11 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 								<div style={{textAlign:'center',fontSize:'18px',fontWeight:'300',marginTop:'20px'}}>
 
 								{this.state.mvEnglish1.length > 0 ?
-									this.editMenu('mvEnglish1',-1)
+									<div style={{display:'flex',justifyContent:'center',alignItems:'center',height:45}}>
+									<span style={{lineHeight:39}}>
+										{this.editMenu('mvEnglish1',-1)}
+									</span>
+									</div>
 									:
 									null
 								}
@@ -5059,7 +5111,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 								}
 								
 
-								<div style={{textAlign:'center',fontSize:'18px',fontWeight:'300'}}>
+							<div style={{textAlign:'center',fontSize:'18px',fontWeight:'300'}}>
 
 							 	{this.state.svnoBases.length > 0 ? 
 							 		<div>
@@ -5106,9 +5158,12 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 										</div>									
 									)):null
 								}
-						
+	
+							<div style={{textAlign:'center',fontSize:'18px',fontWeight:'300',marginTop:'20px'}}>
 								{this.state.svEnglish1.length > 0 ?
-									this.editMenu('svEnglish1',-1)
+									<span style={{lineHeight:'45px'}}>
+									{this.editMenu('svEnglish1',-1)}
+									</span>
 									:
 									null
 								}
@@ -5228,13 +5283,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 								}
 
 
-						
-								{this.state.svEnglish2.length > 0 ?
-									this.editMenu('svEnglish2',-1)
-									:
-									null
-								}
 
+							</div>
 							</div>
 
 							</div>
