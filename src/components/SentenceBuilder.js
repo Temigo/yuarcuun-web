@@ -3,7 +3,7 @@ import { Container, Header, Button, Icon, Divider, Image, Grid, Dropdown, List, 
 import { Link } from 'react-router-dom';
 import { API_URL } from '../App.js';
 import axios from 'axios';
-import {nounOptionsMVPossessors, popularVPostbases,popularNPostbases, popularNouns, popularVerbs, npnEnglish, npnEnglishself, colorsList,  mvSubject4thPersonCalls, mvObject4thPersonCalls,nObject4thPersonCalls, mvSubjectOptionsWho, mvSubjectOptionsWhat, mvObjectOptionsWhom, mvObjectOptionsWhomAbl, mvObjectOptionsWhat, mvObjectOptionsWhatAbl,retrieveMoodEnglish, nounOptionsPossessorsNo4th, mvSubjectOptionsOnly2nd, nounOptionsNumbers, nounoptionsmodalis, mvSubjectOptions, mvObjectOptions, mvSubjectOptionsEnglish, verbPostbases, nounPostbases, VVpostbases, NNpostbases} from './constants/newconstants.js'
+import {nounOptionsMVPossessors, mvObjectOptionsEnglish, popularVPostbases,popularNPostbases, popularNouns, popularVerbs, npnEnglish, npnEnglishself, colorsList,  mvSubject4thPersonCalls, mvObject4thPersonCalls,nObject4thPersonCalls, mvSubjectOptionsWho, mvSubjectOptionsWhat, mvObjectOptionsWhom, mvObjectOptionsWhomAbl, mvObjectOptionsWhat, mvObjectOptionsWhatAbl,retrieveMoodEnglish, nounOptionsPossessorsNo4th, mvSubjectOptionsOnly2nd, nounOptionsNumbers, nounoptionsmodalis, mvSubjectOptions, mvObjectOptions, mvSubjectOptionsEnglish, verbPostbases, nounPostbases, VVpostbases, NNpostbases} from './constants/newconstants.js'
 import {newpostbases} from './constants/newpostbases.js'
 import {ending_underlying} from './constants/ending_underlying.js'
 import palette from 'google-palette';
@@ -1951,7 +1951,7 @@ class SentenceBuilder extends Component {
   	} else if (currentEditMode==='svinsert') {
   		return this.baseChooser(["Insert",["sv"]],'v','insert','Sbrd',setStateTo[0],forEnglish)
   	} else if (currentEditMode==='mvupdate') {
-  		return this.baseChooser(["Update",["mv","vBase"]],'v','update',this.state.mvvMood)
+  		return this.baseChooser(["Update",["mv","vBase"]],'v','update',this.state.mvvMood,null,['',this.state.mvvs])
   	} else if (currentEditMode==='svupdate') {
   		return this.baseChooser(["Update",["sv","vBase"]],'v','update')
   	} else if (currentEditMode==='nObliqueInsert') {
@@ -2035,7 +2035,7 @@ class SentenceBuilder extends Component {
   	} else if (currentEditMode==='mvnopossessorinsert') {
   		return this.baseChooser(["Insert",["mv","no",-1]],'n','insert',null)
   	} else if (currentEditMode==='cvupdate') {
-  		return this.baseChooser(["Update",["cv","vBase"]],'v','update')
+  		return this.baseChooser(["Update",["cv","vBase"]],'v','update',this.state.cvvMood,null,['',this.state.cvvs])
   	} else if (currentEditMode==='cvnsinsert') {
   		return this.baseChooser(["Insert",["cv","ns"]],'n','insert','Ind')
   	} else if (currentEditMode==='cvnsupdate') {
@@ -2194,7 +2194,15 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 				    position="bottom center"
 				    ref={(element)=>{this.mainScreenMenuRef[name]=element;}}
 			      onOpen={()=>{
-			      	console.log('open', name, currentEditMode)
+			      	// console.log('open', name, currentEditMode)
+			      	this.setState({
+							candidateCall:[],
+							candidateBase:[],
+							candidateDisplay:[],
+							unallowable_next_ids:[],
+							nextTenses:[],			      		
+			      	})
+
 		      		if (setState === 'npCase') {
 								this.setState({npCase:setStateTo[0],npCaseType:setStateTo[1]})
 							} else if (setState === 'mvvType') {
@@ -2206,9 +2214,19 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 							} else if (setState === 'optCase') {
 								this.setState({optCase:setStateTo[0], mvvType:setStateTo[1]})
 							} 
-							this.setState({currentlyOpen:name, crecentlyOpen: name, currentEditMode:currentEditMode,overlayOn:true,})
+							this.setState({
+								currentlyOpen:name, 
+								crecentlyOpen: name, 
+								currentEditMode:currentEditMode,
+								overlayOn:true,
+							// candidateCall:[],
+							// candidateBase:[],
+							// candidateDisplay:[],
+							// unallowable_next_ids:[],
+							// nextTenses:[],
+							})
 			      }}
-     				onClose={()=>{this.setState({currentlyOpen:'',activeIndexes1:[],candidateCall:[],candidateBase:[],lockSubmit:false,nextTenses:[],candidateDisplay:[],searchQuery:'',wordsList:[]})}}
+     				onClose={()=>{this.setState({currentlyOpen:'',cvvMood:'',activeIndexes1:[],candidateCall:[],candidateBase:[],lockSubmit:false,nextTenses:[],candidateDisplay:[],searchQuery:'',wordsList:[]})}}
   >
   	{this.contentItems(currentEditMode,currentEditMode,-1,true,forEnglish,setStateTo)}
   </Popup>
@@ -2230,7 +2248,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 				this.editMenuRef[typeInd].open()
 			})
 		} else {
-			console.log(this.editMenuRef, typeInd, typeInd in this.editMenuRef)
+			// console.log(this.editMenuRef, typeInd, typeInd in this.editMenuRef)
 			if (typeInd in this.editMenuRef) {
 				if (this.editMenuRef[typeInd] !== null) {
 					this.editMenuRef[typeInd].close()
@@ -2255,14 +2273,51 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 	resetEditMenu = () => {
 		this.setState({
 			activeIndexes1:[],
-			candidateCall:[],
-			candidateBase:[],
 			lockSubmit:false,
-			nextTenses:[],
-			candidateDisplay:[],
 			searchQuery:'',
 			wordsList:[],
+				// candidateCall:[],
+				// candidateBase:[],
+				// candidateDisplay:[],
+				// unallowable_next_ids:[],
+				// nextTenses:[],
 		})		
+	}
+
+
+	checkIfIntrgTense = (type, ind) => {
+		console.log(type, ind)
+		if (type == 'mvEnglish2' && this.state.mvvMood === 'Intrg' &&  (this.state.mvvType === 'Intrg4' || this.state.mvvType === 'Intrg5')) {
+			if (this.state.mvvType === 'Intrg4' && this.state.candidateDisplay.length === 0) {
+				let p = '2'
+  			this.setState({
+  				candidateBase:this.state.candidateBase.concat([[newpostbases[popularVPostbases[p]['expression']]['keylookup'],popularVPostbases[p]['expression']]]),
+	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledPostbaseText(popularVPostbases[p],'1',undefined,'mv','Intrg'),newpostbases[popularVPostbases[p]['expression']]['exp']]]),
+	    		unallowable_next_ids: this.state.unallowable_next_ids.concat([[popularVPostbases[p]['allowable_next_ids'],]]),
+	    		nextTenses:(newpostbases[popularVPostbases[p]['expression']]['match_case'] && !('gen_preverb_after' in newpostbases[popularVPostbases[p]['expression']]) ? (this.state.nextTenses.length == 0 ? this.state.nextTenses.concat(['gen']):this.state.nextTenses.concat([this.state.nextTenses[this.state.nextTenses.length-1]])) : this.state.nextTenses.concat([newpostbases[popularVPostbases[p]['expression']]['gen_preverb_after'],])),
+  			},()=>{
+	    		this.updateCandidateCall('v','insert','Intrg','Intrg4','p')
+	    	})						
+			} else if (this.state.mvvType === 'Intrg5' && this.state.candidateDisplay.length === 0) {
+				let p = '4'
+  			this.setState({
+  				candidateBase:this.state.candidateBase.concat([[newpostbases[popularVPostbases[p]['expression']]['keylookup'],popularVPostbases[p]['expression']]]),
+	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledPostbaseText(popularVPostbases[p],'1',undefined,'mv','Intrg'),newpostbases[popularVPostbases[p]['expression']]['exp']]]),
+	    		unallowable_next_ids: this.state.unallowable_next_ids.concat([[popularVPostbases[p]['allowable_next_ids'],]]),
+	    		nextTenses:(newpostbases[popularVPostbases[p]['expression']]['match_case'] && !('gen_preverb_after' in newpostbases[popularVPostbases[p]['expression']]) ? (this.state.nextTenses.length == 0 ? this.state.nextTenses.concat(['gen']):this.state.nextTenses.concat([this.state.nextTenses[this.state.nextTenses.length-1]])) : this.state.nextTenses.concat([newpostbases[popularVPostbases[p]['expression']]['gen_preverb_after'],])),
+  			},()=>{
+	    		this.updateCandidateCall('v','insert','Intrg','Intrg5','p')
+	    	})
+			} 
+		} else {
+		this.setState({
+				candidateCall:[],
+				candidateBase:[],
+				candidateDisplay:[],
+				unallowable_next_ids:[],
+				nextTenses:[],
+		})		
+		}
 	}
 
 	editMenu = (type,ind) => {
@@ -2286,6 +2341,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 	      						// if (this.state.crecentlyOpen !== this.state.currentlyOpen) {
 	      						// 	this.setState({'cpreviousEditMode':this.state.currentEditMode})
 	      						// }
+	      						this.checkIfIntrgTense(type, ind);
       							this.setState({
       								cpreviousEditMode: this.state.currentEditMode, 
       								currentlyOpen: typeInd,
@@ -2299,6 +2355,15 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 	      						// }
 										// this.setState({currentlyOpen:''})
 										// this.closeEditMenuRef('','default',false,true)
+										// if (this.state.) {
+										// 	this.setState({
+										// 		candidateCall:[],
+										// 		candidateBase:[],
+										// 		candidateDisplay:[],
+										// 		unallowable_next_ids:[],
+										// 		nextTenses:[],												
+										// 	})
+										// }
 										this.resetEditMenu();
       						}}
       position='bottom center'
@@ -2367,7 +2432,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
     // let mood = moods[index];
     // if (newIndex !== -1) {   
-      // this.getEndings(this.state.parses[currentIndex], mood);
+      // this.getEndings(this.state.parses[currentIndex],mood);
     // }
     this.setState({ activeIndexes: newIndex });
   };
@@ -2405,7 +2470,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
     // let mood = moods[index];
     // if (newIndex !== -1) {   
-      // this.getEndings(this.state.parses[currentIndex], mood);
+      // this.getEndings(this.state.parses[currentIndex],mood);
     // }
     this.setState({ activeIndexes1: newIndex });
   };
@@ -2851,11 +2916,13 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 			}		
 			
 		})
+
+		console.log(transitivity)
 		if (this.state.candidateBase.length === 0) {
 			this.setState({endingAdjusted:''})
 		}
 		// candidateFST = [candidateFST]
-		console.log(candidateFST, transitivity)
+		// console.log(candidateFST, transitivity)
 
 		if (update==='insert') {
 			if (type === 'n') {
@@ -2917,16 +2984,21 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 	}
 
 
-	processStyledMainText = (key,forEnglish) => {
+	processStyledMainText = (key,forEnglish, verbtype, mood) => {
 		// console.log(key,this.state.startingCase,this.state.mvvs,this.state.mvvsPlanned,this.state.nextTenses)
 		let verbAdd = ''
 		let sentence = key['englishmain']	
 		let startingCase = ''
-		let mvvsPlanned = []
+		let vsPlanned = []
 		if (forEnglish !== undefined) {
 			startingCase = forEnglish[0]
-			mvvsPlanned = forEnglish[1]
+			vsPlanned = forEnglish[1]
 		}
+
+
+		// if (mood === 'mv') {console.log(key, mood, forEnglish, startingCase, vsPlanned)}
+
+		// console.log(key, forEnglish, startingCase)
 
 		if (key['type'] == 'n') {
 			sentence = key['base_case']
@@ -3007,26 +3079,66 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 					}	
 					sentence = sentence.replace('!is!','')
 				} else {
-					if (this.state.mvvs.length > 0) {
-						if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
-							sentence = sentence.replace('!is!','am')
-						} else if ((this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) || this.state.mvvs.length === 0) {
-							sentence = sentence.replace('!is!','is')
-						} else {
-							sentence = sentence.replace('!is!','are')
-						}						
+
+					let specialStartingCase = this.returnBaseCaseforMoods(verbtype,mood,vsPlanned)
+					// console.log(key,specialStartingCase)
+					let s0 = specialStartingCase[0]
+					let s1 = specialStartingCase[1]
+					if (s0 === 'main') {
+						sentence = key['englishmain'].replace('!is!',s1)	
+					} else if (key['englishtenses'][0]=='be' && s1.length > 0) {
+						sentence = key['englishmain'].replace('!is!',s1)	
 					} else {
-						if (mvvsPlanned[0] == 1 && mvvsPlanned[1] == 1)	{
-							sentence = sentence.replace('!is!','am')
-						} else if ((mvvsPlanned[0] == 3 && mvvsPlanned[1] == 1) || mvvsPlanned.length === 0) {
-							sentence = sentence.replace('!is!','is')
-						} else {
-							sentence = sentence.replace('!is!','are')
-						}
+						if (s0 === 'p') {
+							verbAdd = key['englishtenses'][1]
+						} else if (s0 === 'g') {
+							verbAdd = key['englishtenses'][3]
+						} else if (s0 === 'i') {
+							verbAdd = key['englishtenses'][0]
+						} else if (s0 === 'pp') {
+							verbAdd = key['englishtenses'][4]
+						} else if (s0 === 'gen') {
+							verbAdd = key['englishtenses'][2]
+						} else if (s0 === 'past') {
+							verbAdd = key['englishtenses'][1]
+						}	else if (s0 === 'present') {
+							verbAdd = key['englishtenses'][2]
+						}		
+						sentence = key['englishraw']
+						let verbMatches = key['englishraw'].match(/\⟨.*?\⟩/g)
+						if (verbMatches !== null) {
+							verbMatches.map((m) => sentence = sentence.replace(m,verbAdd))	
+						}						
 					}
+
+					// if (key['englishtenses'][0]==='be') {
+					// 	sentence = sentence.replace('!is!',s1[1])	
+					// } else {
+					// 	sentence = sentence.replace('!is!',s1[0])	
+					// }
+					// if (this.state.mvvs.length > 0) {
+					// 	if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
+					// 		sentence = sentence.replace('!is!','am')
+					// 	} else if ((this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) || this.state.mvvs.length === 0) {
+					// 		sentence = sentence.replace('!is!','is')
+					// 	} else {
+					// 		sentence = sentence.replace('!is!','are')
+					// 	}						
+					// } else {
+					// 	if (mvvsPlanned[0] == 1 && mvvsPlanned[1] == 1)	{
+					// 		sentence = sentence.replace('!is!','am')
+					// 	} else if ((mvvsPlanned[0] == 3 && mvvsPlanned[1] == 1) || mvvsPlanned.length === 0) {
+					// 		sentence = sentence.replace('!is!','is')
+					// 	} else {
+					// 		sentence = sentence.replace('!is!','are')
+					// 	}
+					// }
 				}
 			}
 		}
+
+		sentence = this.returnPossessor(sentence, forEnglish, vsPlanned)
+
 
 		let matches = sentence.match(/\<.*?\>/g)
 		if (matches !== null) {
@@ -3037,17 +3149,14 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		}
 	}
 
-	returnTenseName = () => {
-
-	}
 
 
-	processStyledPostbaseText = (key,i,forEnglish) => {
-		// console.log(key,i)
+	processStyledPostbaseText = (key,i,forEnglish, verbtype, mood) => {
+		// console.log(mood)
 		let lookup;
-		let mvvsPlanned = []
+		let vsPlanned = []
 		if (forEnglish !== undefined) {
-			mvvsPlanned = forEnglish[1]
+			vsPlanned = forEnglish[1]
 		}
 		if (i === '1') {
 			lookup = key['expression']
@@ -3060,7 +3169,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 			if (newpostbases[lookup]['type'] === 'VV') {
 				if (!newpostbases[lookup]['is'] && !newpostbases[lookup]['has']) {
-					if (mvvsPlanned[0] == 3 && mvvsPlanned[1] == 1 || this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) {
+					if (vsPlanned[0] == 3 && vsPlanned[1] == 1 || this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) {
 						sentence = newpostbases[lookup]['description']
 					} else {
 						if ('inf_preverb' in newpostbases[lookup]) {
@@ -3078,33 +3187,79 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 				} else {
 					// console.log(this.state.nextTenses[this.state.nextTenses.length-1])
 					if (!newpostbases[lookup]['match_case']) {
-						if (this.state.nextTenses[this.state.nextTenses.length-1] === 'p' || this.state.nextTenses[this.state.nextTenses.length-1] === 'pp' || this.state.nextTenses[this.state.nextTenses.length-1] === 'past') {
-							if (newpostbases[lookup]['past_preverb'].length == 0 && newpostbases[lookup]['was']) {
-								sentence = newpostbases[lookup]['description']						
-								if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
-									sentence = 'was '+sentence
-								} else if ((this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) || this.state.mvvs.length === 0) {
-									if (mvvsPlanned[1] !== 1) {
-										sentence = 'were '+sentence							
+						if (this.state.nextTenses.length === 0) {
+							let specialStartingCase = this.returnBaseCaseforMoods(verbtype,mood,vsPlanned)
+							// console.log(key)
+							// console.log(newpostbases[lookup], specialStartingCase)
+							let s0 = specialStartingCase[0]
+							let s1 = specialStartingCase[1]
+							if (s0 === 'main' || s1.length > 0) {
+								sentence = newpostbases[lookup]['gen_preverb']
+								if (newpostbases[lookup]['is']) {
+									sentence = s1 +' '+ sentence
+								} else if (newpostbases[lookup]['has']) {
+									if (vsPlanned[0] == 3 && vsPlanned[1] == 1) {
+										sentence = 'has ' + sentence
 									} else {
-										sentence = 'was '+sentence														
+										sentence = 'have ' + sentence
 									}
-								} else {
-									sentence = 'were '+sentence
-								}  
+								}
 							} else {
-								sentence = newpostbases[lookup]['past_preverb']						
+								if (s0 === 'p') {
+									if (newpostbases[lookup]['was']) {
+										sentence = s1+' (was) '+newpostbases[lookup]['gen_preverb']
+									} else {
+										sentence = newpostbases[lookup]['past_preverb']
+									}
+								} else if (s0 === 'g') {
+									sentence = newpostbases[lookup]['ger_preverb']
+								} else if (s0 === 'i') {
+									sentence = newpostbases[lookup]['inf_preverb']
+								} else if (s0 === 'pp') {
+									sentence = newpostbases[lookup]['past_preverb']
+								} else if (s0 === 'gen') {
+									sentence = s1+' '+newpostbases[lookup]['gen_preverb']
+								} else if (s0 === 'past') {
+									if (newpostbases[lookup]['was']) {
+										sentence = s1+' (was) '+newpostbases[lookup]['gen_preverb']
+									} else {
+										sentence = newpostbases[lookup]['past_preverb']
+									}
+								}	else if (s0 === 'present') {
+									sentence = newpostbases[lookup]['gen_preverb']
+								} else {
+									sentence = newpostbases[lookup]['gen_preverb']									
+								}
 							}
-						} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'g') {
-							sentence = newpostbases[lookup]['ger_preverb']
-						} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'gen') {
-							sentence = newpostbases[lookup]['gen_preverb']
-						} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'i') {
-							sentence = newpostbases[lookup]['inf_preverb']
-						}	else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'past') {
-							sentence = newpostbases[lookup]['past_preverb']
-						} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'present') {
-							sentence = newpostbases[lookup]['gen_preverb']
+						} else {
+							if (this.state.nextTenses[this.state.nextTenses.length-1] === 'p' || this.state.nextTenses[this.state.nextTenses.length-1] === 'pp' || this.state.nextTenses[this.state.nextTenses.length-1] === 'past') {
+								if (newpostbases[lookup]['past_preverb'].length == 0 && newpostbases[lookup]['was']) {
+									sentence = newpostbases[lookup]['description']						
+									if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
+										sentence = 'was '+sentence
+									} else if ((this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) || this.state.mvvs.length === 0) {
+										if (vsPlanned[1] !== 1) {
+											sentence = 'were '+sentence							
+										} else {
+											sentence = 'was '+sentence														
+										}
+									} else {
+										sentence = 'were '+sentence
+									}  
+								} else {
+									sentence = newpostbases[lookup]['past_preverb']						
+								}
+							} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'g') {
+								sentence = newpostbases[lookup]['ger_preverb']
+							} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'gen') {
+								sentence = newpostbases[lookup]['gen_preverb']
+							} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'i') {
+								sentence = newpostbases[lookup]['inf_preverb']
+							}	else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'past') {
+								sentence = newpostbases[lookup]['past_preverb']
+							} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'present') {
+								sentence = newpostbases[lookup]['gen_preverb']
+							}
 						}
 					}				
 				}
@@ -3117,7 +3272,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 							if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
 								sentence = 'was '+sentence
 							} else if ((this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) || this.state.mvvs.length === 0) {
-								if (mvvsPlanned[1] !== 1) {
+								if (vsPlanned[1] !== 1) {
 									sentence = 'were '+sentence							
 								} else {
 									sentence = 'was '+sentence														
@@ -3160,58 +3315,58 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 
 
-	  	if (newpostbases[lookup]['is'] && this.state.addIs) {
-	  		// if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp' || this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
-					// if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
-					// 	sentence = 'was '+sentence
-					// } else if (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) {
-					// 	sentence = 'was '+sentence
-					// } else {
-					// 	sentence = 'were '+sentence
-					// }  
-	  		// } else {
+	  	// if (newpostbases[lookup]['is'] && this.state.addIs) {
+	  	// 	// if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp' || this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
+				// 	// if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
+				// 	// 	sentence = 'was '+sentence
+				// 	// } else if (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) {
+				// 	// 	sentence = 'was '+sentence
+				// 	// } else {
+				// 	// 	sentence = 'were '+sentence
+				// 	// }  
+	  	// 	// } else {
 
-					// if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
-					// 	sentence = 'am '+sentence
-					// } else if ((this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) || this.state.mvvs.length === 0) {
-					// 	if (mvvsPlanned[1] !== 1) {
-					// 		sentence = 'are '+sentence							
-					// 	} else {
-					// 		sentence = 'is '+sentence														
-					// 	}
-					// } else {
-					// 	sentence = 'are '+sentence
-					// }  	  			
+				// 	// if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
+				// 	// 	sentence = 'am '+sentence
+				// 	// } else if ((this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) || this.state.mvvs.length === 0) {
+				// 	// 	if (mvvsPlanned[1] !== 1) {
+				// 	// 		sentence = 'are '+sentence							
+				// 	// 	} else {
+				// 	// 		sentence = 'is '+sentence														
+				// 	// 	}
+				// 	// } else {
+				// 	// 	sentence = 'are '+sentence
+				// 	// }  	  			
 
-					if (mvvsPlanned[0] == 1 && mvvsPlanned[1] == 1)	{
-						sentence = 'am '+sentence							
-					} else if (mvvsPlanned.length === 0 || (mvvsPlanned[0] == 3 && mvvsPlanned[1] == 1)) {
-						sentence = 'is '+sentence														
-					} else {
-						sentence = 'are '+sentence							
-					}		
+				// 	if (mvvsPlanned[0] == 1 && mvvsPlanned[1] == 1)	{
+				// 		sentence = 'am '+sentence							
+				// 	} else if (mvvsPlanned.length === 0 || (mvvsPlanned[0] == 3 && mvvsPlanned[1] == 1)) {
+				// 		sentence = 'is '+sentence														
+				// 	} else {
+				// 		sentence = 'are '+sentence							
+				// 	}		
 
-	  		// }
-				// this.setState({addIs:false})
-	  	}
+	  	// 	// }
+				// // this.setState({addIs:false})
+	  	// }
 
-	  	if (newpostbases[lookup]['has'] && this.state.addIs) {
-	  		if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp' || this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
-	  			sentence = 'had '+sentence
-	  		} else {
-					if (mvvsPlanned[0] == 1 && mvvsPlanned[1] == 1)	{
-						sentence = 'have '+sentence							
-					} else if (mvvsPlanned.length === 0 || (mvvsPlanned[0] == 3 && mvvsPlanned[1] == 1)) {
-						sentence = 'has '+sentence														
-					} else {
-						sentence = 'have '+sentence							
-					}		  			
-	  		}
-				// this.setState({addIs:false})
-	  	}
+	  	// if (newpostbases[lookup]['has'] && this.state.addIs) {
+	  	// 	if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp' || this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
+	  	// 		sentence = 'had '+sentence
+	  	// 	} else {
+				// 	if (mvvsPlanned[0] == 1 && mvvsPlanned[1] == 1)	{
+				// 		sentence = 'have '+sentence							
+				// 	} else if (mvvsPlanned.length === 0 || (mvvsPlanned[0] == 3 && mvvsPlanned[1] == 1)) {
+				// 		sentence = 'has '+sentence														
+				// 	} else {
+				// 		sentence = 'have '+sentence							
+				// 	}		  			
+	  	// 	}
+				// // this.setState({addIs:false})
+	  	// }
 
 
-			sentence = this.returnPossessor(sentence, forEnglish)
+			sentence = this.returnPossessor(sentence, forEnglish, vsPlanned)
 
 
 			let matches = sentence.match(/\<.*?\>/g)
@@ -3231,25 +3386,35 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		}
 	}
 
-	returnPossessor = (sentence, forEnglish) => {
+	returnPossessor = (sentence, forEnglish, vsPlanned) => {
 		let mvvs = this.state.mvvs
-		// let mvvsPlanned = []
-		// if (forEnglish !== undefined) {
-		// 	mvvsPlanned = forEnglish[0]
-		// }
-		// if (mvvsPlanned.length > 0) {
-		// 	mvvs = mvvsPlanned
-		// }
+		if (vsPlanned.length > 0 && mvvs.length == 0) {
+			mvvs = vsPlanned
+		}
 		if (sentence.includes('^his^')) {
 			return sentence.replace('^his^',npnEnglish[mvvs.join("")])
+		} else if (sentence.includes('^its^')) {
+			return sentence.replace('^its^',npnEnglish[mvvs.join("")])
 		} else if (sentence.includes('^himself^')) {
-			return sentence.replace('^himself^',npnEnglishself[mvvs.join("")])
+			return sentence.replace('^herself^',npnEnglishself[mvvs.join("")])
+		} else if (sentence.includes('^herself^')) {
+			return sentence.replace('^herself^',npnEnglishself[mvvs.join("")])
+		} else if (sentence.includes('^itself^')) {
+			return sentence.replace('^itself^',npnEnglishself[mvvs.join("")])
 		} else if (sentence.includes('^he^')) {
 			return sentence.replace('^he^',mvSubjectOptionsEnglish[mvvs.join("")])
+		} else if (sentence.includes('^she^')) {
+			return sentence.replace('^she^',mvSubjectOptionsEnglish[mvvs.join("")])
+		} else if (sentence.includes('^it^')) {
+			return sentence.replace('^it^',mvObjectOptionsEnglish[mvvs.join("")])
+		} else if (sentence.includes('^him^')) {
+			return sentence.replace('^him^',mvObjectOptionsEnglish[mvvs.join("")])
 		} else {			
 			return sentence
 		}
 	}
+
+
 
 	returnBaseChooserTitle = (itemUpdating,endingNeeded,mood,submood,forEnglish) => {
 		let subject = '';
@@ -3437,15 +3602,140 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		return subject
 	}
 
-	returnPlaceholder = (endingNeeded, forEnglish) => {
+	returnBaseCaseforMoods = (verbtype,mood,vsPlanned) => {
+		if (
+				verbtype === 'mv' &&
+				((
+				mood === "Opt][PRS" || 
+				mood === "Opt][FUT" || 
+				mood === "Opt][PRS][NEG" || 
+				mood === "Sbrd")
+				 || (
+				this.state.mvvMood === "Opt][PRS" || 
+				this.state.mvvMood === "Opt][FUT" || 
+				this.state.mvvMood === "Opt][PRS][NEG" || 
+				this.state.mvvMood === "Sbrd")
+				))
+		{
+			// return 'hunt, be happy, etc.'
+			return ['i','']
+		} else if (
+			verbtype === 'cv' &&
+			(this.state.cvvMood === "Prec" ||
+			this.state.cvvMood === "Cond" ||
+			this.state.cvvMood === "Cont")
+			) 
+		{ 
+			if (vsPlanned.length === 0) {
+				if (this.state.cvvs[0] == 1 && this.state.cvvs[1] == 1)	{
+					// return 'hunt, am happy, etc.'
+					return ['i','am']
+				} else if (this.state.cvvs.length === 0 || (this.state.cvvs[0] == 3 && this.state.cvvs[1] == 1)) {
+					// return 'hunts, is happy, etc.'
+					return ['gen','is']
+				} else {
+					// return 'hunt, are happy, etc.'
+					return ['i','are']
+				}		
+			} else {
+				if (vsPlanned[0] == 1 && vsPlanned[1] == 1)	{
+					// return 'hunt, am happy, etc.'
+					return ['i','am']
+				} else if (vsPlanned[0] == 3 && vsPlanned[1] == 1) {
+					// return 'hunts, is happy, etc.'
+					return ['gen','is']
+				} else {
+					// return 'hunt, are happy, etc.'
+					return ['i','are']
+				}		
+			}
+		} else if (
+			verbtype === 'cv' && this.state.cvvMood === "Conc"
+			) 
+		{ 
+			if (this.state.cvvs[0] == 1 && this.state.cvvs[1] == 1)	{
+				// return 'am hunting, happy, etc.'
+				return ['main','am']
+			} else if (this.state.cvvs.length === 0 || (this.state.cvvs[0] == 3 && this.state.cvvs[1] == 1)) {
+				return ['main','is']
+			} else {
+				return ['main','are']
+			}		
+		} else if (
+			verbtype === 'cv' &&
+			(this.state.cvvMood === "Cnsq" ||
+			this.state.cvvMood === "CtmpI" ||
+			this.state.cvvMood === "CtmpII")
+
+			) 
+		{
+			if (this.state.cvvs[0] == 1 && this.state.cvvs[1] == 1)	{
+				// return 'hunted, was happy, etc.'
+				return ['p','']
+			} else if (this.state.cvvs.length === 0 || (this.state.cvvs[0] == 3 && this.state.cvvs[1] == 1)) {
+				return ['p','']
+			} else {
+				return ['p','']
+			}		
+		} else if (
+			verbtype === 'mv' &&
+			(this.state.mvvType === "Intrg4" ||
+			this.state.mvvType === "Intrg5")
+			) 
+		{
+			// return 'hunt, be happy, etc.'
+			return ['i','']
+		} else if (
+			verbtype === 'mv' &&
+			(this.state.mvvType === "Intrg6" ||
+			this.state.mvvType === "Intrg7" ||
+			this.state.mvvType === "Intrg8" ||
+			this.state.mvvType === "Intrg9" ||
+			this.state.mvvType === "IntrgA")
+			) 
+		{
+			// return 'hunting, being happy, etc.'
+			return ['g','']
+		} else if (
+			verbtype === 'sv' &&
+			(this.state.svvType === "by" ||
+			this.state.svvType === "being") 
+			) 
+		{
+			return ['g','']
+		} else {
+			if (vsPlanned.length === 0) {
+				if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
+					// return 'am hunting, am happy, etc.'
+					return ['main','am']
+				} else if (this.state.mvvs.length === 0 || (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1)) {
+					return ['main','is']
+				} else {
+					return ['main','are']
+				}							
+			} else {
+				if (vsPlanned[0] == 1 && vsPlanned[1] == 1)	{
+					// return 'am hunting, am happy, etc.'
+					return ['main','am']
+				} else if (vsPlanned[0] == 3 && vsPlanned[1] == 1) {
+					return ['main','is']
+				} else {
+					return ['main','are']
+				}			
+				
+			}
+		}
+	}
+
+	returnPlaceholder = (endingNeeded, forEnglish, verbtype, mood) => {
 		// console.log(endingNeeded, this.state.endingAdjusted, this.state.startingCase, this.state.mvvsPlanned)
 
-		// console.log(endingNeeded, forEnglish)
+		// console.log(endingNeeded, forEnglish, mood)
 		let startingCase = ''
-		let mvvsPlanned = []
+		let vsPlanned = []
 		if (forEnglish !== undefined) {
 			startingCase = forEnglish[0]
-			mvvsPlanned = forEnglish[1]
+			vsPlanned = forEnglish[1]
 		}
 
 		if (endingNeeded == 'n') {
@@ -3454,10 +3744,10 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 					return 'hunt, be happy, etc.'
 				} else if (startingCase == 'g') {
 					return 'hunting, being happy, etc.'
-				} else if (mvvsPlanned.length > 0) {
-					if (mvvsPlanned[0] == 1 && mvvsPlanned[1] == 1)	{
+				} else if (vsPlanned.length > 0) {
+					if (vsPlanned[0] == 1 && vsPlanned[1] == 1)	{
 						return 'am hunting, happy, etc.'
-					} else if (mvvsPlanned.length === 0 || (mvvsPlanned[0] == 3 && mvvsPlanned[1] == 1)) {
+					} else if (vsPlanned.length === 0 || (vsPlanned[0] == 3 && vsPlanned[1] == 1)) {
 						return 'is hunting, happy, etc.'
 					} else {
 						return 'are hunting, happy, etc.'
@@ -3484,37 +3774,66 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 						return 'hunting, being happy, etc.'
 					} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'p' || this.state.nextTenses[this.state.nextTenses.length-1] === 'pp') {
 						return 'hunted, been happy, etc.'
-					} else if (mvvsPlanned.length > 0) {
-						if (mvvsPlanned[0] == 1 && mvvsPlanned[1] == 1)	{
-							return 'am hunting, happy, etc.'
-						} else if (mvvsPlanned.length === 0 || (mvvsPlanned[0] == 3 && mvvsPlanned[1] == 1)) {
-							return 'is hunting, happy, etc.'
-						} else {
-							return 'are hunting, happy, etc.'
-						}
-					} else {
-						if (this.state.mvvMood === "Opt][PRS" || 
+					} 
+					// else if (vsPlanned.length > 0) {
+					// 	if (vsPlanned[0] == 1 && vsPlanned[1] == 1)	{
+					// 		return 'am hunting, happy, etc.'
+					// 	} else if (vsPlanned.length === 0 || (vsPlanned[0] == 3 && vsPlanned[1] == 1)) {
+					// 		return 'is hunting, happy, etc.'
+					// 	} else {
+					// 		return 'are hunting, happy, etc.'
+					// 	}
+					// } 
+					else {
+						if (
+								verbtype === 'mv' &&
+								(this.state.mvvMood === "Opt][PRS" || 
 								this.state.mvvMood === "Opt][FUT" || 
 								this.state.mvvMood === "Opt][PRS][NEG" || 
-								this.state.mvvMood === "Sbrd"
+								this.state.mvvMood === "Sbrd")
 								) 
 						{
 							return 'hunt, be happy, etc.'
 						} else if (
-							this.state.cvvMood === "Prec" ||
+							verbtype === 'cv' &&
+							(this.state.cvvMood === "Prec" ||
 							this.state.cvvMood === "Cond" ||
-							this.state.cvvMood === "Cont" 
+							this.state.cvvMood === "Cont")
 							) 
 						{ 
-							if (this.state.cvvs[0] == 1 && this.state.cvvs[1] == 1)	{
-								return 'hunt, am happy, etc.'
-							} else if (this.state.cvvs.length === 0 || (this.state.cvvs[0] == 3 && this.state.cvvs[1] == 1)) {
-								return 'hunts, is happy, etc.'
+
+							if (vsPlanned.length === 0) {
+								if (this.state.cvvs[0] == 1 && this.state.cvvs[1] == 1)	{
+									return 'hunt, am happy, etc.'
+									// return ['i','am']
+								} else if (this.state.cvvs.length === 0 || (this.state.cvvs[0] == 3 && this.state.cvvs[1] == 1)) {
+									return 'hunts, is happy, etc.'
+									// return ['gen','is']
+								} else {
+									return 'hunt, are happy, etc.'
+									// return ['i','are']
+								}		
 							} else {
-								return 'hunt, are happy, etc.'
-							}		
+								if (vsPlanned[0] == 1 && vsPlanned[1] == 1)	{
+									return 'hunt, am happy, etc.'
+									// return ['i','am']
+								} else if (vsPlanned[0] == 3 && vsPlanned[1] == 1) {
+									return 'hunts, is happy, etc.'
+									// return ['gen','is']
+								} else {
+									return 'hunt, are happy, etc.'
+									// return ['i','are']
+								}		
+							}
+							// if (this.state.cvvs[0] == 1 && this.state.cvvs[1] == 1)	{
+							// 	return 'hunt, am happy, etc.'
+							// } else if (this.state.cvvs.length === 0 || (this.state.cvvs[0] == 3 && this.state.cvvs[1] == 1)) {
+							// 	return 'hunts, is happy, etc.'
+							// } else {
+							// 	return 'hunt, are happy, etc.'
+							// }		
 						} else if (
-							this.state.cvvMood === "Conc"
+							verbtype === 'cv' && this.state.cvvMood === "Conc"
 							) 
 						{ 
 							if (this.state.cvvs[0] == 1 && this.state.cvvs[1] == 1)	{
@@ -3525,10 +3844,10 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 								return 'are hunting, happy, etc.'
 							}		
 						} else if (
-							this.state.cvvMood === "Cnsq" ||
-							this.state.cvvMood === "CtmpI" ||
-							this.state.cvvMood === "CtmpII"
-
+								verbtype === 'cv' &&
+								(this.state.cvvMood === "Cnsq" ||
+								this.state.cvvMood === "CtmpI" ||
+								this.state.cvvMood === "CtmpII")
 							) 
 						{
 							if (this.state.cvvs[0] == 1 && this.state.cvvs[1] == 1)	{
@@ -3539,34 +3858,49 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 								return 'hunted, were happy, etc.'
 							}		
 						} else if (
-							this.state.mvvType === "Intrg4" ||
-							this.state.mvvType === "Intrg5" 
+							verbtype === 'mv' &&
+							(this.state.mvvType === "Intrg4" ||
+							this.state.mvvType === "Intrg5")
 							) 
 						{
 							return 'hunt, be happy, etc.'
 						} else if (
-							this.state.mvvType === "Intrg6" ||
+							verbtype === 'mv' &&
+							(this.state.mvvType === "Intrg6" ||
 							this.state.mvvType === "Intrg7" ||
 							this.state.mvvType === "Intrg8" ||
 							this.state.mvvType === "Intrg9" ||
-							this.state.mvvType === "IntrgA" 
+							this.state.mvvType === "IntrgA")
 							) 
 						{
-							return 'eating, being happy, etc.'
+							return 'hunting, being happy, etc.'
 						} else if (
-							this.state.svvType === "by" ||
-							this.state.svvType === "being" 
+							verbtype === 'sv' &&
+							(this.state.svvType === "by" ||
+							this.state.svvType === "being")
 							) 
 						{
-							return 'hunting, be happy, etc.'
+							return 'hunting, being happy, etc.'
 						} else {
-							if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
+							if (vsPlanned.length === 0) {
+								if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
+									// return 'am hunting, am happy, etc.'
 								return 'am hunting, happy, etc.'
-							} else if (this.state.mvvs.length === 0 || (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1)) {
+								} else if (this.state.mvvs.length === 0 || (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1)) {
 								return 'is hunting, happy, etc.'
-							} else {
+								} else {
 								return 'are hunting, happy, etc.'
-							}							
+								}							
+							} else {
+								if (vsPlanned[0] == 1 && vsPlanned[1] == 1)	{
+									// return 'am hunting, am happy, etc.'
+								return 'am hunting, happy, etc.'
+								} else if (vsPlanned[0] == 3 && vsPlanned[1] == 1) {
+								return 'is hunting, happy, etc.'
+								} else {
+								return 'are hunting, happy, etc.'
+								}			
+							}					
 						}
 					}
 				// } 
@@ -3709,7 +4043,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 											      autoComplete='off'
 											      autoFocus
 											      disabled={this.state.lockSubmit}
-											      placeholder={this.returnPlaceholder(endingNeeded,forEnglish)}
+											      placeholder={this.returnPlaceholder(endingNeeded,forEnglish,itemUpdating[1][0],mood)}
 											      // width='100%'
 											      style={{width:'100%',padding:'5px 5px'}}
 											 		  onChange={this.onChangeBaseSearch.bind(this,endingNeeded)}
@@ -3735,7 +4069,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 																	    		searchQuery:'',
 																	    		wordsList:[],
 														      				candidateBase:this.state.candidateBase.concat([[newpostbases[k['fsts']]['keylookup'],k['fsts']]]),
-																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledPostbaseText(k['fsts'],'2',forEnglish),k['fsts']]]),
+																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledPostbaseText(k['fsts'],'2',forEnglish,itemUpdating[1][0],mood),k['fsts']]]),
 																	    		nextTenses:(
 																	    			newpostbases[k['fsts']]['match_case'] && !('gen_preverb_after' in newpostbases[k['fsts']]) ? 
 																		    			(this.state.nextTenses.length == 0 ? 
@@ -3756,7 +4090,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 														      		}}>
 															      		<div>
 																      		<div style={{marginBottom:'5px',color:'#545454'}}>
-																      		<span>{this.processStyledPostbaseText(k['fsts'],'2',forEnglish)}</span>
+																      		<span>{this.processStyledPostbaseText(k['fsts'],'2',forEnglish,itemUpdating[1][0],mood)}</span>
 																      		<span style={{color:'#bdbdbd'}}>{'...'}</span></div>
 																      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{k['fsts']}</div>
 															      		</div>
@@ -3768,14 +4102,14 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 																	    		searchQuery:'',
 																	    		wordsList:[],
 																	    		candidateBase:this.state.candidateBase.concat(k),
-																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledMainText(k,forEnglish),k['fsts'].toString()+'-']]),
+																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledMainText(k,forEnglish,itemUpdating[1][0],mood),k['fsts'].toString()+'-']]),
 																	    	},()=>{
 																	    		this.updateCandidateCall(endingNeeded,update,mood,submood,'b')
 																	    	})
 														      		}}>
 															      		<div>
 																      		<div style={{marginBottom:'5px',color:'#545454'}}>
-																      		<span>{this.processStyledMainText(k,forEnglish)}</span>
+																      		<span>{this.processStyledMainText(k,forEnglish,itemUpdating[1][0],mood)}</span>
 																      		</div>
 																      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{k['fsts'].toString()+'-'}</div>
 															      		</div>
@@ -3817,7 +4151,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 												      					// this.handleClick('verbs',false); 
 														      			this.setState({
 														      				candidateBase:this.state.candidateBase.concat([[newpostbases[popularPostbases[p]['expression']]['keylookup'],popularPostbases[p]['expression']]]),
-																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledPostbaseText(popularPostbases[p],'1',forEnglish),newpostbases[popularPostbases[p]['expression']]['exp']]]),
+																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledPostbaseText(popularPostbases[p],'1',forEnglish,itemUpdating[1][0],mood),newpostbases[popularPostbases[p]['expression']]['exp']]]),
 																	    		unallowable_next_ids: this.state.unallowable_next_ids.concat([[popularPostbases[p]['allowable_next_ids'],]]),
 																	    		nextTenses:(newpostbases[popularPostbases[p]['expression']]['match_case'] && !('gen_preverb_after' in newpostbases[popularPostbases[p]['expression']]) ? (this.state.nextTenses.length == 0 ? this.state.nextTenses.concat(['gen']):this.state.nextTenses.concat([this.state.nextTenses[this.state.nextTenses.length-1]])) : this.state.nextTenses.concat([newpostbases[popularPostbases[p]['expression']]['gen_preverb_after'],])),
 														      			},()=>{
@@ -3826,7 +4160,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 														      		}}>
 															      		<div>
 																      		<div style={{marginBottom:'5px',color:'#545454'}}>
-																      		<span>{this.processStyledPostbaseText(popularPostbases[p],'1',forEnglish)}</span>
+																      		<span>{this.processStyledPostbaseText(popularPostbases[p],'1',forEnglish,itemUpdating[1][0],mood)}</span>
 																      		<span style={{color:'#bdbdbd'}}>{'...'}</span></div>
 																      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{newpostbases[popularPostbases[p]['expression']]['exp']}</div>
 															      		</div>
@@ -3866,14 +4200,14 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 																	    		searchQuery:'',
 																	    		wordsList:[],
 																	    		candidateBase:this.state.candidateBase.concat(popularBases[p]),
-																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledMainText(popularBases[p],forEnglish),popularBases[p]['fsts'].join("-, ")+'-']]),
+																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledMainText(popularBases[p],forEnglish,itemUpdating[1][0],mood),popularBases[p]['fsts'].join("-, ")+'-']]),
 																	    	},()=>{
 																	    		this.updateCandidateCall(endingNeeded,update,mood,submood,'b')
 																	    	})
 														      		 }}>
 																      		<div>
 																	      		<div style={{marginBottom:'5px',color:'#545454'}}>
-																	      		<span>{this.processStyledMainText(popularBases[p],forEnglish)}</span>
+																	      		<span>{this.processStyledMainText(popularBases[p],forEnglish,itemUpdating[1][0],mood)}</span>
 																	      		<span style={{color:'#bdbdbd'}}>{'.'}</span></div>
 																	      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{popularBases[p]['fstsDisplay']}</div>
 																      		</div>
@@ -4599,12 +4933,6 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 									null
 								}
 
-								{this.state.mvvMood === 'Intrg' ?
-									<span>{'?'}</span>
-									:
-									null
-								}
-
 
 								</div>
 
@@ -4686,12 +5014,12 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 							    			{'Make a Command'}
 							    		</Accordion.Title>
 							    		<Accordion.Content active={this.state.activeIndexes.includes('commandInsert')}>
-							    		{this.mainScreenMenu('command right now','commandInsert','optCase',['Opt][PRS',''],['i',[]])}
-							    		{this.mainScreenMenu('command future','commandInsert','optCase',['Opt][FUT',''],['i',[]])}
-							    		{this.mainScreenMenu('do not ____','commandInsert','optCase',['Opt][PRS][NEG',''],['i',[]])}
-							    		{this.mainScreenMenu('do not ____ (future)?','commandInsert','optCase',['Opt][FUT][NEG',''],['i',[]])}
-							    		{this.mainScreenMenu('polite request','commandInsert','optCase',['Sbrd',''],['i',[]])}
-							    		{this.mainScreenMenu('polite do not ____','commandInsert','optCase',['Sbrd','neg'],['i',[]])}
+							    		{this.mainScreenMenu('command right now','commandInsert','optCase',['Opt][PRS',''],['i',[2,1,0]])}
+							    		{this.mainScreenMenu('command future','commandInsert','optCase',['Opt][FUT',''],['i',[2,1,0]])}
+							    		{this.mainScreenMenu('do not ____','commandInsert','optCase',['Opt][PRS][NEG',''],['i',[2,1,0]])}
+							    		{this.mainScreenMenu('do not ____ (future)?','commandInsert','optCase',['Opt][FUT][NEG',''],['i',[2,1,0]])}
+							    		{this.mainScreenMenu('polite request','commandInsert','optCase',['Sbrd',''],['i',[2,1,0]])}
+							    		{this.mainScreenMenu('polite do not ____','commandInsert','optCase',['Sbrd','neg'],['i',[2,1,0]])}
 							    		</Accordion.Content>
 							    	</Accordion>		
 										</div>
@@ -5299,7 +5627,16 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 							    			id={'nObliqueInsert'}
                 				style={{color:(this.state.activeIndexes.includes('nObliqueInsert') ? '#000000' : '#00000066')}}
 							    			active={this.state.activeIndexes.includes('nObliqueInsert')}
-						            onClick={()=>{this.handleClick('nObliqueInsert',true)}}
+						            onClick={()=>{
+						            	this.handleClick('nObliqueInsert',true)
+									      	this.setState({
+													candidateCall:[],
+													candidateBase:[],
+													candidateDisplay:[],
+													unallowable_next_ids:[],
+													nextTenses:[],			      		
+									      	})
+						            }}
 							    		>
 							    			<Icon name="dropdown" />
 							    			{'Add location, direction, etc.'}
@@ -5315,21 +5652,30 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 							    			id={'cvinsert'}
                 				style={{color:(this.state.activeIndexes.includes('nObliqueInsert') ? '#000000' : '#00000066')}}
 							    			active={this.state.activeIndexes.includes('cvinsert')}
-						            onClick={()=>{this.handleClick('cvinsert',true)}}
+						            onClick={()=>{
+						            	this.handleClick('cvinsert',true);
+									      	this.setState({
+													candidateCall:[],
+													candidateBase:[],
+													candidateDisplay:[],
+													unallowable_next_ids:[],
+													nextTenses:[],			      		
+									      	})
+						            }}
 							    		>
 							    			<Icon name="dropdown" />
 							    			{'Add an additional verb phrase'}
 							    		</Accordion.Title>
 							    		<Accordion.Content active={this.state.activeIndexes.includes('cvinsert')}>
-							    		{this.mainScreenMenu('before '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['Prec',''],['gen',[]])}
-							    		{this.mainScreenMenu('because '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['Cnsq',''],['p',[]])}
-							    		{this.mainScreenMenu('whenever '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['Cont',''],['gen',[]])}
-							    		{this.mainScreenMenu('even though '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['Conc',''],['g',[]])}
-							    		{this.mainScreenMenu('even if '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['Conc','evenif'],['g',[]])}
-							    		{this.mainScreenMenu('if '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['Cond','if'],['gen',[]])}
-							    		{this.mainScreenMenu('when (in future) '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['Cond','wheninthefuture'],['gen',[]])}
-							    		{this.mainScreenMenu('when (in past) '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['CtmpI',''],['p',[]])}
-							    		{this.mainScreenMenu('while '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['CtmpII',''],['p',[]])}
+							    		{this.mainScreenMenu('before '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['Prec',''],['',this.state.mvvs])}
+							    		{this.mainScreenMenu('because '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['Cnsq',''],['',this.state.mvvs])}
+							    		{this.mainScreenMenu('whenever '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['Cont',''],['',this.state.mvvs])}
+							    		{this.mainScreenMenu('even though '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['Conc',''],['',this.state.mvvs])}
+							    		{this.mainScreenMenu('even if '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['Conc','evenif'],['',this.state.mvvs])}
+							    		{this.mainScreenMenu('if '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['Cond','if'],['',this.state.mvvs])}
+							    		{this.mainScreenMenu('when (in future) '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['Cond','wheninthefuture'],['',this.state.mvvs])}
+							    		{this.mainScreenMenu('when (in past) '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['CtmpI',''],['',this.state.mvvs])}
+							    		{this.mainScreenMenu('while '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['CtmpII',''],['',this.state.mvvs])}
 							    		{this.mainScreenMenu('by _____','svinsert','svvType',['by',''],['g',[]])}
 							    		{this.mainScreenMenu('being _____','svinsert','svvType',['being',''],['g',[]])}
 							    		</Accordion.Content>

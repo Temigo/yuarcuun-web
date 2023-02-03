@@ -24,6 +24,7 @@ export const inupiaqSpeakerIDs = {
 
 export const popularVerbs = [
 {'englishnorm': 'eat', 'yupikword': "ner'uq", 'fsts': ['nere'], 'fstsDisplay': 'nere-', 'key': 'nere-', 'englishtenses': ['eat', 'ate', 'eats', 'eating', 'eaten'], 'properties': [], 'englishmain': '!is! eating', 'englishraw': '\u27e8eat\u27e9', 'base_case': 'eat', 'usageIndex': 0, 'type': 'i'},
+{'englishnorm': 'eat', 'yupikword': "ner'uq", 'fsts': ['nere'], 'fstsDisplay': 'nere-', 'key': 'nere-', 'englishtenses': ['eat', 'ate', 'eats', 'eating', 'eaten'], 'properties': [], 'englishmain': '!is! eating <something>', 'englishraw': '\u27e8eat\u27e9 <something>', 'base_case': 'eat', 'usageIndex': 1, 'type': 'it'},
 {'englishnorm': 'eat', 'yupikword': 'neraa', 'fsts': ['nere'], 'fstsDisplay': 'nere-', 'key': 'nere-', 'englishtenses': ['eat', 'ate', 'eats', 'eating', 'eaten'], 'properties': [], 'englishmain': '!is! eating <it>', 'englishraw': '\u27e8eat\u27e9 <it>', 'base_case': 'eat', 'usageIndex': 2, 'type': 't'},
 {'englishnorm': 'hunt', 'yupikword': 'pissurtuq', 'fsts': ['pissur'], 'fstsDisplay': 'pissur-', 'key': 'pissur-', 'englishtenses': ['hunt', 'hunted', 'hunts', 'hunting', 'hunted'], 'properties': [], 'englishmain': '!is! hunting <something>', 'englishraw': '\u27e8hunt\u27e9 <something>', 'base_case': 'hunt', 'usageIndex': 1, 'type': 'it'},
 {'englishnorm': 'hunt', 'yupikword': 'pissuraa', 'fsts': ['pissur'], 'fstsDisplay': 'pissur-', 'key': 'pissur-', 'englishtenses': ['hunt', 'hunted', 'hunts', 'hunting', 'hunted'], 'properties': [], 'englishmain': '!is! hunting <it>', 'englishraw': '\u27e8hunt\u27e9 <it>', 'base_case': 'hunt', 'usageIndex': 2, 'type': 't'},
@@ -1249,6 +1250,23 @@ export const mvSubjectOptionsEnglish = {
   '430':'their own (3+)',
 };
 
+export const mvObjectOptionsEnglish = {
+  '110':'me', 
+  '210':'you', 
+  '310':'it',
+  '311':'him',
+  '312':'her',
+  '313':'it',
+  '410':'subject',
+  '120':'the two of us',
+  '220':'the two of you',
+  '320':'the two of them',
+  '420':'their own (two)',
+  '130':'us all (3+)',
+  '230':'you all (3+)',
+  '330':'them all (3+)',
+  '430':'their own (3+)',
+};
 export const npnEnglish = {
   '1':'one', 
   '2':'two', 
