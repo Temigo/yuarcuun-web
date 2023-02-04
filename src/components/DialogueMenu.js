@@ -188,7 +188,7 @@ class DialogueMenu extends Component {
 
         <div style={{display:'flex',flexDirection:'column',justifyContent:'center',marginTop:'10px'}}>
         <span style={{fontSize:'14px',color:'grey',padding:'15px',fontWeight:'400',lineHeight:'23px'}}>
-        Website, audio library, and dialogue module production provided by <a style={{color:'#306190'}} href="https://yuarcuun.github.io" target="_blank" >Yuarcuun Technologies</a> in partnership with Orutsararmiut Native Council (ONC). Dialogues from textbook Qaneryaurci Yup'igtun. Recordings done by Maklak Barbara Liu and Cikigaq. This website was made possible by Grant Number 90XN0110-01-00 from Administration for Native Americans.
+        Website, audio library, and dialogue module production provided by <a style={{color:'#306190'}} href="https://yuarcuun.github.io" target="_blank" >Yuarcuun Technologies</a> in partnership with Orutsararmiut Native Council (ONC). Dialogues from textbook Qaneryaurci Yup'igtun. Recordings done by Maklak Liu and Cikigaq John. This website was made possible by Grant Number 90XN0110-01-00 from Administration for Native Americans.
         </span>
         </div>
 

@@ -371,308 +371,204 @@ export const popularNPostbases = [
   // }
 ]
 
-export const popularVPostbases = [
+export const popularVPostbasesNOTIME = [
 
 
   {
     id: 0,
-    // descriptionEnglish: 'is probably',
     // description: 'probably',
-    // expression: '@~+yugnarqe¹[V→V]',
-    // key:"@~+yugnarqe¹-",
-    // priority: 1,
     allowable_next_ids: [1,0],
     expression:'@~+yugnarqe¹[V→V]',
-    // key:"@~+yugnarqe¹-",
-    // properties:[],
-    // type:"[V→V]",
-    // usageIndex:-1,
-    // yupikword:"@~+yugnarqe¹[V→V]",
-
   },
   {
     id: 1,
-    // descriptionEnglish: 'is evidently (without being observed)',
     // description: 'evidently',
-    // expression: '–llini[V→V]',
-    // key:'-llini-',
-    // priority: 1,
     allowable_next_ids: [0,1],
-    // englishnorm: "evidently (without being observed)",
-    // englishraw: "evidently (without being observed)",
     expression: '–llini[V→V]',
-    // key: "-llini-",
-    // properties: [],
-    // type: "[V→V]",
-    // usageIndex: -1,
-    // yupikword: "–llini[V→V]",
-  },
-  {
-    id: 5,
-    // description: 'past tense',
-    // description: 'past tense',
-    expression: '–llru¹[V→V]',
-    // key: "-llru¹-",
-    // priority: 3,
-    allowable_next_ids: [7,5,8,9]
-  },
-  {
-    id: 6,
-    // description: 'not yet',
-    // description: 'not yet',
-    expression: "–ksaite[V→V]",
-    // key: "-ksaite-",
-    // priority: 1,
-    allowable_next_ids: [0,1,7,6]
-  },
-  {
-    id: 7,
-    // description: 'future tense',
-    // description: 'future tense',
-    expression: '+ciqe|@ciiqe[V→V]',
-    // key: "+ciqe-|@ciiqe-",
-    // priority: 3,
-    allowable_next_ids: [0,1,5,10,7]
-  },
-  {
-    id: 8,
-    // description: 'will not',
-    // description: 'will not',
-    expression: '@~+ngaite[V→V]',
-    // key: "@~+ngaite-",
-    // priority: 3,
-    allowable_next_ids: [0,1,7,10,8]
-  },
-  {
-    id: 9,
-    description: 'will soon',
-    description: 'will soon',
-    key: "@~+niarar-",
-    expression: '@~+niarar[V→V]',
-    priority: 3,
-    allowable_next_ids: [0,1,5,6,7,10,9]
-  },
-  {
-    id: 10,
-    description: 'about to',
-    description: 'about to',
-    key: "-qatar-",
-    expression:'–qatar[V→V]',
-    priority: 1,
-    allowable_next_ids: [1,7,10]
   },
 
   {
     id: 2,
-    // descriptionEnglish: 'is no longer able to',
     // description: 'no longer able to',
     expression: "+(s)ciigali[V→V]",
-    // key:"+(s)ciigali-,+(s)ciigalli-",
-    // priority: 1,
     allowable_next_ids: [1,3,2],
 
   },
   {
     id: 3,
-    descriptionEnglish: 'is not able to',
-    description: 'not able to',
+    // description: 'not able to',
     expression: '+(s)ciigate[V→V]',
-    key:"+(s)ciigate-",
-    priority: 1,
     allowable_next_ids: [1,2,3]
   },
   {
     id: 4,
-    description: 'is able to',
-    description: 'able to',
+    // description: 'is able to',
     expression: '@~+yugnga[V→V]',
-    key: "@~+yugnga-",
-    priority: 1,
     allowable_next_ids: [0,1,6,7,8,4]
   },
 
   {
     id: 11,
-    description: 'repeatedly',
-    description: 'repeatedly',
+    // description: 'repeatedly',
     expression: "–lar[V→V]",
-    key:"~+lar-,@~+lar-,-lar-",
-    priority: 1,
     allowable_next_ids: [1,11]
   },
   {
     id: 12,
-    description: 'doing it again',
-    description: '(again)',
+    // description: 'doing it again',
     expression: '–nqigte[V→V]',
-    key:"-nqigte-",
-    priority: 1,
     allowable_next_ids: [1,12]
   },
   {
     id: 13,
-    description: 'almost',
-    description: 'almost',
+    // description: 'almost',
     expression: '@~+yarpiar[V→V]',
-    key:"@~+yarpiar-,~+yarpigar-",
-    priority: 1,
     allowable_next_ids: [1,13]
   },
   {
     id: 14,
-    description: 'never',
-    description: 'never',
-    key:"@~-yuite-",
+    // description: 'never',
     expression: '@~–yuite[V→V]',
-    priority: 1,
     allowable_next_ids: [1,14]
   },
   {
     id: 15,
-    description: 'no longer',
-    description: 'no longer',
+    // description: 'no longer',
     expression: '–nrir[V→V]',
-    key:"-nrir-",
-    priority: 1,
     allowable_next_ids: [0,1,27,15]
   },
   {
     id: 16,
-    description: 'trying (unsuccessfully) to',
-    description: 'try (unsuccessfully) to',
-    description: 'trying (unsuccessfully) to',
+    // description: 'trying (unsuccessfully) to',
     expression: '@~+yaaqe[V→V]',
-    key: "@~+yaaqe-",
-    priority: 1,
     allowable_next_ids: [0,1,17,19,16]
   },
   {
     id: 17,
-    description: 'trying despite difficulties to',
-    description: 'try despite difficulties to',
-    description: 'trying despite difficulties to',
+    // description: 'trying despite difficulties to',
     expression: '–qcaar(ar)[V→V]',
-    key:"-qcaar(ar)-",
-    priority: 1,
     allowable_next_ids: [0,1,16,18,17]
   },
   {
     id: 18,
-    description: 'trying to',
-    description: 'try to',
-    description: 'trying to',
+    // description: 'trying to',
     expression: '–ngnaqe[V→V]',
-    key: "-ngnaqe-",
-    priority: 1,
     allowable_next_ids: [0,1,16,17,18]
   },
   {
     id: 19,
-    description: 'excessively (too much)',
-    description: 'excessively',
+    // description: 'excessively (too much)',
     expression: '–ssiyaag[V→V]',
-    key: "-ssiyaag-",
-    priority: 1,
     allowable_next_ids: [1,19]
   },
   {
     id: 20,
-    description: 'to be more or better at',
-    description: '(being more or better at)',
+    // description: 'to be more or better at',
     expression: '–nru[V→V]',
-    key: "-nru-",
-    priority: 1,
     allowable_next_ids: [1,20]
   },
   {
     id: 21,
-    description: 'loves to',
-    descriptionI: 'love to',
-    descriptionG: 'loving to',
+    // description: 'loves to',
     expression: '@~+yunqegg[V→V]',
-    key:"@~+yunqegg-",
-    priority: 1,
     allowable_next_ids: [0,1,7,8,21]
   },
   {
     id: 22,
-    description: 'no longer wants to',
-    descriptionI: 'no longer want to',
-    descriptionG: 'no longer wanting to',
+    // description: 'no longer wants to',
     expression: '@~+yuumiir(ar)te[V→V]',
-    key:"@~+yuumiir(ar)te-",
-    priority: 1,
     allowable_next_ids: [0,1,7,8,22]
   },
   {
     id: 23,
-    description: 'not care to',
-    descriptionI: 'not care to',
-    descriptionG: 'not caring to',
+    // description: 'not care to',
     expression: '@~+yuumiite[V→V]',
-    key:"@~+yuumiite-",
-    priority: 1,
     allowable_next_ids: [0,1,7,8,23]
   },
   {
     id: 24,
-    description: 'yearns to',
-    descriptionI: 'yearn to',
-    descriptionG: 'yearning to',
+    // description: 'yearns to',
     expression: '@~+yuumir[V→V]',
-    key: "@~+yuumir-",
-    priority: 1,
     allowable_next_ids: [0,1,7,8,24]
   },
   {
     id: 25,
-    description: 'wants to',
-    descriptionI: 'want to',
-    descriptionG: 'wanting to',
+    // description: 'wants to',
     expression: '@~+yug[V→V]',
-    key:"@~+yug-,+(r)yug-",
-    priority: 1,
     allowable_next_ids: [0,1,7,8,25]
   },
   {
     id: 26,
-    description: 'enjoys doing',
-    descriptionI: 'enjoy',
-    descriptionG: 'enjoying',
+    // description: 'enjoys doing',
     expression: '@~+yugar[V→V]',
-    key:"@~+yugar-",
-    priority: 1,
     allowable_next_ids: [0,1,7,8,26]
   },
   {
     id: 27,
-    description: 'not',
-    description: 'not',
+    // description: 'not',
     expression: '–nrite[V→V]',
-    key:"-nrite-",
-    priority: 1,
     allowable_next_ids: [0,1,27]
   },
 
   {
     id: 28,
-    description: 'in the process of',
-    description: 'in the process of',
+    // description: 'in the process of',
     expression: '@~+yartur[V→V]',
-    key:"@~+yartur-",
-    priority: 1,
     allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,19,28]
   },
   {
     id: 29,
-    description: 'definitely no longer going to',
-    description: 'definitely no longer going to',
+    // description: 'definitely no longer going to',
     expression: '@~+yugnairute[V→V]',
-    key:"@~+yugnairute-",
-    priority: 1,
     allowable_next_ids: [0,1,3,4,8,10,29], // only refers to the postbases, not the endings
   }
 ];
+
+
+export const popularVPostbasesPAST = [
+  {
+    id: 5,
+    // description: 'past tense',
+    expression: '–llru¹[V→V]',
+    allowable_next_ids: [7,5,8,9]
+  },
+  {
+    id: 6,
+    // description: 'not yet',
+    expression: "–ksaite[V→V]",
+    allowable_next_ids: [0,1,7,6]
+  },
+];
+
+
+export const popularVPostbasesFUTURE = [
+  {
+    id: 7,
+    // description: 'future tense',
+    expression: '+ciqe|@ciiqe[V→V]',
+    allowable_next_ids: [0,1,5,10,7]
+  },
+  {
+    id: 8,
+    // description: 'will not',
+    expression: '@~+ngaite[V→V]',
+    allowable_next_ids: [0,1,7,10,8]
+  },
+  {
+    id: 9,
+    // description: 'will soon',
+    expression: '@~+niarar[V→V]',
+    allowable_next_ids: [0,1,5,6,7,10,9]
+  },
+  {
+    id: 10,
+    // description: 'about to',
+    expression:'–qatar[V→V]',
+    allowable_next_ids: [1,7,10]
+  },
+];
+
+
 
 export const colorsList = [
   { 

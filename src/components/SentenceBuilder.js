@@ -3,7 +3,7 @@ import { Container, Header, Button, Icon, Divider, Image, Grid, Dropdown, List, 
 import { Link } from 'react-router-dom';
 import { API_URL } from '../App.js';
 import axios from 'axios';
-import {nounOptionsMVPossessors, mvObjectOptionsEnglish, popularVPostbases,popularNPostbases, popularNouns, popularVerbs, npnEnglish, npnEnglishself, colorsList,  mvSubject4thPersonCalls, mvObject4thPersonCalls,nObject4thPersonCalls, mvSubjectOptionsWho, mvSubjectOptionsWhat, mvObjectOptionsWhom, mvObjectOptionsWhomAbl, mvObjectOptionsWhat, mvObjectOptionsWhatAbl,retrieveMoodEnglish, nounOptionsPossessorsNo4th, mvSubjectOptionsOnly2nd, nounOptionsNumbers, nounoptionsmodalis, mvSubjectOptions, mvObjectOptions, mvSubjectOptionsEnglish, verbPostbases, nounPostbases, VVpostbases, NNpostbases} from './constants/newconstants.js'
+import {nounOptionsMVPossessors, mvObjectOptionsEnglish, popularVPostbasesPAST, popularVPostbasesFUTURE, popularVPostbasesNOTIME, popularNPostbases, popularNouns, popularVerbs, npnEnglish, npnEnglishself, colorsList,  mvSubject4thPersonCalls, mvObject4thPersonCalls,nObject4thPersonCalls, mvSubjectOptionsWho, mvSubjectOptionsWhat, mvObjectOptionsWhom, mvObjectOptionsWhomAbl, mvObjectOptionsWhat, mvObjectOptionsWhatAbl,retrieveMoodEnglish, nounOptionsPossessorsNo4th, mvSubjectOptionsOnly2nd, nounOptionsNumbers, nounoptionsmodalis, mvSubjectOptions, mvObjectOptions, mvSubjectOptionsEnglish, verbPostbases, nounPostbases, VVpostbases, NNpostbases} from './constants/newconstants.js'
 import {newpostbases} from './constants/newpostbases.js'
 import {ending_underlying} from './constants/ending_underlying.js'
 import palette from 'google-palette';
@@ -21,6 +21,12 @@ import 'reactjs-popup/dist/index.css';
 
 let customFontFam = "Roboto,'Helvetica Neue',Arial,Helvetica,sans-serif"
 const YUGTUNDOTCOM_URL = "https://www.yugtun.com/";
+
+const popularVPostbases = popularVPostbasesPAST.concat(popularVPostbasesFUTURE, popularVPostbasesNOTIME)
+const popularVPostbasesOnlyPast = popularVPostbasesPAST.concat(popularVPostbasesNOTIME)
+const popularVPostbasesOnlyFuture = popularVPostbasesFUTURE.concat(popularVPostbasesNOTIME)
+const popularVPostbasesNoTime = popularVPostbasesNOTIME
+
 
 let tensesSentenceTemplates = [
 	'llru',
@@ -473,6 +479,7 @@ class SentenceBuilder extends Component {
 			switchedToEdit:false,
 			currentlyOpen:'',
 			crecentlyOpen:'',
+			containsTime:false,
 
 		}
 
@@ -1323,7 +1330,7 @@ class SentenceBuilder extends Component {
 	}
 
 	resetAfterSubmit = () => {
-		this.setState({activeIndexes:[],activeIndexes1:[],currentlyOpen:'',isOpen:false,mvvsPlanned:[],searchQuery:'',wordsList:[],candidateBase:[],candidateDisplay:[],candidateCall:[],nextTenses:[],nounNum:'s',unallowable_next_ids:[],addIs:true,lockSubmit:false});
+		this.setState({containsTime:false,activeIndexes:[],activeIndexes1:[],currentlyOpen:'',isOpen:false,mvvsPlanned:[],searchQuery:'',wordsList:[],candidateBase:[],candidateDisplay:[],candidateCall:[],nextTenses:[],nounNum:'s',unallowable_next_ids:[],addIs:true,lockSubmit:false});
 	}
 
 
@@ -1338,7 +1345,8 @@ class SentenceBuilder extends Component {
 	}
 
 
-	onChangeBaseSearch = (endingNeeded,event,data) => {
+	onChangeBaseSearch = (endingNeeded,forEnglish,itemUpdating,mood,submood,event,data) => {
+		console.log(endingNeeded,forEnglish,itemUpdating,mood,submood)
 		let word = data.value
 		let wordsList
 		let filteredDictV = {}
@@ -1371,13 +1379,17 @@ class SentenceBuilder extends Component {
 		}
 
 		console.log(optionsFuzzy)
-		if (this.state.cvvMood == 'CtmpI' || this.state.cvvMood == 'CtmpII' || this.state.mvvType == 'Intrg4' || this.state.mvvMood == 'Sbrd' || this.state.mvvMood.includes('Opt')) {
+		if (mood == 'CtmpI' || mood == 'CtmpII' || submood == 'Intrg4' || mood == 'Sbrd' || mood.includes('Opt')) {
 			noFuture = true
 		}
-		if (this.state.mvvMood == 'Sbrd' || this.state.mvvMood.includes('Opt') || this.state.mvvType == 'Intrg5') {
+		if (mood == 'Sbrd' || mood.includes('Opt') || submood == 'Intrg5') {
 			noPast = true
 		}
-		if (this.state.mvvType == 'Intrg1' || this.state.mvvType == 'Intrg3') {
+		// if (submood == 'Intrg4' || submood == 'Intrg5') {
+		// 	noFuture = true
+		// 	noPast = true
+		// }
+		if (submood == 'Intrg1' || submood == 'Intrg3') {
 			filteredDictV = this.state.filteredDictVit
 		} else {
 			filteredDictV = this.state.filteredDictV
@@ -1951,7 +1963,7 @@ class SentenceBuilder extends Component {
   	} else if (currentEditMode==='svinsert') {
   		return this.baseChooser(["Insert",["sv"]],'v','insert','Sbrd',setStateTo[0],forEnglish)
   	} else if (currentEditMode==='mvupdate') {
-  		return this.baseChooser(["Update",["mv","vBase"]],'v','update',this.state.mvvMood,null,['',this.state.mvvs])
+  		return this.baseChooser(["Update",["mv","vBase"]],'v','update',this.state.mvvMood,this.state.mvvType,['',this.state.mvvs])
   	} else if (currentEditMode==='svupdate') {
   		return this.baseChooser(["Update",["sv","vBase"]],'v','update')
   	} else if (currentEditMode==='nObliqueInsert') {
@@ -2228,7 +2240,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 							// nextTenses:[],
 							})
 			      }}
-     				onClose={()=>{this.setState({currentlyOpen:'',cvvMood:'',activeIndexes1:[],candidateCall:[],candidateBase:[],lockSubmit:false,nextTenses:[],candidateDisplay:[],searchQuery:'',wordsList:[]})}}
+     				onClose={()=>{this.setState({currentlyOpen:'',containsTime:false,cvvMood:'',activeIndexes1:[],candidateCall:[],candidateBase:[],lockSubmit:false,nextTenses:[],candidateDisplay:[],searchQuery:'',wordsList:[]})}}
   >
   	{this.contentItems(currentEditMode,currentEditMode,-1,true,forEnglish,setStateTo)}
   </Popup>
@@ -2278,6 +2290,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 			lockSubmit:false,
 			searchQuery:'',
 			wordsList:[],
+			containsTime:false,
 				// candidateCall:[],
 				// candidateBase:[],
 				// candidateDisplay:[],
@@ -2291,7 +2304,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		console.log(type, ind)
 		if (type == 'mvEnglish2' && this.state.mvvMood === 'Intrg' &&  (this.state.mvvType === 'Intrg4' || this.state.mvvType === 'Intrg5')) {
 			if (this.state.mvvType === 'Intrg4' && this.state.candidateDisplay.length === 0) {
-				let p = '2'
+				console.log(popularVPostbases)
+				let p = '0'
   			this.setState({
   				candidateBase:this.state.candidateBase.concat([[newpostbases[popularVPostbases[p]['expression']]['keylookup'],popularVPostbases[p]['expression']]]),
 	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledPostbaseText(popularVPostbases[p],'1',undefined,'mv','Intrg'),newpostbases[popularVPostbases[p]['expression']]['exp']]]),
@@ -2301,7 +2315,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 	    		this.updateCandidateCall('v','insert','Intrg','Intrg4','p')
 	    	})						
 			} else if (this.state.mvvType === 'Intrg5' && this.state.candidateDisplay.length === 0) {
-				let p = '4'
+				let p = '2'
   			this.setState({
   				candidateBase:this.state.candidateBase.concat([[newpostbases[popularVPostbases[p]['expression']]['keylookup'],popularVPostbases[p]['expression']]]),
 	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledPostbaseText(popularVPostbases[p],'1',undefined,'mv','Intrg'),newpostbases[popularVPostbases[p]['expression']]['exp']]]),
@@ -2878,14 +2892,19 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 	updateCandidateCall=(type,update,mood,submood,pos)=>{
 
-		console.log(type, update, mood, submood,this.state.candidateBase)
+		// console.log(type, update, mood, submood,this.state.candidateBase)
 
 		let lockSubmit = false
 		let candidateFST = []
 		let transitivity = ''
+		let containsTime = false
 
 		this.state.candidateBase.slice().reverse().map((x,xind)=>{
-			// console.log(x,xind,pos)
+			if (Array.isArray(x)) {
+				if (['-llru¹-','-ksaite-','+ciqe-|@ciiqe-','@~+ngaite-','@~+niarar-','-qatar-'].includes(x[0][0])) {
+					containsTime = true
+				}				
+			}
 			if (xind === 0) {
 				if (!Array.isArray(x)) {
 					lockSubmit = true
@@ -2896,7 +2915,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 					this.setState({endingAdjusted:''})
 					candidateFST.push([x['key'],0,x['usageIndex'],0])
 				} else {
-					console.log(x[1],!newpostbases[x[1]]['match_case'])
+					// console.log(x[1],!newpostbases[x[1]]['match_case'])
 					if (!('post_verb' in newpostbases[x[1]])) {
 						this.setState({addIs:false})
 					}
@@ -2919,6 +2938,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 			}		
 			
 		})
+
+		this.setState({containsTime:containsTime})
 
 		if (this.state.candidateBase.length === 0) {
 			this.setState({endingAdjusted:''})
@@ -3856,15 +3877,33 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		}
 	}
 
+	popularVPostbasesGetter = (mood,submood) => {
+		let noFuture = false
+		let noPast = false
+		if (mood == 'CtmpI' || mood == 'CtmpII' || submood == 'Intrg4' || mood == 'Sbrd' || mood.includes('Opt')) {
+			noFuture = true
+		}
+		if (mood == 'Sbrd' || mood.includes('Opt') || submood == 'Intrg5') {
+			noPast = true
+		}
+		if ((noFuture && noPast) || this.state.containsTime) {
+			return popularVPostbasesNoTime
+		} else if (noFuture) {
+			return popularVPostbasesOnlyPast
+		} else if (noPast) {
+			return popularVPostbasesOnlyFuture
+		} else {
+			return popularVPostbases
+		}
+	}
 
-	baseChooser = (itemUpdating,endingNeeded,update,mood,submood,forEnglish) => {
-		let key;
+	getPopular = (endingNeeded, mood, submood) => {
 		let popularPostbases = []
-		// this.setState({currentEnding:endingNeeded})
 		let popularBases = []
+
 		if (endingNeeded == 'n') {
 			if (this.state.endingAdjusted === 'v') {
-				popularPostbases = popularVPostbases
+				popularPostbases = this.popularVPostbasesGetter(mood,submood)
 				popularBases = popularVerbs
 			} else {
 				popularPostbases = popularNPostbases
@@ -3875,10 +3914,46 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 				popularPostbases = popularNPostbases
 				popularBases = popularNouns		
 			} else {
-				popularPostbases = popularVPostbases
+				popularPostbases = this.popularVPostbasesGetter(mood,submood)
 				popularBases = popularVerbs
 			}
 		}
+
+		return [popularPostbases, popularBases]
+	}
+
+	// getNextTenses = (p) => {
+	// 		if (this.state.nextTenses.length == 0) {
+	// 			return this.state.nextTenses.concat(['gen'])
+	// 		} else {
+	// 			let lastTense = this.state.nextTenses[this.state.nextTenses.length-1]
+	// 			if (p['match_case']) {
+	// 				return this.state.nextTenses.concat([lastTense])
+	// 			} else if (lastTense === 'g') {
+	// 				return this.state.nextTenses.concat(p['ger_preverb_after'])
+	// 			} else if (lastTense === 'i') {
+	// 				return this.state.nextTenses.concat(p['inf_preverb_after'])
+	// 			} else if (lastTense === 'gen') {
+	// 				return this.state.nextTenses.concat(p['gen_preverb_after'])
+	// 			} else if (lastTense === 'p') {
+	// 				return this.state.nextTenses.concat(p['past_preverb_after'])
+	// 			} else if (lastTense === 'past') {
+	// 				return this.state.nextTenses.concat(p['past_preverb_after'])
+	// 			} else if (lastTense === 'pp') {
+	// 				return this.state.nextTenses.concat(p['past_preverb_after'])
+	// 			} else if (lastTense === 'present') {
+	// 				return this.state.nextTenses.concat(p['gen_preverb_after'])
+	// 			}
+	// 		}
+	// }
+
+	baseChooser = (itemUpdating,endingNeeded,update,mood,submood,forEnglish) => {
+		let key;
+
+		let popular = this.getPopular(endingNeeded,mood,submood)
+
+		let popularPostbases = popular[0]
+		let popularBases = popular[1]
 
 		let mvvsPlanned = []
 		if (forEnglish !== undefined) {
@@ -3995,7 +4070,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 											      placeholder={this.returnPlaceholder(endingNeeded,forEnglish,itemUpdating[1][0],mood)}
 											      // width='100%'
 											      style={{width:'100%',padding:'5px 5px'}}
-											 		  onChange={this.onChangeBaseSearch.bind(this,endingNeeded)}
+											 		  onChange={this.onChangeBaseSearch.bind(this,endingNeeded,forEnglish,itemUpdating[1][0],mood,submood)}
 								            value={this.state.searchQuery}
 								            // onClose={()=>{this.setState({searchQuery:'',wordsList:[]})}}
 								            />
@@ -4102,7 +4177,17 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 														      				candidateBase:this.state.candidateBase.concat([[newpostbases[popularPostbases[p]['expression']]['keylookup'],popularPostbases[p]['expression']]]),
 																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledPostbaseText(popularPostbases[p],'1',forEnglish,itemUpdating[1][0],mood),newpostbases[popularPostbases[p]['expression']]['exp']]]),
 																	    		unallowable_next_ids: this.state.unallowable_next_ids.concat([[popularPostbases[p]['allowable_next_ids'],]]),
-																	    		nextTenses:(newpostbases[popularPostbases[p]['expression']]['match_case'] && !('gen_preverb_after' in newpostbases[popularPostbases[p]['expression']]) ? (this.state.nextTenses.length == 0 ? this.state.nextTenses.concat(['gen']):this.state.nextTenses.concat([this.state.nextTenses[this.state.nextTenses.length-1]])) : this.state.nextTenses.concat([newpostbases[popularPostbases[p]['expression']]['gen_preverb_after'],])),
+																	    		nextTenses:
+																	    		(newpostbases[popularPostbases[p]['expression']]['match_case'] && !('gen_preverb_after' in newpostbases[popularPostbases[p]['expression']]) 
+																	    			? 
+																	    			(this.state.nextTenses.length == 0 
+																	    				? 
+																	    				this.state.nextTenses.concat(['gen'])
+																	    				:
+																	    				this.state.nextTenses.concat([this.state.nextTenses[this.state.nextTenses.length-1]])) 
+																	    			: 
+																	    			this.state.nextTenses.concat([newpostbases[popularPostbases[p]['expression']]['gen_preverb_after'],])
+																	    			),
 														      			},()=>{
 																	    		this.updateCandidateCall(endingNeeded,update,mood,submood,'p')
 																	    	})
@@ -4514,7 +4599,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 	}
 
 	render() {
-		// console.log(this.state)
+		console.log(this.state)
 		// console.log("mvv",this.state.mvvMood)
 		// console.log("mvvtype",this.state.mvvType)
 		// console.log("cvv",this.state.cvvMood)
