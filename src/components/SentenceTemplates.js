@@ -232,7 +232,6 @@ class SentenceTemplates extends PureComponent {
                                   <Link to={{pathname: '/sentencebuilder/2'}}>
                                   <Button style={{marginTop:'-1px'}} fluid basic onClick={()=> {this.props.backEndCall(sentenceTemplates[k][2],true);this.setState({activeIndexes: []})}}>
                                     <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
-                                        {console.log(sentenceTemplates[k])}
                                       <span style={{flex:1,textAlign:'left',fontSize:'16px',fontFamily:customFontFam}}>
                                         {sentenceTemplates[k][6][0].map((t)=>
                                           <span style={{color:this.props.getColor(t[1],true,t[0],1)}}>{t[0]}</span>

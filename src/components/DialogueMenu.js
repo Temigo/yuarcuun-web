@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Header, Button, Icon, Divider, Form, Input, List, Grid } from 'semantic-ui-react';
+import { Container, Header, Button, Icon, Divider, Form, Input, List, Grid, Image } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { API_URL, TUTORIAL_URL, ICON_URL } from '../App.js';
 import { lessonsList, dialogueLibrary } from './constants/qaneryaurci.js';
@@ -46,9 +46,9 @@ class DialogueMenu extends Component {
         <Grid.Column style={{maxWidth:'800px'}}>
         <div style={{justifyContent:'space-between',display:'flex'}}>
           <div>
-          <Button primary icon circular onClick={this.props.history.goBack}>
-            <Icon name='chevron left' />
-          </Button>
+
+          <Icon onClick={()=>{this.props.history.goBack()}} circular style={{margin:0,color:'#B1B1B1',cursor:'pointer',fontSize:'22px'}} name='chevron left' />
+
           </div>
 
           <div>
@@ -178,6 +178,23 @@ class DialogueMenu extends Component {
             </List>
           </div>
         </div>
+
+          <div style={{display:'flex',justifyContent:'space-evenly',alignItems:'center',height:60,paddingBottom:16,paddingTop:25}}>
+            <Image style={{height:'30px',opacity:0.65}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+            <Image style={{height:'30px',opacity:0.65}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+            <Image style={{height:'30px',opacity:0.65}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+            <Image style={{height:'30px',opacity:0.65}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+          </div>
+
+        <div style={{display:'flex',flexDirection:'column',justifyContent:'center',marginTop:'10px'}}>
+        <span style={{fontSize:'14px',color:'grey',padding:'15px',fontWeight:'400',lineHeight:'23px'}}>
+        Website, audio library, and dialogue module production provided by <a style={{color:'#306190'}} href="https://yuarcuun.github.io" target="_blank" >Yuarcuun Technologies</a> in partnership with Orutsararmiut Native Council (ONC). Dialogues from textbook Qaneryaurci Yup'igtun. Recordings done by Maklak Barbara Liu and Cikigaq. This website was made possible by Grant Number 90XN0110-01-00 from Administration for Native Americans.
+        </span>
+        </div>
+
+
+
+
         </Grid.Column>
         </Grid>
       </div>

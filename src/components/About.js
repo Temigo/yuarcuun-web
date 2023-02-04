@@ -14,9 +14,9 @@ class About extends Component {
       <Container>
         <div style={{justifyContent:'space-between',display:'flex'}}>
           <div>
-          <Button primary icon circular onClick={this.props.history.goBack}>
-            <Icon name='chevron left' />
-          </Button>
+
+          <Icon onClick={()=>{this.props.history.goBack()}} circular style={{margin:0,color:'#B1B1B1',cursor:'pointer',fontSize:'22px'}} name='chevron left' />
+
           </div>
           <div>
           <Header as='h1'>About Us</Header>

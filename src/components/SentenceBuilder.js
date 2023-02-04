@@ -1553,7 +1553,7 @@ class SentenceBuilder extends Component {
 		} else if (type==='svnObliquesEnglish2' || type==='svnObliquesEnglish2appositive') {
   		return this.contentDisplay(this.state.svnObliquesEnglish2[ind[0]][this.state.svnObliquesEnglish2[ind[0]].length-1-ind[1]][this.state.svnObliquesEnglish2[ind[0]][this.state.svnObliquesEnglish2[ind[0]].length-1-ind[1]].length-1-ind[2]], 5)
 		} else if (type==='svEnglish1') {
-			return <span style={{border:'solid 1px #22242626',marginRight:'2px',marginLeft:'2px',cursor:'pointer',fontSize:'18px',padding:'8px 5px 8px 5px',borderRadius:'5px'}}> 
+			return <span style={{display:'inline-block',border:'1px solid #22242626',marginRight:'2px',marginLeft:'2px',cursor:'pointer',fontSize:'18px',padding:'8px 5px 8px 5px',borderRadius:'5px'}}> 
 			{this.state.svEnglish2.map((w,wind)=>
 				<span style={{color:this.getColor(w[1])}}>{this.state.svvText+w[0]+" "}</span>
 				)} 
@@ -1599,7 +1599,7 @@ class SentenceBuilder extends Component {
   	} else if (fontType == 5) {
   		// console.log(data)
   		// console.log('5')
-			return <span style={{border:'solid 1px #22242626',marginRight:'2px',marginLeft:'2px',cursor:'pointer',fontSize:'18px',padding:'8px 5px 8px 5px',borderRadius:'5px'}}> 
+			return <span style={{display:'inline-block',border:'solid 1px #22242626',marginRight:'2px',marginLeft:'2px',cursor:'pointer',fontSize:'18px',padding:'8px 5px 8px 5px',borderRadius:'5px'}}> 
 			{data.map((w,wind)=><span 
 				style={{color:this.getColor(w[1])}}
 				// {{color:this.getColor(w[1]),cursor:'pointer',paddingBottom:'1px',borderBottom:'1px solid '+this.getColor(w[1])}}
@@ -1615,7 +1615,7 @@ class SentenceBuilder extends Component {
   		return 	<span style={{color:this.getColor(data[1]),cursor:'pointer',paddingBottom:'1px',borderBottom:'1px solid '+this.getColor(data[1])}}>{data[0]+" "}<Icon style={{color:this.getColor(data[1]),fontSize:'16px',margin:0}} name='dropdown' /></span>
   	} else if (fontType == 8) {
   		// console.log('8')
-			return <span style={{border:'solid 1px #22242626',marginRight:'2px',marginLeft:'2px',cursor:'pointer',fontSize:'18px',padding:'8px 5px 8px 5px',borderRadius:'5px'}}> 
+			return <span style={{display:'inline-block',border:'solid 1px #22242626',marginRight:'2px',marginLeft:'2px',cursor:'pointer',fontSize:'18px',padding:'8px 5px 8px 5px',borderRadius:'5px'}}> 
 			{data[0].map((w,wind)=><span style={{color:this.getColor(w[1])}}>{w[0]+(w[0].length>0?" ":"")}</span>)} 
 			{data[1].map((w,wind)=><span style={{color:this.getColor(w[1])}}>{w[0]+(w[0].length>0 && wind !== data[1].length-1 ?" ":"")}</span>)} 
 			<Icon style={{color:this.getColor(data[1]),fontSize:'16px',margin:0}} name='dropdown' />
@@ -1941,7 +1941,7 @@ class SentenceBuilder extends Component {
   	} else if (currentEditMode==='mvinsert') {
   		return this.baseChooser(["Insert",["mv"]],'v','insert','Ind',null,forEnglish)
   	} else if (currentEditMode==='mvinsertqaa') {
-  		return this.baseChooser(["Insert",["mv"]],'v','insert','Ind',null)
+  		return this.baseChooser(["Insert",["mv"]],'v','insert','Ind','qaa',forEnglish)
   	} else if (currentEditMode==='cvinsert') {
   		return this.baseChooser(["Insert",["cv"]],'v','insert',setStateTo[0],setStateTo[1],forEnglish)
   	} else if (currentEditMode==='questionInsert') {
@@ -2099,7 +2099,7 @@ editSubjectMenu = (nounInsert,subject, tag, statevvs, update, backendcall, value
 	// console.log(value,options)
 	return <Popup
 			      trigger={									
-							<span style={{border:'solid 1px #22242626',marginRight:'2px',marginLeft:'2px',color:this.getColor(tag),fontSize:'18px',padding:'8px 2px 8px 5px',borderRadius:'5px',marginRight:'2px',marginLeft:'2px', cursor:'pointer'}}>{options.map((k)=>{return value == k['value'] ? k['text'] : null})}<Icon style={{color:this.getColor(tag),fontSize:'16px',margin:0}} name='dropdown' /></span>
+							<span style={{display:'inline-block',border:'solid 1px #22242626',marginRight:'2px',marginLeft:'2px',color:this.getColor(tag),fontSize:'18px',padding:'8px 2px 8px 5px',borderRadius:'5px',marginRight:'2px',marginLeft:'2px', cursor:'pointer'}}>{options.map((k)=>{return value == k['value'] ? k['text'] : null})}<Icon style={{color:this.getColor(tag),fontSize:'16px',margin:0}} name='dropdown' /></span>
 			      }
 			      on='click'
 			      position='bottom center'
@@ -2194,7 +2194,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 				    position="bottom center"
 				    ref={(element)=>{this.mainScreenMenuRef[name]=element;}}
 			      onOpen={()=>{
-			      	// console.log('open', name, currentEditMode)
+			      	console.log('open', name, currentEditMode, setState, setStateTo, forEnglish)
 			      	this.setState({
 							candidateCall:[],
 							candidateBase:[],
@@ -2207,13 +2207,15 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 								this.setState({npCase:setStateTo[0],npCaseType:setStateTo[1]})
 							} else if (setState === 'mvvType') {
 								this.setState({mvvType:setStateTo[0]})
+							} else if (setState === 'mvinsertqaa') {
+								this.setState({mvvMood:setStateTo[0] ,mvvType:setStateTo[1]})
 							} else if (setState === 'cvvType') {
 								this.setState({cvvMood:setStateTo[0] ,cvvType:setStateTo[1]})
 							} else if (setState === 'svvType') {
 								this.setState({svvType:setStateTo[0]})
 							} else if (setState === 'optCase') {
 								this.setState({optCase:setStateTo[0], mvvType:setStateTo[1]})
-							} 
+							}
 							this.setState({
 								currentlyOpen:name, 
 								crecentlyOpen: name, 
@@ -2715,25 +2717,26 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		    		</Accordion.Title>
 		    		<Accordion.Content active={true}>
 		    		<Button.Group vertical basic fluid>
-			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',mvvType:'Intrg0',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg0']])})}}>who is (subject)...?</Button>
+			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',mvvMood:'Ind',mvvType:'qaa',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Ind'],["Update",["mv","vType"],'qaa']])})}}>(yes or no question)?</Button>
+			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',mvvMood:'Intrg',mvvType:'Intrg0',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Intrg'],["Update",["mv","vType"],'Intrg0']])})}}>who is (subject)...?</Button>
 			        {this.state.mvvBase[1] != 'i' ?
-			        	<Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',mvvType:'Intrg1',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg1']])})}}>to whom (object)...?</Button>
+			        	<Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',mvvMood:'Intrg',mvvType:'Intrg1',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Intrg'],["Update",["mv","vType"],'Intrg1']])})}}>to whom (object)...?</Button>
 			        	:
 			        	null
 			        }
-			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',mvvType:'Intrg2',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg2']])})}}>what is (subject)...?</Button>
+			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',mvvMood:'Intrg',mvvType:'Intrg2',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Intrg'],["Update",["mv","vType"],'Intrg2']])})}}>what is (subject)...?</Button>
 			        {this.state.mvvBase[1] != 'i' ?
-			        	<Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',mvvType:'Intrg3',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg3']])})}}>to what (object)...?</Button>
+			        	<Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',mvvMood:'Intrg',mvvType:'Intrg3',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Intrg'],["Update",["mv","vType"],'Intrg3']])})}}>to what (object)...?</Button>
 			        	:
 			        	null
 			        }
-			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',mvvType:'Intrg4',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg4']])})}}>when did...?</Button>
-			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',mvvType:'Intrg5',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg5']])})}}>when will...?</Button>
-			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',mvvType:'Intrg6',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg6']])})}}>where is...?</Button>
-			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',mvvType:'Intrg7',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg7']])})}}>from where is...?</Button>
-			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',mvvType:'Intrg8',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg8']])})}}>to where is...?</Button>
-			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',mvvType:'Intrg9',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'Intrg9']])})}}>why is...?</Button>
-			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',mvvType:'IntrgA',isOpen: false},()=>{this.backEndCall([["Update",["mv","vType"],'IntrgA']])})}}>how is...?</Button>
+			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',mvvMood:'Intrg',mvvType:'Intrg4',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Intrg'],["Update",["mv","vType"],'Intrg4']])})}}>when did...?</Button>
+			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',mvvMood:'Intrg',mvvType:'Intrg5',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Intrg'],["Update",["mv","vType"],'Intrg5']])})}}>when will...?</Button>
+			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',mvvMood:'Intrg',mvvType:'Intrg6',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Intrg'],["Update",["mv","vType"],'Intrg6']])})}}>where is...?</Button>
+			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',mvvMood:'Intrg',mvvType:'Intrg7',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Intrg'],["Update",["mv","vType"],'Intrg7']])})}}>from where is...?</Button>
+			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',mvvMood:'Intrg',mvvType:'Intrg8',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Intrg'],["Update",["mv","vType"],'Intrg8']])})}}>to where is...?</Button>
+			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',mvvMood:'Intrg',mvvType:'Intrg9',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Intrg'],["Update",["mv","vType"],'Intrg9']])})}}>why is...?</Button>
+			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',mvvMood:'Intrg',mvvType:'IntrgA',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Intrg'],["Update",["mv","vType"],'IntrgA']])})}}>how is...?</Button>
 		    		</Button.Group>
 		    		</Accordion.Content>
 	    		</Accordion>				
@@ -2917,7 +2920,6 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 			
 		})
 
-		console.log(transitivity)
 		if (this.state.candidateBase.length === 0) {
 			this.setState({endingAdjusted:''})
 		}
@@ -3516,27 +3518,19 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 		if (itemUpdating[0]==='Insert') {
 			if (mood==='Ind') {
-				// if (this.state.mvvs.length > 0) {
-				// 	subject = mvSubjectOptionsEnglish[this.state.mvvs.join("")] + ' _____'
-				// } else {
 					if (forEnglish[1].length > 0) {
 						subject = mvSubjectOptionsEnglish[forEnglish[1].join("")] + ' _____'
 					} else {
 						subject = 'he _____'					
-					}
-				// }
-			// } else if (['mvns'].includes(itemUpdating[1].join(""))) {
-			// 	subject = 'the one _____ is'				
-			// } else if (['mvno'].includes(itemUpdating[1].join(""))) {
-			// 	subject = 'the one _____'				
+					}	
 			} else if (itemUpdating[1][0]==='cv') {
 				if (submood != '') {
 					if (submood in starters) {
-						subject = starters[submood].replace('[]',mvSubjectOptionsEnglish[this.state.mvvs.join("")]) // if reflexive
+						subject = starters[submood].replace('[]',mvSubjectOptionsEnglish[this.state.mvvs.join("")]).replace('[','').replace(']','') // if reflexive
 					}
 				} else {
 					if (mood in starters) {
-						subject = starters[mood].replace('[]',mvSubjectOptionsEnglish[this.state.mvvs.join("")]) // if reflexive
+						subject = starters[mood].replace('[]',mvSubjectOptionsEnglish[this.state.mvvs.join("")]).replace('[','').replace(']','') // if reflexive
 					}
 				}			
 			} else if (submood != '') {
@@ -3550,55 +3544,9 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 			}
 		}
 
-
-		// if (mood == 'Sbrd') {
-		// 	if (submood == '') {
-		// 		subject = starters['Sbrd']
-		// 	} else if (submood == 'neg') {
-		// 		subject = starters['Sbrdneg']
-		// 	} else if (submood == 'by') {
-		// 		subject = starters['by']
-		// 	} else if (submood == 'being') {
-		// 		subject = starters['being']
-		// 	}				
-		// } else if (mood == 'Intrg') {
-		// 	subject = starters[submood]
-
-		// } else if (mood == 'Loc' || mood == 'Ter' | mood == 'Via' || mood == 'Equ' || mood == 'Abs' || mood === 'Rel') {
-		// 	subject = starters[mood]
-		// 	if (itemUpdating[0] === 'Insert') {
-		// 		subject = subject + ' the one _____'					
-		// 	} else {
-
-		// 	}
-		// } else if (mood == 'Prec' || mood == 'Cnsq' || mood == 'Cont' || mood == 'CtmpI' || mood == 'CtmpII') {
-		// 	subject = starters[mood]
-		// 	if (itemUpdating[0] === 'Insert') {
-		// 		subject = subject + ' he _____'
-		// 	}
-		// } else if (submood == 'eventhough' || submood == 'evenif' || submood == 'io'|| submood == 'from' || submood == 'if' || submood == 'wheninthefuture') {
-		// 	subject = starters[submood]
-		// 	if (submood == 'io') {
-		// 		subject = subject + '_____'	
-		// 	} else if (submood == 'from') {
-		// 		subject = subject + ' the one _____'					
-		// 	} else if (itemUpdating[0] === 'Insert') {
-		// 		subject = subject + ' he _____'
-		// 	}
-		// } else {
-		// 	//optative
-		// 	if (mood in starters) {
-		// 		subject = starters[mood]
-		// 	}
-		// }
-
-		
-// 'Loc',npCaseType:''},()=>{this.menuSelect('nObliqueInsert',-1)})}}>in or at the...</Button>
-// 'Ter',npCaseType:''},()=>{this.menuSelect('nObliqueInsert',-1)})}}>toward the...</Button>
-// 'Abl_Mod',npCaseType:'from'},()=>{this.menuSelect('nObliqueInsert',-1)})}}>from the...</Button>
-// 'Abl_Mod',npCaseType:'io'},()=>{this.menuSelect('nObliqueInsert',-1)})}}>a or some...</Button>
-// 'Via',npCaseType:''},()=>{this.menuSelect('nObliqueInsert',-1)})}}>through, using...</Button>
-// 'Equ',npCaseType:''},()=>{this.menuSelect('nObliqueInsert',-1)})}}>like a...</Button>
+		if (submood === 'qaa') {
+			subject = subject + '?'
+		}
 		return subject
 	}
 
@@ -3937,6 +3885,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 			mvvsPlanned = forEnglish[1]
 		}
 
+
 		// console.log(itemUpdating,endingNeeded,update,mood,submood,forEnglish)
 
 		let subject = this.returnBaseChooserTitle(itemUpdating,endingNeeded,mood,submood,forEnglish)
@@ -4242,10 +4191,18 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 					                				this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Insert",["mv","qWord"],[submood,1]]]); 		                				
 					                			} else {
 				                					if (mvvsPlanned.length > 0) {
-				                						this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Update",["mv","vs"],mvvsPlanned]])                						                									                						
+							                			if (submood == 'qaa') {
+				                							this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Update",["mv","vs"],mvvsPlanned],["Update",["mv","vType"],'qaa']])                						                									                						
+							                			} else {
+				                							this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Update",["mv","vs"],mvvsPlanned]])                						                									                													                				
+							                			}
 				                					} else {
 					                					this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall]]); 				                						
 				                					}
+					                			}
+					                			console.log(submood)
+					                			if (submood == 'qaa') {
+					                				this.backEndCall([["Update",["mv","vType"],'qaa']])
 					                			}
 					                		}} disabled={!this.state.lockSubmit} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}>
 					                			<div style={{fontFamily:'Lato'}}>{'Submit'}</div>
@@ -4553,7 +4510,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 	}
 
 	getDropdownStyle=(color)=>{
-		return {border:'solid 1px #22242626',color:this.getColor(color),fontSize:'18px',padding:'5px',borderRadius:'5px',marginRight:'2px',marginLeft:'2px',}
+		return {lineHeight:'33px',marginTop:'2px',marginBottom:'2px',border:'solid 1px #22242626',color:this.getColor(color),fontSize:'18px',padding:'5px',borderRadius:'5px',marginRight:'2px',marginLeft:'2px',}
 	}
 
 	render() {
@@ -4754,19 +4711,17 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 								<div style={{textAlign:'center',fontSize:'18px',fontWeight:'300',marginTop:'20px'}}>
 
-								{this.state.mvEnglish1.length > 0 ?
-									<div style={{display:'flex',justifyContent:'center',alignItems:'center',height:45}}>
-									<span style={{lineHeight:39}}>
+								{this.state.mvEnglish1.length > 0 || (this.state.mvvType === 'Intrg1' || this.state.mvvType === 'Intrg3')?
+										<span style={{height:45,display:'inline-flex',alignItems:'center',marginBottom:'2px',marginTop:'2px'}}>
 										{this.editMenu('mvEnglish1',-1)}
-									</span>
-									</div>
+										</span>
 									:
 									null
 								}
 
 								{this.state.mvvs.length > 0 ?
 									(this.state.mvnsSegments.length > 0 ? 
-										<div style={{display:'flex',justifyContent:'center',alignItems:'center',height:45}}>
+										<div style={{display:'flex',justifyContent:'center',alignItems:'center',}}>
 											{this.state.mvnsSegments.slice().reverse().map((x,xind)=>
 												<span>
 												{xind === 0 ?
@@ -4830,11 +4785,11 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 								{this.state.mvEnglish2.length > 0 ?
 									(this.state.mvnsSegments.length === 0 || (this.state.mvvo.length > 0 && this.state.mvnoSegments.length === 0) ?
-										<span style={{height:45,display:'inline-flex',alignItems:'center'}}>
+										<span style={{height:45,display:'inline-flex',alignItems:'center',marginBottom:'2px',marginTop:'2px'}}>
 										{this.editMenu('mvEnglish2',-1)}
 										</span>
 										:
-										<div style={{display:'flex',justifyContent:'center',alignItems:'center',height:45}}>
+										<div style={{display:'flex',justifyContent:'center',alignItems:'center',}}>
 										{this.editMenu('mvEnglish2',-1)}
 										</div>
 										)
@@ -4844,7 +4799,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 								{this.state.mvvo.length > 0 ?
 									(this.state.mvnoSegments.length > 0 && this.state.mvnoSegments.length === this.state.mvno.length ? 
-										<div style={{display:'flex',justifyContent:'center',alignItems:'center',height:45,}}>
+										<div style={{display:'flex',justifyContent:'center',alignItems:'center',}}>
 											{this.state.mvnoSegments.slice().reverse().map((x,xind)=>
 												<span>
 												{xind === 0 ?
@@ -4990,6 +4945,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 							    			{'Ask a Question'}
 							    		</Accordion.Title>
 							    		<Accordion.Content active={this.state.activeIndexes.includes('questionInsert')}>
+							    		{this.mainScreenMenu('he is _____ (yes or no)?','mvinsertqaa','mvinsertqaa',['Ind','qaa'],['',[3,1,1]])}
 							    		{this.mainScreenMenu('who is he who is _____?','questionInsert','mvvType',['Intrg0',''],['',[3,1,1]])}
 							    		{this.mainScreenMenu('she is _____ whom (object)?','questionInsert','mvvType',['Intrg1',''],['',[3,1,2]])}
 							    		{this.mainScreenMenu('what is it that is _____ ?','questionInsert','mvvType',['Intrg2',''],['',[3,1,3]])}
@@ -5036,7 +4992,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 								{this.state.mvnObliquesSegments.length > 0 && this.state.mvnObliquesSegments.length === this.state.mvnObliques.length && this.state.mvnObliquesSegments.length === this.state.mvnObliquesEnglish2.length ? 
 									(this.state.mvnObliques.map((obliques,obliqueind)=>
-										<div style={{display:'flex',justifyContent:'center',alignItems:'center',height:45}}>
+										<div style={{display:'flex',justifyContent:'center',alignItems:'center',}}>
 											{obliques['n'].slice().reverse().map((x,xind)=>
 												<span>
 												{xind === 0 ?
@@ -5090,7 +5046,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 										<span>					
 											{/*{console.log(this.state.npn[this.state.npn.length-1][0], this.arraysEqual(this.state.npn[this.state.npn.length-1][0], [0,0,0,1]))}*/}
 
-											<div style={{display:'flex',justifyContent:'center',alignItems:'center',height:45}}>
+											<div style={{display:'flex',justifyContent:'center',alignItems:'center',}}>
 											{this.state.npnSegments.slice().reverse().map((x,xind)=>
 												<span>
 												{xind === 0 ? (
@@ -5303,7 +5259,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 								}
 
 								{this.state.cvEnglish2.length > 0 ? 
-									<span style={{lineHeight:'45px'}}>
+									<span style={{height:45,display:'inline-flex',alignItems:'center',marginBottom:'2px',marginTop:'2px'}}>
 										{this.editMenu('cvEnglish2',-1)}
 									</span>
 									:
@@ -5489,7 +5445,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 	
 							<div style={{textAlign:'center',fontSize:'18px',fontWeight:'300',marginTop:'20px'}}>
 								{this.state.svEnglish1.length > 0 ?
-									<span style={{lineHeight:'45px'}}>
+									<span style={{height:45,display:'inline-flex',alignItems:'center',marginBottom:'2px',marginTop:'2px'}}>
 									{this.editMenu('svEnglish1',-1)}
 									</span>
 									:
@@ -5551,7 +5507,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 											{this.state.svvBase[1] == 'it' ?
 												(this.editMenu('svEnglishAbl',-1))		
 												:
-												<Dropdown inline scrolling style={this.getDropdownStyle('svv.o')} onChange={(event,data)=>{this.backEndCall([["Update",["sv","vo"],data.value.split('').map(Number)]])}}  value={this.state.svvo.join("")} options={this.state.svObjectOptions1} />							
+												this.editSubjectMenu(["Insert",["sv","no"]],'an object','svv.o',this.state.svvo,"Update",["sv","vo"],this.state.svvo.join(""),this.state.svObjectOptions1)			
+
 											}
 										</span>
 									)
@@ -5698,19 +5655,38 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 
 					</div>
-				</Container>
 
+				</Container>
 
 			</div>
 
+          <div style={{display:'flex',justifyContent:'space-evenly',alignItems:'center',height:60,paddingBottom:16,paddingTop:25}}>
+            <Image style={{height:'30px',opacity:0.65}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+            <Image style={{height:'30px',opacity:0.65}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+            <Image style={{height:'30px',opacity:0.65}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+            <Image style={{height:'30px',opacity:0.65}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+          </div>
 
+				<div style={{display:'flex',flexDirection:'column',justifyContent:'center',marginTop:'10px'}}>
+				<span style={{fontSize:'14px',color:'grey',padding:'15px',fontWeight:'400',lineHeight:'23px'}}>
+				<span style={{textDecoration:'underline'}}>Disclaimer:</span> Please note that there may be mistakes with word results and translations. The automated computer rules that produce these words don't often reflect common language use, context, and cultural knowledge. 
+				</span>
+				<span style={{fontSize:'14px',color:'grey',padding:'15px',fontWeight:'400',lineHeight:'23px'}}>
+				Website and sentence builder production provided by <a style={{color:'#306190'}} href="https://yuarcuun.github.io" target="_blank" >Yuarcuun Technologies</a> in partnership with the Native Village of Kwinhagak (NVK). This website was made possible by Grant Number 90XN0110-01-00 from Administration for Native Americans.
+				</span>
+				</div>
 
 
 
 			</Grid.Column>  
 			</Grid.Row>
+
+				
 			</Grid>
+
 			</div>
+
+
 			</Container>
 		);
 	}
