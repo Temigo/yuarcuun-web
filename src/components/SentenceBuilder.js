@@ -3,7 +3,7 @@ import { Container, Header, Button, Icon, Divider, Image, Grid, Dropdown, List, 
 import { Link } from 'react-router-dom';
 import { API_URL } from '../App.js';
 import axios from 'axios';
-import {nounOptionsMVPossessors, mvObjectOptionsEnglish, popularVPostbasesPAST, popularVPostbasesFUTURE, popularVPostbasesNOTIME, popularNPostbases, popularNouns, popularVerbs, npnEnglish, npnEnglishself, colorsList,  mvSubject4thPersonCalls, mvObject4thPersonCalls,nObject4thPersonCalls, mvSubjectOptionsWho, mvSubjectOptionsWhat, mvObjectOptionsWhom, mvObjectOptionsWhomAbl, mvObjectOptionsWhat, mvObjectOptionsWhatAbl,retrieveMoodEnglish, nounOptionsPossessorsNo4th, mvSubjectOptionsOnly2nd, nounOptionsNumbers, nounoptionsmodalis, mvSubjectOptions, mvObjectOptions, mvSubjectOptionsEnglish, verbPostbases, nounPostbases, VVpostbases, NNpostbases} from './constants/newconstants.js'
+import {nounOptionsMVPossessors, mvObjectOptionsEnglish, popularVPostbasesPAST, popularVPostbasesFUTURE, popularVPostbasesNOTIME, popularNPostbases, popularNounsBeings, popularNounsThings, popularVerbsIT, popularVerbsI, popularVerbsT, npnEnglish, npnEnglishself, colorsList,  mvSubject4thPersonCalls, mvObject4thPersonCalls,nObject4thPersonCalls, mvSubjectOptionsWho, mvSubjectOptionsWhat, mvObjectOptionsWhom, mvObjectOptionsWhomAbl, mvObjectOptionsWhat, mvObjectOptionsWhatAbl,retrieveMoodEnglish, nounOptionsPossessorsNo4th, mvSubjectOptionsOnly2nd, nounOptionsNumbers, nounoptionsmodalis, mvSubjectOptions, mvObjectOptions, mvSubjectOptionsEnglish, verbPostbases, nounPostbases, VVpostbases, NNpostbases} from './constants/newconstants.js'
 import {newpostbases} from './constants/newpostbases.js'
 import {ending_underlying} from './constants/ending_underlying.js'
 import palette from 'google-palette';
@@ -27,6 +27,7 @@ const popularVPostbasesOnlyPast = popularVPostbasesPAST.concat(popularVPostbases
 const popularVPostbasesOnlyFuture = popularVPostbasesFUTURE.concat(popularVPostbasesNOTIME)
 const popularVPostbasesNoTime = popularVPostbasesNOTIME
 
+const popularNouns = popularNounsBeings.concat(popularNounsThings)
 
 let tensesSentenceTemplates = [
 	'llru',
@@ -94,6 +95,7 @@ let vEnglish = [
 	'mvEnglish1',
 	'mvEnglish2',
 	'mvEnglish3',
+	'mvEnglish3in2',
 	'mvEnglishAbl',
 	'mvEnglishQaa',
 	'mvnsEnglish1',
@@ -109,6 +111,7 @@ let vEnglish = [
 	'cvEnglish1',
 	'cvEnglish2',
 	'cvEnglish3',
+	'cvEnglish3in2',
 	'cvEnglishAbl',
 	'svEnglish1',
 	'svEnglish2',
@@ -284,6 +287,7 @@ class SentenceBuilder extends Component {
 			mvEnglish1: [],
 			mvEnglish2: [],
 			mvEnglish3: [],
+			mvEnglish3in2: [],
 			mvEnglishAbl: [],
 			mvEnglishQaa: [],
 			svEnglishAbl: [],
@@ -300,6 +304,7 @@ class SentenceBuilder extends Component {
 			cvEnglish1: [],
 			cvEnglish2: [],
 			cvEnglish3: [],
+			cvEnglish3in2: [],
 			cvEnglishAbl: [],
 			cvSubjectEnglish: [],
 			cvObjectEnglish: [],
@@ -680,7 +685,11 @@ class SentenceBuilder extends Component {
 
 	    if (this.state.mvvo.length > 0) {
 	    	if (this.state.mvvMood == 'Intrg') {
-    			subjDontAllow = subjDontAllow.concat([0,6,10])	    		
+	    		if (this.state.mvvType == 'Intrg1' || this.state.mvvType === 'Intrg3') {
+    				subjDontAllow = subjDontAllow.concat([6,10])	    		
+	    		} else {
+    				subjDontAllow = subjDontAllow.concat([0,6,10])	    		
+	    		}
 	    	}
 	      if (this.state.mvvs[0] == 1) {
     			objDontAllow = objDontAllow.concat([0,6,10])
@@ -887,6 +896,7 @@ class SentenceBuilder extends Component {
       	mvEnglish1: [],
       	mvEnglish2: [],
       	mvEnglish3: [],
+      	mvEnglish3in2: [],
       	mvEnglishAbl: [],
       	mvEnglishQaa: [],
       	mvqWord: [],
@@ -916,6 +926,7 @@ class SentenceBuilder extends Component {
       	cvEnglish1: [],
       	cvEnglish2: [],
       	cvEnglish3: [],
+      	cvEnglish3in2: [],
       	cvEnglishAbl: [],
       	cv:{},
       	requirePostbase:'',
@@ -1506,8 +1517,8 @@ class SentenceBuilder extends Component {
   		return this.contentDisplay(this.state.mvEnglish1, 5)
 		} else if (type==='mvEnglish2') {
 			return <span>
-								{this.state.mvEnglish3.length > 0 ?
-									this.contentDisplay([this.state.mvEnglish3,this.state.mvEnglish2], 8)
+								{this.state.mvEnglish3in2.length > 0 ?
+									this.contentDisplay([this.state.mvEnglish3in2,this.state.mvEnglish2], 8)
 									:
 									this.contentDisplay(this.state.mvEnglish2, 5)
 								}
@@ -1524,8 +1535,8 @@ class SentenceBuilder extends Component {
   		return this.contentDisplay(this.state.cvEnglishAbl, 5)
 		} else if (type==='cvEnglish2') {
   		return <span>
-								{this.state.cvEnglish3.length > 0 ?
-									this.contentDisplay([this.state.cvEnglish3,this.state.cvEnglish2], 8)
+								{this.state.cvEnglish3in2.length > 0 ?
+									this.contentDisplay([this.state.cvEnglish3in2,this.state.cvEnglish2], 8)
 									:
 									this.contentDisplay(this.state.cvEnglish2, 5)
 								}
@@ -1730,13 +1741,14 @@ class SentenceBuilder extends Component {
   		else if (type == 'mvEnglish2') {
 				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
 			      {this.menuItem('BaseChooser','Change Verb',[typeInd,'mvupdate'],null)}
+			      {this.menuItem('Delete','Delete Verb',null,null,[["Delete",["mv",],-1]])}
 			      {/*{this.menuItem('BaseChooser','Change Verb','mvupdate',null)}*/}
 			      {this.state.requirePostbase.length > 0 ?
 			      	this.subMenuItem('changeRequiredPostbase')
 			      	:
 			      	null
 			      }
-{/*			      {this.state.mvvMood == 'Ind'  ?
+			      {this.state.mvvMood == 'Ind'  ?
 			      	(this.state.mvvType !== 'qaa' ?
 			      		this.menuItem('Update','Make Yes or No Question',null,null,[["Update",["mv","vType"],'qaa']])
 			      		:
@@ -1744,13 +1756,12 @@ class SentenceBuilder extends Component {
 			      		) 
 			      	:
 			      	null
-			      }*/}
+			      }
 			      {this.state.optCase.length > 0 ?
 			      	this.subMenuItem('switchOptative')
 			      	:
 			      	null
 			      }
-			      {this.menuItem('Delete','Delete Verb',null,null,[["Delete",["mv",],-1]])}
 
 			    	</Menu>
  			} else if (type == 'mvEnglish1') {
@@ -2848,7 +2859,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		          name='messages'
 		          // active={this.state.activeItem === 'messages'}
 		          style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}
-							onClick={()=>{this.setState({ isOpen: false },()=>{this.backEndCall(backEnd)})}}
+							onClick={()=>{this.closeEditMenuRef(this.state.crecentlyOpen,'default',false); this.setState({ isOpen: false },()=>{this.backEndCall(backEnd)})}}
 		        >
 		          <div>{text}</div>
 		        </Menu.Item>			
@@ -3444,50 +3455,6 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		if (forEnglish === undefined) {
 			forEnglish = ['',[]]
 		}
-		// console.log(itemUpdating,endingNeeded,mood,submood)
-		// console.log(this.state.mvvsPlanned)
-
-		// if (['mv','mvvBase'].includes(itemUpdating[1].join(""))) {
-		// 	if (this.state.mvvs.length > 0) {
-		// 		subject = mvSubjectOptionsEnglish[this.state.mvvs.join("")] + ' _____'
-		// 	} else {
-		// 		if (this.state.mvvsPlanned.length > 0) {
-		// 			subject = mvSubjectOptionsEnglish[this.state.mvvsPlanned.join("")] + ' _____'
-		// 		} else {
-		// 			subject = 'he _____'					
-		// 		}
-		// 	}
-		// } else if (['mvns'].includes(itemUpdating[1].join(""))) {
-		// 	subject = 'the one _____ is'				
-		// } else if (['mvno'].includes(itemUpdating[1].join(""))) {
-		// 	subject = 'the one _____'				
-		// }
-		// } else if (itemUpdating[1][0]==='np') {
-		// 	if (itemUpdating[1].length == 1) { //(['np'].includes(itemUpdating[1].join(""))) 
-		// 		subject = 'the one'
-		// 	} else if (itemUpdating[1].length == 3) { // add possessor or possessive ([npn-1','npn0'].includes(itemUpdating[1].join("")))
-		// 		if (itemUpdating[1].join("") == 'npn-1') {
-		// 			subject = "the one _____'s N"
-		// 		} else {
-		// 			subject = "N's one _____"
-		// 		}
-		// 	} else if (itemUpdating[1].length == 4) { 
-		// 		if (itemUpdating[1][1] === 'nBases') { // update
-		// 			if (itemUpdating[1][2] === this.state.npn.length-1) {
-		// 				subject = npnEnglish[this.state.npn[itemUpdating[1][2]][0].slice(0, -1).join("")] + ' ' + npnEnglish[this.state.npn[itemUpdating[1][2]][0][3]]
-		// 			} else {
-		// 				subject = npnEnglish[this.state.npn[itemUpdating[1][2]][0][3]]
-		// 			}
-		// 		} else if (itemUpdating[1][1] === 'n') { // add descriptor
-		// 			console.log(npnEnglish, this.state.npn, itemUpdating)
-		// 			if (itemUpdating[1][2] === this.state.npn.length-1) {
-		// 				subject = npnEnglish[this.state.npn[itemUpdating[1][2]][0].slice(0, -1).join("")] + ' ' + npnEnglish[this.state.npn[itemUpdating[1][2]][0][3]] + ' _____ N'
-		// 			} else {
-		// 				subject = npnEnglish[this.state.npn[itemUpdating[1][2]][0][3]] + ' _____ N'
-		// 			}
-		// 		}
-		// 	}
-		// }
 
 		let starters = {
 			'Abs':'[the one] _____',
@@ -3513,13 +3480,13 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 			'Intrg1':'[she] _____ whom (object)?',
 			'Intrg2':'what is [it] that _____?',
 			'Intrg3':'[he] _____ what (object)?',
-			'Intrg4':'when did [she] _____?',
-			'Intrg5':'when will [he] _____?',
-			'Intrg6':'where is [it] _____?',
-			'Intrg7':'from where is [he] _____?',
-			'Intrg8':'to where is [she] _____?',
-			'Intrg9':'why is [it] _____?',
-			'IntrgA':'how is [he] _____?',
+			'Intrg4':'when did [you] _____?',
+			'Intrg5':'when will [you] _____?',
+			'Intrg6':'where are [you] _____?',
+			'Intrg7':'from where are [you] _____?',
+			'Intrg8':'to where are [you] _____?',
+			'Intrg9':'why are [you] _____?',
+			'IntrgA':'how are [you] _____?',
 
 			'Opt][PRS':'[you], _____ (command)',
 			'Opt][FUT':'[you], _____ (command in the future)',
@@ -3541,6 +3508,9 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 			if (mood==='Ind') {
 					if (forEnglish[1].length > 0) {
 						subject = mvSubjectOptionsEnglish[forEnglish[1].join("")] + ' _____'
+						if (submood === 'qaa') {
+							subject = subject + '?'
+						}
 					} else {
 						subject = 'he _____'					
 					}	
@@ -3565,9 +3535,9 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 			}
 		}
 
-		if (submood === 'qaa') {
-			subject = subject + '?'
-		}
+		// if (submood === 'qaa') {
+		// 	subject = subject + '?'
+		// }
 		return subject
 	}
 
@@ -3649,7 +3619,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		} else if (
 			verbtype === 'mv' &&
 			(this.state.mvvType === "Intrg4" ||
-			this.state.mvvType === "Intrg5")
+			this.state.mvvType === "Intrg5" )
 			) 
 		{
 			// return 'hunt, be happy, etc.'
@@ -3660,11 +3630,19 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 			this.state.mvvType === "Intrg7" ||
 			this.state.mvvType === "Intrg8" ||
 			this.state.mvvType === "Intrg9" ||
-			this.state.mvvType === "IntrgA")
+			this.state.mvvType === "IntrgA")	
 			) 
 		{
 			// return 'hunting, being happy, etc.'
 			return ['g','']
+		} else if (
+			verbtype === 'mv' &&
+			this.state.mvvType === "qaa" &&
+			this.state.mvvs.length !== 0
+			) 
+		{
+			// return 'hunting, being happy, etc.'
+			return ['g','']								
 		} else if (
 			verbtype === 'sv' &&
 			(this.state.svvType === "by" ||
@@ -3844,6 +3822,14 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 						{
 							return 'hunting, being happy, etc.'
 						} else if (
+							verbtype === 'mv' &&
+							this.state.mvvType === "qaa" &&
+							this.state.mvvs.length !== 0
+							) 
+						{
+							// return 'hunting, being happy, etc.'
+							return 'hunting, being happy, etc.'
+						} else if (
 							verbtype === 'sv' &&
 							(this.state.svvType === "by" ||
 							this.state.svvType === "being")
@@ -3897,6 +3883,15 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		}
 	}
 
+	popularVerbsGetter = (mood,submood) => {
+		if (submood == 'Intrg1' || submood == 'Intrg3') {
+			return popularVerbsT
+		} else {
+			return popularVerbsIT
+		}
+	}
+
+
 	getPopular = (endingNeeded, mood, submood) => {
 		let popularPostbases = []
 		let popularBases = []
@@ -3904,7 +3899,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		if (endingNeeded == 'n') {
 			if (this.state.endingAdjusted === 'v') {
 				popularPostbases = this.popularVPostbasesGetter(mood,submood)
-				popularBases = popularVerbs
+				popularBases = this.popularVerbsGetter(mood,submood)
 			} else {
 				popularPostbases = popularNPostbases
 				popularBases = popularNouns				
@@ -3915,7 +3910,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 				popularBases = popularNouns		
 			} else {
 				popularPostbases = this.popularVPostbasesGetter(mood,submood)
-				popularBases = popularVerbs
+				popularBases = this.popularVerbsGetter(mood,submood)
 			}
 		}
 
@@ -4087,39 +4082,39 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 												    		<Button.Group vertical basic fluid>
 													      	{this.state.wordsList.map((k,index)=>{
 													      		if (k['type'].includes('→')) {
-														      		return <Button style={{textAlign:'left',padding:'10px'}} onClick={()=>{
-														      			console.log(this.state.nextTenses, k, newpostbases[k['fsts']])
-														      			this.setState({
-																	    		searchQuery:'',
-																	    		wordsList:[],
-														      				candidateBase:this.state.candidateBase.concat([[newpostbases[k['fsts']]['keylookup'],k['fsts']]]),
-																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledPostbaseText(k['fsts'],'2',forEnglish,itemUpdating[1][0],mood),k['fsts']]]),
-																	    		nextTenses:(
-																	    			newpostbases[k['fsts']]['match_case'] && !('gen_preverb_after' in newpostbases[k['fsts']]) ? 
-																		    			(this.state.nextTenses.length == 0 ? 
-																		    				this.state.nextTenses.concat(['gen'])
-																		    				:
-																		    				this.state.nextTenses.concat([this.state.nextTenses[this.state.nextTenses.length-1]])
-																		    			) 
-																	    			: 
-																		    			('verbType' in newpostbases[k['fsts']] ?
-																			    			this.state.nextTenses.concat([newpostbases[k['fsts']]['verbType'],])
-																			    			:
-																			    			this.state.nextTenses.concat([newpostbases[k['fsts']]['gen_preverb_after'],])
-																		    			)
-																	    			),
-														      			},()=>{
-																	    		this.updateCandidateCall(endingNeeded,update,mood,submood,'p')
-																	    	})
-														      		}}>
-															      		<div>
-																      		<div style={{marginBottom:'5px',color:'#545454'}}>
-																      		<span>{this.processStyledPostbaseText(k['fsts'],'2',forEnglish,itemUpdating[1][0],mood)}</span>
-																      		<span style={{color:'#bdbdbd'}}>{'...'}</span></div>
-																      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{k['fsts']}</div>
-															      		</div>
-														      		</Button>
-
+													      			if (k['fsts'] in newpostbases) {
+															      		return <Button style={{textAlign:'left',padding:'10px'}} onClick={()=>{
+															      			this.setState({
+																		    		searchQuery:'',
+																		    		wordsList:[],
+															      				candidateBase:this.state.candidateBase.concat([[newpostbases[k['fsts']]['keylookup'],k['fsts']]]),
+																		    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledPostbaseText(k['fsts'],'2',forEnglish,itemUpdating[1][0],mood),k['fsts']]]),
+																		    		nextTenses:(
+																		    			newpostbases[k['fsts']]['match_case'] && !('gen_preverb_after' in newpostbases[k['fsts']]) ? 
+																			    			(this.state.nextTenses.length == 0 ? 
+																			    				this.state.nextTenses.concat(['gen'])
+																			    				:
+																			    				this.state.nextTenses.concat([this.state.nextTenses[this.state.nextTenses.length-1]])
+																			    			) 
+																		    			: 
+																			    			('verbType' in newpostbases[k['fsts']] ?
+																				    			this.state.nextTenses.concat([newpostbases[k['fsts']]['verbType'],])
+																				    			:
+																				    			this.state.nextTenses.concat([newpostbases[k['fsts']]['gen_preverb_after'],])
+																			    			)
+																		    			),
+															      			},()=>{
+																		    		this.updateCandidateCall(endingNeeded,update,mood,submood,'p')
+																		    	})
+															      		}}>
+																      		<div>
+																	      		<div style={{marginBottom:'5px',color:'#545454'}}>
+																	      		<span>{this.processStyledPostbaseText(k['fsts'],'2',forEnglish,itemUpdating[1][0],mood)}</span>
+																	      		<span style={{color:'#bdbdbd'}}>{'...'}</span></div>
+																	      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{k['fsts']}</div>
+																      		</div>
+															      		</Button>
+													      			}
 													      		} else {
 														      		return <Button style={{textAlign:'left',padding:'10px'}} onClick={()=>{
 																	    	this.setState({
@@ -4282,13 +4277,17 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 				                							this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Update",["mv","vs"],mvvsPlanned]])                						                									                													                				
 							                			}
 				                					} else {
-					                					this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall]]); 				                						
+							                			if (submood == 'qaa') {
+				                							this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Update",["mv","vType"],'qaa']])                						                									                						
+							                			} else {
+					                						this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall]]); 				                						
+							                			}
 				                					}
 					                			}
-					                			console.log(submood)
-					                			if (submood == 'qaa') {
-					                				this.backEndCall([["Update",["mv","vType"],'qaa']])
-					                			}
+					                			// console.log(submood)
+					                			// if (submood == 'qaa') {
+					                			// 	this.backEndCall([["Update",["mv","vType"],'qaa']])
+					                			// }
 					                		}} disabled={!this.state.lockSubmit} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}>
 					                			<div style={{fontFamily:'Lato'}}>{'Submit'}</div>
 					                			<Icon name='chevron right' />
@@ -4962,6 +4961,15 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 								}
 
 
+								{this.state.mvEnglish3.length > 0 ? 
+										<span style={{marginLeft:2,lineHeight:'35px'}}>
+											{this.state.mvEnglish3.map((t)=>
+												<span style={{color:this.getColor(t[1])}}>{t[0]}</span>
+											)}
+										</span>
+									:
+									null
+								}
 
 
 
@@ -5035,13 +5043,13 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 							    		{this.mainScreenMenu('she is _____ whom (object)?','questionInsert','mvvType',['Intrg1',''],['',[3,1,2]])}
 							    		{this.mainScreenMenu('what is it that is _____ ?','questionInsert','mvvType',['Intrg2',''],['',[3,1,3]])}
 							    		{this.mainScreenMenu('he is _____ what (object)?','questionInsert','mvvType',['Intrg3',''],['',[3,1,1]])}
-							    		{this.mainScreenMenu('when did she _____?','questionInsert','mvvType',['Intrg4',''],['i',[3,1,2]])}
-							    		{this.mainScreenMenu('when will he _____?','questionInsert','mvvType',['Intrg5',''],['i',[3,1,1]])}
-							    		{this.mainScreenMenu('where is it _____?','questionInsert','mvvType',['Intrg6',''],['g',[3,1,3]])}
-							    		{this.mainScreenMenu('from where is he _____?','questionInsert','mvvType',['Intrg7',''],['g',[3,1,1]])}
-							    		{this.mainScreenMenu('to where is she _____?','questionInsert','mvvType',['Intrg8',''],['g',[3,1,2]])}
-							    		{this.mainScreenMenu('why is it _____?','questionInsert','mvvType',['Intrg9',''],['g',[3,1,3]])}
-							    		{this.mainScreenMenu('how is he _____?','questionInsert','mvvType',['IntrgA',''],['g',[3,1,1]])}
+							    		{this.mainScreenMenu('when did you _____?','questionInsert','mvvType',['Intrg4',''],['i',[2,1,0]])}
+							    		{this.mainScreenMenu('when will you _____?','questionInsert','mvvType',['Intrg5',''],['i',[2,1,0]])}
+							    		{this.mainScreenMenu('where are you _____?','questionInsert','mvvType',['Intrg6',''],['g',[2,1,0]])}
+							    		{this.mainScreenMenu('from where are you _____?','questionInsert','mvvType',['Intrg7',''],['g',[2,1,0]])}
+							    		{this.mainScreenMenu('to where are you _____?','questionInsert','mvvType',['Intrg8',''],['g',[2,1,0]])}
+							    		{this.mainScreenMenu('why are you _____?','questionInsert','mvvType',['Intrg9',''],['g',[2,1,0]])}
+							    		{this.mainScreenMenu('how are you _____?','questionInsert','mvvType',['IntrgA',''],['g',[2,1,0]])}
 							    		</Accordion.Content>
 							    	</Accordion>		
 

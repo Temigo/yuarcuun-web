@@ -1098,7 +1098,9 @@ class SimpleWordBuilderUpdated extends Component {
         }
 
         {this.state.mvEnglish3.map((w,wind)=>{
-          return <span style={{color:colorsList[this.state.colorScheme][w[1]]}}>{w[0]+" "}</span>
+          return <span style={{marginLeft:(this.state.mvvo.length > 0 ? (this.state.mvvBase[1] == 'it' ? '4px' : '0px') :'0px')}}>
+                  <span style={{color:colorsList[this.state.colorScheme][w[1]]}}>{w[0]+" "}</span>
+                </span>
         })}
         </div>
 
