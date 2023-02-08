@@ -215,7 +215,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "+(s)ciigali-,+(s)ciigalli-",
-            0
+            1
         ]
     },
     "+(s)ciigate[V\u2192V]": {
@@ -439,7 +439,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "-curlak,-curlag-",
-            1
+            0
         ]
     },
     "@~+(ng)iinar[V\u2192V]": {
@@ -670,7 +670,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "-ksaitelar-,-ksaitlar-",
-            0
+            1
         ]
     },
     "\u2013ksuar(ar)[V\u2192V]": {
@@ -682,7 +682,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "-ksuar(ar)-,-ksuar(ar)-",
-            0
+            1
         ]
     },
     "\u2013kugte[V\u2192V]": {
@@ -865,7 +865,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "~+lallru-,@~+lallru-,-lallru-",
-            0
+            1
         ]
     },
     "\u2013lallru[V\u2192V]": {
@@ -889,7 +889,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "~+lallru-,@~+lallru-,-lallru-",
-            0
+            2
         ]
     },
     "~+lar[V\u2192V]": {
@@ -927,7 +927,7 @@ export const newpostbases = {
         "gen_preverb_after": "g",
         "keylookup": [
             "~+lar-,@~+lar-,-lar-",
-            0
+            1
         ]
     },
     "\u2013lar[V\u2192V]": {
@@ -946,7 +946,7 @@ export const newpostbases = {
         "gen_preverb_after": "g",
         "keylookup": [
             "~+lar-,@~+lar-,-lar-",
-            0
+            2
         ]
     },
     "~+laryaaqe[V\u2192V]": {
@@ -984,7 +984,7 @@ export const newpostbases = {
         "gen_preverb_after": "g",
         "keylookup": [
             "~+laryaaqe-,@~+laryaaqe-,-laryaaqe-",
-            0
+            1
         ]
     },
     "\u2013laryaaqe[V\u2192V]": {
@@ -1003,7 +1003,7 @@ export const newpostbases = {
         "gen_preverb_after": "g",
         "keylookup": [
             "~+laryaaqe-,@~+laryaaqe-,-laryaaqe-",
-            0
+            2
         ]
     },
     "\u2013ler[V\u2192V]": {
@@ -1027,7 +1027,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "-ler-,~+ler-",
-            0
+            1
         ]
     },
     "\u2013leryag[V\u2192V]": {
@@ -1051,7 +1051,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "-leryag-,~+leryag-",
-            0
+            1
         ]
     },
     "\u2013lgu[V\u2192V]": {
@@ -1211,7 +1211,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "-liyar-,-liar-",
-            2
+            3
         ]
     },
     "\u2013lkia[V\u2192V]": {
@@ -1540,7 +1540,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "-mcugte-,-mssugte-,-myugte-",
-            0
+            1
         ]
     },
     "\u2013mssugte[V\u2192V]": {
@@ -1552,7 +1552,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "-mssugte-",
-            0
+            1
         ]
     },
     "@~+mi[V\u2192V]": {
@@ -1786,7 +1786,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "-nerraq*,-nerrar(aq*),-nerar(aq*),-nerrar-,-nerrar(ar)-,-nerar(ar)-",
-            3
+            4
         ]
     },
     "\u2013nerar(ar)[V\u2192V]": {
@@ -1810,7 +1810,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "-nerraq*,-nerrar(aq*),-nerar(aq*),-nerrar-,-nerrar(ar)-,-nerar(ar)-",
-            3
+            5
         ]
     },
     "@\u2013nerrlugte[V\u2192V]": {
@@ -2167,7 +2167,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "@-ngqa-",
-            0
+            2
         ]
     },
     "\u2013ngssaar(ar)[V\u2192V]": {
@@ -2191,7 +2191,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "-ngssak,-ngssag-",
-            1
+            0
         ]
     },
     "\u2013ngssi[V\u2192V]": {
@@ -2286,7 +2286,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "-nqegcaar(aq*),-nqegcaar(ar)-",
-            1
+            0
         ]
     },
     "\u2013nqigte[V\u2192V]": {
@@ -2436,7 +2436,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "@+paalug-|~vaalug-,@+pailug-|~vailug-",
-            0
+            1
         ]
     },
     "\u2013pacug[V\u2192V]": {
@@ -2484,7 +2484,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "@+pakar-|~vakar-,-qpakar-",
-            0
+            1
         ]
     },
     "@+pallag|~vallag[V\u2192V]": {
@@ -2520,7 +2520,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "@+pallug-|~vallug-,@+pallur-|~vallur-",
-            0
+            1
         ]
     },
     "+peke|.vke[V\u2192V]": {
@@ -2564,7 +2564,7 @@ export const newpostbases = {
         "gen_preverb_after": "g",
         "keylookup": [
             "+peke-|+vke-,+pege-|+vke-",
-            0
+            1
         ]
     },
     "+pigainar[V\u2192V]": {
@@ -2602,7 +2602,7 @@ export const newpostbases = {
         "gen_preverb_after": "g",
         "keylookup": [
             "+pigainar-,-pigainar-",
-            0
+            1
         ]
     },
     "\u2013pig[V\u2192V]": {
@@ -2640,7 +2640,7 @@ export const newpostbases = {
         "gen_preverb_after": "g",
         "keylookup": [
             "-pik\u00b9,-piaq,-pigaq,-pig-,-piar-,-pigar-",
-            3
+            4
         ]
     },
     "\u2013pigar[V\u2192V]": {
@@ -2652,7 +2652,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "-pik\u00b9,-piaq,-pigaq,-pig-,-piar-,-pigar-",
-            3
+            5
         ]
     },
     "\u2013qaci[V\u2192V]": {
@@ -2778,7 +2778,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "-qaqur(ar)-,-qaqu-",
-            0
+            1
         ]
     },
     "\u2013qar[V\u2192V]": {
@@ -2884,7 +2884,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "-qetaaq,-qetaar-",
-            1
+            0
         ]
     },
     "@\u2013qtaar[V\u2192V]": {
@@ -3066,7 +3066,7 @@ export const newpostbases = {
         "gen_preverb_after": "g",
         "keylookup": [
             "-rrluk,-rrlug-,-rrlugte-",
-            1
+            3
         ]
     },
     "\u2013rrlugte[V\u2192V]": {
@@ -3085,7 +3085,7 @@ export const newpostbases = {
         "gen_preverb_after": "g",
         "keylookup": [
             "-rrluk,-rrlug-,-rrlugte-",
-            1
+            4
         ]
     },
     "\u2013q(ur)lur[V\u2192V]": {
@@ -3261,7 +3261,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "+tar\u00b9-",
-            0
+            1
         ]
     },
     "+ter[V\u2192V]": {
@@ -3297,7 +3297,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "-tngurte-,-tmurte\u00b2-",
-            0
+            1
         ]
     },
     "\u2013tu[V\u2192V]": {
@@ -3454,7 +3454,7 @@ export const newpostbases = {
         "gen_preverb_after": "g",
         "keylookup": [
             "@+'(g|t)uralar-,@+'(g|t)ur(ar)lar-,@+'(g|t)uratu-",
-            0
+            1
         ]
     },
     "@+`(g|t)uratu[V\u2192V]": {
@@ -3473,7 +3473,7 @@ export const newpostbases = {
         "gen_preverb_after": "g",
         "keylookup": [
             "@+'(g|t)uralar-,@+'(g|t)ur(ar)lar-,@+'(g|t)uratu-",
-            0
+            2
         ]
     },
     "\u2013vguar(ar)[V\u2192V]": {
@@ -3568,7 +3568,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "-vsiar-,-vyiar-",
-            0
+            1
         ]
     },
     "\u2013vyirte[V\u2192V]": {
@@ -3630,7 +3630,7 @@ export const newpostbases = {
         "gen_preverb_after": "g",
         "keylookup": [
             "-ya(g)aq*,-yagaq*,-ya(g)ar-,-yagar-",
-            2
+            3
         ]
     },
     "@~+yalqar[V\u2192V]": {
@@ -3723,7 +3723,7 @@ export const newpostbases = {
         "gen_preverb_after": "g",
         "keylookup": [
             "@~+yarpiar-,~+yarpigar-",
-            0
+            1
         ]
     },
     "@~+yartur[V\u2192V]": {
@@ -3861,7 +3861,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "@~+yug-,+(r)yug-",
-            1
+            2
         ]
     },
     "@~+yugar[V\u2192V]": {
@@ -4292,7 +4292,7 @@ export const newpostbases = {
         "pluralDefinition": "that are",
         "match_case": false,
         "keylookup": [
-            "-lria",
+            "@nguq*",
             0
         ]
     },
@@ -4487,7 +4487,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "+li\u00b9,+liq",
-            2
+            3
         ]
     },
     "\u2013ller\u00b9[V\u2192N]": {
@@ -4638,7 +4638,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "-nerraq*,-nerrar(aq*),-nerar(aq*),-nerrar-,-nerrar(ar)-,-nerar(ar)-",
-            3
+            6
         ]
     },
     "\u2013nerrar(ar*)[V\u2192N]": {
@@ -4652,7 +4652,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "-nerraq*,-nerrar(aq*),-nerar(aq*),-nerrar-,-nerrar(ar)-,-nerar(ar)-",
-            3
+            7
         ]
     },
     "\u2013nerar(ar*)[V\u2192N]": {
@@ -4666,7 +4666,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "-nerraq*,-nerrar(aq*),-nerar(aq*),-nerrar-,-nerrar(ar)-,-nerar(ar)-",
-            3
+            8
         ]
     },
     "@~+ngalngur*[V\u2192N]": {
@@ -4708,7 +4708,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "-nguaq,@~-nguar-",
-            1
+            2
         ]
     },
     "\u2013nqegcaar(ar*)[V\u2192N]": {
@@ -4748,7 +4748,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "-pik\u00b9,-piaq,-pigaq,-pig-,-piar-,-pigar-",
-            3
+            6
         ]
     },
     "@+piiner|~viiner[V\u2192N]": {
@@ -4929,7 +4929,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "+(ng)uaq,@~+(ng)uar-",
-            1
+            2
         ]
     },
     "@~+vig[V\u2192N]": {
@@ -4957,7 +4957,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "@~+vik,+(r)vik",
-            0
+            1
         ]
     },
     "@~+yailkutar[V\u2192N]": {
@@ -4985,7 +4985,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "@~+yailkutaq,@~+yailkun",
-            0
+            1
         ]
     },
     "+yag[V\u2192N]": {
@@ -5250,7 +5250,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "-kegtaar(aq*)",
-            0
+            1
         ]
     },
     "@\u2013ksagar[N\u2192N]": {
@@ -5310,7 +5310,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "-kuciq",
-            0
+            1
         ]
     },
     "\u2013kuiner(ar*)[N\u2192N]": {
@@ -5340,7 +5340,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "-kuiner(aq*),-kuinr(aq*),-kuineq",
-            0
+            1
         ]
     },
     "\u2013kuiner[N\u2192N]": {
@@ -5355,7 +5355,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "-kuiner(aq*),-kuinr(aq*),-kuineq",
-            0
+            2
         ]
     },
     "\u2013kutar[N\u2192N]": {
@@ -5385,7 +5385,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "-kutaq,-kun",
-            0
+            1
         ]
     },
     "\u2013kuyug[N\u2192N]": {
@@ -5415,7 +5415,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "-kuyuk,-kuyugaq",
-            0
+            1
         ]
     },
     "\u2013leg[N\u2192N]": {
@@ -5460,7 +5460,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "+li\u00b9,+liq",
-            2
+            0
         ]
     },
     "+lir[N\u2192N]": {
@@ -5475,7 +5475,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "+li\u00b9,+liq",
-            2
+            1
         ]
     },
     "\u2013\u2013liar[N\u2192N]": {
@@ -5520,7 +5520,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "-linraq*,-linr(aq*)",
-            0
+            1
         ]
     },
     "\u2013lkug[N\u2192N]": {
@@ -5535,7 +5535,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "-lkuk,-lkug-",
-            1
+            0
         ]
     },
     "\u2013llar*[N\u2192N]": {
@@ -5580,7 +5580,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "@-lluk,-llug-,-llugte-",
-            1
+            0
         ]
     },
     "\u2013lqur[N\u2192N]": {
@@ -5640,7 +5640,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "+mik,+miaq,+mig-",
-            2
+            0
         ]
     },
     "+miar[N\u2192N]": {
@@ -5655,7 +5655,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "+mik,+miaq,+mig-",
-            2
+            1
         ]
     },
     "~+miu[N\u2192N]": {
@@ -5715,7 +5715,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "-nerraq*,-nerrar(aq*),-nerar(aq*),-nerrar-,-nerrar(ar)-,-nerar(ar)-",
-            3
+            0
         ]
     },
     "\u2013nerrar(ar*)[N\u2192N]": {
@@ -5730,7 +5730,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "-nerraq*,-nerrar(aq*),-nerar(aq*),-nerrar-,-nerrar(ar)-,-nerar(ar)-",
-            3
+            1
         ]
     },
     "\u2013nerar(ar*)[N\u2192N]": {
@@ -5745,7 +5745,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "-nerraq*,-nerrar(aq*),-nerar(aq*),-nerrar-,-nerrar(ar)-,-nerar(ar)-",
-            3
+            2
         ]
     },
     "\u2013ngirta'rrlugar*[N\u2192N]": {
@@ -5775,7 +5775,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "-ngnagaq,-ngnagar-",
-            1
+            0
         ]
     },
     "\u2013ngssaar(ar*)[N\u2192N]": {
@@ -5790,7 +5790,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "-ngssaar(aq*),-ngssaar(ar)-",
-            1
+            0
         ]
     },
     "\u2013nguar[N\u2192N]": {
@@ -5805,7 +5805,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "-nguaq,@~-nguar-",
-            1
+            0
         ]
     },
     "\u2013ngyaar(ar*)[N\u2192N]": {
@@ -5835,7 +5835,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "-ngyaar(aq*),-ngiar(aq*)",
-            0
+            1
         ]
     },
     "+nir\u00b2[N\u2192N]": {
@@ -5880,7 +5880,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "-pik\u00b9,-piaq,-pigaq,-pig-,-piar-,-pigar-",
-            3
+            0
         ]
     },
     "\u2013piar[N\u2192N]": {
@@ -5895,7 +5895,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "-pik\u00b9,-piaq,-pigaq,-pig-,-piar-,-pigar-",
-            3
+            1
         ]
     },
     "\u2013pigar[N\u2192N]": {
@@ -5910,7 +5910,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "-pik\u00b9,-piaq,-pigaq,-pig-,-piar-,-pigar-",
-            3
+            2
         ]
     },
     "\u2013qainar[N\u2192N]": {
@@ -5925,7 +5925,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "-qainaq,-qainar-",
-            1
+            0
         ]
     },
     "\u2013qtar*[N\u2192N]": {
@@ -5940,7 +5940,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "-qtaq*,-qtar-",
-            1
+            0
         ]
     },
     "\u2013qva[N\u2192N]": {
@@ -5955,7 +5955,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "-qva",
-            0
+            2
         ]
     },
     "\u2013qvaar*[N\u2192N]": {
@@ -5970,7 +5970,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "-qvaaq*",
-            0
+            2
         ]
     },
     "\u2013r'aya'ar[N\u2192N]": {
@@ -6045,7 +6045,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "-rraq*,-rrar-",
-            1
+            2
         ]
     },
     "\u2013rrlainar*[N\u2192N]": {
@@ -6060,7 +6060,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "-rrlainaq*,-rrlainar-",
-            1
+            0
         ]
     },
     "\u2013rrlugar*[N\u2192N]": {
@@ -6090,7 +6090,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "-rrluk,-rrlug-,-rrlugte-",
-            1
+            0
         ]
     },
     "\u2013rugar*[N\u2192N]": {
@@ -6120,7 +6120,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "-r(ur)luq*,-q(ur)lur-",
-            1
+            3
         ]
     },
     "\u2013ssaarar[N\u2192N]": {
@@ -6210,7 +6210,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "+tuli,-tuli",
-            1
+            0
         ]
     },
     "+(ng)uar[N\u2192N]": {
@@ -6225,7 +6225,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "+(ng)uaq,@~+(ng)uar-",
-            1
+            0
         ]
     },
     ":(ng)ute[N\u2192N]": {
@@ -6255,7 +6255,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             ":(ng)un,:~(ng)un",
-            0
+            1
         ]
     },
     ":(ng)uteller[N\u2192N]": {
@@ -6285,7 +6285,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             ":(ng)utelleq,:~(ng)utelleq",
-            0
+            1
         ]
     },
     "\u2013vaarrlug[N\u2192N]": {
@@ -6315,7 +6315,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "-vialuk,-vialug-",
-            1
+            0
         ]
     },
     "@~+viutar[N\u2192N]": {
@@ -6345,7 +6345,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "-ya(g)aq*,-yagaq*,-ya(g)ar-,-yagar-",
-            2
+            0
         ]
     },
     "\u2013yagar*[N\u2192N]": {
@@ -6360,7 +6360,7 @@ export const newpostbases = {
         "match_case": true,
         "keylookup": [
             "-ya(g)aq*,-yagaq*,-ya(g)ar-,-yagar-",
-            2
+            1
         ]
     },
     "+yag[N\u2192N]": {
@@ -6375,7 +6375,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "+yak",
-            1
+            0
         ]
     },
     "@~+yarar[N\u2192N]": {
@@ -6390,7 +6390,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "@~+yaraq",
-            1
+            0
         ]
     },
     "\u2013yaya(g)ar*[N\u2192N]": {
@@ -6425,7 +6425,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "@~+ngari-",
-            1
+            0
         ]
     },
     "+`(g)ar(ar)[N\u2192V]": {
@@ -6445,7 +6445,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "+'(g)ar(ar)-",
-            2
+            0
         ]
     },
     "+arar(ar)[N\u2192V]": {
@@ -6465,7 +6465,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "+'(g)ar(ar)-",
-            2
+            1
         ]
     },
     ":(ng)ar(ar)te\u00b2[N\u2192V]": {
@@ -6545,7 +6545,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "+cite\u00b2-",
-            1
+            0
         ]
     },
     "@\u2013ckegg[N\u2192V]": {
@@ -6565,7 +6565,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "@-ckegg-",
-            1
+            0
         ]
     },
     "+cugninarqe[N\u2192V]": {
@@ -6605,7 +6605,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "+cugninarqe-,+cugnilarqe-,-cugninarqe-",
-            0
+            1
         ]
     },
     "\u2013cugninarqe[N\u2192V]": {
@@ -6625,7 +6625,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "+cugninarqe-,+cugnilarqe-,-cugninarqe-",
-            0
+            2
         ]
     },
     "+cugnite[N\u2192V]": {
@@ -6725,7 +6725,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             ":(ng)illiqe-",
-            1
+            0
         ]
     },
     "\u2013ir\u00b9[N\u2192V]": {
@@ -6765,7 +6765,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             ":(ng)ir\u00b2-",
-            1
+            2
         ]
     },
     ":(ng)ir(ar)[N\u2192V]": {
@@ -6825,7 +6825,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             ":(ng)i:rute-",
-            1
+            0
         ]
     },
     ":(ng)ite\u00b9[N\u2192V]": {
@@ -6845,7 +6845,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             ":(ng)ite\u00b9-",
-            1
+            0
         ]
     },
     "+karci[N\u2192V]": {
@@ -6885,7 +6885,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "-kegci-",
-            0
+            1
         ]
     },
     "\u2013kegte[N\u2192V]": {
@@ -6945,7 +6945,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "-kiirar-,-kiir(ar)-,-kaar-",
-            0
+            1
         ]
     },
     "\u2013kaar[N\u2192V]": {
@@ -6965,7 +6965,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "-kiirar-,-kiir(ar)-,-kaar-",
-            0
+            2
         ]
     },
     "+kiur[N\u2192V]": {
@@ -7225,7 +7225,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "-liyar-,-liar-",
-            2
+            0
         ]
     },
     "\u2013liar[N\u2192V]": {
@@ -7245,7 +7245,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "-liyar-,-liar-",
-            2
+            1
         ]
     },
     "\u2013lkia[N\u2192V]": {
@@ -7265,7 +7265,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "-lkia-",
-            1
+            0
         ]
     },
     "\u2013lkite[N\u2192V]": {
@@ -7345,7 +7345,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "@-lluk,-llug-,-llugte-",
-            1
+            2
         ]
     },
     "+mig[N\u2192V]": {
@@ -7425,7 +7425,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "@~+ngate-,+ngate-",
-            1
+            0
         ]
     },
     "\u2013nge[N\u2192V]": {
@@ -7445,7 +7445,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "-nge-",
-            1
+            0
         ]
     },
     "\u2013ngqerr[N\u2192V]": {
@@ -7465,7 +7465,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "-ngqerr-",
-            0
+            1
         ]
     },
     "@~+nialke[N\u2192V]": {
@@ -7485,7 +7485,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "@~+nialke-",
-            1
+            0
         ]
     },
     "@~+niate[N\u2192V]": {
@@ -7505,7 +7505,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "@~+niate-",
-            1
+            0
         ]
     },
     "@~+niilke[N\u2192V]": {
@@ -7525,7 +7525,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "@~+niilke-",
-            1
+            0
         ]
     },
     "@~+niite[N\u2192V]": {
@@ -7545,7 +7545,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "@~+niite-",
-            1
+            0
         ]
     },
     "@~+nike[N\u2192V]": {
@@ -7565,7 +7565,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "@~+nike-",
-            1
+            0
         ]
     },
     "~+ninarqe[N\u2192V]": {
@@ -7605,7 +7605,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "~+ninarqe-,~+nilarqe-",
-            0
+            1
         ]
     },
     "@~+nirqe[N\u2192V]": {
@@ -7625,7 +7625,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "@~+nirqe-",
-            1
+            0
         ]
     },
     "+nite[N\u2192V]": {
@@ -7665,7 +7665,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "-qsig-",
-            0
+            2
         ]
     },
     "\u2013qsigi[N\u2192V]": {
@@ -7685,7 +7685,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "-qsigi-",
-            0
+            2
         ]
     },
     "\u2013qu\u00b2[N\u2192V]": {
@@ -7825,7 +7825,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "-rrluk,-rrlug-,-rrlugte-",
-            1
+            2
         ]
     },
     "\u2013(u)saar[N\u2192V]": {
@@ -8048,9 +8048,9 @@ export const newpostbases = {
             0
         ]
     },
-    "+te\u2075[N\u2192V]": {
+    "+te\u2076[N\u2192V]": {
         "type": "NV",
-        "exp": "+te\u2075[N\u2192V]",
+        "exp": "+te\u2076[N\u2192V]",
         "exp_display": "+te",
         "description": "to make the N noise",
         "subjectit": "it",
@@ -8064,7 +8064,7 @@ export const newpostbases = {
         "ger_prenoun": "making a noise like",
         "match_case": false,
         "keylookup": [
-            "+te\u2075-",
+            "+te\u2076-",
             0
         ]
     },
@@ -8125,7 +8125,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "+tu-,-tu-",
-            1
+            2
         ]
     },
     "+tur\u00b2[N\u2192V]": {
@@ -8165,7 +8165,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "+(r)tuuma(r)-",
-            0
+            1
         ]
     },
     ":~(ng)u[N\u2192V]": {
@@ -8265,7 +8265,7 @@ export const newpostbases = {
         "match_case": false,
         "keylookup": [
             "@~+yug-,+(r)yug-",
-            1
+            0
         ]
     }
 }
