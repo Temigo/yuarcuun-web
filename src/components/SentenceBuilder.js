@@ -1639,7 +1639,7 @@ class SentenceBuilder extends Component {
   	} else if (fontType == 8) {
   		// console.log('8')
 			return <span style={{display:'inline-block',border:'solid 1px #22242626',marginRight:'2px',marginLeft:'2px',cursor:'pointer',fontSize:'18px',padding:'8px 5px 8px 5px',borderRadius:'5px'}}> 
-			{data[0].map((w,wind)=><span style={{color:this.getColor(w[1])}}>{w[0]+(w[0].length>0?" ":"")}</span>)} 
+			{data[0].map((w,wind)=><span style={{color:this.getColor(w[1])}}>{w[0]+(w[0].length>0 && w[1] !== 'mvv.com' ? " ":"")}</span>)} 
 			{data[1].map((w,wind)=><span style={{color:this.getColor(w[1])}}>{w[0]+(w[0].length>0 && wind !== data[1].length-1 ?" ":"")}</span>)} 
 			<Icon style={{color:this.getColor(data[1]),fontSize:'16px',margin:0}} name='dropdown' />
 			</span>  
@@ -2782,7 +2782,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',optCase:'Opt][PRS][NEG',mvvType:'',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Opt][PRS][NEG']])})}}>do not ...</Button>
 			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',optCase:'Opt][FUT][NEG',mvvType:'',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Opt][FUT][NEG']])})}}>do not ... (future)</Button>
 			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',optCase:'Sbrd',mvvType:'',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Sbrd']])})}}>polite request</Button>
-			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',optCase:'Sbrd',mvvType:'neg',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Sbrd'],["Insert",["mv"],[this.state.candidateCall[0].concat([['+peke-|+vke-,+pege-|+vke-', 0, 0, 0]]),this.state.candidateCall[1],'Sbrd']]])})}}>polite do not...</Button>
+			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',optCase:'Sbrd',mvvType:'neg',isOpen: false},()=>{this.backEndCall([["Update",["mv","vMood"],'Sbrd'],["Insert",["mv"],[this.state.mvvBase[0].concat([['+peke-|+vke-,+pege-|+vke-', 0, 0, 0]]),this.state.mvvBase[1],'Sbrd']]])})}}>polite do not...</Button>
 		    		</Button.Group>
 		    		</Accordion.Content>
 	    		</Accordion>		
@@ -3027,6 +3027,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		if (forEnglish !== undefined) {
 			startingCase = forEnglish[0]
 			vsPlanned = forEnglish[1]
+		} else {
+			vsPlanned = this.state.mvvs
 		}
 
 
@@ -3052,17 +3054,17 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 			if (this.state.nextTenses.length > 0) {
 				if ((this.state.addIs && key['englishtenses'][2]=='is') || this.state.nextTenses[this.state.nextTenses.length-1] === 'gen') {
 					if (this.state.nextTenses[this.state.nextTenses.length-1] === 'p' || this.state.nextTenses[this.state.nextTenses.length-1] === 'pp') {
-						if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
+						if (vsPlanned[0] == 1 && vsPlanned[1] == 1)	{
 							sentence = sentence.replace('!is!','was')
-						} else if ((this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) || this.state.mvvs.length === 0) {
+						} else if ((vsPlanned[0] == 3 && vsPlanned[1] == 1) || vsPlanned.length === 0) {
 							sentence = sentence.replace('!is!','was')
 						} else {
 							sentence = sentence.replace('!is!','were')
 						}
 					} else {
-						if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
+						if (vsPlanned[0] == 1 && vsPlanned[1] == 1)	{
 							sentence = sentence.replace('!is!','am')
-						} else if ((this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) || this.state.mvvs.length === 0) {
+						} else if ((vsPlanned[0] == 3 && vsPlanned[1] == 1) || vsPlanned.length === 0) {
 							sentence = sentence.replace('!is!','is')
 						} else {
 							sentence = sentence.replace('!is!','are')
@@ -3071,7 +3073,11 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 				} else {
 					// console.log(this.state.nextTenses[this.state.nextTenses.length-1], key['englishtenses'], key['englishraw'])
 					if (this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
-						verbAdd = key['englishtenses'][1]
+						if (['Intrg4','Intrg5','Intrg6','Intrg7','Intrg8','Intrg9','IntrgA'].includes(this.state.mvvType)) {
+							verbAdd = key['englishtenses'][0]
+						} else {
+							verbAdd = key['englishtenses'][1]
+						}
 					} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'g') {
 						verbAdd = key['englishtenses'][3]
 					} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'i') {
@@ -3118,7 +3124,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 					// console.log(key,specialStartingCase)
 					let s0 = specialStartingCase[0]
 					let s1 = specialStartingCase[1]
-					if (s0 === 'main') {
+					if (s0 === 'gen') {
 						sentence = key['englishmain'].replace('!is!',s1)	
 					} else if (key['englishtenses'][0]=='be' && s1.length > 0) {
 						sentence = key['englishmain'].replace('!is!',s1)	
@@ -3217,7 +3223,30 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 				}
 
 				if (key['id'] == 5) {
-					sentence = '<past tense>'
+					sentence = '(in the past)'
+				} else if (key['id'] == 27) {
+					let s1 = ''
+					// let specialStartingCase = this.returnBaseCaseforMoods(verbtype,mood,vsPlanned)
+					// console.log(newpostbases[lookup], specialStartingCase)
+					// if (this.state.nextTenses.length === 0 && mood === {
+						// let s1 = ''
+						// if (vsPlanned[0] == 1 && vsPlanned[1] == 1)	{
+						// 	sentence = 'am '
+						// } else if (vsPlanned[0] == 3 && vsPlanned[1] == 1) {
+						// 	sentence = 'is '
+						// } else {
+						// 	sentence = 'are '
+						// }
+					// }
+					// if (specialStartingCase[1].length > 0) {
+						// if (this.state.nextTenses.length == 0) {
+							// s1 = specialStartingCase[1]+' '
+						// } 
+						// else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
+							// s1 = specialStartingCase[1].replace('is','did').replace('are','do').replace('am','did')+' '
+						// }
+					// }
+					sentence = s1+'not'
 				} else {
 					// console.log(this.state.nextTenses[this.state.nextTenses.length-1])
 					if (!newpostbases[lookup]['match_case']) {
@@ -3227,7 +3256,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 							// console.log(newpostbases[lookup], specialStartingCase)
 							let s0 = specialStartingCase[0]
 							let s1 = specialStartingCase[1]
-							if (s0 === 'main' || s1.length > 0) {
+							if (s0 === 'gen' || s1.length > 0) {
 								sentence = newpostbases[lookup]['gen_preverb']
 								if (newpostbases[lookup]['is']) {
 									sentence = s1 +' '+ sentence
@@ -3267,21 +3296,26 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 							}
 						} else {
 							if (this.state.nextTenses[this.state.nextTenses.length-1] === 'p' || this.state.nextTenses[this.state.nextTenses.length-1] === 'pp' || this.state.nextTenses[this.state.nextTenses.length-1] === 'past') {
-								if (newpostbases[lookup]['past_preverb'].length == 0 && newpostbases[lookup]['was']) {
-									sentence = newpostbases[lookup]['description']						
-									if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
-										sentence = 'was '+sentence
-									} else if ((this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) || this.state.mvvs.length === 0) {
-										if (vsPlanned[1] !== 1) {
-											sentence = 'were '+sentence							
-										} else {
-											sentence = 'was '+sentence														
-										}
-									} else {
-										sentence = 'were '+sentence
-									}  
+
+								if (['Intrg4','Intrg5','Intrg6','Intrg7','Intrg8','Intrg9','IntrgA'].includes(this.state.mvvType)) {
+									sentence = newpostbases[lookup]['inf_preverb']
 								} else {
-									sentence = newpostbases[lookup]['past_preverb']						
+									if (newpostbases[lookup]['past_preverb'].length == 0 && newpostbases[lookup]['was']) {
+										sentence = newpostbases[lookup]['description']						
+										if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
+											sentence = 'was '+sentence
+										} else if ((this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1) || this.state.mvvs.length === 0) {
+											if (vsPlanned[1] !== 1) {
+												sentence = 'were '+sentence							
+											} else {
+												sentence = 'was '+sentence														
+											}
+										} else {
+											sentence = 'were '+sentence
+										}  
+									} else {
+										sentence = newpostbases[lookup]['past_preverb']						
+									}									
 								}
 							} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'g') {
 								sentence = newpostbases[lookup]['ger_preverb']
@@ -3482,11 +3516,11 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 			'Intrg3':'[he] _____ what (object)?',
 			'Intrg4':'when did [you] _____?',
 			'Intrg5':'when will [you] _____?',
-			'Intrg6':'where are [you] _____?',
-			'Intrg7':'from where are [you] _____?',
-			'Intrg8':'to where are [you] _____?',
-			'Intrg9':'why are [you] _____?',
-			'IntrgA':'how are [you] _____?',
+			'Intrg6':'where *are* [you] _____?',
+			'Intrg7':'from where *are* [you] _____?',
+			'Intrg8':'to where *are* [you] _____?',
+			'Intrg9':'why *are* [you] _____?',
+			'IntrgA':'how *are* [you] _____?',
 
 			'Opt][PRS':'[you], _____ (command)',
 			'Opt][FUT':'[you], _____ (command in the future)',
@@ -3527,6 +3561,12 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 			} else if (submood != '') {
 				if (submood in starters) {
 					subject = starters[submood].replace('[','').replace(']','')
+					if (this.state.nextTenses.length > 0) {
+						if (this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
+							subject = subject.replace('*are*','did')
+						}
+					}
+					subject = subject.replace('*are*','are')
 				}
 			} else {
 				if (mood in starters) {
@@ -3594,11 +3634,11 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		{ 
 			if (this.state.cvvs[0] == 1 && this.state.cvvs[1] == 1)	{
 				// return 'am hunting, happy, etc.'
-				return ['main','am']
+				return ['gen','am']
 			} else if (this.state.cvvs.length === 0 || (this.state.cvvs[0] == 3 && this.state.cvvs[1] == 1)) {
-				return ['main','is']
+				return ['gen','is']
 			} else {
-				return ['main','are']
+				return ['gen','are']
 			}		
 		} else if (
 			verbtype === 'cv' &&
@@ -3654,20 +3694,20 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 			if (vsPlanned.length === 0) {
 				if (this.state.mvvs[0] == 1 && this.state.mvvs[1] == 1)	{
 					// return 'am hunting, am happy, etc.'
-					return ['main','am']
+					return ['gen','am']
 				} else if (this.state.mvvs.length === 0 || (this.state.mvvs[0] == 3 && this.state.mvvs[1] == 1)) {
-					return ['main','is']
+					return ['gen','is']
 				} else {
-					return ['main','are']
+					return ['gen','are']
 				}							
 			} else {
 				if (vsPlanned[0] == 1 && vsPlanned[1] == 1)	{
 					// return 'am hunting, am happy, etc.'
-					return ['main','am']
+					return ['gen','am']
 				} else if (vsPlanned[0] == 3 && vsPlanned[1] == 1) {
-					return ['main','is']
+					return ['gen','is']
 				} else {
-					return ['main','are']
+					return ['gen','are']
 				}			
 				
 			}
@@ -3950,9 +3990,9 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		let popularPostbases = popular[0]
 		let popularBases = popular[1]
 
-		let mvvsPlanned = []
+		let vsPlanned = []
 		if (forEnglish !== undefined) {
-			mvvsPlanned = forEnglish[1]
+			vsPlanned = forEnglish[1]
 		}
 
 
@@ -4037,7 +4077,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 									        			:
 										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center',padding:'8px 15px',backgroundColor:'#f7f7f7'}}>
 										        		<div style={{flex:1}}>										        		
-											        		<div style={{color:'#545454',fontFamily:"Lato,'Helvetica Neue',Arial,Helvetica,sans-serif"}}>{k[0]}</div>
+											        		<div style={{color:'#545454',fontFamily:customFontFam}}>{k[0]}</div>
 											        		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{k[1]}</div>
 										        		</div>
 										        		<div style={{width:30}} />
@@ -4092,15 +4132,23 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 																		    		nextTenses:(
 																		    			newpostbases[k['fsts']]['match_case'] && !('gen_preverb_after' in newpostbases[k['fsts']]) ? 
 																			    			(this.state.nextTenses.length == 0 ? 
-																			    				this.state.nextTenses.concat(['gen'])
+																			    				this.state.nextTenses.concat([this.returnBaseCaseforMoods(itemUpdating[1][0],mood,vsPlanned)[0]])
 																			    				:
 																			    				this.state.nextTenses.concat([this.state.nextTenses[this.state.nextTenses.length-1]])
 																			    			) 
-																		    			: 
-																			    			('verbType' in newpostbases[k['fsts']] ?
-																				    			this.state.nextTenses.concat([newpostbases[k['fsts']]['verbType'],])
-																				    			:
-																				    			this.state.nextTenses.concat([newpostbases[k['fsts']]['gen_preverb_after'],])
+																		    			: 				
+																								(newpostbases[k['fsts']]['match_case'] ? 
+																				    			(this.state.nextTenses.length == 0 ? 
+																				    				this.state.nextTenses.concat([this.returnBaseCaseforMoods(itemUpdating[1][0],mood,vsPlanned)[0]])
+																				    				:
+																				    				this.state.nextTenses.concat([this.state.nextTenses[this.state.nextTenses.length-1]])
+																				    			)
+																				    			: 
+																				    			('verbType' in newpostbases[k['fsts']] ?
+																					    			this.state.nextTenses.concat([newpostbases[k['fsts']]['verbType'],])
+																					    			:
+																					    			this.state.nextTenses.concat([newpostbases[k['fsts']]['gen_preverb_after'],])
+																				    			)
 																			    			)
 																		    			),
 															      			},()=>{
@@ -4167,6 +4215,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 													      		if (!removeItem) {
 														      		return <Button style={{textAlign:'left',padding:'10px'}} onClick={()=>{
 														      			this.handleClick1('vvpostbases',false); 
+														      			console.log(newpostbases[popularPostbases[p]['expression']])
 												      					// this.handleClick('verbs',false); 
 														      			this.setState({
 														      				candidateBase:this.state.candidateBase.concat([[newpostbases[popularPostbases[p]['expression']]['keylookup'],popularPostbases[p]['expression']]]),
@@ -4177,11 +4226,19 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 																	    			? 
 																	    			(this.state.nextTenses.length == 0 
 																	    				? 
-																	    				this.state.nextTenses.concat(['gen'])
+																	    				this.state.nextTenses.concat([this.returnBaseCaseforMoods(itemUpdating[1][0],mood,vsPlanned)[0]])
 																	    				:
 																	    				this.state.nextTenses.concat([this.state.nextTenses[this.state.nextTenses.length-1]])) 
 																	    			: 
-																	    			this.state.nextTenses.concat([newpostbases[popularPostbases[p]['expression']]['gen_preverb_after'],])
+																	    			(newpostbases[popularPostbases[p]['expression']]['match_case'] ?
+																	    				(this.state.nextTenses.length == 0 ?
+																		    				this.state.nextTenses.concat([this.returnBaseCaseforMoods(itemUpdating[1][0],mood,vsPlanned)[0]])
+																	    					:
+																	    					this.state.nextTenses.concat([this.state.nextTenses[this.state.nextTenses.length-1]])
+																		    			)
+																	    				:
+																	    				this.state.nextTenses.concat([newpostbases[popularPostbases[p]['expression']]['gen_preverb_after'],])
+																	    				)
 																	    			),
 														      			},()=>{
 																	    		this.updateCandidateCall(endingNeeded,update,mood,submood,'p')
@@ -4270,11 +4327,11 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 					                			if (mood === 'Intrg') {
 					                				this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Insert",["mv","qWord"],[submood,1]]]); 		                				
 					                			} else {
-				                					if (mvvsPlanned.length > 0) {
+				                					if (vsPlanned.length > 0) {
 							                			if (submood == 'qaa') {
-				                							this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Update",["mv","vs"],mvvsPlanned],["Update",["mv","vType"],'qaa']])                						                									                						
+				                							this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Update",["mv","vs"],vsPlanned],["Update",["mv","vType"],'qaa']])                						                									                						
 							                			} else {
-				                							this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Update",["mv","vs"],mvvsPlanned]])                						                									                													                				
+				                							this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Update",["mv","vs"],vsPlanned]])                						                									                													                				
 							                			}
 				                					} else {
 							                			if (submood == 'qaa') {
