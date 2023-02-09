@@ -3,7 +3,7 @@ import { Container, Header, Button, Icon, Divider, Image, Grid, Dropdown, List, 
 import { Link } from 'react-router-dom';
 import { API_URL } from '../App.js';
 import axios from 'axios';
-import {nounOptionsMVPossessors, mvObjectOptionsEnglish, popularVPostbasesPAST, popularVPostbasesFUTURE, popularVPostbasesNOTIME, popularNPostbases, popularNounsBeings, popularNounsThings, popularVerbsIT, popularVerbsI, popularVerbsT, npnEnglish, npnEnglishself, colorsList,  mvSubject4thPersonCalls, mvObject4thPersonCalls,nObject4thPersonCalls, mvSubjectOptionsWho, mvSubjectOptionsWhat, mvObjectOptionsWhom, mvObjectOptionsWhomAbl, mvObjectOptionsWhat, mvObjectOptionsWhatAbl,retrieveMoodEnglish, nounOptionsPossessorsNo4th, mvSubjectOptionsOnly2nd, nounOptionsNumbers, nounoptionsmodalis, mvSubjectOptions, mvObjectOptions, mvSubjectOptionsEnglish, verbPostbases, nounPostbases, VVpostbases, NNpostbases} from './constants/newconstants.js'
+import {nounOptionsMVPossessors, mvObjectOptionsEnglish, popularOptPostbases, popularNounsDescriptors, popularVerbsOptative, popularVPostbasesPAST, popularVPostbasesFUTURE, popularVPostbasesNOTIME, popularNPostbases, popularNounsBeings, popularNounsThings, popularVerbsIT, popularVerbsI, popularVerbsT, npnEnglish, npnEnglishself, colorsList,  mvSubject4thPersonCalls, mvObject4thPersonCalls,nObject4thPersonCalls, mvSubjectOptionsWho, mvSubjectOptionsWhat, mvObjectOptionsWhom, mvObjectOptionsWhomAbl, mvObjectOptionsWhat, mvObjectOptionsWhatAbl,retrieveMoodEnglish, nounOptionsPossessorsNo4th, mvSubjectOptionsOnly2nd, nounOptionsNumbers, nounoptionsmodalis, mvSubjectOptions, mvObjectOptions, mvSubjectOptionsEnglish, verbPostbases, nounPostbases, VVpostbases, NNpostbases} from './constants/newconstants.js'
 import {newpostbases} from './constants/newpostbases.js'
 import {ending_underlying} from './constants/ending_underlying.js'
 import palette from 'google-palette';
@@ -1357,7 +1357,7 @@ class SentenceBuilder extends Component {
 
 
 	onChangeBaseSearch = (endingNeeded,forEnglish,itemUpdating,mood,submood,event,data) => {
-		console.log(endingNeeded,forEnglish,itemUpdating,mood,submood)
+		// console.log(endingNeeded,forEnglish,itemUpdating,mood,submood)
 		let word = data.value
 		let wordsList
 		let filteredDictV = {}
@@ -1376,7 +1376,7 @@ class SentenceBuilder extends Component {
 		let newSearch = word.replaceAll(/^is /g,'').replaceAll(/^am /g,'')
 
 
-		console.log((endingNeeded,event,data))
+		// console.log((endingNeeded,event,data))
 		if (this.state.nextTenses.length > 0) {
 			if (this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
 				optionsFuzzy['keys'] = ['yupikword','past_preverb']
@@ -1389,7 +1389,7 @@ class SentenceBuilder extends Component {
 			}
 		}
 
-		console.log(optionsFuzzy)
+		// console.log(optionsFuzzy)
 		if (mood == 'CtmpI' || mood == 'CtmpII' || submood == 'Intrg4' || mood == 'Sbrd' || mood.includes('Opt')) {
 			noFuture = true
 		}
@@ -1593,11 +1593,8 @@ class SentenceBuilder extends Component {
   contentDisplay = (data, fontType) => {
   	// console.log(data)
   	if (fontType == 1) {
-		return <div style={{paddingRight:10,paddingLeft:10,cursor:'pointer'}}>
-							<span style={{cursor:'pointer',display:'flex',justifyContent:'center', flexDirection:'row', marginBottom:5,lineHeight:'35px'}}>
-{/*								{data.map((t)=>
-									<span style={{color:this.getColor(t[1]),paddingBottom:'2px',borderBottom:'2px solid '+this.getColor(t[1])}}>{t[0]}</span>
-								)}*/}
+		return <div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:5,}}>
+							<span style={{cursor:'pointer',display:'flex',justifyContent:'center', flexDirection:'row', lineHeight:'40px'}}>
 								{data.map((t)=>
 									<span style={{color:this.getColor(t[1])}}>{t[0]}</span>
 								)}
@@ -1605,7 +1602,7 @@ class SentenceBuilder extends Component {
 						</div>								
   	} else if (fontType == 2) {
   		return 	<div style={{fontSize:'30px',fontWeight:'400'}}>
-								<span style={{cursor:'pointer',display:'flex',justifyContent:'center', flexDirection:'row', marginBottom:5,lineHeight:'35px'}}>
+								<span style={{cursor:'pointer',display:'flex',justifyContent:'center', flexDirection:'row', marginBottom:5,lineHeight:'40px'}}>
 									{data.map((t)=>
 										<span style={{color:this.getColor(t[1])}}>{t[0]}</span>
 									)}
@@ -1757,12 +1754,21 @@ class SentenceBuilder extends Component {
 			      	:
 			      	null
 			      }
+			      {this.state.mvvMood == 'Ind'  ?
+			      	this.menuItem('Update','Change to Command',null,null,[["Update",["mv","vMood"],'Opt][PRS']])
+			      	:
+			      	null
+			      }
 			      {this.state.optCase.length > 0 ?
 			      	this.subMenuItem('switchOptative')
 			      	:
 			      	null
 			      }
-
+			      {this.state.optCase.length > 0 ?
+			      	this.menuItem('Update','Change to Statement',null,null,[["Update",["mv","vMood"],'Ind']])
+			      	:
+			      	null
+			      }
 			    	</Menu>
  			} else if (type == 'mvEnglish1') {
 				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
@@ -2019,7 +2025,7 @@ class SentenceBuilder extends Component {
   	} else if (currentEditMode==='npnpossessorinsert') {
   		return this.baseChooser(["Insert",["np","n",-1]],'n','insert')
   	} else if (currentEditMode==='npnappositiveinsert') {
-  		console.log(this.state.npn,ind)
+  		// console.log(this.state.npn,ind)
   		return this.baseChooser(["Insert",["np","n",this.state.npn.length-1-ind[0],-1]],'n','insert')
   	} else if (currentEditMode==='npnpossessedinsert') {
   		return this.baseChooser(["Insert",["np","n",0]],'n','insert')
@@ -2843,23 +2849,21 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 	menuItem=(type,text,endRequirement,mood,backEnd)=>{
 
-		if (type === 'UpdateConnective') {
-			return <Menu.Item
-		          name='messages'
-		          // active={this.state.activeItem === 'messages'}
-		          style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}
-							onClick={()=>{this.setState({ isOpen: false },()=>{this.backEndCall(backEnd)})}}
-		        >
-		          <div>{text}</div>
-		        </Menu.Item>			
-		}
-
 		if (type === 'Update') {
 			return <Menu.Item
 		          name='messages'
 		          // active={this.state.activeItem === 'messages'}
 		          style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}
-							onClick={()=>{this.closeEditMenuRef(this.state.crecentlyOpen,'default',false); this.setState({ isOpen: false },()=>{this.backEndCall(backEnd)})}}
+							onClick={()=>{
+								this.closeEditMenuRef(this.state.crecentlyOpen,'default',false);
+								if (text == 'Change to Command') {
+									this.setState({ isOpen: false, optCase:"Opt][PRS",currentEditMode:''},()=>{this.backEndCall(backEnd)})							
+								} else if (text == 'Change to Statement') {
+									this.setState({ isOpen: false, optCase:"",currentEditMode:''},()=>{this.backEndCall(backEnd)})							
+								} else {
+									this.setState({ isOpen: false,currentEditMode:'' },()=>{this.backEndCall(backEnd)})
+								}
+							}}
 		        >
 		          <div>{text}</div>
 		        </Menu.Item>			
@@ -2870,22 +2874,14 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		          name='messages'
 		          // active={this.state.activeItem === 'messages'}
 		          style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}
-							onClick={()=>{this.setState({ isOpen: false },()=>{this.backEndCall(backEnd)})}}
+							onClick={()=>{
+								this.closeEditMenuRef(this.state.crecentlyOpen,'default',false);
+								this.setState({ isOpen: false,currentEditMode:'' },()=>{this.backEndCall(backEnd)})}}
 		        >
 		          <div>{text}</div>
 		        </Menu.Item>			
 		}
 
-		if (type === 'Change') {
-			return <Menu.Item
-		          name='messages'
-		          // active={this.state.activeItem === 'messages'}
-		          style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}
-		          onClick={()=>{this.menuSelect(endRequirement)}}
-		        >
-		          <div>Change Main Verb</div>
-		        </Menu.Item>			
-		}
 		if (type === 'BaseChooser') {
 			return <Menu.Item
 		          name='messages'
@@ -3906,33 +3902,51 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 	popularVPostbasesGetter = (mood,submood) => {
 		let noFuture = false
 		let noPast = false
-		if (mood == 'CtmpI' || mood == 'CtmpII' || submood == 'Intrg4' || mood == 'Sbrd' || mood.includes('Opt')) {
-			noFuture = true
-		}
-		if (mood == 'Sbrd' || mood.includes('Opt') || submood == 'Intrg5') {
-			noPast = true
-		}
-		if ((noFuture && noPast) || this.state.containsTime) {
-			return popularVPostbasesNoTime
-		} else if (noFuture) {
-			return popularVPostbasesOnlyPast
-		} else if (noPast) {
-			return popularVPostbasesOnlyFuture
+		if (mood.includes('Opt')) {
+			return popularOptPostbases
 		} else {
-			return popularVPostbases
+			if (mood == 'CtmpI' || mood == 'CtmpII' || submood == 'Intrg4' || mood == 'Sbrd' || mood.includes('Opt')) {
+				noFuture = true
+			}
+			if (mood == 'Sbrd' || mood.includes('Opt') || submood == 'Intrg5') {
+				noPast = true
+			}
+			if ((noFuture && noPast) || this.state.containsTime) {
+				return popularVPostbasesNoTime
+			} else if (noFuture) {
+				return popularVPostbasesOnlyPast
+			} else if (noPast) {
+				return popularVPostbasesOnlyFuture
+			} else {
+				return popularVPostbases
+			}
 		}
 	}
 
 	popularVerbsGetter = (mood,submood) => {
-		if (submood == 'Intrg1' || submood == 'Intrg3') {
-			return popularVerbsT
+		if (mood.includes('Opt')) {
+			return popularVerbsOptative
 		} else {
-			return popularVerbsIT
+			if (submood == 'Intrg1' || submood == 'Intrg3') {
+				return popularVerbsT
+			} else {
+				return popularVerbsIT
+			}
 		}
 	}
 
 
-	getPopular = (endingNeeded, mood, submood) => {
+	popularNounsGetter = (itemUpdating,mood,submood) => {
+		if (this.state.currentEditMode.includes("appositiveinsert")) {
+			return popularNounsDescriptors
+		} else {
+			return popularNouns
+		}
+	}
+
+
+
+	getPopular = (itemUpdating,endingNeeded, mood, submood) => {
 		let popularPostbases = []
 		let popularBases = []
 
@@ -3942,12 +3956,12 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 				popularBases = this.popularVerbsGetter(mood,submood)
 			} else {
 				popularPostbases = popularNPostbases
-				popularBases = popularNouns				
+				popularBases = this.popularNounsGetter(itemUpdating,mood,submood)				
 			}
 		} else {
 			if (this.state.endingAdjusted === 'n') {
 				popularPostbases = popularNPostbases
-				popularBases = popularNouns		
+				popularBases = this.popularNounsGetter(itemUpdating,mood,submood)		
 			} else {
 				popularPostbases = this.popularVPostbasesGetter(mood,submood)
 				popularBases = this.popularVerbsGetter(mood,submood)
@@ -3985,7 +3999,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 	baseChooser = (itemUpdating,endingNeeded,update,mood,submood,forEnglish) => {
 		let key;
 
-		let popular = this.getPopular(endingNeeded,mood,submood)
+		let popular = this.getPopular(itemUpdating,endingNeeded,mood,submood)
 
 		let popularPostbases = popular[0]
 		let popularBases = popular[1]
@@ -4193,7 +4207,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 												      null
 												    }
 
-									        {this.state.candidateBase.length < 2 ?
+									        {this.state.candidateBase.length < 2 && Object.keys(popularPostbases).length > 0 ?
 														<Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
 												    		<Accordion.Title
 												    			id={'verb'}
@@ -4655,7 +4669,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 	}
 
 	render() {
-		console.log(this.state)
+		// console.log(this.state)
 		// console.log("mvv",this.state.mvvMood)
 		// console.log("mvvtype",this.state.mvvType)
 		// console.log("cvv",this.state.cvvMood)
@@ -4717,8 +4731,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 								{this.state.mvqWordSegments.length > 0 ?
 									<div>
-										<div style={{marginBottom:'5px',fontSize:'30px',fontWeight:'400'}}>
-											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
+										<div style={{fontSize:'30px',fontWeight:'400'}}>
+											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'40px'}}>
 												<div style={{paddingRight:10,paddingLeft:10}}>
 													{this.editMenu('mvqWordParser',-1)}
 												</div>
@@ -4732,8 +4746,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 							 	{this.state.mvnsBases.length > 0 ? 
 									<div>
-										<div style={{marginBottom:'5px',fontSize:'30px',fontWeight:'400'}}>
-											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
+										<div style={{fontSize:'30px',fontWeight:'400'}}>
+											<div style={{display:'flex',justifyContent:'center',flexDirection:(window.innerWidth < 480 ? 'column':'row'), lineHeight:'40px'}}>
 											{this.state.mvnsSegments.slice().reverse().map((k,kind)=> 
 												<div style={{paddingRight:10,paddingLeft:10}}>
 												{k.map((q,qind)=> {
@@ -4755,8 +4769,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 								{this.state.mvvBase.length > 0 && this.state.mvvSegments.length > 0 ?
 									<div>
-										<div style={{marginBottom:'5px',fontSize:'30px',fontWeight:'400'}}>
-											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
+										<div style={{fontSize:'30px',fontWeight:'400'}}>
+											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'40px'}}>
 												<div style={{paddingRight:10,paddingLeft:10}}>
 													{this.editMenu('mvParser',-1)}
 												</div>
@@ -4771,8 +4785,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 							 	{this.state.mvnoBases.length > 0 ? 
 							 		<div>
-										<div style={{marginBottom:'5px',fontSize:'30px',fontWeight:'400'}}>
-											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
+										<div style={{fontSize:'30px',fontWeight:'400'}}>
+											<div style={{display:'flex',justifyContent:'center',flexDirection:(window.innerWidth < 480 ? 'column':'row'), lineHeight:'40px'}}>
 											{this.state.mvnoSegments.slice().reverse().map((k,kind)=> 
 												<div style={{paddingRight:10,paddingLeft:10}}>
 												{k.map((q,qind)=> {
@@ -4797,8 +4811,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 								{this.state.mvnObliquesSegments.length > 0 && this.state.mvnObliques.length === this.state.mvnObliquesSegments.length ?
 									(this.state.mvnObliquesSegments.map((obliques,obliqueind)=>
 										<div>
-											<div style={{marginBottom:'5px',fontSize:'30px',fontWeight:'400'}}>
-												<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
+											<div style={{fontSize:'30px',fontWeight:'400'}}>
+												<div style={{display:'flex',justifyContent:'center',flexDirection:(window.innerWidth < 480 ? 'column':'row'), lineHeight:'40px'}}>
 													{obliques.slice().reverse().map((x,xind)=> 
 													<div style={{paddingRight:10,paddingLeft:10}}>
 														{x.map((k,kind)=>
@@ -4818,8 +4832,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 								
 								{this.state.npnSegments.length > 0 && this.state.npnSegments.length === this.state.npn.length ?
 									<div>
-										<div style={{marginBottom:'5px',fontSize:'30px',fontWeight:'400'}}>
-											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
+										<div style={{fontSize:'30px',fontWeight:'400'}}>
+											<div style={{display:'flex',justifyContent:'center',flexDirection:(window.innerWidth < 480 ? 'column':'row'), lineHeight:'40px'}}>
 												{this.state.npnSegments.slice().reverse().map((x,xind)=> 
 													<div style={{paddingRight:10,paddingLeft:10}}>
 													{x.map((k,kind)=>
@@ -4862,7 +4876,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 								{this.state.mvvs.length > 0 ?
 									(this.state.mvnsSegments.length > 0 ? 
-										<div style={{display:'flex',justifyContent:'center',alignItems:'center',}}>
+										<div style={{display:'flex',flexDirection:(window.innerWidth < 480 ? 'column':'row'), justifyContent:'center',alignItems:'center',}}>
 											{this.state.mvnsSegments.slice().reverse().map((x,xind)=>
 												<span>
 												{xind === 0 ?
@@ -4940,7 +4954,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 								{this.state.mvvo.length > 0 ?
 									(this.state.mvnoSegments.length > 0 && this.state.mvnoSegments.length === this.state.mvno.length ? 
-										<div style={{display:'flex',justifyContent:'center',alignItems:'center',}}>
+										<div style={{display:'flex',flexDirection:(window.innerWidth < 480 ? 'column':'row'),justifyContent:'center',alignItems:'center',}}>
 											{this.state.mvnoSegments.slice().reverse().map((x,xind)=>
 												<span>
 												{xind === 0 ?
@@ -5019,7 +5033,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 
 								{this.state.mvEnglish3.length > 0 ? 
-										<span style={{marginLeft:2,lineHeight:'35px'}}>
+										<span style={{marginLeft:2,lineHeight:'40px'}}>
 											{this.state.mvEnglish3.map((t)=>
 												<span style={{color:this.getColor(t[1])}}>{t[0]}</span>
 											)}
@@ -5196,7 +5210,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 										<span>					
 											{/*{console.log(this.state.npn[this.state.npn.length-1][0], this.arraysEqual(this.state.npn[this.state.npn.length-1][0], [0,0,0,1]))}*/}
 
-											<div style={{display:'flex',justifyContent:'center',alignItems:'center',}}>
+											<div style={{display:'flex',flexDirection:(window.innerWidth < 480 ? 'column':'row'),justifyContent:'center',alignItems:'center',}}>
 											{this.state.npnSegments.slice().reverse().map((x,xind)=>
 												<span>
 												{xind === 0 ? (
@@ -5271,8 +5285,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 							 	{this.state.cvnsBases.length > 0 ? 
 									<div>
-										<div style={{marginBottom:'5px',fontSize:'30px',fontWeight:'400'}}>
-											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
+										<div style={{fontSize:'30px',fontWeight:'400'}}>
+											<div style={{display:'flex',justifyContent:'center',flexDirection:(window.innerWidth < 480 ? 'column':'row'), lineHeight:'40px'}}>
 											{this.state.cvnsSegments.slice().reverse().map((k,kind)=> 
 												<div style={{paddingRight:10,paddingLeft:10}}>
 												{k.map((q,qind)=> {
@@ -5302,8 +5316,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 							 	{this.state.cvnoBases.length > 0 ? 
 							 		<div>
-										<div style={{marginBottom:'5px',fontSize:'30px',fontWeight:'400'}}>
-											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
+										<div style={{fontSize:'30px',fontWeight:'400'}}>
+											<div style={{display:'flex',justifyContent:'center',flexDirection:(window.innerWidth < 480 ? 'column':'row'), lineHeight:'40px'}}>
 											{this.state.cvnoSegments.slice().reverse().map((k,kind)=> 
 												<div style={{paddingRight:10,paddingLeft:10}}>
 												{k.map((q,qind)=> {
@@ -5326,8 +5340,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 								{this.state.cvnObliquesSegments.length > 0 && this.state.cvnObliques.length === this.state.cvnObliquesSegments.length ?
 									(this.state.cvnObliquesSegments.map((obliques,obliqueind)=>
 										<div>
-											<div style={{marginBottom:'5px',fontSize:'30px',fontWeight:'400'}}>
-												<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
+											<div style={{fontSize:'30px',fontWeight:'400'}}>
+												<div style={{display:'flex',justifyContent:'center',flexDirection:(window.innerWidth < 480 ? 'column':'row'), lineHeight:'40px'}}>
 													{obliques.slice().reverse().map((x,xind)=> 
 													<div style={{paddingRight:10,paddingLeft:10}}>
 														{x.map((k,kind)=>
@@ -5363,7 +5377,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 								{this.state.cvvs.length > 0 ?
 									(this.state.cvnsSegments.length > 0 && this.state.cvnsSegments.length === this.state.cvns.length ? 
-										<span>					
+										<div style={{display:'flex',flexDirection:(window.innerWidth < 480 ? 'column':'row'),justifyContent:'center',alignItems:'center',}}>
 											{this.state.cvnsSegments.slice().reverse().map((x,xind)=>
 												<span>
 												{xind === 0 ?
@@ -5400,7 +5414,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 												}
 												</span>
 											)}
-										</span>
+										</div>
 										:
 										this.editSubjectMenu(["Insert",["cv","ns"]],'a subject','cvv.s',this.state.cvvs,"Update",["cv","vs"],this.state.cvvs.join(""),this.state.cvSubjectOptions1)
 										)
@@ -5419,7 +5433,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 								{this.state.cvvo.length > 0 ?
 									(this.state.cvnoSegments.length > 0 && this.state.cvnoSegments.length === this.state.cvno.length ? 
-										<span>					
+										<div style={{display:'flex',flexDirection:(window.innerWidth < 480 ? 'column':'row'),justifyContent:'center',alignItems:'center',}}>
 											{this.state.cvnoSegments.slice().reverse().map((x,xind)=>
 												<span>
 												{xind === 0 ?
@@ -5466,7 +5480,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 												}
 												</span>
 											)}
-										</span>
+										</div>
 										:
 										<span>
 											{this.state.cvvBase[1] == 'it' ?
@@ -5549,8 +5563,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 							 	{this.state.svnoBases.length > 0 ? 
 							 		<div>
-										<div style={{marginBottom:'5px',fontSize:'30px',fontWeight:'400'}}>
-											<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
+										<div style={{fontSize:'30px',fontWeight:'400'}}>
+											<div style={{display:'flex',justifyContent:'center',flexDirection:(window.innerWidth < 480 ? 'column':'row'), lineHeight:'40px'}}>
 											{this.state.svnoSegments.slice().reverse().map((k,kind)=> 
 												<div style={{paddingRight:10,paddingLeft:10}}>
 												{k.map((q,qind)=> {
@@ -5574,8 +5588,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 								{this.state.svnObliquesSegments.length > 0 && this.state.svnObliques.length === this.state.svnObliquesSegments.length ?
 									(this.state.svnObliquesSegments.map((obliques,obliqueind)=>
 										<div>
-											<div style={{marginBottom:'5px',fontSize:'30px',fontWeight:'400'}}>
-												<div style={{display:'flex',justifyContent:'center',flexDirection:'row', lineHeight:'35px'}}>
+											<div style={{fontSize:'30px',fontWeight:'400'}}>
+												<div style={{display:'flex',justifyContent:'center',flexDirection:(window.innerWidth < 480 ? 'column':'row'), lineHeight:'40px'}}>
 													{obliques.slice().reverse().map((x,xind)=> 
 													<div style={{paddingRight:10,paddingLeft:10}}>
 														{x.map((k,kind)=>
@@ -5604,7 +5618,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 								{this.state.svvo.length > 0 ?
 									(this.state.svnoSegments.length > 0 && this.state.svnoSegments.length === this.state.svno.length ? 
-										<span>
+										<div style={{display:'flex',flexDirection:(window.innerWidth < 480 ? 'column':'row'),justifyContent:'center',alignItems:'center',}}>
 											{this.state.svnoSegments.slice().reverse().map((x,xind)=>
 												<span>
 												{xind === 0 ?
@@ -5651,7 +5665,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 												}
 												</span>
 											)}
-										</span>
+										</div>
 										:
 										<span>
 											{this.state.svvBase[1] == 'it' ?

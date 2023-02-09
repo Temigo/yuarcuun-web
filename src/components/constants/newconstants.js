@@ -22,6 +22,42 @@ export const inupiaqSpeakerIDs = {
 "Yaayuk (Bernadette Alvanna-Stimpfle)":8,    
 }
 
+
+export const popularVerbsOptative = [
+{'englishnorm': 'eat', 'yupikword': "ner'uq", 'inf_preverb': 'eat', 'past_preverb': 'ate', 'fsts': ['nere'], 'fstsDisplay': 'nere-', 'key': 'nere-', 'englishtenses': ['eat', 'ate', 'eats', 'eating', 'eaten'], 'properties': [], 'englishmain': '!is! eating', 'englishraw': '\u27e8eat\u27e9', 'base_case': 'is eating', 'ger_preverb': 'eating', 'usageIndex': 0, 'type': 'i'},
+{'englishnorm': 'come in', 'yupikword': 'itertuq', 'inf_preverb': 'come in', 'past_preverb': 'came in', 'fsts': ['iter'], 'fstsDisplay': 'iter-', 'key': 'iter-', 'englishtenses': ['come', 'came', 'comes', 'coming', 'come'], 'properties': [], 'englishmain': 'came in', 'englishraw': '\u27e8come\u27e9 in', 'base_case': 'came in', 'ger_preverb': 'coming in', 'usageIndex': 0, 'type': 'i'},
+{'englishnorm': 'go out', 'yupikword': "an'uq", 'inf_preverb': 'go out', 'past_preverb': 'went out', 'fsts': ['ane'], 'fstsDisplay': 'ane-', 'key': 'ane-', 'englishtenses': ['go', 'went', 'goes', 'going', 'gone'], 'properties': [], 'englishmain': 'went out', 'englishraw': '\u27e8go\u27e9 out', 'base_case': 'went out', 'ger_preverb': 'going out', 'usageIndex': 0, 'type': 'i'},
+{'englishnorm': 'sit down', 'yupikword': 'aqumuq', 'inf_preverb': 'sit down', 'past_preverb': 'sat down', 'fsts': ['aqume'], 'fstsDisplay': 'aqume-', 'key': 'aqume-', 'englishtenses': ['sit', 'sat', 'sits', 'sitting', 'sat'], 'properties': [], 'englishmain': 'sat down', 'englishraw': '\u27e8sit\u27e9 down', 'base_case': 'sat down', 'ger_preverb': 'sitting down', 'usageIndex': 0, 'type': 'i'},
+{'englishnorm': 'lay down', 'yupikword': 'inartuq', 'inf_preverb': 'lay down', 'past_preverb': 'laid down', 'fsts': ['inarte'], 'fstsDisplay': 'inarte-', 'key': 'inarte-', 'englishtenses': ['lay', 'laid', 'lays', 'laying', 'laid'], 'properties': [], 'englishmain': 'lay down', 'englishraw': '\u27e8lay\u27e9 down', 'base_case': 'lay down', 'ger_preverb': 'laying down', 'usageIndex': 0, 'type': 'i'},
+{'englishnorm': 'work', 'yupikword': 'caliuq', 'inf_preverb': 'work', 'past_preverb': 'worked', 'fsts': ['cali'], 'fstsDisplay': 'cali-', 'key': 'cali-', 'englishtenses': ['work', 'worked', 'works', 'working', 'worked'], 'properties': [], 'englishmain': '!is! working', 'englishraw': '\u27e8work\u27e9', 'base_case': 'is working', 'ger_preverb': 'working', 'usageIndex': 0, 'type': 'i'},
+{'englishnorm': 'get up', 'yupikword': 'maktuq', 'inf_preverb': 'get up', 'past_preverb': 'got up', 'fsts': ['makte'], 'fstsDisplay': 'makte-', 'key': 'makte-', 'englishtenses': ['get', 'got', 'gets', 'getting', 'got'], 'properties': [], 'englishmain': 'got up', 'englishraw': '\u27e8get\u27e9 up', 'base_case': 'got up', 'ger_preverb': 'getting up', 'usageIndex': 0, 'type': 'i'},
+{'englishnorm': 'listen', 'yupikword': 'niicugniuq', 'inf_preverb': 'listen', 'past_preverb': 'listened', 'fsts': ['niicugni'], 'fstsDisplay': 'niicugni-', 'key': 'niicugni-', 'englishtenses': ['listen', 'listened', 'listens', 'listening', 'listened'], 'properties': [], 'englishmain': '!is! listening', 'englishraw': '\u27e8listen\u27e9', 'base_case': 'is listening', 'ger_preverb': 'listening', 'usageIndex': 0, 'type': 'i'},
+{'englishnorm': 'answer', 'yupikword': 'kiugaa', 'inf_preverb': 'answer <him>', 'past_preverb': 'answered <him>', 'fsts': ['ki'], 'fstsDisplay': 'kiu-', 'key': 'kiu-', 'englishtenses': ['answer', 'answered', 'answers', 'answering', 'answered'], 'properties': [], 'englishmain': 'answered <him>', 'englishraw': '\u27e8answer\u27e9 <him>', 'base_case': 'answered him', 'ger_preverb': 'answering <him>', 'usageIndex': 2, 'type': 't'},
+{'englishnorm': 'try', 'yupikword': 'naspaagaa', 'inf_preverb': 'try <it>', 'past_preverb': 'tried <it>', 'fsts': ['naspaa'], 'fstsDisplay': 'naspaa-', 'key': 'naspaa-', 'englishtenses': ['try', 'tried', 'tries', 'trying', 'tried'], 'properties': [], 'englishmain': '!is! trying <it>', 'englishraw': '\u27e8try\u27e9 <it>', 'base_case': 'is trying it', 'ger_preverb': 'trying <it>', 'usageIndex': 2, 'type': 't'},
+{'englishnorm': 'own', 'yupikword': 'pikaa', 'inf_preverb': 'own <it>', 'past_preverb': 'owned <it>', 'fsts': ['pike'], 'fstsDisplay': 'pike-', 'key': 'pike-', 'englishtenses': ['own', 'owned', 'owns', 'owning', 'owned'], 'properties': [], 'englishmain': 'owns <it>', 'englishraw': '\u27e8own\u27e9 <it>', 'base_case': 'owns it', 'ger_preverb': 'owning <it>', 'usageIndex': 0, 'type': 't'},
+{'englishnorm': 'give to someone', 'yupikword': 'tunaa', 'inf_preverb': 'give <it> to someone', 'past_preverb': 'gave <it> to someone', 'fsts': ['tune'], 'fstsDisplay': 'tune-', 'key': 'tune-', 'englishtenses': ['give', 'gave', 'gives', 'giving', 'given'], 'properties': [], 'englishmain': 'gave <it> to someone', 'englishraw': '\u27e8give\u27e9 <it> to someone', 'base_case': 'gave it to someone', 'ger_preverb': 'giving <it> to someone', 'usageIndex': 4, 'type': 't'},
+{'englishnorm': 'use', 'yupikword': 'aturaa', 'inf_preverb': 'use <it>', 'past_preverb': 'used <it>', 'fsts': ['atur'], 'fstsDisplay': 'atur-', 'key': 'atuq,atur-', 'englishtenses': ['use', 'used', 'uses', 'using', 'used'], 'properties': [], 'englishmain': '!is! using <it>', 'englishraw': '\u27e8use\u27e9 <it>', 'base_case': 'is using it', 'ger_preverb': 'using <it>', 'usageIndex': 3, 'type': 't'},
+{'englishnorm': 'open', 'yupikword': 'ikirtaa', 'inf_preverb': 'open <it>', 'past_preverb': 'opened <it>', 'fsts': ['ikirte'], 'fstsDisplay': 'ikirte-', 'key': 'ikirte-', 'englishtenses': ['open', 'opened', 'opens', 'opening', 'opened'], 'properties': [], 'englishmain': 'opened <it>', 'englishraw': '\u27e8open\u27e9 <it>', 'base_case': 'opened it', 'ger_preverb': 'opening <it>', 'usageIndex': 2, 'type': 't'},
+{'englishnorm': 'buy', 'yupikword': 'kiputaa', 'inf_preverb': 'buy <it>', 'past_preverb': 'bought <it>', 'fsts': ['kipute'], 'fstsDisplay': 'kipute-', 'key': 'kipute-', 'englishtenses': ['buy', 'bought', 'buys', 'buying', 'bought'], 'properties': [], 'englishmain': 'bought <it>', 'englishraw': '\u27e8buy\u27e9 <it>', 'base_case': 'bought it', 'ger_preverb': 'buying <it>', 'usageIndex': 2, 'type': 't'},
+{'englishnorm': 'wash', 'yupikword': 'eruraa', 'inf_preverb': 'wash <it>', 'past_preverb': 'washed <it>', 'fsts': ['erur'], 'fstsDisplay': 'erur-', 'key': 'erur-', 'englishtenses': ['wash', 'washed', 'washes', 'washing', 'washed'], 'properties': [], 'englishmain': '!is! washing <it>', 'englishraw': '\u27e8wash\u27e9 <it>', 'base_case': 'is washing it', 'ger_preverb': 'washing <it>', 'usageIndex': 2, 'type': 't'},
+{'englishnorm': 'pass over', 'yupikword': 'taitaa', 'inf_preverb': 'pass <it> over', 'past_preverb': 'passed <it> over', 'fsts': ['taite\xb9'], 'fstsDisplay': 'taite\xb9-', 'key': 'taite\xb9-', 'englishtenses': ['pass', 'passed', 'passes', 'passing', 'passed'], 'properties': [], 'englishmain': 'passed <it> over', 'englishraw': '\u27e8pass\u27e9 <it> over', 'base_case': 'passed it over', 'ger_preverb': 'passing <it> over', 'usageIndex': 2, 'type': 't'},
+{'englishnorm': 'go with', 'yupikword': 'maligtaa', 'inf_preverb': 'go with <her*>', 'past_preverb': 'went with <her*>', 'fsts': ['maligte'], 'fstsDisplay': 'maligte-', 'key': 'maligte-', 'englishtenses': ['go', 'went', 'goes', 'going', 'gone'], 'properties': [], 'englishmain': '!is! going with <her*>', 'englishraw': '\u27e8go\u27e9 with <her*>', 'base_case': 'is going with her*', 'ger_preverb': 'going with <her*>', 'usageIndex': 0, 'type': 't'},
+{'englishnorm': 'eat', 'yupikword': 'neraa', 'inf_preverb': 'eat <it>', 'past_preverb': 'ate <it>', 'fsts': ['nere'], 'fstsDisplay': 'nere-', 'key': 'nere-', 'englishtenses': ['eat', 'ate', 'eats', 'eating', 'eaten'], 'properties': [], 'englishmain': '!is! eating <it>', 'englishraw': '\u27e8eat\u27e9 <it>', 'base_case': 'is eating it', 'ger_preverb': 'eating <it>', 'usageIndex': 2, 'type': 't'},
+{'englishnorm': 'ask', 'yupikword': 'aptaa', 'inf_preverb': 'ask <her*>', 'past_preverb': 'asked <her*>', 'fsts': ['apte'], 'fstsDisplay': 'apte-', 'key': 'apte-', 'englishtenses': ['ask', 'asked', 'asks', 'asking', 'asked'], 'properties': [], 'englishmain': 'asked <her*>', 'englishraw': '\u27e8ask\u27e9 <her*>', 'base_case': 'asked her*', 'ger_preverb': 'asking <her*>', 'usageIndex': 2, 'type': 't'},
+]
+
+export const popularNounsDescriptors = [
+{'englishnorm': 'new thing, fresh thing, fresh fish', 'yupikword': 'nutaraq', 'fsts': ['nutarar'], 'fstsDisplay': 'nutarar-', 'key': 'nutaraq', 'englishtenses': [['thing', 'things'], ['thing', 'things'], ['fish', 'fish']], 'properties': [], 'englishmain': ['new \u27e8thing\u27e9', 'fresh \u27e8thing\u27e9', 'fresh \u27e8fish\u27e9'], 'englishraw': 'new \u27e8thing\u27e9, fresh \u27e8thing\u27e9, fresh \u27e8fish\u27e9', 'base_case': 'new thing, fresh thing, fresh fish', 'usageIndex': 0, 'type': 'n'},
+{'englishnorm': 'old thing, thing of the past', 'yupikword': "ak'allaq", 'fsts': ["ak'allar"], 'fstsDisplay': "ak'allar-", 'key': "ak'allaq", 'englishtenses': [['thing', 'things'], ['thing', 'things']], 'properties': [], 'englishmain': ['old \u27e8thing\u27e9', '\u27e8thing\u27e9 of the past'], 'englishraw': 'old \u27e8thing\u27e9, \u27e8thing\u27e9 of the past', 'base_case': 'old thing, thing of the past', 'usageIndex': 0, 'type': 'n'},
+{'englishnorm': 'big thing', 'yupikword': 'angtuaq', 'fsts': ['angtuar'], 'fstsDisplay': 'angtuar-', 'key': 'angtuaq', 'englishtenses': [['thing', 'things']], 'properties': [], 'englishmain': ['big \u27e8thing\u27e9'], 'englishraw': 'big \u27e8thing\u27e9', 'base_case': 'big thing', 'usageIndex': 0, 'type': 'n'},
+{'englishnorm': 'white person, Caucasian, priest, especially Russian Orthodox priest', 'yupikword': "kass'aq", 'fsts': ["kass'ar"], 'fstsDisplay': "kass'ar-", 'key': "kass'aq", 'englishtenses': [['person', 'people'], ['Caucasian', 'Caucasians'], ['priest', 'priests'], ['priest', 'priests']], 'properties': [], 'englishmain': ['white \u27e8person\u27e9', '\u27e8Caucasian\u27e9', '\u27e8priest\u27e9', 'especially Russian Orthodox \u27e8priest\u27e9'], 'englishraw': 'white \u27e8person\u27e9, \u27e8Caucasian\u27e9, \u27e8priest\u27e9, especially Russian Orthodox \u27e8priest\u27e9', 'base_case': 'white person, Caucasian, priest, especially Russian Orthodox priest', 'usageIndex': 0, 'type': 'n'},
+{'englishnorm': 'red thing, low-bush cranberry (Vaccinium vitis-idaea)', 'yupikword': 'kavirliq', 'fsts': ['kavirlir'], 'fstsDisplay': 'kavirlir-', 'key': 'kavirliq', 'englishtenses': [['thing', 'things'], ['cranberry', 'cranberries']], 'properties': [], 'englishmain': ['red \u27e8thing\u27e9', 'low-bush \u27e8cranberry\u27e9 (Vaccinium vitis-idaea)'], 'englishraw': 'red \u27e8thing\u27e9, low-bush \u27e8cranberry\u27e9 (Vaccinium vitis-idaea)', 'base_case': 'red thing, low-bush cranberry (Vaccinium vitis-idaea)', 'usageIndex': 0, 'type': 'n'},
+{'englishnorm': 'black thing', 'yupikword': 'tungulria', 'fsts': ['tungulria'], 'fstsDisplay': 'tungulria-', 'key': 'tungulria', 'englishtenses': [['thing', 'things']], 'properties': [], 'englishmain': ['black \u27e8thing\u27e9'], 'englishraw': 'black \u27e8thing\u27e9', 'base_case': 'black thing', 'usageIndex': 0, 'type': 'n'},
+{'englishnorm': 'white thing, the color white', 'yupikword': 'qatellria', 'fsts': ['qatellria', 'qatelria'], 'fstsDisplay': 'qatellria-, qatelria-', 'key': 'qatellria,qatelria', 'englishtenses': [['thing', 'things']], 'properties': [], 'englishmain': ['white \u27e8thing\u27e9, the color white'], 'englishraw': 'white \u27e8thing\u27e9, the color white', 'base_case': 'white thing, the color white', 'usageIndex': 0, 'type': 'n'},
+{'englishnorm': 'green thing', 'yupikword': 'cungagliq', 'fsts': ['cungaglir'], 'fstsDisplay': 'cungaglir-', 'key': 'cungagliq', 'englishtenses': [['thing', 'things']], 'properties': [], 'englishmain': ['green \u27e8thing\u27e9'], 'englishraw': 'green \u27e8thing\u27e9', 'base_case': 'green thing', 'usageIndex': 0, 'type': 'n'},
+{'englishnorm': 'yellow thing', 'yupikword': 'esirliq', 'fsts': ['esirlir', 'esirngalngur*'], 'fstsDisplay': 'esirlir-, esirngalngur*-', 'key': 'esirliq,esirngalnguq*', 'englishtenses': [['thing', 'things']], 'properties': [], 'englishmain': ['yellow \u27e8thing\u27e9'], 'englishraw': 'yellow \u27e8thing\u27e9', 'base_case': 'yellow thing', 'usageIndex': 0, 'type': 'n'},
+]
+
 export const popularVerbs = [
 {'englishnorm': 'eat', 'yupikword': "ner'uq", 'fsts': ['nere'], 'fstsDisplay': 'nere-', 'key': 'nere-', 'englishtenses': ['eat', 'ate', 'eats', 'eating', 'eaten'], 'properties': [], 'englishmain': '!is! eating', 'englishraw': '\u27e8eat\u27e9', 'base_case': 'eat', 'usageIndex': 0, 'type': 'i'},
 {'englishnorm': 'eat', 'yupikword': "ner'uq", 'fsts': ['nere'], 'fstsDisplay': 'nere-', 'key': 'nere-', 'englishtenses': ['eat', 'ate', 'eats', 'eating', 'eaten'], 'properties': [], 'englishmain': '!is! eating <something>', 'englishraw': '\u27e8eat\u27e9 <something>', 'base_case': 'eat', 'usageIndex': 1, 'type': 'it'},
@@ -164,6 +200,35 @@ export const popularNounsThings = [
 
 ]
 
+export const popularOptPostbases = [
+  {
+    id: 0,
+    // description: 'please',
+    expression:"\u2013qar[V\u2192V]",
+    allowable_next_ids: [0]
+  },
+  {
+    id: 1,
+    // description: 'trying despite difficulties to',
+    expression: '–qcaar(ar)[V→V]',
+    allowable_next_ids: [1,0,2]
+  },
+  {
+    id: 2, 
+    // description: "first", 
+    expression: "\u2013rraar[V\u2192V]", 
+    allowable_next_ids: [2,0],
+  }, 
+  {
+    id: 3, 
+    // description: "quickly", 
+    expression: "\u2013laag[V\u2192V]", 
+    allowable_next_ids: [2,0],
+  }, 
+]
+ 
+
+ 
 export const popularNPostbases = [
   {
     id: 0,
