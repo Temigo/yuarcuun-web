@@ -486,11 +486,22 @@ class SentenceBuilder extends Component {
 			crecentlyOpen:'',
 			containsTime:false,
 
+			 width: window.innerWidth, 
+			 height: window.innerHeight,
+
 		}
 
 		this.subjectMenu = {}
 		this.editMenuRef = {}
 		this.mainScreenMenuRef = {}
+		this.mvEnglish2Ref = {}
+		this.cvEnglish2Ref = {}
+		this.vEnglish2Ref = {}
+		this.mvEnglishVerticalRef = {}
+		this.cvEnglishVerticalRef = {}
+
+
+
 		this.fromEntry = false
 		console.log(decodeURI(props.match.params.num))
 		if (decodeURI(props.match.params.num) == 1) {
@@ -509,6 +520,7 @@ class SentenceBuilder extends Component {
 
 	componentDidMount() {
 		let start = now();
+		window.addEventListener('resize', this.updateDimensions);
 		// console.log(this.props)
     // if (dictionary.length === 0) {
     //   // axios
@@ -601,6 +613,10 @@ class SentenceBuilder extends Component {
 
 }
 
+	componentWillUnmount() {
+		window.removeEventListener('resize', this.updateDimensions);
+	}
+
   componentDidUpdate(prevProps, prevState) {
   	if (this.props.match.params.num !== prevProps.match.params.num) {
 			if (decodeURI(this.props.match.params.num) == 1) {
@@ -642,6 +658,11 @@ class SentenceBuilder extends Component {
     // }
 
   }
+
+  updateDimensions = () => {
+  	console.log('updated')
+    this.setState({ width: window.innerWidth, height: window.innerHeight });
+  };
 
   update4thPersonAndAgreement = () => {
 
@@ -1472,109 +1493,111 @@ class SentenceBuilder extends Component {
   	// console.log(this.state)
   	// console.log('trigger',type,ind)
   	if (type==='default') {
-  		return this.contentDisplay([], 3)
+  		return this.contentDisplay(type,[], 3)
   	} else if (type==='defaultverbphrase') {
-  		return this.contentDisplay([], 3)
+  		return this.contentDisplay(type,[], 3)
   	} else if (type==='defaultmv') {
-  		return this.contentDisplay([], 4)
+  		return this.contentDisplay(type,[], 4)
   	} else if (type==='defaultcv') {
-  		return this.contentDisplay([], 4)
+  		return this.contentDisplay(type,[], 4)
   	} else if (type==='defaultsv') {
-  		return this.contentDisplay([], 4)
+  		return this.contentDisplay(type,[], 4)
   	} else if (type === 'mvnsParser') {
-  		return this.contentDisplay(this.state.mvnsSegments.slice().reverse()[ind[0]][ind[1]], 1)
+  		return this.contentDisplay(type,this.state.mvnsSegments.slice().reverse()[ind[0]][ind[1]], 1)
   	} else if (type==='mvnsappositiveParser') {
-  		return this.contentDisplay(this.state.mvnsSegments.slice().reverse()[ind[0]][ind[1]], 1)		
+  		return this.contentDisplay(type,this.state.mvnsSegments.slice().reverse()[ind[0]][ind[1]], 1)		
   	} else if (type==='mvnoParser') {
-  		return this.contentDisplay(this.state.mvnoSegments.slice().reverse()[ind[0]][ind[1]], 1)		
+  		return this.contentDisplay(type,this.state.mvnoSegments.slice().reverse()[ind[0]][ind[1]], 1)		
   	} else if (type==='mvnoappositiveParser') {
-  		return this.contentDisplay(this.state.mvnoSegments.slice().reverse()[ind[0]][ind[1]], 1)			
+  		return this.contentDisplay(type,this.state.mvnoSegments.slice().reverse()[ind[0]][ind[1]], 1)			
   	} else if (type === 'cvnsParser' || type === 'cvnsappositiveParser') {
-  		return this.contentDisplay(this.state.cvnsSegments.slice().reverse()[ind[0]][ind[1]], 1)
+  		return this.contentDisplay(type,this.state.cvnsSegments.slice().reverse()[ind[0]][ind[1]], 1)
   	} else if (type === 'cvnoParser' || type === 'cvnoappositiveParser') {
-  		return this.contentDisplay(this.state.cvnoSegments.slice().reverse()[ind[0]][ind[1]], 1)		
+  		return this.contentDisplay(type,this.state.cvnoSegments.slice().reverse()[ind[0]][ind[1]], 1)		
   	} else if (type==='svnoParser' || type === 'svnoappositiveParser') {
-  		return this.contentDisplay(this.state.svnoSegments.slice().reverse()[ind[0]][ind[1]], 1)		
+  		return this.contentDisplay(type,this.state.svnoSegments.slice().reverse()[ind[0]][ind[1]], 1)		
   	} else if (type==='cvnoappositiveParser') {
-  		return this.contentDisplay(this.state.cvnoSegments.slice().reverse()[ind[0]][ind[1]], 1)		
+  		return this.contentDisplay(type,this.state.cvnoSegments.slice().reverse()[ind[0]][ind[1]], 1)		
   	} else if (type == 'mvQuestion' || type == 'mvParser') {
-  		return this.contentDisplay(this.state.mvvSegments, 2)		
+  		return this.contentDisplay(type,this.state.mvvSegments, 2)		
   	} else if (type==='mvqWord' || type==='mvqWordParser') {
-  		return this.contentDisplay(this.state.mvqWordSegments, 2)		
+  		return this.contentDisplay(type,this.state.mvqWordSegments, 2)		
   	} else if (type == 'cvParser') {
-  		return this.contentDisplay(this.state.cvvSegments, 2)		
+  		return this.contentDisplay(type,this.state.cvvSegments, 2)		
   	} else if (type == 'svParser') {
-  		return this.contentDisplay(this.state.svvSegments, 2)		
+  		return this.contentDisplay(type,this.state.svvSegments, 2)		
   	} else if (type==='npnParser' || type==='npnappositiveParser') {
-  		return this.contentDisplay(this.state.npnSegments.slice().reverse()[ind[0]][ind[1]], 1)		
+  		return this.contentDisplay(type,this.state.npnSegments.slice().reverse()[ind[0]][ind[1]], 1)		
   	} else if (type==='mvnObliquesParser' || type == 'mvnObliquesAppositiveParser') {
-  		return this.contentDisplay(this.state.mvnObliquesSegments[ind[0]][ind[1]][ind[2]], 1)		
+  		return this.contentDisplay(type,this.state.mvnObliquesSegments[ind[0]][ind[1]][ind[2]], 1)		
   	} else if (type==='cvnObliquesParser' || type==='cvnObliquesAppositiveParser') {
-  		return this.contentDisplay(this.state.cvnObliquesSegments[ind[0]][ind[1]][ind[2]], 1)		
+  		return this.contentDisplay(type,this.state.cvnObliquesSegments[ind[0]][ind[1]][ind[2]], 1)		
   	} else if (type==='svnObliquesParser' || type==='svnObliquesAppositiveParser') {
-  		return this.contentDisplay(this.state.svnObliquesSegments[ind[0]][ind[1]][ind[2]], 1)
+  		return this.contentDisplay(type,this.state.svnObliquesSegments[ind[0]][ind[1]][ind[2]], 1)
   	} else if (type==='mvEnglish1') {
-  		return this.contentDisplay(this.state.mvEnglish1, 5)
+  		return this.contentDisplay(type,this.state.mvEnglish1, 5)
 		} else if (type==='mvEnglish2') {
 			return <span>
 								{this.state.mvEnglish3in2.length > 0 ?
-									this.contentDisplay([this.state.mvEnglish3in2,this.state.mvEnglish2], 8)
+									this.contentDisplay(type,[this.state.mvEnglish3in2,this.state.mvEnglish2], 8)
 									:
-									this.contentDisplay(this.state.mvEnglish2, 5)
+									this.contentDisplay(type,this.state.mvEnglish2, 5)
 								}
 							</span>
 		} else if (type==='mvEnglishAbl') {
-  		return this.contentDisplay(this.state.mvEnglishAbl, 5)
+  		return this.contentDisplay(type,this.state.mvEnglishAbl, 5)
 		} else if (type==='mvEnglishQaa') {
-  		return this.contentDisplay(this.state.mvEnglishQaa, 5)
+  		return this.contentDisplay(type,this.state.mvEnglishQaa, 5)
 		} else if (type==='npnEnglish1') {
-  		return this.contentDisplay(this.state.npnEnglish1, 5)
+  		return this.contentDisplay(type,this.state.npnEnglish1, 5)
 		} else if (type==='cvEnglish1') {
-  		return this.contentDisplay(this.state.cvEnglish1, 5)
+  		return this.contentDisplay(type,this.state.cvEnglish1, 5)
 		} else if (type==='cvEnglishAbl') {
-  		return this.contentDisplay(this.state.cvEnglishAbl, 5)
+  		return this.contentDisplay(type,this.state.cvEnglishAbl, 5)
 		} else if (type==='cvEnglish2') {
   		return <span>
 								{this.state.cvEnglish3in2.length > 0 ?
-									this.contentDisplay([this.state.cvEnglish3in2,this.state.cvEnglish2], 8)
+									this.contentDisplay(type,[this.state.cvEnglish3in2,this.state.cvEnglish2], 8)
 									:
-									this.contentDisplay(this.state.cvEnglish2, 5)
+									this.contentDisplay(type,this.state.cvEnglish2, 5)
 								}
 							</span>
 		} else if (type==='svEnglishAbl') {
-  		return this.contentDisplay(this.state.svEnglishAbl, 5)
+  		return this.contentDisplay(type,this.state.svEnglishAbl, 5)
 		} else if (type==='svEnglish2') {
-  		return this.contentDisplay(this.state.svEnglish2, 5)
+  		return this.contentDisplay(type,this.state.svEnglish2, 5)
 		} else if (type==='mvnObliquesEnglish1') {
-  		return this.contentDisplay(this.state.mvnObliquesEnglish1[ind], 5)
+  		return this.contentDisplay(type,this.state.mvnObliquesEnglish1[ind], 5)
 		} else if (type==='svnObliquesEnglish1') {
-  		return this.contentDisplay(this.state.svnObliquesEnglish1[ind], 5)
+  		return this.contentDisplay(type,this.state.svnObliquesEnglish1[ind], 5)
 		} else if (type==='cvnObliquesEnglish1') {
-  		return this.contentDisplay(this.state.cvnObliquesEnglish1[ind], 5)
+  		return this.contentDisplay(type,this.state.cvnObliquesEnglish1[ind], 5)
 		} else if (type==='mvnsEnglish2' || type==='mvnsEnglish2appositive') {
-  		return this.contentDisplay(this.state.mvnsEnglish2[ind[0]][ind[1]], 5)
+  		return this.contentDisplay(type,this.state.mvnsEnglish2[ind[0]][ind[1]], 5)
 		} else if (type==='mvnoEnglish2' || type==='mvnoEnglish2appositive') {
-  		return this.contentDisplay(this.state.mvnoEnglish2[ind[0]][ind[1]], 5)
+  		return this.contentDisplay(type,this.state.mvnoEnglish2[ind[0]][ind[1]], 5)
 		} else if (type==='cvnsEnglish2' || type==='cvnsEnglish2appositive') {
-  		return this.contentDisplay(this.state.cvnsEnglish2[ind[0]][ind[1]], 5)
+  		return this.contentDisplay(type,this.state.cvnsEnglish2[ind[0]][ind[1]], 5)
 		} else if (type==='cvnoEnglish2' || type==='cvnoEnglish2appositive') {
-  		return this.contentDisplay(this.state.cvnoEnglish2[ind[0]][ind[1]], 5)
+  		return this.contentDisplay(type,this.state.cvnoEnglish2[ind[0]][ind[1]], 5)
 		} else if (type==='svnoEnglish2' || type==='svnoEnglish2appositive') {
-  		return this.contentDisplay(this.state.svnoEnglish2[ind[0]][ind[1]], 5)
+  		return this.contentDisplay(type,this.state.svnoEnglish2[ind[0]][ind[1]], 5)
 		} else if (type==='npnEnglish2') {
-  		return this.contentDisplay(this.state.npnEnglish2[ind[0]][ind[1]], 5)
+			// console.log('npn', this.state.npnEnglish2, ind[0], ind[1])
+  		return this.contentDisplay(type,this.state.npnEnglish2[ind[0]][this.state.npnEnglish2[ind[0]].length-1-ind[1]], 5)
 		} else if (type==='npnEnglish2appositive') {
-  		return this.contentDisplay(this.state.npnEnglish2[ind[0]][ind[1]], 5)
+			// console.log('npnappositive', this.state.npnEnglish2, ind[0], ind[1])
+  		return this.contentDisplay(type,this.state.npnEnglish2[ind[0]][this.state.npnEnglish2[ind[0]].length-1-ind[1]], 5)
 		} else if (type==='cvnsEnglish2') {
-  		return this.contentDisplay(this.state.cvnsEnglish2[ind], 6)
+  		return this.contentDisplay(type,this.state.cvnsEnglish2[ind], 6)
 		} else if (type==='svnoEnglish2') {
-  		return this.contentDisplay(this.state.svnoEnglish2[ind], 6)
+  		return this.contentDisplay(type,this.state.svnoEnglish2[ind], 6)
 		} else if (type==='mvnObliquesEnglish2' || type ==='mvnObliquesEnglish2appositive') {
-  		return this.contentDisplay(this.state.mvnObliquesEnglish2[ind[0]][this.state.mvnObliquesEnglish2[ind[0]].length-1-ind[1]][this.state.mvnObliquesEnglish2[ind[0]][this.state.mvnObliquesEnglish2[ind[0]].length-1-ind[1]].length-1-ind[2]], 5)
+  		return this.contentDisplay(type,this.state.mvnObliquesEnglish2[ind[0]][this.state.mvnObliquesEnglish2[ind[0]].length-1-ind[1]][this.state.mvnObliquesEnglish2[ind[0]][this.state.mvnObliquesEnglish2[ind[0]].length-1-ind[1]].length-1-ind[2]], 5)
 		} else if (type==='cvnObliquesEnglish2' || type==='cvnObliquesEnglish2appositive') {
-  		return this.contentDisplay(this.state.cvnObliquesEnglish2[ind[0]][this.state.cvnObliquesEnglish2[ind[0]].length-1-ind[1]][this.state.cvnObliquesEnglish2[ind[0]][this.state.cvnObliquesEnglish2[ind[0]].length-1-ind[1]].length-1-ind[2]], 5)
+  		return this.contentDisplay(type,this.state.cvnObliquesEnglish2[ind[0]][this.state.cvnObliquesEnglish2[ind[0]].length-1-ind[1]][this.state.cvnObliquesEnglish2[ind[0]][this.state.cvnObliquesEnglish2[ind[0]].length-1-ind[1]].length-1-ind[2]], 5)
 		} else if (type==='svnObliquesEnglish2' || type==='svnObliquesEnglish2appositive') {
-  		return this.contentDisplay(this.state.svnObliquesEnglish2[ind[0]][this.state.svnObliquesEnglish2[ind[0]].length-1-ind[1]][this.state.svnObliquesEnglish2[ind[0]][this.state.svnObliquesEnglish2[ind[0]].length-1-ind[1]].length-1-ind[2]], 5)
+  		return this.contentDisplay(type,this.state.svnObliquesEnglish2[ind[0]][this.state.svnObliquesEnglish2[ind[0]].length-1-ind[1]][this.state.svnObliquesEnglish2[ind[0]][this.state.svnObliquesEnglish2[ind[0]].length-1-ind[1]].length-1-ind[2]], 5)
 		} else if (type==='svEnglish1') {
 			return <span style={{display:'inline-block',border:'1px solid #22242626',marginRight:'2px',marginLeft:'2px',cursor:'pointer',fontSize:'18px',padding:'8px 5px 8px 5px',borderRadius:'5px'}}> 
 			{this.state.svEnglish2.map((w,wind)=>
@@ -1590,7 +1613,7 @@ class SentenceBuilder extends Component {
 
 
 
-  contentDisplay = (data, fontType) => {
+  contentDisplay = (type, data, fontType) => {
   	// console.log(data)
   	if (fontType == 1) {
 		return <div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:5,}}>
@@ -1619,23 +1642,23 @@ class SentenceBuilder extends Component {
   	} else if (fontType == 5) {
   		// console.log(data)
   		// console.log('5')
-			return <span style={{display:'inline-block',border:'solid 1px #22242626',marginRight:'2px',marginLeft:'2px',cursor:'pointer',fontSize:'18px',padding:'8px 5px 8px 5px',borderRadius:'5px'}}> 
+			return <span ref={(element)=>{this.vEnglish2Ref[type]=element;}} style={{display:'inline-block',border:'solid 1px #22242626',marginRight:'2px',marginLeft:'2px',cursor:'pointer',fontSize:'18px',padding:'8px 5px 8px 5px',borderRadius:'5px'}}> 
 			{data.map((w,wind)=><span 
 				style={{color:this.getColor(w[1])}}
 				// {{color:this.getColor(w[1]),cursor:'pointer',paddingBottom:'1px',borderBottom:'1px solid '+this.getColor(w[1])}}
 				// {{border:'solid 1px #22242626',color:this.getColor(w[1]),fontSize:'18px',padding:'5px',borderRadius:'5px',marginRight:'2px',marginLeft:'2px',}}
 				>{w[0].replaceAll("<","").replaceAll(">","")+" "}</span>)} <Icon style={{fontSize:'16px',margin:0}} name='dropdown' /></span>  		
   	} else if (fontType == 6) {
-  		console.log('6')
+  		// console.log('6')
   		return 	<span> {data.map((w,wind)=>
 							(w.map((t)=> <span style={{color:this.getColor(t[1]),cursor:'pointer',paddingBottom:'1px',borderBottom:'1px solid '+this.getColor(t[1])}}>{t[0]+" "}<Icon style={{color:this.getColor(t[1]),fontSize:'16px',margin:0}} name='dropdown' /></span>)))}
   						</span>
   	} else if (fontType == 7) {
-  		console.log('7')
+  		// console.log('7')
   		return 	<span style={{color:this.getColor(data[1]),cursor:'pointer',paddingBottom:'1px',borderBottom:'1px solid '+this.getColor(data[1])}}>{data[0]+" "}<Icon style={{color:this.getColor(data[1]),fontSize:'16px',margin:0}} name='dropdown' /></span>
   	} else if (fontType == 8) {
   		// console.log('8')
-			return <span style={{display:'inline-block',border:'solid 1px #22242626',marginRight:'2px',marginLeft:'2px',cursor:'pointer',fontSize:'18px',padding:'8px 5px 8px 5px',borderRadius:'5px'}}> 
+			return <span ref={(element)=>{this.vEnglish2Ref[type]=element;}} style={{display:'inline-block',border:'solid 1px #22242626',marginRight:'2px',marginLeft:'2px',cursor:'pointer',fontSize:'18px',padding:'8px 5px 8px 5px',borderRadius:'5px'}}> 
 			{data[0].map((w,wind)=><span style={{color:this.getColor(w[1])}}>{w[0]+(w[0].length>0 && w[1] !== 'mvv.com' ? " ":"")}</span>)} 
 			{data[1].map((w,wind)=><span style={{color:this.getColor(w[1])}}>{w[0]+(w[0].length>0 && wind !== data[1].length-1 ?" ":"")}</span>)} 
 			<Icon style={{color:this.getColor(data[1]),fontSize:'16px',margin:0}} name='dropdown' />
@@ -1866,13 +1889,13 @@ class SentenceBuilder extends Component {
 					{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun',[typeInd,'npnpossessorinsert'],null) : null}
 		      {ind[0] == this.state.npnEnglish2.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun',[typeInd,'npnpossessedinsert'],null) : null}
 					{this.menuItem('BaseChooser','Add Descriptor Noun',[typeInd,'npnappositiveinsert'],null)}
-					{this.menuItem('Delete','Delete Noun',null,null,[["Delete",["np","n",ind[0]],-1]])}
+					{this.menuItem('Delete','Delete Noun',null,null,[["Delete",["np","n",this.state.npnSegments.length-1-ind[0]],-1]])}
 		    	</Menu>  
  			} else if (type === 'npnEnglish2appositive') {
- 					console.log('content',type,ind)
+ 					// console.log('content',type,ind)
  					return <Menu vertical style={{marginTop:10,marginBottom:10}}>
 						{this.menuItem('BaseChooser','Change Noun',[typeInd,'npnupdateEnglish'],null)}
-				    {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["np","n",ind[0],this.state.npnEnglish2[ind[0]].length-1-ind[1]],-1]])}
+				    {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["np","n",this.state.npnSegments.length-1-ind[0],ind[1]],-1]])}
 			    	</Menu>   					
  			} else if (type === 'npnEnglish1') {
 				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
@@ -2018,6 +2041,7 @@ class SentenceBuilder extends Component {
   	} else if (currentEditMode==='npnupdate') {
   		return this.baseChooser(["Update",["np","nBases",this.state.npn.length-1-ind[0],ind[1]]],'n','updatebase')
   	} else if (currentEditMode==='npnupdateEnglish') {
+  		// console.log(this.state.npn, this.state.npn.length-1-ind[0], ind[1])
   		return this.baseChooser(["Update",["np","nBases",this.state.npn.length-1-ind[0],ind[1]]],'n','updatebase')
   		// return this.baseChooser(["Update",["np","nBases",this.state.npn.length-1-ind[0],this.state.npn[this.state.npn.length-1-ind[0]].length-1-ind[1]]],'n','updatebase')
   	} else if (currentEditMode==='npinsert') {
@@ -2034,6 +2058,7 @@ class SentenceBuilder extends Component {
   	} else if (currentEditMode==='mvnsupdate') {
   		return this.baseChooser(["Update",["mv","nsBases",this.state.mvnsSegments.length-1-ind[0],ind[1]]],'n','updatebase')
   	} else if (currentEditMode==='mvnsupdateEnglish' && ind !== -1) {
+  		// console.log(this.state.mvnsSegments, ind[0],ind[1])
   		return this.baseChooser(["Update",["mv","nsBases",this.state.mvnsSegments.length-1-ind[0],this.state.mvnsSegments[this.state.mvnsSegments.length-1-ind[0]].length-1-ind[1]]],'n','updatebase')
   	} else if (currentEditMode==='mvnoupdateEnglish' && ind !== -1) {
   		return this.baseChooser(["Update",["mv","noBases",this.state.mvnoSegments.length-1-ind[0],this.state.mvnoSegments[this.state.mvnoSegments.length-1-ind[0]].length-1-ind[1]]],'n','updatebase')
@@ -2159,7 +2184,7 @@ editSubjectMenu = (nounInsert,subject, tag, statevvs, update, backendcall, value
 					      		:
 					      		null
 					      	}
-					      	<Segment style={{height:200,overflow:'auto',padding:0,marginBottom:8}}>
+					      	<Segment style={{maxHeight:200,overflow:'auto',padding:0,marginBottom:8}}>
 						      <Button.Group style={{border:0}} basic vertical>
 						      	{options.map((k)=>
 						      		<Button active={k['value']==statevvs.join("")} onClick={()=>{this.closeSubjectMenu(tag,false); this.backEndCall([[update,backendcall,k['value'].split('').map(Number)]])}}>{k['text']}</Button>
@@ -2875,6 +2900,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		          // active={this.state.activeItem === 'messages'}
 		          style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}
 							onClick={()=>{
+								console.log(backEnd)
 								this.closeEditMenuRef(this.state.crecentlyOpen,'default',false);
 								this.setState({ isOpen: false,currentEditMode:'' },()=>{this.backEndCall(backEnd)})}}
 		        >
@@ -3266,7 +3292,14 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 							} else {
 								if (s0 === 'p') {
 									if (newpostbases[lookup]['was']) {
-										sentence = s1+' (was) '+newpostbases[lookup]['gen_preverb']
+										if (vsPlanned[0] == 1 && vsPlanned[1] == 1)	{
+											sentence = 'was '+newpostbases[lookup]['gen_preverb']
+										} else if (vsPlanned[0] == 3 && vsPlanned[1] == 1) {
+											sentence = 'was '+newpostbases[lookup]['gen_preverb']
+										} else {
+											sentence = 'were '+newpostbases[lookup]['gen_preverb']
+										}		
+										// sentence = s1+' (was) '+newpostbases[lookup]['gen_preverb']
 									} else {
 										sentence = newpostbases[lookup]['past_preverb']
 									}
@@ -3280,7 +3313,14 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 									sentence = s1+' '+newpostbases[lookup]['gen_preverb']
 								} else if (s0 === 'past') {
 									if (newpostbases[lookup]['was']) {
-										sentence = s1+' (was) '+newpostbases[lookup]['gen_preverb']
+										if (vsPlanned[0] == 1 && vsPlanned[1] == 1)	{
+											sentence = 'was '+newpostbases[lookup]['gen_preverb']
+										} else if (vsPlanned[0] == 3 && vsPlanned[1] == 1) {
+											sentence = 'was '+newpostbases[lookup]['gen_preverb']
+										} else {
+											sentence = 'were '+newpostbases[lookup]['gen_preverb']
+										}	
+										// sentence = s1+' (was) '+newpostbases[lookup]['gen_preverb']
 									} else {
 										sentence = newpostbases[lookup]['past_preverb']
 									}
@@ -4668,6 +4708,35 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		return {lineHeight:'33px',marginTop:'2px',marginBottom:'2px',border:'solid 1px #22242626',color:this.getColor(color),fontSize:'18px',padding:'5px',borderRadius:'5px',marginRight:'2px',marginLeft:'2px',}
 	}
 
+	shortEnoughVEnglish2=(type)=> {
+			let offsetWidth = 0
+			let offsetHeight = 0
+
+			if (this.vEnglish2Ref[type] !== null && this.vEnglish2Ref[type] !== undefined) {
+				offsetWidth = this.vEnglish2Ref[type].offsetWidth
+				offsetHeight = this.vEnglish2Ref[type].offsetHeight
+			}
+
+			// console.log(offsetWidth)
+			// console.log(offsetHeight)
+
+			if (offsetHeight > 50) {
+				return false
+			} else {
+				return true
+			}
+
+			// if (window.innerWidth < 480 && offsetWidth > 230) {
+			// 	return false
+			// } else if (offsetWidth > 300) {
+			// 	return false
+			// } else {
+			// 	return true
+			// }
+		// }
+	}
+
+
 	render() {
 		// console.log(this.state)
 		// console.log("mvv",this.state.mvvMood)
@@ -4718,7 +4787,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 					:
 					<div style={{textAlign:'right'}}>
 					<Link to={{pathname: '/sentencebuilder/1'}}>
-	      		<Icon circular onClick={()=>{this.backEndCall([['Delete',['mv',],''],['Delete',['np',],'']])}} style={{margin:10,color:'#B1B1B1',cursor:'pointer',fontSize:'22px'}} name='x' />
+	      		<Icon circular onClick={()=>{this.setState({crecentlyOpen:'',currentEditMode:'default'},()=>{this.backEndCall([['Delete',['mv',],''],['Delete',['np',],'']])})}} style={{margin:10,color:'#B1B1B1',cursor:'pointer',fontSize:'22px'}} name='x' />
 	      	</Link>
 	      	</div>
 				}
@@ -4864,7 +4933,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 								}
 */}
 
-								<div style={{textAlign:'center',fontSize:'18px',fontWeight:'300',marginTop:'20px'}}>
+								<div ref={(element)=>{this.mvEnglishVerticalRef=element;}}  style={{textAlign:'center',fontSize:'18px',fontWeight:'300',marginTop:'20px'}}>
 
 								{this.state.mvEnglish1.length > 0 || (this.state.mvvType === 'Intrg1' || this.state.mvvType === 'Intrg3')?
 										<span style={{height:45,display:'inline-flex',alignItems:'center',marginBottom:'2px',marginTop:'2px'}}>
@@ -4939,12 +5008,12 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 
 								{this.state.mvEnglish2.length > 0 ?
-									(this.state.mvnsSegments.length === 0 || (this.state.mvvo.length > 0 && this.state.mvnoSegments.length === 0) ?
+									(this.shortEnoughVEnglish2('mvEnglish2') && (this.state.mvnsSegments.length === 0 || (this.state.mvvo.length > 0 && this.state.mvnoSegments.length === 0)) ?
 										<span style={{height:45,display:'inline-flex',alignItems:'center',marginBottom:'2px',marginTop:'2px'}}>
 										{this.editMenu('mvEnglish2',-1)}
 										</span>
 										:
-										<div style={{display:'flex',justifyContent:'center',alignItems:'center',}}>
+										<div style={{display:'flex',justifyContent:'center',alignItems:'center',marginBottom:'2px',marginTop:'2px'}}>
 										{this.editMenu('mvEnglish2',-1)}
 										</div>
 										)
@@ -5226,11 +5295,11 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 													{x.map((k,kind)=>
 														{if (kind === x.length-1) {
 															return <span>
-																{this.editMenu('npnEnglish2',[xind,kind])}
+																{this.editMenu('npnEnglish2',[xind,x.length-1-kind])}
 															</span>
 														} else {
 															return <span>
-																{this.editMenu('npnEnglish2appositive',[xind,kind])}
+																{this.editMenu('npnEnglish2appositive',[xind,x.length-1-kind])}
 															</span>															
 														}}											
 													)}
@@ -5242,11 +5311,11 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 														{x.map((k,kind)=>
 															{if (kind === x.length-1) {
 																return <span>
-																	{this.editMenu('npnEnglish2',[xind,kind])}
+																	{this.editMenu('npnEnglish2',[xind,x.length-1-kind])}
 																</span>
 															} else {
 																return <span>
-																	{this.editMenu('npnEnglish2appositive',[xind,kind])}
+																	{this.editMenu('npnEnglish2appositive',[xind,x.length-1-kind])}
 																</span>															
 															}}											
 														)}
@@ -5367,7 +5436,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 									null
 								}								
 */}
-								<div style={{textAlign:'center',fontSize:'18px',fontWeight:'300',marginTop:'20px'}}>
+								<div ref={(element)=>{this.cvEnglishVerticalRef=element;}} style={{textAlign:'center',fontSize:'18px',fontWeight:'300',marginTop:'20px'}}>
 
 								{this.state.cvEnglish1.length > 0 ?
 									this.editMenu('cvEnglish1',-1)
@@ -5423,13 +5492,18 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 								}
 
 								{this.state.cvEnglish2.length > 0 ? 
-									<span style={{height:45,display:'inline-flex',alignItems:'center',marginBottom:'2px',marginTop:'2px'}}>
+									(this.shortEnoughVEnglish2('cvEnglish2') ?
+										<span ref={(element)=>{this.cvEnglish2Ref=element;}} style={{height:45,display:'inline-flex',alignItems:'center',marginBottom:'2px',marginTop:'2px'}}>
 										{this.editMenu('cvEnglish2',-1)}
-									</span>
+										</span>
+										:
+										<div ref={(element)=>{this.cvEnglish2Ref=element;}} style={{display:'flex',justifyContent:'center',alignItems:'center',marginBottom:'2px',marginTop:'2px'}}>
+										{this.editMenu('cvEnglish2',-1)}
+										</div>
+										)
 									:
 									null
 								}
-
 
 								{this.state.cvvo.length > 0 ?
 									(this.state.cvnoSegments.length > 0 && this.state.cvnoSegments.length === this.state.cvno.length ? 

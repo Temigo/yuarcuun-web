@@ -223,7 +223,7 @@ export const popularOptPostbases = [
     id: 3, 
     // description: "quickly", 
     expression: "\u2013laag[V\u2192V]", 
-    allowable_next_ids: [2,0],
+    allowable_next_ids: [2,0,3],
   }, 
 ]
  
