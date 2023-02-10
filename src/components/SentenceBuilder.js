@@ -1831,12 +1831,12 @@ class SentenceBuilder extends Component {
 						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun',[typeInd,'svnopossessorinsert'],null) : null}
 			      {ind[0] == this.state.svno.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun',[typeInd,'svnopossessedinsert'],null): null}
 						{this.menuItem('BaseChooser','Add Descriptor Noun',[typeInd,'svnoappositiveinsert'],null)}
-			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["sv","no",ind[0]],-1]])}
+			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["sv","no",this.state.svno.length-1-ind[0]],-1]])}
 			    	</Menu>  			
  			} else if (type === 'svnoEnglish2appositive') {
 				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
 						{this.menuItem('BaseChooser','Change Descriptor Noun',[typeInd,'svnoupdateEnglishappositiveupdate'],null)}
-			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["sv","no",ind[0],this.state.svno[ind[0]].length-1-ind[1]],-1]])}
+			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["sv","no",this.state.svno.length-1-ind[0],this.state.svno[ind[0]].length-1-ind[1]],-1]])}
 			    	</Menu>  					
  			} else if (type == 'mvnsEnglish2') {
 				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
@@ -1844,12 +1844,12 @@ class SentenceBuilder extends Component {
 						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun',[typeInd,'mvnspossessorinsert'],null) : null}
 			      {ind[0] == this.state.mvns.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun',[typeInd,'mvnspossessedinsert'],null): null}
 						{this.menuItem('BaseChooser','Add Descriptor Noun',[typeInd,'mvnsappositiveinsert'],null)}
-			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["mv","ns",ind[0]],-1]])}
+			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["mv","ns",this.state.mvns.length-1-ind[0]],-1]])}
 			    	</Menu>  			
  			} else if (type == 'mvnsEnglish2appositive') {
 				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
 						{this.menuItem('BaseChooser','Change Descriptor Noun',[typeInd,'mvnsupdateEnglishappositiveupdate'],null)}
-			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["mv","ns",ind[0],this.state.mvns[ind[0]].length-1-ind[1]],-1]])}
+			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["mv","ns",this.state.mvns.length-1-ind[0],this.state.mvns[ind[0]].length-1-ind[1]],-1]])}
 			    	</Menu>  			
  			} else if (type === 'mvnoEnglish2') {
 				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
@@ -1857,12 +1857,12 @@ class SentenceBuilder extends Component {
 						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun',[typeInd,'mvnopossessorinsert'],null) : null}
 			      {ind[0] == this.state.mvno.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun',[typeInd,'mvnopossessedinsert'],null): null}
 						{this.menuItem('BaseChooser','Add Descriptor Noun',[typeInd,'mvnoappositiveinsert'],null)}
-			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["mv","no",ind[0]],-1]])}
+			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["mv","no",this.state.mvno.length-1-ind[0]],-1]])}
 			    	</Menu>  			
  			} else if (type === 'mvnoEnglish2appositive') {
 				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
 						{this.menuItem('BaseChooser','Change Descriptor Noun',[typeInd,'mvnoupdateEnglishappositiveupdate'],null)}
-			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["mv","no",ind[0],this.state.mvno[ind[0]].length-1-ind[1]],-1]])}
+			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["mv","no",this.state.mvno.length-1-ind[0],this.state.mvno[ind[0]].length-1-ind[1]],-1]])}
 			    	</Menu>  			
  			} else if (type === 'cvnsEnglish2') {
 				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
@@ -1870,7 +1870,7 @@ class SentenceBuilder extends Component {
 						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun',[typeInd,'cvnspossessorinsert'],null) : null}
 			      {ind[0] == this.state.cvns.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun',[typeInd,'cvnspossessedinsert'],null): null}
 						{this.menuItem('BaseChooser','Add Descriptor Noun',[typeInd,'cvnsappositiveinsert'],null)}
-			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["cv","ns",ind[0]],-1]])}
+			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["cv","ns",this.state.cvns.length-1-ind[0]],-1]])}
 			    	</Menu>  			
  			} else if (type === 'cvnoEnglish2') {
 				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
@@ -1878,17 +1878,17 @@ class SentenceBuilder extends Component {
 						{ind[0] == 0 ? this.menuItem('BaseChooser','Add Possessor Noun',[typeInd,'cvnopossessorinsert'],null) : null}
 			      {ind[0] == this.state.cvno.length-1 ? this.menuItem('BaseChooser','Add Possessed Noun',[typeInd,'cvnopossessedinsert'],null): null}
 						{this.menuItem('BaseChooser','Add Descriptor Noun',[typeInd,'cvnoappositiveinsert'],null)}
-			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["cv","no",ind[0]],-1]])}
+			      {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["cv","no",this.state.cvno.length-1-ind[0]],-1]])}
 			    	</Menu>  			
  			} else if (type === 'cvnsEnglish2appositive') {
 				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
 						{this.menuItem('BaseChooser','Change Descriptor Noun',[typeInd,'cvnsupdateEnglishappositiveupdate'],null)}
-			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["cv","ns",ind[0],this.state.cvns[ind[0]].length-1-ind[1]],-1]])}
+			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["cv","ns",this.state.cvns.length-1-ind[0],this.state.cvns[ind[0]].length-1-ind[1]],-1]])}
 			    	</Menu>  			
  			} else if (type === 'cvnoEnglish2appositive') {
 				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
 						{this.menuItem('BaseChooser','Change Descriptor Noun',[typeInd,'cvnoupdateEnglishappositiveupdate'],null)}
-			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["cv","no",ind[0],this.state.cvno[ind[0]].length-1-ind[1]],-1]])}
+			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["cv","no",this.state.cvno.length-1-ind[0],this.state.cvno[ind[0]].length-1-ind[1]],-1]])}
 			    	</Menu>  					
  			} else if (type === 'npnEnglish2') {
  				// console.log(ind, this.state.npnEnglish2[ind[0]].length-1)
@@ -2018,7 +2018,7 @@ class SentenceBuilder extends Component {
   	} else if (currentEditMode==='svinsert') {
   		return this.baseChooser(["Insert",["sv"]],'v','insert','Sbrd',setStateTo[0],forEnglish)
   	} else if (currentEditMode==='mvupdate') {
-  		return this.baseChooser(["Update",["mv","vBase"]],'v','update',this.state.mvvMood,this.state.mvvType,['',this.state.mvvs])
+  		return this.baseChooser(["Update",["mv","vBase"]],'v','update',this.state.mvvMood,this.state.mvvType)
   	} else if (currentEditMode==='svupdate') {
   		return this.baseChooser(["Update",["sv","vBase"]],'v','update')
   	} else if (currentEditMode==='nObliqueInsert') {
@@ -2108,7 +2108,7 @@ class SentenceBuilder extends Component {
   	} else if (currentEditMode==='mvnopossessorinsert') {
   		return this.baseChooser(["Insert",["mv","no",-1]],'n','insert',null)
   	} else if (currentEditMode==='cvupdate') {
-  		return this.baseChooser(["Update",["cv","vBase"]],'v','update',this.state.cvvMood,null,['',this.state.cvvs])
+  		return this.baseChooser(["Update",["cv","vBase"]],'v','update',this.state.cvvMood,null)
   	} else if (currentEditMode==='cvnsinsert') {
   		return this.baseChooser(["Insert",["cv","ns"]],'n','insert','Ind')
   	} else if (currentEditMode==='cvnsupdate') {
@@ -4995,7 +4995,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 							 	{this.state.mvnsBases.length > 0 ? 
 									<div>
 										<div style={{fontSize:'30px',fontWeight:'400'}}>
-											<div style={{display:'flex',justifyContent:'center',flexDirection:(window.innerWidth < 480 ? 'column':'row'), lineHeight:'40px'}}>
+											<div style={{display:'flex',justifyContent:'center',flexDirection:(window.innerWidth < 480 || this.state.mvnsBases.length > 2 ? 'column':'row'), lineHeight:'40px'}}>
 											{this.state.mvnsSegments.slice().reverse().map((k,kind)=> 
 												<div style={{paddingRight:10,paddingLeft:10}}>
 												{k.map((q,qind)=> {
@@ -5034,7 +5034,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 							 	{this.state.mvnoBases.length > 0 ? 
 							 		<div>
 										<div style={{fontSize:'30px',fontWeight:'400'}}>
-											<div style={{display:'flex',justifyContent:'center',flexDirection:(window.innerWidth < 480 ? 'column':'row'), lineHeight:'40px'}}>
+											<div style={{display:'flex',justifyContent:'center',flexDirection:(window.innerWidth < 480 || this.state.mvnoBases.length > 2 ? 'column':'row'), lineHeight:'40px'}}>
 											{this.state.mvnoSegments.slice().reverse().map((k,kind)=> 
 												<div style={{paddingRight:10,paddingLeft:10}}>
 												{k.map((q,qind)=> {
@@ -5060,7 +5060,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 									(this.state.mvnObliquesSegments.map((obliques,obliqueind)=>
 										<div>
 											<div style={{fontSize:'30px',fontWeight:'400'}}>
-												<div style={{display:'flex',justifyContent:'center',flexDirection:(window.innerWidth < 480 ? 'column':'row'), lineHeight:'40px'}}>
+												<div style={{display:'flex',justifyContent:'center',flexDirection:(window.innerWidth < 480 || this.state.mvnObliquesSegments.length > 2 ? 'column':'row'), lineHeight:'40px'}}>
 													{obliques.slice().reverse().map((x,xind)=> 
 													<div style={{paddingRight:10,paddingLeft:10}}>
 														{x.map((k,kind)=>
@@ -5081,7 +5081,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 								{this.state.npnSegments.length > 0 && this.state.npnSegments.length === this.state.npn.length ?
 									<div>
 										<div style={{fontSize:'30px',fontWeight:'400'}}>
-											<div style={{display:'flex',justifyContent:'center',flexDirection:(window.innerWidth < 480 ? 'column':'row'), lineHeight:'40px'}}>
+											<div style={{display:'flex',justifyContent:'center',flexDirection:(window.innerWidth < 480 || this.state.npnSegments.length > 2 ? 'column':'row'), lineHeight:'40px'}}>
 												{this.state.npnSegments.slice().reverse().map((x,xind)=> 
 													<div style={{paddingRight:10,paddingLeft:10}}>
 													{x.map((k,kind)=>
@@ -5124,7 +5124,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 								{this.state.mvvs.length > 0 ?
 									(this.state.mvnsSegments.length > 0 ? 
-										<div style={{display:'flex',flexDirection:(window.innerWidth < 480 ? 'column':'row'), justifyContent:'center',alignItems:'center',}}>
+										<div style={{display:'flex',flexDirection:(window.innerWidth < 480 || this.state.mvnsSegments.length > 2 ? 'column':'row'), justifyContent:'center',alignItems:'center',}}>
 											{this.state.mvnsSegments.slice().reverse().map((x,xind)=>
 												<span>
 												{xind === 0 ?
@@ -5202,7 +5202,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 								{this.state.mvvo.length > 0 ?
 									(this.state.mvnoSegments.length > 0 && this.state.mvnoSegments.length === this.state.mvno.length ? 
-										<div style={{display:'flex',flexDirection:(window.innerWidth < 480 ? 'column':'row'),justifyContent:'center',alignItems:'center',}}>
+										<div style={{display:'flex',flexDirection:(window.innerWidth < 480 || this.state.mvnoSegments.length > 2 ? 'column':'row'),justifyContent:'center',alignItems:'center',}}>
 											{this.state.mvnoSegments.slice().reverse().map((x,xind)=>
 												<span>
 												{xind === 0 ?
@@ -5458,7 +5458,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 										<span>					
 											{/*{console.log(this.state.npn[this.state.npn.length-1][0], this.arraysEqual(this.state.npn[this.state.npn.length-1][0], [0,0,0,1]))}*/}
 
-											<div style={{display:'flex',flexDirection:(window.innerWidth < 480 ? 'column':'row'),justifyContent:'center',alignItems:'center',}}>
+											<div style={{display:'flex',flexDirection:(window.innerWidth < 480 || this.state.npnSegments.length > 2 ? 'column':'row'),justifyContent:'center',alignItems:'center',}}>
 											{this.state.npnSegments.slice().reverse().map((x,xind)=>
 												<span>
 												{xind === 0 ? (
@@ -5534,7 +5534,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 							 	{this.state.cvnsBases.length > 0 ? 
 									<div>
 										<div style={{fontSize:'30px',fontWeight:'400'}}>
-											<div style={{display:'flex',justifyContent:'center',flexDirection:(window.innerWidth < 480 ? 'column':'row'), lineHeight:'40px'}}>
+											<div style={{display:'flex',justifyContent:'center',flexDirection:(window.innerWidth < 480 || this.state.cvnsBases.length > 2 ? 'column':'row'), lineHeight:'40px'}}>
 											{this.state.cvnsSegments.slice().reverse().map((k,kind)=> 
 												<div style={{paddingRight:10,paddingLeft:10}}>
 												{k.map((q,qind)=> {
@@ -5565,7 +5565,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 							 	{this.state.cvnoBases.length > 0 ? 
 							 		<div>
 										<div style={{fontSize:'30px',fontWeight:'400'}}>
-											<div style={{display:'flex',justifyContent:'center',flexDirection:(window.innerWidth < 480 ? 'column':'row'), lineHeight:'40px'}}>
+											<div style={{display:'flex',justifyContent:'center',flexDirection:(window.innerWidth < 480 || this.state.cvnoBases.length > 2 ? 'column':'row'), lineHeight:'40px'}}>
 											{this.state.cvnoSegments.slice().reverse().map((k,kind)=> 
 												<div style={{paddingRight:10,paddingLeft:10}}>
 												{k.map((q,qind)=> {
@@ -5589,7 +5589,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 									(this.state.cvnObliquesSegments.map((obliques,obliqueind)=>
 										<div>
 											<div style={{fontSize:'30px',fontWeight:'400'}}>
-												<div style={{display:'flex',justifyContent:'center',flexDirection:(window.innerWidth < 480 ? 'column':'row'), lineHeight:'40px'}}>
+												<div style={{display:'flex',justifyContent:'center',flexDirection:(window.innerWidth < 480 || this.state.cvnObliquesSegments.length > 2 ? 'column':'row'), lineHeight:'40px'}}>
 													{obliques.slice().reverse().map((x,xind)=> 
 													<div style={{paddingRight:10,paddingLeft:10}}>
 														{x.map((k,kind)=>
@@ -5625,7 +5625,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 								{this.state.cvvs.length > 0 ?
 									(this.state.cvnsSegments.length > 0 && this.state.cvnsSegments.length === this.state.cvns.length ? 
-										<div style={{display:'flex',flexDirection:(window.innerWidth < 480 ? 'column':'row'),justifyContent:'center',alignItems:'center',}}>
+										<div style={{display:'flex',flexDirection:(window.innerWidth < 480 || this.state.cvnsSegments.length > 2 ? 'column':'row'),justifyContent:'center',alignItems:'center',}}>
 											{this.state.cvnsSegments.slice().reverse().map((x,xind)=>
 												<span>
 												{xind === 0 ?
@@ -5686,7 +5686,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 								{this.state.cvvo.length > 0 ?
 									(this.state.cvnoSegments.length > 0 && this.state.cvnoSegments.length === this.state.cvno.length ? 
-										<div style={{display:'flex',flexDirection:(window.innerWidth < 480 ? 'column':'row'),justifyContent:'center',alignItems:'center',}}>
+										<div style={{display:'flex',flexDirection:(window.innerWidth < 480 || this.state.cvnoSegments.length > 2 ? 'column':'row'),justifyContent:'center',alignItems:'center',}}>
 											{this.state.cvnoSegments.slice().reverse().map((x,xind)=>
 												<span>
 												{xind === 0 ?
@@ -5817,7 +5817,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 							 	{this.state.svnoBases.length > 0 ? 
 							 		<div>
 										<div style={{fontSize:'30px',fontWeight:'400'}}>
-											<div style={{display:'flex',justifyContent:'center',flexDirection:(window.innerWidth < 480 ? 'column':'row'), lineHeight:'40px'}}>
+											<div style={{display:'flex',justifyContent:'center',flexDirection:(window.innerWidth < 480 || this.state.svnoBases.length > 2 ? 'column':'row'), lineHeight:'40px'}}>
 											{this.state.svnoSegments.slice().reverse().map((k,kind)=> 
 												<div style={{paddingRight:10,paddingLeft:10}}>
 												{k.map((q,qind)=> {
@@ -5842,7 +5842,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 									(this.state.svnObliquesSegments.map((obliques,obliqueind)=>
 										<div>
 											<div style={{fontSize:'30px',fontWeight:'400'}}>
-												<div style={{display:'flex',justifyContent:'center',flexDirection:(window.innerWidth < 480 ? 'column':'row'), lineHeight:'40px'}}>
+												<div style={{display:'flex',justifyContent:'center',flexDirection:(window.innerWidth < 480 || this.state.svnObliquesSegments.length > 2 ? 'column':'row'), lineHeight:'40px'}}>
 													{obliques.slice().reverse().map((x,xind)=> 
 													<div style={{paddingRight:10,paddingLeft:10}}>
 														{x.map((k,kind)=>
@@ -5871,7 +5871,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 								{this.state.svvo.length > 0 ?
 									(this.state.svnoSegments.length > 0 && this.state.svnoSegments.length === this.state.svno.length ? 
-										<div style={{display:'flex',flexDirection:(window.innerWidth < 480 ? 'column':'row'),justifyContent:'center',alignItems:'center',}}>
+										<div style={{display:'flex',flexDirection:(window.innerWidth < 480 || this.state.svnoSegments.length > 2 ? 'column':'row'),justifyContent:'center',alignItems:'center',}}>
 											{this.state.svnoSegments.slice().reverse().map((x,xind)=>
 												<span>
 												{xind === 0 ?
