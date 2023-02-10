@@ -3,7 +3,7 @@ import { Container, Header, Button, Icon, Divider, Image, Grid, Dropdown, List, 
 import { Link } from 'react-router-dom';
 import { API_URL } from '../App.js';
 import axios from 'axios';
-import {nounOptionsMVPossessors, mvObjectOptionsEnglish, popularOptPostbases, popularNounsDescriptors, popularVerbsOptative, popularVPostbasesPAST, popularVPostbasesFUTURE, popularVPostbasesNOTIME, popularNPostbases, popularNounsBeings, popularNounsThings, popularVerbsIT, popularVerbsI, popularVerbsT, npnEnglish, npnEnglishself, colorsList,  mvSubject4thPersonCalls, mvObject4thPersonCalls,nObject4thPersonCalls, mvSubjectOptionsWho, mvSubjectOptionsWhat, mvObjectOptionsWhom, mvObjectOptionsWhomAbl, mvObjectOptionsWhat, mvObjectOptionsWhatAbl,retrieveMoodEnglish, nounOptionsPossessorsNo4th, mvSubjectOptionsOnly2nd, nounOptionsNumbers, nounoptionsmodalis, mvSubjectOptions, mvObjectOptions, mvSubjectOptionsEnglish, verbPostbases, nounPostbases, VVpostbases, NNpostbases} from './constants/newconstants.js'
+import {nounOptionsMVPossessors, mvObjectOptionsEnglish, popularOptPostbases, popularNounsDescriptors, popularVerbsOptative, popularVPostbasesPAST, popularVPostbasesFUTURE, popularVPostbasesNOTIME, popularNPostbases, popularNounsBeings, popularNounsThings, popularNounsVialis, popularNounsPlaces, popularVerbsIT, popularVerbsI, popularVerbsT, npnEnglish, npnEnglishself, colorsList,  mvSubject4thPersonCalls, mvObject4thPersonCalls,nObject4thPersonCalls, mvSubjectOptionsWho, mvSubjectOptionsWhat, mvObjectOptionsWhom, mvObjectOptionsWhomAbl, mvObjectOptionsWhat, mvObjectOptionsWhatAbl,retrieveMoodEnglish, nounOptionsPossessorsNo4th, mvSubjectOptionsOnly2nd, nounOptionsNumbers, nounoptionsmodalis, mvSubjectOptions, mvObjectOptions, mvSubjectOptionsEnglish, verbPostbases, nounPostbases, VVpostbases, NNpostbases} from './constants/newconstants.js'
 import {newpostbases} from './constants/newpostbases.js'
 import {ending_underlying} from './constants/ending_underlying.js'
 import palette from 'google-palette';
@@ -634,10 +634,10 @@ class SentenceBuilder extends Component {
 			this.setState({currentlyOpen:''},()=>{this.setState({currentlyOpen:tag})})
     }
 
-    if (prevState.addSubject !== this.state.addSubject && this.state.crecentlyOpen !== '') {
-    	this.openSubjectMenu(this.state.crecentlyOpen)
-    	// this.subjectMenu.open();    		
-    }
+    // if (prevState.addSubject !== this.state.addSubject && this.state.crecentlyOpen !== '') {
+    // 	this.openSubjectMenu(this.state.crecentlyOpen)
+    // 	// this.subjectMenu.open();    		
+    // }
 
     // if (prevState.currentEditMode !== this.state.currentEditMode && this.state.crecentlyOpen !== '') {
     // 	// console.log(this.state.crecentlyOpen)
@@ -1675,6 +1675,8 @@ class SentenceBuilder extends Component {
 
   contentItems = (currentEditMode,type,ind,mainscreen,forEnglish,setStateTo) => {
   	// console.log(type,ind)
+  	// console.log(setStateTo)
+  	// console.log(currentEditMode,type,ind,mainscreen,forEnglish,setStateTo)
   	let typeInd = type+(ind+1).toString()
   	// let currentEditMode = this.state.currentEditMode
   	if (setStateTo == undefined) {
@@ -1833,7 +1835,7 @@ class SentenceBuilder extends Component {
 			    	</Menu>  			
  			} else if (type === 'svnoEnglish2appositive') {
 				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
-						{this.menuItem('BaseChooser','Change Descriptor Noun',[typeInd,'svnoupdateEnglish'],null)}
+						{this.menuItem('BaseChooser','Change Descriptor Noun',[typeInd,'svnoupdateEnglishappositiveupdate'],null)}
 			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["sv","no",ind[0],this.state.svno[ind[0]].length-1-ind[1]],-1]])}
 			    	</Menu>  					
  			} else if (type == 'mvnsEnglish2') {
@@ -1846,7 +1848,7 @@ class SentenceBuilder extends Component {
 			    	</Menu>  			
  			} else if (type == 'mvnsEnglish2appositive') {
 				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
-						{this.menuItem('BaseChooser','Change Descriptor Noun',[typeInd,'mvnsupdateEnglish'],null)}
+						{this.menuItem('BaseChooser','Change Descriptor Noun',[typeInd,'mvnsupdateEnglishappositiveupdate'],null)}
 			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["mv","ns",ind[0],this.state.mvns[ind[0]].length-1-ind[1]],-1]])}
 			    	</Menu>  			
  			} else if (type === 'mvnoEnglish2') {
@@ -1859,7 +1861,7 @@ class SentenceBuilder extends Component {
 			    	</Menu>  			
  			} else if (type === 'mvnoEnglish2appositive') {
 				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
-						{this.menuItem('BaseChooser','Change Descriptor Noun',[typeInd,'mvnoupdateEnglish'],null)}
+						{this.menuItem('BaseChooser','Change Descriptor Noun',[typeInd,'mvnoupdateEnglishappositiveupdate'],null)}
 			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["mv","no",ind[0],this.state.mvno[ind[0]].length-1-ind[1]],-1]])}
 			    	</Menu>  			
  			} else if (type === 'cvnsEnglish2') {
@@ -1880,12 +1882,12 @@ class SentenceBuilder extends Component {
 			    	</Menu>  			
  			} else if (type === 'cvnsEnglish2appositive') {
 				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
-						{this.menuItem('BaseChooser','Change Descriptor Noun',[typeInd,'cvnsupdateEnglish'],null)}
+						{this.menuItem('BaseChooser','Change Descriptor Noun',[typeInd,'cvnsupdateEnglishappositiveupdate'],null)}
 			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["cv","ns",ind[0],this.state.cvns[ind[0]].length-1-ind[1]],-1]])}
 			    	</Menu>  			
  			} else if (type === 'cvnoEnglish2appositive') {
 				return <Menu vertical style={{marginTop:10,marginBottom:10}}>
-						{this.menuItem('BaseChooser','Change Descriptor Noun',[typeInd,'cvnoupdateEnglish'],null)}
+						{this.menuItem('BaseChooser','Change Descriptor Noun',[typeInd,'cvnoupdateEnglishappositiveupdate'],null)}
 			      {this.menuItem('Delete','Delete Descriptor Noun',null,null,[["Delete",["cv","no",ind[0],this.state.cvno[ind[0]].length-1-ind[1]],-1]])}
 			    	</Menu>  					
  			} else if (type === 'npnEnglish2') {
@@ -1901,7 +1903,7 @@ class SentenceBuilder extends Component {
  			} else if (type === 'npnEnglish2appositive') {
  					// console.log('content',type,ind)
  					return <Menu vertical style={{marginTop:10,marginBottom:10}}>
-						{this.menuItem('BaseChooser','Change Noun',[typeInd,'npnupdateEnglish'],null)}
+						{this.menuItem('BaseChooser','Change Noun',[typeInd,'npnupdateEnglishappositiveupdate'],null)}
 				    {this.menuItem('Delete','Delete Noun',null,null,[["Delete",["np","n",this.state.npnSegments.length-1-ind[0],ind[1]],-1]])}
 			    	</Menu>   					
  			} else if (type === 'npnEnglish1') {
@@ -1992,11 +1994,17 @@ class SentenceBuilder extends Component {
 			    	</Menu> 
 	  	}
   	} else if (currentEditMode==='mvnObliqueUpdate') {
-  		return this.baseChooser(["Update",["mv","nObliques",ind[0],'nBases',ind[1],ind[2]]],'n','updatebase','Ind')
+  		let nCases = ['',''] 
+  		nCases = this.getnCasenType(this.state.mvnObliques,ind[0])
+  		return this.baseChooser(["Update",["mv","nObliques",ind[0],'nBases',ind[1],ind[2]]],'n','updatebase',nCases[0],nCases[1])
   	} else if (currentEditMode==='cvnObliqueUpdate') {
-  		return this.baseChooser(["Update",["cv","nObliques",ind[0],'nBases',ind[1],ind[2]]],'n','updatebase','Ind')
+  		let nCases = ['',''] 
+  		nCases = this.getnCasenType(this.state.cvnObliques,ind[0])
+  		return this.baseChooser(["Update",["cv","nObliques",ind[0],'nBases',ind[1],ind[2]]],'n','updatebase',nCases[0],nCases[1])
   	} else if (currentEditMode==='svnObliqueUpdate') {
-  		return this.baseChooser(["Update",["sv","nObliques",ind[0],'nBases',ind[1],ind[2]]],'n','updatebase','Ind')
+  		let nCases = ['',''] 
+  		nCases = this.getnCasenType(this.state.svnObliques,ind[0])
+  		return this.baseChooser(["Update",["sv","nObliques",ind[0],'nBases',ind[1],ind[2]]],'n','updatebase',nCases[0],nCases[1])
   	} else if (currentEditMode==='mvinsert') {
   		return this.baseChooser(["Insert",["mv"]],'v','insert','Ind',null,forEnglish)
   	} else if (currentEditMode==='mvinsertqaa') {
@@ -2047,7 +2055,7 @@ class SentenceBuilder extends Component {
   		return this.baseChooser(["Insert",["sv","nObliques",ind[0],0]],'n','insert',this.state.npCase,this.state.npCaseType)
   	} else if (currentEditMode==='npnupdate') {
   		return this.baseChooser(["Update",["np","nBases",this.state.npn.length-1-ind[0],ind[1]]],'n','updatebase')
-  	} else if (currentEditMode==='npnupdateEnglish') {
+  	} else if (currentEditMode==='npnupdateEnglish' || currentEditMode==='npnupdateEnglishappositiveupdate') {
   		// console.log(this.state.npn, this.state.npn.length-1-ind[0], ind[1])
   		return this.baseChooser(["Update",["np","nBases",this.state.npn.length-1-ind[0],ind[1]]],'n','updatebase')
   		// return this.baseChooser(["Update",["np","nBases",this.state.npn.length-1-ind[0],this.state.npn[this.state.npn.length-1-ind[0]].length-1-ind[1]]],'n','updatebase')
@@ -2064,10 +2072,10 @@ class SentenceBuilder extends Component {
   		return this.baseChooser(["Insert",["mv","ns"]],'n','insert','Rel')
   	} else if (currentEditMode==='mvnsupdate') {
   		return this.baseChooser(["Update",["mv","nsBases",this.state.mvnsSegments.length-1-ind[0],ind[1]]],'n','updatebase')
-  	} else if (currentEditMode==='mvnsupdateEnglish' && ind !== -1) {
+  	} else if ((currentEditMode==='mvnsupdateEnglish' || currentEditMode==='mvnsupdateEnglishappositiveupdate') && ind !== -1) {
   		// console.log(this.state.mvnsSegments, ind[0],ind[1])
   		return this.baseChooser(["Update",["mv","nsBases",this.state.mvnsSegments.length-1-ind[0],this.state.mvnsSegments[this.state.mvnsSegments.length-1-ind[0]].length-1-ind[1]]],'n','updatebase')
-  	} else if (currentEditMode==='mvnoupdateEnglish' && ind !== -1) {
+  	} else if ((currentEditMode==='mvnoupdateEnglish' || currentEditMode==='mvnoupdateEnglishappositiveupdate') && ind !== -1) {
   		return this.baseChooser(["Update",["mv","noBases",this.state.mvnoSegments.length-1-ind[0],this.state.mvnoSegments[this.state.mvnoSegments.length-1-ind[0]].length-1-ind[1]]],'n','updatebase')
   	} else if (currentEditMode==='mvnsappositiveinsert') {
   		return this.baseChooser(["Insert",["mv","ns",this.state.mvnsSegments.length-1-ind[0],-1]],'n','insert')
@@ -2101,11 +2109,11 @@ class SentenceBuilder extends Component {
   		return this.baseChooser(["Insert",["cv","ns"]],'n','insert','Ind')
   	} else if (currentEditMode==='cvnsupdate') {
   		return this.baseChooser(["Update",["cv","nsBases",this.state.cvnsSegments.length-1-ind[0],ind[1]]],'n','updatebase')
-  	} else if (currentEditMode==='cvnsupdateEnglish' && ind !== -1) {
+  	} else if ((currentEditMode==='cvnsupdateEnglish' || currentEditMode==='cvnsupdateEnglishappositiveupdate') && ind !== -1) {
   		return this.baseChooser(["Update",["cv","nsBases",this.state.cvnsSegments.length-1-ind[0],this.state.cvnsSegments[this.state.cvnsSegments.length-1-ind[0]].length-1-ind[1]]],'n','updatebase')
-  	} else if (currentEditMode==='cvnoupdateEnglish' && ind !== -1) {
+  	} else if ((currentEditMode==='cvnoupdateEnglish' || currentEditMode==='cvnsupdateEnglishappositiveupdate') && ind !== -1) {
   		return this.baseChooser(["Update",["cv","noBases",this.state.cvnoSegments.length-1-ind[0],this.state.cvnoSegments[this.state.cvnoSegments.length-1-ind[0]].length-1-ind[1]]],'n','updatebase')
-  	} else if (currentEditMode==='svnoupdateEnglish' && ind !== -1) {
+  	} else if ((currentEditMode==='svnoupdateEnglish' || currentEditMode==='cvnsupdateEnglishappositiveupdate') && ind !== -1) {
   		return this.baseChooser(["Update",["sv","noBases",this.state.svnoSegments.length-1-ind[0],this.state.svnoSegments[this.state.svnoSegments.length-1-ind[0]].length-1-ind[1]]],'n','updatebase')
   	} else if (currentEditMode==='cvnsappositiveinsert') {
   		return this.baseChooser(["Insert",["cv","ns",this.state.cvnsSegments.length-1-ind[0],-1]],'n','insert')
@@ -2140,21 +2148,81 @@ class SentenceBuilder extends Component {
   }
 
 
+  getnCasenType = (nObliques,ind) => {
+  	let nCase = ''
+  	let nType = ''
+		if (ind !== undefined) {
+  		if ('nCase' in nObliques[ind]) {
+  			nCase = nObliques[ind]['nCase']
+  		}
+  		if ('nType' in nObliques[ind]) {
+  			nType = nObliques[ind]['nType']
+  		}  			
+  	}
+  	return [nCase, nType]  	
+  }
+
+													
+	closeEditMenuRef = (typeInd,currentEditMode,turnOffAndOn) => {
+		console.log(typeInd,currentEditMode)
+
+		if (turnOffAndOn) {
+			if (typeInd in this.editMenuRef) {
+				this.editMenuRef[typeInd].close()
+			}
+
+			this.setState({
+				currentEditMode:currentEditMode,
+			},()=>{
+				this.editMenuRef[typeInd].open()
+			})
+		} else {
+			// console.log(this.editMenuRef, typeInd, typeInd in this.editMenuRef)
+			if (typeInd in this.editMenuRef) {
+				if (this.editMenuRef[typeInd] !== null) {
+					this.editMenuRef[typeInd].close()
+				}
+			}
+
+			this.setState({
+				currentEditMode:'default',
+				currentlyOpen:'',
+			})		
+		}
+
+	}
+
+
 closeSubjectMenu = (tag,addSubject) => {
 	// console.log(tag, addSubject, this.state.crecentlyOpen)
-	this.subjectMenu[tag].close()
-	this.setState({
-		crecentlyOpen:tag,
-	},()=>{
+	if (addSubject) {
+		if (tag in this.subjectMenu) {
+			if (this.subjectMenu[tag] !== null) {
+				this.subjectMenu[tag].close()
+			}
+		}
 		this.setState({
-			addSubject:addSubject,
+			crecentlyOpen:tag,
+			addSubject:true,
+		},()=>{
+			this.subjectMenu[tag].open()
 		})
-	})
+	} else {
+		if (tag in this.subjectMenu) {
+			if (this.subjectMenu[tag] !== null) {
+				this.subjectMenu[tag].close()
+			}
+		}
+		this.setState({
+			crecentlyOpen:tag,
+			addSubject:false,
+		})
+	}
 }
 
-openSubjectMenu = (tag) => {
-	this.subjectMenu[tag].open()
-}
+// openSubjectMenu = (tag) => {
+// 	this.subjectMenu[tag].open()
+// }
 
 editSubjectMenu = (nounInsert,subject, tag, statevvs, update, backendcall, value, options) => {
 	// console.log(value,options)
@@ -2170,8 +2238,19 @@ editSubjectMenu = (nounInsert,subject, tag, statevvs, update, backendcall, value
 			      	// height:this.returnHeight(name),
 			      // }}
 			      ref={(element)=>{this.subjectMenu[tag]=element;}}
-			      onOpen={()=>{this.setState({currentlyOpen:tag,overlayOn:true,})}}
-			      onClose={()=>{this.setState({currentlyOpen:''})}}
+			      onOpen={()=>{
+			      	this.setState({
+			      		currentlyOpen:tag,
+			      		overlayOn:true,
+								candidateCall:[],
+								candidateBase:[],
+								candidateDisplay:[],
+								unallowable_next_ids:[],
+								nextTenses:[],			      		
+			      	})}}
+			      onClose={()=>{
+			      	this.resetEditMenu();
+			      }}
 			      // content={
 			      	// }
 			    >
@@ -2263,7 +2342,6 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 							unallowable_next_ids:[],
 							nextTenses:[],			      		
 			      	})
-
 		      		if (setState === 'npCase') {
 								this.setState({npCase:setStateTo[0],npCaseType:setStateTo[1]})
 							} else if (setState === 'mvvType') {
@@ -4026,7 +4104,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		}
 	}
 
-	popularVerbsGetter = (mood,submood) => {
+	popularVerbsGetter = (mood,submood,forEnglish) => {
 		if (mood === undefined) {
 			return popularVerbsIT
 		} else {
@@ -4041,9 +4119,22 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 	}
 
 
-	popularNounsGetter = (itemUpdating,mood,submood) => {
-		if (this.state.currentEditMode.includes("appositiveinsert")) {
+	popularNounsGetter = (itemUpdating,mood,submood,forEnglish) => {
+		// console.log(itemUpdating, forEnglish)
+		// if (itemUpdating[1][0] == 'mv') {
+		// 	if (itemUpdating[1][1] === 'nObliques') {
+		// 		mood = this.state.mv[itemUpdating[1][1]][itemUpdating[1][2]]['nCase']
+		// 		submood = this.state.mv[itemUpdating[1][1]][itemUpdating[1][2]]['nType']				
+		// 	}
+		// }
+		// console.log(itemUpdating, this.state.currentEditMode, 'mood=',mood,',submood=',submood)
+
+		if (this.state.currentEditMode.includes("appositiveinsert") || this.state.currentEditMode.includes("appositiveupdate")) {
 			return popularNounsDescriptors
+		} else if (mood === 'Loc' || mood === 'Ter' || submood === 'from') {
+			return popularNounsPlaces
+		} else if (mood === 'Via') {
+			return popularNounsVialis
 		} else {
 			return popularNouns
 		}
@@ -4051,25 +4142,25 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 
 
-	getPopular = (itemUpdating,endingNeeded, mood, submood) => {
+	getPopular = (itemUpdating,endingNeeded, mood, submood,forEnglish) => {
 		let popularPostbases = []
 		let popularBases = []
 
 		if (endingNeeded == 'n') {
 			if (this.state.endingAdjusted === 'v') {
-				popularPostbases = this.popularVPostbasesGetter(mood,submood)
-				popularBases = this.popularVerbsGetter(mood,submood)
+				popularPostbases = this.popularVPostbasesGetter(mood,submood,forEnglish)
+				popularBases = this.popularVerbsGetter(mood,submood,forEnglish)
 			} else {
 				popularPostbases = popularNPostbases
-				popularBases = this.popularNounsGetter(itemUpdating,mood,submood)				
+				popularBases = this.popularNounsGetter(itemUpdating,mood,submood,forEnglish)				
 			}
 		} else {
 			if (this.state.endingAdjusted === 'n') {
 				popularPostbases = popularNPostbases
-				popularBases = this.popularNounsGetter(itemUpdating,mood,submood)		
+				popularBases = this.popularNounsGetter(itemUpdating,mood,submood,forEnglish)		
 			} else {
-				popularPostbases = this.popularVPostbasesGetter(mood,submood)
-				popularBases = this.popularVerbsGetter(mood,submood)
+				popularPostbases = this.popularVPostbasesGetter(mood,submood,forEnglish)
+				popularBases = this.popularVerbsGetter(mood,submood,forEnglish)
 			}
 		}
 
@@ -4104,7 +4195,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 	baseChooser = (itemUpdating,endingNeeded,update,mood,submood,forEnglish) => {
 		let key;
 
-		let popular = this.getPopular(itemUpdating,endingNeeded,mood,submood)
+		// console.log(itemUpdating,endingNeeded,update,mood,submood,forEnglish)
+		let popular = this.getPopular(itemUpdating,endingNeeded,mood,submood,forEnglish)
 
 		let popularPostbases = popular[0]
 		let popularBases = popular[1]
@@ -4812,7 +4904,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		return (
 			<Container style={{ margin: 0, padding: 0 }} text>
 			{this.state.overlayOn ?
-				<div className="overlay" onClick={()=>{this.setState({overlayOn:false,currentEditMode:'default',})}} />
+				<div className="overlay" onClick={()=>{this.closeSubjectMenu(this.state.crecentlyOpen,false); this.setState({overlayOn:false,currentEditMode:'default',})}} />
 				:
 				null
 			}
