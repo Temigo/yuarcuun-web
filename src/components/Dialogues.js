@@ -70,6 +70,8 @@ class Dialogues extends Component {
     this.setState({
       record:{},
       currentCounter:0,
+      showYupik:false,
+      showEnglishMatrix:[],
     })
     this.playNextSentence(0)
   }
@@ -149,10 +151,18 @@ class Dialogues extends Component {
   //   )}</span>
   // }
 
+  normalize(text) {
+    var newText = text.toLowerCase()
+    newText = newText.replace(/[’ʼ]/,"'")
+    newText = newText.replace(/[?!.,;:"]/,"")
+    newText = newText.normalize()
+    return newText
+  }
+
   checkInputCorrect(match, index, dialogueInfo, language, event, data) {
       console.log(dialogueInfo)
 
-      if (this.state.inputtedWords.toLowerCase() === match.toLowerCase()) {
+      if (this.normalize(this.state.inputtedWords) === this.normalize(match.toLowerCase())) {
           this.correctSound.bind(this)();
 
           var record = this.state.record

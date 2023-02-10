@@ -5,6 +5,9 @@ import { API_URL, TUTORIAL_URL, ICON_URL } from '../App.js';
 import { lessonsList, dialogueLibrary } from './constants/qaneryaurci.js';
 import { dialogueGenerator } from './constants/dialogueListGenerator.js';
 import '../semantic/dist/semantic.min.css';
+import * as Scroll from 'react-scroll';
+
+var scroll = Scroll.animateScroll;
 
 let customFontFam = "Roboto,'Helvetica Neue',Arial,Helvetica,sans-serif"
 let iconStyle = {paddingLeft:10,fontSize:12,color:'#2185d0'}
@@ -17,7 +20,7 @@ class DialogueMenu extends Component {
     console.log(props)
     this.state = {
       lessons: dialog_gen.lessons,
-      showExercise: [],
+      showExercise: this.props.lessonsStarted === undefined ? [] : this.props.lessonsStarted,
     }
   }
 
@@ -92,9 +95,10 @@ class DialogueMenu extends Component {
                           name="chevron down"
                         />
                       </Button>
-                      {this.state.showExercise.includes(index) || this.props.lessonsStarted.includes(index) ?
+                      {this.state.showExercise.includes(index) ?
                         <div style={{display:'flex',flexDirection:'column',paddingTop:'10px'}}>
-
+                          
+                          <div>
                           <Link to={{pathname: 'dialogues/'+ index, state: {lessonIndex:index, exerciseNumber:0}}}>
                           <Button basic compact style={{margin:'5px'}}>
                           {"Guess Yup'ik"}
@@ -108,7 +112,9 @@ class DialogueMenu extends Component {
                           }
                           </Button>
                           </Link>
+                          </div>
 
+                          <div>
                           <Link to={{pathname: 'dialogues/'+ index, state: {lessonIndex:index, exerciseNumber:5}}}>
                           <Button basic compact style={{margin:'5px'}}>
                           {"Listening Yup'ik"}
@@ -122,7 +128,9 @@ class DialogueMenu extends Component {
                           }
                           </Button>
                           </Link>
+                          </div>
 
+                          <div>
                           <Link to={{pathname: 'dialogues/'+ index, state: {lessonIndex:index, exerciseNumber:1}}}>
                           <Button basic compact style={{margin:'5px'}}>
                           {"Fill-In Yup'ik"}
@@ -136,9 +144,12 @@ class DialogueMenu extends Component {
                           }
                           </Button>
                           </Link>
+                          </div>
 
+                          <div>
                           <Link to={{pathname: 'dialogues/'+ index, state: {lessonIndex:index, exerciseNumber:2}}}>
                           <Button basic compact style={{margin:'5px'}}>
+                          {"Select Yup'ik"}
                           {this.props.completedExercises.includes(index.toString()+'%2') ?
                             <Icon
                               style={iconStyle}
@@ -147,12 +158,14 @@ class DialogueMenu extends Component {
                             :
                             null
                           }
-                          {"Select Yup'ik"}
                           </Button>
                           </Link>
+                          </div>
 
+                          <div>
                           <Link to={{pathname: 'dialogues/'+ index, state: {lessonIndex:index, exerciseNumber:4}}}>
                           <Button basic compact style={{margin:'5px'}}>
+                          {'Select English'}
                           {this.props.completedExercises.includes(index.toString()+'%4') ?
                             <Icon
                               style={iconStyle}
@@ -161,9 +174,9 @@ class DialogueMenu extends Component {
                             :
                             null
                           }
-                          {'Select English'}
                           </Button>
                           </Link>
+                          </div>
 
 
                         </div>
