@@ -2073,10 +2073,14 @@ class SentenceBuilder extends Component {
   	} else if (currentEditMode==='mvnsupdate') {
   		return this.baseChooser(["Update",["mv","nsBases",this.state.mvnsSegments.length-1-ind[0],ind[1]]],'n','updatebase')
   	} else if ((currentEditMode==='mvnsupdateEnglish' || currentEditMode==='mvnsupdateEnglishappositiveupdate') && ind !== -1) {
-  		// console.log(this.state.mvnsSegments, ind[0],ind[1])
-  		return this.baseChooser(["Update",["mv","nsBases",this.state.mvnsSegments.length-1-ind[0],this.state.mvnsSegments[this.state.mvnsSegments.length-1-ind[0]].length-1-ind[1]]],'n','updatebase')
+  		// console.log(this.state.mvnsSegments, this.state.mvnsSegments.length-1-ind[0], ind[0],ind[1])
+  		if (ind[0] !== undefined) {
+	  		return this.baseChooser(["Update",["mv","nsBases",this.state.mvnsSegments.length-1-ind[0],this.state.mvnsSegments[this.state.mvnsSegments.length-1-ind[0]].length-1-ind[1]]],'n','updatebase')  			
+  		}
   	} else if ((currentEditMode==='mvnoupdateEnglish' || currentEditMode==='mvnoupdateEnglishappositiveupdate') && ind !== -1) {
+  		if (ind[0] !== undefined) {
   		return this.baseChooser(["Update",["mv","noBases",this.state.mvnoSegments.length-1-ind[0],this.state.mvnoSegments[this.state.mvnoSegments.length-1-ind[0]].length-1-ind[1]]],'n','updatebase')
+  		}
   	} else if (currentEditMode==='mvnsappositiveinsert') {
   		return this.baseChooser(["Insert",["mv","ns",this.state.mvnsSegments.length-1-ind[0],-1]],'n','insert')
   	} else if (currentEditMode==='mvnObliqueappositiveinsert') {
@@ -2110,11 +2114,17 @@ class SentenceBuilder extends Component {
   	} else if (currentEditMode==='cvnsupdate') {
   		return this.baseChooser(["Update",["cv","nsBases",this.state.cvnsSegments.length-1-ind[0],ind[1]]],'n','updatebase')
   	} else if ((currentEditMode==='cvnsupdateEnglish' || currentEditMode==='cvnsupdateEnglishappositiveupdate') && ind !== -1) {
-  		return this.baseChooser(["Update",["cv","nsBases",this.state.cvnsSegments.length-1-ind[0],this.state.cvnsSegments[this.state.cvnsSegments.length-1-ind[0]].length-1-ind[1]]],'n','updatebase')
+			if (ind[0] !== undefined) {
+  			return this.baseChooser(["Update",["cv","nsBases",this.state.cvnsSegments.length-1-ind[0],this.state.cvnsSegments[this.state.cvnsSegments.length-1-ind[0]].length-1-ind[1]]],'n','updatebase')
+  		}
   	} else if ((currentEditMode==='cvnoupdateEnglish' || currentEditMode==='cvnsupdateEnglishappositiveupdate') && ind !== -1) {
-  		return this.baseChooser(["Update",["cv","noBases",this.state.cvnoSegments.length-1-ind[0],this.state.cvnoSegments[this.state.cvnoSegments.length-1-ind[0]].length-1-ind[1]]],'n','updatebase')
+			if (ind[0] !== undefined) {
+  			return this.baseChooser(["Update",["cv","noBases",this.state.cvnoSegments.length-1-ind[0],this.state.cvnoSegments[this.state.cvnoSegments.length-1-ind[0]].length-1-ind[1]]],'n','updatebase')
+  		}
   	} else if ((currentEditMode==='svnoupdateEnglish' || currentEditMode==='cvnsupdateEnglishappositiveupdate') && ind !== -1) {
-  		return this.baseChooser(["Update",["sv","noBases",this.state.svnoSegments.length-1-ind[0],this.state.svnoSegments[this.state.svnoSegments.length-1-ind[0]].length-1-ind[1]]],'n','updatebase')
+			if (ind[0] !== undefined) {
+  			return this.baseChooser(["Update",["sv","noBases",this.state.svnoSegments.length-1-ind[0],this.state.svnoSegments[this.state.svnoSegments.length-1-ind[0]].length-1-ind[1]]],'n','updatebase')
+  		}
   	} else if (currentEditMode==='cvnsappositiveinsert') {
   		return this.baseChooser(["Insert",["cv","ns",this.state.cvnsSegments.length-1-ind[0],-1]],'n','insert')
   	} else if (currentEditMode==='cvnspossessorinsert') {
@@ -3323,7 +3333,11 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 								} else if (itemUpdating[1][1] === 'noBases') {
 									nounNumber = this.state.mvno[itemUpdating[1][2]][itemUpdating[1][3]][3]
 								} else if (itemUpdating[1][1] === 'nObliques') {
-									nounNumber = this.state.mvnObliques[itemUpdating[1][2]]['n'][itemUpdating[1][4]][itemUpdating[1][5]][3]
+									if (itemUpdating[1][5] === undefined) {
+										nounNumber = this.state.mvnObliques[itemUpdating[1][2]]['n'][itemUpdating[1][4]][3]
+									} else {
+										nounNumber = this.state.mvnObliques[itemUpdating[1][2]]['n'][itemUpdating[1][4]][itemUpdating[1][5]][3]
+									}
 								}
 							} else if (itemUpdating[1][0] === 'sv') {
 								if (itemUpdating[1][1] === 'nsBases') {
@@ -3331,7 +3345,11 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 								} else if (itemUpdating[1][1] === 'noBases') {
 									nounNumber = this.state.svno[itemUpdating[1][2]][itemUpdating[1][3]][3]
 								} else if (itemUpdating[1][1] === 'nObliques') {
-									nounNumber = this.state.svnObliques[itemUpdating[1][2]]['n'][itemUpdating[1][4]][itemUpdating[1][5]][3]
+									if (itemUpdating[1][5] === undefined) {
+										nounNumber = this.state.svnObliques[itemUpdating[1][2]]['n'][itemUpdating[1][4]][3]
+									} else {
+										nounNumber = this.state.svnObliques[itemUpdating[1][2]]['n'][itemUpdating[1][4]][itemUpdating[1][5]][3]
+									}
 								}
 							} else if (itemUpdating[1][0] === 'cv') {
 								if (itemUpdating[1][1] === 'nsBases') {
@@ -3339,7 +3357,11 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 								} else if (itemUpdating[1][1] === 'noBases') {
 									nounNumber = this.state.cvno[itemUpdating[1][2]][itemUpdating[1][3]][3]
 								} else if (itemUpdating[1][1] === 'nObliques') {
-									nounNumber = this.state.cvnObliques[itemUpdating[1][2]]['n'][itemUpdating[1][4]][itemUpdating[1][5]][3]
+									if (itemUpdating[1][5] === undefined) {
+										nounNumber = this.state.cvnObliques[itemUpdating[1][2]]['n'][itemUpdating[1][4]][3]
+									} else {
+										nounNumber = this.state.cvnObliques[itemUpdating[1][2]]['n'][itemUpdating[1][4]][itemUpdating[1][5]][3]
+									}
 								}
 							}
 						}
