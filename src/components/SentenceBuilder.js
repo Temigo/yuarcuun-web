@@ -1411,10 +1411,17 @@ class SentenceBuilder extends Component {
 		}
 
 		// console.log(optionsFuzzy)
-		if (mood == 'CtmpI' || mood == 'CtmpII' || submood == 'Intrg4' || mood == 'Sbrd' || mood.includes('Opt')) {
+
+		if (mood !== undefined) {
+			if (mood.includes('Opt')) {
+				noFuture = true
+				noPast = true
+			}
+		}
+		if (mood == 'CtmpI' || mood == 'CtmpII' || submood == 'Intrg4' || mood == 'Sbrd') {
 			noFuture = true
 		}
-		if (mood == 'Sbrd' || mood.includes('Opt') || submood == 'Intrg5') {
+		if (mood == 'Sbrd' || submood == 'Intrg5') {
 			noPast = true
 		}
 		// if (submood == 'Intrg4' || submood == 'Intrg5') {
@@ -2350,7 +2357,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 				let p = '0'
   			this.setState({
   				candidateBase:this.state.candidateBase.concat([[newpostbases[popularVPostbases[p]['expression']]['keylookup'],popularVPostbases[p]['expression']]]),
-	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledPostbaseText(popularVPostbases[p],'1',undefined,'mv','Intrg'),newpostbases[popularVPostbases[p]['expression']]['exp']]]),
+	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledPostbaseText(popularVPostbases[p],'1',undefined,'mv','Intrg',undefined),newpostbases[popularVPostbases[p]['expression']]['exp']]]),
 	    		unallowable_next_ids: this.state.unallowable_next_ids.concat([[popularVPostbases[p]['allowable_next_ids'],]]),
 	    		nextTenses:(newpostbases[popularVPostbases[p]['expression']]['match_case'] && !('gen_preverb_after' in newpostbases[popularVPostbases[p]['expression']]) ? (this.state.nextTenses.length == 0 ? this.state.nextTenses.concat(['gen']):this.state.nextTenses.concat([this.state.nextTenses[this.state.nextTenses.length-1]])) : this.state.nextTenses.concat([newpostbases[popularVPostbases[p]['expression']]['gen_preverb_after'],])),
   			},()=>{
@@ -2360,7 +2367,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 				let p = '2'
   			this.setState({
   				candidateBase:this.state.candidateBase.concat([[newpostbases[popularVPostbases[p]['expression']]['keylookup'],popularVPostbases[p]['expression']]]),
-	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledPostbaseText(popularVPostbases[p],'1',undefined,'mv','Intrg'),newpostbases[popularVPostbases[p]['expression']]['exp']]]),
+	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledPostbaseText(popularVPostbases[p],'1',undefined,'mv','Intrg',undefined),newpostbases[popularVPostbases[p]['expression']]['exp']]]),
 	    		unallowable_next_ids: this.state.unallowable_next_ids.concat([[popularVPostbases[p]['allowable_next_ids'],]]),
 	    		nextTenses:(newpostbases[popularVPostbases[p]['expression']]['match_case'] && !('gen_preverb_after' in newpostbases[popularVPostbases[p]['expression']]) ? (this.state.nextTenses.length == 0 ? this.state.nextTenses.concat(['gen']):this.state.nextTenses.concat([this.state.nextTenses[this.state.nextTenses.length-1]])) : this.state.nextTenses.concat([newpostbases[popularVPostbases[p]['expression']]['gen_preverb_after'],])),
   			},()=>{
@@ -3213,8 +3220,60 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 
 
-	processStyledPostbaseText = (key,i,forEnglish, verbtype, mood) => {
+	processStyledPostbaseText = (key,i,forEnglish, verbtype, mood,itemUpdating) => {
 		// console.log(mood)
+		let nounNumber = 1;
+		
+		if (itemUpdating !== undefined) {
+			if (itemUpdating[0]=='Update') {
+				// if (itemUpdating[1][0] == 'nBases' || itemUpdating[1][1] == 'nBases') {
+
+				// } else {
+
+				// }
+				if (itemUpdating[1][0]+itemUpdating[1][1] in this.state) {
+					if ([itemUpdating[1][2]] in this.state[itemUpdating[1][0]+itemUpdating[1][1]]) {
+						if ([itemUpdating[1][3]] in this.state[itemUpdating[1][0]+itemUpdating[1][1]][itemUpdating[1][2]]) {
+							// console.log(itemUpdating)
+							// console.log(itemUpdating[1][0]+' '+itemUpdating[1][1])
+							// console.log(itemUpdating[1][2]+' '+itemUpdating[1][3])
+							if (itemUpdating[1][0] === 'np') {
+								nounNumber = this.state.npn[itemUpdating[1][2]][itemUpdating[1][3]][3]
+							} else if (itemUpdating[1][0] === 'mv') {
+								if (itemUpdating[1][1] === 'nsBases') {
+									nounNumber = this.state.mvns[itemUpdating[1][2]][itemUpdating[1][3]][3]
+								} else if (itemUpdating[1][1] === 'noBases') {
+									nounNumber = this.state.mvno[itemUpdating[1][2]][itemUpdating[1][3]][3]
+								} else if (itemUpdating[1][1] === 'nObliques') {
+									nounNumber = this.state.mvnObliques[itemUpdating[1][2]]['n'][itemUpdating[1][4]][itemUpdating[1][5]][3]
+								}
+							} else if (itemUpdating[1][0] === 'sv') {
+								if (itemUpdating[1][1] === 'nsBases') {
+									nounNumber = this.state.svns[itemUpdating[1][2]][itemUpdating[1][3]][3]
+								} else if (itemUpdating[1][1] === 'noBases') {
+									nounNumber = this.state.svno[itemUpdating[1][2]][itemUpdating[1][3]][3]
+								} else if (itemUpdating[1][1] === 'nObliques') {
+									nounNumber = this.state.svnObliques[itemUpdating[1][2]]['n'][itemUpdating[1][4]][itemUpdating[1][5]][3]
+								}
+							} else if (itemUpdating[1][0] === 'cv') {
+								if (itemUpdating[1][1] === 'nsBases') {
+									nounNumber = this.state.cvns[itemUpdating[1][2]][itemUpdating[1][3]][3]
+								} else if (itemUpdating[1][1] === 'noBases') {
+									nounNumber = this.state.cvno[itemUpdating[1][2]][itemUpdating[1][3]][3]
+								} else if (itemUpdating[1][1] === 'nObliques') {
+									nounNumber = this.state.cvnObliques[itemUpdating[1][2]]['n'][itemUpdating[1][4]][itemUpdating[1][5]][3]
+								}
+							}
+						}
+					}
+				}
+			
+			}
+		}
+
+		
+
+
 		let lookup;
 		let vsPlanned = []
 		if (forEnglish !== undefined) {
@@ -3402,13 +3461,13 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 					}
 				}				
 			} else if (newpostbases[lookup]['type'] === 'NN') {
-					if (this.state.nounNum == 'p') {
+					if (this.state.nounNum == 'p' || nounNumber > 1) {
 						sentence = newpostbases[lookup]['pluralDefinition']
 					} else {
 						sentence = newpostbases[lookup]['singularDefinition']
 					}
 			} else if (newpostbases[lookup]['type'] === 'VN') {
-					if (this.state.nounNum == 'p') {
+					if (this.state.nounNum == 'p' || nounNumber > 1) {
 						sentence = newpostbases[lookup]['pluralDefinition']
 					} else {
 						sentence = newpostbases[lookup]['singularDefinition']
@@ -3942,13 +4001,17 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 	popularVPostbasesGetter = (mood,submood) => {
 		let noFuture = false
 		let noPast = false
-		if (mood.includes('Opt')) {
-			return popularOptPostbases
+		if (mood === undefined) {
+			return popularVPostbases
+			
 		} else {
-			if (mood == 'CtmpI' || mood == 'CtmpII' || submood == 'Intrg4' || mood == 'Sbrd' || mood.includes('Opt')) {
+			if (mood.includes('Opt')) {
+				return popularOptPostbases
+			}
+			if (mood == 'CtmpI' || mood == 'CtmpII' || submood == 'Intrg4' || mood == 'Sbrd') {
 				noFuture = true
 			}
-			if (mood == 'Sbrd' || mood.includes('Opt') || submood == 'Intrg5') {
+			if (mood == 'Sbrd' || submood == 'Intrg5') {
 				noPast = true
 			}
 			if ((noFuture && noPast) || this.state.containsTime) {
@@ -3964,11 +4027,13 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 	}
 
 	popularVerbsGetter = (mood,submood) => {
-		if (mood.includes('Opt')) {
-			return popularVerbsOptative
+		if (mood === undefined) {
+			return popularVerbsIT
 		} else {
 			if (submood == 'Intrg1' || submood == 'Intrg3') {
 				return popularVerbsT
+			} else if (mood.includes('Opt')) {
+				return popularVerbsOptative
 			} else {
 				return popularVerbsIT
 			}
@@ -4182,7 +4247,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 																		    		searchQuery:'',
 																		    		wordsList:[],
 															      				candidateBase:this.state.candidateBase.concat([[newpostbases[k['fsts']]['keylookup'],k['fsts']]]),
-																		    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledPostbaseText(k['fsts'],'2',forEnglish,itemUpdating[1][0],mood),k['fsts']]]),
+																		    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledPostbaseText(k['fsts'],'2',forEnglish,itemUpdating[1][0],mood,itemUpdating),k['fsts']]]),
 																		    		nextTenses:(
 																		    			newpostbases[k['fsts']]['match_case'] && !('gen_preverb_after' in newpostbases[k['fsts']]) ? 
 																			    			(this.state.nextTenses.length == 0 ? 
@@ -4211,7 +4276,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 															      		}}>
 																      		<div>
 																	      		<div style={{marginBottom:'5px',color:'#545454'}}>
-																	      		<span>{this.processStyledPostbaseText(k['fsts'],'2',forEnglish,itemUpdating[1][0],mood)}</span>
+																	      		<span>{this.processStyledPostbaseText(k['fsts'],'2',forEnglish,itemUpdating[1][0],mood,itemUpdating)}</span>
 																	      		<span style={{color:'#bdbdbd'}}>{'...'}</span></div>
 																	      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{k['fsts']}</div>
 																      		</div>
@@ -4273,7 +4338,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 												      					// this.handleClick('verbs',false); 
 														      			this.setState({
 														      				candidateBase:this.state.candidateBase.concat([[newpostbases[popularPostbases[p]['expression']]['keylookup'],popularPostbases[p]['expression']]]),
-																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledPostbaseText(popularPostbases[p],'1',forEnglish,itemUpdating[1][0],mood),newpostbases[popularPostbases[p]['expression']]['exp']]]),
+																	    		candidateDisplay:this.state.candidateDisplay.concat([[this.processStyledPostbaseText(popularPostbases[p],'1',forEnglish,itemUpdating[1][0],mood,itemUpdating),newpostbases[popularPostbases[p]['expression']]['exp']]]),
 																	    		unallowable_next_ids: this.state.unallowable_next_ids.concat([[popularPostbases[p]['allowable_next_ids'],]]),
 																	    		nextTenses:
 																	    		(newpostbases[popularPostbases[p]['expression']]['match_case'] && !('gen_preverb_after' in newpostbases[popularPostbases[p]['expression']]) 
@@ -4300,7 +4365,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 														      		}}>
 															      		<div>
 																      		<div style={{marginBottom:'5px',color:'#545454'}}>
-																      		<span>{this.processStyledPostbaseText(popularPostbases[p],'1',forEnglish,itemUpdating[1][0],mood)}</span>
+																      		<span>{this.processStyledPostbaseText(popularPostbases[p],'1',forEnglish,itemUpdating[1][0],mood,itemUpdating)}</span>
 																      		<span style={{color:'#bdbdbd'}}>{'...'}</span></div>
 																      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{newpostbases[popularPostbases[p]['expression']]['exp']}</div>
 															      		</div>
