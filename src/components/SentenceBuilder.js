@@ -3638,7 +3638,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 	}
 
 	returnPossessor = (sentence, forEnglish, vsPlanned) => {
-		// console.log(sentence, forEnglish, vsPlanned)
+		
 		let mvvs = this.state.mvvs
 		if (vsPlanned.length > 0 && mvvs.length == 0) {
 			mvvs = vsPlanned
@@ -3648,7 +3648,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		} else if (sentence.includes('^its^')) {
 			return sentence.replace('^its^',npnEnglish[mvvs.join("")])
 		} else if (sentence.includes('^himself^')) {
-			return sentence.replace('^herself^',npnEnglishself[mvvs.join("")])
+			return sentence.replace('^himself^',npnEnglishself[mvvs.join("")])
 		} else if (sentence.includes('^herself^')) {
 			return sentence.replace('^herself^',npnEnglishself[mvvs.join("")])
 		} else if (sentence.includes('^itself^')) {
@@ -4720,7 +4720,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
   	// console.log(parses)
 
     return (
-      <div style={{padding:'11px 14px',fontFamily:"Lato,'Helvetica Neue',Arial,Helvetica,sans-serif"}}>
+      <div style={{maxWidth:'320px',padding:'11px 14px',fontFamily:"Lato,'Helvetica Neue',Arial,Helvetica,sans-serif"}}>
         {parses['yugtun'].map((q,qindex) =>
           <div style={{paddingBottom:(qindex !== parses['yugtun'].length-1 ? 15 : 0),paddingLeft:qindex*20,fontSize:'16px'}}>
               <div>
