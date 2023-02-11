@@ -1933,11 +1933,7 @@ class SentenceBuilder extends Component {
 			      {ind[1] == 0 ? this.menuItem('BaseChooser','Add Oblique Possessed Noun',[typeInd,'mvnObliquepossessedinsert'],null): null}
 			      {/*{ind[1] == 0 ? this.subMenuItem('changeVObliquetype','mv',ind[0]): null}*/}
 						{this.menuItem('BaseChooser','Add Descriptor Noun',[typeInd,'mvnObliqueappositiveinsert'],null)}
-						{ind[1] == 0 ? 
-							(this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["mv","nObliques",ind[0],ind[1]],-1]]))
-							:
-							(this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["mv","nObliques",ind[0],ind[1],ind[2]],-1]]))
-						}
+						{this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["mv","nObliques",ind[0],ind[1]],-1]])}
 			      
 			    	</Menu> 
 	  	} else if (type ==='cvnObliquesEnglish2') {
@@ -1951,17 +1947,13 @@ class SentenceBuilder extends Component {
 			      {ind[1] == 0 ? this.menuItem('BaseChooser','Add Oblique Possessed Noun',[typeInd,'cvnObliquepossessedinsert'],null): null}
 			      {/*{ind[1] == 0 ? this.subMenuItem('changeVObliquetype','cv',ind[0]): null}*/}
 						{this.menuItem('BaseChooser','Add Descriptor Noun',[typeInd,'cvnObliqueappositiveinsert'],null)}
-						{ind[1] == 0 ? 
-							(this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["cv","nObliques",ind[0],ind[1]],-1]]))
-							:
-							(this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["cv","nObliques",ind[0],ind[1],ind[2]],-1]]))
-						}
+						{this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["cv","nObliques",ind[0],ind[1]],-1]])}
 			      
 			    	</Menu> 
 	  	} else if (type ==='cvnObliquesEnglish2appositive') {
   					return <Menu vertical style={{marginTop:10,marginBottom:10}}>
-						{this.menuItem('BaseChooser','Change Oblique Appositive Noun',[typeInd,'cvnObliqueUpdate'],null)}
-			      {this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["cv","nObliques",ind[0],ind[1],ind[2]],-1]])}
+						{this.menuItem('BaseChooser','Change Oblique Descriptor Noun',[typeInd,'cvnObliqueUpdate'],null)}
+			      {this.menuItem('Delete','Delete Oblique Descriptor Noun',null,null,[["Delete",["cv","nObliques",ind[0],ind[1],ind[2]],-1]])}
 			    	</Menu> 
 	  	} else if (type ==='svnObliquesEnglish2') {
   					return <Menu vertical style={{marginTop:10,marginBottom:10}}>
@@ -1974,23 +1966,19 @@ class SentenceBuilder extends Component {
 			      {ind[1] == 0 ? this.menuItem('BaseChooser','Add Oblique Possessed Noun',[typeInd,'svnObliquepossessedinsert'],null): null}
 			      {/*{ind[1] == 0 ? this.subMenuItem('changeVObliquetype','sv',ind[0]): null}*/}
 						{this.menuItem('BaseChooser','Add Descriptor Noun',[typeInd,'svnObliqueappositiveinsert'],null)}
-						{ind[1] == 0 ? 
-							(this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["sv","nObliques",ind[0],ind[1]],-1]]))
-							:
-							(this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["sv","nObliques",ind[0],ind[1],ind[2]],-1]]))
-						}
+						{this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["sv","nObliques",ind[0],ind[1]],-1]])}
 			      
 			    	</Menu> 
 	  	} else if (type ==='svnObliquesEnglish2appositive') {
   					return <Menu vertical style={{marginTop:10,marginBottom:10}}>
-						{this.menuItem('BaseChooser','Change Oblique Appositive Noun',[typeInd,'cvnObliqueUpdate'],null)}
-			      {this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["cv","nObliques",ind[0],ind[1],ind[2]],-1]])}
+						{this.menuItem('BaseChooser','Change Oblique Descriptor Noun',[typeInd,'cvnObliqueUpdate'],null)}
+			      {this.menuItem('Delete','Delete Oblique Descriptor Noun',null,null,[["Delete",["cv","nObliques",ind[0],ind[1],ind[2]],-1]])}
 			    	</Menu> 
 	  	} else if (type ==='mvnObliquesEnglish2appositive') {
 	  				console.log(ind)
   					return <Menu vertical style={{marginTop:10,marginBottom:10}}>
-						{this.menuItem('BaseChooser','Change Oblique Appositive Noun',[typeInd,'mvnObliqueUpdate'],null)}
-			      {this.menuItem('Delete','Delete Oblique Noun',null,null,[["Delete",["mv","nObliques",ind[0],ind[1],ind[2]],-1]])}
+						{this.menuItem('BaseChooser','Change Oblique Descriptor Noun',[typeInd,'mvnObliqueUpdate'],null)}
+			      {this.menuItem('Delete','Delete Oblique Descriptor Noun',null,null,[["Delete",["mv","nObliques",ind[0],ind[1],ind[2]],-1]])}
 			    	</Menu> 
 	  	}
   	} else if (currentEditMode==='mvnObliqueUpdate') {
