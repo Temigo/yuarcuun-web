@@ -211,7 +211,7 @@ export const accordionTitlesNouns = [
   "Relative (the)",
   "Ablative-Modalis (a, some, from)",
   "Localis (in, at)",
-  "Terminalis (toward)",
+  "Terminalis (to)",
   "Vialis (through, using)",
   "Equalis (like, similar to)",
   ];
@@ -220,7 +220,7 @@ export const accordionTitlesQuantQual = [
   "Relative (the possessor, owner)",
   "Ablative-Modalis (a, some, from)",
   "Localis (in, at)",
-  "Terminalis (toward)",
+  "Terminalis (to)",
   "Vialis (through, using)",
   "Equalis (like, similar to)",
   ];
