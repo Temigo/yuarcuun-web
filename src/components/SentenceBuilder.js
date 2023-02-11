@@ -1786,7 +1786,7 @@ class SentenceBuilder extends Component {
 			      	:
 			      	null
 			      }
-			      {this.state.mvvMood == 'Ind'  ?
+			      {this.state.mvvMood == 'Ind' && this.state.mvvType !== 'qaa' ?
 			      	this.menuItem('Update','Change to Command',null,null,[["Update",["mv","vMood"],'Opt][PRS']])
 			      	:
 			      	null
@@ -2734,7 +2734,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 	        <Button onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'from'},()=>{this.menuSelect('nPhraseInsert',-1)})}}>from...</Button>
 	        <Button onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'io'},()=>{this.menuSelect('nPhraseInsert',-1)})}}>a or some...</Button>
 	        <Button onClick={()=>{this.setState({npCase:'Loc',npCaseType:''},()=>{this.menuSelect('nPhraseInsert',-1)})}}>in, at...</Button>
-	        <Button onClick={()=>{this.setState({npCase:'Ter',npCaseType:''},()=>{this.menuSelect('nPhraseInsert',-1)})}}>toward...</Button>
+	        <Button onClick={()=>{this.setState({npCase:'Ter',npCaseType:''},()=>{this.menuSelect('nPhraseInsert',-1)})}}>to...</Button>
 	        <Button onClick={()=>{this.setState({npCase:'Via',npCaseType:''},()=>{this.menuSelect('nPhraseInsert',-1)})}}>through, using...</Button>
 	        <Button onClick={()=>{this.setState({npCase:'Equ',npCaseType:''},()=>{this.menuSelect('nPhraseInsert',-1)})}}>like, similar to...</Button>
 	    		</Button.Group>
@@ -2754,7 +2754,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 	    		<Accordion.Content active={this.state.activeIndexes.includes(type)}>
 	    		<Button.Group vertical basic fluid>
 		        <Button onClick={()=>{this.setState({npCase:'Loc',npCaseType:''},()=>{this.menuSelect('nObliqueInsert',-1)})}}>in or at the...</Button>
-		        <Button onClick={()=>{this.setState({npCase:'Ter',npCaseType:''},()=>{this.menuSelect('nObliqueInsert',-1)})}}>toward the...</Button>
+		        <Button onClick={()=>{this.setState({npCase:'Ter',npCaseType:''},()=>{this.menuSelect('nObliqueInsert',-1)})}}>to the...</Button>
 		        <Button onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'from'},()=>{this.menuSelect('nObliqueInsert',-1)})}}>from the...</Button>
 		        <Button onClick={()=>{this.setState({npCase:'Via',npCaseType:''},()=>{this.menuSelect('nObliqueInsert',-1)})}}>through, using...</Button>
 		        <Button onClick={()=>{this.setState({npCase:'Equ',npCaseType:''},()=>{this.menuSelect('nObliqueInsert',-1)})}}>like a...</Button>
@@ -2775,7 +2775,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 	    		<Accordion.Content active={this.state.activeIndexes.includes(type)}>
 	    		<Button.Group vertical basic fluid>
 		        <Button onClick={()=>{this.setState({npCase:'Loc',npCaseType:''},()=>{this.menuSelect('cnObliqueInsert',-1)})}}>in or at the...</Button>
-		        <Button onClick={()=>{this.setState({npCase:'Ter',npCaseType:''},()=>{this.menuSelect('cnObliqueInsert',-1)})}}>toward the...</Button>
+		        <Button onClick={()=>{this.setState({npCase:'Ter',npCaseType:''},()=>{this.menuSelect('cnObliqueInsert',-1)})}}>to the...</Button>
 		        <Button onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'from'},()=>{this.menuSelect('cnObliqueInsert',-1)})}}>from the...</Button>
 		        <Button onClick={()=>{this.setState({npCase:'Via',npCaseType:''},()=>{this.menuSelect('cnObliqueInsert',-1)})}}>through, using...</Button>
 		        <Button onClick={()=>{this.setState({npCase:'Equ',npCaseType:''},()=>{this.menuSelect('cnObliqueInsert',-1)})}}>like a...</Button>
@@ -2796,7 +2796,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 	    		<Accordion.Content active={this.state.activeIndexes.includes(type)}>
 	    		<Button.Group vertical basic fluid>
 		        <Button onClick={()=>{this.setState({npCase:'Loc',npCaseType:''},()=>{this.menuSelect('snObliqueInsert',-1)})}}>in or at the...</Button>
-		        <Button onClick={()=>{this.setState({npCase:'Ter',npCaseType:''},()=>{this.menuSelect('snObliqueInsert',-1)})}}>toward the...</Button>
+		        <Button onClick={()=>{this.setState({npCase:'Ter',npCaseType:''},()=>{this.menuSelect('snObliqueInsert',-1)})}}>to the...</Button>
 		        <Button onClick={()=>{this.setState({npCase:'Abl_Mod',npCaseType:'from'},()=>{this.menuSelect('snObliqueInsert',-1)})}}>from the...</Button>
 		        <Button onClick={()=>{this.setState({npCase:'Via',npCaseType:''},()=>{this.menuSelect('snObliqueInsert',-1)})}}>through, using...</Button>
 		        <Button onClick={()=>{this.setState({npCase:'Equ',npCaseType:''},()=>{this.menuSelect('snObliqueInsert',-1)})}}>like a...</Button>
@@ -2919,7 +2919,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',npCase:'Abl_Mod',npCaseType:'from',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Abl_Mod'],["Update",["np","nType"],'from']])})}}>from...</Button>
 			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',npCase:'Abl_Mod',npCaseType:'io',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Abl_Mod'],["Update",["np","nType"],'io']])})}}>a or some...</Button>
 			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',npCase:'Loc',npCaseType:'',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Loc']])})}}>in or at...</Button>
-			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',npCase:'Ter',npCaseType:'',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Ter']])})}}>toward...</Button>
+			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',npCase:'Ter',npCaseType:'',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Ter']])})}}>to...</Button>
 			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',npCase:'Via',npCaseType:'',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Via']])})}}>through, using...</Button>
 			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',npCase:'Equ',npCaseType:'',npnType:'',isOpen:false},()=>{this.backEndCall([["Update",["np","nCase"],'Equ']])})}}>like, similar to...</Button>
 		    		</Button.Group>
@@ -2939,7 +2939,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:''},()=>{this.backEndCall([["Update",[ind1,"nObliques",ind2,'nCase'],'Abl_Mod'],["Update",[ind1,"nObliques",ind2,'nType'],'from']])})}}>from...</Button>
 			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:''},()=>{this.backEndCall([["Update",[ind1,"nObliques",ind2,'nCase'],'Abl_Mod'],["Update",[ind1,"nObliques",ind2,'nType'],'io']])})}}>a or some...</Button>
 			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:''},()=>{this.backEndCall([["Update",[ind1,"nObliques",ind2,'nCase'],'Loc']])})}}>in or at...</Button>
-			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:''},()=>{this.backEndCall([["Update",[ind1,"nObliques",ind2,'nCase'],'Ter']])})}}>toward...</Button>
+			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:''},()=>{this.backEndCall([["Update",[ind1,"nObliques",ind2,'nCase'],'Ter']])})}}>to...</Button>
 			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:''},()=>{this.backEndCall([["Update",[ind1,"nObliques",ind2,'nCase'],'Via']])})}}>through, using...</Button>
 			        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:''},()=>{this.backEndCall([["Update",[ind1,"nObliques",ind2,'nCase'],'Equ']])})}}>like, similar to...</Button>
 		    		</Button.Group>
@@ -2951,7 +2951,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 // "[Abl_Mod]":"Ablative-Modalis (indirect object, from...)",
 // "[Loc]":"Localis (in, at...)",
-// "[Ter]":"Terminalis (toward...)",
+// "[Ter]":"Terminalis (to...)",
 // "[Via]":"Vialis (through, using...)",
 // "[Equ]":"Equalis (like, similar to...)",
 
@@ -3638,6 +3638,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 	}
 
 	returnPossessor = (sentence, forEnglish, vsPlanned) => {
+		// console.log(sentence, forEnglish, vsPlanned)
 		let mvvs = this.state.mvvs
 		if (vsPlanned.length > 0 && mvvs.length == 0) {
 			mvvs = vsPlanned
@@ -3677,7 +3678,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 			'Abs':'[the one] _____',
 			'Rel':'[the one] _____',
 			'Loc':'in or at [the one] _____',
-			'Ter':'toward [the one] _____',
+			'Ter':'to [the one] _____',
 			'from':'from [the one] _____',
 			'io':'a _____',
 			'Via':'through, using [a] _____',
@@ -5327,7 +5328,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 							    		{this.mainScreenMenu('the one _____','nPhraseInsert','npCase',['Abs',''],['',[]])}
 							    		{this.mainScreenMenu('from the one _____','nPhraseInsert','npCase',['Abl_Mod','from'],['',[]])}
 							    		{this.mainScreenMenu('in or at the one _____','nPhraseInsert','npCase',['Loc',''],['',[]])}
-							    		{this.mainScreenMenu('toward the one _____','nPhraseInsert','npCase',['Ter',''],['',[]])}
+							    		{this.mainScreenMenu('to the one _____','nPhraseInsert','npCase',['Ter',''],['',[]])}
 							    		{this.mainScreenMenu('through, using the one _____','nPhraseInsert','npCase',['Via',''],['',[]])}
 							    		{this.mainScreenMenu('like, similar to the one _____','nPhraseInsert','npCase',['Equ',''],['',[]])}
 							    		<Divider />
@@ -6006,7 +6007,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 							    		<Accordion.Content active={this.state.activeIndexes.includes('nObliqueInsert')}>
 							    		{this.mainScreenMenu('from the one _____','nObliqueInsert','npCase',['Abl_Mod','from'],['',[]])}
 							    		{this.mainScreenMenu('in or at the one _____','nObliqueInsert','npCase',['Loc',''],['',[]])}
-							    		{this.mainScreenMenu('toward the one _____','nObliqueInsert','npCase',['Ter',''],['',[]])}
+							    		{this.mainScreenMenu('to the one _____','nObliqueInsert','npCase',['Ter',''],['',[]])}
 							    		{this.mainScreenMenu('through, using the one _____','nObliqueInsert','npCase',['Via',''],['',[]])}
 							    		{this.mainScreenMenu('like, similar to the one _____','nObliqueInsert','npCase',['Equ',''],['',[]])}
 							    		</Accordion.Content>
