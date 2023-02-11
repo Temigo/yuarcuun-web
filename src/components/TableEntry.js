@@ -47,6 +47,16 @@ class TableEntry extends PureComponent {
         finalHTML += '<span>, </span>'
         }
       })     
+    } else if (base == 'quantQual') {
+      word.map((k,index)=>{
+        const lastIndex = k.lastIndexOf('<')
+        finalHTML = k.slice(0, lastIndex)
+        let desiredRegion = k.slice(lastIndex+1)
+        finalHTML += '<span style="color:#002477">'+desiredRegion+'</span>'
+        if (word.length-1 !== index) {
+        finalHTML += '<span>, </span>'
+        }
+      })     
     } else {
       word.map((k,index)=>{
         k = k.replace(/</g,'')
@@ -494,7 +504,7 @@ class TableEntry extends PureComponent {
                 {quantQual.map((i,index) =>
                     <Table.Row>
                       <Table.HeaderCell style={{color:"#002477"}}>{subjectsEnglishQuantQual[index]}</Table.HeaderCell>
-                      <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e[i])}</Table.Cell>
+                      <Table.Cell style={{paddingLeft:10}}>{this.processSubjObjArrow(e[i],"quantQual")}</Table.Cell>
                     </Table.Row>
                 )}
             </Table.Body>
