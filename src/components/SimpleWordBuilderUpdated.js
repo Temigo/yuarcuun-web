@@ -155,7 +155,7 @@ class SimpleWordBuilderUpdated extends Component {
 
   componentWillReceiveProps(nextProps) {
     // backEndCall()
-    console.log(nextProps)
+    // console.log(nextProps)
     let initializedCall
     if (nextProps.entry[0] == 'n') {
       initializedCall = [["Insert",["np"],[[[nextProps.word,0,nextProps.index,nextProps.definitionIndex]],[0,0,0,1],"Abs"]]]
@@ -169,8 +169,8 @@ class SimpleWordBuilderUpdated extends Component {
 
 
   backEndCall(keyChanged, eraseExisting) {
-    console.log('backend',this.state)
-    console.log(keyChanged)
+    // console.log('backend',this.state)
+    // console.log(keyChanged)
 
     let mv = {}
     let cv = {}

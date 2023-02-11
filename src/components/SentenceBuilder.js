@@ -1741,23 +1741,23 @@ class SentenceBuilder extends Component {
 			    	</Menu>  			
   		} else if (type === 'mvParser') {
   			return this.parserPopup(this.state.parses.mv.v)
-  		} else if (type === 'mvnsParser') {
+  		} else if (type === 'mvnsParser' || type=== 'mvnsappositiveParser') {
   			return this.parserPopup(this.state.parses.mv.ns[this.state.mvnsSegments.length-1-ind[0]][ind[1]])
-  		} else if (type === 'mvnoParser') {
+  		} else if (type === 'mvnoParser' || type=== 'mvnoappositiveParser') {
   			return this.parserPopup(this.state.parses.mv.no[this.state.mvnoSegments.length-1-ind[0]][ind[1]])
   		} else if (type === 'mvnObliquesParser' || type === 'mvnObliquesAppositiveParser') {
   			return this.parserPopup(this.state.parses.mv.nObliques[ind[0]][ind[1]][ind[2]])
   		} else if (type === 'cvParser') {
   			return this.parserPopup(this.state.parses.cv.v)
-  		} else if (type === 'cvnsParser') {
+  		} else if (type === 'cvnsParser' || type === 'cvnsappositiveParser') {
   			return this.parserPopup(this.state.parses.cv.ns[this.state.cvnsSegments.length-1-ind[0]][ind[1]])
-  		} else if (type === 'cvnoParser') {
+  		} else if (type === 'cvnoParser' || type === 'cvnoappositiveParser') {
   			return this.parserPopup(this.state.parses.cv.no[this.state.cvnoSegments.length-1-ind[0]][ind[1]])
   		} else if (type === 'cvnObliquesParser' || type === 'cvnObliquesAppositiveParser') {
   			return this.parserPopup(this.state.parses.cv.nObliques[ind[0]][ind[1]][ind[2]])
   		} else if (type === 'svParser') {
   			return this.parserPopup(this.state.parses.sv.v)
-  		} else if (type === 'svnoParser') {
+  		} else if (type === 'svnoParser' || type === 'svnoappositiveParser') {
   			return this.parserPopup(this.state.parses.sv.no[this.state.svnoSegments.length-1-ind[0]][ind[1]])
   		} else if (type === 'svnObliquesParser' || type === 'svnObliquesAppositiveParser') {
   			return this.parserPopup(this.state.parses.sv.nObliques[ind[0]][ind[1]][ind[2]])

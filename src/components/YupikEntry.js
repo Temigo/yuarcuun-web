@@ -66,12 +66,14 @@ class YupikEntry extends Component {
   }
 
   retrieveDialect = (dialect) => {
+    console.log(dialect)
     if (dialect in DialectDictionary) {
       return DialectDictionary[dialect]
     }
   }
 
   retrieveDialects = (dialects) => {
+    console.log(dialects)
     let dialectList = []
     dialects.map((dialect)=>{
       if (dialect in DialectDictionary) {
@@ -297,11 +299,11 @@ class YupikEntry extends Component {
           </div>
 
             {this.state.entry.definition.map((entry,i) => {
-              return <div style={{display:'flex',flexDirection:'row',marginTop:'8px',marginBottom:'8px'}}>
+              return <div style={{display:'flex',flexDirection:'row',alignItems:'center', marginTop:'8px',marginBottom:'8px'}}>
               <div style={{marginLeft:'10px',color:'#000000',fontSize:'18px','fontWeight':'300'}}>{'○'}</div>
               <div style={{marginLeft:'20px',marginRight:'15px',color:'#000000',fontSize:'18px',lineHeight:'27px'}}>{this.processStyledText(entry[0])}</div>
               {entry[1][0] !== '' ?
-                <Label horizontal>{entry[1]}</Label>
+                <Label style={{height:'20px',fontSize:'10px'}} horizontal>{entry[1]}</Label>
                 :
                 null
                 }
@@ -385,7 +387,7 @@ class YupikEntry extends Component {
                 :
                 null
                 }
-              {this.state.entry.verbkeyString.pos.map((descriptor) => 
+              {this.state.entry.verbkeyString.pos.map((descriptor) =>  
                 {return <TagColors key={descriptor} word={descriptor} padding={0} />}
               )}
               </div>
@@ -401,9 +403,11 @@ class YupikEntry extends Component {
             {this.state.entry.verbkeyString.definition.map((entry,i) => {
               return <div style={{marginTop:'8px',marginBottom:'8px'}}>
               <span style={{marginLeft:'10px',color:'#777777',fontSize:'18px','fontWeight':'300'}}>{'○'}</span>
-              <span style={{marginLeft:'20px',color:'#000000',fontSize:'18px',lineHeight:'24px'}}>{this.processStyledText(entry[0])}</span>
+              <span style={{marginLeft:'20px',color:'#000000',fontSize:'18px',lineHeight:'24px',marginRight:'15px'}}>{this.processStyledText(entry[0])}</span>
               {entry[1][0] !== '' ?
-                <Label horizontal>{entry[1]}</Label>
+                (entry[1].map((dialect)=> 
+                  <Label style={{fontSize:'10px'}} horizontal>{dialect}</Label>
+                ))
                 :
                 null
                 }
