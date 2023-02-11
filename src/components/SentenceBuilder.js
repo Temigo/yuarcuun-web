@@ -1777,12 +1777,8 @@ class SentenceBuilder extends Component {
 			      	:
 			      	null
 			      }
-			      {this.state.mvvMood == 'Ind'  ?
-			      	(this.state.mvvType !== 'qaa' ?
-			      		this.menuItem('Update','Make Yes or No Question',null,null,[["Update",["mv","vType"],'qaa']])
-			      		:
-			      		null
-			      		) 
+			      {this.state.mvvMood == 'Ind' && this.state.mvvType !== 'qaa' ?
+			      	this.menuItem('Update','Make Yes or No Question',null,null,[["Update",["mv","vType"],'qaa']])
 			      	:
 			      	null
 			      }
@@ -1791,12 +1787,12 @@ class SentenceBuilder extends Component {
 			      	:
 			      	null
 			      }
-			      {this.state.optCase.length > 0 ?
+			      {this.state.mvvMood.includes("Opt") || this.state.mvvMood == 'Sbrd' ?
 			      	this.subMenuItem('switchOptative')
 			      	:
 			      	null
 			      }
-			      {this.state.optCase.length > 0 ?
+			      {this.state.mvvMood.includes("Opt") || this.state.mvvMood == 'Sbrd' ?
 			      	this.menuItem('Update','Change to Statement',null,null,[["Update",["mv","vMood"],'Ind']])
 			      	:
 			      	null
@@ -3669,6 +3665,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 
 	returnBaseChooserTitle = (itemUpdating,endingNeeded,mood,submood,forEnglish) => {
+
 		let subject = '';
 		if (forEnglish === undefined) {
 			forEnglish = ['',[]]
@@ -3718,7 +3715,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 		}
 
-		// console.log(subject, itemUpdating, mood,submood)
+		// console.log(itemUpdating,endingNeeded,mood,submood,forEnglish)
 		// console.log(itemUpdating, mood,submood)
 		// console.log(this.state)
 
@@ -3729,6 +3726,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 						if (submood === 'qaa') {
 							subject = subject + '?'
 						}
+					} else if (endingNeeded !== 'v') {
+						subject = ''
 					} else {
 						subject = 'he _____'					
 					}	
