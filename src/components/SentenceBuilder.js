@@ -5154,7 +5154,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 										</div>
 										:
 										<span>
-											{this.state.mvvMood == "Opt][PRS][NEG" || this.state.mvvMood == "Opt][FUT][NEG" ?
+											{this.state.mvvMood == "Opt][PRS][NEG" || this.state.mvvMood == "Opt][FUT][NEG" || this.state.mvvMood == 'Sbrd' ?
 												<Dropdown inline scrolling style={this.getDropdownStyle('mvv.s')} onChange={(event,data)=>{this.backEndCall([["Update",["mv","vs"],data.value.split('').map(Number)]])}}  value={this.state.mvvs.join("")} options={mvSubjectOptionsOnly2nd} />
 												:
 												(this.state.mvvType == 'Intrg0' ?

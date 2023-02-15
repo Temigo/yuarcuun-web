@@ -139,7 +139,7 @@ class App extends Component {
   }
 
   updateCompleted = (lessonIndex, exerciseNumber, data,value) => {
-    // console.log(lessonIndex, exerciseNumber, data,value)
+    console.log(lessonIndex, exerciseNumber, data,value)
     let completedExercises = this.state.completedExercises
     let lessonsStarted = this.state.lessonsStarted
     let newentry = lessonIndex.toString()+'%'+exerciseNumber.toString()
@@ -147,7 +147,7 @@ class App extends Component {
     if (!completedExercises.includes(newentry)) {
       this.setState({completedExercises:completedExercises.concat([newentry])})
     }
-    if (!lessonsStarted.includes(lessonIndex)) {
+    if (!lessonsStarted.includes(lessonIndex) && exerciseNumber !== -1) {
       this.setState({lessonsStarted:lessonsStarted.concat([lessonIndex])})
     }
   }

@@ -700,9 +700,9 @@ class Dialogues extends Component {
 
         <div style={{justifyContent:'space-between',display:'flex'}}>
           <div>
-          <Button primary icon circular onClick={this.props.history.goBack}>
-            <Icon name='chevron left' />
-          </Button>
+
+          <Icon onClick={()=>{this.props.history.goBack()}} circular style={{margin:0,color:'#B1B1B1',cursor:'pointer',fontSize:'22px'}} name='chevron left' />
+
           </div>
           <div>
             <div style={{textAlign:'center',fontWeight:'bold',fontSize:'14px'}}>{this.state.lesson.title}</div>
@@ -714,8 +714,8 @@ class Dialogues extends Component {
         <div>
           
           {this.state.currentCounter == -1 ?
-            <div style={{display:'flex',flexDirection:'column',justifyContent:'center'}}>
-            <Button onClick={()=>{this.setState({currentCounter:0},()=>{this.playNextSentence(0)})}}>Ayagnia</Button>
+            <div style={{display:'flex',justifyContent:'center'}}>
+            <Button style={{width:'200px'}} onClick={()=>{this.setState({currentCounter:0},()=>{this.playNextSentence(0)})}}>Ayagnia</Button>
             </div>
             :
             <div>

@@ -20,6 +20,7 @@ class DialogueMenu extends Component {
     console.log(props)
     this.state = {
       lessons: dialog_gen.lessons,
+      // showExercise: [],
       showExercise: this.props.lessonsStarted === undefined ? [] : this.props.lessonsStarted,
     }
   }
@@ -90,10 +91,17 @@ class DialogueMenu extends Component {
                       </Link>
                       <Button basic compact style={{fontSize:'14px',fontWeight:'400'}} onClick={()=>{this.toggleExercise(index)}}>
                         {'Exercises'}
-                        <Icon
-                          style={{paddingLeft:10,fontSize:12}}
-                          name="chevron down"
-                        />
+                        {this.state.showExercise.includes(index) ?
+                          <Icon
+                            style={{paddingLeft:10,fontSize:12}}
+                            name="chevron up"
+                          />
+                          :
+                          <Icon
+                            style={{paddingLeft:10,fontSize:12}}
+                            name="chevron down"
+                          />                          
+                        }
                       </Button>
                       {this.state.showExercise.includes(index) ?
                         <div style={{display:'flex',flexDirection:'column',paddingTop:'10px'}}>
