@@ -45,6 +45,15 @@ export const ending_underlying = {
     "[Loc][SgUnpd]": [
         ".mi"
     ],
+    "[Cardinal][Sg]": [
+        ""
+    ],
+    "[Cardinal][Du]": [
+        ""
+    ],
+    "[Cardinal][Pl]": [
+        ""
+    ],
     "[N][Abl_Mod][1DuPoss][DuPosd]": [
         "%:(e)gmegnek",
         "%:(e)gmegneng"

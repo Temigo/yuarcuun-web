@@ -1,4 +1,59 @@
 export const endingRules = {
+    "[Abl]": [
+        ".ken"
+    ],
+    "[Abl_Mod][DuUnpd]": [
+        ".gnek"
+    ],
+    "[Abl_Mod][PlUnpd]": [
+        ".nek"
+    ],
+    "[Abl_Mod][SgUnpd]": [
+        ".mek"
+    ],
+    "[Abs][DuUnpd]": [
+        ".k"
+    ],
+    "[Abs][PlUnpd]": [
+        ".t"
+    ],
+    "[Abs][SgUnpd]": [
+        "+na",
+        "+n'a"
+    ],
+    "[Equ]": [
+        ".ten"
+    ],
+    "[Equ][DuUnpd]": [
+        ".gcetun"
+    ],
+    "[Equ][PlUnpd]": [
+        ".cetun"
+    ],
+    "[Equ][SgUnpd]": [
+        ".tun"
+    ],
+    "[Loc]": [
+        ".ni"
+    ],
+    "[Loc][DuUnpd]": [
+        ".gni"
+    ],
+    "[Loc][PlUnpd]": [
+        ".ni"
+    ],
+    "[Loc][SgUnpd]": [
+        ".mi"
+    ],
+    "[Cardinal][Sg]": [
+        ""
+    ],
+    "[Cardinal][Du]": [
+        ""
+    ],
+    "[Cardinal][Pl]": [
+        ""
+    ],
     "[N][Abl_Mod][1DuPoss][DuPosd]": [
         "%:(e)gmegnek",
         "%:(e)gmegneng"
