@@ -110,6 +110,9 @@ class YupikEntry extends Component {
     //   </div>
     // }
 
+    // remove links
+    sentence = sentence.replaceAll(/{(.*?)}⟨.*?⟩/g,"$1")
+
     let matches = sentence.match(/\`.*(\`|\')/g)
     let matches2 = sentence.match(/\(.*?\)/g)
 
