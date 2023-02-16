@@ -663,9 +663,9 @@ class Dialogues extends Component {
       if (this.state.showContinue) {
         if (this.state.lesson.dialogues.length-1 === this.state.currentCounter) {
         this.props.updateCompleted(this.state.lessonIndex,this.state.exerciseNumber)
-        return <div>
-            <div style={{display:'flex',justifyContent:'center'}}><Link to={{pathname:'/dialogues'}}><Button>Continue</Button></Link></div>
-            <div style={{display:'flex',justifyContent:'center'}}><Button onClick={()=>{this.initialize()}}>Redo</Button></div>
+        return <div style={{display:'flex',justifyContent:'center',flexDirection:'row'}}>
+            <Button onClick={()=>{this.initialize()}}>Redo</Button>
+            <Link to={{pathname:'/dialogues'}}><Button>Continue</Button></Link>
             </div>
         } else {
         return <Button icon circular size='huge' onClick={()=>{

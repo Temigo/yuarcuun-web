@@ -832,7 +832,7 @@ class SearchPage extends Component {
                       {this.state.links[index][qindex] !== "" ? (
                         <div>
                           <div
-                            style={{ fontWeight: "bold", fontFamily: "Lato,Arial,Helvetica,sans-serif", textDecoration: "underline", paddingBottom: "5px", }}
+                            style={{ fontWeight: "bold", fontFamily: "Lato,Arial,Helvetica,sans-serif", textDecoration: "underline", color:'#4183c4', paddingBottom: "5px", }}
                           >
                             <Link
                               to={{

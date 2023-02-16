@@ -35,7 +35,7 @@ class About extends Component {
 We are proud to be a team of Yup'ik developers. Current contributors are Christopher Egalaaq Liu, from Mamterilleq (Bethel, Alaska), <a href="http://temigo.github.io/">Laura Domine</a> from Paris, and Lonny Alaskuk Strunk from Kuinerraq (Quinhagak, Alaska).
 </p>
 
-<p>We would like to properly cite and express gratitude for grammar material from the following books, "<i>A Practical Grammar of the Central Alaskan Yup'ik Eskimo Language</i>" and the "<i><a href="http://www.uaf.edu/anla/item.xml?id=CY972J2012">Yup'ik Eskimo Dictionary</a></i>" compiled by Steve Jacobson, Anna Jacobson, and others. Their work made all of this possible. <i> Quyavikamceci. </i></p>
+<p>We would like to properly cite and express gratitude for grammar material from the following books, "<i>A Practical Grammar of the Central Alaskan Yup'ik Eskimo Language</i>" and the "<i>Yup'ik Eskimo Dictionary</i>" compiled by Steve Jacobson, Anna Jacobson, and others. Their work made all of this possible. <i> Quyavikamceci. </i></p>
 
 <p>
 {'The first release of this website (Oct 2018) was supported through the Yuarcuun Initiative and received financial sponsorship. At that time, the initiative was financially supported by the\xa0'}
@@ -54,7 +54,11 @@ We are proud to be a team of Yup'ik developers. Current contributors are Christo
 null
 }
 
-<p>For this new update (Jan 2021), we integrated a <a href="https://digital.lib.washington.edu/researchworks/bitstream/handle/1773/46496/Strunk_washington_0250O_22260.pdf?sequence=1&isAllowed=y">Yugtun morphological parser</a> created by Lonny Alaskuk Strunk. Please contact us at yuarcuun @ gmail dot com for questions about our projects or to discuss any new projects.</p>
+<p>In the second update (Jan 2021), we integrated a <a href="https://digital.lib.washington.edu/researchworks/bitstream/handle/1773/46496/Strunk_washington_0250O_22260.pdf?sequence=1&isAllowed=y">Yugtun morphological parser</a> created by Lonny Alaskuk Strunk. </p>
+
+<p>In the third update (Feb 2023), we added an advanced sentence builder, a Yugtun audio library, and a conversational module in partnership with the Native Village of Kwinhagak (NVK), Orutsararmiut Native Council (ONC), and KYUK. This update was made possible by Grant Number 90XN0110-01-00 from Administration for Native Americans. </p>
+
+<p>Please contact us at yuarcuun @ gmail dot com for questions about our projects or to discuss any new projects.</p>
 
 <p> <i> Quyana cakneq! </i> </p>
 

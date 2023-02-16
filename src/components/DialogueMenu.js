@@ -51,7 +51,9 @@ class DialogueMenu extends Component {
         <div style={{justifyContent:'space-between',display:'flex'}}>
           <div>
 
-          <Icon onClick={()=>{this.props.history.goBack()}} circular style={{margin:0,color:'#B1B1B1',cursor:'pointer',fontSize:'22px'}} name='chevron left' />
+      <Link to={{pathname: "/"}}>
+      <Icon circular style={{margin:0,marginLeft:5,color:'#B1B1B1',cursor:'pointer',fontSize:'22px'}} name='chevron left' />
+      </Link>     
 
           </div>
 
@@ -64,7 +66,7 @@ class DialogueMenu extends Component {
           <div style={{border:'1px solid #E3E3E3',marginTop:'10px'}}>
             <List style={{marginBottom:'5px'}}>
               {this.state.lessons.map((i,index)=>
-                <List.Item style={{padding:0,borderBottom:'1px solid #E3E3E3'}}>
+                <List.Item style={{padding:0,borderBottom:(index === 60 ? '0px solid #E3E3E3' : '1px solid #E3E3E3')}}>
                   {i.context === "chunk" ?
                   <div className='hierarchymain'>
                     <span className='span1'>{i.title}</span>

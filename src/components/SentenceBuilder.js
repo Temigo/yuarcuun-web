@@ -1948,7 +1948,7 @@ class SentenceBuilder extends Component {
 			    	</Menu> 
 	  	} else if (type ==='cvnObliquesEnglish2appositive') {
   					return <Menu vertical style={{marginTop:10,marginBottom:10}}>
-						{this.menuItem('BaseChooser','Change Oblique Descriptor Noun',[typeInd,'cvnObliqueUpdate'],null)}
+						{this.menuItem('BaseChooser','Change Oblique Descriptor Noun',[typeInd,'cvnObliqueUpdateappositiveupdate'],null)}
 			      {this.menuItem('Delete','Delete Oblique Descriptor Noun',null,null,[["Delete",["cv","nObliques",ind[0],ind[1],ind[2]],-1]])}
 			    	</Menu> 
 	  	} else if (type ==='svnObliquesEnglish2') {
@@ -1967,13 +1967,13 @@ class SentenceBuilder extends Component {
 			    	</Menu> 
 	  	} else if (type ==='svnObliquesEnglish2appositive') {
   					return <Menu vertical style={{marginTop:10,marginBottom:10}}>
-						{this.menuItem('BaseChooser','Change Oblique Descriptor Noun',[typeInd,'cvnObliqueUpdate'],null)}
+						{this.menuItem('BaseChooser','Change Oblique Descriptor Noun',[typeInd,'cvnObliqueUpdateappositiveupdate'],null)}
 			      {this.menuItem('Delete','Delete Oblique Descriptor Noun',null,null,[["Delete",["cv","nObliques",ind[0],ind[1],ind[2]],-1]])}
 			    	</Menu> 
 	  	} else if (type ==='mvnObliquesEnglish2appositive') {
 	  				console.log(ind)
   					return <Menu vertical style={{marginTop:10,marginBottom:10}}>
-						{this.menuItem('BaseChooser','Change Oblique Descriptor Noun',[typeInd,'mvnObliqueUpdate'],null)}
+						{this.menuItem('BaseChooser','Change Oblique Descriptor Noun',[typeInd,'mvnObliqueUpdateappositiveupdate'],null)}
 			      {this.menuItem('Delete','Delete Oblique Descriptor Noun',null,null,[["Delete",["mv","nObliques",ind[0],ind[1],ind[2]],-1]])}
 			    	</Menu> 
 	  	}
@@ -1986,6 +1986,18 @@ class SentenceBuilder extends Component {
   		nCases = this.getnCasenType(this.state.cvnObliques,ind[0])
   		return this.baseChooser(["Update",["cv","nObliques",ind[0],'nBases',ind[1],ind[2]]],'n','updatebase',nCases[0],nCases[1])
   	} else if (currentEditMode==='svnObliqueUpdate') {
+  		let nCases = ['',''] 
+  		nCases = this.getnCasenType(this.state.svnObliques,ind[0])
+  		return this.baseChooser(["Update",["sv","nObliques",ind[0],'nBases',ind[1],ind[2]]],'n','updatebase',nCases[0],nCases[1])
+  	} else if (currentEditMode==='mvnObliqueUpdateappositiveupdate') {
+  		let nCases = ['',''] 
+  		nCases = this.getnCasenType(this.state.mvnObliques,ind[0])
+  		return this.baseChooser(["Update",["mv","nObliques",ind[0],'nBases',ind[1],ind[2]]],'n','updatebase',nCases[0],nCases[1])
+  	} else if (currentEditMode==='cvnObliqueUpdateappositiveupdate') {
+  		let nCases = ['',''] 
+  		nCases = this.getnCasenType(this.state.cvnObliques,ind[0])
+  		return this.baseChooser(["Update",["cv","nObliques",ind[0],'nBases',ind[1],ind[2]]],'n','updatebase',nCases[0],nCases[1])
+  	} else if (currentEditMode==='svnObliqueUpdateappositiveupdate') {
   		let nCases = ['',''] 
   		nCases = this.getnCasenType(this.state.svnObliques,ind[0])
   		return this.baseChooser(["Update",["sv","nObliques",ind[0],'nBases',ind[1],ind[2]]],'n','updatebase',nCases[0],nCases[1])
@@ -3279,6 +3291,12 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		}
 
 		sentence = this.returnPossessor(sentence, forEnglish, vsPlanned)
+
+
+		sentence = sentence.replace('[he or it]','')
+		if (sentence.includes('[')) {
+			console.log(sentence)
+		}
 
 
 		let matches = sentence.match(/\<.*?\>/g)
@@ -6045,8 +6063,12 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 										</div>
 									</div>
 								:
-								<div style={{height:'40px'}} />
+								<div style={{height:(this.state.mvvs.length === 0 && this.state.npn.length === 0 ? '0px': '40px')}} />
 							}
+
+					</div>
+
+				</Container>
 
 				{!this.fromEntry && this.state.mvvBase.length === 0 && this.state.npnBases.length === 0 ?
 					(this.state.glossary ? 
@@ -6059,9 +6081,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 				}
 
 
-					</div>
 
-				</Container>
 
 			</div>
 
