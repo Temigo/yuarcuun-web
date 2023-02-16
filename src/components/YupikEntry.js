@@ -289,7 +289,7 @@ class YupikEntry extends Component {
                 null
                 }
               {this.state.entry.pos.map((descriptor) => 
-                {return <TagColors key={descriptor} word={descriptor} padding={0} />}
+                {return <TagColors key={descriptor} word={descriptor} padding={3} />}
               )}
               </div>
             })}
@@ -391,7 +391,7 @@ class YupikEntry extends Component {
                 null
                 }
               {this.state.entry.verbkeyString.pos.map((descriptor) =>  
-                {return <TagColors key={descriptor} word={descriptor} padding={0} />}
+                {return <TagColors key={descriptor} word={descriptor} padding={3} />}
               )}
               </div>
             })}

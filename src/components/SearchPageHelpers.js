@@ -23,18 +23,18 @@ export const YugtunFooter = (props) => (
 
 export const TagColors = (props) => {
   console.log('hi',props.word)
-  let isNoun = props.word.includes('noun');
-  let isVerb = props.word.includes('verb');
-  let isParticle = props.word.includes('particle');
-  let isRoot = props.word.includes('root');
-  let isExclamation = props.word.includes('exclamation');
-  let isConjunction = props.word.includes('conjunction');
-  let isAdverb = props.word.includes('adverb');
-  let isPredicate = props.word.includes('predicate');
-  let isDemonstrative = props.word.includes('demonstrative');
-  let isInterjection = props.word.includes('interjection');
-  let isPostbase = props.word.includes('postbase');
-  let isEnclitic = props.word.includes('enclitic');
+  let isNoun = props.word == 'noun';
+  let isVerb = props.word == 'verb';
+  let isParticle = props.word == 'particle';
+  let isRoot = props.word == 'root';
+  let isExclamation = props.word == 'exclamation';
+  let isConjunction = props.word == 'conjunction';
+  let isAdverb = props.word == 'adverb';
+  let isPredicate = props.word == 'predicate';
+  let isDemonstrative = props.word == 'demonstrative';
+  let isInterjection = props.word == 'interjection';
+  let isPostbase = props.word == 'postbase';
+  let isEnclitic = props.word == 'enclitic';
   let isTransitive = props.word == 't';
   let isIntransitive = props.word == 'i';
   let isNoun2 = props.word == 'n';
