@@ -6,7 +6,7 @@ import * as Fin from "finnlp";
 import { Inflectors } from "en-inflectors";
 
 const lessonChunks = {
-	0:"Test", 
+	0:"Featured", 
 	1:"Basic Questions",
 	2:"Introductions",
 	3:"At Home",
