@@ -3,7 +3,7 @@ import { Container, Header, Button, Icon, Divider, Image, Grid, Dropdown, List, 
 import { Link } from 'react-router-dom';
 import { API_URL } from '../App.js';
 import axios from 'axios';
-import {nounOptionsMVPossessors, mvObjectOptionsEnglish, popularOptPostbases, popularNounsDescriptors, popularVerbsOptative, popularVPostbasesPAST, popularVPostbasesFUTURE, popularVPostbasesNOTIME, popularNPostbases, popularNounsBeings, popularNounsThings, popularNounsVialis, popularNounsPlaces, popularVerbsIT, popularVerbsI, popularVerbsT, npnEnglish, npnEnglishself, colorsList,  mvSubject4thPersonCalls, mvObject4thPersonCalls,nObject4thPersonCalls, mvSubjectOptionsWho, mvSubjectOptionsWhat, mvObjectOptionsWhom, mvObjectOptionsWhomAbl, mvObjectOptionsWhat, mvObjectOptionsWhatAbl,retrieveMoodEnglish, nounOptionsPossessorsNo4th, mvSubjectOptionsOnly2nd, nounOptionsNumbers, nounoptionsmodalis, mvSubjectOptions, mvObjectOptions, mvSubjectOptionsEnglish, verbPostbases, nounPostbases, VVpostbases, NNpostbases} from './constants/newconstants.js'
+import {nounOptionsMVPossessors, mvObjectOptionsEnglish, popularOptPostbases,popularVPostbasesSub, popularNounsDescriptors, popularVerbsOptative, popularVPostbasesPAST, popularVPostbasesFUTURE, popularVPostbasesNOTIME, popularNPostbases, popularNounsBeings, popularNounsThings, popularNounsVialis, popularNounsPlaces, popularVerbsIT, popularVerbsI, popularVerbsT, npnEnglish, npnEnglishself, colorsList,  mvSubject4thPersonCalls, mvObject4thPersonCalls,nObject4thPersonCalls, mvSubjectOptionsWho, mvSubjectOptionsWhat, mvObjectOptionsWhom, mvObjectOptionsWhomAbl, mvObjectOptionsWhat, mvObjectOptionsWhatAbl,retrieveMoodEnglish, nounOptionsPossessorsNo4th, mvSubjectOptionsOnly2nd, nounOptionsNumbers, nounoptionsmodalis, mvSubjectOptions, mvObjectOptions, mvSubjectOptionsEnglish, verbPostbases, nounPostbases, VVpostbases, NNpostbases} from './constants/newconstants.js'
 import {newpostbases} from './constants/newpostbases.js'
 import {ending_underlying} from './constants/ending_underlying.js'
 import palette from 'google-palette';
@@ -586,29 +586,37 @@ class SentenceBuilder extends Component {
 
           // this.setState({ usageDictionary: usageDictionary});
 
-          let filteredDictV = usageDictionary.filter(entry => (entry.type.includes('i')||entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')) )
+          let filteredDictV = usageDictionary.filter(entry => ((entry.type.includes('i')||entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')) && !entry.properties.includes('sub')))
+          let filteredDictVsub = usageDictionary.filter(entry => (entry.type.includes('i')||entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')) )
           let filteredDictN = usageDictionary.filter(entry => (entry.type.includes('n')||entry.type.includes('[V→N]')||entry.type.includes('[N→N]')))
-          let filteredDictVit = usageDictionary.filter(entry => (entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')))
+          let filteredDictVit = usageDictionary.filter(entry => ((entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')) && !entry.properties.includes('sub')))
 
-          let filteredDictVVnofuture = usageDictionary.filter(entry => (entry.type.includes('[V→V]') && !entry.properties.includes('future')))
-          let filteredDictVVnopast = usageDictionary.filter(entry => (entry.type.includes('[V→V]') && !entry.properties.includes('past')))
-          let filteredDictVVnotime = usageDictionary.filter(entry => (entry.type.includes('[V→V]') && !entry.properties.includes('past')  && !entry.properties.includes('future')))
-          let filteredDictVVall = usageDictionary.filter(entry => (entry.type.includes('[V→V]')))
 
-          this.setState({ usageDictionary: usageDictionary, filteredDictV: filteredDictV, filteredDictVit: filteredDictVit, filteredDictN: filteredDictN, filteredDictVVnofuture: filteredDictVVnofuture, filteredDictVVnopast: filteredDictVVnopast, filteredDictVVnotime:filteredDictVVnotime, filteredDictVVall: filteredDictVVall});
+          let filteredDictVVnofuture = usageDictionary.filter(entry => (entry.type.includes('[V→V]') && !entry.properties.includes('future') && !entry.properties.includes('sub')))
+          let filteredDictVVnopast = usageDictionary.filter(entry => (entry.type.includes('[V→V]') && !entry.properties.includes('past') && !entry.properties.includes('sub')))
+          let filteredDictVVnotime = usageDictionary.filter(entry => (entry.type.includes('[V→V]') && !entry.properties.includes('past')  && !entry.properties.includes('future') && !entry.properties.includes('sub')))
+          let filteredDictVVnotimesub = usageDictionary.filter(entry => (entry.type.includes('[V→V]') && !entry.properties.includes('past')  && !entry.properties.includes('future')))
+          let filteredDictVVall = usageDictionary.filter(entry => (entry.type.includes('[V→V]') && !entry.properties.includes('sub')))
+
+
+          this.setState({ usageDictionary: usageDictionary, filteredDictVsub:filteredDictVsub, filteredDictVVnotimesub:filteredDictVVnotimesub,filteredDictV: filteredDictV, filteredDictVit: filteredDictVit, filteredDictN: filteredDictN, filteredDictVVnofuture: filteredDictVVnofuture, filteredDictVVnopast: filteredDictVVnopast, filteredDictVVnotime:filteredDictVVnotime, filteredDictVVall: filteredDictVVall});
         });
     } else {
     			usageDictionary = this.state.usageDictionary
-          let filteredDictV = usageDictionary.filter(entry => (entry.type.includes('i')||entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')) )
+          let filteredDictV = usageDictionary.filter(entry => ((entry.type.includes('i')||entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')) && !entry.properties.includes('sub')))
+          let filteredDictVsub = usageDictionary.filter(entry => (entry.type.includes('i')||entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')) )
           let filteredDictN = usageDictionary.filter(entry => (entry.type.includes('n')||entry.type.includes('[V→N]')||entry.type.includes('[N→N]')))
-          let filteredDictVit = usageDictionary.filter(entry => (entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')))
+          let filteredDictVit = usageDictionary.filter(entry => ((entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')) && !entry.properties.includes('sub')))
 
-          let filteredDictVVnofuture = usageDictionary.filter(entry => (entry.type.includes('[V→V]') && !entry.properties.includes('future')))
-          let filteredDictVVnopast = usageDictionary.filter(entry => (entry.type.includes('[V→V]') && !entry.properties.includes('past')))
-          let filteredDictVVnotime = usageDictionary.filter(entry => (entry.type.includes('[V→V]') && !entry.properties.includes('past')  && !entry.properties.includes('future')))
-          let filteredDictVVall = usageDictionary.filter(entry => (entry.type.includes('[V→V]')))
 
-          this.setState({ usageDictionary: usageDictionary, filteredDictV: filteredDictV, filteredDictVit: filteredDictVit, filteredDictN: filteredDictN, filteredDictVVnofuture: filteredDictVVnofuture, filteredDictVVnopast: filteredDictVVnopast, filteredDictVVnotime:filteredDictVVnotime, filteredDictVVall: filteredDictVVall});
+          let filteredDictVVnofuture = usageDictionary.filter(entry => (entry.type.includes('[V→V]') && !entry.properties.includes('future') && !entry.properties.includes('sub')))
+          let filteredDictVVnopast = usageDictionary.filter(entry => (entry.type.includes('[V→V]') && !entry.properties.includes('past') && !entry.properties.includes('sub')))
+          let filteredDictVVnotime = usageDictionary.filter(entry => (entry.type.includes('[V→V]') && !entry.properties.includes('past')  && !entry.properties.includes('future') && !entry.properties.includes('sub')))
+          let filteredDictVVnotimesub = usageDictionary.filter(entry => (entry.type.includes('[V→V]') && !entry.properties.includes('past')  && !entry.properties.includes('future')))
+          let filteredDictVVall = usageDictionary.filter(entry => (entry.type.includes('[V→V]') && !entry.properties.includes('sub')))
+
+
+          this.setState({ usageDictionary: usageDictionary, filteredDictVsub:filteredDictVsub, filteredDictVVnotimesub:filteredDictVVnotimesub,filteredDictV: filteredDictV, filteredDictVit: filteredDictVit, filteredDictN: filteredDictN, filteredDictVVnofuture: filteredDictVVnofuture, filteredDictVVnopast: filteredDictVVnopast, filteredDictVVnotime:filteredDictVVnotime, filteredDictVVall: filteredDictVVall});
     }
 
 }
@@ -1377,13 +1385,15 @@ class SentenceBuilder extends Component {
 	}
 
 
-	onChangeBaseSearch = (endingNeeded,forEnglish,itemUpdating,mood,submood,event,data) => {
-		// console.log(endingNeeded,forEnglish,itemUpdating,mood,submood)
+	onChangeBaseSearch = (endingNeeded,forEnglish,itemUpdating,mood,submood,update,itemUpdatingFull,event,data) => {
 		let word = data.value
 		let wordsList
 		let filteredDictV = {}
+		let Sbrd = false
 		let noFuture = false
 		let noPast = false
+		let vsPlanned = []
+		let startingCase = ''
 		let optionsFuzzy = {
 		  keys: ['yupikword', 'base_case'],
 		  limit: 10, // don't return more results than you need!
@@ -1396,32 +1406,80 @@ class SentenceBuilder extends Component {
 
 		let newSearch = word.replaceAll(/^is /g,'').replaceAll(/^am /g,'')
 
+		if (this.state.endingAdjusted == 'v' || (this.state.endingAdjusted !== 'n' || endingNeeded == 'v')) {
+			if (forEnglish !== undefined) {
+				startingCase = forEnglish[0]
+				vsPlanned = forEnglish[1]
+			} else {
+				if (itemUpdating == 'cv') {
+					vsPlanned = this.state.cvvs
+				} else {
+					vsPlanned = this.state.mvvs
+				}			
+			}
 
-		// console.log((endingNeeded,event,data))
-		if (this.state.nextTenses.length > 0) {
-			if (this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
-				optionsFuzzy['keys'] = ['yupikword','past_preverb']
-			} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'g') {
-				optionsFuzzy['keys'] = ['yupikword','ger_preverb']
-			} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'i') {
-				optionsFuzzy['keys'] = ['yupikword','inf_preverb']
-			} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp') {
-				optionsFuzzy['keys'] = ['yupikword','past_preverb']
+			if (this.state.nextTenses.length > 0) {
+				if (this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
+					optionsFuzzy['keys'] = ['yupikword','past_preverb']
+				} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'g') {
+					optionsFuzzy['keys'] = ['yupikword','ger_preverb']
+				} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'i') {
+					optionsFuzzy['keys'] = ['yupikword','inf_preverb']
+				} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'pp') {
+					optionsFuzzy['keys'] = ['yupikword','past_preverb']
+				}
+			} else {
+
+				let specialStartingCase = this.returnBaseCaseforMoods(itemUpdating,mood,vsPlanned)
+				// console.log(verbtype,mood,vsPlanned)
+				// console.log(specialStartingCase)
+				let s0 = specialStartingCase[0]
+
+				if (s0 === 'p') {
+					optionsFuzzy['keys'] = ['yupikword','past_preverb']
+				} else if (s0 === 'g') {
+					optionsFuzzy['keys'] = ['yupikword','ger_preverb']
+				} else if (s0 === 'i') {
+					optionsFuzzy['keys'] = ['yupikword','inf_preverb']
+				} else if (s0 === 'past') {
+					optionsFuzzy['keys'] = ['yupikword','past_preverb']
+				}	
+
+				// else if (s0 === 'pp') {
+				// 	verbAdd = key['englishtenses'][4]
+				// } else if (s0 === 'gen') {
+				// 	verbAdd = key['englishtenses'][2]
+				// } else if (s0 === 'gen2') {
+				// 	verbAdd = key['englishtenses'][2]
+				// } else if (s0 === 'present') {
+				// 	verbAdd = key['englishtenses'][2]
+				// }						
+				
 			}
 		}
+
+		// console.log((endingNeeded,event,data))
+		// console.log(endingNeeded,forEnglish,itemUpdating,mood,submood, update,itemUpdatingFull, this.state.nextTenses)
+		// this.returnBaseCaseforMoods(verbtype,mood,vsPlanned)
+
+
 
 		// console.log(optionsFuzzy)
 
 		if (mood !== undefined) {
-			if (mood.includes('Opt')) {
-				noFuture = true
+			if (mood == 'Sbrd' || mood.includes('Opt')) {
+				noFuture = true				
 				noPast = true
 			}
 		}
-		if (mood == 'CtmpI' || mood == 'CtmpII' || submood == 'Intrg4' || mood == 'Sbrd') {
+
+		if (itemUpdating == 'sv') {
+			Sbrd = true
+		}
+		if (mood == 'CtmpI' || mood == 'CtmpII' || submood == 'Intrg4') {
 			noFuture = true
 		}
-		if (mood == 'Sbrd' || submood == 'Intrg5') {
+		if (submood == 'Intrg5') {
 			noPast = true
 		}
 		// if (submood == 'Intrg4' || submood == 'Intrg5') {
@@ -1430,10 +1488,14 @@ class SentenceBuilder extends Component {
 		// }
 		if (submood == 'Intrg1' || submood == 'Intrg3') {
 			filteredDictV = this.state.filteredDictVit
+		} else if (Sbrd) {
+			filteredDictV = this.state.filteredDictVsub
 		} else {
 			filteredDictV = this.state.filteredDictV
 		}
-		if (noFuture && noPast) {
+		if (Sbrd) {
+			Object.keys(this.state.filteredDictVVnotimesub).map(key => filteredDictV[key]=this.state.filteredDictVVnotimesub[key])
+		} else if (noFuture && noPast) {
 			Object.keys(this.state.filteredDictVVnotime).map(key => filteredDictV[key]=this.state.filteredDictVVnotime[key])
 		} else if (noFuture) {
 			Object.keys(this.state.filteredDictVVnofuture).map(key => filteredDictV[key]=this.state.filteredDictVVnofuture[key])
@@ -1442,19 +1504,26 @@ class SentenceBuilder extends Component {
 		} else {
 			Object.keys(this.state.filteredDictVVall).map(key => filteredDictV[key]=this.state.filteredDictVVall[key])
 		}
+			
+
+
 
 		if (this.state.endingAdjusted == 'n') {
 	    	wordsList = fuzzysort.go(newSearch, this.state.filteredDictN, optionsFuzzy).map(({ obj }) => (obj));
+	    	// console.log(wordsList)
 	    	this.setState({ wordsList: wordsList, searchQuery: word });
 		} else if (this.state.endingAdjusted == 'v') {
 	    	wordsList = fuzzysort.go(newSearch, filteredDictV, optionsFuzzy).map(({ obj }) => (obj));
+	    	// console.log(wordsList)
 	    	this.setState({ wordsList: wordsList, searchQuery: word });
 		} else {
 			if (endingNeeded === 'v') {
 	    	wordsList = fuzzysort.go(newSearch, filteredDictV, optionsFuzzy).map(({ obj }) => (obj));
+	    	// console.log(wordsList)
 	    	this.setState({ wordsList: wordsList, searchQuery: word });
 			} else if (endingNeeded === 'n') {
 	    	wordsList = fuzzysort.go(newSearch, this.state.filteredDictN, optionsFuzzy).map(({ obj }) => (obj));
+	    	// console.log(wordsList)
 	    	this.setState({ wordsList: wordsList, searchQuery: word });
 			}
 		}
@@ -1782,7 +1851,7 @@ class SentenceBuilder extends Component {
 			      	:
 			      	null
 			      }
-			      {this.state.mvvMood == 'Ind' && this.state.mvvType !== 'qaa' ?
+			      {this.state.mvvMood == 'Ind' && this.state.mvvType !== 'qaa' && this.state.cvvMood !== 'CtmpI' ?
 			      	this.menuItem('Update','Change to Command',null,null,[["Update",["mv","vMood"],'Opt][PRS']])
 			      	:
 			      	null
@@ -2360,7 +2429,10 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 								this.setState({svvType:setStateTo[0]})
 							} else if (setState === 'optCase') {
 								this.setState({optCase:setStateTo[0], mvvType:setStateTo[1]})
-							}
+							} 
+							// else {
+								// this.setState({mvvMood:'',mvvType:'',cvvMood:'',svvType:'',optCase:'',npCase:'',npCaseType:''})
+							// }
 							this.setState({
 								currentlyOpen:name, 
 								crecentlyOpen: name, 
@@ -2373,7 +2445,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 							// nextTenses:[],
 							})
 			      }}
-     				onClose={()=>{this.setState({currentlyOpen:'',containsTime:false,cvvMood:'',activeIndexes1:[],candidateCall:[],candidateBase:[],lockSubmit:false,nextTenses:[],candidateDisplay:[],searchQuery:'',wordsList:[]})}}
+     				onClose={()=>{this.setState({currentlyOpen:'',mvvMood:'',mvvType:'',cvvMood:'',svvType:'',optCase:'',npCase:'',npCaseType:'',containsTime:false,activeIndexes1:[],candidateCall:[],candidateBase:[],lockSubmit:false,nextTenses:[],candidateDisplay:[],searchQuery:'',wordsList:[]})}}
   >
   	{this.contentItems(currentEditMode,currentEditMode,-1,true,forEnglish,setStateTo)}
   </Popup>
@@ -2847,8 +2919,16 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 	        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',cvvMood:'Conc',cvvType:'evenif',isOpen: false},()=>{this.backEndCall([["Update",["cv","vMood"],this.state.cvvMood],["Update",["cv","vType"],this.state.cvvType]])})}}>even if...</Button>
 	        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',cvvMood:'Cond',cvvType:'if',isOpen: false},()=>{this.backEndCall([["Update",["cv","vMood"],this.state.cvvMood],["Update",["cv","vType"],this.state.cvvType]])})}}>if...</Button>
 	        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',cvvMood:'Cond',cvvType:'wheninthefuture',isOpen: false},()=>{this.backEndCall([["Update",["cv","vMood"],this.state.cvvMood],["Update",["cv","vType"],this.state.cvvType]])})}}>when (in future)...</Button>
+	        {this.state.mvvMood.includes('Opt') || this.state.mvvMood === 'Sbrd' ? 
+	        null
+	        :
 	        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',cvvMood:'CtmpI',cvvType:'',isOpen: false},()=>{this.backEndCall([["Update",["cv","vMood"],this.state.cvvMood]])})}}>when (in past)...</Button>
+	      	}
+	        {this.state.mvvMood.includes('Opt') || this.state.mvvMood === 'Sbrd' ? 
+	        null
+	        :
 	        <Button onClick={()=>{this.editMenuRef[this.state.currentlyOpen].close(); this.setState({currentlyOpen:'',cvvMood:'CtmpII',cvvType:'',isOpen: false},()=>{this.backEndCall([["Update",["cv","vMood"],this.state.cvvMood]])})}}>while...</Button>
+	      	}
 		    		</Button.Group>
 		    		</Accordion.Content>
 	    		</Accordion>			
@@ -3137,11 +3217,16 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		let sentence = key['englishmain']	
 		let startingCase = ''
 		let vsPlanned = []
+		// console.log(key,forEnglish, verbtype, mood)
 		if (forEnglish !== undefined) {
 			startingCase = forEnglish[0]
 			vsPlanned = forEnglish[1]
 		} else {
-			vsPlanned = this.state.mvvs
+			if (verbtype == 'cv') {
+				vsPlanned = this.state.cvvs
+			} else {
+				vsPlanned = this.state.mvvs
+			}
 		}
 
 
@@ -3232,8 +3317,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 					}	
 					sentence = sentence.replace('!is!','')
 				} else {
-
 					let specialStartingCase = this.returnBaseCaseforMoods(verbtype,mood,vsPlanned)
+					// console.log(verbtype,mood,vsPlanned)
 					// console.log(key,specialStartingCase)
 					let s0 = specialStartingCase[0]
 					let s1 = specialStartingCase[1]
@@ -3251,6 +3336,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 						} else if (s0 === 'pp') {
 							verbAdd = key['englishtenses'][4]
 						} else if (s0 === 'gen') {
+							verbAdd = key['englishtenses'][2]
+						} else if (s0 === 'gen2') {
 							verbAdd = key['englishtenses'][2]
 						} else if (s0 === 'past') {
 							verbAdd = key['englishtenses'][1]
@@ -3380,6 +3467,12 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		let vsPlanned = []
 		if (forEnglish !== undefined) {
 			vsPlanned = forEnglish[1]
+		} else {
+			if (verbtype == 'cv') {
+				vsPlanned = this.state.cvvs
+			} else {				
+				vsPlanned = this.state.mvvs
+			}
 		}
 		if (i === '1') {
 			lookup = key['expression']
@@ -3529,7 +3622,14 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 					}				
 				}
 			} else if (newpostbases[lookup]['type'] === 'NV') {
-				sentence = newpostbases[lookup]['gen_prenoun']
+				// console.log(this.state.nounNum, nounNumber, newpostbases[lookup])
+				if (vsPlanned.length > 0) {
+					if (vsPlanned[0] == 3 && vsPlanned[1] == 1)	{
+						sentence = newpostbases[lookup]['present']
+					} else {
+						sentence = newpostbases[lookup]['inf_prenoun']						
+					}
+				}
 				if (!newpostbases[lookup]['match_case']) {
 					if (this.state.nextTenses[this.state.nextTenses.length-1] === 'p') {
 						if (newpostbases[lookup]['past'].length == 0 && newpostbases[lookup]['was']) {
@@ -3569,6 +3669,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 						sentence = newpostbases[lookup]['singularDefinition']
 					}
 			} else if (newpostbases[lookup]['type'] === 'VN') {
+				
 					if (this.state.nounNum == 'p' || nounNumber > 1) {
 						sentence = newpostbases[lookup]['pluralDefinition']
 					} else {
@@ -3812,7 +3913,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 					return ['i','am']
 				} else if (this.state.cvvs.length === 0 || (this.state.cvvs[0] == 3 && this.state.cvvs[1] == 1)) {
 					// return 'hunts, is happy, etc.'
-					return ['gen','is']
+					return ['gen2','is']
 				} else {
 					// return 'hunt, are happy, etc.'
 					return ['i','are']
@@ -3823,7 +3924,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 					return ['i','am']
 				} else if (vsPlanned[0] == 3 && vsPlanned[1] == 1) {
 					// return 'hunts, is happy, etc.'
-					return ['gen','is']
+					return ['gen2','is']
 				} else {
 					// return 'hunt, are happy, etc.'
 					return ['i','are']
@@ -4107,6 +4208,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 	popularVPostbasesGetter = (mood,submood) => {
 		let noFuture = false
 		let noPast = false
+		// console.log(mood,submood)
 		if (mood === undefined) {
 			return popularVPostbases
 			
@@ -4174,7 +4276,11 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		let popularPostbases = []
 		let popularBases = []
 
-		if (endingNeeded == 'n') {
+		// console.log(itemUpdating,endingNeeded, mood, submood,forEnglish)
+		if (itemUpdating[1][0] == 'sv') {
+			popularPostbases = popularVPostbasesSub
+			popularBases = popularVerbsIT
+		} else if (endingNeeded == 'n') {
 			if (this.state.endingAdjusted === 'v') {
 				popularPostbases = this.popularVPostbasesGetter(mood,submood,forEnglish)
 				popularBases = this.popularVerbsGetter(mood,submood,forEnglish)
@@ -4344,7 +4450,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 											      placeholder={this.returnPlaceholder(endingNeeded,forEnglish,itemUpdating[1][0],mood)}
 											      // width='100%'
 											      style={{width:'100%',padding:'5px 5px'}}
-											 		  onChange={this.onChangeBaseSearch.bind(this,endingNeeded,forEnglish,itemUpdating[1][0],mood,submood)}
+											 		  onChange={this.onChangeBaseSearch.bind(this,endingNeeded,forEnglish,itemUpdating[1][0],mood,submood,update,itemUpdating)}
 								            value={this.state.searchQuery}
 								            // onClose={()=>{this.setState({searchQuery:'',wordsList:[]})}}
 								            />
@@ -5120,7 +5226,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 								<div ref={(element)=>{this.mvEnglishVerticalRef=element;}}  style={{textAlign:'center',fontSize:'18px',fontWeight:'300',marginTop:'20px'}}>
 
-								{this.state.mvEnglish1.length > 0 || (this.state.mvvType === 'Intrg1' || this.state.mvvType === 'Intrg3')?
+								{(this.state.mvEnglish1.length > 0 || this.state.mvvType === 'Intrg1' || this.state.mvvType === 'Intrg3') && this.state.mvvs.length > 0 ?
 										<span style={{height:45,display:'inline-flex',alignItems:'center',marginBottom:'2px',marginTop:'2px'}}>
 										{this.editMenu('mvEnglish1',-1)}
 										</span>
@@ -5360,7 +5466,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 						            onClick={()=>{this.handleClick('questionInsert',true)}}
 							    		>
 							    			<Icon name="dropdown" />
-							    			{'Ask a Question'}
+							    			{'Ask a question'}
 							    		</Accordion.Title>
 							    		<Accordion.Content active={this.state.activeIndexes.includes('questionInsert')}>
 							    		{this.mainScreenMenu('he is _____ (yes or no)?','mvinsertqaa','mvinsertqaa',['Ind','qaa'],['',[3,1,1]])}
@@ -5385,7 +5491,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 						            onClick={()=>{this.handleClick('commandInsert',true)}}
 							    		>
 							    			<Icon name="dropdown" />
-							    			{'Make a Command'}
+							    			{'Make a command'}
 							    		</Accordion.Title>
 							    		<Accordion.Content active={this.state.activeIndexes.includes('commandInsert')}>
 							    		{this.mainScreenMenu('command right now','commandInsert','optCase',['Opt][PRS',''],['i',[2,1,0]])}
@@ -6054,8 +6160,16 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 							    		{this.mainScreenMenu('even if '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['Conc','evenif'],['',this.state.mvvs])}
 							    		{this.mainScreenMenu('if '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['Cond','if'],['',this.state.mvvs])}
 							    		{this.mainScreenMenu('when (in future) '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['Cond','wheninthefuture'],['',this.state.mvvs])}
-							    		{this.mainScreenMenu('when (in past) '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['CtmpI',''],['',this.state.mvvs])}
-							    		{this.mainScreenMenu('while '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['CtmpII',''],['',this.state.mvvs])}
+							    		{this.state.mvvMood.includes('Opt') || this.state.mvvMood === 'Sbrd' ? 
+							    			null
+							    			:
+							    			this.mainScreenMenu('when (in past) '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['CtmpI',''],['',this.state.mvvs])
+							    		}
+							    		{this.state.mvvMood.includes('Opt') || this.state.mvvMood === 'Sbrd' ? 
+							    			null
+							    			:
+							    			this.mainScreenMenu('while '+mvSubjectOptionsEnglish[this.state.mvvs.join("")]+' _____','cvinsert','cvvType',['CtmpII',''],['',this.state.mvvs])
+							    		}
 							    		{this.mainScreenMenu('by _____','svinsert','svvType',['by',''],['g',[]])}
 							    		{this.mainScreenMenu('being _____','svinsert','svvType',['being',''],['g',[]])}
 							    		</Accordion.Content>

@@ -229,7 +229,179 @@ export const popularNounsVialis = [
 {'englishnorm': 'cutting knife', 'yupikword': 'nuussiq', 'fsts': ['nuussir'], 'fstsDisplay': 'nuussir-', 'key': 'nuussiq', 'englishtenses': [['knife', 'knives']], 'properties': [], 'englishmain': ['cutting \u27e8knife\u27e9'], 'englishraw': 'cutting \u27e8knife\u27e9', 'base_case': 'cutting knife', 'usageIndex': 0, 'type': 'n'},
 ]
 
+export const popularVPostbasesSub = [
 
+  {
+    id: 0,
+    // description: 'probably',
+    allowable_next_ids: [1,0],
+    expression:'–qaqe¹[V→V]',
+  },
+  {
+    id: 1,
+    // description: 'evidently',
+    allowable_next_ids: [0,1],
+    expression: '+peke|.vke[V→V]',
+  },
+
+  {
+    id: 2,
+    // description: 'no longer able to',
+    expression: "+pege|.vke[V→V]",
+    allowable_next_ids: [1,3,2],
+
+  },
+
+
+  // {
+  //   id: 0,
+  //   // description: 'probably',
+  //   allowable_next_ids: [1,0],
+  //   expression:'@~+yugnarqe¹[V→V]',
+  // },
+  // {
+  //   id: 1,
+  //   // description: 'evidently',
+  //   allowable_next_ids: [0,1],
+  //   expression: '–llini[V→V]',
+  // },
+
+  // {
+  //   id: 2,
+  //   // description: 'no longer able to',
+  //   expression: "+(s)ciigali[V→V]",
+  //   allowable_next_ids: [1,3,2],
+
+  // },
+  // {
+  //   id: 3,
+  //   // description: 'not able to',
+  //   expression: '+(s)ciigate[V→V]',
+  //   allowable_next_ids: [1,2,3]
+  // },
+  {
+    id: 4,
+    // description: 'is able to',
+    expression: '@~+yugnga[V→V]',
+    allowable_next_ids: [0,1,6,7,8,4]
+  },
+
+  {
+    id: 11,
+    // description: 'repeatedly',
+    expression: "–lar[V→V]",
+    allowable_next_ids: [1,11]
+  },
+  {
+    id: 12,
+    // description: 'doing it again',
+    expression: '–nqigte[V→V]',
+    allowable_next_ids: [1,12]
+  },
+  {
+    id: 13,
+    // description: 'almost',
+    expression: '@~+yarpiar[V→V]',
+    allowable_next_ids: [1,13]
+  },
+  {
+    id: 14,
+    // description: 'never',
+    expression: '@~–yuite[V→V]',
+    allowable_next_ids: [1,14]
+  },
+  {
+    id: 15,
+    // description: 'no longer',
+    expression: '–nrir[V→V]',
+    allowable_next_ids: [0,1,27,15]
+  },
+  {
+    id: 16,
+    // description: 'trying (unsuccessfully) to',
+    expression: '@~+yaaqe[V→V]',
+    allowable_next_ids: [0,1,17,19,16]
+  },
+  {
+    id: 17,
+    // description: 'trying despite difficulties to',
+    expression: '–qcaar(ar)[V→V]',
+    allowable_next_ids: [0,1,16,18,17]
+  },
+  {
+    id: 18,
+    // description: 'trying to',
+    expression: '–ngnaqe[V→V]',
+    allowable_next_ids: [0,1,16,17,18]
+  },
+  {
+    id: 19,
+    // description: 'excessively (too much)',
+    expression: '–ssiyaag[V→V]',
+    allowable_next_ids: [1,19]
+  },
+  {
+    id: 20,
+    // description: 'to be more or better at',
+    expression: '–nru[V→V]',
+    allowable_next_ids: [1,20]
+  },
+  {
+    id: 21,
+    // description: 'loves to',
+    expression: '@~+yunqegg[V→V]',
+    allowable_next_ids: [0,1,7,8,21]
+  },
+  {
+    id: 22,
+    // description: 'no longer wants to',
+    expression: '@~+yuumiir(ar)te[V→V]',
+    allowable_next_ids: [0,1,7,8,22]
+  },
+  {
+    id: 23,
+    // description: 'not care to',
+    expression: '@~+yuumiite[V→V]',
+    allowable_next_ids: [0,1,7,8,23]
+  },
+  {
+    id: 24,
+    // description: 'yearns to',
+    expression: '@~+yuumir[V→V]',
+    allowable_next_ids: [0,1,7,8,24]
+  },
+  {
+    id: 25,
+    // description: 'wants to',
+    expression: '@~+yug[V→V]',
+    allowable_next_ids: [0,1,7,8,25]
+  },
+  {
+    id: 26,
+    // description: 'enjoys doing',
+    expression: '@~+yugar[V→V]',
+    allowable_next_ids: [0,1,7,8,26]
+  },
+  {
+    id: 27,
+    // description: 'not',
+    expression: '–nrite[V→V]',
+    allowable_next_ids: [0,1,27]
+  },
+
+  {
+    id: 28,
+    // description: 'in the process of',
+    expression: '@~+yartur[V→V]',
+    allowable_next_ids: [0,1,2,3,4,5,6,7,8,9,10,19,28]
+  },
+  {
+    id: 29,
+    // description: 'definitely no longer going to',
+    expression: '@~+yugnairute[V→V]',
+    allowable_next_ids: [0,1,3,4,8,10,29], // only refers to the postbases, not the endings
+  }
+]
 export const popularOptPostbases = [
   {
     id: 0,

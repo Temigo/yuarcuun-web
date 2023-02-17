@@ -19,7 +19,7 @@ import { YugtunLoader, YugtunFooter, WordItem, AudioItem, tagColors } from './Se
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 const WEB_URL = "http://localhost:3000";
-const KYUK_URL = 'https://www.inupiaqonline.com/'
+const KYUK_URL = 'https://archive.kyuk.com'
 
 // Cache dictionary
 // let dictionary = [];
