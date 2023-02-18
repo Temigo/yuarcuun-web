@@ -19,14 +19,14 @@ export const dialogueList = [
 [3,4,5,2,"b","Kuigilngurmiunguunga.","I'm from Kwigillingok.","camiu-2b.mp3",,"","","<Kuigilngur>miunguunga.","","I'm from <Kwigillingok>.","","","","","","","","","","","","","","n"],
 [3,14,1,1,"a","Waqaa?","What's up?","waqaa-1.mp3",201,"Waqaa?: What's up?","","<Waqaa>?","","<What's up>?","","","","","","","","","","","","","","p"],
 [3,14,1,2,"b","Ellmikun.","Just visiting.","waqaa-2.mp3",,"","","<Ellmikun>.","","<Just visiting>.","","","","","","","","","","","","","","p"],
-[3,14,2,1,"a","Cangacit?","How are you?","iqvallruu-1.mp3",602,"Iqvallruuten-qaa?: Did you go berry picking?","Two friends see each other","Canga<cit>?","cit;sit","How are <you>?","","Canga<cit>?","cit;sit","How are <you>?","","","","","","1","","","","e"],
+[3,14,2,1,"a","Cangacit?","How are you?","iqvallruu-1.mp3",1,"Iqvallruuten-qaa?: Did you go berry picking?","Two friends see each other","Canga<cit>?","cit;sit","How are <you>?","","Canga<cit>?","cit;sit","How are <you>?","","","","","","1","","","","e"],
 [3,14,2,2,"b","Assirtua, elpet-mi?","I'm fine, and you?","iqvallruu-2.mp3",,"","","<Assir>tua, elpet-mi?","tua;tunga;tuten;tuq","I'm <fine>, and you?","","Assir<tua>, elpet-mi?","tua;tunga;tuten;tuq","<I'm> fine, and you?","","","","","","1","","","","v"],
 [3,14,2,2,"b","Cangatenritua, elpet-mi?","I'm fine, and you?","iqvallruu-2b.mp3",,"","","Cangatenrit<ua>, elpet-mi?","ua;unga;uten;uq","<I'm> fine, and you?","","Cangatenrit<ua>, elpet-mi?","ua;unga;uten;uq","<I'm> fine, and you?","","","","","","1","","","","e"],
 [3,14,2,3,"a","Wii-ll' assirtua. Iqvallruuten-qaa?","I'm fine also. Have you been picking berries?","iqvallruu-3.mp3",,"","","Wii-ll' assirtua. <Iqva>llruuten-qaa?","uten;uci;unga;uq","I'm fine also. Have you been <picking berries>?","","Wii-ll' assirtua. Iqvallru<uten>-qaa?","uten;uci;unga;uq","I'm fine also. Have <you> been picking berries?","","","","","","1","","","","v"],
 [3,14,2,4,"b","Ii-i, iqvallruunga curanek.","Yes, I picked blueberries.","iqvallruu-4.mp3",,"","","Ii-i, iqvallruunga <cura>nek.","unga;ua;uten;ukut","Yes, I picked <blueberries>.","","Ii-i, iqvallru<unga> curanek.","unga;ua;uten;ukut","Yes, <I> picked blueberries.","","","","","","1","","","","n"],
 [3,14,2,5,"a","Qangvaq iqvallrusit?","When were you picking?","iqvallruu-5.mp3",,"","","Qangvaq iqvallru<sit>?","sit;cit","When were <you> picking?","","Qangvaq iqvallru<sit>?","sit;cit","When were <you> picking?","","","","","","1","","","","e"],
 [3,14,2,6,"b","Yaaliagni.","The day before yesterday.","iqvallruu-6.mp3",,"","","<Yaaliagni>.","","<The day before yesterday>.","","Yaaliagni.","","The day before yesterday.","","","","","","-1","","","","p"],
-[3,22,1,1,"a","Kipusvigciiquten-qaa?","Will you go to the store?","snuukuuq-1.mp3",1,"Snuukuuq: The Snow-go","","<Kipusvig>ciiquten-qaa?","","Will you go to the <store>?","","","","","","","","","","","","","","n"],
+[3,22,1,1,"a","Kipusvigciiquten-qaa?","Will you go to the store?","snuukuuq-1.mp3",5,"Snuukuuq: The Snow-go","","<Kipusvig>ciiquten-qaa?","","Will you go to the <store>?","","","","","","","","","","","","","","n"],
 [3,22,1,2,"b","Ii-i, piciqua. Snuukuuliurtua.","Yes, I will. I'm working on the snow-go.","snuukuuq-2.mp3",,"","","Ii-i, piciqua. <Snuukuu>liurtua.","","Yes, I will. I'm working on the <snow-go>.","","","","","","","","","","","","","","n"],
 [3,22,1,3,"a","Snuukuun-qaa assiituq?","Is something wrong with your snow-go?","snuukuuq-3.mp3",,"","","Snuukuun-qaa <assiit>uq?","","Is something <wrong> with your snow-go?","","","","","","","","","","","","","","v"],
 [3,22,1,4,"b","Akwaugaq pissullemni kaviaq malirqallemku naqugutii navellruuq.","While I was hunting yesterday the belt broke when I raced after a fox.","snuukuuq-4.mp3",,"","","Akwaugaq pissullemni kaviaq malirqallemku naqugutii <nave>llruuq.","","While I was hunting yesterday the belt <broke> when I raced after a fox.","","","","","","","","","","","","","","v"],
@@ -86,16 +86,16 @@ export const dialogueList = [
 [4,15,9,2,"b","Kemek.","Meat.","yugtun-2.mp3",,"","","<Kemek>.","","<Meat>.","","","","","","","","","","","","","","n"],
 [4,15,9,3,"a","Church-aq-mi?","What about church?","yugtun-3.mp3",,"","","Church-aq-<mi>?","","<What about> church?","","","","","","","","","","","","","","p"],
 [4,15,9,4,"b","Agayuvik.","Church.","yugtun-4.mp3",,"","","<Agayuvik>.","","<Church>.","","","","","","","","","","","","","","n"],
-[4,21,1,1,"a","Manalartuten-qaa?","Have you been jigging?","manalar-1.mp3",2,"Manalartuten-qaa?: Have you been jigging?","","<Mana>lartuten-qaa?","","Have you been <jigging>?","","","","","","","","","","","","","","v"],
+[4,21,1,1,"a","Manalartuten-qaa?","Have you been jigging?","manalar-1.mp3",801,"Manalartuten-qaa?: Have you been jigging?","","<Mana>lartuten-qaa?","","Have you been <jigging>?","","","","","","","","","","","","","","v"],
 [4,21,1,2,"b","Manaqsaitua. Manaryaryugyaaqua tau͡gaam Maqinermi ella assiqan. Elpet-qaa manalartuten?","I haven't been jigging yet, but I'd like to go on Saturday if the weather is good. How about you, have you been jigging?","manalar-2.mp3",,"","","Manaqsaitua. Manaryaryugyaaqua tau͡gaam <Maqiner>mi ella assiqan. Elpet-qaa manalartuten?","","I haven't been jigging yet, but I'd like to go on <Saturday> if the weather is good. How about you, have you been jigging?","","","","","","","","","","","","","","n"],
-[4,21,1,3,"a","Manaryallruyaaqua uumi cangellrunritua tau͡gaam.","I went jiggin the other day, but I didn't catch anything.","manalar-3.mp3",,"","","Manaryallruyaaqua uumi <cange>llrunritua tau͡gaam.","","I went jiggin the other day, but I didn't <catch> anything.","","","","","","","","","","","","","","v"],
+[4,21,1,3,"a","Manaryallruyaaqua uumi cangellrunritua tau͡gaam.","I went jigging the other day, but I didn't catch anything.","manalar-3.mp3",,"","","Manaryallruyaaqua uumi <cange>llrunritua tau͡gaam.","","I went jigging the other day, but I didn't <catch> anything.","","","","","","","","","","","","","","v"],
 [4,21,1,4,"b","Nani manallrusit?","Where did you jig?","manalar-4.mp3",,"","","Nani <mana>llrusit?","","Where did you <jig>?","","","","","","","","","","","","","","v"],
 [4,21,1,5,"a","Kuigem paingani.","At the mouth of the river.","manalar-5.mp3",,"","","<Kuig>em paingani.","","At the mouth of the <river>.","","","","","","","","","","","","","","n"],
 [4,21,2,1,"a","Tuntutuliarmun-qaa ayallruuten?","Did you go to Tuntutuliak?","maqaruaq-1.mp3",701,"Maqaruanek: Rabbits","","Tuntutuliarmun-qaa <aya>llruuten?","","Did you <go> to Tuntutuliak?","","","","","","","","","","","","","","v"],
 [4,21,2,2,"b","Ii-i, pissullruunga maqaruanek Tuntutuliarmiut nuniitni.","Yes, I was hunting rabbits near Tuntutuliak. (lit., 'in the land of the people of Tuntutuliak')","maqaruaq-2.mp3",,"","","Ii-i, pissullruunga <maqarua>nek Tuntutuliarmiut nuniitni.","","Yes, I was hunting <rabbit>s near Tuntutuliak. (lit., 'in the land of the people of Tuntutuliak')","","","","","","","","","","","","","","n"],
 [4,21,2,3,"a","Nagg'un pissullrusit?","How are you hunting?","maqaruaq-3.mp3",,"","","Nagg'un <pissu>llrusit?","","How are you <hunting>?","","","","","","","","","","","","","","v"],
 [4,21,2,4,"b","Snuukuukun. Maqaruanek amllernek tangellruunga tau͡gaam nuyurtallruut.","By snow-machine. I saw lots of rabbits, but they were pretty shy.","maqaruaq-4.mp3",,"","","Snuukuukun. Maqaruanek amllernek tangellruunga tau͡gaam <nuyurta>llruut.","","By snow-machine. I saw lots of rabbits, but they were pretty <shy>.","","","","","","","","","","","","","","v"],
-[4,21,2,5,"a","Qavcinek pitellrusit?","How many did you catch?","maqaruaq-5.mp3",,"","","Qavcinek <pite>llrusit?","","How many did you <catch>?","","","","","","","","","","","","","","v"],
+[4,21,2,5,"a","Qavcinek pit'ellrusit?","How many did you catch?","maqaruaq-5.mp3",,"","","Qavcinek <pit'e>llrusit?","","How many did you <catch>?","","","","","","","","","","","","","","v"],
 [4,21,2,6,"b","Qulnek.","Ten.","maqaruaq-6.mp3",,"","","<Qul>nek.","","<Ten>.","","","","","","","","","","","","","","n"],
 [4,21,4,1,"a","Ac'aq qanellruuq agayulirta-gguq tekiciiquq.","Ac'aq said that the priest is going to arrive.","agayulirta-1.mp3",404,"Agayulirta: The Priest","","Ac'aq qanellruuq <agayulirta>-gguq tekiciiquq.","","Ac'aq said that the <priest> is going to arrive.","","","","","","","","","","","","","","n"],
 [4,21,4,2,"b","Caciqa?","What will he do?","agayulirta-2.mp3",,"","","Caciq<a>?","","What will <he> do?","","","","","","","","","","","","","","e"],
@@ -113,7 +113,7 @@ export const dialogueList = [
 [4,21,7,3,"a","Tangellruan-qaa Ac'aq kipusvigmi?","Did you see Ac'aq at the store?","kipusvik-3.mp3",,"","","<Tange>llruan-qaa Ac'aq kipusvigmi?","","Did you <see> Ac'aq at the store?","","","","","","","","","","","","","","v"],
 [4,21,7,4,"b","Tangellrunritaqa. Calinrituq-gguq unuamek.","I didn't see her. They said that she's not working today.","kipusvik-4.mp3",,"","","Tangellrunritaqa. <Cali>nrituq-gguq unuamek.","","I didn't see her. They said that she's not <working> today.","","","","","","","","","","","","","","v"],
 [4,21,7,5,"a","Ciin kiputenricit kuulicaanek?","Why didn't you buy some chicken?","kipusvik-5.mp3",,"","","Ciin kiputenricit <kuulicaa>nek?","","Why didn't you buy some <chicken>?","","","","","","","","","","","","","","n"],
-[4,21,7,6,"b","Akitussiyaagtut. Tuntum kemga akikitenrullruuq.","They were too expensive. The caribou meat was cheaper.","kipusvik-6.mp3",,"","","<Akitu>ssiyaagtut. Tuntum kemga akikitenrullruuq.","","They were too <expensive>. The caribou meat was cheaper.","","","","","","","","","","","","","","v"],
+[4,21,7,6,"b","Akitussiyaagtut. Tuntum kemga akiitenrullruuq.","They were too expensive. The caribou meat was cheaper.","kipusvik-6.mp3",,"","","<Akitu>ssiyaagtut. Tuntum kemga akiitenrullruuq.","","They were too <expensive>. The caribou meat was cheaper.","","","","","","","","","","","","","","v"],
 [4,21,7,7,"a","Canrituq. Ikayurciqamken keniquvgu.","It's ok. I'll help you when you cook it.","kipusvik-7.mp3",,"","","Canrituq. <Ikayur>ciqamken keniquvgu.","","It's ok. I'll <help> you when you cook it.","","","","","","","","","","","","","","v"],
 [4,21,8,1,"a","Yugtun qantulliniuten.","I see that you speak Yup'ik.","qantullini-1.mp3",405,"Yugtun qantulliniuten: I see that you speak Yup'ik","","Yugtun <qan>tulliniuten.","","I see that you <speak> Yup'ik.","","","","","","","","","","","","","","v"],
 [4,21,8,2,"b","Ellma qantuunga. Elitnaurtua KuC-mi.","I speak a little bit. I'm studying at KuC.","qantullini-2.mp3",,"","","Ellma qantuunga. <Elitnaur>tua KuC-mi.","","I speak a little bit. I'm <studying> at KuC.","","","","","","","","","","","","","","v"],
@@ -152,7 +152,7 @@ export const dialogueList = [
 [5,2,5,8,"b","Ii-i, pissullemteńi uksuaq tuntuvagtellruukut pingayunek carayaggluta-llu malrugnek.","Yes, when we were hunting last fall, we caught three moose, and two bears.","tekite-8.mp3",,"","","Ii-i, pissullemteńi uksuaq <tuntuvag>tellruukut pingayunek carayaggluta-llu malrugnek.","tuntuvag;taqukar;tuntu","Yes, when we were hunting last fall, we caught three <moose>, and two bears.","","","","","","","","","","listenchoose-baseYupik","chooseoption-baseYupik","","","n"],
 [5,2,5,9,"a","Yuurqeryarturluk nemnun.","We should go to my house for tea.","tekite-9.mp3",,"","","<Yuurqer>yarturluk nemnun.","Yuurqer;Ner;Mer;Yuar","We should go to my house <for tea>.","","","","","","","","","","listenchoose-baseYupik","chooseoption-baseYupik","","","v"],
 [5,2,5,10,"b","Ii-i.","Okay.","tekite-10.mp3",,"","","<Ii-i>.","","<Okay>.","","","","","","","","","","nothing","nothing","","","p"],
-[5,6,1,1,"a","Kassuuciiqua.","I'm going to get married.","iqlu-1.mp3",409,"Iqluuten: You're lying","","<Kassuu>ciiqua.","","I'm going to <get married>.","","","","","","","","","","","","","","v"],
+[5,6,1,1,"a","Kassuuciiqua.","I'm going to get married.","iqlu-1.mp3",6,"Iqluuten: You're lying","","<Kassuu>ciiqua.","","I'm going to <get married>.","","","","","","","","","","","","","","v"],
 [5,6,1,2,"b","Iqluuten.","You're kidding. (lit., you're lying)","iqlu-2.mp3",,"","","<Iqlu>uten.","","You're <kidding>. (lit., you're lying)","","","","","","","","","","","","","","v"],
 [5,6,1,3,"a","Iqlunritua.","I'm not kidding. (lit., I'm not lying)","iqlu-3.mp3",,"","","<Iqlu>nritua.","","I'm not <kidding>. (lit., I'm not lying)","","","","","","","","","","","","","","v"],
 [5,6,1,4,"b","Qaku?","When?","iqlu-4.mp3",,"","","<Qaku>?","","<When>?","","","","","","","","","","","","","","p"],
@@ -174,8 +174,8 @@ export const dialogueList = [
 [5,6,4,4,"b","Qaill' pillrua?","What was wrong with it?","taqsuqe-4.mp3",,"","","Qaill' pillru<a>?","","What was wrong with <it>?","","","","","","","","","","","","","","e"],
 [5,6,4,5,"a","Carburetor-aara cikuyullruuq. Uqua mertangqellruyugnarquq.","The carburetor kept freezing. There must have been water in the gas.","taqsuqe-5.mp3",,"","","Carburetor-aara cikuyullruuq. Uqua <mer>tangqellruyugnarquq.","","The carburetor kept freezing. There must have been <water> in the gas.","","","","","","","","","","","","","","n"],
 [5,6,4,6,"b","Yuurqeryarturluk enemnun.","Let's go to my house and have some tea.","taqsuqe-6.mp3",,"","","<Yuurqer>yarturluk enemnun.","","Let's go to my house and <have some tea>.","","","","","","","","","","","","","","v"],
-[5,6,4,7,"a","(eyebrow flash)","(gesture meaning \"Sure.\")","taqsuqe-7.mp3",,"","","<(eyebrow flash)>","","(gesture meaning \"<Sure>.\")","","","","","","","","","","","","","","p"],
-[5,6,5,1,"a","Assikan-qaa tauna?","Do you like that one?","qaspeq-1.mp3",303,"Qaspeq: The Qaspeq","","<Assik>an-qaa tauna?","","Do you <like> that one?","","","","","","","","","","","","","","v"],
+[5,6,4,7,"a","Ii-i.","Sounds good.","taqsuqe-7.mp3",,"","","<Ii-i>.","","<Sounds good>.","","","","","","","","","","","","","","p"],
+[5,6,5,1,"a","Assikan-qaa tauna?","Do you like that one?","qaspeq-1.mp3",4,"Qaspeq: The Qaspeq","","<Assik>an-qaa tauna?","","Do you <like> that one?","","","","","","","","","","","","","","v"],
 [5,6,5,2,"b","Ca?","Which?","qaspeq-2.mp3",,"","","<Ca>?","","<Which>?","","","","","","","","","","","","","","p"],
 [5,6,5,3,"a","Tauna qaspeq.","That kuspuk.","qaspeq-3.mp3",,"","","Tauna <qaspeq>.","","That <kuspuk>.","","","","","","","","","","","","","","n"],
 [5,6,5,4,"b","Assikaqa tau͡gaam akitussiyaagtuq.","I like it but it's too expensive.","qaspeq-4.mp3",,"","","Assikaqa tau͡gaam <akitu>ssiyaagtuq.","","I like it but it's too <expensive>.","","","","","","","","","","","","","","v"],
@@ -183,7 +183,7 @@ export const dialogueList = [
 [5,11,1,1,"a","Uluarpangqertuten-qaa?","Do you have a big uluaq?","ulligci-1.mp3",802,"Ulligciqatartua: I'm going to cut fish for drying","In the summer.","<Ulua>rpangqertuten-qaa?","","Do you have a big <uluaq>?","","","","","","","","","","","","","","n"],
 [5,11,1,2,"b","Ii-i. Caqatarcit?","Yes. What are you going to do?","ulligci-2.mp3",,"","","Ii-i. Caqatar<cit>?","","Yes. What are <you> going to do?","","","","","","","","","","","","","","e"],
 [5,11,1,3,"a","Ulligciqatartua iqallugnek.","I'm going to split some dog salmon (for drying).","ulligci-3.mp3",,"","","Ulligciqatartua <iqallug>nek.","","I'm going to split some <dog salmon> (for drying).","","","","","","","","","","","","","","n"],
-[5,11,1,4,"b","Amllertut-qaa uligtarkaten?","Do you have a lot of them to split?","ulligci-4.mp3",,"","","Amllertut-qaa <uligt>arkaten?","","Do you have a lot of them to <split>?","","","","","","","","","","","","","","v"],
+[5,11,1,4,"b","Amllertut-qaa ulligtarkaten?","Do you have a lot of them to split?","ulligci-4.mp3",,"","","Amllertut-qaa <ulligt>arkaten?","","Do you have a lot of them to <split>?","","","","","","","","","","","","","","v"],
 [5,11,1,5,"a","Amllessiyaanritut.","Not too many.","ulligci-5.mp3",,"","","<Amlle>ssiyaanritut.","","Not too <many>.","","","","","","","","","","","","","","v"],
 [5,11,3,1,"a","Nani kuvyallrusit?","Where did you fish?","kuvyaq-1.mp3",803,"Kuvyalriik: The Two Drift Net Fishing","Waiting in line to sell fish after a commercial fishing period.","Nani <kuvya>llrusit?","","Where did you <fish>?","","","","","","","","","","","","","","v"],
 [5,11,3,2,"b","Un'gani Nalqiglim nuniini.","Downriver near Nalqigliq.","kuvyaq-2.mp3",,"","","Un'gani Nalqiglim <nuni>ini.","","Downriver <near> Nalqigliq.","","","","","","","","","","","","","","n"],
@@ -195,13 +195,13 @@ export const dialogueList = [
 [5,11,3,8,"b","Ii-i, aturyugngaan.","Yes, you can use it.","kuvyaq-8.mp3",,"","","Ii-i, <atur>yugngaan.","","Yes, you can <use> it.","","","","","","","","","","","","","","v"],
 [5,15,1,1,"a","Egturyirpaa!","Lots of mosquitos!","angyalriik-1.mp3",804,"Angyalriik: The Two Going by Boat","By the boats on the riverbank.","<Egtury>irpaa!","","Lots of <mosquitos>!","","","","","","","","","","","","","","n"],
 [5,15,1,2,"b","Ilumun. Mingungqertuten-qaa?","That's for sure. Do you have any bug dope?","angyalriik-2.mp3",,"","","Ilumun. <Mingu>ngqertuten-qaa?","","That's for sure. Do you have any <bug dope>?","","","","","","","","","","","","","","n"],
-[5,15,1,3,"a","Iiyi, waniwa. Natmurteqatarcit?","Sure, here. Where are you going?","angyalriik-3.mp3",,"","","Iiyi, waniwa. Natmurteqatar<cit>?","","Sure, here. Where are <you> going?","","","","","","","","","","","","","","e"],
+[5,15,1,3,"a","Ii-i, waniwa. Natmurteqatarcit?","Sure, here. Where are you going?","angyalriik-3.mp3",,"","","Ii-i, waniwa. Natmurteqatar<cit>?","","Sure, here. Where are <you> going?","","","","","","","","","","","","","","e"],
 [5,15,1,4,"b","Kuvyaqa paqteqataraqa.","I'm going to check my net.","angyalriik-4.mp3",,"","","Kuvyaqa <paqte>qataraqa.","","I'm going to <check> my net.","","","","","","","","","","","","","","v"],
 [5,15,1,5,"a","Nani kuvangqercit?","Where do you have your net?","angyalriik-5.mp3",,"","","Nani <kuva>ngqercit?","","Where do you have your <net>?","","","","","","","","","","","","","","n"],
 [5,15,1,6,"b","Un'gani. Elpes-mi natmurteqatarcit?","Downriver. How about you? Where are you heading?","angyalriik-6.mp3",,"","","<Un'ga>ni. Elpes-mi natmurteqatarcit?","","<Downriver>. How about you? Where are <you> heading?","","","","","","","","","","","","","","n"],
 [5,15,1,7,"a","Anelraqatartua. Naparyarrarmun aqvaluku nuliaqa. Tua-i piuraa.","I'm going down to Napakiak to pick up my wife. I'll see you. (lit., that's it, goodbye)","angyalriik-7.mp3",,"","","<Anelra>qatartua. Naparyarrarmun aqvaluku nuliaqa. Tua-i piuraa.","","I'm <going down> to Napakiak to pick up my wife. I'll see you. (lit., that's it, goodbye)","","","","","","","","","","","","","","v"],
 [5,15,1,8,"b","Ii-i.","Sounds good.","angyalriik-8.mp3",,"","","<Ii-i>.","","<Sounds good>.","","","","","","","","","","","","","","p"],
-[5,15,2,1,"a","Qangvaq tekicit? Tangerrsaqlirpaa!","When did you arrive? I haven't seen you in ages!","tangerr-1.mp3",401,"Tangerrsaqlirpaa!: I haven't seen you in ages!","Between two men or two women in Bethel.","<Qangvaq> tekicit? Tangerrsaqlirpaa!","Qangvaq;Qaku;Naken;Qaillun","<When> did you arrive? I haven't seen you in ages!","","","","","","","","","","listenchoose-baseYupik","chooseoption-baseYupik","","","p"],
+[5,15,2,1,"a","Qangvaq tekicit? Tangerrsaqlirpaa!","When did you arrive? I haven't seen you in ages!","tangerr-1.mp3",3,"Tangerrsaqlirpaa!: I haven't seen you in ages!","Between two men or two women in Bethel.","<Qangvaq> tekicit? Tangerrsaqlirpaa!","Qangvaq;Qaku;Naken;Qaillun","<When> did you arrive? I haven't seen you in ages!","","","","","","","","","","listenchoose-baseYupik","chooseoption-baseYupik","","","p"],
 [5,15,2,2,"b","Maani uitalartua. Makumiungurtellruunga.","I'm living here now. I've become a Bethel resident (lit., a person from here).","tangerr-2.mp3",,"","","<Maani> uitalartua. Makumiungurtellruunga.","Maani;Tamaani;Wani;Yaani","I'm living <here> now. I've become a Bethel resident (lit., a person from here).","","","","","","","","","","listenchoose-baseYupik","chooseoption-baseYupik","","","p"],
 [5,15,2,3,"a","Qaa? Caliuten-qaa?","Really? Are you working?","tangerr-3.mp3",,"","","Qaa? <Cali>uten-qaa?","Cali;Maqi;Aqum;Elit","Really? Are you <working>?","","","","","","","","","","listenchoose-baseYupik","chooseoption-baseYupik","","","v"],
 [5,15,2,4,"b","Ii-i, caliunga AVCP housing-aami.","Yes, I'm working at AVCP housing.","tangerr-4.mp3",,"","","Ii-i, cali<unga> AVCP housing-aami.","unga;uten;ukut;anga","Yes, <I'm> working at AVCP housing.","","Ii-i, cali<unga> AVCP housing-aami.","unga;uten;ukut;anga","Yes, <I'm> working at AVCP housing.","","","","","","listenchoose-endingYupik","chooseoption-endingYupik","","","e"],
@@ -219,7 +219,7 @@ export const dialogueList = [
 [5,15,4,1,"a","Iqvallruuten-qaa akwaugaq?","Did you pick berries yesterday?","paqeskilauk-1.mp3",604,"Unuaqu paqeskilauk: Let's check tomorrow","Between two women in the fall season.","<Iqva>llruuten-qaa akwaugaq?","","Did you <pick berries> yesterday?","","","","","","","","","","","","","","v"],
 [5,15,4,2,"b","Iqvallruyaaqua tau͡gaam kavirlit amllessiyaallrunritut au͡g'umi nunapigmi paqtellemni.","Yes, I picked, but there weren't very many cranberries over there in the tundra where I checked.","paqeskilauk-2.mp3",,"","","Iqvallruyaaqua tau͡gaam kavirlit amllessiyaallrunritut au͡g'umi <nunapig>mi paqtellemni.","","Yes, I picked, but there weren't very many cranberries over there in the <tundra> where I checked.","","","","","","","","","","","","","","n"],
 [5,15,4,3,"a","Un'gani kavirliliryugnarquq. Unuaqu paqeskilauk.","There's probably lots of cranberries downriver. Let's check tomorrow.","paqeskilauk-3.mp3",,"","","Un'gani <kavirli>liryugnarquq. Unuaqu paqeskilauk.","","There's probably lots of <cranberries> downriver. Let's check tomorrow.","","","","","","","","","","","","","","n"],
-[5,15,4,4,"b","Naugg'un-mi ayagciqsenuk?","But how will we go?","paqeskilauk-4.mp3",,"","","Naugg'un-mi <ayag>ciqsenuk?","","But how will we <go>?","","","","","","","","","","","","","","v"],
+[5,15,4,4,"b","Naugg'un-mi ayagciqceńuk?","But how will we go?","paqeskilauk-4.mp3",,"","","Naugg'un-mi <ayag>ciqceńuk?","","But how will we <go>?","","","","","","","","","","","","","","v"],
 [5,15,4,5,"a","Qetunraqa apciiqaqa ayautesqellunuk. Yaqulegcurniartuq iqvainanmegni.","I'll ask my son if he can take us. He can hunt birds while we pick.","paqeskilauk-5.mp3",,"","","Qetunraqa <ap>ciiqaqa ayautesqellunuk. Yaqulegcurniartuq iqvainanmegni.","","I'll <ask> my son if he can take us. He can hunt birds while we pick.","","","","","","","","","","","","","","v"],
 [5,15,4,6,"b","Panika-llu malikciqaqa ikayurniaraanga.","I will also take my daughter along so that she can help me.","paqeskilauk-6.mp3",,"","","Panika-llu malikciqaqa <ikayur>niaraanga.","","I will also take my daughter along so that she can <help> me.","","","","","","","","","","","","","","v"],
 [6,2,1,1,"a","Waqaa?","What's up?","levaara-1.mp3",904,"Sak'am Levaara: Sak'aq's Motor","A woman comes into the house of a couple who are friends of hers. This is actually a trialogue.","<Waqaa>?","","<What's up>?","","","","","","","","","","","","","","p"],
@@ -236,7 +236,7 @@ export const dialogueList = [
 [6,2,2,4,"b","Nalluyagutelliniaqa-am uluaqa neqlillerni.","I left my ulu down at fish-camp.","uluaqa-4.mp3",,"","","Nalluyagutelliniaqa-am uluaqa <neqliller>ni.","","I left my ulu down at <fish-camp>.","","","","","","","","","","","","","","n"],
 [6,2,2,5,"a","Uuminaqvaa! Allamek uluangqertua. Aturyugan-qaa?","Well shucks... I have another ulu. Do you want to use it?","uluaqa-5.mp3",,"","","Uuminaqvaa! <Alla>mek uluangqertua. Aturyugan-qaa?","","Well shucks... I have <another> ulu. Do you want to use it?","","","","","","","","","","","","","","n"],
 [6,2,2,6,"b","Ii-i, kitak aturnaurqa.","Sure, I'd like to use it.","uluaqa-6.mp3",,"","","Ii-i, kitak <atur>naurqa.","","Sure, I'd like to <use> it.","","","","","","","","","","","","","","v"],
-[6,2,4,1,"a","Taumi-lli qaspermi iqavaa.","That qaspeq is filthy.","manallemni-1.mp3",806,"Manallemni: When I went jigging","An exchange between ilungaqs (female cross-cousins are usually close and informal with each other).","Taumi-lli qaspermi <iqa>vaa.","","That qaspeq is <filthy>.","","","","","","","","","","","","","","v"],
+[6,2,4,1,"a","Taumi-lli qaspermi iqavaa.","That qaspeq is filthy.","manallemni-1.mp3",2,"Manallemni: When I went jigging","An exchange between ilungaqs (female cross-cousins are usually close and informal with each other).","Taumi-lli qaspermi <iqa>vaa.","","That qaspeq is <filthy>.","","","","","","","","","","","","","","v"],
 [6,2,4,2,"b","Akwaugaq manallemni atullruaqa. Cali unuaqu aturciqaqa.","I wore it jigging yesterday. I'll use it again tomorrow.","manallemni-2.mp3",,"","","Akwaugaq manallemni <atu>llruaqa. Cali unuaqu aturciqaqa.","","I <wore> it jigging yesterday. I'll use it again tomorrow.","","","","","","","","","","","","","","v"],
 [6,2,4,3,"a","Nani manallrusit?","Where did you jig?","manallemni-3.mp3",,"","","Nani <mana>llrusit?","","Where did you <jig>?","","","","","","","","","","","","","","v"],
 [6,2,4,4,"b","An'arciim paingani.","At the mouth of the Johnson River.","manallemni-4.mp3",,"","","An'arciim <pai>ngani.","","At the <mouth> of the Johnson River.","","","","","","","","","","","","","","v"],
@@ -246,14 +246,14 @@ export const dialogueList = [
 [6,2,4,8,"b","Naaqellrunritanka tau͡gaam cangliqellruunga.","I didn't count them, but I got quite a few.","manallemni-8.mp3",,"","","<Naaqe>llrunritanka tau͡gaam cangliqellruunga.","","I didn't <count> them, but I got quite a few.","","","","","","","","","","","","","","v"],
 [6,2,4,9,"a","Quyanaqvaa-ll'. Ak'a-qaa ulligtellruaten?","I'm very thankful. Did you already cut them for drying?","manallemni-9.mp3",,"","","<Quyanaq>vaa-ll'. Ak'a-qaa ulligtellruaten?","","I'm very <thankful>. Did you already cut them for drying?","","","","","","","","","","","","","","v"],
 [6,2,4,10,"b","Ulligteksaitanka. Atata nererraarlua piciqanka.","I haven't cut them yet. I'll cut them later after I eat.","manallemni-10.mp3",,"","","<Ulligte>ksaitanka. Atata nererraarlua piciqanka.","","I haven't <cut> them yet. I'll cut them later after I eat.","","","","","","","","","","","","","","v"],
-[6,7,1,1,"a","Caqatarcit?","What are you going to do?","iqairi-1.mp3",305,"Iqairiqatartua: I'm going to wash clothes","Between two women who are relatives. One is staying at the other's house.","Caqatar<cit>?","","What are <you> going to do?","","","","","","","","","","","","","","e"],
+[6,7,1,1,"a","Caqatarcit?","What are you going to do?","iqairi-1.mp3",305,"Iqairiqatartua: I'm going to wash clothes","Between two people who are relatives. One is staying at the other's house.","Caqatar<cit>?","","What are <you> going to do?","","","","","","","","","","","","","","e"],
 [6,7,1,2,"b","Iqairiqatartua.","I'm going to wash clothes.","iqairi-2.mp3",,"","","<Iqairi>qatartua.","","I'm going to <wash clothes>.","","","","","","","","","","","","","","v"],
 [6,7,1,3,"a","Imirli-qaa iqairissuun?","Should the washing machine be filled?","iqairi-3.mp3",,"","","Imirli-qaa <iqairissuun>?","","Should the <washing machine> be filled?","","","","","","","","","","","","","","n"],
 [6,7,1,4,"b","Imiryaqunaku. Aturngaitaqa. Calisciigatuq.","Don't fill it. I won't use it. It doesn't work.","iqairi-4.mp3",,"","","<Imir>yaqunaku. Aturngaitaqa. Calisciigatuq.","","Don't <fill> it. I won't use it. It doesn't work.","","","","","","","","","","","","","","v"],
 [6,7,1,5,"a","Nani-mi iqairiqatarcit?","Where will you wash them?","iqairi-5.mp3",,"","","<Nani>-mi iqairiqatarcit?","","<Where> will you wash them?","","","","","","","","","","","","","","p"],
 [6,7,1,6,"b","Panill'am eniini piciqua.","I'll do it at Panill'aq's house.","iqairi-6.mp3",,"","","Panill'am <eni>ini piciqua.","","I'll do it at Panill'aq's <house>.","","","","","","","","","","","","","","n"],
 [6,7,1,7,"a","Mer'a-qaa amllertuq?","Does she have lots of water?","iqairi-7.mp3",,"","","<Mer>'a-qaa amllertuq?","","Does she have lots of <water>?","","","","","","","","","","","","","","n"],
-[6,7,1,8,"b","Ii-i, C.B.-kun aptellemni qanrutellruanga nem'i amllerrniluku.","Yes, when I asked her over the C.B. she said there was lots in the house.","iqairi-8.mp3",,"","","Ii-i, C.B.-kun aptellemni <qanrute>llruanga nem'i amllerrniluku.","","Yes, when I asked her over the C.B. she <said> there was lots in the house.","","","","","","","","","","","","","","v"],
+[6,7,1,8,"b","Ii-i, C.B.-kun aptellemni qanrutellruanga nem'i amllerrniluku.","Yes, when I asked her over the C.B. she said there were lots in the house.","iqairi-8.mp3",,"","","Ii-i, C.B.-kun aptellemni <qanrute>llruanga nem'i amllerrniluku.","","Yes, when I asked her over the C.B. she <said> there were lots in the house.","","","","","","","","","","","","","","v"],
 [6,7,1,9,"a","Uuminaqvaa-ll' iqairissuuten assiitelliniuq.","How frustrating that your washing machine is broken.","iqairi-9.mp3",,"","","<Uuminaq>vaa-ll' iqairissuuten assiitelliniuq.","","How <frustrating> that your washing machine is broken.","","","","","","","","","","","","","","v"],
 [6,7,1,10,"b","Tua-i-wa ak'allaurcami. Uika kipucugtuq allamek kiaku kuvyarraarluni.","Oh well, it's because it's old. My husband wants to buy another one next summer after he fishes.","iqairi-10.mp3",,"","","Tua-i-wa <ak'alla>urcami. Uika kipucugtuq allamek kiaku kuvyarraarluni.","","Oh well, it's because it's <old>. My husband wants to buy another one next summer after he fishes.","","","","","","","","","","","","","","n"],
 [6,7,1,11,"a","Kenirciqua luqruuyagnek ut'reskuvet nerniartukuk.","I'll cook some pike and we'll eat when you return.","iqairi-11.mp3",,"","","Kenirciqua luqruuyagnek <ut'r>eskuvet nerniartukuk.","","I'll cook some pike and we'll eat when you <return>.","","","","","","","","","","","","","","v"],
@@ -293,14 +293,14 @@ export const dialogueList = [
 [6,13,2,1,"a","Neryulliuten?","Would you care for something to eat?","neryulli-1.mp3",307,"Neryulliuten?: Would you care for something to eat?","Between two adults.","Neryulli<uten>?","","Would <you> care for something to eat?","","","","","","","","","","","","","","e"],
 [6,13,2,2,"b","Qang'a, aqsissiyaagtua. Tau͡gaam saayungqerquvet yuurqacuaqaqerlii.","No thank you, I'm too full, but I'll have a little tea if you have some.","neryulli-2.mp3",,"","","Qang'a, <aqsi>ssiyaagtua. Tau͡gaam saayungqerquvet yuurqacuaqaqerlii.","","No thank you, I'm too <full>, but I'll have a little tea if you have some.","","","","","","","","","","","","","","v"],
 [6,13,2,3,"a","Nerevkaraaten-qaa Nay'am?","Did you eat at Nay'aq's? (lit., Were you her guest?)","neryulli-3.mp3",,"","","<Nere>vkaraaten-qaa Nay'am?","","Did you <eat> at Nay'aq's? (lit., Were you her guest?)","","","","","","","","","","","","","","v"],
-[6,13,2,4,"b","Ii-i, ner'ukut luqruuyagnek, taryaqvagnek, akutamek-llu.","Yes, we had dried pike (with seal oil), kign salmon, and akutaq.","neryulli-4.mp3",,"","","Ii-i, ner'ukut <luqruuyag>nek, taryaqvagnek, akutamek-llu.","","Yes, we had dried <pike> (with seal oil), kign salmon, and akutaq.","","","","","","","","","","","","","","n"],
+[6,13,2,4,"b","Ii-i, ner'ukut luqruuyagnek, taryaqvagnek, akutamek-llu.","Yes, we had dried pike (with seal oil), king salmon, and akutaq.","neryulli-4.mp3",,"","","Ii-i, ner'ukut <luqruuyag>nek, taryaqvagnek, akutamek-llu.","","Yes, we had dried <pike> (with seal oil), king salmon, and akutaq.","","","","","","","","","","","","","","n"],
 [6,13,2,5,"a","Assirpaa-lli. Qangqiirnek kenirciqua ataku, neryugtuten-qaa maani?","Sounds wonderful. I'm going to cook some ptarmigan this evening, do you want to eat here?","neryulli-5.mp3",,"","","Assirpaa-lli. <Qangqiir>nek kenirciqua ataku, neryugtuten-qaa maani?","","Sounds wonderful. I'm going to cook some <ptarmigan> this evening, do you want to eat here?","","","","","","","","","","","","","","n"],
-[6,13,2,6,"b","Aqvayullruyaaqaanga Angivv'am ataku calirraarluni, ayanrilkuma taiciqua.","Angivv'aq wanted to pick me up this evening after he's through working, (but) if i don't go I'll come over.","neryulli-6.mp3",,"","","Aqvayullruyaaqaanga Angivv'am <ataku> calirraarluni, ayanrilkuma taiciqua.","","Angivv'aq wanted to pick me up <this evening> after he's through working, (but) if i don't go I'll come over.","","","","","","","","","","","","","","p"],
-[6,13,3,1,"a","Amiik ikirteqerru.","Please open the door?","amiik-1.mp3",308,"Amiik ikirteqerru: Please open the door","Between mother and teenage child.","Amiik <ikirte>qerru.","","Please <open> the door?","","","","","","","","","","","","","","v"],
+[6,13,2,6,"b","Aqvayullruyaaqaanga Angivv'am ataku calirraarluni, ayanrilkuma taiciqua.","Angivv'aq wanted to pick me up this evening after he's through working, (but) if I don't go I'll come over.","neryulli-6.mp3",,"","","Aqvayullruyaaqaanga Angivv'am <ataku> calirraarluni, ayanrilkuma taiciqua.","","Angivv'aq wanted to pick me up <this evening> after he's through working, (but) if I don't go I'll come over.","","","","","","","","","","","","","","p"],
+[6,13,3,1,"a","Amiik ikirteqerru.","Please open the door?","amiik-1.mp3",7,"Amiik ikirteqerru: Please open the door","Between mother and teenage child.","Amiik <ikirte>qerru.","","Please <open> the door?","","","","","","","","","","","","","","v"],
 [6,13,3,2,"b","Ciin? Ikirtenrilli, egturyalissiyaagtuq.","Why? It shouldn't be open, there's too many mosquitos.","amiik-2.mp3",,"","","Ciin? Ikirtenrilli, <egturya>lissiyaagtuq.","","Why? It shouldn't be open, there's too many <mosquitos>.","","","","","","","","","","","","","","n"],
 [6,13,3,3,"a","Kitak kaminiaq nipli.","Well then the stove should be turned off.","amiik-3.mp3",,"","","Kitak kaminiaq <nip>li.","","Well then the stove should be <turned off>.","","","","","","","","","","","","","","v"],
 [6,13,3,4,"b","Ak'a niptellruaqa.","I turned it off a while ago.","amiik-4.mp3",,"","","<Ak'a> niptellruaqa.","","I turned it off <a while ago>.","","","","","","","","","","","","","","p"],
-[6,13,3,5,"a","Aren, nalluyagutellrulliniaqa Tut'am qaspera Panill'am eniini, aqvayugan-qaa?","Darn, I must've forgotten Tut'aq's kuspuk at Panill'aq's house, do you want to get it?","amiik-5.mp3",,"","","Aren, <nalluyagute>llrulliniaqa Tut'am qaspera Panill'am eniini, aqvayugan-qaa?","","Darn, I must've <forgotten> Tut'aq's kuspuk at Panill'aq's house, do you want to get it?","","","","","","","","","","","","","","v"],
+[6,13,3,5,"a","Aren, nalluyagutelliniaqa Tut'am qaspera Panill'am eniini, aqvayugan-qaa?","Darn, I must've forgotten Tut'aq's kuspuk at Panill'aq's house, do you want to get it?","amiik-5.mp3",,"","","Aren, <nalluyagute>lliniaqa Tut'am qaspera Panill'am eniini, aqvayugan-qaa?","","Darn, I must've <forgotten> Tut'aq's kuspuk at Panill'aq's house, do you want to get it?","","","","","","","","","","","","","","v"],
 [6,13,3,6,"b","Ii-i.","Sure.","amiik-6.mp3",,"","","<Ii-i>.","","<Sure>.","","","","","","","","","","","","","","p"],
 [6,13,3,7,"a","Egmian taikina.","Come straight back (immediately).","amiik-7.mp3",,"","","Egmian <tai>kina.","","<Come> straight back (immediately).","","","","","","","","","","","","","","v"],
 [6,13,4,1,"a","Nauwa-mi aanan?","Where's your mother?","akngirte-1.mp3",411,"Akngirtellruuq: He got hurt","Between two women.","Nauwa-mi <aana>n?","","Where's your <mother>?","","","","","","","","","","","","","","n"],
@@ -311,7 +311,7 @@ export const dialogueList = [
 [6,13,4,6,"b","Natii akngircaaqa?","Where did she get hurt?","akngirte-6.mp3",,"","","Natii <akngir>caaqa?","","Where did she get <hurt>?","","","","","","","","","","","","","","v"],
 [6,13,4,7,"a","Irua. Emutellrunritaqa tau͡gaam egmian assirillruuq.","On her leg, but I didn’t take her to the clinic because she got better right away.","akngirte-7.mp3",,"","","Irua. Emutellrunritaqa tau͡gaam egmian <assiri>llruuq.","","On her leg, but I didn’t take her to the clinic because she <got better> right away.","","","","","","","","","","","","","","v"],
 [6,13,4,8,"b","Kuuvviaryugtuten-qaa?","Do you want some coffee?","akngirte-8.mp3",,"","","<Kuuvviar>yugtuten-qaa?","","Do you want some <coffee>?","","","","","","","","","","","","","","v"],
-[6,17,1,1,"a","Natmurteqatarcit?","Where are you going?","natmurte-1.mp3",309,"Natmurteqatarcit?: Where are you going?","","Natmurteqatar<cit>?","","Where are <you> going?","","","","","","","","","","","","","","e"],
+[6,17,1,1,"a","Natmurteqatarcit?","Where are you going?","natmurte-1.mp3",8,"Natmurteqatarcit?: Where are you going?","","Natmurteqatar<cit>?","","Where are <you> going?","","","","","","","","","","","","","","e"],
 [6,17,1,2,"b","Nay'am maurlua payugteqataraqa luqruuyagnek uqumek-llu.","I'm going to take some pike and seal oil to Nay'aq's grandmother.","natmurte-2.mp3",,"","","Nay'am maurlua <payugte>qataraqa luqruuyagnek uqumek-llu.","","I'm going to <take> some pike and seal oil to Nay'aq's grandmother.","","","","","","","","","","","","","","v"],
 [6,17,1,3,"a","Tua-llu-qaa qaillun ayuqa?","How is she doing?","natmurte-3.mp3",,"","","Tua-llu-qaa qaillun <ayuq>a?","","How is she <doing>?","","","","","","","","","","","","","","v"],
 [6,17,1,4,"b","Unuaq Panill'am qanrutellruanga cali-gguq naulluuguq.","Panill'aq told me this morning that she's still sick.","natmurte-4.mp3",,"","","Unuaq Panill'am qanrutellruanga cali-gguq <naulluu>guq.","","Panill'aq told me this morning that she's still <sick>.","","","","","","","","","","","","","","v"],
@@ -319,7 +319,7 @@ export const dialogueList = [
 [6,17,1,6,"b","Qangqiirmek suupalillruunga. Amllessiyaanrituq. Nangyaqunaku. Aatan tekiskuni kaigciquq.","I made some ptarmigan soup. There's not too much of it. Don't finish it. Your father will be hungry when he arrives.","natmurte-6.mp3",,"","","Qangqiirmek suupalillruunga. Amllessiyaanrituq. <Nang>yaqunaku. Aatan tekiskuni kaigciquq.","","I made some ptarmigan soup. There's not too much of it. Don't <finish> it. Your father will be hungry when he arrives.","","","","","","","","","","","","","","v"],
 [6,17,1,7,"a","Natmurtellrua?","Where did he go?","natmurte-7.mp3",,"","","Natmurtellru<a>?","","Where did <he> go?","","","","","","","","","","","","","","e"],
 [6,17,1,8,"b","Neqlillernun itrallruuq taryaqvagnek aqvalluni.","He went up to the fish camp to get some king salmon.","natmurte-8.mp3",,"","","Neqlillernun <itra>llruuq taryaqvagnek aqvalluni.","","He <went up> to the fish camp to get some king salmon.","","","","","","","","","","","","","","v"],
-[6,17,2,1,"a","Qaku nunaciiqa maurluun?","When will your grandmother visit?","saayulriik-1.mp3",310,"Saayulriik: The Two Drinking Tea","Two women drinking tea.","Qaku <nuna>ciiqa maurluun?","","When will your grandmother <visit>?","","","","","","","","","","","","","","v"],
+[6,17,2,1,"a","Qaku nunaciiqa maurlun?","When will your grandmother visit?","saayulriik-1.mp3",310,"Saayulriik: The Two Drinking Tea","Two people drinking tea.","Qaku <nuna>ciiqa maurlun?","","When will your grandmother <visit>?","","","","","","","","","","","","","","v"],
 [6,17,2,2,"b","Kiaku nunacullruyaaquq tau͡gaam pisciigaciiqsugnarquq.","She wanted to visit this summer but I don't think she'll be able to.","saayulriik-2.mp3",,"","","<Kiaku> nunacullruyaaquq tau͡gaam pisciigaciiqsugnarquq.","","She wanted to visit <this summer> but I don't think she'll be able to.","","","","","","","","","","","","","","p"],
 [6,17,2,3,"a","Ciin?","How come?","saayulriik-3.mp3",,"","","<Ciin>?","","<How come>?","","","","","","","","","","","","","","p"],
 [6,17,2,4,"b","Uinga-gguq caliciquq cannery-mi.","We heard that her husband will be working at the cannery.","saayulriik-4.mp3",,"","","<Ui>nga-gguq caliciquq cannery-mi.","","We heard that her <husband> will be working at the cannery.","","","","","","","","","","","","","","n"],
@@ -327,404 +327,12 @@ export const dialogueList = [
 [6,17,2,6,"b","Pili-tuq. Cali-qaa saayumek?","I hope so. Would you like more tea?","saayulriik-6.mp3",,"","","Pili-tuq. Cali-qaa <saayu>mek?","","I hope so. Would you like more <tea>?","","","","","","","","","","","","","","n"],
 [6,17,2,7,"a","Qang'a aqsissiyaagtua. Quyanaqvaa-ll' tua-i.","No thank you, I'm full. Thank you so much (for tea).","saayulriik-7.mp3",,"","","Qang'a <aqsi>ssiyaagtua. Quyanaqvaa-ll' tua-i.","","No thank you, I'm <full>. Thank you so much (for tea).","","","","","","","","","","","","","","v"],
 [6,17,2,8,"b","Aa-ang. Cikirciqamken taryaqvagmek.","You're welcome. I'll give you some king salmon.","saayulriik-8.mp3",,"","","Aa-ang. <Cikir>ciqamken taryaqvagmek.","","You're welcome. I'll <give> you some king salmon.","","","","","","","","","","","","","","v"],
-[6,17,2,9,"a","Ala-i, quyana. Keniqsaitua taryaqvagmek ak'anek.","Oh, how nice. I's been a long time since I cooked some salmon.","saayulriik-9.mp3",,"","","Ala-i, quyana. <Keni>qsaitua taryaqvagmek ak'anek.","","Oh, how nice. I's been a long time since I <cook>ed some salmon.","","","","","","","","","","","","","","v"],
+[6,17,2,9,"a","Ala-i, quyana. Keniqsaitua taryaqvagmek ak'anek.","Oh, how nice. It's been a long time since I cooked some salmon.","saayulriik-9.mp3",,"","","Ala-i, quyana. <Keni>qsaitua taryaqvagmek ak'anek.","","Oh, how nice. It's been a long time since I <cook>ed some salmon.","","","","","","","","","","","","","","v"],
 [6,17,2,10,"b","Imna uika qasgim kaminiaranek caliyugnarquq.","I think my husband is working on the steambath's stove.","saayulriik-10.mp3",,"","","Imna uika <qasgi>m kaminiaranek caliyugnarquq.","","I think my husband is working on the <steambath>'s stove.","","","","","","","","","","","","","","n"],
 [6,17,2,11,"a","Qaill' kaminiara pia?","What's wrong with the stove (lit., its stove)?","saayulriik-11.mp3",,"","","Qaill' <kaminiar>a pia?","","What's wrong with the <stove> (lit., its stove)?","","","","","","","","","","","","","","n"],
 [6,17,2,12,"b","Assiitellruuq akwaugaq. Atam kaminiara ak'allauguq.","It wasn't working yesterday (lit., it wasn't good). You see, the stove is old.","saayulriik-12.mp3",,"","","<Assiite>llruuq akwaugaq. Atam kaminiara ak'allauguq.","","It <wasn't working> yesterday (lit., it wasn't good). You see, the stove is old.","","","","","","","","","","","","","","v"],
 [6,17,2,13,"a","Tua-i, wii uterrlii.","I guess I'll go home.","saayulriik-13.mp3",,"","","Tua-i, wii <uterr>lii.","","I guess I'll <go home>.","","","","","","","","","","","","","","v"],
 [6,17,2,14,"b","Ii-i, quyana taiqerluten. Taryaqvak nalluyagucaqunaku.","Okay, thanks for dropping by. Don't forget the salmon.","saayulriik-14.mp3",,"","","Ii-i, quyana taiqerluten. Taryaqvak <nalluyagu>caqunaku.","","Okay, thanks for dropping by. Don't <forget> the salmon.","","","","","","","","","","","","","","v"],
 [6,17,2,15,"a","Teguciqaqa. Quyanaqvaa.","I'll take it. Thank you very much.","saayulriik-15.mp3",,"","","<Tegu>ciqaqa. Quyanaqvaa.","","I'll <take> it. Thank you very much.","","","","","","","","","","","","","","v"],
-[6,17,2,16,"b","Aang.","You're welcome.","saayulriik-16.mp3",,"","","<Aang>.","","<You're welcome>.","","","","","","","","","","","","","","p"],
 [0,0,0,1,"a","Dummy","Dummy","dummy.mp3",,"","","<Dummy>","","<Dummy>","","","","","","","","","","","","","","p"],
 ]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

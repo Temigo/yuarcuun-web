@@ -325,6 +325,7 @@ class Dialogues extends Component {
           <div style={{display:'flex',alignItems:'center',justifyContent:(dialogueInfo['speaker']=='a'?'flex-start':'flex-end'),lineHeight:'30px'}}>
           {this.returnContent('englishNotStyled',dialogueInfo,name,index,textStyle)}
           </div>
+          <div style={{height:'10px'}} />
           {this.state.showYupik ? 
             <div style={{display:'flex',alignItems:'center',justifyContent:(dialogueInfo['speaker']=='a'?'flex-start':'flex-end'),lineHeight:'31px'}}>
             {this.returnContent('yupikNotStyled',dialogueInfo,name,index,textStyle)}
@@ -340,6 +341,7 @@ class Dialogues extends Component {
           <div style={{display:'flex',alignItems:'center',justifyContent:(dialogueInfo['speaker']=='a'?'flex-start':'flex-end'),lineHeight:'30px'}}>
             {this.returnContent('englishNotStyled',dialogueInfo,name,index,textStyle)}
           </div>
+          <div style={{height:'10px'}} />
           <div style={{display:'flex',alignItems:'center',justifyContent:(dialogueInfo['speaker']=='a'?'flex-start':'flex-end'),lineHeight:'31px'}}>
             {this.returnContent('yupikNotStyled',dialogueInfo,name,index,textStyle)}
           </div>
@@ -349,14 +351,17 @@ class Dialogues extends Component {
       if (isCurrent) {
         return <div style={customFont}>
           {this.returnContent('englishUnderlined',dialogueInfo,name,index,toptextStyle)}
+          <div style={{height:'5px'}} />
           {index in this.state.record ?
             <div>
             {this.returnContent('yupikUnderlined',dialogueInfo,name,index,textStyle)}
+            <div style={{height:'5px'}} />
             {this.returnContent('userRegularInput',dialogueInfo,name,index,textStyle,'yupik')}
             </div>
             :
             <div>
             {this.returnContent('selection',dialogueInfo,name,index,textStyle,'yupik')}
+            <div style={{height:'5px'}} />
             {this.returnContent('regularInput',dialogueInfo,name,index,textStyle,'yupik')}
             </div>
           }
@@ -364,7 +369,9 @@ class Dialogues extends Component {
       } else {
         return <div style={customFont}>
           {this.returnContent('englishUnderlined',dialogueInfo,name,index,toptextStyle)}
+          <div style={{height:'5px'}} />
           {this.returnContent('yupikUnderlined',dialogueInfo,name,index,textStyle)}
+          <div style={{height:'5px'}} />
           {this.returnContent('userRegularInput',dialogueInfo,name,index,textStyle,'yupik')}
         </div>           
       }
@@ -372,6 +379,7 @@ class Dialogues extends Component {
       if (isCurrent) {
         return <div style={customFont}>
           {this.returnContent('englishUnderlined',dialogueInfo,name,index,toptextStyle)}
+          <div style={{height:'5px'}} />
           {index in this.state.record ?
             (this.state.record[index]['optionsTried'].includes(dialogueInfo['yupikQuestionCorrect']) ?
               this.returnContent('yupikUnderlined',dialogueInfo,name,index,textStyle)
@@ -381,12 +389,15 @@ class Dialogues extends Component {
             :
             this.returnContent('selection',dialogueInfo,name,index,textStyle,'yupik')
           }
+          <div style={{height:'5px'}} />
           {this.returnContent('options',dialogueInfo,name,index,textStyle,'yupik')}
         </div>           
       } else {
         return <div style={customFont}>
           {this.returnContent('englishUnderlined',dialogueInfo,name,index,toptextStyle)}
+          <div style={{height:'5px'}} />
           {this.returnContent('yupikUnderlined',dialogueInfo,name,index,textStyle)}
+          <div style={{height:'5px'}} />
           {this.returnContent('options',dialogueInfo,name,index,textStyle,'yupik')}
         </div>           
       }
@@ -394,6 +405,7 @@ class Dialogues extends Component {
       if (isCurrent) {
         return <div style={customFont}>
           {this.returnContent('yupikUnderlined',dialogueInfo,name,index,toptextStyle)}
+          <div style={{height:'5px'}} />
             {index in this.state.record ?
               <div>
               {this.returnContent('englishUnderlined',dialogueInfo,name,index,textStyle)}
@@ -409,7 +421,9 @@ class Dialogues extends Component {
       } else {
         return <div style={customFont}>
           {this.returnContent('yupikUnderlined',dialogueInfo,name,index,toptextStyle)}
+          <div style={{height:'5px'}} />
           {this.returnContent('englishUnderlined',dialogueInfo,name,index,textStyle)}
+          <div style={{height:'5px'}} />
           {this.returnContent('userRegularInput',dialogueInfo,name,index,textStyle,'english')}
         </div>           
       }
@@ -417,6 +431,7 @@ class Dialogues extends Component {
       if (isCurrent) {
         return <div style={customFont}>
           {this.returnContent('yupikUnderlined',dialogueInfo,name,index,toptextStyle)}
+          <div style={{height:'5px'}} />
           {index in this.state.record ?
             (this.state.record[index]['optionsTried'].includes(dialogueInfo['englishQuestionCorrect']) ?
               this.returnContent('englishUnderlined',dialogueInfo,name,index,textStyle)
@@ -426,12 +441,15 @@ class Dialogues extends Component {
             :
             this.returnContent('selection',dialogueInfo,name,index,textStyle,'english')
           }
+          <div style={{height:'5px'}} />
           {this.returnContent('options',dialogueInfo,name,index,textStyle,'english')}
         </div>           
       } else {
         return <div style={customFont}>
           {this.returnContent('yupikUnderlined',dialogueInfo,name,index,toptextStyle)}
+          <div style={{height:'5px'}} />
           {this.returnContent('englishUnderlined',dialogueInfo,name,index,textStyle)}
+          <div style={{height:'5px'}} />
           {this.returnContent('options',dialogueInfo,name,index,textStyle,'english')}
         </div>           
       }
@@ -441,11 +459,13 @@ class Dialogues extends Component {
           {index in this.state.record ?
             <div>
             {this.returnContent('yupikUnderlined',dialogueInfo,name,index,textStyle)}
+          <div style={{height:'5px'}} />
             {this.returnContent('userRegularInput',dialogueInfo,name,index,textStyle,'yupik')}
             </div>
             :
             <div>
             {this.returnContent('listeningselection',dialogueInfo,name,index,textStyle,'yupik')}
+          <div style={{height:'5px'}} />
             {this.returnContent('regularInput',dialogueInfo,name,index,textStyle,'yupik')}
             </div>
           }
@@ -453,6 +473,7 @@ class Dialogues extends Component {
       } else {
         return <div style={customFont}>
           {this.returnContent('yupikUnderlined',dialogueInfo,name,index,textStyle)}
+          <div style={{height:'5px'}} />
           {this.returnContent('userRegularInput',dialogueInfo,name,index,textStyle,'yupik')}
         </div>           
       }
@@ -464,9 +485,10 @@ class Dialogues extends Component {
     let correctColor = '#6cb590'
     let incorrectColor = "#ff5757"
     let parts = [0,0,0]
+    console.log(type)
 
     if (type === 'yupikNotStyled') {
-        return <div style={{textAlign:(dialogueInfo['speaker']=='a'?'left':'right')}}>
+        return <div style={{lineHeight:'24px', textAlign:(dialogueInfo['speaker']=='a'?'left':'right')}}>
             {dialogueInfo['speaker']=='a' ?
               null
               :
@@ -618,8 +640,8 @@ class Dialogues extends Component {
               <span style={{color:'#b9b9b9'}}>{dialogueInfo['yupikQuestion'][2]}</span>
             </div>
     } else if (type === 'englishNotStyled') {
-      return <div style={{textAlign:(dialogueInfo['speaker']=='a'?'left':'right'),...textStyle}}>
-            {dialogueInfo['english']}
+      return <div style={{lineHeight:'24px', textAlign:(dialogueInfo['speaker']=='a'?'left':'right'),...textStyle}}>
+            <span>{dialogueInfo['english']}</span>
             </div>
     } else if (type === 'yupikReadOnly') {
       return <div>
@@ -633,7 +655,7 @@ class Dialogues extends Component {
               :
               (this.state.audioExists ? <span style={{paddingRight:'5px', cursor:'pointer'}}><Icon name='volume up' color='black' onClick={()=>{this.playCurrentSentence(index,name)}} /></span> : null)
             }
-            <span>{dialogueInfo['yupik']}</span>
+            <span style={{lineHeight:'24px'}}>{dialogueInfo['yupik']}</span>
             {dialogueInfo['speaker']=='a' && this.state.audioExists  ? 
               (this.state.audioExists ? <span style={{paddingLeft:'5px', cursor:'pointer'}}><Icon name='volume up' color='black' onClick={()=>{this.playCurrentSentence(index,name)}} /></span> : null)
               :
@@ -648,7 +670,7 @@ class Dialogues extends Component {
             }
             </div>
             {this.state.showEnglishMatrix.includes(name) ?
-              <div style={{color:'#b9b9b9',fontWeight:'200',marginTop:'5px'}}>{dialogueInfo['english']}</div>
+              <div style={{color:'#b9b9b9',fontWeight:'200',marginTop:'5px',lineHeight:'24px'}}>{dialogueInfo['english']}</div>
               :
               null
             }
