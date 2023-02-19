@@ -16,7 +16,7 @@ import { YugtunLoader, YugtunFooter, WordItem, AudioItem, tagColors } from './Se
 // import TableEntry from './TableEntry.js';
 // import {demPro, perPro} from './constants/pronounEndings.js';
 // import {endingRules} from './constants/endingRules.js';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
+// import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 const WEB_URL = "http://localhost:3000";
 const KYUK_URL = 'https://archive.kyuk.com'
@@ -948,7 +948,7 @@ class SearchPage extends Component {
 
                               {this.state.activeAudioIndex[index]['content']['speaker'].length === 1 ?
                                 <span>
-                                <LazyLoadImage effect='blur' height={'75px'} width={'100px'} style={{borderRadius:'10px'}} src={WEB_URL +'/images/EldersPhotos/'+this.state.activeAudioIndex[index]['content']['speaker'][0][1]} />
+                                <Image height={'75px'} width={'100px'} style={{borderRadius:'10px'}} src={WEB_URL +'/images/EldersPhotos/'+this.state.activeAudioIndex[index]['content']['speaker'][0][1]} />
                                 {this.state.activeAudioIndex[index]['content']['speaker'][0][0].includes('~') ?
                                   <span>
                                     <div style={{color:'#333333',display:'flex',justifyContent:'center',textAlign:'center',fontWeight:'bold'}}>{this.state.activeAudioIndex[index]['content']['speaker'][0][0].split('--')[0].split('~')[0]}</div>

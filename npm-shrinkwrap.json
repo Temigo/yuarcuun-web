@@ -2165,11 +2165,6 @@
       "integrity": "sha512-UZK3NBx2Mca+b5LsG7bY183pHWt5Y1xts4P3Pz7ENTwGVnJOUWbRb3ocjvX7hx9tq/yTAdclXm9sZ38gNuem4A==",
       "dev": true
     },
-    "cities-list": {
-      "version": "1.0.3",
-      "resolved": "https://registry.npmjs.org/cities-list/-/cities-list-1.0.3.tgz",
-      "integrity": "sha512-UadgzcZiV38TvJXlGymITRvvxaR5PtlrS2M+RJICyvRNp3TnOCPA/5ZZuRn8yG6SexKy1x9I+IwFctZ39XbI/Q=="
-    },
     "clap": {
       "version": "1.2.3",
       "resolved": "https://registry.npmjs.org/clap/-/clap-1.2.3.tgz",
@@ -2501,14 +2496,6 @@
             "ms": "2.0.0"
           }
         }
-      }
-    },
-    "compromise": {
-      "version": "13.11.4",
-      "resolved": "https://registry.npmjs.org/compromise/-/compromise-13.11.4.tgz",
-      "integrity": "sha512-nBITcNdqIHSVDDluaG6guyFFCSNXN+Hu87fU8VlhkE5Z0PwTZN1nro2O7a8JcUH88nB5EOzrxd9zKfXLSNFqcg==",
-      "requires": {
-        "efrt-unpack": "2.2.0"
       }
     },
     "concat-map": {
@@ -3952,11 +3939,6 @@
       "resolved": "https://registry.npmjs.org/ee-first/-/ee-first-1.1.1.tgz",
       "integrity": "sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0="
     },
-    "efrt-unpack": {
-      "version": "2.2.0",
-      "resolved": "https://registry.npmjs.org/efrt-unpack/-/efrt-unpack-2.2.0.tgz",
-      "integrity": "sha512-9xUSSj7qcUxz+0r4X3+bwUNttEfGfK5AH+LVa1aTpqdAfrN5VhROYCfcF+up4hp5OL7IUKcZJJrzAGipQRDoiQ=="
-    },
     "ejs": {
       "version": "2.7.4",
       "resolved": "https://registry.npmjs.org/ejs/-/ejs-2.7.4.tgz",
@@ -4005,42 +3987,6 @@
       "integrity": "sha512-G9wwJMx9DQQzwom8J8e8ErVpI6h/Z5BpYusJCE2Q/2NfgBNYCesyNaCOOskZAhOrw2nmR4D8nYAv4Xv/INIbzw==",
       "requires": {
         "en-stemmer": "^1.0.2"
-      }
-    },
-    "en-lexicon": {
-      "version": "1.0.11",
-      "resolved": "https://registry.npmjs.org/en-lexicon/-/en-lexicon-1.0.11.tgz",
-      "integrity": "sha512-eanOw9551H6jMRpRK023+Nlss5qnuAi99drXcSUzQySsMrB43teDNbin/AbpOfnemQiTtuZChXYm2kEIR1Mhmg==",
-      "requires": {
-        "en-inflectors": "^1.0.7"
-      }
-    },
-    "en-norm": {
-      "version": "0.0.2",
-      "resolved": "https://registry.npmjs.org/en-norm/-/en-norm-0.0.2.tgz",
-      "integrity": "sha512-LcApDzmkDU/OUsZN0Wc2NFlDNOHBWgZOHu8aQUiD5ezQlUKNNRMBIL9AqKqb+V0/EXA06Sn6BZLgZXfBTi/alQ==",
-      "requires": {
-        "en-inflectors": "^1.0.11",
-        "en-lexicon": "^1.0.10"
-      }
-    },
-    "en-parse": {
-      "version": "1.1.7",
-      "resolved": "https://registry.npmjs.org/en-parse/-/en-parse-1.1.7.tgz",
-      "integrity": "sha512-YnJXElRwNQjczHFTsBOZ5vmvNJOKlb7O30ohQoCYAwkowmafRRS2Ci53/gQXHBdwlKa+9bavHgSrdEj4ldTp3w==",
-      "requires": {
-        "en-inflectors": "^1.0.8"
-      }
-    },
-    "en-pos": {
-      "version": "1.0.16",
-      "resolved": "https://registry.npmjs.org/en-pos/-/en-pos-1.0.16.tgz",
-      "integrity": "sha512-b/tYA8NNl2fuXn55deB81RwW6S9bJqgYjNMVmltUZxT1JZEzNsWvkZpKiXfOe4RlsB2t5O3s1B/BgnXDOAO1Zw==",
-      "requires": {
-        "cities-list": "^1.0.3",
-        "en-inflectors": "^1.0.7",
-        "en-lexicon": "^1.0.8",
-        "humannames": "^1.0.5"
       }
     },
     "en-stemmer": {
@@ -5387,18 +5333,6 @@
         "object.defaults": "^1.1.0",
         "object.pick": "^1.2.0",
         "parse-filepath": "^1.0.1"
-      }
-    },
-    "finnlp": {
-      "version": "1.1.1",
-      "resolved": "https://registry.npmjs.org/finnlp/-/finnlp-1.1.1.tgz",
-      "integrity": "sha512-BYSN0PWf44/S59dnOtmJDM83nXLN63tSC1MrglfjQTHTYwmH9vSbhxiUPSnDv3rqSGgF9fAT8AxgeqOjNVtS4g==",
-      "requires": {
-        "en-norm": "0.0.2",
-        "en-parse": "^1.1.0",
-        "en-pos": "^1.0.13",
-        "lemmatizer": "0.0.1",
-        "lexed": "^1.0.10"
       }
     },
     "first-chunk-stream": {
@@ -7720,11 +7654,6 @@
       "resolved": "https://registry.npmjs.org/https-browserify/-/https-browserify-1.0.0.tgz",
       "integrity": "sha1-7AbBDgo0wPL68Zn3/X/Hj//QPHM="
     },
-    "humannames": {
-      "version": "1.0.5",
-      "resolved": "https://registry.npmjs.org/humannames/-/humannames-1.0.5.tgz",
-      "integrity": "sha512-FArOOhsfu1Rzc6wj8TZWTEpO/+TQOqhU0YNx+IyRaScE7HVanOwn8knN1OjjUngJOLaRqFSLjX0EzvMiNnT7zw=="
-    },
     "iconv-lite": {
       "version": "0.4.24",
       "resolved": "https://registry.npmjs.org/iconv-lite/-/iconv-lite-0.4.24.tgz",
@@ -9044,16 +8973,6 @@
         "invert-kv": "^1.0.0"
       }
     },
-    "lemmatizer": {
-      "version": "0.0.1",
-      "resolved": "https://registry.npmjs.org/lemmatizer/-/lemmatizer-0.0.1.tgz",
-      "integrity": "sha512-OhVYdbBYeCHE0Jea6L8jzbyKzZyZVjq/Aexd7Tv/kQa4TSiXR9HQ7+SgsD/VRzNNEB2sfO5HCx4Czg1fWgibDw==",
-      "requires": {
-        "en-inflectors": "^1.0.11",
-        "en-lexicon": "^1.0.10",
-        "en-stemmer": "^1.0.3"
-      }
-    },
     "less": {
       "version": "2.7.3",
       "resolved": "https://registry.npmjs.org/less/-/less-2.7.3.tgz",
@@ -9238,11 +9157,6 @@
         "prelude-ls": "~1.1.2",
         "type-check": "~0.3.2"
       }
-    },
-    "lexed": {
-      "version": "1.0.10",
-      "resolved": "https://registry.npmjs.org/lexed/-/lexed-1.0.10.tgz",
-      "integrity": "sha512-EmLOEQK9F58dwoRN4ICvghtUmWKwL4JjDye3hh/R94VTv52hXVmMDn7vleLJNCeMg1t20+bOITRkUVJ286uakA=="
     },
     "liftoff": {
       "version": "2.5.0",

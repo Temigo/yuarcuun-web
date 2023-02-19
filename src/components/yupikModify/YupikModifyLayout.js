@@ -7,7 +7,7 @@ import {withRouter} from 'react-router';
 import palette from 'google-palette';
 import shuffle from 'shuffle-array';
 import axios from 'axios';
-import nlp from 'compromise';
+// import nlp from 'compromise';
 import { API_URL } from '../../App.js';
 
 import YupikModifyNoun from './YupikModifyNoun.js';
@@ -747,9 +747,10 @@ class YupikModifyLayout extends Component {
 
     var postbasesEnglish = []
     let test = new_adj
-    let originalverb = nlp(test).verbs().out() //might not work if there are multiple verbs
+    let originalverb = []
+    // let originalverb = nlp(test).verbs().out() //might not work if there are multiple verbs
     if (originalverb.includes(' ')) {
-      originalverb = nlp(test).verbs().out().split(' ')[0]
+      // originalverb = nlp(test).verbs().out().split(' ')[0]
     }
     // console.log(originalverb)
     let verbtenses = ''
@@ -763,7 +764,7 @@ class YupikModifyLayout extends Component {
         gerund_new_adj = test.replace(originalverb,'')
         infinitive_new_adj = test.replace(originalverb,'')
       } else {
-        verbtenses = nlp(originalverb).verbs().conjugate()[0]
+        // verbtenses = nlp(originalverb).verbs().conjugate()[0]
         // console.log(verbtenses)
         gerund_new_adj = test.replace(originalverb,verbtenses.Gerund)
         infinitive_new_adj = test.replace(originalverb,verbtenses.Infinitive)
