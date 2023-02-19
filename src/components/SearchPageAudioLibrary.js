@@ -979,7 +979,7 @@ class SearchPage extends Component {
                               <span>{this.state.activeAudioIndex[index]['content']['contextAfterEng']+'..'}</span>
                               </div>
                               <div style={{paddingTop:'5px',paddingBottom:'5px'}}>{'Source: '+this.state.activeAudioIndex[index]['content']['source']}</div>
-                              {this.state.activeAudioIndex[index]['content']['link'].length !== 0 ?
+                              {this.state.activeAudioIndex[index]['content']['link'].length !== 0 && false?
                                 <div>
                                 {'Link: '}
                                 <a style={{color:'#4a80b5',textDecoration:'underline'}} href={KYUK_URL+this.state.activeAudioIndex[index]['content']['link']} target="_blank">
