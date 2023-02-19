@@ -454,6 +454,7 @@ class SearchPage extends Component {
 
   onChangeSearch(event, data) {
     // this.setState({entries:undefined, activeIndex:-1, loaderOn: true, seeMoreActive:false,currentTableOpen: -1,})
+    this.resetAll()
     let newStartingSearch = event === undefined;
     let new_search = data.value.replace("’","'");
     // console.log(new_search)
