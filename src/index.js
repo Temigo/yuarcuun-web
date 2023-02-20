@@ -12,7 +12,9 @@ import ReactGA from 'react-ga';
 // Uncomment this for deployment
 // ReactGA.initialize('UA-127737321-1');
 
-const history = createHistory();
+const history = createHistory({
+  //basename: '/yuarcuun'
+});
 //FIXME how to exclude localhost?
 history.listen(location => {
 	ReactGA.set({ page: location.pathname })
