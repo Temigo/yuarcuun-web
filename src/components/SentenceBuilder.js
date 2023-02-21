@@ -1386,6 +1386,7 @@ class SentenceBuilder extends Component {
 
 
 	onChangeBaseSearch = (endingNeeded,forEnglish,itemUpdating,mood,submood,update,itemUpdatingFull,event,data) => {
+		this.setState({activeIndexes1:[]})
 		let word = data.value
 		let wordsList
 		let filteredDictV = {}
@@ -2364,7 +2365,11 @@ editSubjectMenu = (nounInsert,subject, tag, statevvs, update, backendcall, value
 	closeMainScreenMenuRef = (name,currentEditMode) => {
 		console.log(this.mainScreenMenuRef, name, currentEditMode)
 		if (name in this.mainScreenMenuRef) {
-			this.mainScreenMenuRef[name].handleClose()
+			if (window.innerWidth < 480) {
+				this.mainScreenMenuRef[name].handleClose()
+			} else {
+				this.mainScreenMenuRef[name].close()				
+			}
 		}
 		if (currentEditMode !== 'default') {
 			this.setState({
@@ -2388,15 +2393,67 @@ editSubjectMenu = (nounInsert,subject, tag, statevvs, update, backendcall, value
 
 	openMainScreenMenuRef = (name) => {
 		if (name in this.mainScreenMenuRef) {
-			this.mainScreenMenuRef[name].handleOpen()
+			if (window.innerWidth < 480) {
+				this.mainScreenMenuRef[name].handleOpen()
+			} else {
+				this.mainScreenMenuRef[name].open()				
+			}
 		}
 	}
 
 mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
-	return   <Modal
+
+	if (window.innerWidth < 480) {
+		return   <Modal
 						style={{
-							marginTop:10,
+							marginTop:0,
 						}}
+				    trigger={<div style={{
+				    	border:'solid 1px #22242626',
+				    	fontSize:'16px',
+				    	padding:'5px',
+				    	borderRadius:'5px',
+				    	marginRight:'2px',
+				    	marginLeft:'2px',
+				    	cursor:'pointer',
+				    	textAlign:'center',
+				    	color:'#00000099'
+				    }}>{name}</div>}
+				    ref={(element)=>{this.mainScreenMenuRef[name]=element;}}
+			      onOpen={()=>{
+			      	this.setState({
+							candidateCall:[],
+							candidateBase:[],
+							candidateDisplay:[],
+							unallowable_next_ids:[],
+							nextTenses:[],			      		
+			      	})
+		      		if (setState === 'npCase') {
+								this.setState({npCase:setStateTo[0],npCaseType:setStateTo[1]})
+							} else if (setState === 'mvvType') {
+								this.setState({mvvType:setStateTo[0]})
+							} else if (setState === 'mvinsertqaa') {
+								this.setState({mvvMood:setStateTo[0] ,mvvType:setStateTo[1]})
+							} else if (setState === 'cvvType') {
+								this.setState({cvvMood:setStateTo[0] ,cvvType:setStateTo[1]})
+							} else if (setState === 'svvType') {
+								this.setState({svvType:setStateTo[0]})
+							} else if (setState === 'optCase') {
+								this.setState({optCase:setStateTo[0], mvvType:setStateTo[1]})
+							} 
+							this.setState({
+								currentlyOpen:name, 
+								crecentlyOpen: name, 
+								currentEditMode:currentEditMode,
+								overlayOn:true,
+							})
+			      }}
+     				onClose={()=>{this.setState({currentlyOpen:'',mvvMood:'',mvvType:'',cvvMood:'',svvType:'',optCase:'',npCase:'',npCaseType:'',containsTime:false,activeIndexes1:[],candidateCall:[],candidateBase:[],lockSubmit:false,nextTenses:[],candidateDisplay:[],searchQuery:'',wordsList:[]})}}
+  >
+  	{this.contentItems(currentEditMode,currentEditMode,-1,true,forEnglish,setStateTo)}
+	  </Modal>
+	} else {
+		return  <Popup
 				    trigger={<div style={{
 				    	border:'solid 1px #22242626',
 				    	fontSize:'16px',
@@ -2441,7 +2498,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
      				onClose={()=>{this.setState({currentlyOpen:'',mvvMood:'',mvvType:'',cvvMood:'',svvType:'',optCase:'',npCase:'',npCaseType:'',containsTime:false,activeIndexes1:[],candidateCall:[],candidateBase:[],lockSubmit:false,nextTenses:[],candidateDisplay:[],searchQuery:'',wordsList:[]})}}
   >
   	{this.contentItems(currentEditMode,currentEditMode,-1,true,forEnglish,setStateTo)}
-  </Modal>
+	  </Popup>
+	}
 
 }
 
@@ -2709,8 +2767,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
     // this.setState({ loaderOn: true });
     // const index = titleProps.id;
     const { activeIndexes1 } = this.state;
-    const newIndex = this.state.activeIndexes1.slice()
-    // const newIndex = []
+    // const newIndex = this.state.activeIndexes1.slice()
+    const newIndex = []
     // const newIndex = activeIndex === index ? -1 : index;
 
     const currentIndexPosition = activeIndexes1.indexOf(index);
@@ -4407,9 +4465,9 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		// let currentTense;n
 		// console.log(this.state)
 		// console.log(this.state.currentEditMode, itemUpdating,endingNeeded,update,mood,submood)
-		         return <Grid>
-		                	<Grid.Row columns={1} divided>
-		                	<Grid.Column style={{paddingTop:'10px'}}>
+		         return <Grid style={{width:(window.innerWidth < 480 ? '':'300px')}}>
+		                	<Grid.Row columns={1}>
+		                	<Grid.Column style={{paddingTop:'10px',height:'480px'}}>
 
 									        <Segment style={{overflow: 'auto',padding:0}}>
 									        	<List divided style={{margin:0,padding:0,}}>
@@ -4495,7 +4553,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 											      disabled={this.state.lockSubmit}
 											      placeholder={this.returnPlaceholder(endingNeeded,forEnglish,itemUpdating[1][0],mood)}
 											      // width='100%'
-											      style={{width:'100%',padding:'5px 5px',fontSize:'16px'}}
+											      style={{width:'100%',padding:'5px 5px',fontSize:(window.innerWidth < 480 ? '16px':'14px')}}
 											 		  onChange={this.onChangeBaseSearch.bind(this,endingNeeded,forEnglish,itemUpdating[1][0],mood,submood,update,itemUpdating)}
 								            value={this.state.searchQuery}
 								            // onClose={()=>{this.setState({searchQuery:'',wordsList:[]})}}
@@ -4508,7 +4566,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 								            }
 								            {this.state.wordsList.length > 0 ?
 								            	<span>
-													      <Segment vertical style={{maxHeight:180,overflow: 'auto',padding:0,margin:"4px 9px",borderBottom:'0px solid #e2e2e2'}}>
+													      <Segment vertical style={{maxHeight:(window.innerWidth < 480 ? 184:259),overflow: 'auto',padding:0,margin:"4px 9px",borderBottom:'0px solid #e2e2e2'}}>
 
 												    		<Button.Group vertical basic fluid>
 													      	{this.state.wordsList.map((k,index)=>{
@@ -4588,7 +4646,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 														<Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
 												    		<Accordion.Title
 												    			id={'verb'}
-												    			style={{paddingBottom:'2px'}}
+												    			style={{fontSize:'14px',paddingTop:(window.innerWidth < 480 ? '10px':''),paddingBottom:(window.innerWidth < 480 ? '5px':'2px')}}
 												    			active={this.state.activeIndexes1.includes('vvpostbases')}
 											            onClick={()=>{this.handleClick1('vvpostbases',true)}}
 												    		>
@@ -4596,7 +4654,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 												    			{'Common Postbases'}
 												    		</Accordion.Title>
 												    		<Accordion.Content active={this.state.activeIndexes1.includes('vvpostbases')}>
-													      <Segment vertical style={{maxHeight:180,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
+													      <Segment vertical style={{maxHeight:(window.innerWidth < 480 ? 180:255),overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
 												    		<Button.Group vertical basic fluid>
 													      	{Object.keys(popularPostbases).map((p,index)=>{
 													      		let removeItem = false
@@ -4606,7 +4664,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 													      		if (!removeItem) {
 														      		return <Button style={{textAlign:'left',padding:'10px'}} onClick={()=>{
 														      			this.handleClick1('vvpostbases',false); 
-														      			console.log(newpostbases[popularPostbases[p]['expression']])
+														      			// console.log(newpostbases[popularPostbases[p]['expression']])
 												      					// this.handleClick('verbs',false); 
 														      			this.setState({
 														      				candidateBase:this.state.candidateBase.concat([[newpostbases[popularPostbases[p]['expression']]['keylookup'],popularPostbases[p]['expression']]]),
@@ -4659,7 +4717,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 														<Accordion style={{color:'000000de',borderTop:'1px solid #2224261a',padding:'4px 9px',paddingBottom:'9px'}}>
 												    		<Accordion.Title
 												    			id={'verb'}
-												    			style={{paddingBottom:'2px'}}
+												    			style={{fontSize:'14px',paddingTop:(window.innerWidth < 480 ? '10px':''),paddingBottom:(window.innerWidth < 480 ? '5px':'2px')}}
 												    			active={this.state.activeIndexes1.includes('verbs')}
 											            onClick={()=>{this.handleClick1('verbs',true)}}
 												    		>
@@ -4667,7 +4725,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 												    			{'Common Bases'}
 												    		</Accordion.Title>
 												    		<Accordion.Content active={this.state.activeIndexes1.includes('verbs')}>
-													      <Segment vertical style={{maxHeight:180,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
+													      <Segment vertical style={{maxHeight:(window.innerWidth < 480 ? 180:255),overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
 													    		<Button.Group vertical basic fluid>
 														      	{Object.keys(popularBases).map((p)=>{
 														      		return <Button style={{textAlign:'left',padding:'10px'}} onClick={()=>{
@@ -4710,8 +4768,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 											      <div style={{paddingBottom:10}}>  
 											      <Link to={{pathname: '/sentencebuilder/2'}}>
-					                		<Button size='small' color='blue' onClick={()=>{
-					                			console.log(mood)
+					                		<Button size='medium' color='blue' onClick={()=>{
 					                			this.setState({overlayOn:false})
 					                			this.closeEditMenuRef(this.state.crecentlyOpen,'default',false)
 					                			this.closeMainScreenMenuRef(this.state.crecentlyOpen,'default')
@@ -4745,7 +4802,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 								        	{this.state.lockSubmit ?
 								        		null
 				                		:
-								        		<div style={{fontFamily:customFontFam,fontSize:'14px',color:'#c7c7c7',marginBottom:'5px'}}>You need at least one base</div>
+								        		<div style={{fontFamily:customFontFam,fontSize:'14px',color:'#c7c7c7',marginBottom:'8px'}}>You need at least one base</div>
 				                	}
 
 
