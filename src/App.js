@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 
 import './semantic/dist/semantic.min.css';
 import './style.css';
-
+import { Loader, Dimmer } from 'semantic-ui-react';
 import SearchPage from './components/SearchPage.js';
 import YupikDetails from './components/YupikDetails.js';
 import WordBuilder from './components/WordBuilder.js';
@@ -155,11 +155,11 @@ class App extends Component {
 
   render() {
     console.log(this.state)
+    // this.state.audiolibrary.length !== 0 && this.state.dictionary.length !== 0 && this.state.usageDictionary !== 0 && this.state.filteredDictV !== 0 && this.state.filteredDictVit !== 0 && this.state.filteredDictN !== 0 ?
     return (
       <div style={{margin:0,padding:0}}>
-      <YugtunLoader criteria={this.state.dictionary.length === 0 && this.state.audiolibrary.length === 0 && this.state.usageDictionary.length === 0 && this.state.filteredDictV === 0 && this.state.filteredDictVit === 0 && this.state.filteredDictN === 0} />
         {
-          this.state.audiolibrary.length !== 0 && this.state.dictionary.length !== 0 && this.state.usageDictionary !== 0 && this.state.filteredDictV !== 0 && this.state.filteredDictVit !== 0 && this.state.filteredDictN !== 0 ?
+          this.state.dictionary.length !== 0 ?
             <Switch>
               <Route exact path='/' render={(props) => <SearchPage audiolibrary={this.state.audiolibrary} dictionary_dict={this.state.dictionary_dict} usageDictionary={this.state.usageDictionary} dictionary={this.state.dictionary} filteredDictV={this.state.filteredDictV} filteredDictVit={this.state.filteredDictVit} filteredDictN={this.state.filteredDictN} {...props} />}/>
               <Route exact path='/about' component={About} />
@@ -176,7 +176,11 @@ class App extends Component {
               <Route exact path='/sentencebuilder/:num' render={(props) => <SentenceBuilder audiolibrary={this.state.audiolibrary} usageDictionary={this.state.usageDictionary} dictionary_dict={this.state.dictionary_dict} dictionary={this.state.dictionary} filteredDictV={this.state.filteredDictV} filteredDictVit={this.state.filteredDictVit} filteredDictN={this.state.filteredDictN} {...props} />}/>
             </Switch>       
             :
-            null 
+            <Dimmer active>
+              <Loader size='massive'>
+                Yugtun is loading...
+              </Loader>
+            </Dimmer>
         }
       </div>
     );

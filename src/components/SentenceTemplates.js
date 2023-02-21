@@ -133,7 +133,7 @@ class SentenceTemplates extends PureComponent {
         <div style={{display:'flex',marginTop:'10px',height:120}}>
           <div style={{flex:4,display:'flex',alignItems:'center',justifyContent:(window.innerWidth < 480 ? 'center':'flex-end')}}>
             <Link to={{pathname: '/sentencebuilder/2'}}>
-              <Button style={{marginLeft:'10px',borderRadius:'4rem'}} circular onClick={()=> {this.props.backEndCall(sentenceTemplates[this.state.randomSentences[this.state.randomSentenceIndex]][2],true);this.setState({activeIndexes: []})}}>
+              <Button style={{marginLeft:'10px',borderRadius:'4rem',paddingBottom:'14px'}} circular onClick={()=> {this.props.backEndCall(sentenceTemplates[this.state.randomSentences[this.state.randomSentenceIndex]][2],true);this.setState({activeIndexes: []})}}>
                 <div style={{width:(window.innerWidth < 480 ? '':'350px'),textAlign:'center',fontSize:(window.innerWidth < 480 ? '18px':'20px'),lineHeight:'20px',paddingTop:'2px',marginBottom:'10px',fontFamily:customFontFam}}>
                   {sentenceTemplates[this.state.randomSentences[this.state.randomSentenceIndex]][6][0].map((t)=>
                     <span style={{color:'black'}}>{t[0]}</span>

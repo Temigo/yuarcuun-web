@@ -1405,7 +1405,9 @@ class SentenceBuilder extends Component {
 		// this.setState({ activeIndexes: [] });			
 		// }
 
-		let newSearch = word.replaceAll(/^is /g,'').replaceAll(/^am /g,'')
+		let newSearch = word.toLowerCase().replaceAll(/^is /g,'').replaceAll(/^am /g,'').replaceAll(/^are /g,'')
+
+		// console.log(newSearch)
 
 		if (this.state.endingAdjusted == 'v' || (this.state.endingAdjusted !== 'n' || endingNeeded == 'v')) {
 			if (forEnglish !== undefined) {
@@ -2428,7 +2430,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 							candidateDisplay:[],
 							unallowable_next_ids:[],
 							nextTenses:[],
-							activeIndexes1:['verbs'],	        		
+							// activeIndexes1:['verbs'],	        		
 			      	})
 		      		if (setState === 'npCase') {
 								this.setState({npCase:setStateTo[0],npCaseType:setStateTo[1]})
