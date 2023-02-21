@@ -4407,7 +4407,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		// let currentTense;n
 		// console.log(this.state)
 		// console.log(this.state.currentEditMode, itemUpdating,endingNeeded,update,mood,submood)
-		         return <Grid style={{width:'300px'}}>
+		         return <Grid>
 		                	<Grid.Row columns={1} divided>
 		                	<Grid.Column style={{paddingTop:'10px'}}>
 
@@ -4495,7 +4495,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 											      disabled={this.state.lockSubmit}
 											      placeholder={this.returnPlaceholder(endingNeeded,forEnglish,itemUpdating[1][0],mood)}
 											      // width='100%'
-											      style={{width:'100%',padding:'5px 5px'}}
+											      style={{width:'100%',padding:'5px 5px',fontSize:'16px'}}
 											 		  onChange={this.onChangeBaseSearch.bind(this,endingNeeded,forEnglish,itemUpdating[1][0],mood,submood,update,itemUpdating)}
 								            value={this.state.searchQuery}
 								            // onClose={()=>{this.setState({searchQuery:'',wordsList:[]})}}
@@ -4508,7 +4508,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 								            }
 								            {this.state.wordsList.length > 0 ?
 								            	<span>
-													      <Segment vertical style={{maxHeight:255,overflow: 'auto',padding:0,margin:"4px 9px",borderBottom:'0px solid #e2e2e2'}}>
+													      <Segment vertical style={{maxHeight:180,overflow: 'auto',padding:0,margin:"4px 9px",borderBottom:'0px solid #e2e2e2'}}>
 
 												    		<Button.Group vertical basic fluid>
 													      	{this.state.wordsList.map((k,index)=>{
@@ -4596,7 +4596,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 												    			{'Common Postbases'}
 												    		</Accordion.Title>
 												    		<Accordion.Content active={this.state.activeIndexes1.includes('vvpostbases')}>
-													      <Segment vertical style={{maxHeight:255,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
+													      <Segment vertical style={{maxHeight:180,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
 												    		<Button.Group vertical basic fluid>
 													      	{Object.keys(popularPostbases).map((p,index)=>{
 													      		let removeItem = false
@@ -4667,7 +4667,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 												    			{'Common Bases'}
 												    		</Accordion.Title>
 												    		<Accordion.Content active={this.state.activeIndexes1.includes('verbs')}>
-													      <Segment vertical style={{maxHeight:255,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
+													      <Segment vertical style={{maxHeight:180,overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
 													    		<Button.Group vertical basic fluid>
 														      	{Object.keys(popularBases).map((p)=>{
 														      		return <Button style={{textAlign:'left',padding:'10px'}} onClick={()=>{
