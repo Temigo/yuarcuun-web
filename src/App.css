@@ -184,6 +184,10 @@
   width: 93%;
 }
 
+.ui.dropdown .scrolling.menu, .ui.scrolling.dropdown .menu {
+    max-height: 9.28571429rem;
+}
+
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

@@ -2407,6 +2407,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		return   <Modal
 						style={{
 							marginTop:0,
+							minHeight:430,
 						}}
 				    trigger={<div style={{
 				    	border:'solid 1px #22242626',
@@ -2426,7 +2427,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 							candidateBase:[],
 							candidateDisplay:[],
 							unallowable_next_ids:[],
-							nextTenses:[],			      		
+							nextTenses:[],
+							activeIndexes1:['verbs'],	        		
 			      	})
 		      		if (setState === 'npCase') {
 								this.setState({npCase:setStateTo[0],npCaseType:setStateTo[1]})
@@ -2473,7 +2475,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 							candidateBase:[],
 							candidateDisplay:[],
 							unallowable_next_ids:[],
-							nextTenses:[],			      		
+							nextTenses:[],		
+							   		
 			      	})
 		      		if (setState === 'npCase') {
 								this.setState({npCase:setStateTo[0],npCaseType:setStateTo[1]})
@@ -4467,7 +4470,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		// console.log(this.state.currentEditMode, itemUpdating,endingNeeded,update,mood,submood)
 		         return <Grid style={{width:(window.innerWidth < 480 ? '':'300px')}}>
 		                	<Grid.Row columns={1}>
-		                	<Grid.Column style={{paddingTop:'10px',height:'480px'}}>
+		                	<Grid.Column style={{paddingTop:'10px'}}>
 
 									        <Segment style={{overflow: 'auto',padding:0}}>
 									        	<List divided style={{margin:0,padding:0,}}>
@@ -4566,7 +4569,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 								            }
 								            {this.state.wordsList.length > 0 ?
 								            	<span>
-													      <Segment vertical style={{maxHeight:(window.innerWidth < 480 ? 184:259),overflow: 'auto',padding:0,margin:"4px 9px",borderBottom:'0px solid #e2e2e2'}}>
+													      <Segment vertical style={{maxHeight:(window.innerWidth < 480 ? 166:259),overflow: 'auto',padding:0,margin:"4px 9px",borderBottom:'0px solid #e2e2e2'}}>
 
 												    		<Button.Group vertical basic fluid>
 													      	{this.state.wordsList.map((k,index)=>{
@@ -4654,7 +4657,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 												    			{'Common Postbases'}
 												    		</Accordion.Title>
 												    		<Accordion.Content active={this.state.activeIndexes1.includes('vvpostbases')}>
-													      <Segment vertical style={{maxHeight:(window.innerWidth < 480 ? 180:255),overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
+													      <Segment vertical style={{maxHeight:(window.innerWidth < 480 ? 162:255),overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
 												    		<Button.Group vertical basic fluid>
 													      	{Object.keys(popularPostbases).map((p,index)=>{
 													      		let removeItem = false
@@ -4725,7 +4728,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 												    			{'Common Bases'}
 												    		</Accordion.Title>
 												    		<Accordion.Content active={this.state.activeIndexes1.includes('verbs')}>
-													      <Segment vertical style={{maxHeight:(window.innerWidth < 480 ? 180:255),overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
+													      <Segment vertical style={{maxHeight:(window.innerWidth < 480 ? 162:255),overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
 													    		<Button.Group vertical basic fluid>
 														      	{Object.keys(popularBases).map((p)=>{
 														      		return <Button style={{textAlign:'left',padding:'10px'}} onClick={()=>{
