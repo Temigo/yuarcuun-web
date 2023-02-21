@@ -2364,7 +2364,7 @@ editSubjectMenu = (nounInsert,subject, tag, statevvs, update, backendcall, value
 	closeMainScreenMenuRef = (name,currentEditMode) => {
 		console.log(this.mainScreenMenuRef, name, currentEditMode)
 		if (name in this.mainScreenMenuRef) {
-			this.mainScreenMenuRef[name].close()
+			this.mainScreenMenuRef[name].handleClose()
 		}
 		if (currentEditMode !== 'default') {
 			this.setState({
@@ -2388,12 +2388,15 @@ editSubjectMenu = (nounInsert,subject, tag, statevvs, update, backendcall, value
 
 	openMainScreenMenuRef = (name) => {
 		if (name in this.mainScreenMenuRef) {
-			this.mainScreenMenuRef[name].open()
+			this.mainScreenMenuRef[name].handleOpen()
 		}
 	}
 
 mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 	return   <Modal
+						style={{
+							marginTop:10,
+						}}
 				    trigger={<div style={{
 				    	border:'solid 1px #22242626',
 				    	fontSize:'16px',
