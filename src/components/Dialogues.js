@@ -536,11 +536,11 @@ class Dialogues extends Component {
       return <div style={{marginTop:'8px',fontSize:'20px',textAlign:(dialogueInfo['speaker']=='a'?'left':'right')}}>
               <div style={{display:'flex',alignItems:'center',justifyContent:(dialogueInfo['speaker']=='a'?'flex-start':'flex-end')}}>
                 <Form autoComplete="off" onSubmit={this.checkInputCorrect.bind(this,parts[0],index,dialogueInfo,language)}>
-                    <Form.Input autoFocus="autoFocus" placeholder='' value={this.state.inputtedWords} onChange={this.inputtedWord.bind(this)} />
+                    <Form.Input style={{fontSize:'16px'}} autoFocus="autoFocus" placeholder='' value={this.state.inputtedWords} onChange={this.inputtedWord.bind(this)} />
                     <script type="text/javascript">document.theFormID.theFieldID.focus();</script>
                 </Form>
               </div>
-              <Button type='submit' onClick={this.checkInputCorrect.bind(this,parts[0],index,dialogueInfo,language)}>Submit</Button>
+              <Button disabled={this.state.inputtedWords.length == 0} type='submit' onClick={this.checkInputCorrect.bind(this,parts[0],index,dialogueInfo,language)}>Submit</Button>
             </div>
     } else if (type === 'userRegularInput') {
       return <div style={{display:'flex',alignItems:'flex-end',marginBottom:'5px',fontWeight:'200',height:'28px',justifyContent:(dialogueInfo['speaker']=='a'?'left':'right')}}>
