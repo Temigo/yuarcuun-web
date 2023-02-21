@@ -2393,8 +2393,7 @@ editSubjectMenu = (nounInsert,subject, tag, statevvs, update, backendcall, value
 	}
 
 mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
-	// console.log(name, currentEditMode,setState,setStateTo)
-	return   <Popup
+	return   <Modal
 				    trigger={<div style={{
 				    	border:'solid 1px #22242626',
 				    	fontSize:'16px',
@@ -2409,7 +2408,6 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 				    position="bottom center"
 				    ref={(element)=>{this.mainScreenMenuRef[name]=element;}}
 			      onOpen={()=>{
-			      	console.log('open', name, currentEditMode, setState, setStateTo, forEnglish)
 			      	this.setState({
 							candidateCall:[],
 							candidateBase:[],
@@ -2430,27 +2428,82 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 							} else if (setState === 'optCase') {
 								this.setState({optCase:setStateTo[0], mvvType:setStateTo[1]})
 							} 
-							// else {
-								// this.setState({mvvMood:'',mvvType:'',cvvMood:'',svvType:'',optCase:'',npCase:'',npCaseType:''})
-							// }
 							this.setState({
 								currentlyOpen:name, 
 								crecentlyOpen: name, 
 								currentEditMode:currentEditMode,
 								overlayOn:true,
-							// candidateCall:[],
-							// candidateBase:[],
-							// candidateDisplay:[],
-							// unallowable_next_ids:[],
-							// nextTenses:[],
 							})
 			      }}
      				onClose={()=>{this.setState({currentlyOpen:'',mvvMood:'',mvvType:'',cvvMood:'',svvType:'',optCase:'',npCase:'',npCaseType:'',containsTime:false,activeIndexes1:[],candidateCall:[],candidateBase:[],lockSubmit:false,nextTenses:[],candidateDisplay:[],searchQuery:'',wordsList:[]})}}
   >
   	{this.contentItems(currentEditMode,currentEditMode,-1,true,forEnglish,setStateTo)}
-  </Popup>
+  </Modal>
 
 }
+
+
+
+// mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
+// 	// console.log(name, currentEditMode,setState,setStateTo)
+// 	return   <Popup
+// 				    trigger={<div style={{
+// 				    	border:'solid 1px #22242626',
+// 				    	fontSize:'16px',
+// 				    	padding:'5px',
+// 				    	borderRadius:'5px',
+// 				    	marginRight:'2px',
+// 				    	marginLeft:'2px',
+// 				    	cursor:'pointer',
+// 				    	textAlign:'center',
+// 				    	color:'#00000099'
+// 				    }}>{name}</div>}
+// 				    position="bottom center"
+// 				    ref={(element)=>{this.mainScreenMenuRef[name]=element;}}
+// 			      onOpen={()=>{
+// 			      	console.log('open', name, currentEditMode, setState, setStateTo, forEnglish)
+// 			      	this.setState({
+// 							candidateCall:[],
+// 							candidateBase:[],
+// 							candidateDisplay:[],
+// 							unallowable_next_ids:[],
+// 							nextTenses:[],			      		
+// 			      	})
+// 		      		if (setState === 'npCase') {
+// 								this.setState({npCase:setStateTo[0],npCaseType:setStateTo[1]})
+// 							} else if (setState === 'mvvType') {
+// 								this.setState({mvvType:setStateTo[0]})
+// 							} else if (setState === 'mvinsertqaa') {
+// 								this.setState({mvvMood:setStateTo[0] ,mvvType:setStateTo[1]})
+// 							} else if (setState === 'cvvType') {
+// 								this.setState({cvvMood:setStateTo[0] ,cvvType:setStateTo[1]})
+// 							} else if (setState === 'svvType') {
+// 								this.setState({svvType:setStateTo[0]})
+// 							} else if (setState === 'optCase') {
+// 								this.setState({optCase:setStateTo[0], mvvType:setStateTo[1]})
+// 							} 
+// 							// else {
+// 								// this.setState({mvvMood:'',mvvType:'',cvvMood:'',svvType:'',optCase:'',npCase:'',npCaseType:''})
+// 							// }
+// 							this.setState({
+// 								currentlyOpen:name, 
+// 								crecentlyOpen: name, 
+// 								currentEditMode:currentEditMode,
+// 								overlayOn:true,
+// 							// candidateCall:[],
+// 							// candidateBase:[],
+// 							// candidateDisplay:[],
+// 							// unallowable_next_ids:[],
+// 							// nextTenses:[],
+// 							})
+// 			      }}
+//      				onClose={()=>{this.setState({currentlyOpen:'',mvvMood:'',mvvType:'',cvvMood:'',svvType:'',optCase:'',npCase:'',npCaseType:'',containsTime:false,activeIndexes1:[],candidateCall:[],candidateBase:[],lockSubmit:false,nextTenses:[],candidateDisplay:[],searchQuery:'',wordsList:[]})}}
+//   >
+//   	{this.contentItems(currentEditMode,currentEditMode,-1,true,forEnglish,setStateTo)}
+//   </Popup>
+
+// }
+
 
 														
 	closeEditMenuRef = (typeInd,currentEditMode,turnOffAndOn) => {
@@ -2543,25 +2596,13 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 	editMenu = (type,ind) => {
 
-		// if (mind) {
-		// 	mind=mind.toString()			
-		// }
-		// console.log(type,ind)
 		let typeInd = type+(ind+1).toString()
-
-		// console.log(typeInd)
 
  		return <Popup
       trigger={									
 				this.triggerItems(type,ind)
       }
-      // offset={[0, 100]}
-      // on='click'
-      // open={this.state.isOpen && this.state.currentlyOpen === typeInd}
       onOpen={()=>{console.log('open', this.state); 
-	      						// if (this.state.crecentlyOpen !== this.state.currentlyOpen) {
-	      						// 	this.setState({'cpreviousEditMode':this.state.currentEditMode})
-	      						// }
 	      						this.checkIfIntrgTense(type, ind);
       							this.setState({
       								cpreviousEditMode: this.state.currentEditMode, 
@@ -2571,42 +2612,11 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
       							})
       						}}
       onClose={()=>{console.log('close', this.state); 
-	      						// if (this.state.crecentlyOpen !== this.state.currentlyOpen) {
-	      						// 	this.setState({'cpreviousEditMode':this.state.currentEditMode})
-	      						// }
-										// this.setState({currentlyOpen:''})
-										// this.closeEditMenuRef('','default',false,true)
-										// if (this.state.) {
-										// 	this.setState({
-										// 		candidateCall:[],
-										// 		candidateBase:[],
-										// 		candidateDisplay:[],
-										// 		unallowable_next_ids:[],
-										// 		nextTenses:[],												
-										// 	})
-										// }
 										this.resetEditMenu();
       						}}
       position='bottom center'
 
       ref={(element)=>{this.editMenuRef[typeInd]=element;}}
-      // positionFixed
-      // style={{margin:0,padding:0}}
-      // 	// height:(this.returnHeight(this.state.currentEditMode)),
-      // 	padding:(this.state.currentEditMode==='default' ? 0 : null)
-      // }}
-      // content={
-      // 	this.contentItems(type,ind)
-      // }
-	    			// {this.state.currentEditMode !== 'default' ?
-		    		// 	<Button basic style={{display:'flex',flexDirection:'row',alignItems:'center',paddingLeft:'13px',marginBottom:'5px',marginTop:'10px'}} onClick={()=>{this.closeEditMenuRef(typeInd,'default')}}>
-		      // 			<Icon name='chevron left' />
-		      //  			<div style={{color:'#666666'}}>{'Back'}</div>
-			     //  	</Button>
-		    		// 	:
-		    		// 	null
-		    		// }
-
       >
 
 	    		<div>
@@ -2616,6 +2626,39 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
       </Popup>
 
 	}
+
+	// editMenu = (type,ind) => {
+
+	// 	let typeInd = type+(ind+1).toString()
+
+ // 		return <Modal
+ //      trigger={									
+	// 			this.triggerItems(type,ind)
+ //      }
+ //      onOpen={()=>{console.log('open', this.state); 
+	//       						this.checkIfIntrgTense(type, ind);
+ //      							this.setState({
+ //      								cpreviousEditMode: this.state.currentEditMode, 
+ //      								currentlyOpen: typeInd,
+ //      								crecentlyOpen: typeInd,
+ //      								overlayOn:true,
+ //      							})
+ //      						}}
+ //      onClose={()=>{console.log('close', this.state); 
+	// 									this.resetEditMenu();
+ //      						}}
+ //      position='bottom center'
+
+ //      ref={(element)=>{this.editMenuRef[typeInd]=element;}}
+ //      >
+
+	//     		<div>
+	// 	      	{this.contentItems(this.state.currentEditMode,type,ind,false)}
+	// 	      </div>
+
+ //      </Modal>
+
+	// }
 
   handleClick = (index,allowAdd) => {
     // console.log(e,titleProps.id)

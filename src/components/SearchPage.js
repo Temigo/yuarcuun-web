@@ -597,6 +597,20 @@ class SearchPage extends Component {
     //   menuItem: 'Sentence Builder',
     // },
   ]
+  const panes2 = [
+    {
+      menuItem: {content:'Dictionary',size:'massive'}
+    },
+    {
+      menuItem: 'Yugtun to English',
+    },
+    {
+      menuItem: 'Audio',
+    },
+    // {
+    //   menuItem: 'Sentence Builder',
+    // },
+  ]
 
   const tabOptions = [
     {
@@ -646,7 +660,7 @@ class SearchPage extends Component {
           	<Grid stackable>
 
           {window.innerWidth < 480 ?
-            <Dropdown selection compact className='frontpage' value={this.state.activeTabIndex} onChange={this.handleTabChange2} options={tabOptions} />
+            <Tab style={{paddingTop:15}} activeIndex={this.state.activeTabIndex} menu={{ secondary: true, pointing: true, size:'large' }} panes={panes2} onTabChange={this.handleTabChange} />
             :
             <Tab style={{paddingTop:10}} activeIndex={this.state.activeTabIndex} menu={{ secondary: true, pointing: true, size:'huge' }} panes={panes} onTabChange={this.handleTabChange} />
           }
