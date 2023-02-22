@@ -139,7 +139,7 @@ class Dialogues extends Component {
   //         <Icon onClick={()=>{{this.state.showEnglishMatrix.includes(i[index]) ? showEnglishMatrix.splice(showEnglishMatrix.indexOf(i[index]),1) : showEnglishMatrix = showEnglishMatrix.concat(i[index])}; this.setState({showEnglishMatrix:showEnglishMatrix})}} style={{color:'#d4d4d4',width:'22px',paddingLeft:'5px'}} link name='comment alternate outline'>{'\n'}</Icon>
   //       }
   //       {this.state.showEnglishMatrix.includes(i[index]) ?
-  //         <div style={{color:'#b9b9b9',fontWeight:'200',marginTop:'5px'}}>{this.state.dialogues[i[index]]['eng']}</div>
+  //         <div style={{color:'#b9b9b9',fontWeight:(window.innerWidth < 480 ? '400':'200'),marginTop:'5px'}}>{this.state.dialogues[i[index]]['eng']}</div>
   //         :
   //         null
   //       }
@@ -313,7 +313,7 @@ class Dialogues extends Component {
     // console.log(dialogueInfo)
     let customFont = {fontSize:'20px',display:'inline-block',border:"1px solid #d7d7d7",borderRadius:'10px',padding:'10px',minWidth:'200px',maxWidth:'80%',marginTop:'5px',marginBottom:'5px'}
     let toptextStyle = {color:'#000000DE'}
-    let textStyle = {color:'#000000DE',fontWeight:200}
+    let textStyle = {color:'#000000DE',fontWeight:(window.innerWidth < 480 ? '400':'200')}
 
     if (exerciseNum == -1) {
       return <div>
@@ -543,8 +543,8 @@ class Dialogues extends Component {
               <Button disabled={this.state.inputtedWords.length == 0} type='submit' onClick={this.checkInputCorrect.bind(this,parts[0],index,dialogueInfo,language)}>Submit</Button>
             </div>
     } else if (type === 'userRegularInput') {
-      return <div style={{display:'flex',alignItems:'flex-end',marginBottom:'5px',fontWeight:'200',height:'28px',justifyContent:(dialogueInfo['speaker']=='a'?'left':'right')}}>
-              <span style={{color:(this.state.record[index]['correct']?correctColor:incorrectColor),fontWeight:'200'}}>{this.state.record[index]['userInput']}</span>
+      return <div style={{display:'flex',alignItems:'flex-end',marginBottom:'5px',fontWeight:(window.innerWidth < 480 ? '400':'200'),height:'28px',justifyContent:(dialogueInfo['speaker']=='a'?'left':'right')}}>
+              <span style={{color:(this.state.record[index]['correct']?correctColor:incorrectColor),fontWeight:(window.innerWidth < 480 ? '400':'200')}}>{this.state.record[index]['userInput']}</span>
             </div>
     } else if (type === 'yupikSelection') {
       return <div style={{lineHeight:'30px',}}>
@@ -617,7 +617,7 @@ class Dialogues extends Component {
                   {parts[0].map((k,kindex)=>
                     <div onClick={this.checkSelectCorrect.bind(this,parts[1],k,index,dialogueInfo,language)} class='grid-verticaloptioncenter' style={{
                       cursor:'pointer',
-                      fontWeight:200,
+                      fontWeight:(window.innerWidth < 480 ? '400':'200'),
                       border:(index in this.state.record ? (this.state.record[index]['optionsTried'].includes(k) ? (k === parts[1] ? '1px solid #69cd6e':'1px solid #ffffff') : null) : null),
                       color:(index in this.state.record ? (this.state.record[index]['optionsTried'].includes(k) ? (k === parts[1] ? '#32a038':'#d4d4d4') : null) : null),
                     }}>
@@ -628,13 +628,13 @@ class Dialogues extends Component {
                 </div>
               </div>
     } else if (type === 'yupikUserInput') {
-      return <div style={{fontWeight:'200'}}>
+      return <div style={{fontWeight:(window.innerWidth < 480 ? '400':'200')}}>
               <span style={{color:'#b9b9b9'}}>{dialogueInfo['yupikQuestion'][0]}</span>
-              <span style={{color:(this.state.record[index]['correct']?correctColor:incorrectColor),fontWeight:'200'}}>{this.state.record[index]['userInput']}</span>
+              <span style={{color:(this.state.record[index]['correct']?correctColor:incorrectColor),fontWeight:(window.innerWidth < 480 ? '400':'200')}}>{this.state.record[index]['userInput']}</span>
               <span style={{color:'#b9b9b9'}}>{dialogueInfo['yupikQuestion'][2]}</span>
             </div>
     } else if (type === 'yupikInputCorrect') {
-      return <div style={{fontWeight:'200',marginBottom:'20px'}}>
+      return <div style={{fontWeight:(window.innerWidth < 480 ? '400':'200'),marginBottom:'20px'}}>
               <span style={{color:'#b9b9b9'}}>{dialogueInfo['yupikQuestion'][0]}</span>
               <span>{dialogueInfo['yupikQuestionCorrect']}</span>
               <span style={{color:'#b9b9b9'}}>{dialogueInfo['yupikQuestion'][2]}</span>
@@ -670,7 +670,7 @@ class Dialogues extends Component {
             }
             </div>
             {this.state.showEnglishMatrix.includes(name) ?
-              <div style={{color:'#b9b9b9',fontWeight:'200',marginTop:'5px',lineHeight:'24px'}}>{dialogueInfo['english']}</div>
+              <div style={{color:'#000000DE',fontWeight:(window.innerWidth < 480 ? '400':'200'),marginTop:'5px',lineHeight:'24px'}}>{dialogueInfo['english']}</div>
               :
               null
             }
