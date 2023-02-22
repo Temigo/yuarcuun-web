@@ -138,7 +138,7 @@ let dictionary_dict = {};
 class SentenceBuilder extends Component {
 	constructor(props) {
 		super(props);
-		console.log(this.props)
+		// console.log(this.props)
 		// console.log(decodeURI(props.match.params.num))
 		this.state = {
 
@@ -503,7 +503,7 @@ class SentenceBuilder extends Component {
 
 
 		this.fromEntry = false
-		console.log(decodeURI(props.match.params.num))
+		// console.log(decodeURI(props.match.params.num))
 		if (decodeURI(props.match.params.num) == 1) {
 				this.backEndCall([['Delete',['mv',],''],['Delete',['np',],'']])
 	  } else if (decodeURI(props.match.params.num) == 2) {
@@ -577,8 +577,8 @@ class SentenceBuilder extends Component {
             label: 'Dictionary loading'
           });
           usageDictionary = response.data;
-          console.log(usageDictionary)
-          console.log('Fetched usage dictionary');
+          // console.log(usageDictionary)
+          // console.log('Fetched usage dictionary');
 
           // let filteredDictV = usageDictionary.filter(entry => (entry.type.includes('i')||entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')||entry.type.includes('[V→V]')) )
           // let filteredDictN = usageDictionary.filter(entry => (entry.type.includes('n')||entry.type.includes('[V→N]')||entry.type.includes('[N→N]')))
@@ -668,7 +668,7 @@ class SentenceBuilder extends Component {
   }
 
   updateDimensions = () => {
-  	console.log('updated')
+  	// console.log('updated')
     this.setState({ width: window.innerWidth, height: window.innerHeight });
   };
 
@@ -1004,8 +1004,8 @@ class SentenceBuilder extends Component {
 	}
 
 	backEndCall(keyChanged, eraseExisting, simpleCall) {
-		console.log('backend',this.state)
-		console.log('backendcall',keyChanged, eraseExisting, simpleCall)
+		// console.log('backend',this.state)
+		// console.log('backendcall',keyChanged, eraseExisting, simpleCall)
 
 		let mv = {}
 		let cv = {}
@@ -1082,7 +1082,7 @@ class SentenceBuilder extends Component {
       	np:np,
       })
       .then(response => {
-      	console.log(response.data)
+      	// console.log(response.data)
       	let vkey, nkey
       	let updateDict = {}
       	if ("english" in response.data) {
@@ -1539,7 +1539,7 @@ class SentenceBuilder extends Component {
   }
   
   menuSelect = (direction) => {
-  	console.log(direction)
+  	// console.log(direction)
   	// if (this.state.cpreviousEditMode !== this.state.currentEditMode) {
 	  	// this.closeEditMenuRef(direction[0],'default')
 	  // } else {
@@ -2043,7 +2043,7 @@ class SentenceBuilder extends Component {
 			      {this.menuItem('Delete','Delete Oblique Descriptor Noun',null,null,[["Delete",["cv","nObliques",ind[0],ind[1],ind[2]],-1]])}
 			    	</Menu> 
 	  	} else if (type ==='mvnObliquesEnglish2appositive') {
-	  				console.log(ind)
+	  				// console.log(ind)
   					return <Menu vertical style={{marginTop:10,marginBottom:10}}>
 						{this.menuItem('BaseChooser','Change Oblique Descriptor Noun',[typeInd,'mvnObliqueUpdateappositiveupdate'],null)}
 			      {this.menuItem('Delete','Delete Oblique Descriptor Noun',null,null,[["Delete",["mv","nObliques",ind[0],ind[1],ind[2]],-1]])}
@@ -2242,7 +2242,7 @@ class SentenceBuilder extends Component {
 
 													
 	closeEditMenuRef = (typeInd,currentEditMode,turnOffAndOn) => {
-		console.log(typeInd,currentEditMode)
+		// console.log(typeInd,currentEditMode)
 
 		if (turnOffAndOn) {
 			if (typeInd in this.editMenuRef) {
@@ -2271,29 +2271,45 @@ class SentenceBuilder extends Component {
 	}
 
 
-closeSubjectMenu = (tag,addSubject) => {
+closeSubjectMenu = (tag,addSubject,back) => {
 	// console.log(tag, addSubject, this.state.crecentlyOpen)
 	if (addSubject) {
 		if (tag in this.subjectMenu) {
 			if (this.subjectMenu[tag] !== null) {
-				this.subjectMenu[tag].close()
+				if (this.state.addSubject && window.innerWidth < 480) {
+					this.subjectMenu[tag].handleClose()
+				} else {
+					this.subjectMenu[tag].close()			
+				}
 			}
 		}
 		this.setState({
 			crecentlyOpen:tag,
 			addSubject:true,
 		},()=>{
-			this.subjectMenu[tag].open()
+			if (this.state.addSubject && window.innerWidth < 480) {
+				this.subjectMenu[tag].handleOpen()
+			} else {
+				this.subjectMenu[tag].open()			
+			}
 		})
 	} else {
 		if (tag in this.subjectMenu) {
 			if (this.subjectMenu[tag] !== null) {
-				this.subjectMenu[tag].close()
+				if (this.state.addSubject && window.innerWidth < 480) {
+					this.subjectMenu[tag].handleClose()
+				} else {
+					this.subjectMenu[tag].close()			
+				}
 			}
 		}
 		this.setState({
 			crecentlyOpen:tag,
 			addSubject:false,
+		},()=> {
+			if (back) {
+				this.subjectMenu[tag].open()			
+			}			
 		})
 	}
 }
@@ -2304,7 +2320,45 @@ closeSubjectMenu = (tag,addSubject) => {
 
 editSubjectMenu = (nounInsert,subject, tag, statevvs, update, backendcall, value, options) => {
 	// console.log(value,options)
-	return <Popup
+	if (this.state.addSubject && window.innerWidth < 480) {
+		return   <Modal
+						style={{
+							marginTop:0,
+							minHeight:430,
+						}}
+			      trigger={									
+							<span style={{display:'inline-block',border:'solid 1px #22242626',marginRight:'2px',marginLeft:'2px',color:this.getColor(tag),fontSize:'18px',padding:'8px 2px 8px 5px',borderRadius:'5px',marginRight:'2px',marginLeft:'2px', cursor:'pointer'}}>{options.map((k)=>{return value == k['value'] ? k['text'] : null})}<Icon style={{color:this.getColor(tag),fontSize:'16px',margin:0}} name='dropdown' /></span>
+			      }
+			      on='click'
+			      position='bottom center'
+			      // positionFixed
+			      // open={this.state.currentlyOpen === tag}
+			      // style={{
+			      	// height:this.returnHeight(name),
+			      // }}
+			      ref={(element)=>{this.subjectMenu[tag]=element;}}
+			      onOpen={()=>{
+			      	this.setState({
+			      		currentlyOpen:tag,
+			      		overlayOn:true,
+								candidateCall:[],
+								candidateBase:[],
+								candidateDisplay:[],
+								unallowable_next_ids:[],
+								nextTenses:[],			      		
+			      	})}}
+			      onClose={()=>{
+			      	this.resetEditMenu();
+			      }}
+			      // content={
+			      	// }
+			    >
+			      	<div style={{paddingBottom:0}}>
+				      	{this.baseChooser(nounInsert,'n','insert','Abs','')}
+			      	</div>
+			   	</Modal>
+	} else {
+				return <Popup
 			      trigger={									
 							<span style={{display:'inline-block',border:'solid 1px #22242626',marginRight:'2px',marginLeft:'2px',color:this.getColor(tag),fontSize:'18px',padding:'8px 2px 8px 5px',borderRadius:'5px',marginRight:'2px',marginLeft:'2px', cursor:'pointer'}}>{options.map((k)=>{return value == k['value'] ? k['text'] : null})}<Icon style={{color:this.getColor(tag),fontSize:'16px',margin:0}} name='dropdown' /></span>
 			      }
@@ -2335,7 +2389,7 @@ editSubjectMenu = (nounInsert,subject, tag, statevvs, update, backendcall, value
 			      	<div style={{paddingBottom:0}}>
 			      	{this.state.addSubject ?
 			      		<div>
-					      	<Button basic style={{display:'flex',flexDirection:'row',alignItems:'center',paddingLeft:'13px',marginBottom:'5px',marginTop:'10px'}} onClick={()=>{this.closeSubjectMenu(tag,false);}}>
+					      	<Button basic style={{display:'flex',flexDirection:'row',alignItems:'center',paddingLeft:'13px',marginBottom:'5px',marginTop:'10px'}} onClick={()=>{this.closeSubjectMenu(tag,false,true);}}>
               			<Icon name='chevron left' />
                			<div style={{color:'#666666'}}>{'Back'}</div>
 					      	</Button>
@@ -2351,7 +2405,7 @@ editSubjectMenu = (nounInsert,subject, tag, statevvs, update, backendcall, value
 					      	<Segment style={{maxHeight:200,overflow:'auto',padding:0,marginBottom:8}}>
 						      <Button.Group style={{border:0}} basic vertical>
 						      	{options.map((k)=>
-						      		<Button active={k['value']==statevvs.join("")} onClick={()=>{this.closeSubjectMenu(tag,false); this.backEndCall([[update,backendcall,k['value'].split('').map(Number)]])}}>{k['text']}</Button>
+						      		<Button active={k['value']==statevvs.join("")} onClick={()=>{this.closeSubjectMenu(tag,false,false); this.backEndCall([[update,backendcall,k['value'].split('').map(Number)]])}}>{k['text']}</Button>
 						      	)}
 					      	</Button.Group>
 					      	</Segment>
@@ -2362,10 +2416,12 @@ editSubjectMenu = (nounInsert,subject, tag, statevvs, update, backendcall, value
 				      }
 			      	</div>
 			   	</Popup>
+
+	}
 }
 
 	closeMainScreenMenuRef = (name,currentEditMode) => {
-		console.log(this.mainScreenMenuRef, name, currentEditMode)
+		// console.log(this.mainScreenMenuRef, name, currentEditMode)
 		if (name in this.mainScreenMenuRef) {
 			if (window.innerWidth < 480) {
 				this.mainScreenMenuRef[name].handleClose()
@@ -2571,25 +2627,41 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 // }
 
 
+	editMenuRefClose = (closeoropen, typeInd, currentEditMode) => {
+		if (window.innerWidth < 480 && this.state.currentEditMode !== 'default') {
+			if (closeoropen == 'open') {
+				this.editMenuRef[typeInd].handleOpen()
+			} else {
+				this.editMenuRef[typeInd].handleClose()					
+			}
+		} else {
+			if (closeoropen == 'open') {
+				this.editMenuRef[typeInd].open()
+			} else {
+				this.editMenuRef[typeInd].close()					
+			}
+		}
+	}
+
 														
 	closeEditMenuRef = (typeInd,currentEditMode,turnOffAndOn) => {
-		console.log(typeInd,currentEditMode)
+		// console.log(typeInd,currentEditMode)
 
 		if (turnOffAndOn) {
 			if (typeInd in this.editMenuRef) {
-				this.editMenuRef[typeInd].close()
+				this.editMenuRefClose('close', typeInd, currentEditMode)
 			}
 
 			this.setState({
 				currentEditMode:currentEditMode,
 			},()=>{
-				this.editMenuRef[typeInd].open()
+				this.editMenuRefClose('open', typeInd, currentEditMode)
 			})
 		} else {
 			// console.log(this.editMenuRef, typeInd, typeInd in this.editMenuRef)
 			if (typeInd in this.editMenuRef) {
 				if (this.editMenuRef[typeInd] !== null) {
-					this.editMenuRef[typeInd].close()
+					this.editMenuRefClose('close', typeInd, currentEditMode)
 				}
 			}
 
@@ -2602,11 +2674,6 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 	}
 
 
-	openEditMenuRef = (typeInd) => {
-		if (typeInd in this.editMenuRef) {
-			this.editMenuRef[typeInd].open()
-		}
-	}
 
 	resetEditMenu = () => {
 		this.setState({
@@ -2625,10 +2692,10 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 
 	checkIfIntrgTense = (type, ind) => {
-		console.log(type, ind)
+		// console.log(type, ind)
 		if (type == 'mvEnglish2' && this.state.mvvMood === 'Intrg' &&  (this.state.mvvType === 'Intrg4' || this.state.mvvType === 'Intrg5')) {
 			if (this.state.mvvType === 'Intrg4' && this.state.candidateDisplay.length === 0) {
-				console.log(popularVPostbases)
+				// console.log(popularVPostbases)
 				let p = '0'
   			this.setState({
   				candidateBase:this.state.candidateBase.concat([[newpostbases[popularVPostbases[p]['expression']]['keylookup'],popularVPostbases[p]['expression']]]),
@@ -2662,13 +2729,18 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 	editMenu = (type,ind) => {
 
-		let typeInd = type+(ind+1).toString()
 
- 		return <Popup
+		let typeInd = type+(ind+1).toString()
+	if (window.innerWidth < 480 && this.state.currentEditMode !== 'default') {
+		return   <Modal
+						style={{
+							marginTop:0,
+							minHeight:430,
+						}}
       trigger={									
 				this.triggerItems(type,ind)
       }
-      onOpen={()=>{console.log('open', this.state); 
+      onOpen={()=>{
 	      						this.checkIfIntrgTense(type, ind);
       							this.setState({
       								cpreviousEditMode: this.state.currentEditMode, 
@@ -2677,7 +2749,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
       								overlayOn:true,
       							})
       						}}
-      onClose={()=>{console.log('close', this.state); 
+      onClose={()=>{
 										this.resetEditMenu();
       						}}
       position='bottom center'
@@ -2689,7 +2761,35 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		      	{this.contentItems(this.state.currentEditMode,type,ind,false)}
 		      </div>
 
-      </Popup>
+      </Modal>
+    } else {
+ 		return <Popup
+      trigger={									
+				this.triggerItems(type,ind)
+      }
+      onOpen={()=>{
+	      						this.checkIfIntrgTense(type, ind);
+      							this.setState({
+      								cpreviousEditMode: this.state.currentEditMode, 
+      								currentlyOpen: typeInd,
+      								crecentlyOpen: typeInd,
+      								overlayOn:true,
+      							})
+      						}}
+      onClose={()=>{
+										this.resetEditMenu();
+      						}}
+      position='bottom center'
+
+      ref={(element)=>{this.editMenuRef[typeInd]=element;}}
+      >
+
+	    		<div>
+		      	{this.contentItems(this.state.currentEditMode,type,ind,false)}
+		      </div>
+
+      </Popup>    	
+    }
 
 	}
 
@@ -3180,7 +3280,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		          // active={this.state.activeItem === 'messages'}
 		          style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}
 							onClick={()=>{
-								console.log(backEnd)
+								// console.log(backEnd)
 								this.closeEditMenuRef(this.state.crecentlyOpen,'default',false);
 								this.setState({ isOpen: false,currentEditMode:'' },()=>{this.backEndCall(backEnd)})}}
 		        >
@@ -3490,9 +3590,9 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 
 		sentence = sentence.replace('[he or it]','')
-		if (sentence.includes('[')) {
-			console.log(sentence)
-		}
+		// if (sentence.includes('[')) {
+		// 	console.log(sentence)
+		// }
 
 
 		let matches = sentence.match(/\<.*?\>/g)
@@ -3856,7 +3956,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 
 		} else {
-			console.log('not in',lookup)
+			// console.log('not in',lookup)
 			return <span>{'not in lookup'}</span>
 		}
 	}
@@ -4571,7 +4671,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 								            }
 								            {this.state.wordsList.length > 0 ?
 								            	<span>
-													      <Segment vertical style={{maxHeight:(window.innerWidth < 480 ? 166:259),overflow: 'auto',padding:0,margin:"4px 9px",borderBottom:'0px solid #e2e2e2'}}>
+													      <Segment vertical style={{maxHeight:(window.innerWidth < 480 ? 166:204),overflow: 'auto',padding:0,margin:"4px 9px",borderBottom:'0px solid #e2e2e2'}}>
 
 												    		<Button.Group vertical basic fluid>
 													      	{this.state.wordsList.map((k,index)=>{
@@ -4659,7 +4759,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 												    			{'Common Postbases'}
 												    		</Accordion.Title>
 												    		<Accordion.Content active={this.state.activeIndexes1.includes('vvpostbases')}>
-													      <Segment vertical style={{maxHeight:(window.innerWidth < 480 ? 162:255),overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
+													      <Segment vertical style={{maxHeight:(window.innerWidth < 480 ? 162:200),overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
 												    		<Button.Group vertical basic fluid>
 													      	{Object.keys(popularPostbases).map((p,index)=>{
 													      		let removeItem = false
@@ -4730,7 +4830,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 												    			{'Common Bases'}
 												    		</Accordion.Title>
 												    		<Accordion.Content active={this.state.activeIndexes1.includes('verbs')}>
-													      <Segment vertical style={{maxHeight:(window.innerWidth < 480 ? 162:255),overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
+													      <Segment vertical style={{maxHeight:(window.innerWidth < 480 ? 162:200),overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
 													    		<Button.Group vertical basic fluid>
 														      	{Object.keys(popularBases).map((p)=>{
 														      		return <Button style={{textAlign:'left',padding:'10px'}} onClick={()=>{
@@ -4771,46 +4871,68 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 								        	</Segment>
 
-											      <div style={{paddingBottom:10}}>  
-											      <Link to={{pathname: '/sentencebuilder/2'}}>
-					                		<Button size='medium' color='blue' onClick={()=>{
-					                			this.setState({overlayOn:false})
-					                			this.closeEditMenuRef(this.state.crecentlyOpen,'default',false)
-					                			this.closeMainScreenMenuRef(this.state.crecentlyOpen,'default')
-					                			if (mood === 'Intrg') {
-					                				this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Insert",["mv","qWord"],[submood,1]]]); 		                				
-					                			} else {
-				                					if (vsPlanned.length > 0) {
-							                			if (submood == 'qaa') {
-				                							this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Update",["mv","vs"],vsPlanned],["Update",["mv","vType"],'qaa']])                						                									                						
-							                			} else {
-				                							this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Update",["mv","vs"],vsPlanned]])                						                									                													                				
-							                			}
-				                					} else {
-							                			if (submood == 'qaa') {
-				                							this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Update",["mv","vType"],'qaa']])                						                									                						
-							                			} else {
-					                						this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall]]); 				                						
-							                			}
-				                					}
-					                			}
-					                			// console.log(submood)
-					                			// if (submood == 'qaa') {
-					                			// 	this.backEndCall([["Update",["mv","vType"],'qaa']])
-					                			// }
-					                		}} disabled={!this.state.lockSubmit} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}>
-					                			<div style={{fontFamily:'Lato'}}>{'Submit'}</div>
-					                			<Icon name='chevron right' />
-					                		</Button>
-				                		</Link>
+											      <div style={{display:'flex',justifyContent:'space-between',paddingBottom:10}}>  
+											      	{window.innerWidth < 480 ? 
+						                		<Button size='medium' onClick={()=>{
+						                			this.setState({overlayOn:false})
+						                			this.closeEditMenuRef(this.state.crecentlyOpen,'default',false)
+						                			this.closeMainScreenMenuRef(this.state.crecentlyOpen,'default')
+						                			this.closeSubjectMenu(this.state.crecentlyOpen,false,false);
+						                		}} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingLeft:'13px'}}>
+						                			<Icon name='chevron left' />
+						                			<div style={{fontFamily:'Lato'}}>{'Back'}</div>
+						                		</Button>
+											      		:
+											      		null
+											      	}
+												      <Link to={{pathname: '/sentencebuilder/2'}}>
+						                		<Button size='medium' color='blue' onClick={()=>{
+						                			this.setState({overlayOn:false})
+						                			this.closeEditMenuRef(this.state.crecentlyOpen,'default',false)
+						                			this.closeMainScreenMenuRef(this.state.crecentlyOpen,'default')
+						                			if (mood === 'Intrg') {
+						                				this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Insert",["mv","qWord"],[submood,1]]]); 		                				
+						                			} else {
+					                					if (vsPlanned.length > 0) {
+								                			if (submood == 'qaa') {
+					                							this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Update",["mv","vs"],vsPlanned],["Update",["mv","vType"],'qaa']])                						                									                						
+								                			} else {
+					                							this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Update",["mv","vs"],vsPlanned]])                						                									                													                				
+								                			}
+					                					} else {
+								                			if (submood == 'qaa') {
+					                							this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Update",["mv","vType"],'qaa']])                						                									                						
+								                			} else {
+						                						this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall]]); 				                						
+								                			}
+					                					}
+						                			}
+						                			// console.log(submood)
+						                			// if (submood == 'qaa') {
+						                			// 	this.backEndCall([["Update",["mv","vType"],'qaa']])
+						                			// }
+						                		}} disabled={!this.state.lockSubmit} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}>
+						                			<div style={{fontFamily:'Lato'}}>{'Submit'}</div>
+						                			<Icon name='chevron right' />
+						                		</Button>
+					                		</Link>
 				                		</div>
 								        	{this.state.lockSubmit ?
 								        		null
 				                		:
-								        		<div style={{fontFamily:customFontFam,fontSize:'14px',color:'#c7c7c7',marginBottom:'8px'}}>You need at least one base</div>
+								        		<div style={{fontFamily:customFontFam,textAlign:(window.innerWidth < 480 ? 'right' : 'left'),fontSize:'14px',color:'#c7c7c7',marginBottom:'8px'}}>You need at least one base</div>
 				                	}
 
-
+				              {this.state.wordsList.length === 0 && this.state.activeIndexes1.length == 0 && window.innerWidth < 480?
+							          <div style={{display:'flex',justifyContent:'space-evenly',alignItems:'center',height:60,paddingBottom:16,paddingTop:5}}>
+							            <Image style={{height:'30px',opacity:0.65}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+							            <Image style={{height:'30px',opacity:0.65}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+							            <Image style={{height:'30px',opacity:0.65}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+							            <Image style={{height:'30px',opacity:0.65}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+							          </div>
+				              	:
+				              	null
+				              }
 
 							
 		                	</Grid.Column>
@@ -5146,7 +5268,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		return (
 			<Container style={{ margin: 0, padding: 0 }} text>
 			{this.state.overlayOn ?
-				<div className="overlay" onClick={()=>{this.closeSubjectMenu(this.state.crecentlyOpen,false); this.setState({overlayOn:false,currentEditMode:'default',})}} />
+				<div className="overlay" onClick={()=>{this.closeSubjectMenu(this.state.crecentlyOpen,false,false); this.setState({overlayOn:false,currentEditMode:'default',})}} />
 				:
 				null
 			}
@@ -5850,8 +5972,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 												<span>
 												{xind === 0 ?
 													<span>
-														<Dropdown inline scrolling style={this.getDropdownStyle('cvns'+(this.state.cvnsSegments.length-1-xind).toString()+'0.ps')} onChange={(event,data)=>{console.log(event,data);this.backEndCall([["Update",["cv","ns",this.state.cvnsSegments.length-1,0],(data.value+this.state.cvns[this.state.cvnsSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.cvns[this.state.cvnsSegments.length-1][0].slice(0, -1).join("")} options={nounOptionsPossessorsNo4th} />
-														<Dropdown inline scrolling style={this.getDropdownStyle('cvns'+(this.state.cvnsSegments.length-1-xind).toString()+'0.pd')} onChange={(event,data)=>{console.log(event,data);this.backEndCall([["Update",["cv","ns",this.state.cvnsSegments.length-1,0],this.state.cvns[this.state.cvnsSegments.length-1][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.cvns[this.state.cvnsSegments.length-1][0].slice(-1).join("")} options={nounOptionsNumbers} />																
+														<Dropdown inline scrolling style={this.getDropdownStyle('cvns'+(this.state.cvnsSegments.length-1-xind).toString()+'0.ps')} onChange={(event,data)=>{this.backEndCall([["Update",["cv","ns",this.state.cvnsSegments.length-1,0],(data.value+this.state.cvns[this.state.cvnsSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.cvns[this.state.cvnsSegments.length-1][0].slice(0, -1).join("")} options={nounOptionsPossessorsNo4th} />
+														<Dropdown inline scrolling style={this.getDropdownStyle('cvns'+(this.state.cvnsSegments.length-1-xind).toString()+'0.pd')} onChange={(event,data)=>{this.backEndCall([["Update",["cv","ns",this.state.cvnsSegments.length-1,0],this.state.cvns[this.state.cvnsSegments.length-1][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.cvns[this.state.cvnsSegments.length-1][0].slice(-1).join("")} options={nounOptionsNumbers} />																
 														{x.map((k,kind)=>
 															{if (kind === x.length-1) {
 																return <span>
@@ -5866,7 +5988,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 													</span>
 													:
 													<span>
-														<Dropdown inline scrolling style={this.getDropdownStyle('cvns'+(this.state.cvnsSegments.length-1-xind).toString()+'0.pd')} onChange={(event,data)=>{console.log(event,data);this.backEndCall([["Update",["cv","ns",this.state.cvnsSegments.length-1-xind,0],this.state.cvns[this.state.cvnsSegments.length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.cvns[this.state.cvnsSegments.length-1-xind][0].slice(-1).join("")}  options={nounOptionsNumbers} />								
+														<Dropdown inline scrolling style={this.getDropdownStyle('cvns'+(this.state.cvnsSegments.length-1-xind).toString()+'0.pd')} onChange={(event,data)=>{this.backEndCall([["Update",["cv","ns",this.state.cvnsSegments.length-1-xind,0],this.state.cvns[this.state.cvnsSegments.length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.cvns[this.state.cvnsSegments.length-1-xind][0].slice(-1).join("")}  options={nounOptionsNumbers} />								
 														{x.map((k,kind)=>
 															{if (kind === x.length-1) {
 																return <span>

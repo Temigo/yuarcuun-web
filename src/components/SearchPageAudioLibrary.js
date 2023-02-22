@@ -18,7 +18,7 @@ import { YugtunLoader, YugtunFooter, WordItem, AudioItem, tagColors } from './Se
 // import {endingRules} from './constants/endingRules.js';
 // import { LazyLoadImage } from 'react-lazy-load-image-component';
 
-const WEB_URL = "http://localhost:3000";
+const WEB_URL = "https://yuarcuun.inupiaqonline.com";
 const KYUK_URL = 'https://archive.kyuk.com'
 
 // Cache dictionary

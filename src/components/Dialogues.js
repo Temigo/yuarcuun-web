@@ -705,7 +705,10 @@ class Dialogues extends Component {
           )}}><Icon name='chevron down' /></Button>
         }
       }          
-    scroll.scrollToBottom()
+    if (window.innerWidth >= 480) {
+      scroll.scrollToBottom()
+    }
+    
   }
 
   render() {
