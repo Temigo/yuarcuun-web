@@ -4571,7 +4571,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 								            }
 								            {this.state.wordsList.length > 0 ?
 								            	<span>
-													      <Segment vertical style={{maxHeight:(window.innerWidth < 480 ? 166:259),overflow: 'auto',padding:0,margin:"4px 9px",borderBottom:'0px solid #e2e2e2'}}>
+													      <Segment vertical style={{maxHeight:(window.innerWidth < 480 ? 166:204),overflow: 'auto',padding:0,margin:"4px 9px",borderBottom:'0px solid #e2e2e2'}}>
 
 												    		<Button.Group vertical basic fluid>
 													      	{this.state.wordsList.map((k,index)=>{
@@ -4659,7 +4659,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 												    			{'Common Postbases'}
 												    		</Accordion.Title>
 												    		<Accordion.Content active={this.state.activeIndexes1.includes('vvpostbases')}>
-													      <Segment vertical style={{maxHeight:(window.innerWidth < 480 ? 162:255),overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
+													      <Segment vertical style={{maxHeight:(window.innerWidth < 480 ? 162:200),overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
 												    		<Button.Group vertical basic fluid>
 													      	{Object.keys(popularPostbases).map((p,index)=>{
 													      		let removeItem = false
@@ -4730,7 +4730,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 												    			{'Common Bases'}
 												    		</Accordion.Title>
 												    		<Accordion.Content active={this.state.activeIndexes1.includes('verbs')}>
-													      <Segment vertical style={{maxHeight:(window.innerWidth < 480 ? 162:255),overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
+													      <Segment vertical style={{maxHeight:(window.innerWidth < 480 ? 162:200),overflow: 'auto',padding:0,marginTop:5,marginBottom:0,borderBottom:'0px solid #e2e2e2'}}>
 													    		<Button.Group vertical basic fluid>
 														      	{Object.keys(popularBases).map((p)=>{
 														      		return <Button style={{textAlign:'left',padding:'10px'}} onClick={()=>{
@@ -4771,46 +4771,67 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 								        	</Segment>
 
-											      <div style={{paddingBottom:10}}>  
-											      <Link to={{pathname: '/sentencebuilder/2'}}>
-					                		<Button size='medium' color='blue' onClick={()=>{
-					                			this.setState({overlayOn:false})
-					                			this.closeEditMenuRef(this.state.crecentlyOpen,'default',false)
-					                			this.closeMainScreenMenuRef(this.state.crecentlyOpen,'default')
-					                			if (mood === 'Intrg') {
-					                				this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Insert",["mv","qWord"],[submood,1]]]); 		                				
-					                			} else {
-				                					if (vsPlanned.length > 0) {
-							                			if (submood == 'qaa') {
-				                							this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Update",["mv","vs"],vsPlanned],["Update",["mv","vType"],'qaa']])                						                									                						
-							                			} else {
-				                							this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Update",["mv","vs"],vsPlanned]])                						                									                													                				
-							                			}
-				                					} else {
-							                			if (submood == 'qaa') {
-				                							this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Update",["mv","vType"],'qaa']])                						                									                						
-							                			} else {
-					                						this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall]]); 				                						
-							                			}
-				                					}
-					                			}
-					                			// console.log(submood)
-					                			// if (submood == 'qaa') {
-					                			// 	this.backEndCall([["Update",["mv","vType"],'qaa']])
-					                			// }
-					                		}} disabled={!this.state.lockSubmit} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}>
-					                			<div style={{fontFamily:'Lato'}}>{'Submit'}</div>
-					                			<Icon name='chevron right' />
-					                		</Button>
-				                		</Link>
+											      <div style={{display:'flex',justifyContent:'space-between',paddingBottom:10}}>  
+											      	{window.innerWidth < 480 ? 
+						                		<Button size='medium' onClick={()=>{
+						                			this.setState({overlayOn:false})
+						                			this.closeEditMenuRef(this.state.crecentlyOpen,'default',false)
+						                			this.closeMainScreenMenuRef(this.state.crecentlyOpen,'default')
+						                		}} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingLeft:'13px'}}>
+						                			<Icon name='chevron left' />
+						                			<div style={{fontFamily:'Lato'}}>{'Back'}</div>
+						                		</Button>
+											      		:
+											      		null
+											      	}
+												      <Link to={{pathname: '/sentencebuilder/2'}}>
+						                		<Button size='medium' color='blue' onClick={()=>{
+						                			this.setState({overlayOn:false})
+						                			this.closeEditMenuRef(this.state.crecentlyOpen,'default',false)
+						                			this.closeMainScreenMenuRef(this.state.crecentlyOpen,'default')
+						                			if (mood === 'Intrg') {
+						                				this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Insert",["mv","qWord"],[submood,1]]]); 		                				
+						                			} else {
+					                					if (vsPlanned.length > 0) {
+								                			if (submood == 'qaa') {
+					                							this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Update",["mv","vs"],vsPlanned],["Update",["mv","vType"],'qaa']])                						                									                						
+								                			} else {
+					                							this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Update",["mv","vs"],vsPlanned]])                						                									                													                				
+								                			}
+					                					} else {
+								                			if (submood == 'qaa') {
+					                							this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall],["Update",["mv","vType"],'qaa']])                						                									                						
+								                			} else {
+						                						this.backEndCall([[itemUpdating[0],itemUpdating[1],this.state.candidateCall]]); 				                						
+								                			}
+					                					}
+						                			}
+						                			// console.log(submood)
+						                			// if (submood == 'qaa') {
+						                			// 	this.backEndCall([["Update",["mv","vType"],'qaa']])
+						                			// }
+						                		}} disabled={!this.state.lockSubmit} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}>
+						                			<div style={{fontFamily:'Lato'}}>{'Submit'}</div>
+						                			<Icon name='chevron right' />
+						                		</Button>
+					                		</Link>
 				                		</div>
 								        	{this.state.lockSubmit ?
 								        		null
 				                		:
-								        		<div style={{fontFamily:customFontFam,fontSize:'14px',color:'#c7c7c7',marginBottom:'8px'}}>You need at least one base</div>
+								        		<div style={{fontFamily:customFontFam,textAlign:(window.innerWidth < 480 ? 'right' : 'left'),fontSize:'14px',color:'#c7c7c7',marginBottom:'8px'}}>You need at least one base</div>
 				                	}
 
-
+				              {this.state.wordsList.length === 0 && this.state.activeIndexes1.length == 0 && window.innerWidth < 480?
+							          <div style={{display:'flex',justifyContent:'space-evenly',alignItems:'center',height:60,paddingBottom:16,paddingTop:5}}>
+							            <Image style={{height:'30px',opacity:0.65}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+							            <Image style={{height:'30px',opacity:0.65}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+							            <Image style={{height:'30px',opacity:0.65}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+							            <Image style={{height:'30px',opacity:0.65}} src={'https://yupikmodulesweb.s3.amazonaws.com/static/exercise1/ellanguaq1.svg'}/>
+							          </div>
+				              	:
+				              	null
+				              }
 
 							
 		                	</Grid.Column>
