@@ -3,7 +3,7 @@ import {dialogueList} from "./dialogueList.js";
 // npm i --save finnlp
 // npm install en-inflectors --save
 // import * as Fin from "finnlp";
-import { Inflectors } from "en-inflectors";
+// import { Inflectors } from "en-inflectors";
 
 const lessonChunks = {
 	0:"Featured", 
@@ -84,6 +84,8 @@ export function dialogueGenerator() {
 		// const exercise4 = dialogueList[d][26]
 		// baseType
 		const baseType = dialogueList[d][27]
+		const engPos = dialogueList[d][28]
+		// const engConj = dialogueList[d][29].split(',')
 
 
 
@@ -137,7 +139,7 @@ export function dialogueGenerator() {
 		const baseYug_bow = baseYug.match(/<.*?>/)[0].slice(1,-1)
 		const baseEng_bow = baseEng.match(/<.*?>/)[0].slice(1,-1)
 		bagOfWords[baseType]['yup'].add(baseYug_bow.toLowerCase())
-		bagOfWords[baseType]['eng'].add(baseEng_bow.toLowerCase())
+		bagOfWords[baseType]['eng'].add([baseEng_bow.toLowerCase(),engPos])
 
 		dialogues[dialogue] = {
 			"speaker":per,
@@ -155,6 +157,8 @@ export function dialogueGenerator() {
 			// "endingEnglishChoose":endingEngCh.split(";"),
 			// "fillinblank1":fib1,
 			// "fillinblank2":fib2,
+			"engPos": engPos,
+			// "engConj": engConj,
 		}
 	}
 	lessons = lessons.filter(a => a.order !== undefined)
@@ -255,30 +259,45 @@ export function exerciseGenerator(lesson,dialogueList,bagOfWords) {
 			let eng_words = Array.from(bagOfWords[dialogue_out.baseType]['eng'].values())
 			let eng_options_all = shuffleArray(eng_words);
 			var eng_options = [eng_bow.slice(1,-1),];
+			
 			for (let i in eng_options_all) {
 				if (eng_options.length >= 4) {
 					break
 				}
 				let correctWord = eng_bow.slice(1,-1);
 				var checkWord2 = "";
-				if (startsWithCapital(correctWord)) {
-					checkWord2 = capitalizeFirstLetter(eng_options_all[i])
+				if (['v','n'].includes(dialogue_out.baseType)) {
+					if (eng_options_all[i][1] === dialogue_out.engPos) {
+						if (startsWithCapital(correctWord)) {
+							checkWord2 = capitalizeFirstLetter(eng_options_all[i][0])
+						} else {
+							checkWord2 = lowercaseFirstLetter(eng_options_all[i][0])
+						}
+						if (!eng_options.includes(checkWord2)) {
+							eng_options.push(checkWord2)
+						}
+					}
 				} else {
-					checkWord2 = lowercaseFirstLetter(eng_options_all[i])
-				}
-				if (!eng_options.includes(checkWord2)) {
-					eng_options.push(checkWord2)
+					if (startsWithCapital(correctWord)) {
+						checkWord2 = capitalizeFirstLetter(eng_options_all[i][0])
+					} else {
+						checkWord2 = lowercaseFirstLetter(eng_options_all[i][0])
+					}
+					if (!eng_options.includes(checkWord2)) {
+						eng_options.push(checkWord2)
+					}
 				}
 			}
 
 			// make smarter english options
-			if (dialogue_out.baseType === 'v') {
-
-				// let processed = new Fin.Run(eng_options[0]);
-				// let tag = processed.sentences[0].tags[0];
+			// if (dialogue_out.baseType === 'v') {
+			// 	let tag = dialogue_out.engPos;
 				// console.log('',eng_options[0],tag)
 				// for (let i in eng_options) {
-				// 	if (['VB','VBP'].includes(tag)) {
+				// 	if (i === 0) {
+				// 		continue
+				// 	}
+				// if (['VB','VBP'].includes(tag)) {
 				// 		eng_options[i] = new Inflectors(eng_options[i]).conjugate("VBP"); // toPresent
 				// 	} else if (tag === 'VBD') {
 				// 		eng_options[i] = new Inflectors(eng_options[i]).conjugate("VBD"); // toPast
@@ -291,18 +310,18 @@ export function exerciseGenerator(lesson,dialogueList,bagOfWords) {
 				// 	}
 				// }
 
-			} else if (dialogue_out.baseType === 'n') {
-				let word = new Inflectors(eng_options[0]);
-				for (let i in eng_options) {
-					if (word.isSingular()) {
-						const instance = new Inflectors(eng_options[i]);
-						eng_options[i] = instance.toSingular();
-					} else {
-						const instance = new Inflectors(eng_options[i]);
-						eng_options[i] = instance.toPlural();
-					}
-				}
-			}
+			// } else if (dialogue_out.baseType === 'n') {
+			// 	let tag = dialogue_out.engPos;
+			// 	for (let i in eng_options) {
+			// 		if (tag === 'sg') {
+			// 			const instance = new Inflectors(eng_options[i]);
+			// 			eng_options[i] = instance.toSingular();
+			// 		} else {
+			// 			const instance = new Inflectors(eng_options[i]);
+			// 			eng_options[i] = instance.toPlural();
+			// 		}
+			// 	}
+			// }
 
 			dialogue_out['yupikQuestion'] = yug_span;
 			dialogue_out['yupikQuestionOptions'] = shuffleArray(yup_options);
