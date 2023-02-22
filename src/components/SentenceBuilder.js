@@ -2276,19 +2276,31 @@ closeSubjectMenu = (tag,addSubject) => {
 	if (addSubject) {
 		if (tag in this.subjectMenu) {
 			if (this.subjectMenu[tag] !== null) {
-				this.subjectMenu[tag].close()
+				if (this.state.addSubject && window.innerWidth < 480) {
+					this.subjectMenu[tag].handleClose()
+				} else {
+					this.subjectMenu[tag].close()			
+				}
 			}
 		}
 		this.setState({
 			crecentlyOpen:tag,
 			addSubject:true,
 		},()=>{
-			this.subjectMenu[tag].open()
+			if (this.state.addSubject && window.innerWidth < 480) {
+				this.subjectMenu[tag].handleOpen()
+			} else {
+				this.subjectMenu[tag].open()			
+			}
 		})
 	} else {
 		if (tag in this.subjectMenu) {
 			if (this.subjectMenu[tag] !== null) {
-				this.subjectMenu[tag].close()
+				if (this.state.addSubject && window.innerWidth < 480) {
+					this.subjectMenu[tag].handleClose()
+				} else {
+					this.subjectMenu[tag].close()			
+				}
 			}
 		}
 		this.setState({
@@ -2304,7 +2316,51 @@ closeSubjectMenu = (tag,addSubject) => {
 
 editSubjectMenu = (nounInsert,subject, tag, statevvs, update, backendcall, value, options) => {
 	// console.log(value,options)
-	return <Popup
+	if (this.state.addSubject && window.innerWidth < 480) {
+		return   <Modal
+						style={{
+							marginTop:0,
+							minHeight:430,
+						}}
+			      trigger={									
+							<span style={{display:'inline-block',border:'solid 1px #22242626',marginRight:'2px',marginLeft:'2px',color:this.getColor(tag),fontSize:'18px',padding:'8px 2px 8px 5px',borderRadius:'5px',marginRight:'2px',marginLeft:'2px', cursor:'pointer'}}>{options.map((k)=>{return value == k['value'] ? k['text'] : null})}<Icon style={{color:this.getColor(tag),fontSize:'16px',margin:0}} name='dropdown' /></span>
+			      }
+			      on='click'
+			      position='bottom center'
+			      // positionFixed
+			      // open={this.state.currentlyOpen === tag}
+			      // style={{
+			      	// height:this.returnHeight(name),
+			      // }}
+			      ref={(element)=>{this.subjectMenu[tag]=element;}}
+			      onOpen={()=>{
+			      	this.setState({
+			      		currentlyOpen:tag,
+			      		overlayOn:true,
+								candidateCall:[],
+								candidateBase:[],
+								candidateDisplay:[],
+								unallowable_next_ids:[],
+								nextTenses:[],			      		
+			      	})}}
+			      onClose={()=>{
+			      	this.resetEditMenu();
+			      }}
+			      // content={
+			      	// }
+			    >
+			      	<div style={{paddingBottom:0}}>
+			      		<div>
+					      	<Button basic style={{display:'flex',flexDirection:'row',alignItems:'center',paddingLeft:'13px',marginBottom:'5px',marginTop:'10px'}} onClick={()=>{this.closeSubjectMenu(tag,false);}}>
+              			<Icon name='chevron left' />
+               			<div style={{color:'#666666'}}>{'Back'}</div>
+					      	</Button>
+				      	{this.baseChooser(nounInsert,'n','insert','Abs','')}
+				      	</div>
+			      	</div>
+			   	</Modal>
+	} else {
+				return <Popup
 			      trigger={									
 							<span style={{display:'inline-block',border:'solid 1px #22242626',marginRight:'2px',marginLeft:'2px',color:this.getColor(tag),fontSize:'18px',padding:'8px 2px 8px 5px',borderRadius:'5px',marginRight:'2px',marginLeft:'2px', cursor:'pointer'}}>{options.map((k)=>{return value == k['value'] ? k['text'] : null})}<Icon style={{color:this.getColor(tag),fontSize:'16px',margin:0}} name='dropdown' /></span>
 			      }
@@ -2362,6 +2418,8 @@ editSubjectMenu = (nounInsert,subject, tag, statevvs, update, backendcall, value
 				      }
 			      	</div>
 			   	</Popup>
+
+	}
 }
 
 	closeMainScreenMenuRef = (name,currentEditMode) => {
@@ -2571,25 +2629,41 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 // }
 
 
+	editMenuRefClose = (closeoropen, typeInd, currentEditMode) => {
+		if (window.innerWidth < 480 && this.state.currentEditMode !== 'default') {
+			if (closeoropen == 'open') {
+				this.editMenuRef[typeInd].handleOpen()
+			} else {
+				this.editMenuRef[typeInd].handleClose()					
+			}
+		} else {
+			if (closeoropen == 'open') {
+				this.editMenuRef[typeInd].open()
+			} else {
+				this.editMenuRef[typeInd].close()					
+			}
+		}
+	}
+
 														
 	closeEditMenuRef = (typeInd,currentEditMode,turnOffAndOn) => {
 		console.log(typeInd,currentEditMode)
 
 		if (turnOffAndOn) {
 			if (typeInd in this.editMenuRef) {
-				this.editMenuRef[typeInd].close()
+				this.editMenuRefClose('close', typeInd, currentEditMode)
 			}
 
 			this.setState({
 				currentEditMode:currentEditMode,
 			},()=>{
-				this.editMenuRef[typeInd].open()
+				this.editMenuRefClose('open', typeInd, currentEditMode)
 			})
 		} else {
 			// console.log(this.editMenuRef, typeInd, typeInd in this.editMenuRef)
 			if (typeInd in this.editMenuRef) {
 				if (this.editMenuRef[typeInd] !== null) {
-					this.editMenuRef[typeInd].close()
+					this.editMenuRefClose('close', typeInd, currentEditMode)
 				}
 			}
 
@@ -2602,11 +2676,6 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 	}
 
 
-	openEditMenuRef = (typeInd) => {
-		if (typeInd in this.editMenuRef) {
-			this.editMenuRef[typeInd].open()
-		}
-	}
 
 	resetEditMenu = () => {
 		this.setState({
@@ -2662,8 +2731,40 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 	editMenu = (type,ind) => {
 
-		let typeInd = type+(ind+1).toString()
 
+		let typeInd = type+(ind+1).toString()
+	if (window.innerWidth < 480 && this.state.currentEditMode !== 'default') {
+		return   <Modal
+						style={{
+							marginTop:0,
+							minHeight:430,
+						}}
+      trigger={									
+				this.triggerItems(type,ind)
+      }
+      onOpen={()=>{console.log('open', this.state); 
+	      						this.checkIfIntrgTense(type, ind);
+      							this.setState({
+      								cpreviousEditMode: this.state.currentEditMode, 
+      								currentlyOpen: typeInd,
+      								crecentlyOpen: typeInd,
+      								overlayOn:true,
+      							})
+      						}}
+      onClose={()=>{console.log('close', this.state); 
+										this.resetEditMenu();
+      						}}
+      position='bottom center'
+
+      ref={(element)=>{this.editMenuRef[typeInd]=element;}}
+      >
+
+	    		<div>
+		      	{this.contentItems(this.state.currentEditMode,type,ind,false)}
+		      </div>
+
+      </Modal>
+    } else {
  		return <Popup
       trigger={									
 				this.triggerItems(type,ind)
@@ -2689,7 +2790,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		      	{this.contentItems(this.state.currentEditMode,type,ind,false)}
 		      </div>
 
-      </Popup>
+      </Popup>    	
+    }
 
 	}
 

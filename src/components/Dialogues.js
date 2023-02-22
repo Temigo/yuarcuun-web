@@ -705,7 +705,7 @@ class Dialogues extends Component {
           )}}><Icon name='chevron down' /></Button>
         }
       }          
-    scroll.scrollToBottom()
+    // scroll.scrollToBottom()
   }
 
   render() {

@@ -638,7 +638,7 @@ class SearchPage extends Component {
     return (
       <div>
       
-      <Grid textAlign='center' style={{ height: window.innerHeight/1.5 }} verticalAlign={this.state.searchBarStuckTop ? 'top' : 'top'}>
+      <Grid textAlign='center' verticalAlign={this.state.searchBarStuckTop ? 'top' : 'top'}>
       <Grid.Row style={{height:40,paddingBottom:0}}>
       <Grid.Column>
       <div style={{display:'flex',justifyContent:'flex-end',paddingBottom:5}}>
@@ -656,7 +656,7 @@ class SearchPage extends Component {
           <Image onClick={this.resetAll} style={{'fontSize': '1.5em',cursor:'pointer'}} src={ICON_URL}/>          
           <span onClick={this.resetAll} style={{ color: 'black', verticalAlign: 'bottom',cursor:'pointer'}}>Yugtun</span>
         </Header>
-        <Container style={{height: window.innerHeight}} ref={this.search_container} className='search_container'>
+        <Container ref={this.search_container} className='search_container'>
           	<Grid stackable>
 
           {window.innerWidth < 480 ?
