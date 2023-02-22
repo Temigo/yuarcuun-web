@@ -138,7 +138,7 @@ let dictionary_dict = {};
 class SentenceBuilder extends Component {
 	constructor(props) {
 		super(props);
-		console.log(this.props)
+		// console.log(this.props)
 		// console.log(decodeURI(props.match.params.num))
 		this.state = {
 
@@ -503,7 +503,7 @@ class SentenceBuilder extends Component {
 
 
 		this.fromEntry = false
-		console.log(decodeURI(props.match.params.num))
+		// console.log(decodeURI(props.match.params.num))
 		if (decodeURI(props.match.params.num) == 1) {
 				this.backEndCall([['Delete',['mv',],''],['Delete',['np',],'']])
 	  } else if (decodeURI(props.match.params.num) == 2) {
@@ -577,8 +577,8 @@ class SentenceBuilder extends Component {
             label: 'Dictionary loading'
           });
           usageDictionary = response.data;
-          console.log(usageDictionary)
-          console.log('Fetched usage dictionary');
+          // console.log(usageDictionary)
+          // console.log('Fetched usage dictionary');
 
           // let filteredDictV = usageDictionary.filter(entry => (entry.type.includes('i')||entry.type.includes('t')||entry.type.includes('it')||entry.type.includes('[N→V]')||entry.type.includes('[V→V]')) )
           // let filteredDictN = usageDictionary.filter(entry => (entry.type.includes('n')||entry.type.includes('[V→N]')||entry.type.includes('[N→N]')))
@@ -668,7 +668,7 @@ class SentenceBuilder extends Component {
   }
 
   updateDimensions = () => {
-  	console.log('updated')
+  	// console.log('updated')
     this.setState({ width: window.innerWidth, height: window.innerHeight });
   };
 
@@ -1004,8 +1004,8 @@ class SentenceBuilder extends Component {
 	}
 
 	backEndCall(keyChanged, eraseExisting, simpleCall) {
-		console.log('backend',this.state)
-		console.log('backendcall',keyChanged, eraseExisting, simpleCall)
+		// console.log('backend',this.state)
+		// console.log('backendcall',keyChanged, eraseExisting, simpleCall)
 
 		let mv = {}
 		let cv = {}
@@ -1082,7 +1082,7 @@ class SentenceBuilder extends Component {
       	np:np,
       })
       .then(response => {
-      	console.log(response.data)
+      	// console.log(response.data)
       	let vkey, nkey
       	let updateDict = {}
       	if ("english" in response.data) {
@@ -1539,7 +1539,7 @@ class SentenceBuilder extends Component {
   }
   
   menuSelect = (direction) => {
-  	console.log(direction)
+  	// console.log(direction)
   	// if (this.state.cpreviousEditMode !== this.state.currentEditMode) {
 	  	// this.closeEditMenuRef(direction[0],'default')
 	  // } else {
@@ -2043,7 +2043,7 @@ class SentenceBuilder extends Component {
 			      {this.menuItem('Delete','Delete Oblique Descriptor Noun',null,null,[["Delete",["cv","nObliques",ind[0],ind[1],ind[2]],-1]])}
 			    	</Menu> 
 	  	} else if (type ==='mvnObliquesEnglish2appositive') {
-	  				console.log(ind)
+	  				// console.log(ind)
   					return <Menu vertical style={{marginTop:10,marginBottom:10}}>
 						{this.menuItem('BaseChooser','Change Oblique Descriptor Noun',[typeInd,'mvnObliqueUpdateappositiveupdate'],null)}
 			      {this.menuItem('Delete','Delete Oblique Descriptor Noun',null,null,[["Delete",["mv","nObliques",ind[0],ind[1],ind[2]],-1]])}
@@ -2242,7 +2242,7 @@ class SentenceBuilder extends Component {
 
 													
 	closeEditMenuRef = (typeInd,currentEditMode,turnOffAndOn) => {
-		console.log(typeInd,currentEditMode)
+		// console.log(typeInd,currentEditMode)
 
 		if (turnOffAndOn) {
 			if (typeInd in this.editMenuRef) {
@@ -2421,7 +2421,7 @@ editSubjectMenu = (nounInsert,subject, tag, statevvs, update, backendcall, value
 }
 
 	closeMainScreenMenuRef = (name,currentEditMode) => {
-		console.log(this.mainScreenMenuRef, name, currentEditMode)
+		// console.log(this.mainScreenMenuRef, name, currentEditMode)
 		if (name in this.mainScreenMenuRef) {
 			if (window.innerWidth < 480) {
 				this.mainScreenMenuRef[name].handleClose()
@@ -2645,7 +2645,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 														
 	closeEditMenuRef = (typeInd,currentEditMode,turnOffAndOn) => {
-		console.log(typeInd,currentEditMode)
+		// console.log(typeInd,currentEditMode)
 
 		if (turnOffAndOn) {
 			if (typeInd in this.editMenuRef) {
@@ -2692,10 +2692,10 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 
 	checkIfIntrgTense = (type, ind) => {
-		console.log(type, ind)
+		// console.log(type, ind)
 		if (type == 'mvEnglish2' && this.state.mvvMood === 'Intrg' &&  (this.state.mvvType === 'Intrg4' || this.state.mvvType === 'Intrg5')) {
 			if (this.state.mvvType === 'Intrg4' && this.state.candidateDisplay.length === 0) {
-				console.log(popularVPostbases)
+				// console.log(popularVPostbases)
 				let p = '0'
   			this.setState({
   				candidateBase:this.state.candidateBase.concat([[newpostbases[popularVPostbases[p]['expression']]['keylookup'],popularVPostbases[p]['expression']]]),
@@ -2740,7 +2740,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
       trigger={									
 				this.triggerItems(type,ind)
       }
-      onOpen={()=>{console.log('open', this.state); 
+      onOpen={()=>{
 	      						this.checkIfIntrgTense(type, ind);
       							this.setState({
       								cpreviousEditMode: this.state.currentEditMode, 
@@ -2749,7 +2749,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
       								overlayOn:true,
       							})
       						}}
-      onClose={()=>{console.log('close', this.state); 
+      onClose={()=>{
 										this.resetEditMenu();
       						}}
       position='bottom center'
@@ -2767,7 +2767,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
       trigger={									
 				this.triggerItems(type,ind)
       }
-      onOpen={()=>{console.log('open', this.state); 
+      onOpen={()=>{
 	      						this.checkIfIntrgTense(type, ind);
       							this.setState({
       								cpreviousEditMode: this.state.currentEditMode, 
@@ -2776,7 +2776,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
       								overlayOn:true,
       							})
       						}}
-      onClose={()=>{console.log('close', this.state); 
+      onClose={()=>{
 										this.resetEditMenu();
       						}}
       position='bottom center'
@@ -3280,7 +3280,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		          // active={this.state.activeItem === 'messages'}
 		          style={{display:'flex',flexDirection:'row',alignItems:'center',paddingRight:'13px'}}
 							onClick={()=>{
-								console.log(backEnd)
+								// console.log(backEnd)
 								this.closeEditMenuRef(this.state.crecentlyOpen,'default',false);
 								this.setState({ isOpen: false,currentEditMode:'' },()=>{this.backEndCall(backEnd)})}}
 		        >
@@ -3590,9 +3590,9 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 
 		sentence = sentence.replace('[he or it]','')
-		if (sentence.includes('[')) {
-			console.log(sentence)
-		}
+		// if (sentence.includes('[')) {
+		// 	console.log(sentence)
+		// }
 
 
 		let matches = sentence.match(/\<.*?\>/g)
@@ -3956,7 +3956,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 
 		} else {
-			console.log('not in',lookup)
+			// console.log('not in',lookup)
 			return <span>{'not in lookup'}</span>
 		}
 	}
@@ -5972,8 +5972,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 												<span>
 												{xind === 0 ?
 													<span>
-														<Dropdown inline scrolling style={this.getDropdownStyle('cvns'+(this.state.cvnsSegments.length-1-xind).toString()+'0.ps')} onChange={(event,data)=>{console.log(event,data);this.backEndCall([["Update",["cv","ns",this.state.cvnsSegments.length-1,0],(data.value+this.state.cvns[this.state.cvnsSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.cvns[this.state.cvnsSegments.length-1][0].slice(0, -1).join("")} options={nounOptionsPossessorsNo4th} />
-														<Dropdown inline scrolling style={this.getDropdownStyle('cvns'+(this.state.cvnsSegments.length-1-xind).toString()+'0.pd')} onChange={(event,data)=>{console.log(event,data);this.backEndCall([["Update",["cv","ns",this.state.cvnsSegments.length-1,0],this.state.cvns[this.state.cvnsSegments.length-1][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.cvns[this.state.cvnsSegments.length-1][0].slice(-1).join("")} options={nounOptionsNumbers} />																
+														<Dropdown inline scrolling style={this.getDropdownStyle('cvns'+(this.state.cvnsSegments.length-1-xind).toString()+'0.ps')} onChange={(event,data)=>{this.backEndCall([["Update",["cv","ns",this.state.cvnsSegments.length-1,0],(data.value+this.state.cvns[this.state.cvnsSegments.length-1][0].slice(-1).toString()).split('').map(Number)]])}} value={this.state.cvns[this.state.cvnsSegments.length-1][0].slice(0, -1).join("")} options={nounOptionsPossessorsNo4th} />
+														<Dropdown inline scrolling style={this.getDropdownStyle('cvns'+(this.state.cvnsSegments.length-1-xind).toString()+'0.pd')} onChange={(event,data)=>{this.backEndCall([["Update",["cv","ns",this.state.cvnsSegments.length-1,0],this.state.cvns[this.state.cvnsSegments.length-1][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.cvns[this.state.cvnsSegments.length-1][0].slice(-1).join("")} options={nounOptionsNumbers} />																
 														{x.map((k,kind)=>
 															{if (kind === x.length-1) {
 																return <span>
@@ -5988,7 +5988,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 													</span>
 													:
 													<span>
-														<Dropdown inline scrolling style={this.getDropdownStyle('cvns'+(this.state.cvnsSegments.length-1-xind).toString()+'0.pd')} onChange={(event,data)=>{console.log(event,data);this.backEndCall([["Update",["cv","ns",this.state.cvnsSegments.length-1-xind,0],this.state.cvns[this.state.cvnsSegments.length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.cvns[this.state.cvnsSegments.length-1-xind][0].slice(-1).join("")}  options={nounOptionsNumbers} />								
+														<Dropdown inline scrolling style={this.getDropdownStyle('cvns'+(this.state.cvnsSegments.length-1-xind).toString()+'0.pd')} onChange={(event,data)=>{this.backEndCall([["Update",["cv","ns",this.state.cvnsSegments.length-1-xind,0],this.state.cvns[this.state.cvnsSegments.length-1-xind][0].slice(0, -1).concat(data.value.split('').map(Number))]])}} value={this.state.cvns[this.state.cvnsSegments.length-1-xind][0].slice(-1).join("")}  options={nounOptionsNumbers} />								
 														{x.map((k,kind)=>
 															{if (kind === x.length-1) {
 																return <span>
