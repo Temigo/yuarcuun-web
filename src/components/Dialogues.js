@@ -684,13 +684,16 @@ class Dialogues extends Component {
   showContinue(index) {
       if (this.state.showContinue) {
         if (this.state.lesson.dialogues.length-1 === this.state.currentCounter) {
+        scroll.scrollToBottom()
         this.props.updateCompleted(this.state.lessonIndex,this.state.exerciseNumber)
         return <div style={{display:'flex',justifyContent:'center',flexDirection:'row'}}>
             <Button onClick={()=>{this.initialize()}}>Redo</Button>
             <Link to={{pathname:'/dialogues'}}><Button>Continue</Button></Link>
             </div>
         } else {
+
         return <Button icon circular size='huge' onClick={()=>{
+          scroll.scrollToBottom()
           this.stopCurrentSentence();
           if (![-1].includes(this.state.exerciseNumberMatrix[index])) {
             this.setState({
@@ -705,7 +708,6 @@ class Dialogues extends Component {
           )}}><Icon name='chevron down' /></Button>
         }
       }          
-    // scroll.scrollToBottom()
   }
 
   render() {

@@ -2271,7 +2271,7 @@ class SentenceBuilder extends Component {
 	}
 
 
-closeSubjectMenu = (tag,addSubject) => {
+closeSubjectMenu = (tag,addSubject,back) => {
 	// console.log(tag, addSubject, this.state.crecentlyOpen)
 	if (addSubject) {
 		if (tag in this.subjectMenu) {
@@ -2306,6 +2306,10 @@ closeSubjectMenu = (tag,addSubject) => {
 		this.setState({
 			crecentlyOpen:tag,
 			addSubject:false,
+		},()=> {
+			if (back) {
+				this.subjectMenu[tag].open()			
+			}			
 		})
 	}
 }
@@ -2350,13 +2354,7 @@ editSubjectMenu = (nounInsert,subject, tag, statevvs, update, backendcall, value
 			      	// }
 			    >
 			      	<div style={{paddingBottom:0}}>
-			      		<div>
-					      	<Button basic style={{display:'flex',flexDirection:'row',alignItems:'center',paddingLeft:'13px',marginBottom:'5px',marginTop:'10px'}} onClick={()=>{this.closeSubjectMenu(tag,false);}}>
-              			<Icon name='chevron left' />
-               			<div style={{color:'#666666'}}>{'Back'}</div>
-					      	</Button>
 				      	{this.baseChooser(nounInsert,'n','insert','Abs','')}
-				      	</div>
 			      	</div>
 			   	</Modal>
 	} else {
@@ -2391,7 +2389,7 @@ editSubjectMenu = (nounInsert,subject, tag, statevvs, update, backendcall, value
 			      	<div style={{paddingBottom:0}}>
 			      	{this.state.addSubject ?
 			      		<div>
-					      	<Button basic style={{display:'flex',flexDirection:'row',alignItems:'center',paddingLeft:'13px',marginBottom:'5px',marginTop:'10px'}} onClick={()=>{this.closeSubjectMenu(tag,false);}}>
+					      	<Button basic style={{display:'flex',flexDirection:'row',alignItems:'center',paddingLeft:'13px',marginBottom:'5px',marginTop:'10px'}} onClick={()=>{this.closeSubjectMenu(tag,false,true);}}>
               			<Icon name='chevron left' />
                			<div style={{color:'#666666'}}>{'Back'}</div>
 					      	</Button>
@@ -2407,7 +2405,7 @@ editSubjectMenu = (nounInsert,subject, tag, statevvs, update, backendcall, value
 					      	<Segment style={{maxHeight:200,overflow:'auto',padding:0,marginBottom:8}}>
 						      <Button.Group style={{border:0}} basic vertical>
 						      	{options.map((k)=>
-						      		<Button active={k['value']==statevvs.join("")} onClick={()=>{this.closeSubjectMenu(tag,false); this.backEndCall([[update,backendcall,k['value'].split('').map(Number)]])}}>{k['text']}</Button>
+						      		<Button active={k['value']==statevvs.join("")} onClick={()=>{this.closeSubjectMenu(tag,false,false); this.backEndCall([[update,backendcall,k['value'].split('').map(Number)]])}}>{k['text']}</Button>
 						      	)}
 					      	</Button.Group>
 					      	</Segment>
@@ -4879,6 +4877,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 						                			this.setState({overlayOn:false})
 						                			this.closeEditMenuRef(this.state.crecentlyOpen,'default',false)
 						                			this.closeMainScreenMenuRef(this.state.crecentlyOpen,'default')
+						                			this.closeSubjectMenu(this.state.crecentlyOpen,false,false);
 						                		}} style={{display:'flex',flexDirection:'row',alignItems:'center',paddingLeft:'13px'}}>
 						                			<Icon name='chevron left' />
 						                			<div style={{fontFamily:'Lato'}}>{'Back'}</div>
@@ -5269,7 +5268,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		return (
 			<Container style={{ margin: 0, padding: 0 }} text>
 			{this.state.overlayOn ?
-				<div className="overlay" onClick={()=>{this.closeSubjectMenu(this.state.crecentlyOpen,false); this.setState({overlayOn:false,currentEditMode:'default',})}} />
+				<div className="overlay" onClick={()=>{this.closeSubjectMenu(this.state.crecentlyOpen,false,false); this.setState({overlayOn:false,currentEditMode:'default',})}} />
 				:
 				null
 			}
