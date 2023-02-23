@@ -84,7 +84,7 @@ class YupikEntry extends Component {
   }
   processStyledText = (sentence) => {     
     sentence = sentence.replace("⟨","").replace("⟩","")
-    let matches = sentence.match(/\⎡.*?\⎤/g)
+    let matches = sentence.match(/⎡.*?⎤/g)
     if (matches !== null) {
       matches.map((m) => sentence = sentence.replace(m,'<i>'+m.slice(1,-1)+'</i>'))   
       return <span dangerouslySetInnerHTML={{__html: sentence}} />    
@@ -113,7 +113,7 @@ class YupikEntry extends Component {
     // remove links
     sentence = sentence.replaceAll(/{(.*?)}⟨.*?⟩/g,"$1")
 
-    let matches = sentence.match(/\`.*(\`|\')/g)
+    let matches = sentence.match(/`.*(`|')/g)
     let matches2 = sentence.match(/\(.*?\)/g)
 
     console.log(matches2)
@@ -131,7 +131,7 @@ class YupikEntry extends Component {
   }
 
   processPostbaseTableRowHTML = (sentence) => {
-    let matchesNormal = sentence.match(/\‘.*?\’(?!\w)/g)
+    let matchesNormal = sentence.match(/‘.*?’(?!\w)/g)
     let matchesItalics = sentence.match(/\s\(.*?\)/g)
 
     if (matchesNormal !== null || matchesItalics !== null) {
@@ -166,7 +166,7 @@ class YupikEntry extends Component {
         return <span>
         <span dangerouslySetInnerHTML={{__html: this.processPostbaseTableRowHTML(sentenceBank[0])}} />
           {matchesBnL.map((k,index)=><span>
-          <Link style={{color:'#306190'}} to={{pathname: k.match(/\⟨.*?\⟩/g)[0].slice(1,-1)}} onClick={()=>{this.setState({key:k.match(/\⟨.*?\⟩/g)[0].slice(1,-1), from:this.props.location.pathname})}}><b>{k.match(/\{.*?\}/g)[0].slice(1,-1)}</b></Link>
+          <Link style={{color:'#306190'}} to={{pathname: k.match(/⟨.*?⟩/g)[0].slice(1,-1)}} onClick={()=>{this.setState({key:k.match(/⟨.*?⟩/g)[0].slice(1,-1), from:this.props.location.pathname})}}><b>{k.match(/\{.*?\}/g)[0].slice(1,-1)}</b></Link>
           {' '}
           <span dangerouslySetInnerHTML={{__html: this.processPostbaseTableRowHTML(sentenceBank[index+1])}} />      
           </span>       
@@ -196,7 +196,7 @@ class YupikEntry extends Component {
         return <span>
           <span dangerouslySetInnerHTML={{__html: this.processPostbaseTableRowHTML(sentenceBank[0])}} />
           {matchesBnL.map((k,index)=><span>
-          <Link style={{color:'#306190'}} to={{pathname: k.match(/\⟨.*?\⟩/g)[0].slice(1,-1)}} onClick={()=>{this.setState({key:k.match(/\⟨.*?\⟩/g)[0].slice(1,-1), from:this.props.location.pathname})}}>{k.match(/\⎡.*?\⎤/g)[0].slice(1,-1)}</Link>
+          <Link style={{color:'#306190'}} to={{pathname: k.match(/⟨.*?⟩/g)[0].slice(1,-1)}} onClick={()=>{this.setState({key:k.match(/⟨.*?⟩/g)[0].slice(1,-1), from:this.props.location.pathname})}}>{k.match(/⎡.*?⎤/g)[0].slice(1,-1)}</Link>
           {' '}
           <span dangerouslySetInnerHTML={{__html: this.processPostbaseTableRowHTML(sentenceBank[index+1])}} />      
           </span>       
@@ -223,7 +223,7 @@ class YupikEntry extends Component {
     //   </div>
     // }
 
-  //   let matches = sentence.match(/\‘.*?\’(?!\w)/g)
+  //   let matches = sentence.match(/‘.*?’(?!\w)/g)
   //   let matches2 = sentence.match(/\s\(.*?\)/g)
   //   console.log(matches)
   //   if (matches !== null) {
