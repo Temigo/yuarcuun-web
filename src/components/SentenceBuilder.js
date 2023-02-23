@@ -3495,6 +3495,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 						verbAdd = key['englishtenses'][1]
 					}	else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'present') {
 						verbAdd = key['englishtenses'][2]
+					}	else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'gen2') {
+						verbAdd = key['englishtenses'][2]
 					}		
 					sentence = key['englishraw']
 					let verbMatches = key['englishraw'].match(/\⟨.*?\⟩/g)
@@ -3513,6 +3515,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 					} else if (startingCase === 'pp') {
 						verbAdd = key['englishtenses'][4]
 					} else if (startingCase === 'gen') {
+						verbAdd = key['englishtenses'][2]
+					} else if (startingCase === 'gen2') {
 						verbAdd = key['englishtenses'][2]
 					} else if (startingCase === 'past') {
 						verbAdd = key['englishtenses'][1]
@@ -3774,6 +3778,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 									sentence = newpostbases[lookup]['past_preverb']
 								} else if (s0 === 'gen') {
 									sentence = s1+' '+newpostbases[lookup]['gen_preverb']
+								} else if (s0 === 'gen2') {
+									sentence = s1+' '+newpostbases[lookup]['gen_preverb']
 								} else if (s0 === 'past') {
 									if (newpostbases[lookup]['was']) {
 										if (vsPlanned[0] == 1 && vsPlanned[1] == 1)	{
@@ -3819,6 +3825,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 							} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'g') {
 								sentence = newpostbases[lookup]['ger_preverb']
 							} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'gen') {
+								sentence = newpostbases[lookup]['gen_preverb']
+							} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'gen2') {
 								sentence = newpostbases[lookup]['gen_preverb']
 							} else if (this.state.nextTenses[this.state.nextTenses.length-1] === 'i') {
 								sentence = newpostbases[lookup]['inf_preverb']
@@ -6441,7 +6449,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 				<span style={{textDecoration:'underline'}}>Disclaimer:</span> Please note that there may be mistakes with word results and translations. The automated computer rules that produce these words don't often reflect common language use, context, and cultural knowledge. 
 				</span>
 				<span style={{fontSize:'14px',color:'grey',padding:'15px',fontWeight:'400',lineHeight:'23px'}}>
-				Website and sentence builder production provided by <a style={{color:'#306190'}} href="https://yuarcuun.github.io" target="_blank" >Yuarcuun Technologies</a> in partnership with the Native Village of Kwinhagak (NVK). This website was made possible by Grant Number 90XN0110-01-00 from Administration for Native Americans.
+				Sentence builder production provided by <a style={{color:'#306190'}} href="https://yuarcuun.github.io" target="_blank" >Yuarcuun Technologies</a> in partnership with the Native Village of Kwinhagak (NVK). This website was made possible by Grant Number 90XN0110-01-00 from Administration for Native Americans.
 				</span>
 				</div>
 
