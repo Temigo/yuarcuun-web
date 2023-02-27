@@ -677,6 +677,7 @@ class SearchPage extends Component {
             <Grid.Column style={{paddingLeft:0,paddingRight:0}}>
               <Input
                 ref={this.handleRef}
+                autoCorrect={false}
                 placeholder="Search by Yugtun..."
                 action={{
                   icon: "search",
