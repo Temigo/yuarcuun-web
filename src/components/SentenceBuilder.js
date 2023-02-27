@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Header, Button, Icon, Divider, Image, Grid, Dropdown, List, Label, Input, Segment, Accordion, Menu, Modal } from 'semantic-ui-react';
+import { Container, Header, Button, Icon, Divider, Image, Grid, Dropdown, List, Label, Input, Segment, Accordion, Menu, Modal, Dimmer, Loader } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { API_URL } from '../App.js';
 import axios from 'axios';
@@ -1693,7 +1693,7 @@ class SentenceBuilder extends Component {
 
 
   contentDisplay = (type, data, fontType) => {
-  	// console.log(data)
+  	console.log(type, data)
   	if (fontType == 1) {
 		return <div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:5,}}>
 							<span style={{cursor:'pointer',display:'flex',justifyContent:'center', flexDirection:'row', lineHeight:'40px'}}>
@@ -1703,10 +1703,10 @@ class SentenceBuilder extends Component {
 							</span>
 						</div>								
   	} else if (fontType == 2) {
-  		return 	<div style={{fontSize:'30px',fontWeight:'400'}}>
+  		return 	<div style={{fontSize:(window.innerWidth < 480 && data.length > 5 ? '25px':'30px'),fontWeight:'400'}}>
 								<span style={{cursor:'pointer',display:'flex',justifyContent:'center', flexDirection:'row', marginBottom:5,lineHeight:'40px'}}>
 									{data.map((t)=>
-										<span style={{color:this.getColor(t[1])}}>{t[0]}</span>
+										<span style={{whiteSpace:'nowrap',color:this.getColor(t[1])}}>{t[0]}</span>
 									)}
 								</span>
 							</div>  		
@@ -2319,7 +2319,7 @@ closeSubjectMenu = (tag,addSubject,back) => {
 // }
 
 editSubjectMenu = (nounInsert,subject, tag, statevvs, update, backendcall, value, options) => {
-	// console.log(value,options)
+
 	if (this.state.addSubject && window.innerWidth < 480) {
 		return   <Modal
 						style={{
@@ -2363,7 +2363,7 @@ editSubjectMenu = (nounInsert,subject, tag, statevvs, update, backendcall, value
 							<span style={{display:'inline-block',border:'solid 1px #22242626',marginRight:'2px',marginLeft:'2px',color:this.getColor(tag),fontSize:'18px',padding:'8px 2px 8px 5px',borderRadius:'5px',marginRight:'2px',marginLeft:'2px', cursor:'pointer'}}>{options.map((k)=>{return value == k['value'] ? k['text'] : null})}<Icon style={{color:this.getColor(tag),fontSize:'16px',margin:0}} name='dropdown' /></span>
 			      }
 			      on='click'
-			      position='bottom center'
+			      position={window.innerWidth < 480 ? (subject === 'a subject' ? 'bottom left' : 'bottom right'):'bottom center'}
 			      // positionFixed
 			      // open={this.state.currentlyOpen === tag}
 			      // style={{
@@ -2729,7 +2729,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 	editMenu = (type,ind) => {
 
-
+		console.log(type, ind)
 		let typeInd = type+(ind+1).toString()
 	if (window.innerWidth < 480 && this.state.currentEditMode !== 'default') {
 		return   <Modal
@@ -2763,6 +2763,14 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
       </Modal>
     } else {
+    let position = 'bottom center'
+    if (window.innerWidth < 480) {
+			if (type === 'npnEnglish1' || type === 'mvEnglish1' || type === 'cvEnglish1') {
+				position = 'bottom left'
+			} else if (type === 'npnEnglish2' || type === 'cvEnglish2' || type === 'cvnsEnglish2' || type === 'mvnsEnglish2' || type === 'cvnoEnglish2' || type === 'mvnoEnglish2') {
+				position = 'bottom right'				
+			}
+		}
  		return <Popup
       trigger={									
 				this.triggerItems(type,ind)
@@ -2779,7 +2787,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
       onClose={()=>{
 										this.resetEditMenu();
       						}}
-      position='bottom center'
+      position={position}
 
       ref={(element)=>{this.editMenuRef[typeInd]=element;}}
       >
@@ -5275,6 +5283,16 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 		return (
 			<Container style={{ margin: 0, padding: 0 }} text>
+			{this.state.usageDictionary.length == 0 ?
+        <Dimmer className="overlay" active>
+          <Loader size='massive'>
+            Yugtun is loading...
+          </Loader>
+        </Dimmer>
+				:
+				null
+			}
+
 			{this.state.overlayOn ?
 				<div className="overlay" onClick={()=>{this.closeSubjectMenu(this.state.crecentlyOpen,false,false); this.setState({overlayOn:false,currentEditMode:'default',})}} />
 				:

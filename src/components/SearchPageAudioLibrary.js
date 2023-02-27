@@ -4,7 +4,7 @@ import '../semantic/dist/semantic.min.css';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import { Container, Header, Grid, Input, List, Label, Icon, Image, Button, Accordion, Table, Segment, Loader, Divider, Tab } from 'semantic-ui-react';
+import { Container, Header, Grid, Input, List, Label, Icon, Image, Button, Accordion, Table, Segment, Loader, Divider, Tab, Dimmer } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { API_URL, TUTORIAL_URL, ICON_URL } from '../App.js';
 // import Fuse from 'fuse.js';
@@ -904,6 +904,7 @@ class SearchPage extends Component {
 
 
     return (
+          this.props.audiolibrary.length > 0 ?
           <Grid>
             <Grid.Row style={{paddingBottom:14,}}>
               <Grid.Column style={{paddingLeft:0,paddingRight:0}}>
@@ -1039,6 +1040,36 @@ class SearchPage extends Component {
 
             </Grid.Row>
 
+          </Grid>
+          :
+          <Grid>
+            <Grid.Row style={{paddingBottom:14,}}>
+              <Grid.Column style={{paddingLeft:0,paddingRight:0}}>
+                <Input
+                disabled={true}
+                ref={this.handleRef}
+                placeholder='Search a word...'
+                // action={{ icon: (this.state.yugtunAnalyzer ? 'search' : null), transparent:true,size:'huge', onClick: () => 
+                // {this.state.yugtunAnalyzer ? this.inputClicked() : null}
+                // }}
+                // icon={<Icon name='x' onClick={console.log('hi')} link />}
+                // iconPosition='right'
+                size='huge'
+                onChange={this.onChangeSearch}
+                value={this.state.search}
+                // onKeyPress={this.onKeyPress}
+                fluid  />                
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row style={{height:200}}>
+              <Grid.Column style={{paddingLeft:0,paddingRight:0}}>
+                <Dimmer active inverted>
+                  <Loader size='massive'>
+                    Audio loading...
+                  </Loader>
+                </Dimmer>
+              </Grid.Column>
+            </Grid.Row>
           </Grid>
     );
   }

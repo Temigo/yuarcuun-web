@@ -28,6 +28,8 @@ export const API_URL = "http://localhost:5000";
 export const TUTORIAL_URL = 'https://youtu.be/8xW36PYaZHo';
 export const ICON_URL = "https://yuarcuun.inupiaqonline.com/images/logo_final_1.jpeg";
 
+let dictionarylite = [];
+let dictionary_dictlite = {};
 let dictionary = [];
 let audiolibrary = []
 let dictionary_dict = {};
@@ -51,6 +53,7 @@ class App extends Component {
 
   componentDidMount() {
     let start = now();
+
     if (dictionary.length === 0) {
       axios
         .get(API_URL + "/word/all2021")
@@ -71,14 +74,16 @@ class App extends Component {
           dictionary.forEach(entry => dictionary_dict[entry.keyString] = entry.definitionString) // create dictionary_dict dictionary
           // dictionary_prepared = fuzzysort.prepare(dictionary)
 
-          this.setState({ dictionary: dictionary, dictionary_dict: dictionary_dict});
+          this.setState({ dictionary: dictionary, dictionary_dict: dictionary_dict},()=>{this.loadRemaining()});
         });
     }
     else {
       // fuse.setCollection(dictionary);
-      this.setState({ dictionary: dictionary, dictionary_dict: dictionary_dict });
+      this.setState({ dictionary: dictionary, dictionary_dict: dictionary_dict},()=>{this.loadRemaining()});
     }
+  }
 
+  loadRemaining = () => {
     if (audiolibrary.length === 0) {
       axios
         .get(API_URL + "/audiolibrary/all")
@@ -110,12 +115,12 @@ class App extends Component {
         .get(API_URL + "/yupiksearchableusagelist/all")
         .then(response => {
           let end = now();
-          ReactGA.timing({
-            category: 'Loading',
-            variable: 'dictionary',
-            value: (end-start).toFixed(3),
-            label: 'Dictionary loading'
-          });
+          // ReactGA.timing({
+          //   category: 'Loading',
+          //   variable: 'dictionary',
+          //   value: (end-start).toFixed(3),
+          //   label: 'Dictionary loading'
+          // });
           usageDictionary = response.data;
           console.log(usageDictionary)
           console.log('Fetched usage dictionary');
@@ -136,7 +141,6 @@ class App extends Component {
     } else {
       this.setState({ usageDictionary: usageDictionary});      
     }
-
   }
 
   updateCompleted = (lessonIndex, exerciseNumber, data,value) => {
@@ -155,11 +159,13 @@ class App extends Component {
 
   render() {
     console.log(this.state)
+
+    console.log(window.location.href)
     // this.state.audiolibrary.length !== 0 && this.state.dictionary.length !== 0 && this.state.usageDictionary !== 0 && this.state.filteredDictV !== 0 && this.state.filteredDictVit !== 0 && this.state.filteredDictN !== 0 ?
     return (
       <div style={{margin:0,padding:0}}>
         {
-            this.state.audiolibrary.length !== 0 && this.state.dictionary.length !== 0 && this.state.usageDictionary !== 0 && this.state.filteredDictV !== 0 && this.state.filteredDictVit !== 0 && this.state.filteredDictN !== 0 ?
+            this.state.dictionary.length !== 0 || window.location.href !== "https://yuarcuun.inupiaqonline.com" ?
             <Switch>
               <Route exact path='/' render={(props) => <SearchPage audiolibrary={this.state.audiolibrary} dictionary_dict={this.state.dictionary_dict} usageDictionary={this.state.usageDictionary} dictionary={this.state.dictionary} filteredDictV={this.state.filteredDictV} filteredDictVit={this.state.filteredDictVit} filteredDictN={this.state.filteredDictN} {...props} />}/>
               <Route exact path='/about' component={About} />
