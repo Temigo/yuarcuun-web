@@ -1693,7 +1693,7 @@ class SentenceBuilder extends Component {
 
 
   contentDisplay = (type, data, fontType) => {
-  	console.log(type, data)
+  	// console.log(type, data)
   	if (fontType == 1) {
 		return <div style={{paddingRight:10,paddingLeft:10,cursor:'pointer',marginBottom:5,}}>
 							<span style={{cursor:'pointer',display:'flex',justifyContent:'center', flexDirection:'row', lineHeight:'40px'}}>
@@ -2241,34 +2241,34 @@ class SentenceBuilder extends Component {
   }
 
 													
-	closeEditMenuRef = (typeInd,currentEditMode,turnOffAndOn) => {
-		// console.log(typeInd,currentEditMode)
+	// closeEditMenuRef = (typeInd,currentEditMode,turnOffAndOn) => {
+	// 	// console.log(typeInd,currentEditMode)
 
-		if (turnOffAndOn) {
-			if (typeInd in this.editMenuRef) {
-				this.editMenuRef[typeInd].close()
-			}
+	// 	if (turnOffAndOn) {
+	// 		if (typeInd in this.editMenuRef) {
+	// 			this.editMenuRef[typeInd].close()
+	// 		}
 
-			this.setState({
-				currentEditMode:currentEditMode,
-			},()=>{
-				this.editMenuRef[typeInd].open()
-			})
-		} else {
-			// console.log(this.editMenuRef, typeInd, typeInd in this.editMenuRef)
-			if (typeInd in this.editMenuRef) {
-				if (this.editMenuRef[typeInd] !== null) {
-					this.editMenuRef[typeInd].close()
-				}
-			}
+	// 		this.setState({
+	// 			currentEditMode:currentEditMode,
+	// 		},()=>{
+	// 			this.editMenuRef[typeInd].open()
+	// 		})
+	// 	} else {
+	// 		// console.log(this.editMenuRef, typeInd, typeInd in this.editMenuRef)
+	// 		if (typeInd in this.editMenuRef) {
+	// 			if (this.editMenuRef[typeInd] !== null) {
+	// 				this.editMenuRef[typeInd].close()
+	// 			}
+	// 		}
 
-			this.setState({
-				currentEditMode:'default',
-				currentlyOpen:'',
-			})		
-		}
+	// 		this.setState({
+	// 			currentEditMode:'default',
+	// 			currentlyOpen:'',
+	// 		})		
+	// 	}
 
-	}
+	// }
 
 
 closeSubjectMenu = (tag,addSubject,back) => {
@@ -2682,6 +2682,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 			searchQuery:'',
 			wordsList:[],
 			containsTime:false,
+			overlayOn:false,
 				// candidateCall:[],
 				// candidateBase:[],
 				// candidateDisplay:[],
@@ -2729,7 +2730,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 	editMenu = (type,ind) => {
 
-		console.log(type, ind)
+		// console.log(type, ind)
 		let typeInd = type+(ind+1).toString()
 	if (window.innerWidth < 480 && this.state.currentEditMode !== 'default') {
 		return   <Modal
@@ -3270,11 +3271,11 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 							onClick={()=>{
 								this.closeEditMenuRef(this.state.crecentlyOpen,'default',false);
 								if (text == 'Change to Command') {
-									this.setState({ isOpen: false, optCase:"Opt][PRS",currentEditMode:''},()=>{this.backEndCall(backEnd)})							
+									this.setState({ isOpen: false, optCase:"Opt][PRS",currentEditMode:'default'},()=>{this.backEndCall(backEnd)})							
 								} else if (text == 'Change to Statement') {
-									this.setState({ isOpen: false, optCase:"",currentEditMode:''},()=>{this.backEndCall(backEnd)})							
+									this.setState({ isOpen: false, optCase:"",currentEditMode:'default'},()=>{this.backEndCall(backEnd)})							
 								} else {
-									this.setState({ isOpen: false,currentEditMode:'' },()=>{this.backEndCall(backEnd)})
+									this.setState({ isOpen: false,currentEditMode:'default' },()=>{this.backEndCall(backEnd)})
 								}
 							}}
 		        >
@@ -3290,7 +3291,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 							onClick={()=>{
 								// console.log(backEnd)
 								this.closeEditMenuRef(this.state.crecentlyOpen,'default',false);
-								this.setState({ isOpen: false,currentEditMode:'' },()=>{this.backEndCall(backEnd)})}}
+								this.setState({ isOpen: false,currentEditMode:'default' },()=>{this.backEndCall(backEnd)})}}
 		        >
 		          <div>{text}</div>
 		        </Menu.Item>			
@@ -5275,7 +5276,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 
 	render() {
-		// console.log(this.state)
+		console.log(this.state)
 		// console.log("mvv",this.state.mvvMood)
 		// console.log("mvvtype",this.state.mvvType)
 		// console.log("cvv",this.state.cvvMood)
@@ -5672,7 +5673,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 								</div>
 
 
-								{this.state.mvvs.length === 0 && this.state.npn.length === 0 ?
+								{!this.fromEntry && this.state.mvvs.length === 0 && this.state.npn.length === 0 ?
 									<div style={{display:'flex',justifyContent:'center'}}>
 										<div style={{width:'300px',display:'flex',flexDirection:'column'}}>
 										<Accordion style={{color:'000000de',padding:'4px 9px',paddingBottom:'9px'}}>

@@ -130,27 +130,32 @@ export const WordItemLikeInup = (props) => {
       </Link>
 
       <List.Content>
-        <List.Header style={{display:'flex',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'18px',paddingBottom:'10px',paddingTop:'5px'}}>
+        <List.Header style={{lineHeight:'28px',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'18px',paddingBottom:'10px',paddingTop:'5px'}}>
           {/*{console.log(props.word.keySplit)}*/}
           {props.word.keySplit.map((w,index) => 
-              <Link style={{fontSize:'18px',color:'#306190','paddingRight':'3px',fontWeight:'400',borderBottom:'1px solid #306190',paddingBottom:'1px',}} to={{pathname: '/' + props.word.url, state: { entry: props.entry, word: props.word, search: props.search, wordsList: props.wordsList, yugtunAnalyzer: false, parses: [], segments: [],endingrule: []}}}>
-              <span style={{display:'flex'}}>
+              <Link style={{fontSize:'18px',color:'#306190',fontWeight:'400',}} to={{pathname: '/' + props.word.url, state: { entry: props.entry, word: props.word, search: props.search, wordsList: props.wordsList, yugtunAnalyzer: false, parses: [], segments: [],endingrule: []}}}>
+              <span style={{borderBottom:'1px solid #306190',paddingBottom:'1px'}}>
                 {w[0]}
-              {/*{console.log(w)}*/}
+              </span>
+             
               {w[1][0] !== '' ?
                   <Label style={{'marginLeft':'5px',marginRight:(index === props.word.keySplit.length-1 ? '0px' : '5px')}} size='mini' color='white'>{w[1].join(', ')}</Label>
                 :
+                
                 (index == props.word.keySplit.length-1 ?
-                  ''
+                  null
                   :
-                  ',\xa0'
+                  <span style={{borderBottom:'1px solid #306190',paddingBottom:'1px','paddingRight':'3px'}}>
+                  {',\xa0'}
+                  </span>
                 )
-            }
-              </span>
+                
+              }
+              
               </Link>
             )}
 
-          <span style={{ display:'flex', height:'20px','marginLeft': '18px'}}>  
+          <span style={{height:'20px','marginLeft': '18px'}}>  
             {isNoun ? <Label size='mini' style={{backgroundColor:'#7F90B0',color:'white'}}>NOUN</Label> : ''}
             {isVerb ? <Label size='mini' style={{backgroundColor:'#B07F7F',color:'white'}}>VERB</Label> : ''}
             {isParticle ? <Label size='mini'>PARTICLE</Label> : ''}
