@@ -73,18 +73,14 @@ export const AudioItem = (props) => {
 }
 
 export const WordItemLikeInup = (props) => {
-  // console.log(props)
   let verbkeyStringbool = false
-  // console.log(props.word.verbkeyString.pos)
   if ('verbkeyString' in props.word) {
     if (props.word.verbkeyString.keyString.length !== 0 && props.word.pos == 'noun') {
       props.word.pos.push('verb')
       props.word.keyString = props.word.keyString.replace(',',', ')
-      console.log('yes!')
       verbkeyStringbool = true
     }    
   }
-  // let word = props.word;
   let isNoun = props.word.pos.includes('noun');
   let isVerb = props.word.pos.includes('verb');
   let isParticle = props.word.pos.includes('particle');
@@ -101,11 +97,6 @@ export const WordItemLikeInup = (props) => {
   let isEnclitic = props.word.pos.includes('enclitic');
   let isUnlinked = props.word.pos.includes('unlinked');
 
-  // let isExpression = props.word.pos.includes('expression');
-  // let isCommon = props.word.pos.includes('grammar');
-  // let isHBC = props.word.pos.includes('Hooper Bay Chevak');
-
-  // console.log(props.word)
   if (isUnlinked) {
     return (
       <List.Item style={{'paddingLeft':props.paddingLeft,paddingTop:5,paddingBottom:8}} key={props.word.keyString}>
@@ -131,7 +122,6 @@ export const WordItemLikeInup = (props) => {
 
       <List.Content>
         <List.Header style={{lineHeight:'28px',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'18px',paddingBottom:'10px',paddingTop:'5px'}}>
-          {/*{console.log(props.word.keySplit)}*/}
           {props.word.keySplit.map((w,index) => 
               <Link style={{fontSize:'18px',color:'#306190',fontWeight:'400',}} to={{pathname: '/' + props.word.url, state: { entry: props.entry, word: props.word, search: props.search, wordsList: props.wordsList, yugtunAnalyzer: false, parses: [], segments: [],endingrule: []}}}>
               <span style={{borderBottom:'1px solid #306190',paddingBottom:'1px'}}>
@@ -141,7 +131,6 @@ export const WordItemLikeInup = (props) => {
               {w[1][0] !== '' ?
                   <Label style={{'marginLeft':'5px',marginRight:(index === props.word.keySplit.length-1 ? '0px' : '5px')}} size='mini' color='white'>{w[1].join(', ')}</Label>
                 :
-                
                 (index == props.word.keySplit.length-1 ?
                   null
                   :
@@ -149,12 +138,9 @@ export const WordItemLikeInup = (props) => {
                   {',\xa0'}
                   </span>
                 )
-                
               }
-              
               </Link>
             )}
-
           <span style={{height:'20px','marginLeft': '18px'}}>  
             {isNoun ? <Label size='mini' style={{backgroundColor:'#7F90B0',color:'white'}}>NOUN</Label> : ''}
             {isVerb ? <Label size='mini' style={{backgroundColor:'#B07F7F',color:'white'}}>VERB</Label> : ''}
@@ -167,18 +153,14 @@ export const WordItemLikeInup = (props) => {
             {isDemonstrative ? <Label size='mini'>DEMONSTRATIVE</Label> : ''}
             {isInterjection ? <Label size='mini'>INTERJECTION</Label> : ''}
             {isUnlinked ? <Label size='mini'>UNLINKED</Label> : ''}
-
             {isPostbase ? <Label size='mini' style={{backgroundColor:'#d56ea8',color:'white'}}>POSTBASE</Label> : ''}
             {isEnclitic ? <Label size='mini' style={{backgroundColor:'#60bf76',color:'white'}}>ENCLITIC</Label> : ''}
-
           </span>
-
-          { props.word.entryDialect.length !== 0 ?
+          {props.word.entryDialect.length !== 0 ?
             <Label style={{'marginLeft':'5px',marginRight:'5px'}} size='mini' color='white'>{props.word.entryDialect.join(', ')}</Label>
           :
           null
           }
-
         </List.Header>
         <List.Description style={{fontSize:'16px',fontWeight:'400',lineHeight:'22px',color:'#000000b3'}}>{props.word.definitionString}</List.Description>
       </List.Content>
@@ -195,7 +177,6 @@ export const WordItem = (props) => {
     if (props.word.verbkeyString.keyString.length !== 0 && props.word.pos == 'noun') {
       props.word.pos.push('verb')
       props.word.keyString = props.word.keyString.replace(',',', ')
-      console.log('yes!')
       verbkeyStringbool = true
     }    
   }

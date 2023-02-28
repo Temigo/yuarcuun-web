@@ -4614,7 +4614,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center',padding:'8px 15px',backgroundColor:'#f7f7f7'}}>
 										        		<div style={{flex:1}}>
 											        		<div style={{color:'#545454',fontFamily:customFontFam}}>{k[0]}</div>
-											        		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{k[1]}</div>
+											        		<div style={{color:'#d3d3d3',fontFamily:customFontFam,marginLeft:'5px'}}>{k[1]}</div>
 										        		</div>
 										        		<Icon circular onClick={()=>{
 												      			// if (newpostbases[popularPostbases[p]['expression']]['type']=="VV") {
@@ -4649,7 +4649,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 										        		<List.Item style={{display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center',padding:'8px 15px',backgroundColor:'#f7f7f7'}}>
 										        		<div style={{flex:1}}>										        		
 											        		<div style={{color:'#545454',fontFamily:customFontFam}}>{k[0]}</div>
-											        		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{k[1]}</div>
+											        		<div style={{color:'#d3d3d3',fontFamily:customFontFam,marginLeft:'5px'}}>{k[1]}</div>
 										        		</div>
 										        		<div style={{width:30}} />
 										        		</List.Item>
@@ -4730,7 +4730,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 																	      		<div style={{marginBottom:'5px',color:'#545454'}}>
 																	      		<span>{this.processStyledPostbaseText(k['fsts'],'2',forEnglish,itemUpdating[1][0],mood,itemUpdating)}</span>
 																	      		<span style={{color:'#bdbdbd'}}>{'...'}</span></div>
-																	      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{k['fsts']}</div>
+																	      		<div style={{color:'#d3d3d3',fontFamily:customFontFam,marginLeft:'5px'}}>{k['fsts']}</div>
 																      		</div>
 															      		</Button>
 													      			}
@@ -4749,7 +4749,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 																      		<div style={{marginBottom:'5px',color:'#545454'}}>
 																      		<span>{this.processStyledMainText(k,forEnglish,itemUpdating[1][0],mood)}</span>
 																      		</div>
-																      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{k['fsts'].toString()+'-'}</div>
+																      		<div style={{color:'#d3d3d3',fontFamily:customFontFam,marginLeft:'5px'}}>{k['fsts'].toString()+'-'}</div>
 															      		</div>
 														      		</Button>
 													      		}
@@ -4819,7 +4819,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 																      		<div style={{marginBottom:'5px',color:'#545454'}}>
 																      		<span>{this.processStyledPostbaseText(popularPostbases[p],'1',forEnglish,itemUpdating[1][0],mood,itemUpdating)}</span>
 																      		<span style={{color:'#bdbdbd'}}>{'...'}</span></div>
-																      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{newpostbases[popularPostbases[p]['expression']]['exp']}</div>
+																      		<div style={{color:'#d3d3d3',fontFamily:customFontFam,marginLeft:'5px'}}>{newpostbases[popularPostbases[p]['expression']]['exp']}</div>
 															      		</div>
 														      		</Button>
 													      		}
@@ -4866,7 +4866,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 																	      		<div style={{marginBottom:'5px',color:'#545454'}}>
 																	      		<span>{this.processStyledMainText(popularBases[p],forEnglish,itemUpdating[1][0],mood)}</span>
 																	      		<span style={{color:'#bdbdbd'}}>{'.'}</span></div>
-																	      		<div style={{color:'#c5c5c5',fontFamily:customFontFam,fontWeight:'200',marginLeft:'5px'}}>{popularBases[p]['fstsDisplay']}</div>
+																	      		<div style={{color:'#d3d3d3',fontFamily:customFontFam,marginLeft:'5px'}}>{popularBases[p]['fstsDisplay']}</div>
 																      		</div>
 														      		 </Button>
 														      	})}
@@ -5276,7 +5276,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 
 	render() {
-		console.log(this.state)
+		// console.log(this.state)
 		// console.log("mvv",this.state.mvvMood)
 		// console.log("mvvtype",this.state.mvvType)
 		// console.log("cvv",this.state.cvvMood)
@@ -5470,16 +5470,24 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 								}
 
 
-{/*
 
-								{this.state.mvvs.length > 0 ?
-									<div style={{display:'flex',justifyContent:'center',paddingBottom:10}}>
-									{this.editMenu('defaultmv',-1)}
-									</div>
+
+
+
+								{this.fromEntry && this.state.mvvs.length == 0 && this.state.npn.length == 0 ? 
+									<Segment basic style={{height:257}}>
+										{this.state.usageDictionary.length != 0 ?
+			                <Dimmer active inverted>
+			                  <Loader size='large' inverted />
+			                </Dimmer>
+											:
+											null
+										}
+		              </Segment>
 									:
 									null
 								}
-*/}
+
 
 								<div ref={(element)=>{this.mvEnglishVerticalRef=element;}}  style={{textAlign:'center',fontSize:'18px',fontWeight:'300',marginTop:'20px'}}>
 
@@ -5773,7 +5781,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 								{this.state.mvnObliquesSegments.length > 0 && this.state.mvnObliquesSegments.length === this.state.mvnObliques.length && this.state.mvnObliquesSegments.length === this.state.mvnObliquesEnglish2.length ? 
 									(this.state.mvnObliques.map((obliques,obliqueind)=>
-										<div style={{display:'flex',justifyContent:'center',alignItems:'center',}}>
+										<div style={{display:'flex',flexDirection:(window.innerWidth < 480 || this.state.npnSegments.length > 2 ? 'column':'row'),justifyContent:'center',alignItems:'center',}}>
+
 											{obliques['n'].slice().reverse().map((x,xind)=>
 												<span>
 												{xind === 0 ?
@@ -6060,8 +6069,9 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 												<span>
 												{xind === 0 ?
 													<span>
-														{this.state.cvvBase[1] == 'it' && !this.arraysEqual(this.state.cvno[0][0],[0,0,0,1]) ?
-															<span style={{color:this.getColor('cvns00.c')}}>{'(some) '}</span>
+
+														{this.state.cvvBase[1] == 'it' && !this.arraysEqual(this.state.cvno[0][0],[0,0,0,1]) && !this.arraysEqual(this.state.cvno[0][0],[0,0,0,2]) && !this.arraysEqual(this.state.cvno[0][0],[0,0,0,3]) ?
+															<span style={{color:this.getColor('cvns00.c')}}>{'(some of) '}</span>
 															:
 															null
 														}
@@ -6245,8 +6255,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 												<span>
 												{xind === 0 ?
 													<span>
-														{this.state.svvBase[1] == 'it' && !this.arraysEqual(this.state.svno[0][0],[0,0,0,1]) ?
-															<span style={{color:this.getColor('svns00.c')}}>{'(some) '}</span>
+														{this.state.svvBase[1] == 'it' && !this.arraysEqual(this.state.svno[0][0],[0,0,0,1]) && !this.arraysEqual(this.state.svno[0][0],[0,0,0,2]) && !this.arraysEqual(this.state.svno[0][0],[0,0,0,3]) ?
+															<span style={{color:this.getColor('svns00.c')}}>{'(some of) '}</span>
 															:
 															null
 														}

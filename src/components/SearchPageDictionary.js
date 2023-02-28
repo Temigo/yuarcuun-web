@@ -450,6 +450,7 @@ class SearchPageDictionary extends Component {
               <Input
                 ref={this.handleRef}
                 placeholder='Search a word...'
+                disabled={this.props.dictionary.length === 0}
                 // action={{ icon: (this.state.yugtunAnalyzer ? 'search' : null), transparent:true,size:'huge', onClick: () => 
                 // {this.state.yugtunAnalyzer ? this.inputClicked() : null}
                 // }}

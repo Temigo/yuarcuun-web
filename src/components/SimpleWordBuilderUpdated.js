@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import '../App.css';
 import '../semantic/dist/semantic.min.css';
-import { Container, Dropdown, Icon, Button, Divider } from 'semantic-ui-react';
+import { Container, Dropdown, Icon, Button, Divider, Segment, Dimmer, Loader } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../App.js';
@@ -1061,6 +1061,11 @@ class SimpleWordBuilderUpdated extends Component {
     // }).length;
     return (
       <div>
+      {this.state.npnSegments.length === 0 && this.state.mvvBase.length === 0 ?
+        <Segment basic style={{height:171}} />     
+        :
+        null
+      }
 
       {this.state.mvvBase.length > 0 && this.state.mvvSegments.length > 0 ?
         <div style={{marginTop:'13px', marginBottom:'20px',marginLeft:'15px'}}>

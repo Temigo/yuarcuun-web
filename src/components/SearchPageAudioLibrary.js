@@ -280,6 +280,7 @@ class SearchPage extends Component {
       playingAudio: false,
       clickedAudioUrl: "",
       clickedAudio: null,
+      clickedAudioIndex:-1,
     }
     // this.getParse = this.getParse.bind(this);
     this.onChangeSearch = this.onChangeSearch.bind(this);
@@ -738,7 +739,7 @@ class SearchPage extends Component {
   //   return parse[index];
   // }
 
-  repeatAudio(audio, event, data) {
+  repeatAudio(audio, index, event, data) {
     // console.log(audio.mp3)
     // var a = new Audio(API_URL+'static/WoW-Link.mp3');
     // a.play();
@@ -775,7 +776,7 @@ class SearchPage extends Component {
       let audio = this.state.clickedAudio;
       audio.pause();
       audio.currentTime = 0;
-      this.setState({clickedAudio:audio, playingAudio: false})
+      this.setState({clickedAudio:audio, clickedAudioIndex:-1, playingAudio: false})
     }
 
     // stop first audio then play new one
@@ -787,16 +788,16 @@ class SearchPage extends Component {
       this.setState({playingAudio: true});
       let secondAudio = new Audio(audioURL);
       secondAudio.play();
-      this.setState({clickedAudioUrl:audioURL, clickedAudio:secondAudio})
-      secondAudio.onended=()=>{this.setState({playingAudio: false})};
+      this.setState({clickedAudioUrl:audioURL,  clickedAudioIndex:index, clickedAudio:secondAudio})
+      secondAudio.onended=()=>{this.setState({playingAudio: false,clickedAudioIndex:-1,})};
     }
 
     // play audio again
     if (this.state.playingAudio === false && this.state.clickedAudioUrl === audioURL) {
       let audio = this.state.clickedAudio;
-      this.setState({playingAudio: true});
+      this.setState({playingAudio: true,  clickedAudioIndex:index, });
       audio.play();
-      audio.onended=()=>{this.setState({playingAudio: false})};
+      audio.onended=()=>{this.setState({playingAudio: false,clickedAudioIndex:-1,})};
     }
 
     // play new audio
@@ -804,8 +805,8 @@ class SearchPage extends Component {
       this.setState({playingAudio: true});
       let audio = new Audio(audioURL);
       audio.play();
-      this.setState({clickedAudioUrl:audioURL, clickedAudio:audio})
-      audio.onended=()=>{this.setState({playingAudio: false})};
+      this.setState({clickedAudioUrl:audioURL, clickedAudioIndex:index, clickedAudio:audio})
+      audio.onended=()=>{this.setState({playingAudio: false,clickedAudioIndex:-1,})};
     }
 
   }
@@ -928,7 +929,7 @@ class SearchPage extends Component {
             {displayList  ? 
                 wordsList.map((word, index) => 
                 <List.Item style={{paddingTop:'10px',paddingBottom:'10px'}}>
-                  <Button style={{float:'left', border:'solid 1px #dededf',backgroundColor:'white', color:'#4a80b5',cursor:'pointer'}} circular icon='volume up' onClick={()=>this.repeatAudio(word)} />
+                  <Button style={{float:'left', border:(this.state.playingAudio && this.state.clickedAudioIndex === index ? 'solid 1px #4a80b5' : 'solid 1px #dededf'),backgroundColor:'white', color:'#4a80b5',cursor:'pointer'}} circular icon='volume up' onClick={()=>this.repeatAudio(word,index)} />
                   <Button style={{float:'right', color:'#8F8F8F',cursor:'pointer'}} basic icon='dropdown' onClick={()=>this.setActiveAudioIndex(word,index)} />
                   <List.Content>
                     <List.Header style={{width:'100%',display:'flex',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'16px',paddingBottom:'4px'}}>
@@ -1012,7 +1013,9 @@ class SearchPage extends Component {
                     <div>
                     <span onClick={()=>{this.setState({search:'shaman',wordsList: fuzzysort.go('shaman', this.props.audiolibrary, optionsFuzzy).map(({ obj }) => (obj)),newStartingSearch:true})}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>shaman</span>
                     <span>{', '}</span>
-                    <span onClick={()=>{this.setState({search:'angalkuq',wordsList: fuzzysort.go('angalkuq', this.props.audiolibrary, optionsFuzzy).map(({ obj }) => (obj)),newStartingSearch:true})}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>angalkuq</span>       
+                    <span onClick={()=>{this.setState({search:'ellam yua',wordsList: fuzzysort.go('ellam yua', this.props.audiolibrary, optionsFuzzy).map(({ obj }) => (obj)),newStartingSearch:true})}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>ellam yua</span>       
+                    <span>{', '}</span>
+                    <span onClick={()=>{this.setState({search:'weather',wordsList: fuzzysort.go('weather', this.props.audiolibrary, optionsFuzzy).map(({ obj }) => (obj)),newStartingSearch:true})}} style={{textDecoration:'underline',color:'#4A80B5',cursor:'pointer'}}>weather</span>                           
                     </div>
                     </div>
 

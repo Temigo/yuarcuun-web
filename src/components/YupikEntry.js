@@ -18,9 +18,6 @@ class YupikEntry extends Component {
     this.state = {
       entry: props.entry,
       word: props.word,
-      // postbaseTableOn: false,
-      // displayEntryNumber: props.displayEntryNumber,
-      // entryNumber: props.entryNumber
     };
   }
 
@@ -29,8 +26,6 @@ class YupikEntry extends Component {
       this.setState({
         entry: this.props.entry,
         word: this.props.word,
-        // displayEntryNumber: this.props.displayEntryNumber,
-        // entryNumber: this.props.entryNumber
       });
     }
   }
@@ -95,22 +90,6 @@ class YupikEntry extends Component {
 
 
   processPostbaseExampleRow = (sentence) => {     
-    // sentence = sentence.trim()
-    // let words = sentence.trim().split(' ')
-    // console.log(words)
-    // if (words.length > 2 && words[1] === 'or') {
-    //    return <div>
-    //       <span style={{fontWeight:'bold',paddingRight:'5px'}}>{words.slice(0,3)}</span>
-    //       <span>{words.slice(3,).join(' ')}</span>
-    //     </div>     
-    // } else {
-    //  return <div>
-    //     <span style={{fontWeight:'bold',paddingRight:'5px'}}>{words[0]}</span>
-    //     <span>{words.slice(1,).join(' ')}</span>
-    //   </div>
-    // }
-
-    // remove links
     sentence = sentence.replaceAll(/{(.*?)}⟨.*?⟩/g,"$1")
 
     let matches = sentence.match(/`.*(`|')/g)
@@ -253,7 +232,7 @@ class YupikEntry extends Component {
   }
 
   render() {
-    console.log(this.state)
+    // console.log(this.state)
     let postbaseTableOn = false
     let postbaseExampleOn = false
     return (

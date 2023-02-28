@@ -560,8 +560,8 @@ class SearchPage extends Component {
   // }
 
   render() {
-    console.log("SearchPage state: ", this.state);
-    console.log("SearchPage props: ", this.props);
+    // console.log("SearchPage state: ", this.state);
+    // console.log("SearchPage props: ", this.props);
     // console.log("dictionary: ",dictionary_dict);
     // console.log("fuse.js: ",fuse.search('pissur'))
     // console.log("Fuzzysort: ",fuzzysort.go('pissur', dictionary, optionsFuzzy));
