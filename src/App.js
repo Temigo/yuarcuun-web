@@ -160,7 +160,7 @@ class App extends Component {
   render() {
     // console.log(this.state)
 
-    // console.log(window.location.href)
+    console.log(window.location.href)
     // this.state.audiolibrary.length !== 0 && this.state.dictionary.length !== 0 && this.state.usageDictionary !== 0 && this.state.filteredDictV !== 0 && this.state.filteredDictVit !== 0 && this.state.filteredDictN !== 0 ?
     return (
       <div style={{margin:0,padding:0}}>
