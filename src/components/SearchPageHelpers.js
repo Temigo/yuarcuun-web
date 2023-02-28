@@ -22,7 +22,7 @@ export const YugtunFooter = (props) => (
 )
 
 export const TagColors = (props) => {
-  console.log('hi',props.word)
+  // console.log('hi',props.word)
   let isNoun = props.word == 'noun';
   let isVerb = props.word == 'verb';
   let isParticle = props.word == 'particle';

@@ -318,7 +318,6 @@ class YupikEntry extends Component {
             (this.state.entry.usage.length !== 0 ? 
               <div style={{border:'1px solid #E3E3E3',marginTop:'10px'}}>
               {this.state.entry.usage.map((entry,i) => {
-                console.log(entry,i)
                 if (entry[3].constructor === Array) {
                   return entry[3].map((k,index) => <span>
                     {index === 0 ? 
