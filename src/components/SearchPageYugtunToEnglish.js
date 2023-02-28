@@ -564,7 +564,7 @@ class SearchPage extends Component {
   }
 
   resetAll = (e, data) => {
-    console.log('hello???')
+    // console.log('hello???')
     this.setState({
       search: "",
       newSearchList: [],

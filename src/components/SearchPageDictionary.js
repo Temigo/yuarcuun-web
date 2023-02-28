@@ -93,6 +93,7 @@ class SearchPageDictionary extends Component {
   }
 
   componentDidMount() {
+    window.history.replaceState({}, document.title)
     this.resetAll();
   }
   //   let start = now();

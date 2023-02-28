@@ -1591,9 +1591,9 @@ export const nObject4thPersonCalls = {
   '311':'his',
   '312':'her',
   '313':'its',
-  // '320':'their (2)',
+  '320':'their (2)',
   '321':'their (2)',
-  // '330':'their (3+)',
+  '330':'their (3+)',
   '331':'their (3+)',
 
   // '410':'its',

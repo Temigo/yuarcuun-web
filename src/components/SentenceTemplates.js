@@ -83,14 +83,14 @@ class SentenceTemplates extends PureComponent {
 
     const currentIndexPosition = activeIndexes.indexOf(index);
 
-    console.log(currentIndexPosition, activeIndexes, index)
+    // console.log(currentIndexPosition, activeIndexes, index)
     if (currentIndexPosition > -1) {
       newIndex.splice(currentIndexPosition, 1);
     } else {
       newIndex.push(index);
     }
 
-    console.log(newIndex)
+    // console.log(newIndex)
 
     // let mood = moods[index];
     // if (newIndex !== -1) {   
