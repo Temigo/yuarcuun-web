@@ -10,7 +10,7 @@ import { API_URL, TUTORIAL_URL, ICON_URL } from '../App.js';
 // import Fuse from 'fuse.js';
 import fuzzysort from 'fuzzysort'
 import now from 'performance-now';
-import ReactGA from 'react-ga';
+// import ReactGA from 'react-ga';
 // import GitHubForkRibbon from 'react-github-fork-ribbon';
 import { YugtunLoader, YugtunFooter, WordItem, AudioItem, tagColors } from './SearchPageHelpers.js';
 // import TableEntry from './TableEntry.js';

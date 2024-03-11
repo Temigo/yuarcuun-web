@@ -11,7 +11,7 @@ import shuffle from 'shuffle-array';
 // import { TagColors } from './SentenceBulderHelpe.js';
 import fuzzysort from 'fuzzysort'
 import now from 'performance-now';
-import ReactGA from 'react-ga';
+// import ReactGA from 'react-ga';
 // import SentenceTemplates from './SentenceTemplates.js'
 import SentenceTemplates from "./SentenceTemplates.js";
 import SentenceGlossary from "./SentenceGlossary.js";
@@ -572,12 +572,12 @@ class SentenceBuilder extends Component {
         .get(API_URL + "/yupiksearchableusagelist/all")
         .then(response => {
           let end = now();
-          ReactGA.timing({
-            category: 'Loading',
-            variable: 'dictionary',
-            value: (end-start).toFixed(3),
-            label: 'Dictionary loading'
-          });
+          // ReactGA.timing({
+          //   category: 'Loading',
+          //   variable: 'dictionary',
+          //   value: (end-start).toFixed(3),
+          //   label: 'Dictionary loading'
+          // });
           usageDictionary = response.data;
           // console.log(usageDictionary)
           // console.log('Fetched usage dictionary');
