@@ -16,6 +16,8 @@ import now from "performance-now";
 import TableEntry from "./TableEntry.js";
 import {demPro,perPro,endingToEnglishTerms,endingEnglishDescriptions,endingDescriptions,exampleSentences,accordionTitlesVerbs,accordionTitlesNouns,accordionTitlesQuantQual,persPronounLabels,persPronounSubjects,persPronounsEnglish,demPronounTitles,demPronounSubjects,demPronounEnglish,moods} from "./constants/endingsConstants.js";
 // import {endingIndexess} from './constants/endingIndexess.js';
+import ReactGA from "react-ga4";
+ReactGA.initialize("G-WDEJDCK7QT")
 
 // Cache dictionary
 // let dictionary = [];

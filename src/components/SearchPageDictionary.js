@@ -16,6 +16,8 @@ import { WordItem, WordItemLikeInup } from './SearchPageHelpers.js';
 // import TableEntry from './TableEntry.js';
 // import {demPro, perPro} from './constants/pronounEndings.js';
 // import {endingRules} from './constants/endingRules.js';
+import ReactGA from "react-ga4";
+ReactGA.initialize("G-WDEJDCK7QT")
 
 // Cache dictionary
 // let dictionary = [];

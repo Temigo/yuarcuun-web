@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Container, Header, Button, Icon, Divider } from 'semantic-ui-react';
 import '../semantic/dist/semantic.min.css';
+import ReactGA from "react-ga4";
+ReactGA.initialize("G-WDEJDCK7QT")
 
 class About extends Component {
   constructor(props) {

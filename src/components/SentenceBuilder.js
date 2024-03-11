@@ -18,6 +18,8 @@ import SentenceGlossary from "./SentenceGlossary.js";
 import { sentenceTemplates } from './constants/sentence_templates.js'
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
+import ReactGA from "react-ga4";
+ReactGA.initialize("G-WDEJDCK7QT")
 
 let customFontFam = "Roboto,'Helvetica Neue',Arial,Helvetica,sans-serif"
 const YUGTUNDOTCOM_URL = "https://www.yugtun.com/";
@@ -138,7 +140,7 @@ let dictionary_dict = {};
 class SentenceBuilder extends Component {
 	constructor(props) {
 		super(props);
-		console.log(this.props)
+		// console.log(this.props)
 		// console.log(decodeURI(props.match.params.num))
 		this.state = {
 

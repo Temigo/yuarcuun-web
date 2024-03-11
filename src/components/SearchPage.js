@@ -18,6 +18,8 @@ import SearchPageDictionary from './SearchPageDictionary.js'
 import SearchPageAudioLibrary from './SearchPageAudioLibrary.js'
 import SearchPageYugtunToEnglish from './SearchPageYugtunToEnglish.js'
 // import {endingRules} from './constants/endingRules.js';
+import ReactGA from "react-ga4";
+ReactGA.initialize("G-WDEJDCK7QT")
 
 // Cache dictionary
 let dictionary = [];

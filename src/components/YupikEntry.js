@@ -8,6 +8,8 @@ import { TagColors, WordItemLikeInup } from './SearchPageHelpers.js';
 import SimpleWordBuilder from './SimpleWordBuilder.js';
 import SimpleWordBuilderUpdated from './SimpleWordBuilderUpdated.js';
 import {DialectDictionary} from './constants/DialectDictionary.js';
+import ReactGA from "react-ga4";
+ReactGA.initialize("G-WDEJDCK7QT")
 
 let customFontFam = "Roboto,'Helvetica Neue',Arial,Helvetica,sans-serif"
 

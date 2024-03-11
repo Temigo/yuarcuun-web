@@ -6,6 +6,8 @@ import { lessonsList, dialogueLibrary } from './constants/qaneryaurci.js';
 import { dialogueGenerator } from './constants/dialogueListGenerator.js';
 import '../semantic/dist/semantic.min.css';
 import * as Scroll from 'react-scroll';
+import ReactGA from "react-ga4";
+ReactGA.initialize("G-WDEJDCK7QT")
 
 var scroll = Scroll.animateScroll;
 

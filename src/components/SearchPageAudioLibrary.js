@@ -17,6 +17,8 @@ import { YugtunLoader, YugtunFooter, WordItem, AudioItem, tagColors } from './Se
 // import {demPro, perPro} from './constants/pronounEndings.js';
 // import {endingRules} from './constants/endingRules.js';
 // import { LazyLoadImage } from 'react-lazy-load-image-component';
+import ReactGA from "react-ga4";
+ReactGA.initialize("G-WDEJDCK7QT")
 
 const WEB_URL = "https://yuarcuun.inupiaqonline.com";
 const KYUK_URL = 'https://archive.kyuk.org'
