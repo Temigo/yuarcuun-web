@@ -43,6 +43,7 @@
     "google-palette": "^1.1.0",
     "gulp": "3.9.1",
     "html-webpack-plugin": "2.29.0",
+    "http-parser-js": "^0.5.10",
     "jest": "20.0.4",
     "object-assign": "4.1.1",
     "path": "^0.12.7",
@@ -56,6 +57,7 @@
     "react-dom": "^16.8.6",
     "react-expand-text": "^1.0.0",
     "react-ga": "^2.5.7",
+    "react-ga4": "^2.1.0",
     "react-github-fork-ribbon": "^0.6.0",
     "react-horizontal-scrolling-menu": "^0.7.8",
     "react-redux": "^5.1.1",
@@ -76,7 +78,7 @@
   },
   "scripts": {
     "start": "node scripts/server.js",
-    "devstart": "node scripts/start.js",
+    "devstart": "node --openssl-legacy-provider scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
     "analyze": "source-map-explorer build/static/js/main.*"
