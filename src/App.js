@@ -166,7 +166,7 @@ class App extends Component {
     return (
       <div style={{margin:0,padding:0}}>
         {
-            this.state.dictionary.length !== 0 || window.location.href !== "https://yuarcuun.inupiaqonline.com/" ?
+            this.state.dictionary.length !== 0 ?
             <Switch>
               <Route exact path='/' render={(props) => <SearchPage audiolibrary={this.state.audiolibrary} dictionary_dict={this.state.dictionary_dict} usageDictionary={this.state.usageDictionary} dictionary={this.state.dictionary} filteredDictV={this.state.filteredDictV} filteredDictVit={this.state.filteredDictVit} filteredDictN={this.state.filteredDictN} {...props} />}/>
               <Route exact path='/about' component={About} />
