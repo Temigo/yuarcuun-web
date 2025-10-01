@@ -31,7 +31,7 @@ class TableEntry extends PureComponent {
     if (base == 'n') {
       word.map((k,index)=>{
         const lastIndex = k.lastIndexOf('<')
-        finalHTML = k.slice(0, lastIndex)
+        finalHTML += '<span>'+k.slice(0, lastIndex).replace(/</g,'')+'</span>'
         let desiredRegion = k.slice(lastIndex+1).split('&')[0]
         if (desiredRegion.includes('↠')) {
           finalHTML += '<span style="color:#002477">'+desiredRegion.split('↠')[0]+'</span>'
@@ -50,7 +50,7 @@ class TableEntry extends PureComponent {
     } else if (base == 'quantQual') {
       word.map((k,index)=>{
         const lastIndex = k.lastIndexOf('<')
-        finalHTML = k.slice(0, lastIndex)
+        finalHTML += '<span>'+k.slice(0, lastIndex).replace(/</g,'')+'</span>'
         let desiredRegion = k.slice(lastIndex+1)
         finalHTML += '<span style="color:#002477">'+desiredRegion+'</span>'
         if (word.length-1 !== index) {
@@ -75,7 +75,6 @@ class TableEntry extends PureComponent {
         }
       })      
     }
-
     return <span dangerouslySetInnerHTML={{__html: finalHTML}} />
   }
 
