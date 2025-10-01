@@ -287,7 +287,9 @@ class YupikEntry extends Component {
               <div style={{marginLeft:'10px',color:'#000000',fontSize:'18px','fontWeight':'300'}}>{'○'}</div>
               <div style={{marginLeft:'20px',marginRight:'15px',color:'#000000',fontSize:'18px',lineHeight:'27px'}}>{this.processStyledText(entry[0])}</div>
               {entry[1][0] !== '' ?
-                <Label style={{height:'20px',fontSize:'10px'}} horizontal>{entry[1]}</Label>
+                (entry[1].map((dialect)=> 
+                  <Label style={{height:'20px',fontSize:'10px'}} horizontal>{dialect}</Label>
+                ))
                 :
                 null
                 }
