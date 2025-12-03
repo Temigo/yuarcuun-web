@@ -3,6 +3,14 @@
   margin: 10px;
 }
 
+/*.modal {
+    height: auto;
+    top: auto;
+    left: auto;
+    bottom: auto;
+    right: auto;
+}*/
+
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 80px;
@@ -179,11 +187,22 @@
 .ui.dropdown.frontpage .menu .item {
   line-height: 20px;
 }
-
-.ui.modal {
-  width: 93%;
+.ui.form .field>label {
+  font-weight: 500;
 }
 
+.dimmed.dimmable > .ui.modals.dimmer.visible {
+  display: flex !important;
+}
+
+/*.ui.modal {
+    height: auto;
+    top: auto;
+    left: auto;
+    bottom: auto;
+    right: auto;
+}
+*/
 .ui.dropdown .scrolling.menu, .ui.scrolling.dropdown .menu {
     max-height: 9.28571429rem;
 }

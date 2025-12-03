@@ -12,10 +12,12 @@ import SentenceGlossary from './components/SentenceGlossary.js';
 import About from './components/About.js';
 import Dialogues from './components/Dialogues.js';
 import DialogueMenu from './components/DialogueMenu.js';
+// import Recorder from './components/Recorder.js';
 import Lksdreader from './components/Lksdreader.js';
 import Support from './components/Support.js';
 import Privacy from './components/Privacy.js';
 import Symbols from './components/Symbols.js';
+import Validate from './components/Validate.js';
 import YupikModifyLayout from './components/yupikModify/YupikModifyLayout.js';
 import axios from 'axios';
 import now from 'performance-now';
@@ -174,6 +176,7 @@ class App extends Component {
               <Route exact path='/dialogues' render={(props) => <DialogueMenu completedExercises={this.state.completedExercises} lessonsStarted={this.state.lessonsStarted} {...props} />}/>
               <Route exact path='/lksdreader' component={Lksdreader} />
               <Route exact path='/support' component={Support} />
+              <Route exact path='/validate' component={Validate} />
               <Route exact path='/privacy' component={Privacy} />
               <Route exact path='/symbols' component={Symbols} />
               <Route exact path='/sentenceglossary' component={SentenceGlossary} />

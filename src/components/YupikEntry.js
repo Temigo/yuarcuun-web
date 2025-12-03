@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Segment, List, Header, Label, Grid , Icon, Divider, Table, Transition, Image} from 'semantic-ui-react';
+import { Segment, List, Header, Label, Grid , Icon, Divider, Table, Transition, Image, Modal, Button, ModalContent} from 'semantic-ui-react';
 import '../App.css';
 import '../semantic/dist/semantic.min.css';
 import { Link } from 'react-router-dom';
 import {withRouter} from 'react-router';
 import { TagColors, WordItemLikeInup } from './SearchPageHelpers.js';
 import SimpleWordBuilder from './SimpleWordBuilder.js';
+import Recorder from './Recorder.js';
 import SimpleWordBuilderUpdated from './SimpleWordBuilderUpdated.js';
 import {DialectDictionary} from './constants/DialectDictionary.js';
 import ReactGA from "react-ga4";
@@ -110,6 +111,32 @@ class YupikEntry extends Component {
       return <span>{sentence}</span>
     }
   }
+
+
+  recordClip = (sentenceid, sentence, siteLocation) => {
+    console.log(sentence)
+        return <Modal
+            trigger={<Button circular basic style={{marginLeft:10}} onClick={()=>{this.setState({showModal:sentenceid})}} icon='microphone' />}
+            on='click'
+            open={this.state.showModal==sentenceid}
+            style={{
+              maxWidth:500,
+              marginTop:(window.innerWidth < 480 ? 10 : 10),
+            }}
+            closeOnDimmerClick={false}
+            onOpen={()=>{
+            }}
+            onClose={()=>{
+              this.setState({showModal:-1,wordsList:[],searchQuery:''})
+            }}
+          >
+          <ModalContent>
+            <Icon circular style={{margin:0,color:'#B1B1B1',cursor:'pointer',position:'relative',float:'right'}} size='large' onClick={()=>{this.setState({showModal:-1})}} name='x' />
+            <Recorder sentence={sentence} siteLocation={siteLocation} />          
+          </ModalContent>
+          </Modal>
+  }
+
 
   processPostbaseTableRowHTML = (sentence) => {
     let matchesNormal = sentence.match(/‘.*?’(?!\w)/g)
@@ -517,7 +544,7 @@ class YupikEntry extends Component {
               <span className='span1'>Example Sentences</span>
               </div>
               <div style={{paddingTop:'5px',paddingBottom:'5px'}}>
-              {this.state.entry.baseExamples.map((sentence) => {
+              {this.state.entry.baseExamples.map((sentence, sentenceid) => {
                 return (
                   <List.Item style={{paddingTop:'10px',paddingBottom:'10px',paddingLeft:'15px',paddingRight:'10px'}} key={sentence[0]}>
                     <List.Header style={{paddingBottom:'7px'}}>
@@ -526,6 +553,7 @@ class YupikEntry extends Component {
                         {sentence[0]}
                         </span>
                       </Link>
+                        {this.recordClip(sentenceid, sentence[0],'exampleSentence')}
                     </List.Header>
                     <List.Description style={{fontSize:'16px',fontWeight:'400',color:'#000000b3'}}>{sentence[1]}</List.Description>
                   </List.Item>
