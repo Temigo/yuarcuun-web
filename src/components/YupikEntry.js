@@ -261,7 +261,7 @@ class YupikEntry extends Component {
   }
 
   render() {
-    // console.log(this.state)
+    console.log(this.state)
     let postbaseTableOn = false
     let postbaseExampleOn = false
     return (

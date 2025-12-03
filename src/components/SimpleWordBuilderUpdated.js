@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import '../App.css';
 import '../semantic/dist/semantic.min.css';
-import { Container, Dropdown, Icon, Button, Divider, Segment, Dimmer, Loader, Modal, ModalContent } from 'semantic-ui-react';
+import { Container, Dropdown, Icon, Button, Divider, Segment, Dimmer, Loader, Modal, ModalContent, Popup, List, ListItem } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../App.js';
@@ -10,6 +10,7 @@ import Recorder from './Recorder.js';
 import {withRouter} from 'react-router';
 import StickyMenu from './common/StickyMenu.js';
 import {nounOptionsMVPossessors,colorsList, mvSubject4thPersonCalls, mvObject4thPersonCalls,nObject4thPersonCalls, nounOptionsMVPossessorsThe, mvSubjectOptionsWho, mvSubjectOptionsWhat, mvObjectOptionsWhom, mvObjectOptionsWhomAbl, mvObjectOptionsWhat, mvObjectOptionsWhatAbl,retrieveMoodEnglish, nounOptionsPossessorsNo4th, mvSubjectOptionsOnly2nd, nounOptionsNumbers, nounoptionsmodalis, mvSubjectOptions, mvObjectOptions, mvSubjectOptionsEnglish, verbPostbases, nounPostbases, VVpostbases, NNpostbases} from './constants/newconstants.js'
+import { TagColors, WordItemLikeInup } from './SearchPageHelpers.js';
 
 let customFontFam = "Roboto,'Helvetica Neue',Arial,Helvetica,sans-serif"
 const options = [
@@ -137,7 +138,8 @@ class SimpleWordBuilderUpdated extends Component {
 
       mvSubjectOptions1:mvSubjectOptions,
       mvObjectOptions1:mvObjectOptions,
-
+      segmentString:'',
+      audioRetrieved:[],
     }
   }
 
@@ -259,13 +261,16 @@ class SimpleWordBuilderUpdated extends Component {
           this.initialize('np')
         }
 
+        let segmentString = ''
         if ("segments" in response.data) {
           if ("mv" in response.data.segments) {
             if ("v" in response.data.segments.mv) {
               // this.setState({
                 // mvvSegments: response.data.segments.mv.v,
-              // })             
+              // })
+              response.data.segments.mv.v.map((t)=>{segmentString+=t[0]})
               updateDict['mvvSegments'] = response.data.segments.mv.v
+              updateDict['segmentString'] = segmentString
             } else {
               // this.setState({
                 // mvvSegments: "",
@@ -279,7 +284,9 @@ class SimpleWordBuilderUpdated extends Component {
               // this.setState({
                 // npnSegments: response.data.segments.np.n,
               // })             
+              response.data.segments.np.n.map((t)=>{segmentString+=t[0]})
               updateDict['npnSegments'] = response.data.segments.np.n
+              updateDict['segmentString'] = segmentString
             } else {
               // this.setState({
                 // npnSegments: [],
@@ -302,6 +309,11 @@ class SimpleWordBuilderUpdated extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevState.mv !== this.state.mv || prevState.np !== this.state.np) {
       this.updateAllowableOptions()
+    }
+
+    if (prevState.segmentString !== this.state.segmentString) {
+      console.log(this.state.segmentString)
+      this.displayIfClipExists(this.state.segmentString)
     }
 
   }
@@ -363,7 +375,7 @@ class SimpleWordBuilderUpdated extends Component {
 
   recordClip = (sentence, siteLocation) => {
         return <Modal
-            trigger={<Button circular basic style={{marginLeft:10}} onClick={()=>{this.setState({showModal:true})}} icon='microphone' />}
+            trigger={<Button circular basic style={{marginLeft:5}} onClick={()=>{this.setState({showModal:true})}} icon='microphone' />}
             on='click'
             open={this.state.showModal}
             style={{
@@ -378,15 +390,85 @@ class SimpleWordBuilderUpdated extends Component {
             }}
           >
           <ModalContent>
-            <Icon circular style={{margin:0,color:'#B1B1B1',cursor:'pointer',position:'relative',float:'right'}} size='large' onClick={()=>{this.setState({showModal:false})}} name='x' />
+            <Icon circular style={{margin:0,color:'#929292',cursor:'pointer',position:'relative',float:'right'}} size='large' onClick={()=>{this.setState({showModal:false})}} name='x' />
             <Recorder sentence={sentence} siteLocation={siteLocation} />          
           </ModalContent>
           </Modal>
   }
 
+  displayIfClipExists = (sentence) => {
+    console.log(sentence)
+    axios
+      .get(API_URL + "/yugtunCrowdsourceAudioLookup/" + sentence)
+      .then(response => {
+        console.log(response.data);
+        this.setState({audioRetrieved:response.data})
+      });
+  }
+
+  displayAudioMic = (audioRetrieved) => {
+    return <Popup
+            content={
+              <List style={{fontFamily:customFontFam}} divided verticalAlign='middle'>
+                {audioRetrieved.map((k)=>{
+                  return <ListItem style={{display:'flex',flexDirection:'row',alignItems:'center'}}>
+                          <Icon circular onClick={()=>this.repeatAudio(k['filename'])} style={{color:'#106181',fontSize:'18px', margin:3, cursor:'pointer'}} name='volume up' />
+                          <div style={{display:'flex',flexDirection:'column',marginLeft:10,padding:'5px 0px'}}>
+                            {k['gender'] != 'do_not_wish_to_say' ?
+                              <div>{k['gender']}</div>
+                              :
+                              null
+                            }
+                            {k['age'] != 'do_not_wish_to_say' ?
+                              <div>{k['age']}</div>
+                              :
+                              null
+                            }
+                            {k['village'] != 'do_not_wish_to_say' ?
+                              <div>{k['village']}</div>
+                              :
+                              null
+                            }
+                            {k['gender'] == 'do_not_wish_to_say' && k['age'] == 'do_not_wish_to_say' && k['village'] == 'do_not_wish_to_say' ?
+                              <div>{'Anonymous Clip'}</div>
+                              :
+                              null
+                            }                            
+                          </div>
+                        </ListItem>
+                })}
+                <ListItem style={{display:'flex',flexDirection:'row',alignItems:'center'}}>
+                  {this.recordClip(this.state.segmentString,'entryUsage')}
+                  <div style={{marginLeft:10,padding:'5px 0px'}}>Submit a Recording for Yugtun.com</div>
+                </ListItem>
+              </List>
+              }
+            on='click'
+            pinned='true'
+            style={{padding:8}}
+            position='bottom center'
+            trigger={<Button style={{paddingRight:15, marginLeft:10}} circular basic icon>{audioRetrieved.length == 0 ? <Icon style={{color:'#929292'}} name='microphone' />:<Icon style={{color:'#106181'}} name='volume up' />}<Icon style={{color:'#d2d2d2',paddingLeft:'6px',fontSize:'11px'}} name='chevron down' /> </Button>}
+          />
+  }
+
+  repeatAudio(audio, event, data) {
+    // console.log(audio)
+    if (!this.state.playingAudio) {
+
+      let sound = new Audio(API_URL + "yugtunCrowdsourceAudio/" + audio);
+      this.setState({playingAudio: true});
+
+      sound.play()
+
+      sound.onended=()=>{
+        this.setState({playingAudio: false});
+      }
+    }
+  }
+
 
   render() {
-    // console.log(this.state)
+    console.log(this.state)
 
     // console.log(mvSubjectOptions)
     // console.log(mvObjectOptions)
@@ -410,8 +492,7 @@ class SimpleWordBuilderUpdated extends Component {
             {this.state.mvvSegments.map((t)=>
               <span style={{color:colorsList[this.state.colorScheme][t[1]]}}>{t[0]}</span>
             )}
-            {this.state.mvvSegments.map((t)=>{newWord+=t[0]})}
-            {this.recordClip(newWord,'entryUsage')}
+            {this.displayAudioMic(this.state.audioRetrieved)}
           </div>
         </div>
 

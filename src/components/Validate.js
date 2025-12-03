@@ -136,15 +136,21 @@ class Validate extends Component {
 		return (
 			<div>
 				{[0,1,2,3].map((k)=>{
-					return <div style={{borderLeft:'5px solid '+clipColors[k],borderRight:'5px solid '+clipColors[k]}}>
+					return <div style={{margin:20,border:'10px solid '+clipColors[k]}}>
 					<div style={{textAlign:'center',fontWeight:'bold',fontSize:'24px',margin:40,textDecoration:'underline'}}>{clipTitles[k]}</div>
-					<Grid divided='vertically'>
+						<Grid divided='vertically'>
 						{Object.keys(this.state.validationData).map((d, dindex)=>
 							{if (this.state.validationData[d]['validation'] == clipStatus[k]) {
-								return <Grid.Row columns={5}>
+								if (showLargerTable) {
+										return <Grid.Row columns={5}>
 												<Grid.Column width={6} style={{display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'column'}}>
 													<div style={{fontSize:"20px"}}>{this.state.validationData[d]['sentence']}</div>
+													{window.innerWidth < 900 ?
+													<Icon circular onClick={()=>this.repeatAudio(this.state.validationData[d]['filename'])} style={{fontSize:'20px', margin:10,color:'#8F8F8F',cursor:'pointer'}} name='volume up' />
+													:													
 													<audio controls style={{height:40,margin:20}} src={API_URL + "yugtunCrowdsourceAudio/" + this.state.validationData[d]['filename']} />
+													}
+
 												</Grid.Column>
 												<Grid.Column width={2}>
 													<div>{'Age: '}</div>
@@ -152,9 +158,9 @@ class Validate extends Component {
 													<div>{'Name: '}</div>
 													<div>{'Village: '}</div>
 													<div>{'Date: '}</div>
-													<div>{'Donate to CV: '}</div>
-													<div>{'Sent to CV: '}</div>
-													<div>{'Site Location: '}</div>
+													<div>{'DonateCV: '}</div>
+													<div>{'SentCV: '}</div>
+													<div>{'SiteLoc: '}</div>
 													<div>{'Status: '}</div>
 												</Grid.Column>
 												<Grid.Column width={4}>
@@ -174,9 +180,54 @@ class Validate extends Component {
 													<Button disabled={this.state.validationData[d]['validation']=='reject'} style={{margin:3}} onClick={()=>this.buttonClicked(d,'reject',this.state.validationData[d]['validation'])} color={(this.state.validationData[d]['validation'] == 'reject' || (d in this.state.validationEdit && this.state.validationEdit[d] == 'reject')) ? 'red' : ''}>Reject</Button>
 												</Grid.Column>
 											</Grid.Row>
-										}
+											
+									} else {
+										return <Grid>
+												<Grid.Row style={{display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'column'}}>
+													<div style={{fontSize:"20px"}}>{this.state.validationData[d]['sentence']}</div>
+													{window.innerWidth < 900 ?
+													<Icon circular onClick={()=>this.repeatAudio(this.state.validationData[d]['filename'])} style={{fontSize:'20px', margin:10,color:'#8F8F8F',cursor:'pointer'}} name='volume up' />
+													:													
+													<audio controls style={{height:40,margin:20}} src={API_URL + "yugtunCrowdsourceAudio/" + this.state.validationData[d]['filename']} />
+													}
+												</Grid.Row>
+												<Grid.Row columns={2}>
+													<Grid.Column style={{textAlign:'right'}} width={6}>
+														<div>{'Age: '}</div>
+														<div>{'Gender: '}</div>
+														<div>{'Name: '}</div>
+														<div>{'Village: '}</div>
+														<div>{'Date: '}</div>
+														<div>{'DonateCV: '}</div>
+														<div>{'SentCV: '}</div>
+														<div>{'SiteLoc: '}</div>
+														<div>{'Status: '}</div>
+													</Grid.Column>
+													<Grid.Column width={10}>
+														<div>{this.state.validationData[d]['age'].replace('do_not_wish_to_say','')}<span style={{color:'white'}}>`</span></div>
+														<div>{this.state.validationData[d]['gender'].replace('do_not_wish_to_say','')}<span style={{color:'white'}}>`</span></div>
+														<div>{this.state.validationData[d]['name']}<span style={{color:'white'}}>`</span></div>
+														<div>{this.state.validationData[d]['village'].replace('do_not_wish_to_say','')}<span style={{color:'white'}}>`</span></div>
+														<div>{this.state.validationData[d]['datetime']}<span style={{color:'white'}}>`</span></div>
+														<div>{this.state.validationData[d]['donate']}<span style={{color:'white'}}>`</span></div>
+														<div>{this.state.validationData[d]['sent']}<span style={{color:'white'}}>`</span></div>
+														<div>{this.state.validationData[d]['siteLocation']}<span style={{color:'white'}}>`</span></div>
+														<div>{this.state.validationData[d]['validation']}<span style={{color:'white'}}>`</span></div>
+													</Grid.Column>
+												</Grid.Row>
+												<Grid.Row>
+													<Grid.Column style={{display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'column',}}>
+														<Button disabled={this.state.validationData[d]['validation']=='accept'} style={{margin:3}} onClick={()=>this.buttonClicked(d,'accept',this.state.validationData[d]['validation'])} color={(this.state.validationData[d]['validation'] == 'accept' || (d in this.state.validationEdit && this.state.validationEdit[d] == 'accept')) ? 'green' : ''}>Accept</Button>
+														<Button disabled={this.state.validationData[d]['validation']=='hold'} style={{margin:3}} onClick={()=>this.buttonClicked(d,'hold',this.state.validationData[d]['validation'])} color={(this.state.validationData[d]['validation'] == 'hold' || (d in this.state.validationEdit && this.state.validationEdit[d] == 'hold')) ? 'yellow' : ''}>Hold</Button>
+														<Button disabled={this.state.validationData[d]['validation']=='reject'} style={{margin:3}} onClick={()=>this.buttonClicked(d,'reject',this.state.validationData[d]['validation'])} color={(this.state.validationData[d]['validation'] == 'reject' || (d in this.state.validationEdit && this.state.validationEdit[d] == 'reject')) ? 'red' : ''}>Reject</Button>
+													</Grid.Column>
+												</Grid.Row>
+												<Divider />
+											</Grid>
+									}
+								}
 						})}
-					</Grid>
+					</Grid>				
 				</div>
 				})}
 				<div style={{textAlign:'center'}}><Button color='blue' style={{margin:30}} size='large' onClick={()=>this.submitEdits()}>Submit Changes</Button></div>

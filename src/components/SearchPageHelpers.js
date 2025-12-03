@@ -38,9 +38,15 @@ export const TagColors = (props) => {
   let isTransitive = props.word == 't';
   let isIntransitive = props.word == 'i';
   let isNoun2 = props.word == 'n';
+  let isAge = props.word == 'age';
+  let isGender = props.word == 'gender';
+  let isVillage = props.word == 'village';
 
   return (
-      <span style={{ display:'flex', height:'20px','marginLeft': props.padding}}>  
+      <span style={{ display:'flex', height:'20px','marginLeft': props.padding}}>
+        {isAge ? <Label basic size='mini' style={{color:'#5f5f5f',whiteSpace:'nowrap'}}>{props.content}</Label> : ''}
+        {isGender ? <Label basic size='mini' style={{color:'#5f5f5f',whiteSpace:'nowrap'}}>{props.content}</Label> : ''}
+        {isVillage ? <Label basic size='mini' style={{color:'#5f5f5f',whiteSpace:'nowrap'}}>{props.content}</Label> : ''}
         {isNoun ? <Label size='mini' style={{backgroundColor:'#7F90B0',color:'white'}}>NOUN</Label> : ''}
         {isNoun2 ? <Label size='mini' style={{backgroundColor:'#7F90B0',color:'white'}}>NOUN</Label> : ''}
         {isVerb ? <Label size='mini' style={{backgroundColor:'#B07F7F',color:'white'}}>VERB</Label> : ''}
