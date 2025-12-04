@@ -140,6 +140,8 @@ class SimpleWordBuilderUpdated extends Component {
       mvObjectOptions1:mvObjectOptions,
       segmentString:'',
       audioRetrieved:[],
+
+      openPopup:false,
     }
   }
 
@@ -284,7 +286,7 @@ class SimpleWordBuilderUpdated extends Component {
               // this.setState({
                 // npnSegments: response.data.segments.np.n,
               // })             
-              response.data.segments.np.n.map((t)=>{segmentString+=t[0]})
+              response.data.segments.np.n[0][0].map((t)=>{segmentString+=t[0]})
               updateDict['npnSegments'] = response.data.segments.np.n
               updateDict['segmentString'] = segmentString
             } else {
@@ -375,7 +377,6 @@ class SimpleWordBuilderUpdated extends Component {
 
   recordClip = (sentence, siteLocation) => {
         return <Modal
-            trigger={<Button circular basic style={{marginLeft:5}} onClick={()=>{this.setState({showModal:true})}} icon='microphone' />}
             on='click'
             open={this.state.showModal}
             style={{
@@ -386,6 +387,7 @@ class SimpleWordBuilderUpdated extends Component {
             onOpen={()=>{
             }}
             onClose={()=>{
+              console.log('modal closing?')
               this.setState({showModal:false,wordsList:[],searchQuery:''})
             }}
           >
@@ -397,13 +399,13 @@ class SimpleWordBuilderUpdated extends Component {
   }
 
   displayIfClipExists = (sentence) => {
-    console.log(sentence)
-    axios
-      .get(API_URL + "/yugtunCrowdsourceAudioLookup/" + sentence)
-      .then(response => {
-        console.log(response.data);
-        this.setState({audioRetrieved:response.data})
-      });
+    // console.log(sentence)
+    // axios
+    //   .get(API_URL + "/yugtunCrowdsourceAudioLookup/" + sentence)
+    //   .then(response => {
+    //     // console.log(response.data);
+    //     this.setState({audioRetrieved:response.data})
+    //   });
   }
 
   displayAudioMic = (audioRetrieved) => {
@@ -412,7 +414,7 @@ class SimpleWordBuilderUpdated extends Component {
               <List style={{fontFamily:customFontFam}} divided verticalAlign='middle'>
                 {audioRetrieved.map((k)=>{
                   return <ListItem style={{display:'flex',flexDirection:'row',alignItems:'center'}}>
-                          <Icon circular onClick={()=>this.repeatAudio(k['filename'])} style={{color:'#106181',fontSize:'18px', margin:3, cursor:'pointer'}} name='volume up' />
+                          <Icon circular onClick={()=>this.repeatAudio(k['filename'])} style={{color:'#106181',opacity:0.9,fontSize:'20px', margin:3, cursor:'pointer'}} name='volume up' />
                           <div style={{display:'flex',flexDirection:'column',marginLeft:10,padding:'5px 0px'}}>
                             {k['gender'] != 'do_not_wish_to_say' ?
                               <div>{k['gender']}</div>
@@ -438,16 +440,17 @@ class SimpleWordBuilderUpdated extends Component {
                         </ListItem>
                 })}
                 <ListItem style={{display:'flex',flexDirection:'row',alignItems:'center'}}>
-                  {this.recordClip(this.state.segmentString,'entryUsage')}
+                  <Button circular basic style={{opacity:0.9,marginLeft:5,fontSize:'14px'}} onClick={()=>{this.setState({openPopup:false},()=>{this.setState({showModal:true})})}} icon='microphone' />
                   <div style={{marginLeft:10,padding:'5px 0px'}}>Submit a Recording for Yugtun.com</div>
                 </ListItem>
               </List>
               }
             on='click'
-            pinned='true'
+            open={this.state.openPopup}
+            onClose={()=>this.setState({openPopup:false})}
             style={{padding:8}}
             position='bottom center'
-            trigger={<Button style={{paddingRight:15, marginLeft:10}} circular basic icon>{audioRetrieved.length == 0 ? <Icon style={{color:'#929292'}} name='microphone' />:<Icon style={{color:'#106181'}} name='volume up' />}<Icon style={{color:'#d2d2d2',paddingLeft:'6px',fontSize:'11px'}} name='chevron down' /> </Button>}
+            trigger={<Button onClick={()=>{this.setState({openPopup:true})}} style={{paddingRight:15, marginLeft:10}} circular basic icon>{audioRetrieved.length == 0 ? <Icon style={{color:'#929292'}} name='microphone' />:<Icon style={{color:'#106181',fontSize:'16px'}} name='volume up' />}<Icon style={{color:'#d2d2d2',paddingLeft:'6px',fontSize:'11px'}} name='chevron down' /> </Button>}
           />
   }
 
@@ -468,7 +471,7 @@ class SimpleWordBuilderUpdated extends Component {
 
 
   render() {
-    console.log(this.state)
+    // console.log(this.state)
 
     // console.log(mvSubjectOptions)
     // console.log(mvObjectOptions)
@@ -493,6 +496,11 @@ class SimpleWordBuilderUpdated extends Component {
               <span style={{color:colorsList[this.state.colorScheme][t[1]]}}>{t[0]}</span>
             )}
             {this.displayAudioMic(this.state.audioRetrieved)}
+            {this.state.showModal ?
+              this.recordClip(this.state.segmentString,'entryUsage')
+              :
+              null
+            }
           </div>
         </div>
 
@@ -552,7 +560,12 @@ class SimpleWordBuilderUpdated extends Component {
               {this.state.npnSegments.slice().reverse()[0][0].map((t)=>
                 <span style={{color:colorsList[this.state.colorScheme][t[1]]}}>{t[0]}</span>
               )}
-
+              {this.displayAudioMic(this.state.audioRetrieved)}
+              {this.state.showModal ?
+                this.recordClip(this.state.segmentString,'entryUsage')
+                :
+                null
+              }
             </div>
           </div>
 

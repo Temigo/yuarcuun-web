@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Header, Button, Icon, Divider, Image, Grid, Dropdown, List, Label, Input, Segment, Accordion, Menu, Modal, Dimmer, Loader } from 'semantic-ui-react';
+import { Container, Header, Button, Icon, Divider, Image, Grid, Dropdown, List, Label, Input, Segment, Accordion, Menu, Modal, Dimmer, Loader, ModalContent,ListItem, Popup as Popup1} from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { API_URL } from '../App.js';
 import axios from 'axios';
@@ -7,6 +7,7 @@ import {nounOptionsMVPossessors, mvObjectOptionsEnglish, popularOptPostbases,pop
 import {newpostbases} from './constants/newpostbases.js'
 import {ending_underlying} from './constants/ending_underlying.js'
 import palette from 'google-palette';
+import Recorder from './Recorder.js';
 import shuffle from 'shuffle-array';
 // import { TagColors } from './SentenceBulderHelpe.js';
 import fuzzysort from 'fuzzysort'
@@ -434,6 +435,7 @@ class SentenceBuilder extends Component {
 			// cvObjectNumber: '3',
 			// cvObjectPossessor: '000',
 
+			segmentString: '',
 
 			wordsList: [],
 			searchQuery:'',
@@ -491,6 +493,10 @@ class SentenceBuilder extends Component {
 			 width: window.innerWidth, 
 			 height: window.innerHeight,
 
+      audioRetrieved:[],
+
+      openPopup:false,
+      showModal:false,
 		}
 
 		this.subjectMenu = {}
@@ -643,6 +649,12 @@ class SentenceBuilder extends Component {
     	let tag = this.state.currentlyOpen
 			this.setState({currentlyOpen:''},()=>{this.setState({currentlyOpen:tag})})
     }
+
+    if (prevState.segmentString !== this.state.segmentString) {
+      console.log(this.state.segmentString)
+      this.displayIfClipExists(this.state.segmentString)
+    }
+
 
     // if (prevState.addSubject !== this.state.addSubject && this.state.crecentlyOpen !== '') {
     // 	this.openSubjectMenu(this.state.crecentlyOpen)
@@ -1084,7 +1096,7 @@ class SentenceBuilder extends Component {
       	np:np,
       })
       .then(response => {
-      	// console.log(response.data)
+      	console.log(response.data)
       	let vkey, nkey
       	let updateDict = {}
       	if ("english" in response.data) {
@@ -1203,34 +1215,15 @@ class SentenceBuilder extends Component {
       	}
 
       	if ("segments" in response.data) {
+      		let segmentString = ''
       		if ("mv" in response.data.segments) {
-      			if ("nObliques" in response.data.segments.mv) {
-			        // this.setState({
-			        	// mvnObliquesSegments: response.data.segments.mv.nObliques,
-			        // })      				
-      				updateDict['mvnObliquesSegments'] = response.data.segments.mv.nObliques
-      			} else {
-			        // this.setState({
-			        	// mvnObliquesSegments: [],
-			        // })      	      				
-      				updateDict['mvnObliquesSegments'] = []
-      			}
-      			if ("v" in response.data.segments.mv) {
-			        // this.setState({
-			        	// mvvSegments: response.data.segments.mv.v,
-			        // })      				
-      				updateDict['mvvSegments'] = response.data.segments.mv.v
-      			} else {
-			        // this.setState({
-			        	// mvvSegments: "",
-			        // })      	      				
-      				updateDict['mvvSegments'] = ""
-      			}
       			if ("qWord" in response.data.segments.mv) {
 			        // this.setState({
 			        	// mvvSegments: response.data.segments.mv.v,
 			        // })      				
       				updateDict['mvqWordSegments'] = response.data.segments.mv.qWord
+              response.data.segments.mv.qWord.map((t)=>{segmentString+=t[0]})
+              segmentString+=' '
       			} else {
 			        // this.setState({
 			        	// mvvSegments: "",
@@ -1242,23 +1235,54 @@ class SentenceBuilder extends Component {
 			        	// mvnsSegments: response.data.segments.mv.ns,
 			        // })      				
       				updateDict['mvnsSegments'] = response.data.segments.mv.ns
+      				response.data.segments.mv.ns.reverse().map((t)=>{t.map((u)=>{u.map((x)=>segmentString+=x[0]); segmentString+=' '})})
       			} else {
 			        // this.setState({
 			        	// mvnsSegments: [],
 			        // })      	      				
       				updateDict['mvnsSegments'] = []
       			}
+
+      			if ("v" in response.data.segments.mv) {
+			        // this.setState({
+			        	// mvvSegments: response.data.segments.mv.v,
+			        // })      				
+      				updateDict['mvvSegments'] = response.data.segments.mv.v
+              response.data.segments.mv.v.map((t)=>{segmentString+=t[0]})
+              segmentString+=' '
+      			} else {
+			        // this.setState({
+			        	// mvvSegments: "",
+			        // })      	      				
+      				updateDict['mvvSegments'] = ""
+      			}
+      			
       			if ("no" in response.data.segments.mv) {
 			        // this.setState({
 			        	// mvnoSegments: response.data.segments.mv.no,
 			        // })      				
       				updateDict['mvnoSegments'] = response.data.segments.mv.no
+      				response.data.segments.mv.no.reverse().map((t)=>{t.map((u)=>{u.map((x)=>segmentString+=x[0]); segmentString+=' '})})
       			} else {
 			        // this.setState({
 			        	// mvnoSegments: [],
 			        // })      	      				
       				updateDict['mvnoSegments'] = []
-      			}      			  
+      			}  
+
+      			if ("nObliques" in response.data.segments.mv) {
+			        // this.setState({
+			        	// mvnObliquesSegments: response.data.segments.mv.nObliques,
+			        // })      				
+      				updateDict['mvnObliquesSegments'] = response.data.segments.mv.nObliques
+      				response.data.segments.mv.nObliques.map((t)=>{t.reverse().map((u)=>{u.map((x)=>{x.map((y)=>segmentString+=y[0]); segmentString+=' '})})})
+      			} else {
+			        // this.setState({
+			        	// mvnObliquesSegments: [],
+			        // })      	      				
+      				updateDict['mvnObliquesSegments'] = []
+      			}
+
       		}
       		if ("cv" in response.data.segments) {
       			if ("nObliques" in response.data.segments.cv) {
@@ -1266,39 +1290,43 @@ class SentenceBuilder extends Component {
 			        	// cvnObliquesSegments: response.data.segments.cv.nObliques,
 			        // })      				
       				updateDict['cvnObliquesSegments'] = response.data.segments.cv.nObliques
+      				response.data.segments.cv.nObliques.map((t)=>{t.reverse().map((u)=>{u.map((x)=>{x.map((y)=>segmentString+=y[0]); segmentString+=' '})})})
       			} else {
 			        // this.setState({
 			        	// cvnObliquesSegments: "",
 			        // })      	      				
       				updateDict['cvnObliquesSegments'] = ""
       			}      			
-      			if ("v" in response.data.segments.cv) {
-			        // this.setState({
-			          // cvvSegments: response.data.segments.cv.v,
-			        // })      				
-      				updateDict['cvvSegments'] = response.data.segments.cv.v
-      			} else {
-			        // this.setState({
-			        	// cvvSegments: "",
-			        // })      	      				
-      				updateDict['cvvSegments'] = ""
-      			}
       			if ("ns" in response.data.segments.cv) {
 			        // this.setState({
 			        	// cvnsSegments: response.data.segments.cv.ns,
 			        // })      				
       				updateDict['cvnsSegments'] = response.data.segments.cv.ns
+      				response.data.segments.cv.ns.reverse().map((t)=>{t.map((u)=>{u.map((x)=>segmentString+=x[0]); segmentString+=' '})})
       			} else {
 			        // this.setState({
 			        	// cvnsSegments: [],
 			        // })      	      				
       				updateDict['cvnsSegments'] = []
       			}
+      			if ("v" in response.data.segments.cv) {
+			        // this.setState({
+			          // cvvSegments: response.data.segments.cv.v,
+			        // })      				
+      				updateDict['cvvSegments'] = response.data.segments.cv.v
+      				response.data.segments.cv.v.map((t)=>{segmentString+=t[0]})
+      			} else {
+			        // this.setState({
+			        	// cvvSegments: "",
+			        // })      	      				
+      				updateDict['cvvSegments'] = ""
+      			}
       			if ("no" in response.data.segments.cv) {
 			        // this.setState({
 			        	// cvnoSegments: response.data.segments.cv.no,
 			        // })      				
       				updateDict['cvnoSegments'] = response.data.segments.cv.no
+      				response.data.segments.cv.no.reverse().map((t)=>{t.map((u)=>{u.map((x)=>segmentString+=x[0]); segmentString+=' '})})
       			} else {
 			        // this.setState({
 			        	// cvnoSegments: [],
@@ -1313,6 +1341,7 @@ class SentenceBuilder extends Component {
 			        	// svnObliquesSegments: response.data.segments.sv.nObliques,
 			        // })      				
       				updateDict['svnObliquesSegments'] = response.data.segments.sv.nObliques
+      				response.data.segments.sv.nObliques.map((t)=>{t.reverse().map((u)=>{u.map((x)=>{x.map((y)=>segmentString+=y[0]); segmentString+=' '})})})
       			} else {
 			        // this.setState({
 			        	// svnObliquesSegments: "",
@@ -1324,6 +1353,7 @@ class SentenceBuilder extends Component {
 			        	// svvSegments: response.data.segments.sv.v,
 			        // })      				
       				updateDict['svvSegments'] = response.data.segments.sv.v
+      				response.data.segments.sv.v.map((t)=>{segmentString+=t[0]})
       			} else {
 			        // this.setState({
 			        	// svvSegments: "",
@@ -1335,6 +1365,7 @@ class SentenceBuilder extends Component {
 			        	// svnoSegments: response.data.segments.sv.no,
 			        // })      				
       				updateDict['svnoSegments'] = response.data.segments.sv.no
+      				response.data.segments.sv.no.reverse().map((t)=>{t.map((u)=>{u.map((x)=>segmentString+=x[0]); segmentString+=' '})})
       			} else {
 			        // this.setState({
 			        	// svnoSegments: [],
@@ -1349,6 +1380,7 @@ class SentenceBuilder extends Component {
 			        	// npnSegments: response.data.segments.np.n,
 			        // })      				
       				updateDict['npnSegments'] = response.data.segments.np.n
+      				response.data.segments.np.n.reverse().map((t)=>{t.map((u)=>{u.map((x)=>segmentString+=x[0]); segmentString+=' '})})
 			      } else {
 			        // this.setState({
 			        	// npnSegments: [],
@@ -1356,6 +1388,8 @@ class SentenceBuilder extends Component {
       				updateDict['npnSegments'] = []
       			}
     			}
+
+    			updateDict['segmentString'] = segmentString.trim()
       	}
 
 
@@ -5327,6 +5361,102 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 	}
 
 
+  recordClip = (sentence, siteLocation) => {
+        return <Modal
+            on='click'
+            open={this.state.showModal}
+            style={{
+              maxWidth:500,
+              marginTop:(window.innerWidth < 480 ? 10 : 10),
+            }}
+            closeOnDimmerClick={false}
+            onOpen={()=>{
+            }}
+            onClose={()=>{
+              this.setState({showModal:false,wordsList:[],searchQuery:''})
+            }}
+          >
+          <ModalContent>
+            <Icon circular style={{margin:0,color:'#929292',cursor:'pointer',position:'relative',float:'right'}} size='large' onClick={()=>{this.setState({showModal:false})}} name='x' />
+            <Recorder sentence={sentence} siteLocation={siteLocation} />          
+          </ModalContent>
+          </Modal>
+  }
+
+  displayIfClipExists = (sentence) => {
+    console.log(sentence)
+    // axios
+    //   .get(API_URL + "/yugtunCrowdsourceAudioLookup/" + sentence)
+    //   .then(response => {
+    //     // console.log(response.data);
+    //     this.setState({audioRetrieved:response.data})
+    //   });
+  }
+
+  displayAudioMic = (audioRetrieved) => {
+  	console.log(audioRetrieved)
+    return <Popup1
+            content={
+              <List style={{fontFamily:customFontFam}} divided verticalAlign='middle'>
+                {audioRetrieved.map((k)=>{
+                  return <ListItem style={{display:'flex',flexDirection:'row',alignItems:'center'}}>
+                          <Icon circular onClick={()=>this.repeatAudio(k['filename'])} style={{color:'#106181',opacity:0.9,fontSize:'20px', margin:3, cursor:'pointer'}} name='volume up' />
+                          <div style={{display:'flex',flexDirection:'column',marginLeft:10,padding:'5px 0px'}}>
+                            {k['gender'] != 'do_not_wish_to_say' ?
+                              <div>{k['gender']}</div>
+                              :
+                              null
+                            }
+                            {k['age'] != 'do_not_wish_to_say' ?
+                              <div>{k['age']}</div>
+                              :
+                              null
+                            }
+                            {k['village'] != 'do_not_wish_to_say' ?
+                              <div>{k['village']}</div>
+                              :
+                              null
+                            }
+                            {k['gender'] == 'do_not_wish_to_say' && k['age'] == 'do_not_wish_to_say' && k['village'] == 'do_not_wish_to_say' ?
+                              <div>{'Anonymous Clip'}</div>
+                              :
+                              null
+                            }                            
+                          </div>
+                        </ListItem>
+                })}
+                <ListItem style={{display:'flex',flexDirection:'row',alignItems:'center'}}>
+                  <Button circular basic style={{opacity:0.9,marginLeft:5,fontSize:'14px'}} onClick={()=>{this.setState({openPopup:false},()=>{this.setState({showModal:true})})}} icon='microphone' />
+                  <div style={{marginLeft:10,padding:'5px 0px'}}>Submit a Recording for Yugtun.com</div>
+                </ListItem>
+              </List>
+              }
+            on='click'
+            open={this.state.openPopup}
+            onClose={()=>this.setState({openPopup:false})}
+            style={{padding:8}}
+            position='top right'
+            trigger={<Button size='large' onClick={()=>{this.setState({openPopup:true})}} style={{paddingRight:15, fontSize:'17px',margin:10}} circular basic icon>{audioRetrieved.length == 0 ? <Icon style={{color:'#929292'}} name='microphone' />:<Icon style={{color:'#106181',fontSize:'16px'}} name='volume up' />}<Icon style={{color:'#d2d2d2',paddingLeft:'6px',fontSize:'11px'}} name='chevron down' /> </Button>}
+          />
+  }
+
+  repeatAudio(audio, event, data) {
+    // console.log(audio)
+    if (!this.state.playingAudio) {
+
+      let sound = new Audio(API_URL + "yugtunCrowdsourceAudio/" + audio);
+      this.setState({playingAudio: true});
+
+      sound.play()
+
+      sound.onended=()=>{
+        this.setState({playingAudio: false});
+      }
+    }
+  }
+
+
+
 	render() {
 		// console.log(this.state)
 		// console.log("mvv",this.state.mvvMood)
@@ -5381,16 +5511,30 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 				}
 
 
+					{!this.fromEntry && this.state.mvvBase.length === 0 && this.state.npnBases.length === 0 ?
+						null
+						:
+						<div style={{display:'flex',justifyContent:'space-between'}}>
+							<div>
+								{this.state.segmentString.length != 0 ?
+				        	this.displayAudioMic(this.state.audioRetrieved)
+				        	:
+				        	null
+				        }
+				        {this.state.showModal ?
+				          this.recordClip(this.state.segmentString,'sentenceBuilder')
+				          :
+				          null
+				        }
+							</div>
+							<div>
+							<Link to={{pathname: '/sentencebuilder/1'}}>
+			      		<Icon circular onClick={()=>{this.setState({crecentlyOpen:'',currentEditMode:'default'},()=>{this.backEndCall([['Delete',['mv',],''],['Delete',['np',],'']])})}} style={{margin:10,color:'#B1B1B1',cursor:'pointer',fontSize:'22px'}} name='x' />
+			      	</Link>
+			      	</div>
+						</div>
+					}
 
-				{!this.fromEntry && this.state.mvvBase.length === 0 && this.state.npnBases.length === 0 ?
-					null
-					:
-					<div style={{textAlign:'right'}}>
-					<Link to={{pathname: '/sentencebuilder/1'}}>
-	      		<Icon circular onClick={()=>{this.setState({crecentlyOpen:'',currentEditMode:'default'},()=>{this.backEndCall([['Delete',['mv',],''],['Delete',['np',],'']])})}} style={{margin:10,color:'#B1B1B1',cursor:'pointer',fontSize:'22px'}} name='x' />
-	      	</Link>
-	      	</div>
-				}
 
 				<Container style={{marginTop:'30px',marginBottom:'30px'}}>
 					<div>

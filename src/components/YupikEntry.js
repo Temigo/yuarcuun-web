@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Segment, List, Header, Label, Grid , Icon, Divider, Table, Transition, Image, Modal, Button, ModalContent} from 'semantic-ui-react';
+import { Segment, List, Header, Label, Grid , Icon, Divider, Table, Transition, Image, Modal, Button, ModalContent, Popup, ListItem} from 'semantic-ui-react';
 import '../App.css';
 import '../semantic/dist/semantic.min.css';
 import { Link } from 'react-router-dom';
@@ -21,6 +21,9 @@ class YupikEntry extends Component {
     this.state = {
       entry: props.entry,
       word: props.word,
+      audioRetrieved: [],
+      showModal:-1,
+      openPopup:-1,
     };
   }
 
@@ -112,11 +115,8 @@ class YupikEntry extends Component {
     }
   }
 
-
   recordClip = (sentenceid, sentence, siteLocation) => {
-    console.log(sentence)
         return <Modal
-            trigger={<Button circular basic style={{marginLeft:10}} onClick={()=>{this.setState({showModal:sentenceid})}} icon='microphone' />}
             on='click'
             open={this.state.showModal==sentenceid}
             style={{
@@ -127,14 +127,94 @@ class YupikEntry extends Component {
             onOpen={()=>{
             }}
             onClose={()=>{
-              this.setState({showModal:-1,wordsList:[],searchQuery:''})
+              this.setState({showModal:-1})
             }}
           >
           <ModalContent>
-            <Icon circular style={{margin:0,color:'#B1B1B1',cursor:'pointer',position:'relative',float:'right'}} size='large' onClick={()=>{this.setState({showModal:-1})}} name='x' />
+            <Icon circular style={{margin:0,color:'#929292',cursor:'pointer',position:'relative',float:'right'}} size='large' onClick={()=>{this.setState({showModal:-1})}} name='x' />
             <Recorder sentence={sentence} siteLocation={siteLocation} />          
           </ModalContent>
           </Modal>
+  }
+
+  // recordClip = (sentenceid, sentence, siteLocation) => {
+  //   console.log(sentence)
+  //       return <Modal
+  //           trigger={<Button circular basic style={{marginLeft:10}} onClick={()=>{this.setState({showModal:sentenceid})}} icon='microphone' />}
+  //           on='click'
+  //           open={this.state.showModal==sentenceid}
+  //           style={{
+  //             maxWidth:500,
+  //             marginTop:(window.innerWidth < 480 ? 10 : 10),
+  //           }}
+  //           closeOnDimmerClick={false}
+  //           onOpen={()=>{
+  //           }}
+  //           onClose={()=>{
+  //             this.setState({showModal:-1,wordsList:[],searchQuery:''})
+  //           }}
+  //         >
+  //         <ModalContent>
+  //           <Icon circular style={{margin:0,color:'#B1B1B1',cursor:'pointer',position:'relative',float:'right'}} size='large' onClick={()=>{this.setState({showModal:-1})}} name='x' />
+  //           <Recorder sentence={sentence} siteLocation={siteLocation} />          
+  //         </ModalContent>
+  //         </Modal>
+  // }
+
+  displayAudioMic = (audioRetrieved,sentenceid) => {
+    return <Popup
+            content={
+              <List style={{fontFamily:customFontFam}} divided verticalAlign='middle'>
+                {audioRetrieved.map((k)=>{
+                  return <ListItem style={{display:'flex',flexDirection:'row',alignItems:'center'}}>
+                          <Icon circular onClick={()=>this.repeatAudio(k['filename'])} style={{color:'#106181',opacity:0.9,fontSize:'20px', margin:3, cursor:'pointer'}} name='volume up' />
+                          <div style={{display:'flex',flexDirection:'column',marginLeft:10,padding:'5px 0px'}}>
+                            {k['gender'] != 'do_not_wish_to_say' ?
+                              <div>{k['gender']}</div>
+                              :
+                              null
+                            }
+                            {k['age'] != 'do_not_wish_to_say' ?
+                              <div>{k['age']}</div>
+                              :
+                              null
+                            }
+                            {k['village'] != 'do_not_wish_to_say' ?
+                              <div>{k['village']}</div>
+                              :
+                              null
+                            }
+                            {k['gender'] == 'do_not_wish_to_say' && k['age'] == 'do_not_wish_to_say' && k['village'] == 'do_not_wish_to_say' ?
+                              <div>{'Anonymous Clip'}</div>
+                              :
+                              null
+                            }                            
+                          </div>
+                        </ListItem>
+                })}
+                <ListItem style={{display:'flex',flexDirection:'row',alignItems:'center'}}>
+                  <Button circular basic style={{opacity:0.9,marginLeft:5,fontSize:'14px'}} onClick={()=>{this.setState({openPopup:-1},()=>{this.setState({showModal:sentenceid})})}} icon='microphone' />
+                  <div style={{marginLeft:10,padding:'5px 0px'}}>Submit a Recording for Yugtun.com</div>
+                </ListItem>
+              </List>
+              }
+            on='click'
+            open={this.state.openPopup==sentenceid}
+            onClose={()=>this.setState({openPopup:-1})}
+            style={{padding:8}}
+            position='bottom center'
+            trigger={<Button onClick={()=>{this.setState({openPopup:sentenceid})}} style={{paddingRight:15, marginLeft:10}} circular basic icon>{audioRetrieved.length == 0 ? <Icon style={{color:'#929292'}} name='microphone' />:<Icon style={{color:'#106181',fontSize:'16px'}} name='volume up' />}<Icon style={{color:'#d2d2d2',paddingLeft:'6px',fontSize:'11px'}} name='chevron down' /> </Button>}
+          />
+  }
+
+  displayIfClipExists = (sentence) => {
+    // console.log(sentence)
+    // axios
+    //   .get(API_URL + "/yugtunCrowdsourceAudioLookup/" + sentence)
+    //   .then(response => {
+    //     // console.log(response.data);
+    //     this.setState({audioRetrieved:response.data})
+    //   });
   }
 
 
@@ -553,7 +633,12 @@ class YupikEntry extends Component {
                         {sentence[0]}
                         </span>
                       </Link>
-                        {this.recordClip(sentenceid, sentence[0],'exampleSentence')}
+                        {this.displayAudioMic(this.state.audioRetrieved,sentenceid)}
+                        {this.state.showModal != -1 ?
+                          this.recordClip(sentenceid,sentence[0],'exampleSentence')
+                          :
+                          null
+                        }
                     </List.Header>
                     <List.Description style={{fontSize:'16px',fontWeight:'400',color:'#000000b3'}}>{sentence[1]}</List.Description>
                   </List.Item>
