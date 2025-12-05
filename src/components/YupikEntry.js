@@ -4,6 +4,7 @@ import '../App.css';
 import '../semantic/dist/semantic.min.css';
 import { Link } from 'react-router-dom';
 import {withRouter} from 'react-router';
+import { API_URL } from '../App.js';
 import { TagColors, WordItemLikeInup } from './SearchPageHelpers.js';
 import SimpleWordBuilder from './SimpleWordBuilder.js';
 import Recorder from './Recorder.js';
@@ -161,6 +162,22 @@ class YupikEntry extends Component {
   //         </Modal>
   // }
 
+  repeatAudio(audio, event, data) {
+    // console.log(audio)
+    if (!this.state.playingAudio) {
+
+      let sound = new Audio(API_URL + "yugtunCrowdsourceAudio/" + audio);
+      this.setState({playingAudio: true});
+
+      sound.play()
+
+      sound.onended=()=>{
+        this.setState({playingAudio: false});
+      }
+    }
+  }
+
+
   displayAudioMic = (audioRetrieved,sentenceid) => {
     return <Popup
             content={
@@ -203,7 +220,7 @@ class YupikEntry extends Component {
             onClose={()=>this.setState({openPopup:-1})}
             style={{padding:8}}
             position='bottom center'
-            trigger={<Button onClick={()=>{this.setState({openPopup:sentenceid})}} style={{paddingRight:15, marginLeft:10}} circular basic icon>{audioRetrieved.length == 0 ? <Icon style={{color:'#929292'}} name='microphone' />:<Icon style={{color:'#106181',fontSize:'16px'}} name='volume up' />}<Icon style={{color:'#d2d2d2',paddingLeft:'6px',fontSize:'11px'}} name='chevron down' /> </Button>}
+            trigger={<Button onClick={()=>{this.setState({openPopup:sentenceid})}} style={{paddingRight:15, marginLeft:10,marginTop:1}} circular basic icon>{audioRetrieved.length == 0 ? <Icon style={{color:'#929292'}} name='microphone' />:<Icon style={{color:'#106181',fontSize:'16px'}} name='volume up' />}<Icon style={{color:'#d2d2d2',paddingLeft:'6px',fontSize:'11px'}} name='chevron down' /> </Button>}
           />
   }
 
@@ -366,18 +383,30 @@ class YupikEntry extends Component {
             </Link>     
 
             <div style={{fontSize:'25px',marginTop:'20px',fontFamily:customFontFam}}>
-            {this.state.entry.keySplit.map((key) => {
+            {this.state.entry.keySplit.map((key,keyid) => {
               return <div style={{display:'flex',alignItems:'center',flexDirection:'row'}}>
-              <span style={{fontWeight:'500',marginRight:'15px'}}>{key[0]}</span>
+              <span style={{fontWeight:'500',marginRight:('keySplitAudio' in this.state.entry ? '0px':'10px')}}>{key[0]}</span>
+              {'keySplitAudio' in this.state.entry ?
+                <span style={{marginRight:3}}>
+                  {this.displayAudioMic(this.state.entry.keySplitAudio[keyid],'a'+keyid.toString())}
+                  {this.state.showModal != -1 ?
+                    this.recordClip('a'+keyid.toString(),key[0],'entryKeySplit')
+                    :
+                    null
+                  }
+                </span>
+                :
+                null
+              }
               {key[1][0] !== '' ?
                 (key[1].map((dialect)=> 
-                  <Label horizontal>{dialect}</Label>
+                  <Label size='mini' style={{marginLeft:'5px'}}>{dialect}</Label>
                 ))
                 :
                 null
                 }
               {this.state.entry.pos.map((descriptor) => 
-                {return <TagColors key={descriptor} word={descriptor} padding={3} />}
+                {return <span style={{marginLeft:'5px'}}><TagColors key={descriptor} word={descriptor} padding={3} /></span>}
               )}
               </div>
             })}
@@ -418,7 +447,7 @@ class YupikEntry extends Component {
                     :
                     null
                   }
-                  <SimpleWordBuilderUpdated entry={entry} index={i} definitionIndex={index} word={this.state.word} />
+                  <SimpleWordBuilderUpdated usageStartingAudio={this.state.entry.usageStartingAudio[i]} entry={entry} index={i} definitionIndex={index} word={this.state.word} />
                   {entry[3].length-1 != index && k[2].length !== 0 ? <Divider style={{margin:0}}/> : null}
                   </span>
                   )
@@ -438,7 +467,7 @@ class YupikEntry extends Component {
                       :
                       null
                     }
-                    <SimpleWordBuilderUpdated entry={entry} index={i} definitionIndex={index} word={this.state.word} />
+                    <SimpleWordBuilderUpdated usageStartingAudio={this.state.entry.usageStartingAudio[i]} entry={entry} index={i} definitionIndex={index} word={this.state.word} />
                       {entry[3].length-1 != index && k[2].length !== 0 ? <Divider style={{margin:0}}/> : null}
                     </span>
                     )
@@ -451,7 +480,7 @@ class YupikEntry extends Component {
                     :
                     null
                   }
-                  <SimpleWordBuilderUpdated entry={entry} index={i} word={this.state.word} /> 
+                  <SimpleWordBuilderUpdated usageStartingAudio={this.state.entry.usageStartingAudio[i]} entry={entry} index={i} word={this.state.word} /> 
                   {this.state.entry.usage.length-1 != i ? <Divider style={{margin:0}}/> : null}
                   </span>
                 }
@@ -515,7 +544,7 @@ class YupikEntry extends Component {
               {this.state.entry.usage.map((entry,i) => {
                 if (entry[3].constructor !== Array) {
                   return <span>
-                  <SimpleWordBuilderUpdated entry={entry} index={i} word={this.state.word} /> 
+                  <SimpleWordBuilderUpdated usageStartingAudio={this.state.entry.usageStartingAudio[i]} entry={entry} index={i} word={this.state.word} /> 
                   {this.state.entry.usage.length-1 != i ? <Divider style={{margin:0}} /> : null}
                   </span>
                 }
@@ -633,12 +662,15 @@ class YupikEntry extends Component {
                         {sentence[0]}
                         </span>
                       </Link>
-                        {this.displayAudioMic(this.state.audioRetrieved,sentenceid)}
-                        {this.state.showModal != -1 ?
-                          this.recordClip(sentenceid,sentence[0],'exampleSentence')
-                          :
-                          null
-                        }
+
+                            {this.displayAudioMic(this.state.entry.baseExamplesAudio[sentenceid],'b'+sentenceid.toString())}
+                            {this.state.showModal != -1 ?
+                              this.recordClip('b'+sentenceid.toString(),sentence[0],'exampleSentence')
+                              :
+                              null
+                            }
+
+
                     </List.Header>
                     <List.Description style={{fontSize:'16px',fontWeight:'400',color:'#000000b3'}}>{sentence[1]}</List.Description>
                   </List.Item>

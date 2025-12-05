@@ -79,6 +79,7 @@ export const AudioItem = (props) => {
 }
 
 export const WordItemLikeInup = (props) => {
+  // console.log(props)
   let verbkeyStringbool = false
   if ('verbkeyString' in props.word) {
     if (props.word.verbkeyString.keyString.length !== 0 && props.word.pos == 'noun') {
@@ -129,7 +130,7 @@ export const WordItemLikeInup = (props) => {
       <List.Content>
         <List.Header style={{lineHeight:'28px',fontFamily:'Lato,Arial,Helvetica,sans-serif',fontSize:'18px',paddingBottom:'10px',paddingTop:'5px'}}>
           {props.word.keySplit.map((w,index) => 
-              <Link style={{fontSize:'18px',color:'#306190',fontWeight:'400',}} to={{pathname: '/' + props.word.url, state: { entry: props.entry, word: props.word, search: props.search, wordsList: props.wordsList, yugtunAnalyzer: false, parses: [], segments: [],endingrule: []}}}>
+              <Link style={{fontSize:'18px',color:'#306190',fontWeight:'400'}} to={{pathname: '/' + props.word.url, state: { entry: props.entry, word: props.word, search: props.search, wordsList: props.wordsList, yugtunAnalyzer: false, parses: [], segments: [],endingrule: []}}}>
               <span style={{borderBottom:'1px solid #306190',paddingBottom:'1px'}}>
                 {w[0]}
               </span>
@@ -147,7 +148,12 @@ export const WordItemLikeInup = (props) => {
               }
               </Link>
             )}
-          <span style={{height:'20px','marginLeft': '18px'}}>  
+          {'audio' in props.word ?
+            <Icon circular size='small' onClick={()=>props.repeatAudio(props.word.audio)} style={{cursor:'pointer',color:'#8a8a8a','marginLeft': '9px'}} name='volume up' />
+            :
+            null
+          }
+          <span style={{height:'20px','marginLeft':('audio' in props.word ? '9px' : '18px')}}>  
             {isNoun ? <Label size='mini' style={{backgroundColor:'#7F90B0',color:'white'}}>NOUN</Label> : ''}
             {isVerb ? <Label size='mini' style={{backgroundColor:'#B07F7F',color:'white'}}>VERB</Label> : ''}
             {isParticle ? <Label size='mini'>PARTICLE</Label> : ''}

@@ -436,6 +436,7 @@ class SentenceBuilder extends Component {
 			// cvObjectPossessor: '000',
 
 			segmentString: '',
+			audioRetrieved: [],
 
 			wordsList: [],
 			searchQuery:'',
@@ -492,8 +493,6 @@ class SentenceBuilder extends Component {
 
 			 width: window.innerWidth, 
 			 height: window.innerHeight,
-
-      audioRetrieved:[],
 
       openPopup:false,
       showModal:false,
@@ -650,10 +649,10 @@ class SentenceBuilder extends Component {
 			this.setState({currentlyOpen:''},()=>{this.setState({currentlyOpen:tag})})
     }
 
-    if (prevState.segmentString !== this.state.segmentString) {
-      console.log(this.state.segmentString)
-      this.displayIfClipExists(this.state.segmentString)
-    }
+    // if (prevState.segmentString !== this.state.segmentString) {
+    //   console.log(this.state.segmentString)
+    //   this.displayIfClipExists(this.state.segmentString)
+    // }
 
 
     // if (prevState.addSubject !== this.state.addSubject && this.state.crecentlyOpen !== '') {
@@ -1215,15 +1214,15 @@ class SentenceBuilder extends Component {
       	}
 
       	if ("segments" in response.data) {
-      		let segmentString = ''
+      		// let segmentString = ''
       		if ("mv" in response.data.segments) {
       			if ("qWord" in response.data.segments.mv) {
 			        // this.setState({
 			        	// mvvSegments: response.data.segments.mv.v,
 			        // })      				
       				updateDict['mvqWordSegments'] = response.data.segments.mv.qWord
-              response.data.segments.mv.qWord.map((t)=>{segmentString+=t[0]})
-              segmentString+=' '
+              // response.data.segments.mv.qWord.map((t)=>{segmentString+=t[0]})
+              // segmentString+=' '
       			} else {
 			        // this.setState({
 			        	// mvvSegments: "",
@@ -1235,7 +1234,7 @@ class SentenceBuilder extends Component {
 			        	// mvnsSegments: response.data.segments.mv.ns,
 			        // })      				
       				updateDict['mvnsSegments'] = response.data.segments.mv.ns
-      				response.data.segments.mv.ns.reverse().map((t)=>{t.map((u)=>{u.map((x)=>segmentString+=x[0]); segmentString+=' '})})
+      				// response.data.segments.mv.ns.reverse().map((t)=>{t.map((u)=>{u.map((x)=>segmentString+=x[0]); segmentString+=' '})})
       			} else {
 			        // this.setState({
 			        	// mvnsSegments: [],
@@ -1248,8 +1247,8 @@ class SentenceBuilder extends Component {
 			        	// mvvSegments: response.data.segments.mv.v,
 			        // })      				
       				updateDict['mvvSegments'] = response.data.segments.mv.v
-              response.data.segments.mv.v.map((t)=>{segmentString+=t[0]})
-              segmentString+=' '
+              // response.data.segments.mv.v.map((t)=>{segmentString+=t[0]})
+              // segmentString+=' '
       			} else {
 			        // this.setState({
 			        	// mvvSegments: "",
@@ -1262,7 +1261,7 @@ class SentenceBuilder extends Component {
 			        	// mvnoSegments: response.data.segments.mv.no,
 			        // })      				
       				updateDict['mvnoSegments'] = response.data.segments.mv.no
-      				response.data.segments.mv.no.reverse().map((t)=>{t.map((u)=>{u.map((x)=>segmentString+=x[0]); segmentString+=' '})})
+      				// response.data.segments.mv.no.reverse().map((t)=>{t.map((u)=>{u.map((x)=>segmentString+=x[0]); segmentString+=' '})})
       			} else {
 			        // this.setState({
 			        	// mvnoSegments: [],
@@ -1275,7 +1274,7 @@ class SentenceBuilder extends Component {
 			        	// mvnObliquesSegments: response.data.segments.mv.nObliques,
 			        // })      				
       				updateDict['mvnObliquesSegments'] = response.data.segments.mv.nObliques
-      				response.data.segments.mv.nObliques.map((t)=>{t.reverse().map((u)=>{u.map((x)=>{x.map((y)=>segmentString+=y[0]); segmentString+=' '})})})
+      				// response.data.segments.mv.nObliques.map((t)=>{t.reverse().map((u)=>{u.map((x)=>{x.map((y)=>segmentString+=y[0]); segmentString+=' '})})})
       			} else {
 			        // this.setState({
 			        	// mvnObliquesSegments: [],
@@ -1290,7 +1289,7 @@ class SentenceBuilder extends Component {
 			        	// cvnObliquesSegments: response.data.segments.cv.nObliques,
 			        // })      				
       				updateDict['cvnObliquesSegments'] = response.data.segments.cv.nObliques
-      				response.data.segments.cv.nObliques.map((t)=>{t.reverse().map((u)=>{u.map((x)=>{x.map((y)=>segmentString+=y[0]); segmentString+=' '})})})
+      				// response.data.segments.cv.nObliques.map((t)=>{t.reverse().map((u)=>{u.map((x)=>{x.map((y)=>segmentString+=y[0]); segmentString+=' '})})})
       			} else {
 			        // this.setState({
 			        	// cvnObliquesSegments: "",
@@ -1302,7 +1301,7 @@ class SentenceBuilder extends Component {
 			        	// cvnsSegments: response.data.segments.cv.ns,
 			        // })      				
       				updateDict['cvnsSegments'] = response.data.segments.cv.ns
-      				response.data.segments.cv.ns.reverse().map((t)=>{t.map((u)=>{u.map((x)=>segmentString+=x[0]); segmentString+=' '})})
+      				// response.data.segments.cv.ns.reverse().map((t)=>{t.map((u)=>{u.map((x)=>segmentString+=x[0]); segmentString+=' '})})
       			} else {
 			        // this.setState({
 			        	// cvnsSegments: [],
@@ -1314,7 +1313,7 @@ class SentenceBuilder extends Component {
 			          // cvvSegments: response.data.segments.cv.v,
 			        // })      				
       				updateDict['cvvSegments'] = response.data.segments.cv.v
-      				response.data.segments.cv.v.map((t)=>{segmentString+=t[0]})
+      				// response.data.segments.cv.v.map((t)=>{segmentString+=t[0]})
       			} else {
 			        // this.setState({
 			        	// cvvSegments: "",
@@ -1326,7 +1325,7 @@ class SentenceBuilder extends Component {
 			        	// cvnoSegments: response.data.segments.cv.no,
 			        // })      				
       				updateDict['cvnoSegments'] = response.data.segments.cv.no
-      				response.data.segments.cv.no.reverse().map((t)=>{t.map((u)=>{u.map((x)=>segmentString+=x[0]); segmentString+=' '})})
+      				// response.data.segments.cv.no.reverse().map((t)=>{t.map((u)=>{u.map((x)=>segmentString+=x[0]); segmentString+=' '})})
       			} else {
 			        // this.setState({
 			        	// cvnoSegments: [],
@@ -1341,7 +1340,7 @@ class SentenceBuilder extends Component {
 			        	// svnObliquesSegments: response.data.segments.sv.nObliques,
 			        // })      				
       				updateDict['svnObliquesSegments'] = response.data.segments.sv.nObliques
-      				response.data.segments.sv.nObliques.map((t)=>{t.reverse().map((u)=>{u.map((x)=>{x.map((y)=>segmentString+=y[0]); segmentString+=' '})})})
+      				// response.data.segments.sv.nObliques.map((t)=>{t.reverse().map((u)=>{u.map((x)=>{x.map((y)=>segmentString+=y[0]); segmentString+=' '})})})
       			} else {
 			        // this.setState({
 			        	// svnObliquesSegments: "",
@@ -1353,7 +1352,7 @@ class SentenceBuilder extends Component {
 			        	// svvSegments: response.data.segments.sv.v,
 			        // })      				
       				updateDict['svvSegments'] = response.data.segments.sv.v
-      				response.data.segments.sv.v.map((t)=>{segmentString+=t[0]})
+      				// response.data.segments.sv.v.map((t)=>{segmentString+=t[0]})
       			} else {
 			        // this.setState({
 			        	// svvSegments: "",
@@ -1365,7 +1364,7 @@ class SentenceBuilder extends Component {
 			        	// svnoSegments: response.data.segments.sv.no,
 			        // })      				
       				updateDict['svnoSegments'] = response.data.segments.sv.no
-      				response.data.segments.sv.no.reverse().map((t)=>{t.map((u)=>{u.map((x)=>segmentString+=x[0]); segmentString+=' '})})
+      				// response.data.segments.sv.no.reverse().map((t)=>{t.map((u)=>{u.map((x)=>segmentString+=x[0]); segmentString+=' '})})
       			} else {
 			        // this.setState({
 			        	// svnoSegments: [],
@@ -1380,7 +1379,7 @@ class SentenceBuilder extends Component {
 			        	// npnSegments: response.data.segments.np.n,
 			        // })      				
       				updateDict['npnSegments'] = response.data.segments.np.n
-      				response.data.segments.np.n.reverse().map((t)=>{t.map((u)=>{u.map((x)=>segmentString+=x[0]); segmentString+=' '})})
+      				// response.data.segments.np.n.reverse().map((t)=>{t.map((u)=>{u.map((x)=>segmentString+=x[0]); segmentString+=' '})})
 			      } else {
 			        // this.setState({
 			        	// npnSegments: [],
@@ -1389,7 +1388,9 @@ class SentenceBuilder extends Component {
       			}
     			}
 
-    			updateDict['segmentString'] = segmentString.trim()
+        updateDict['segmentString']=response.data.segmentString
+        updateDict['audioRetrieved']=response.data.audioRetrieved
+    			// updateDict['segmentString'] = segmentString.trim()
       	}
 
 

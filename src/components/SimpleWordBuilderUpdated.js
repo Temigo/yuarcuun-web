@@ -138,16 +138,18 @@ class SimpleWordBuilderUpdated extends Component {
 
       mvSubjectOptions1:mvSubjectOptions,
       mvObjectOptions1:mvObjectOptions,
-      segmentString:'',
-      audioRetrieved:[],
+
+      segmentString:props.entry[2],
+      audioRetrieved:props.usageStartingAudio,
 
       openPopup:false,
+      // entry:props.entry[2],
     }
   }
 
   componentDidMount() {
     // backEndCall()
-    console.log(this.props)
+    // console.log(this.props)
     let initializedCall
     if (this.props.entry[0] == 'n') {
       initializedCall = [["Insert",["np"],[[[this.props.word,0,this.props.index,this.props.definitionIndex]],[0,0,0,1],"Abs"]]]
@@ -208,7 +210,7 @@ class SimpleWordBuilderUpdated extends Component {
         np:np,
       })
       .then(response => {
-        // console.log(response.data)
+        // console.log('backend',response.data)
         let vkey, nkey
         let updateDict = {}
         if ("english" in response.data) {
@@ -263,16 +265,16 @@ class SimpleWordBuilderUpdated extends Component {
           this.initialize('np')
         }
 
-        let segmentString = ''
+        // let segmentString = ''
         if ("segments" in response.data) {
           if ("mv" in response.data.segments) {
             if ("v" in response.data.segments.mv) {
               // this.setState({
                 // mvvSegments: response.data.segments.mv.v,
               // })
-              response.data.segments.mv.v.map((t)=>{segmentString+=t[0]})
+              // response.data.segments.mv.v.map((t)=>{segmentString+=t[0]})
               updateDict['mvvSegments'] = response.data.segments.mv.v
-              updateDict['segmentString'] = segmentString
+              // updateDict['segmentString'] = segmentString
             } else {
               // this.setState({
                 // mvvSegments: "",
@@ -286,9 +288,9 @@ class SimpleWordBuilderUpdated extends Component {
               // this.setState({
                 // npnSegments: response.data.segments.np.n,
               // })             
-              response.data.segments.np.n[0][0].map((t)=>{segmentString+=t[0]})
+              // response.data.segments.np.n[0][0].map((t)=>{segmentString+=t[0]})
               updateDict['npnSegments'] = response.data.segments.np.n
-              updateDict['segmentString'] = segmentString
+              // updateDict['segmentString'] = segmentString
             } else {
               // this.setState({
                 // npnSegments: [],
@@ -298,6 +300,8 @@ class SimpleWordBuilderUpdated extends Component {
           }
         }
 
+        updateDict['segmentString']=response.data.segmentString
+        updateDict['audioRetrieved']=response.data.audioRetrieved
 
         this.setState(updateDict)
 
@@ -313,10 +317,10 @@ class SimpleWordBuilderUpdated extends Component {
       this.updateAllowableOptions()
     }
 
-    if (prevState.segmentString !== this.state.segmentString) {
-      console.log(this.state.segmentString)
-      this.displayIfClipExists(this.state.segmentString)
-    }
+    // if (prevState.segmentString !== this.state.segmentString) {
+    //   console.log(this.state.segmentString)
+    //   this.displayIfClipExists(this.state.segmentString)
+    // }
 
   }
 

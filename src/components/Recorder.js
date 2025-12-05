@@ -560,7 +560,7 @@ class Recorder extends Component {
                         </FormField>
                             <ReCAPTCHA
                                   style={{margin:(window.innerWidth < 480 ? 0:22),marginBottom:15}}
-                                sitekey="6LcjLeMrAAAAAAc3X2tUrlQ66G9H7X2DImvTK7B6"
+                                sitekey="6LekfyIsAAAAAMwm2_wOCDIlJ8i8YYrnZd0fYypu"
                                 onChange={()=>{this.setState({recaptchaAllowed:true})}}
                                 onErrored={()=>{this.setState({recaptchaAllowed:false})}}
                                 onExpired={()=>{this.setState({recaptchaAllowed:false})}}

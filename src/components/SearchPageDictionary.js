@@ -10,6 +10,7 @@ import { Grid, Input, List, Image, Divider } from 'semantic-ui-react';
 // import Fuse from 'fuse.js';
 import fuzzysort from 'fuzzysort'
 // import now from 'performance-now';
+import { API_URL } from '../App.js';
 // import ReactGA from 'react-ga';
 // import GitHubForkRibbon from 'react-github-fork-ribbon';
 import { WordItem, WordItemLikeInup } from './SearchPageHelpers.js';
@@ -42,6 +43,7 @@ class SearchPageDictionary extends Component {
       // dictionaryNouns: [],
       // dictionaryVerbs: [],
       wordsList: [],
+      playingAudio:false,
       // yugtunAnalyzer: props.location.state === undefined ? false : props.location.state.yugtunAnalyzer,
       search: props.location.state === undefined ? '' : props.location.state.search,
       // currentWord: {},
@@ -84,6 +86,7 @@ class SearchPageDictionary extends Component {
       // segment: "",
       // possibleDefinition: ["","","","","","","","","",""],
       // moods: ["[Ind]","[Intrg]","[Opt]","[Sbrd]","[Ptcp]","[Prec]","[Cnsq]","[Cont]","[Conc]","[Cond]","[CtmpI]","[CtmpII]","[Abs]","[Rel]","[Abl_Mod]","[Loc]", "[Ter]","[Via]","[Equ]","%5BQuant_Qual%5D","[PerPro]","[PerPro]","[PerPro]","[PerPro]","[PerPro]","[PerPro]","[PerPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]","[DemPro]",],
+      
     }
     // this.getParse = this.getParse.bind(this);
     this.onChangeSearch = this.onChangeSearch.bind(this);
@@ -421,6 +424,22 @@ class SearchPageDictionary extends Component {
   //   return parse[index];
   // }
 
+  repeatAudio(audio, event, data) {
+    console.log(audio, this.state.playingAudio)
+    if (!this.state.playingAudio) {
+
+      let sound = new Audio(API_URL + "yugtunCrowdsourceAudio/" + audio);
+      this.setState({playingAudio: true});
+
+      sound.play()
+
+      sound.onended=()=>{
+        this.setState({playingAudio: false});
+      }
+    }
+  }
+
+
   render() {
     // console.log("SearchPage state: ", this.state);
     // console.log("props:",this.props)
@@ -476,7 +495,7 @@ class SearchPageDictionary extends Component {
             <List style={{width:'100%',}} divided>
             {displayList  ? 
                 wordsList.map((word) => 
-                <WordItemLikeInup key={word} word={word} search={this.state.search} wordsList={this.state.wordsList} />)
+                <WordItemLikeInup repeatAudio={this.repeatAudio.bind(this)} key={word} word={word} search={this.state.search} wordsList={this.state.wordsList} />)
               : 
               (this.state.search.length === 0 ?
                 <div style={{display:'flex',justifyContent:'center',paddingLeft:(window.innerWidth < 480 ? 7:0),paddingRight:(window.innerWidth < 480 ? 7:0)}}>

@@ -27,8 +27,8 @@ import {YugtunLoader} from './components/SearchPageHelpers.js';
 // export const API_URL = "https://yugtun-api.herokuapp.com";
 // export const API_URL = "http://127.0.0.1:5000";
 // export const API_URL = "https://inupiaqonline.com/api";
-// export const API_URL = "https://www.inupiaqonline.com/fastapi/";
-export const API_URL = "http://0.0.0.0:5001"
+export const API_URL = "https://www.inupiaqonline.com/fastapi/";
+// export const API_URL = "http://0.0.0.0:5001"
 
 export const TUTORIAL_URL = 'https://youtu.be/8xW36PYaZHo';
 export const ICON_URL = "https://yuarcuun.inupiaqonline.com/images/logo_final_1.jpeg";
