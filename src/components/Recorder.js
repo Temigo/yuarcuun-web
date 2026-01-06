@@ -196,6 +196,7 @@ class Recorder extends Component {
             nameProvided:'',
             villageProvided:'do_not_wish_to_say',
             donateCommonVoiceProvided:false,
+            recordingTooLarge:false,
 		}
 	}
 
@@ -482,10 +483,15 @@ class Recorder extends Component {
   }
 
 	seeRecording = async (recording, blob) => {
-		console.log(recording, blob)
-		const audioBlob = await fetch(recording).then((r) => r.blob());
-		const audioFile = new File([blob], 'voice.wav', { type: 'audio/wav' });
-		this.setState({currentAudioFileToSave:audioFile})
+		console.log(recording, blob.size)
+        if (blob.size < 450000) {
+            const audioBlob = await fetch(recording).then((r) => r.blob());
+            const audioFile = new File([blob], 'voice.wav', { type: 'audio/wav' });
+            console.log(audioFile.duration)
+            this.setState({currentAudioFileToSave:audioFile})
+        } else {
+            this.setState({recordingTooLarge:true,currentAudioFileToSave:[]})
+        }
 	}
 
 	sendRecordingToSave = async (recording) => {
@@ -513,6 +519,7 @@ class Recorder extends Component {
 		    <ReactMediaRecorder
 		      audio
 		      onStop={this.seeRecording}
+              onStart={()=>{this.setState({recordingTooLarge:false})}}
 		      render={({ status, startRecording, stopRecording, mediaBlobUrl, clearBlobUrl }) => (
 		        <div style={{textAlign:'center'}}>
                     <div style={{fontSize:'14px',marginLeft:'42px'}}>Submit a Recording for Yugtun.com</div>
@@ -520,7 +527,7 @@ class Recorder extends Component {
                     
 		          <div>
 				      </div>
-		        	{mediaBlobUrl !== null?
+		        	{mediaBlobUrl !== null && this.state.currentAudioFileToSave.length !== 0 ?
 		        		<div style={{textAlign:'center',height:'85px'}}>
 		        			{'name' in this.state.currentAudioFileToSave ?
 		        				<div>
@@ -541,6 +548,11 @@ class Recorder extends Component {
 				          :
 				          <Icon size='big' color='grey' style={{cursor:'pointer',marginTop:7}} circular name='microphone' onClick={startRecording} />
 				        }
+                        {this.state.recordingTooLarge ?
+                            <div style={{color:'red'}}>Recording was too long (>30 seconds)</div>
+                            :
+                            null
+                        }
                         </div>
 				      }
 
