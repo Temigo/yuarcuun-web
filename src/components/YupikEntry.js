@@ -187,7 +187,7 @@ class YupikEntry extends Component {
                           <Icon circular onClick={()=>this.repeatAudio(k['filename'])} style={{color:'#106181',opacity:0.9,fontSize:'20px', margin:3, cursor:'pointer'}} name='volume up' />
                           <div style={{display:'flex',flexDirection:'column',marginLeft:10,padding:'5px 0px'}}>
                             {k['gender'] != 'do_not_wish_to_say' ?
-                              <div>{k['gender']}</div>
+                              <div>{k['gender'].replaceAll('_',' / ')}</div>
                               :
                               null
                             }
