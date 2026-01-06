@@ -19,12 +19,16 @@ class YupikEntry extends Component {
   constructor(props) {
     super(props);
     console.log("YupikEntry props: ", props);
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const record = urlParams.get('record') 
     this.state = {
       entry: props.entry,
       word: props.word,
       audioRetrieved: [],
       showModal:-1,
       openPopup:-1,
+      audioParameterBool:record !== null ? true : false,
     };
   }
 
@@ -388,7 +392,11 @@ class YupikEntry extends Component {
               <span style={{fontWeight:'500',marginRight:('keySplitAudio' in this.state.entry ? '0px':'10px')}}>{key[0]}</span>
               {'keySplitAudio' in this.state.entry ?
                 <span style={{marginRight:3}}>
-                  {this.displayAudioMic(this.state.entry.keySplitAudio[keyid],'a'+keyid.toString())}
+                  {this.state.audioParameterBool ?
+                    this.displayAudioMic(this.state.entry.keySplitAudio[keyid],'a'+keyid.toString())
+                    :
+                    null
+                  }
                   {this.state.showModal != -1 ?
                     this.recordClip('a'+keyid.toString(),key[0],'entryKeySplit')
                     :
@@ -662,8 +670,11 @@ class YupikEntry extends Component {
                         {sentence[0]}
                         </span>
                       </Link>
-
-                            {this.displayAudioMic(this.state.entry.baseExamplesAudio[sentenceid],'b'+sentenceid.toString())}
+                            {this.state.audioParameterBool ?
+                              this.displayAudioMic(this.state.entry.baseExamplesAudio[sentenceid],'b'+sentenceid.toString())
+                              :
+                              null
+                            }
                             {this.state.showModal != -1 ?
                               this.recordClip('b'+sentenceid.toString(),sentence[0],'exampleSentence')
                               :

@@ -86,6 +86,10 @@ class SimpleWordBuilderUpdated extends Component {
     // console.log("YupikDetails props: ", props);
     // console.log(props.entry)
     // console.log(props.entry[5][0])
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const record = urlParams.get('record') 
+    // console.log(urlParams, record)
     this.state = {
       showModal:false,
       mvEnglish1: [],
@@ -144,6 +148,7 @@ class SimpleWordBuilderUpdated extends Component {
 
       openPopup:false,
       // entry:props.entry[2],
+      audioParameterBool: record !== null ? true : false,
     }
   }
 
@@ -499,7 +504,11 @@ class SimpleWordBuilderUpdated extends Component {
             {this.state.mvvSegments.map((t)=>
               <span style={{color:colorsList[this.state.colorScheme][t[1]]}}>{t[0]}</span>
             )}
-            {this.displayAudioMic(this.state.audioRetrieved)}
+            {this.state.audioParameterBool ?
+              this.displayAudioMic(this.state.audioRetrieved)
+              :
+              null
+            }
             {this.state.showModal ?
               this.recordClip(this.state.segmentString,'entryUsage')
               :
@@ -564,7 +573,11 @@ class SimpleWordBuilderUpdated extends Component {
               {this.state.npnSegments.slice().reverse()[0][0].map((t)=>
                 <span style={{color:colorsList[this.state.colorScheme][t[1]]}}>{t[0]}</span>
               )}
-              {this.displayAudioMic(this.state.audioRetrieved)}
+              {this.state.audioParameterBool ?
+                this.displayAudioMic(this.state.audioRetrieved)
+                :
+                null
+              }
               {this.state.showModal ?
                 this.recordClip(this.state.segmentString,'entryUsage')
                 :

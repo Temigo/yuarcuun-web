@@ -142,6 +142,9 @@ class SentenceBuilder extends Component {
 	constructor(props) {
 		super(props);
 		// console.log(this.props)
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const record = urlParams.get('record') 
 		// console.log(decodeURI(props.match.params.num))
 		this.state = {
 
@@ -496,6 +499,7 @@ class SentenceBuilder extends Component {
 
       openPopup:false,
       showModal:false,
+      audioParameterBool:record !== null ? true : false,
 		}
 
 		this.subjectMenu = {}
@@ -5517,7 +5521,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 						:
 						<div style={{display:'flex',justifyContent:'space-between'}}>
 							<div>
-								{this.state.segmentString.length != 0 ?
+								{this.state.segmentString.length != 0 && this.state.audioParameterBool?
 				        	this.displayAudioMic(this.state.audioRetrieved)
 				        	:
 				        	null
