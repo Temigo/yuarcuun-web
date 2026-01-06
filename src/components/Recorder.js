@@ -578,8 +578,8 @@ class Recorder extends Component {
                                 onExpired={()=>{this.setState({recaptchaAllowed:false})}}
                               />
                         <Button 
-                         disabled={mediaBlobUrl === null}
-                         // disabled={!this.state.recaptchaAllowed && mediaBlobUrl !== null}
+                         // disabled={mediaBlobUrl === null}
+                         disabled={!this.state.recaptchaAllowed && mediaBlobUrl !== null}
                          onClick={()=>this.sendRecordingToSave(mediaBlobUrl)}>{'Submit'}</Button>
                       </Form>
                     </div>
