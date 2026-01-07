@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import React, { Component } from 'react';
+import React, { Component, useState, useRef } from 'react';
 import { Container, Header, Button, Icon, Divider, Form, Loader, Segment, Dimmer, FormField, Dropdown, FormSelect, Checkbox, Image, Grid, Popup } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 // import {YouTubeLinks} from './info/YouTubeLinks.js';
@@ -18,6 +18,8 @@ import axios from 'axios';
 import ReCAPTCHA from "react-google-recaptcha";
 import Mirt from 'react-mirt';
 import 'react-mirt/dist/css/react-mirt.css';
+import { MultiRecorder, type AudioFormat } from "react-ts-audio-recorder";
+import vmsgWasm from "react-ts-audio-recorder/assets/vmsg.wasm?url";
 // import Dropzone from 'react-dropzone'
 
 // var toWav = require('audiobuffer-to-wav')
@@ -197,7 +199,13 @@ class Recorder extends Component {
             villageProvided:'do_not_wish_to_say',
             donateCommonVoiceProvided:false,
             recordingTooLarge:false,
+
+            useTrimmableAudio:false,
+            isRecording:false,
+            setIsRecording:false,
+            recordingBlob:null,
 		}
+        this.recorder = null
 	}
 
 	// componentDidMount() {
@@ -512,10 +520,48 @@ class Recorder extends Component {
       	// }
       })
 	}
+          
+    startRecording = async () => {
+        this.recorder = new MultiRecorder({
+          format: "mp3", // or "mp3"
+          sampleRate: 48000,
+          wasmURL: vmsgWasm,
+        });
+        // console.log(this.recorderRef)            
+        // this.recorderRef.current = recorder;
+        await this.recorder.init();
+        await this.recorder.startRecording();
+        this.setState({setIsRecording:true});
+    };
+
+    stopRecording = async () => {
+        if (!this.recorder) return;
+        // console.log(this.recorder)
+        const blob = await this.recorder.stopRecording();
+        // console.log(this.recorder)
+        await this.recorder.close();
+        this.recorder = null;
+        this.setState({setIsRecording:false, recordingBlob:blob, blobUrl: URL.createObjectURL(blob)});
+    };
 
 	render() {
+
+
+
+
 		console.log(this.state)
 		return (
+            <div>
+                {this.state.blobUrl !== null ?
+                    <audio controls style={{width:(window.innerWidth < 480 ? '100%':'50%'),height:40}} src={this.state.blobUrl} />
+                    :
+                    null
+                }
+            <div>
+              <button onClick={this.state.setIsRecording ? this.stopRecording : this.startRecording}>
+                {this.state.setIsRecording ? "Stop" : "Start"} Recording
+              </button>
+            </div>
 		    <ReactMediaRecorder
 		      audio
 		      onStop={this.seeRecording}
@@ -531,9 +577,17 @@ class Recorder extends Component {
 		        		<div style={{textAlign:'center',height:'85px'}}>
 		        			{'name' in this.state.currentAudioFileToSave ?
 		        				<div>
-		        					<Mirt onChange={(timeRange) => {this.setState({timeRange:timeRange})}} file={this.state.currentAudioFileToSave} />
+                                    {this.state.useTrimmableAudio ?
+    		        					<Mirt onChange={(timeRange) => {this.setState({timeRange:timeRange})}} file={this.state.currentAudioFileToSave} />
+                                        :
+                                        <audio controls style={{width:(window.innerWidth < 480 ? '100%':'50%'),height:40}} src={mediaBlobUrl} />
+                                    }
 							        <div style={{marginTop:'5px'}}>
-							        	<Button onClick={()=>{this.trimAudio()}}>Trim Recording</Button>
+                                        {this.state.useTrimmableAudio ?
+							        	    <Button onClick={()=>{this.trimAudio()}}>Trim Recording</Button>
+                                            :
+                                            false
+                                        }
 							          <Button disabled={this.state.retrievingRecording} basic onClick={clearBlobUrl}>{'Redo'}</Button>
 							        </div>
 							      </div>
@@ -587,6 +641,7 @@ class Recorder extends Component {
 		        </div>
 		      )}
 		    />
+        </div>
 		);
 	}
 }
