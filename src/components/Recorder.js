@@ -18,8 +18,9 @@ import axios from 'axios';
 import ReCAPTCHA from "react-google-recaptcha";
 import Mirt from 'react-mirt';
 import 'react-mirt/dist/css/react-mirt.css';
-import { MultiRecorder, type AudioFormat } from "react-ts-audio-recorder";
-import vmsgWasm from "react-ts-audio-recorder/assets/vmsg.wasm?url";
+// import vmsg from "vmsg";
+// import { MultiRecorder, type AudioFormat } from "react-ts-audio-recorder";
+// import vmsgWasm from "react-ts-audio-recorder/assets/vmsg.wasm?url";
 // import Dropzone from 'react-dropzone'
 
 // var toWav = require('audiobuffer-to-wav')
@@ -56,6 +57,10 @@ ReactGA.initialize("G-JZB9CXH4GJ")
 //   customFontFam2 = {fontFamily:customFirefoxTitleFontFam}
 //   letterbutton = {fontFamily:customFirefoxTitleFontFam,paddingTop:'10px',paddingBottom:'10px',paddingRight:'14px',paddingLeft:'14px',fontSize:'16px'}
 // }
+
+// const recorder = new vmsg.Recorder({
+//   wasmURL: "https://unpkg.com/vmsg@0.3.0/vmsg.wasm"
+// });
 
 const AUDIO_CONFIG = {
     MP3_BITRATE: 192, // Increased from 128 for better quality
@@ -201,9 +206,14 @@ class Recorder extends Component {
             recordingTooLarge:false,
 
             useTrimmableAudio:false,
-            isRecording:false,
-            setIsRecording:false,
-            recordingBlob:null,
+            // isRecording:false,
+            // setIsRecording:false,
+            // recordingBlob:null,
+
+            isLoading: false,
+            isRecording: false,
+            recordings: []
+
 		}
         this.recorder = null
 	}
@@ -521,28 +531,51 @@ class Recorder extends Component {
       })
 	}
           
-    startRecording = async () => {
-        this.recorder = new MultiRecorder({
-          format: "mp3", // or "mp3"
-          sampleRate: 48000,
-          wasmURL: vmsgWasm,
-        });
-        // console.log(this.recorderRef)            
-        // this.recorderRef.current = recorder;
-        await this.recorder.init();
-        await this.recorder.startRecording();
-        this.setState({setIsRecording:true});
-    };
+    // startRecording = async () => {
+    //     this.recorder = new MultiRecorder({
+    //       format: "mp3", // or "mp3"
+    //       sampleRate: 48000,
+    //       wasmURL: vmsgWasm,
+    //     });
+    //     // console.log(this.recorderRef)            
+    //     // this.recorderRef.current = recorder;
+    //     await this.recorder.init();
+    //     await this.recorder.startRecording();
+    //     this.setState({setIsRecording:true});
+    // };
 
-    stopRecording = async () => {
-        if (!this.recorder) return;
-        // console.log(this.recorder)
-        const blob = await this.recorder.stopRecording();
-        // console.log(this.recorder)
-        await this.recorder.close();
-        this.recorder = null;
-        this.setState({setIsRecording:false, recordingBlob:blob, blobUrl: URL.createObjectURL(blob)});
-    };
+    // stopRecording = async () => {
+    //     if (!this.recorder) return;
+    //     // console.log(this.recorder)
+    //     const blob = await this.recorder.stopRecording();
+    //     // console.log(this.recorder)
+    //     await this.recorder.close();
+    //     this.recorder = null;
+    //     this.setState({setIsRecording:false, recordingBlob:blob, blobUrl: URL.createObjectURL(blob)});
+    // };
+
+      // record = async () => {
+      //   this.setState({ isLoading: true });
+
+      //   if (this.state.isRecording) {
+      //     const blob = await recorder.stopRecording();
+      //     this.setState({
+      //       isLoading: false,
+      //       isRecording: false,
+      //       recordings: this.state.recordings.concat(URL.createObjectURL(blob))
+      //     });
+      //   } else {
+      //     try {
+      //       await recorder.initAudio();
+      //       await recorder.initWorker();
+      //       recorder.startRecording();
+      //       this.setState({ isLoading: false, isRecording: true });
+      //     } catch (e) {
+      //       console.error(e);
+      //       this.setState({ isLoading: false });
+      //     }
+      //   }
+      // };
 
 	render() {
 
@@ -552,16 +585,16 @@ class Recorder extends Component {
 		console.log(this.state)
 		return (
             <div>
-                {this.state.blobUrl !== null ?
-                    <audio controls style={{width:(window.innerWidth < 480 ? '100%':'50%'),height:40}} src={this.state.blobUrl} />
-                    :
-                    null
-                }
-            <div>
-              <button onClick={this.state.setIsRecording ? this.stopRecording : this.startRecording}>
-                {this.state.setIsRecording ? "Stop" : "Start"} Recording
-              </button>
-            </div>
+{/*            <button disabled={this.state.isLoading} onClick={this.record}>
+              {this.state.isRecording ? "Stop" : "Record"}
+            </button>
+            <ul style={{ listStyle: "none", padding: 0 }}>
+              {this.state.recordings.map(url => (
+                <li key={url}>
+                  <audio src={url} controls />
+                </li>
+              ))}
+            </ul>*/}
 		    <ReactMediaRecorder
 		      audio
 		      onStop={this.seeRecording}
