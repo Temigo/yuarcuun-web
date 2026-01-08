@@ -39,7 +39,26 @@ import {useRecorder}  from 'react-microphone-recorder';
       isRecording
     } = useRecorder();
 
-    const onButtonClick = () => {
+    const onButtonClick = async (audioURL) => {
+        console.log(audioURL)
+
+        // this.setState({sendingRecording:true})
+        const audioBlob = await fetch(audioURL).then((r) => r.blob());
+        const audioFile = new File([audioBlob], 'voice.mp3', { type: 'audio/mp3' });
+        const formData = new FormData(); // preparing to send to the server
+        formData.append('file', audioFile);  // preparing to send to the server
+        formData.append("data", JSON.stringify({"sentence":'newtest',"name": '',"gender":'do_not_wish_to_say',"age": 'do_not_wish_to_say',"village": 'do_not_wish_to_say',"donate": false,"siteLocation": ''}));
+        console.log(formData)
+        axios
+          .post(API_URL + "yugtunCrowdsource", formData)
+          .then(response => {
+            console.log(response)
+            // if (response.data) {
+            // this.setState({returnedTranscript:response.data.transcription, retrievingRecording:false})
+            // }
+          })
+        
+
         // send audio file to server or process it here
     }
   
@@ -77,6 +96,7 @@ import {useRecorder}  from 'react-microphone-recorder';
                   <div className="mt-4">
                       <span className="text-gray-900">Audio File:</span>
                       <audio src={audioURL} controls className="mt-4"></audio>
+                      <button onClick={()=>onButtonClick(audioURL)}>Send</button>
                   </div>
               )
             }
@@ -731,9 +751,9 @@ class Recorder extends Component {
                                 onExpired={()=>{this.setState({recaptchaAllowed:false})}}
                               />
                         <Button 
-                         // disabled={mediaBlobUrl === null}
-                         disabled={!this.state.recaptchaAllowed || mediaBlobUrl == null}
-                         onClick={()=>this.sendRecordingToSave(mediaBlobUrl)}>{'Submit'}</Button>
+                         disabled={this.state.newBlobUrl === null}
+                         // disabled={!this.state.recaptchaAllowed || mediaBlobUrl == null}
+                         onClick={()=>this.sendRecordingToSave(this.state.newBlobUrl)}>{'Submit'}</Button>
                       </Form>
                     </div>
 
