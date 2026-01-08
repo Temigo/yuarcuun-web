@@ -44,7 +44,7 @@ import {useRecorder}  from 'react-microphone-recorder';
 
         // this.setState({sendingRecording:true})
         const audioBlob = await fetch(audioURL).then((r) => r.blob());
-        const audioFile = new File([audioBlob], 'voice.mp3', { type: 'audio/mp3' });
+        const audioFile = new File([audioBlob], 'voice.webm', { type: 'audio/webm' });
         const formData = new FormData(); // preparing to send to the server
         formData.append('file', audioFile);  // preparing to send to the server
         formData.append("data", JSON.stringify({"sentence":'newtest',"name": '',"gender":'do_not_wish_to_say',"age": 'do_not_wish_to_say',"village": 'do_not_wish_to_say',"donate": false,"siteLocation": ''}));
