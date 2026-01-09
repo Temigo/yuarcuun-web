@@ -47,10 +47,10 @@
         "postcss-loader": "2.0.8",
         "promise": "8.0.1",
         "raf": "3.4.0",
-        "react": "^16.8.6",
+        "react": "^16.14.0",
         "react-csv-to-table": "0.0.4",
         "react-dev-utils": "^5.0.3",
-        "react-dom": "^16.8.6",
+        "react-dom": "^16.14.0",
         "react-expand-text": "^1.0.0",
         "react-ga": "^2.5.7",
         "react-ga4": "^2.1.0",
@@ -58,6 +58,7 @@
         "react-google-recaptcha": "^3.1.0",
         "react-horizontal-scrolling-menu": "^0.7.8",
         "react-media-recorder": "^1.6.5",
+        "react-microphone-recorder": "^1.0.0",
         "react-mirt": "^1.3.7",
         "react-redux": "^5.1.1",
         "react-router-dom": "^4.3.1",
@@ -69,6 +70,7 @@
         "shuffle-array": "^1.0.1",
         "style-loader": "0.19.0",
         "sw-precache-webpack-plugin": "0.11.4",
+        "tslib": "^2.8.1",
         "url-loader": "0.6.2",
         "webpack": "3.8.1",
         "webpack-dev-server": "2.9.4",
@@ -12340,6 +12342,7 @@
       "version": "16.14.0",
       "resolved": "https://registry.npmjs.org/react/-/react-16.14.0.tgz",
       "integrity": "sha512-0X2CImDkJGApiAlcf0ODKIneSwBPhqJawOa5wCtKbu7ZECrmS26NvtSILynQ66cgkT/RJ4LidJOc3bUESwmU8g==",
+      "license": "MIT",
       "dependencies": {
         "loose-envify": "^1.1.0",
         "object-assign": "^4.1.1",
@@ -12403,6 +12406,7 @@
       "version": "16.14.0",
       "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-16.14.0.tgz",
       "integrity": "sha512-1gCeQXDLoIqMgqD3IO2Ah9bnf0w9kzhwN5q4FGnHZ67hBm9yePzB5JJAIQCc8x3pFnNlwFq4RidZggNAAkzWWw==",
+      "license": "MIT",
       "dependencies": {
         "loose-envify": "^1.1.0",
         "object-assign": "^4.1.1",
@@ -12519,6 +12523,16 @@
       "resolved": "https://registry.npmjs.org/react-media-recorder/-/react-media-recorder-1.6.5.tgz",
       "integrity": "sha512-YcARNZ498jtmOJ+O7GkaokR0DbMNV+YSXB0msAHMZk9wharBuVSWYCXKiIL5JAnR5cs6ebXaOtkkGsM3uIq7Bw==",
       "license": "MIT"
+    },
+    "node_modules/react-microphone-recorder": {
+      "version": "1.0.0",
+      "resolved": "https://registry.npmjs.org/react-microphone-recorder/-/react-microphone-recorder-1.0.0.tgz",
+      "integrity": "sha512-ecqUQTCsYTXaPjRjKQsfjCd0ORzePRj2wwVUuxbagbwhe4se7D3y6V3wBFxkuvHakQFCKKdXC6zmxNxrMY5nPw==",
+      "license": "MIT",
+      "peerDependencies": {
+        "react": ">=16.8.0 || >=17.0.0",
+        "react-dom": ">=16.8.0 || >=17.0.0"
+      }
     },
     "node_modules/react-mirt": {
       "version": "1.3.7",
@@ -13372,6 +13386,7 @@
       "version": "0.19.1",
       "resolved": "https://registry.npmjs.org/scheduler/-/scheduler-0.19.1.tgz",
       "integrity": "sha512-n/zwRWRYSUj0/3g/otKDRPMh6qv2SYMWNq85IEa8iZyAv8od9zDYpGSnpBEjNgcMNq6Scbu5KfIPxNF72R/2EA==",
+      "license": "MIT",
       "dependencies": {
         "loose-envify": "^1.1.0",
         "object-assign": "^4.1.1"
@@ -15027,6 +15042,12 @@
       "resolved": "https://registry.npmjs.org/tryer/-/tryer-1.0.1.tgz",
       "integrity": "sha512-c3zayb8/kWWpycWYg87P71E1S1ZL6b6IJxfb5fvsUgsf0S2MVGaDhDXXjDMpdCpfWXqptc+4mXwmiy1ypXqRAA==",
       "dev": true
+    },
+    "node_modules/tslib": {
+      "version": "2.8.1",
+      "resolved": "https://registry.npmjs.org/tslib/-/tslib-2.8.1.tgz",
+      "integrity": "sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==",
+      "license": "0BSD"
     },
     "node_modules/tty-browserify": {
       "version": "0.0.0",
