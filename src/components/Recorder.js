@@ -184,8 +184,6 @@ import {useRecorder}  from 'react-microphone-recorder';
     return (
 
     <div style={{textAlign:'center'}}>
-      <div style={{fontSize:'14px',marginLeft:'42px'}}>Submit a Recording for Yugtun.com</div>
-      <div style={{fontSize:'26px',margin:'25px',marginBottom:'7px'}}>{sentence}</div>
                     
 {/*
         <div className="flex flex-col items-center justify-center p-4 ">
@@ -218,15 +216,18 @@ import {useRecorder}  from 'react-microphone-recorder';
               <span className="text-gray-900">Recording State: {recordingState}</span>*/}
 
             {recordingSent ?
-              <div style={{fontSize:'26px', margin:20}}> Recording Sent! </div>
+              <div style={{fontSize:'18px', fontStyle:'italic', margin:10}}> Recording Sent. Quyana! </div>
               :
               <div>
+                <div style={{fontSize:'14px',marginLeft:'42px'}}>Submit a Recording for Yugtun.com</div>
+                <div style={{fontSize:'25px',margin:(sentence.length > 20 ? '10px':'25px'),marginBottom:'7px'}}>{sentence}</div>
+                <div style={{textAlign:'center',height:'85px'}}>
                 {
                   recordingState === "stopped" && audioFile && timeElapsed <= maximumClipSeconds ?
                     <div>
-                      <audio controls style={{width:(window.innerWidth < 480 ? '100%':'50%'),height:40}} src={audioURL} />
+                      <audio controls style={{height:40}} src={audioURL} />
                       <div style={{marginTop:'5px'}}>
-                        <Button basic onClick={resetRecording}>{'Redo'}</Button>
+                        <Button basic onClick={resetRecording}>{'Reset'}</Button>
                       </div>
                     </div>
                     :
@@ -245,6 +246,7 @@ import {useRecorder}  from 'react-microphone-recorder';
 
                     </div>
                 }
+              </div>
                 <div style={{display:'flex',justifyContent:'center',marginTop:'20px'}}>
                     <Form style={{width:'350px'}}>
                       <FormSelect style={{fontWeight:'normal'}} label='Qavcircit? (optional)' onChange={(event, data)=>setageProvided(data.value)} options={ageOptions} placeholder='20-29' />

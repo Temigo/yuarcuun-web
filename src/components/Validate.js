@@ -75,7 +75,7 @@ class Validate extends Component {
 			validationEdit:{},
 			passkey:'pissurtuq',
 			inputkey:'',
-			visible:true,
+			visible:false,
 		}
 	}
 
