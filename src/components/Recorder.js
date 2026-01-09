@@ -39,15 +39,15 @@ import {useRecorder}  from 'react-microphone-recorder';
       isRecording
     } = useRecorder();
 
-    const onButtonClick = async (audioURL, audioFile) => {
+    const onButtonClick = async (audioURL) => {
         console.log(audioURL)
 
         // this.setState({sendingRecording:true})
         const audioBlob = await fetch(audioURL).then((r) => r.blob());
-        // const audioFile = new File([audioBlob], 'voice.webm', { type: 'audio/webm' });
+        const audioFile = new File([audioBlob], 'voice.mp3', { type: 'audio/mp3' });
         const formData = new FormData(); // preparing to send to the server
         formData.append('file', audioFile);  // preparing to send to the server
-        formData.append("data", JSON.stringify({"sentence":'newtest2',"name": '',"gender":'do_not_wish_to_say',"age": 'do_not_wish_to_say',"village": 'do_not_wish_to_say',"donate": false,"siteLocation": ''}));
+        formData.append("data", JSON.stringify({"sentence":'newtest',"name": '',"gender":'do_not_wish_to_say',"age": 'do_not_wish_to_say',"village": 'do_not_wish_to_say',"donate": false,"siteLocation": ''}));
         console.log(formData)
         axios
           .post(API_URL + "yugtunCrowdsource", formData)
@@ -96,7 +96,7 @@ import {useRecorder}  from 'react-microphone-recorder';
                   <div className="mt-4">
                       <span className="text-gray-900">Audio File:</span>
                       <audio src={audioURL} controls className="mt-4"></audio>
-                      <button onClick={()=>onButtonClick(audioURL, audioFile)}>Send</button>
+                      <button onClick={()=>onButtonClick(audioURL)}>Send</button>
                   </div>
               )
             }
