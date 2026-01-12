@@ -184,7 +184,6 @@ import useRecorder  from '../useRecorderEdited.js';
     return (
 
     <div style={{textAlign:'center'}}>
-    {console.log(audioLevel)}
 {/*
         <div className="flex flex-col items-center justify-center p-4 ">
           <div className="w-full max-w-md p-8 bg-white rounded shadow">
