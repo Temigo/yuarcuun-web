@@ -5382,7 +5382,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
             }}
           >
           <ModalContent>
-            <Icon circular style={{margin:0,color:'#929292',cursor:'pointer',position:'relative',float:'right'}} size='large' onClick={()=>{this.setState({showModal:false}); window.location.reload();}} name='x' />
+            <Icon circular style={{margin:0,color:'#929292',cursor:'pointer',position:'relative',float:'right'}} size='large' onClick={()=>{this.setState({showModal:false});}} name='x' />
             <Recorder sentence={sentence} siteLocation={siteLocation} />          
           </ModalContent>
           </Modal>

@@ -22,7 +22,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 // import { MultiRecorder, type AudioFormat } from "react-ts-audio-recorder";
 // import vmsgWasm from "react-ts-audio-recorder/assets/vmsg.wasm?url";
 // import Dropzone from 'react-dropzone'
-import {useRecorder}  from 'react-microphone-recorder';
+import useRecorder  from '../useRecorderEdited.js';
   
   const RecorderHook = (props) => {
     // console.log('props',props)
@@ -42,7 +42,7 @@ import {useRecorder}  from 'react-microphone-recorder';
 
     const sentence = props.sentence
     const siteLocation = props.siteLocation
-    const maximumClipSeconds = 3
+    const maximumClipSeconds = 20
 
     const [recaptchaAllowed, setrecaptchaAllowed] = useState(false);
     const [ageProvided, setageProvided] = useState('do_not_wish_to_say');
@@ -184,7 +184,7 @@ import {useRecorder}  from 'react-microphone-recorder';
     return (
 
     <div style={{textAlign:'center'}}>
-                    
+    {console.log(audioLevel)}
 {/*
         <div className="flex flex-col items-center justify-center p-4 ">
           <div className="w-full max-w-md p-8 bg-white rounded shadow">
