@@ -186,6 +186,7 @@ class Validate extends Component {
 														<div>{'SentCV: '}</div>
 														<div>{'SiteLoc: '}</div>
 														<div>{'Status: '}</div>
+														<div>{'English: '}</div>
 													</Grid.Column>
 													<Grid.Column width={4}>
 														<div>{this.state.validationData[d]['age'].replace('do_not_wish_to_say','')}<span style={{color:'white'}}>`</span></div>
@@ -197,6 +198,11 @@ class Validate extends Component {
 														<div>{this.state.validationData[d]['sent'].toString()}<span style={{color:'white'}}>`</span></div>
 														<div>{this.state.validationData[d]['siteLocation']}<span style={{color:'white'}}>`</span></div>
 														<div>{this.state.validationData[d]['validation']}<span style={{color:'white'}}>`</span></div>
+														{'english' in this.state.validationData[d] ?
+															<div>{this.state.validationData[d]['english']}<span style={{color:'white'}}>`</span></div>
+															:
+															null
+														}
 													</Grid.Column>
 													<Grid.Column width={3} style={{display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'column',}}>
 														<Button disabled={this.state.validationData[d]['validation']=='accept'} style={{margin:3}} onClick={()=>this.buttonClicked(d,'accept',this.state.validationData[d]['validation'])} color={(this.state.validationData[d]['validation'] == 'accept' || (d in this.state.validationEdit && this.state.validationEdit[d] == 'accept')) ? 'green' : ''}>Accept</Button>
@@ -226,6 +232,7 @@ class Validate extends Component {
 															<div>{'SentCV: '}</div>
 															<div>{'SiteLoc: '}</div>
 															<div>{'Status: '}</div>
+															<div>{'English: '}</div>
 														</Grid.Column>
 														<Grid.Column width={10}>
 															<div>{this.state.validationData[d]['age'].replace('do_not_wish_to_say','')}<span style={{color:'white'}}>`</span></div>
@@ -237,6 +244,11 @@ class Validate extends Component {
 															<div>{this.state.validationData[d]['sent'.toString()]}<span style={{color:'white'}}>`</span></div>
 															<div>{this.state.validationData[d]['siteLocation']}<span style={{color:'white'}}>`</span></div>
 															<div>{this.state.validationData[d]['validation']}<span style={{color:'white'}}>`</span></div>
+															{'english' in this.state.validationData[d] ?
+																<div>{this.state.validationData[d]['english']}<span style={{color:'white'}}>`</span></div>
+																:
+																null
+															}
 														</Grid.Column>
 													</Grid.Row>
 													<Grid.Row>
