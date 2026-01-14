@@ -500,6 +500,8 @@ class SentenceBuilder extends Component {
       openPopup:false,
       showModal:false,
       audioParameterBool:record !== null || true ? true : false,
+
+      englishString:'',
 		}
 
 		this.subjectMenu = {}
@@ -1394,7 +1396,20 @@ class SentenceBuilder extends Component {
 
         updateDict['segmentString']=response.data.segmentString
         updateDict['audioRetrieved']=response.data.audioRetrieved
-    			// updateDict['segmentString'] = segmentString.trim()
+        let englishString = ''
+        if ("mvEnglishString" in response.data.english) {
+        	englishString+=response.data.english.mvEnglishString
+        }
+        if ("cvEnglishString" in response.data.english) {
+        	englishString+=' '+response.data.english.cvEnglishString
+        }
+        if ("svEnglishString" in response.data.english) {
+        	englishString+=' '+response.data.english.svEnglishString
+        }
+        if ("npEnglishString" in response.data.english) {
+        	englishString+=' '+response.data.english.npEnglishString
+        }
+        updateDict['englishString']=englishString
       	}
 
 
@@ -5366,7 +5381,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 	}
 
 
-  recordClip = (sentence, siteLocation) => {
+  recordClip = (sentence, siteLocation, english) => {
         return <Modal
             on='click'
             open={this.state.showModal}
@@ -5383,7 +5398,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
           >
           <ModalContent>
             <Icon circular style={{margin:0,color:'#929292',cursor:'pointer',position:'relative',float:'right'}} size='large' onClick={()=>{this.setState({showModal:false});}} name='x' />
-            <Recorder sentence={sentence} siteLocation={siteLocation} />          
+            <Recorder english={english} sentence={sentence} siteLocation={siteLocation} />          
           </ModalContent>
           </Modal>
   }
@@ -5399,7 +5414,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
   }
 
   displayAudioMic = (audioRetrieved) => {
-  	console.log(audioRetrieved)
+  	// console.log(audioRetrieved)
     return <Popup1
             content={
               <List style={{fontFamily:customFontFam}} divided verticalAlign='middle'>
@@ -5463,7 +5478,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
 
 	render() {
-		// console.log(this.state)
+		console.log(this.state.englishString)
 		// console.log("mvv",this.state.mvvMood)
 		// console.log("mvvtype",this.state.mvvType)
 		// console.log("cvv",this.state.cvvMood)
@@ -5527,7 +5542,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 				        	null
 				        }
 				        {this.state.showModal ?
-				          this.recordClip(this.state.segmentString,'sentenceBuilder')
+				          this.recordClip(this.state.segmentString,'sentenceBuilder',this.state.englishString)
 				          :
 				          null
 				        }

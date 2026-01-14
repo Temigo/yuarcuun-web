@@ -120,7 +120,7 @@ class YupikEntry extends Component {
     }
   }
 
-  recordClip = (sentenceid, sentence, siteLocation) => {
+  recordClip = (sentenceid, sentence, siteLocation, english) => {
         return <Modal
             on='click'
             open={this.state.showModal==sentenceid}
@@ -137,7 +137,7 @@ class YupikEntry extends Component {
           >
           <ModalContent>
             <Icon circular style={{margin:0,color:'#929292',cursor:'pointer',position:'relative',float:'right'}} size='large' onClick={()=>{this.setState({showModal:-1});}} name='x' />
-            <Recorder sentence={sentence} siteLocation={siteLocation} />          
+            <Recorder english={english} sentence={sentence} siteLocation={siteLocation} />          
           </ModalContent>
           </Modal>
   }
@@ -398,7 +398,7 @@ class YupikEntry extends Component {
                     null
                   }
                   {this.state.showModal != -1 ?
-                    this.recordClip('a'+keyid.toString(),key[0],'entryKeySplit')
+                    this.recordClip('a'+keyid.toString(),key[0],'entryKeySplit',this.state.entry.definitionString)
                     :
                     null
                   }
@@ -676,7 +676,7 @@ class YupikEntry extends Component {
                               null
                             }
                             {this.state.showModal != -1 ?
-                              this.recordClip('b'+sentenceid.toString(),sentence[0],'exampleSentence')
+                              this.recordClip('b'+sentenceid.toString(),sentence[0],'exampleSentence',sentence[1])
                               :
                               null
                             }

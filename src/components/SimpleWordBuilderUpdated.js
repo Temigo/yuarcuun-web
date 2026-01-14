@@ -149,6 +149,7 @@ class SimpleWordBuilderUpdated extends Component {
       openPopup:false,
       // entry:props.entry[2],
       audioParameterBool: record !== null || true ? true : false,
+      englishString:'',
     }
   }
 
@@ -215,7 +216,7 @@ class SimpleWordBuilderUpdated extends Component {
         np:np,
       })
       .then(response => {
-        // console.log('backend',response.data)
+        console.log('backend',response.data)
         let vkey, nkey
         let updateDict = {}
         if ("english" in response.data) {
@@ -307,6 +308,21 @@ class SimpleWordBuilderUpdated extends Component {
 
         updateDict['segmentString']=response.data.segmentString
         updateDict['audioRetrieved']=response.data.audioRetrieved
+        let englishString = ''
+        if ("mvEnglishString" in response.data.english) {
+          englishString+=response.data.english.mvEnglishString
+        }
+        if ("cvEnglishString" in response.data.english) {
+          englishString+=' '+response.data.english.cvEnglishString
+        }
+        if ("svEnglishString" in response.data.english) {
+          englishString+=' '+response.data.english.svEnglishString
+        }
+        if ("npEnglishString" in response.data.english) {
+          englishString+=' '+response.data.english.npEnglishString
+        }
+        updateDict['englishString']=englishString
+
 
         this.setState(updateDict)
 
@@ -384,7 +400,7 @@ class SimpleWordBuilderUpdated extends Component {
     
   }
 
-  recordClip = (sentence, siteLocation) => {
+  recordClip = (sentence, siteLocation,english) => {
         return <Modal
             on='click'
             open={this.state.showModal}
@@ -402,7 +418,7 @@ class SimpleWordBuilderUpdated extends Component {
           >
           <ModalContent>
             <Icon circular style={{margin:0,color:'#929292',cursor:'pointer',position:'relative',float:'right'}} size='large' onClick={()=>{this.setState({showModal:false});}} name='x' />
-            <Recorder sentence={sentence} siteLocation={siteLocation} />          
+            <Recorder english={english} sentence={sentence} siteLocation={siteLocation} />          
           </ModalContent>
           </Modal>
   }
@@ -480,7 +496,7 @@ class SimpleWordBuilderUpdated extends Component {
 
 
   render() {
-    // console.log(this.state)
+    console.log(this.state.englishString)
 
     // console.log(mvSubjectOptions)
     // console.log(mvObjectOptions)
@@ -510,7 +526,7 @@ class SimpleWordBuilderUpdated extends Component {
               null
             }
             {this.state.showModal ?
-              this.recordClip(this.state.segmentString,'entryUsage')
+              this.recordClip(this.state.segmentString,'entryUsage',this.state.englishString)
               :
               null
             }
@@ -579,7 +595,7 @@ class SimpleWordBuilderUpdated extends Component {
                 null
               }
               {this.state.showModal ?
-                this.recordClip(this.state.segmentString,'entryUsage')
+                this.recordClip(this.state.segmentString,'entryUsage',this.state.englishString)
                 :
                 null
               }

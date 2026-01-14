@@ -41,6 +41,7 @@ import useRecorder  from '../useRecorderEdited.js';
     } = useRecorder();
 
     const sentence = props.sentence
+    const english = props.english
     const siteLocation = props.siteLocation
     const maximumClipSeconds = 20
 
@@ -164,7 +165,7 @@ import useRecorder  from '../useRecorderEdited.js';
         const audioFile = new File([audioBlob], 'voice.mp3', { type: 'audio/mp3' });
         const formData = new FormData(); // preparing to send to the server
         formData.append('file', audioFile);  // preparing to send to the server
-        formData.append("data", JSON.stringify({"sentence":sentence,"name": nameProvided,"gender":genderProvided,"age": ageProvided,"village": villageProvided,"donate": donateCommonVoiceProvided,"siteLocation": siteLocation}));
+        formData.append("data", JSON.stringify({"sentence":sentence,"english":english,"name": nameProvided,"gender":genderProvided,"age": ageProvided,"village": villageProvided,"donate": donateCommonVoiceProvided,"siteLocation": siteLocation}));
         // console.log(formData)
         axios
           .post(API_URL + "yugtunCrowdsource", formData)
