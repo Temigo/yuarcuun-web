@@ -235,10 +235,10 @@ class Validate extends Component {
 															<div>{'English: '}</div>
 														</Grid.Column>
 														<Grid.Column width={10}>
-															<div>{this.state.validationData[d]['age'].replace('do_not_wish_to_say','')}<span style={{color:'white'}}>`</span></div>
-															<div>{this.state.validationData[d]['gender'].replace('do_not_wish_to_say','')}<span style={{color:'white'}}>`</span></div>
+															<div>{this.state.validationData[d]['age']}<span style={{color:'white'}}>`</span></div>
+															<div>{this.state.validationData[d]['gender']}<span style={{color:'white'}}>`</span></div>
 															<div>{this.state.validationData[d]['name']}<span style={{color:'white'}}>`</span></div>
-															<div>{this.state.validationData[d]['village'].replace('do_not_wish_to_say','')}<span style={{color:'white'}}>`</span></div>
+															<div>{this.state.validationData[d]['village']}<span style={{color:'white'}}>`</span></div>
 															<div>{this.state.validationData[d]['datetime']}<span style={{color:'white'}}>`</span></div>
 															<div>{this.state.validationData[d]['donate'].toString()}<span style={{color:'white'}}>`</span></div>
 															<div>{this.state.validationData[d]['sent'.toString()]}<span style={{color:'white'}}>`</span></div>

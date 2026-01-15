@@ -185,10 +185,18 @@ import useRecorder  from '../useRecorderEdited.js';
   
     useEffect(() => {
       // console.log('mounted')
-      setageProvided(localStorage.getItem('ageProvided'))
-      setgenderProvided(localStorage.getItem('genderProvided'))
-      setvillageProvided(localStorage.getItem('villageProvided'))
-      setnameProvided(localStorage.getItem('nameProvided'))
+      if (localStorage.getItem('ageProvided') != null) {
+        setageProvided(localStorage.getItem('ageProvided'))
+      }
+      if (localStorage.getItem('genderProvided') != null) {
+        setgenderProvided(localStorage.getItem('genderProvided'))
+      }
+      if (localStorage.getItem('villageProvided') != null) {
+        setvillageProvided(localStorage.getItem('villageProvided'))
+      }
+      if (localStorage.getItem('nameProvided') != null) {
+        setnameProvided(localStorage.getItem('nameProvided'))
+      }     
       // Your code here
     }, []);
 
