@@ -168,16 +168,16 @@ import useRecorder  from '../useRecorderEdited.js';
         // console.log(formData)
         // console.log(localStorage.getItem('age'))
 
-        // axios
-        //   .post(API_URL + "yugtunCrowdsource", formData)
-        //   .then(response => {
-        //     console.log(response)
+        axios
+          .post(API_URL + "yugtunCrowdsource", formData)
+          .then(response => {
+            console.log(response)
 
-        //     setrecordingSent(true)
-        //     // if (response.data) {
-        //     // this.setState({returnedTranscript:response.data.transcription, retrievingRecording:false})
-        //     // }
-        //   })
+            setrecordingSent(true)
+            // if (response.data) {
+            // this.setState({returnedTranscript:response.data.transcription, retrievingRecording:false})
+            // }
+          })
         
 
         // send audio file to server or process it here
