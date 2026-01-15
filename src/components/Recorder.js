@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import React, { Component, useState, useRef } from 'react';
+import React, { Component, useState, useEffect, useRef } from 'react';
 import { Container, Header, Button, Icon, Divider, Form, Loader, Segment, Dimmer, FormField, Dropdown, FormSelect, Checkbox, Image, Grid, Popup } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 // import {YouTubeLinks} from './info/YouTubeLinks.js';
@@ -61,7 +61,6 @@ import useRecorder  from '../useRecorderEdited.js';
     // var donateCommonVoiceProvided = false
 
     // var recordingSent = false
-
     const genderOptions = [
       { key: 'male_masculine', text: 'Male / Masculine', value: 'male_masculine' },
       { key: 'female_feminine', text: 'Female / Feminine', value: 'female_feminine' },
@@ -167,21 +166,32 @@ import useRecorder  from '../useRecorderEdited.js';
         formData.append('file', audioFile);  // preparing to send to the server
         formData.append("data", JSON.stringify({"sentence":sentence,"english":english,"name": nameProvided,"gender":genderProvided,"age": ageProvided,"village": villageProvided,"donate": donateCommonVoiceProvided,"siteLocation": siteLocation}));
         // console.log(formData)
-        axios
-          .post(API_URL + "yugtunCrowdsource", formData)
-          .then(response => {
-            console.log(response)
+        // console.log(localStorage.getItem('age'))
 
-            setrecordingSent(true)
-            // if (response.data) {
-            // this.setState({returnedTranscript:response.data.transcription, retrievingRecording:false})
-            // }
-          })
+        // axios
+        //   .post(API_URL + "yugtunCrowdsource", formData)
+        //   .then(response => {
+        //     console.log(response)
+
+        //     setrecordingSent(true)
+        //     // if (response.data) {
+        //     // this.setState({returnedTranscript:response.data.transcription, retrievingRecording:false})
+        //     // }
+        //   })
         
 
         // send audio file to server or process it here
     }
   
+    useEffect(() => {
+      // console.log('mounted')
+      setageProvided(localStorage.getItem('ageProvided'))
+      setgenderProvided(localStorage.getItem('genderProvided'))
+      setvillageProvided(localStorage.getItem('villageProvided'))
+      setnameProvided(localStorage.getItem('nameProvided'))
+      // Your code here
+    }, []);
+
     return (
 
     <div style={{textAlign:'center'}}>
@@ -249,17 +259,16 @@ import useRecorder  from '../useRecorderEdited.js';
               </div>
                 <div style={{display:'flex',justifyContent:'center',marginTop:'20px'}}>
                     <Form style={{width:'350px'}}>
-                      <FormSelect style={{fontWeight:'normal'}} label='Qavcircit? (optional)' onChange={(event, data)=>setageProvided(data.value)} options={ageOptions} placeholder='20-29' />
-                      <FormSelect label='Yuurucimikun naliucia? (optional)' onChange={(event, data)=>setgenderProvided(data.value)} options={genderOptions} placeholder='Male' />
+                      <FormSelect style={{fontWeight:'normal'}} label='Qavcircit? (optional)' onChange={(event, data)=>{setageProvided(data.value); localStorage.setItem('ageProvided', data.value)}} options={ageOptions} value={ageProvided} placeholder='20-29' />
+                      <FormSelect label='Yuurucimikun naliucia? (optional)' onChange={(event, data)=>{setgenderProvided(data.value); localStorage.setItem('genderProvided', data.value)}} options={genderOptions} value={genderProvided} placeholder='Male' />
                       <FormField style={{marginBottom:4}}>
                         <label>Kituusit? (optional)</label>
-                        <input maxlength="40" onChange={(data)=>setnameProvided(data.target.value)} placeholder='Name' />
+                        <input maxlength="40" onChange={(data)=>{setnameProvided(data.target.value); localStorage.setItem('nameProvided', data.target.value)}} value={nameProvided} placeholder='Name' />
                       </FormField>
                       <div style={{marginBottom:10, color:'#bbbbbb',fontSize:'13px'}}>Your name will never be shared online.</div>
-                      <label style={{fontSize:'13px'}}>Camiungusit? (optional)</label>
-                      <Dropdown style={{marginBottom:14,marginTop:4}} fluid search selection onChange={(event, data)=>setvillageProvided(data.value)} options={hometownOptions} placeholder='Village or Dialect' />
+                      <FormSelect label='Camiungusit? (optional)' onChange={(event, data)=>{setvillageProvided(data.value); localStorage.setItem('villageProvided', data.value)}} options={hometownOptions} value={villageProvided} placeholder='Village or Dialect' />
                       <FormField>
-                        <Checkbox onChange={(event, data)=>setdonateCommonVoiceProvided(data.checked)} style={{paddingTop:'3px',marginRight:'6px',fontSize:'13px'}}/> <span>{'I would also like to submit this clip to the '}</span><a target="_blank" href='https://commonvoice.mozilla.org/en'>Mozilla Data Collective</a><span>{' (optional)'}</span>
+                        <Checkbox onChange={(event, data)=>{setdonateCommonVoiceProvided(data.checked); localStorage.setItem('donateCommonVoiceProvided', data.checked)}} style={{paddingTop:'3px',marginRight:'6px',fontSize:'13px'}}/> <span>{'I would also like to submit this clip to the '}</span><a target="_blank" href='https://commonvoice.mozilla.org/en'>Mozilla Data Collective</a><span>{' (optional)'}</span>
                       </FormField>
                           <ReCAPTCHA
                                 style={{margin:(window.innerWidth < 480 ? 0:22),marginBottom:15}}
