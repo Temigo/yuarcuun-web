@@ -171,67 +171,64 @@ class YupikEntry extends Component {
   //         </Modal>
   // }
 
-  repeatAudio(audio, index, event, data) {
-    // console.log(audio)
-    if (!this.state.playingAudio) {
+  // repeatAudio(audio, event, data) {
+  //   // console.log(audio)
+  //   if (!this.state.playingAudio) {
 
-      let sound = new Audio(API_URL + "yugtunCrowdsourceAudio/" + audio);
-      this.setState({playingAudio: true});
-      sound.load()
-      sound.play()
-
-      sound.onended=()=>{
-        this.setState({playingAudio: false});
-        sound.src = ''
-        sound.removeAttribute('src')
-        sound = null
-      }
-    }
-  }
-
-  // repeatAudio(audio, index, event, data) {
-
-  //   let audioURL = API_URL + "yugtunCrowdsourceAudio/" +  audio;
-
-  //   // stop audio on double click
-  //   if (this.state.playingAudio === true && this.state.clickedAudioUrl === audioURL) {
-  //     let audio = this.state.clickedAudio;
-  //     audio.pause();
-  //     audio.currentTime = 0;
-  //     this.setState({clickedAudio:audio, clickedAudioIndex:-1, playingAudio: false})
-  //   }
-
-  //   // stop first audio then play new one
-  //   if (this.state.playingAudio === true && this.state.clickedAudioUrl !== audioURL) {
-  //     let firstAudio = this.state.clickedAudio;
-  //     firstAudio.pause();
-  //     firstAudio.currentTime = 0;
-
+  //     let sound = new Audio(API_URL + "yugtunCrowdsourceAudio/" + audio);
   //     this.setState({playingAudio: true});
-  //     let secondAudio = new Audio(audioURL);
-  //     secondAudio.play();
-  //     this.setState({clickedAudioUrl:audioURL,  clickedAudioIndex:index, clickedAudio:secondAudio})
-  //     secondAudio.onended=()=>{this.setState({playingAudio: false,clickedAudioIndex:-1,})};
-  //   }
 
-  //   // play audio again
-  //   if (this.state.playingAudio === false && this.state.clickedAudioUrl === audioURL) {
-  //     let audio = this.state.clickedAudio;
-  //     this.setState({playingAudio: true,  clickedAudioIndex:index, });
-  //     audio.play();
-  //     audio.onended=()=>{this.setState({playingAudio: false,clickedAudioIndex:-1,})};
-  //   }
+  //     sound.play()
 
-  //   // play new audio
-  //   if (this.state.playingAudio === false && this.state.clickedAudioUrl !== audioURL) {
-  //     this.setState({playingAudio: true});
-  //     let audio = new Audio(audioURL);
-  //     audio.play();
-  //     this.setState({clickedAudioUrl:audioURL, clickedAudioIndex:index, clickedAudio:audio})
-  //     audio.onended=()=>{this.setState({playingAudio: false,clickedAudioIndex:-1,})};
+  //     sound.onended=()=>{
+  //       this.setState({playingAudio: false});
+  //     }
   //   }
-
   // }
+
+  repeatAudio(audio, index, event, data) {
+
+    let audioURL = API_URL + "yugtunCrowdsourceAudio/" +  audio;
+
+    // stop audio on double click
+    if (this.state.playingAudio === true && this.state.clickedAudioUrl === audioURL) {
+      let audio = this.state.clickedAudio;
+      audio.pause();
+      audio.currentTime = 0;
+      this.setState({clickedAudio:audio, clickedAudioIndex:-1, playingAudio: false})
+    }
+
+    // stop first audio then play new one
+    if (this.state.playingAudio === true && this.state.clickedAudioUrl !== audioURL) {
+      let firstAudio = this.state.clickedAudio;
+      firstAudio.pause();
+      firstAudio.currentTime = 0;
+
+      this.setState({playingAudio: true});
+      let secondAudio = new Audio(audioURL);
+      secondAudio.play();
+      this.setState({clickedAudioUrl:audioURL,  clickedAudioIndex:index, clickedAudio:secondAudio})
+      secondAudio.onended=()=>{this.setState({playingAudio: false,clickedAudioIndex:-1,})};
+    }
+
+    // play audio again
+    if (this.state.playingAudio === false && this.state.clickedAudioUrl === audioURL) {
+      let audio = this.state.clickedAudio;
+      this.setState({playingAudio: true,  clickedAudioIndex:index, });
+      audio.play();
+      audio.onended=()=>{this.setState({playingAudio: false,clickedAudioIndex:-1,})};
+    }
+
+    // play new audio
+    if (this.state.playingAudio === false && this.state.clickedAudioUrl !== audioURL) {
+      this.setState({playingAudio: true});
+      let audio = new Audio(audioURL);
+      audio.play();
+      this.setState({clickedAudioUrl:audioURL, clickedAudioIndex:index, clickedAudio:audio})
+      audio.onended=()=>{this.setState({playingAudio: false,clickedAudioIndex:-1,})};
+    }
+
+  }
 
 
   displayAudioMic = (audioRetrieved,sentenceid) => {
@@ -240,7 +237,7 @@ class YupikEntry extends Component {
               <List style={{fontFamily:customFontFam}} divided verticalAlign='middle'>
                 {audioRetrieved.map((k,kindex)=>{
                   return <ListItem style={{display:'flex',flexDirection:'row',alignItems:'center'}}>
-                          <Button disabled={this.state.playingAudio} style={{float:'left', border:(this.state.playingAudio && this.state.clickedAudioIndex === kindex ? 'solid 1px #4a80b5' : 'solid 1px #dededf'),marginLeft:5,backgroundColor:'white', color:'#106181',cursor:'pointer'}} circular icon='volume up' onClick={()=>this.repeatAudio(k['filename'], kindex)} />
+                          <Button style={{float:'left', border:(this.state.playingAudio && this.state.clickedAudioIndex === kindex ? 'solid 1px #4a80b5' : 'solid 1px #dededf'),marginLeft:5,backgroundColor:'white', color:'#106181',cursor:'pointer'}} circular icon='volume up' onClick={()=>this.repeatAudio(k['filename'], kindex)} />
                           <div style={{display:'flex',flexDirection:'column',marginLeft:10,padding:'5px 0px'}}>
                             {k['gender'] != 'do_not_wish_to_say' ?
                               <div>{k['gender'].replaceAll('_',' / ')}</div>
