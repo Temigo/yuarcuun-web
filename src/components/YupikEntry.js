@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Segment, List, Header, Label, Grid , Icon, Divider, Table, Transition, Image, Modal, Button, ModalContent, Popup, ListItem} from 'semantic-ui-react';
 import '../App.css';
 import '../semantic/dist/semantic.min.css';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import {withRouter} from 'react-router';
 import { API_URL } from '../App.js';
@@ -29,6 +30,10 @@ class YupikEntry extends Component {
       showModal:-1,
       openPopup:-1,
       audioParameterBool:record !== null || true ? true : false,
+      playingAudio: false,
+      clickedAudioUrl: "",
+      clickedAudio: null,
+      clickedAudioIndex:-1,
     };
   }
 
@@ -166,19 +171,63 @@ class YupikEntry extends Component {
   //         </Modal>
   // }
 
-  repeatAudio(audio, event, data) {
-    // console.log(audio)
-    if (!this.state.playingAudio) {
+  // repeatAudio(audio, event, data) {
+  //   // console.log(audio)
+  //   if (!this.state.playingAudio) {
 
-      let sound = new Audio(API_URL + "yugtunCrowdsourceAudio/" + audio);
-      this.setState({playingAudio: true});
+  //     let sound = new Audio(API_URL + "yugtunCrowdsourceAudio/" + audio);
+  //     this.setState({playingAudio: true});
 
-      sound.play()
+  //     sound.play()
 
-      sound.onended=()=>{
-        this.setState({playingAudio: false});
-      }
+  //     sound.onended=()=>{
+  //       this.setState({playingAudio: false});
+  //     }
+  //   }
+  // }
+
+  repeatAudio(audio, index, event, data) {
+
+    let audioURL = API_URL + "yugtunCrowdsourceAudio/" +  audio;
+
+    // stop audio on double click
+    if (this.state.playingAudio === true && this.state.clickedAudioUrl === audioURL) {
+      let audio = this.state.clickedAudio;
+      audio.pause();
+      audio.currentTime = 0;
+      this.setState({clickedAudio:audio, clickedAudioIndex:-1, playingAudio: false})
     }
+
+    // stop first audio then play new one
+    if (this.state.playingAudio === true && this.state.clickedAudioUrl !== audioURL) {
+      let firstAudio = this.state.clickedAudio;
+      firstAudio.pause();
+      firstAudio.currentTime = 0;
+
+      this.setState({playingAudio: true});
+      let secondAudio = new Audio(audioURL);
+      secondAudio.play();
+      this.setState({clickedAudioUrl:audioURL,  clickedAudioIndex:index, clickedAudio:secondAudio})
+      secondAudio.onended=()=>{this.setState({playingAudio: false,clickedAudioIndex:-1,})};
+    }
+
+    // play audio again
+    if (this.state.playingAudio === false && this.state.clickedAudioUrl === audioURL) {
+      let audio = this.state.clickedAudio;
+      this.setState({playingAudio: true,  clickedAudioIndex:index, });
+      audio.play();
+      audio.onended=()=>{this.setState({playingAudio: false,clickedAudioIndex:-1,})};
+    }
+
+    // play new audio
+    if (this.state.playingAudio === false && this.state.clickedAudioUrl !== audioURL) {
+      this.setState({playingAudio: true});
+      let audio = new Audio(audioURL);
+      audio.play();
+      this.setState({clickedAudioUrl:audioURL, clickedAudioIndex:index, clickedAudio:audio})
+      audio.onended=()=>{this.setState({playingAudio: false,clickedAudioIndex:-1,})};
+    }
+
   }
 
 
@@ -188,7 +237,7 @@ class YupikEntry extends Component {
               <List style={{fontFamily:customFontFam}} divided verticalAlign='middle'>
                 {audioRetrieved.map((k)=>{
                   return <ListItem style={{display:'flex',flexDirection:'row',alignItems:'center'}}>
-                          <Icon circular onClick={()=>this.repeatAudio(k['filename'])} style={{color:'#106181',opacity:0.9,fontSize:'20px', margin:3, cursor:'pointer'}} name='volume up' />
+                          <Icon circular onClick={()=>this.repeatAudio(k['filename'], sentenceid)} style={{color:'#106181',opacity:0.9,fontSize:'20px', margin:3, cursor:'pointer'}} name='volume up' />
                           <div style={{display:'flex',flexDirection:'column',marginLeft:10,padding:'5px 0px'}}>
                             {k['gender'] != 'do_not_wish_to_say' ?
                               <div>{k['gender'].replaceAll('_',' / ')}</div>
