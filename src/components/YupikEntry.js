@@ -237,7 +237,7 @@ class YupikEntry extends Component {
               <List style={{fontFamily:customFontFam}} divided verticalAlign='middle'>
                 {audioRetrieved.map((k,kindex)=>{
                   return <ListItem style={{display:'flex',flexDirection:'row',alignItems:'center'}}>
-                          <Button style={{float:'left', border:(this.state.playingAudio && this.state.clickedAudioIndex === kindex ? 'solid 1px #4a80b5' : 'solid 1px #dededf'),marginLeft:5,backgroundColor:'white', color:'#106181',cursor:'pointer'}} circular icon='volume up' onClick={()=>this.repeatAudio(k['filename'], kindex)} />
+                          <Button disabled={this.state.playingAudio} style={{float:'left', border:(this.state.playingAudio && this.state.clickedAudioIndex === kindex ? 'solid 1px #4a80b5' : 'solid 1px #dededf'),marginLeft:5,backgroundColor:'white', color:'#106181',cursor:'pointer'}} circular icon='volume up' onClick={()=>this.repeatAudio(k['filename'], kindex)} />
                           <div style={{display:'flex',flexDirection:'column',marginLeft:10,padding:'5px 0px'}}>
                             {k['gender'] != 'do_not_wish_to_say' ?
                               <div>{k['gender'].replaceAll('_',' / ')}</div>
