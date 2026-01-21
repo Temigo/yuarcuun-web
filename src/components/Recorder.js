@@ -46,9 +46,9 @@ import useRecorder  from '../useRecorderEdited.js';
     const maximumClipSeconds = 20
 
     const [recaptchaAllowed, setrecaptchaAllowed] = useState(false);
-    const [ageProvided, setageProvided] = useState('do_not_wish_to_say');
-    const [genderProvided, setgenderProvided] = useState('do_not_wish_to_say');
-    const [villageProvided, setvillageProvided] = useState('do_not_wish_to_say');
+    const [ageProvided, setageProvided] = useState('');
+    const [genderProvided, setgenderProvided] = useState('');
+    const [villageProvided, setvillageProvided] = useState('');
     const [nameProvided, setnameProvided] = useState('');
     const [donateCommonVoiceProvided, setdonateCommonVoiceProvided] = useState(false);
     const [recordingSent, setrecordingSent] = useState(false);
