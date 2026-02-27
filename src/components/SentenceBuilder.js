@@ -3529,7 +3529,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 		// console.log(key, forEnglish, startingCase)
 
 		if (key['type'] == 'n') {
-			sentence = key['base_case']
+			sentence = key['englishraw'].replaceAll('⟨','').replaceAll('⟩','')
 			// sentence = key['englishraw']
 			// let verbMatches = key['englishraw'].match(/\⟨.*?\⟩/g)
 			// if (this.state.nounNum == 'p') {
