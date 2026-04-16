@@ -1456,7 +1456,7 @@ class SentenceBuilder extends Component {
 		let vsPlanned = []
 		let startingCase = ''
 		let optionsFuzzy = {
-		  keys: ['yupikword', 'base_case'],
+		  keys: ['yupikword', 'englishraw'],
 		  limit: 10, // don't return more results than you need!
 		  threshold: -10000, // don't return bad results
 		};
