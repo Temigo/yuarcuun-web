@@ -2,6 +2,7 @@ import _ from 'lodash'
 import React, { Component, useState, useEffect, useRef } from 'react';
 import { Container, Header, Button, Icon, Divider, Form, Loader, Segment, Dimmer, FormField, Dropdown, FormSelect, Checkbox, Image, Grid, Popup } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import { isSafari } from 'react-device-detect';
 // import {YouTubeLinks} from './info/YouTubeLinks.js';
 
 // import {summaries} from './info/summaries.js';
@@ -164,7 +165,7 @@ import useRecorder  from '../useRecorderEdited.js';
         const audioFile = new File([audioBlob], 'voice.mp3', { type: 'audio/mp3' });
         const formData = new FormData(); // preparing to send to the server
         formData.append('file', audioFile);  // preparing to send to the server
-        formData.append("data", JSON.stringify({"sentence":sentence,"english":english,"name": nameProvided,"gender":genderProvided,"age": ageProvided,"village": villageProvided,"donate": donateCommonVoiceProvided,"siteLocation": siteLocation}));
+        formData.append("data", JSON.stringify({"sentence":sentence,"english":english,"name": nameProvided,"isSafari": isSafari,"gender":genderProvided,"age": ageProvided,"village": villageProvided,"donate": donateCommonVoiceProvided,"siteLocation": siteLocation}));
         // console.log(formData)
         // console.log(localStorage.getItem('age'))
 
