@@ -23,6 +23,8 @@ import axios from 'axios';
 import now from 'performance-now';
 import ReactGA from 'react-ga';
 import {YugtunLoader} from './components/SearchPageHelpers.js';
+import TTSComponent from './components/TTS_ASR/TTSComponent.jsx';
+import ASRComponent from './components/TTS_ASR/ASRComponent.jsx';
 
 // export const API_URL = "https://yugtun-api.herokuapp.com";
 // export const API_URL = "http://127.0.0.1:5000";
@@ -181,6 +183,8 @@ class App extends Component {
               <Route exact path='/privacy' component={Privacy} />
               <Route exact path='/symbols' component={Symbols} />
               <Route exact path='/sentenceglossary' component={SentenceGlossary} />
+              <Route exact path='/tts' component={TTSComponent} />
+              <Route exact path='/asr' component={ASRComponent} />
               <Route path='/:word/:entry_id/:usage_id/modify' component={YupikModifyLayout} />
               <Route exact path='/:word' component={YupikDetails} />
               <Route exact path='/sentencebuilder/:num' render={(props) => <SentenceBuilder audiolibrary={this.state.audiolibrary} usageDictionary={this.state.usageDictionary} dictionary_dict={this.state.dictionary_dict} dictionary={this.state.dictionary} filteredDictV={this.state.filteredDictV} filteredDictVit={this.state.filteredDictVit} filteredDictN={this.state.filteredDictN} {...props} />}/>
