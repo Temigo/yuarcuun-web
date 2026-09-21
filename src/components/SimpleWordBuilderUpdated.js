@@ -460,8 +460,8 @@ class SimpleWordBuilderUpdated extends Component {
                               :
                               null
                             }
-                            {k['gender'] == 'do_not_wish_to_say' && k['age'] == 'do_not_wish_to_say' && k['village'] == 'do_not_wish_to_say' ?
-                              <div>{'Anonymous Clip'}</div>
+                            {(k['gender'] == 'do_not_wish_to_say' || k['gender'] == '') && (k['age'] == 'do_not_wish_to_say' || k['age'] == '') && (k['village'] == 'do_not_wish_to_say' || k['village'] == '') ?
+                              <div>{'Anonymous'}</div>
                               :
                               null
                             }                            
