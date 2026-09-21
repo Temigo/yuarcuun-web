@@ -8,6 +8,7 @@
       "name": "yuarcuun-web",
       "version": "1.0.0",
       "dependencies": {
+        "@gradio/client": "^2.3.1",
         "autoprefixer": "7.1.6",
         "axios": "^0.18.1",
         "babel-core": "6.26.0",
@@ -50,7 +51,9 @@
         "react": "^16.14.0",
         "react-csv-to-table": "0.0.4",
         "react-dev-utils": "^5.0.3",
+        "react-device-detect": "^2.2.3",
         "react-dom": "^16.14.0",
+        "react-dropzone": "^15.0.0",
         "react-expand-text": "^1.0.0",
         "react-ga": "^2.5.7",
         "react-ga4": "^2.1.0",
@@ -58,7 +61,6 @@
         "react-google-recaptcha": "^3.1.0",
         "react-horizontal-scrolling-menu": "^0.7.8",
         "react-media-recorder": "^1.6.5",
-        "react-microphone-recorder": "^1.0.0",
         "react-mirt": "^1.3.7",
         "react-redux": "^5.1.1",
         "react-router-dom": "^4.3.1",
@@ -94,6 +96,18 @@
       "license": "MIT",
       "engines": {
         "node": ">=6.9.0"
+      }
+    },
+    "node_modules/@gradio/client": {
+      "version": "2.3.1",
+      "resolved": "https://registry.npmjs.org/@gradio/client/-/client-2.3.1.tgz",
+      "integrity": "sha512-Vznt4Ju/nPCajVMlwbJgfrHp0NGodSNCYxoxQEb9WfwPVF2fSNyobGmIiQ2/xbm7Mkn3afNGRqfmIyjJesjOxw==",
+      "license": "ISC",
+      "dependencies": {
+        "fetch-event-stream": "^0.1.5"
+      },
+      "engines": {
+        "node": ">=18.0.0"
       }
     },
     "node_modules/@types/q": {
@@ -632,6 +646,15 @@
       },
       "engines": {
         "node": ">= 4.5.0"
+      }
+    },
+    "node_modules/attr-accept": {
+      "version": "2.2.5",
+      "resolved": "https://registry.npmjs.org/attr-accept/-/attr-accept-2.2.5.tgz",
+      "integrity": "sha512-0bDNnY/u6pPwHDMoF0FieU354oBi0a8rD9FcsLwzcGWbc8KS8KPIi7y+s13OlVY+gMWc/9xEMUgNE6Qm8ZllYQ==",
+      "license": "MIT",
+      "engines": {
+        "node": ">=4"
       }
     },
     "node_modules/autoprefixer": {
@@ -5473,6 +5496,12 @@
         "asap": "~2.0.3"
       }
     },
+    "node_modules/fetch-event-stream": {
+      "version": "0.1.6",
+      "resolved": "https://registry.npmjs.org/fetch-event-stream/-/fetch-event-stream-0.1.6.tgz",
+      "integrity": "sha512-GREtJ5HNikdU2AXtZ6E/5bk+aslMU6ie5mPG6H9nvsdDkkHQ6m5lHwmmmDTOBexok9hApQ7EprsXCdmz9ZC68w==",
+      "license": "MIT"
+    },
     "node_modules/figures": {
       "version": "2.0.0",
       "resolved": "https://registry.npmjs.org/figures/-/figures-2.0.0.tgz",
@@ -5510,6 +5539,18 @@
       },
       "peerDependencies": {
         "webpack": "^2.0.0 || ^3.0.0"
+      }
+    },
+    "node_modules/file-selector": {
+      "version": "2.1.2",
+      "resolved": "https://registry.npmjs.org/file-selector/-/file-selector-2.1.2.tgz",
+      "integrity": "sha512-QgXo+mXTe8ljeqUFaX3QVHc5osSItJ/Km+xpocx0aSqWGMSCf6qYs/VnzZgS864Pjn5iceMRFigeAV7AfTlaig==",
+      "license": "MIT",
+      "dependencies": {
+        "tslib": "^2.7.0"
+      },
+      "engines": {
+        "node": ">= 12"
       }
     },
     "node_modules/file-uri-to-path": {
@@ -12134,13 +12175,14 @@
       }
     },
     "node_modules/prop-types": {
-      "version": "15.7.2",
-      "resolved": "https://registry.npmjs.org/prop-types/-/prop-types-15.7.2.tgz",
-      "integrity": "sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==",
+      "version": "15.8.1",
+      "resolved": "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz",
+      "integrity": "sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==",
+      "license": "MIT",
       "dependencies": {
         "loose-envify": "^1.4.0",
         "object-assign": "^4.1.1",
-        "react-is": "^16.8.1"
+        "react-is": "^16.13.1"
       }
     },
     "node_modules/proxy-addr": {
@@ -12402,6 +12444,45 @@
         "node": ">=6"
       }
     },
+    "node_modules/react-device-detect": {
+      "version": "2.2.3",
+      "resolved": "https://registry.npmjs.org/react-device-detect/-/react-device-detect-2.2.3.tgz",
+      "integrity": "sha512-buYY3qrCnQVlIFHrC5UcUoAj7iANs/+srdkwsnNjI7anr3Tt7UY6MqNxtMLlr0tMBied0O49UZVK8XKs3ZIiPw==",
+      "license": "MIT",
+      "dependencies": {
+        "ua-parser-js": "^1.0.33"
+      },
+      "peerDependencies": {
+        "react": ">= 0.14.0",
+        "react-dom": ">= 0.14.0"
+      }
+    },
+    "node_modules/react-device-detect/node_modules/ua-parser-js": {
+      "version": "1.0.41",
+      "resolved": "https://registry.npmjs.org/ua-parser-js/-/ua-parser-js-1.0.41.tgz",
+      "integrity": "sha512-LbBDqdIC5s8iROCUjMbW1f5dJQTEFB1+KO9ogbvlb3nm9n4YHa5p4KTvFPWvh2Hs8gZMBuiB1/8+pdfe/tDPug==",
+      "funding": [
+        {
+          "type": "opencollective",
+          "url": "https://opencollective.com/ua-parser-js"
+        },
+        {
+          "type": "paypal",
+          "url": "https://paypal.me/faisalman"
+        },
+        {
+          "type": "github",
+          "url": "https://github.com/sponsors/faisalman"
+        }
+      ],
+      "license": "MIT",
+      "bin": {
+        "ua-parser-js": "script/cli.js"
+      },
+      "engines": {
+        "node": "*"
+      }
+    },
     "node_modules/react-dom": {
       "version": "16.14.0",
       "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-16.14.0.tgz",
@@ -12415,6 +12496,23 @@
       },
       "peerDependencies": {
         "react": "^16.14.0"
+      }
+    },
+    "node_modules/react-dropzone": {
+      "version": "15.0.0",
+      "resolved": "https://registry.npmjs.org/react-dropzone/-/react-dropzone-15.0.0.tgz",
+      "integrity": "sha512-lGjYV/EoqEjEWPnmiSvH4v5IoIAwQM2W4Z1C0Q/Pw2xD0eVzKPS359BQTUMum+1fa0kH2nrKjuavmTPOGhpLPg==",
+      "license": "MIT",
+      "dependencies": {
+        "attr-accept": "^2.2.4",
+        "file-selector": "^2.1.0",
+        "prop-types": "^15.8.1"
+      },
+      "engines": {
+        "node": ">= 10.13"
+      },
+      "peerDependencies": {
+        "react": ">= 16.8 || 18.0.0"
       }
     },
     "node_modules/react-error-overlay": {
@@ -12523,16 +12621,6 @@
       "resolved": "https://registry.npmjs.org/react-media-recorder/-/react-media-recorder-1.6.5.tgz",
       "integrity": "sha512-YcARNZ498jtmOJ+O7GkaokR0DbMNV+YSXB0msAHMZk9wharBuVSWYCXKiIL5JAnR5cs6ebXaOtkkGsM3uIq7Bw==",
       "license": "MIT"
-    },
-    "node_modules/react-microphone-recorder": {
-      "version": "1.0.0",
-      "resolved": "https://registry.npmjs.org/react-microphone-recorder/-/react-microphone-recorder-1.0.0.tgz",
-      "integrity": "sha512-ecqUQTCsYTXaPjRjKQsfjCd0ORzePRj2wwVUuxbagbwhe4se7D3y6V3wBFxkuvHakQFCKKdXC6zmxNxrMY5nPw==",
-      "license": "MIT",
-      "peerDependencies": {
-        "react": ">=16.8.0 || >=17.0.0",
-        "react-dom": ">=16.8.0 || >=17.0.0"
-      }
     },
     "node_modules/react-mirt": {
       "version": "1.3.7",

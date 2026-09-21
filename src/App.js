@@ -17,6 +17,7 @@ import Lksdreader from './components/Lksdreader.js';
 import Support from './components/Support.js';
 import Privacy from './components/Privacy.js';
 import Symbols from './components/Symbols.js';
+import SpeechToText from './components/SpeechToText.js';
 import Validate from './components/Validate.js';
 import YupikModifyLayout from './components/yupikModify/YupikModifyLayout.js';
 import axios from 'axios';
@@ -180,6 +181,7 @@ class App extends Component {
               <Route exact path='/validate' component={Validate} />
               <Route exact path='/privacy' component={Privacy} />
               <Route exact path='/symbols' component={Symbols} />
+              <Route exact path='/speechtotext' component={SpeechToText} />
               <Route exact path='/sentenceglossary' component={SentenceGlossary} />
               <Route path='/:word/:entry_id/:usage_id/modify' component={YupikModifyLayout} />
               <Route exact path='/:word' component={YupikDetails} />

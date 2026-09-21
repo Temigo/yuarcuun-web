@@ -13,6 +13,7 @@
     "webpack-bundle-analyzer": "^3.3.2"
   },
   "dependencies": {
+    "@gradio/client": "^2.3.1",
     "autoprefixer": "7.1.6",
     "axios": "^0.18.1",
     "babel-core": "6.26.0",
@@ -55,7 +56,9 @@
     "react": "^16.14.0",
     "react-csv-to-table": "0.0.4",
     "react-dev-utils": "^5.0.3",
+    "react-device-detect": "^2.2.3",
     "react-dom": "^16.14.0",
+    "react-dropzone": "^15.0.0",
     "react-expand-text": "^1.0.0",
     "react-ga": "^2.5.7",
     "react-ga4": "^2.1.0",
