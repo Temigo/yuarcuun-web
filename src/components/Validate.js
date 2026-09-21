@@ -102,7 +102,7 @@ class Validate extends Component {
   	// console.log(audio)
     if (!this.state.playingAudio) {
 
-      let sound = new Audio(API_URL + "yugtunCrowdsourceAudio/" + audio);
+      let sound = new Audio(API_URL + "/yugtunCrowdsourceAudio/" + audio);
       this.setState({playingAudio: true});
 
       sound.play()
@@ -172,7 +172,7 @@ class Validate extends Component {
 														{window.innerWidth < 900 ?
 														<Icon circular onClick={()=>this.repeatAudio(this.state.validationData[d]['filename'])} style={{fontSize:'20px', margin:10,color:'#8F8F8F',cursor:'pointer'}} name='volume up' />
 														:													
-														<audio controls style={{height:40,margin:20}} src={API_URL + "yugtunCrowdsourceAudio/" + this.state.validationData[d]['filename']} />
+														<audio controls style={{height:40,margin:20}} src={API_URL + "/yugtunCrowdsourceAudio/" + this.state.validationData[d]['filename']} />
 														}
 
 													</Grid.Column>
@@ -218,7 +218,7 @@ class Validate extends Component {
 														{window.innerWidth < 900 ?
 														<Icon circular onClick={()=>this.repeatAudio(this.state.validationData[d]['filename'])} style={{fontSize:'20px', margin:10,color:'#8F8F8F',cursor:'pointer'}} name='volume up' />
 														:													
-														<audio controls style={{height:40,margin:20}} src={API_URL + "yugtunCrowdsourceAudio/" + this.state.validationData[d]['filename']} />
+														<audio controls style={{height:40,margin:20}} src={API_URL + "/yugtunCrowdsourceAudio/" + this.state.validationData[d]['filename']} />
 														}
 													</Grid.Row>
 													<Grid.Row columns={2}>

@@ -175,7 +175,7 @@ class YupikEntry extends Component {
   //   // console.log(audio)
   //   if (!this.state.playingAudio) {
 
-  //     let sound = new Audio(API_URL + "yugtunCrowdsourceAudio/" + audio);
+  //     let sound = new Audio(API_URL + "/yugtunCrowdsourceAudio/" + audio);
   //     this.setState({playingAudio: true});
 
   //     sound.play()
@@ -188,7 +188,9 @@ class YupikEntry extends Component {
 
   repeatAudio(audio, index, event, data) {
 
-    let audioURL = API_URL + "yugtunCrowdsourceAudio/" +  audio;
+    let audioURL = API_URL + "/yugtunCrowdsourceAudio/" +  audio;
+
+    console.log(audioURL)
 
     // stop audio on double click
     if (this.state.playingAudio === true && this.state.clickedAudioUrl === audioURL) {
@@ -821,7 +823,7 @@ class YupikEntry extends Component {
                 <List style={{marginTop:'5px',marginBottom:'5px'}}>
                 {Object.keys(this.state.entry.childrenEntries).map((word, index) =>
                   (Object.keys(this.state.entry.childrenEntries[word]).length !== 0 ?
-                    <WordItemLikeInup paddingLeft={15} key={word} word={this.state.entry.childrenEntries[word]} />
+                    <WordItemLikeInup paddingLeft={15} key={word} word={this.state.entry.childrenEntries[word]} repeatAudio={this.repeatAudio.bind(this)} />
                     :
                     this.unlinked(word)               
                   )
@@ -841,7 +843,7 @@ class YupikEntry extends Component {
                 <List style={{marginTop:'5px',marginBottom:'5px'}}>
                 {Object.keys(this.state.entry.synonyms).map((word, index) =>
                   (Object.keys(this.state.entry.synonyms[word]).length !== 0 ?
-                    <WordItemLikeInup paddingLeft={15} key={word} word={this.state.entry.synonyms[word]} />
+                    <WordItemLikeInup paddingLeft={15} key={word} word={this.state.entry.synonyms[word]} repeatAudio={this.repeatAudio.bind(this)} />
                     :
                     this.unlinked(word)
                   )
@@ -860,7 +862,7 @@ class YupikEntry extends Component {
                 <List style={{marginTop:'5px',marginBottom:'5px'}}>
                 {Object.keys(this.state.entry.questionablyrelated).map((word, index) =>
                   (Object.keys(this.state.entry.questionablyrelated[word]).length !== 0 ?
-                    <WordItemLikeInup paddingLeft={15} key={word} word={this.state.entry.questionablyrelated[word]} />
+                    <WordItemLikeInup paddingLeft={15} key={word} word={this.state.entry.questionablyrelated[word]} repeatAudio={this.repeatAudio.bind(this)} />
                     :
                     this.unlinked(word)               
                   )
@@ -898,7 +900,7 @@ class YupikEntry extends Component {
                 <List style={{marginTop:'5px',marginBottom:'5px'}}>
                 {Object.keys(this.state.entry.etymology).map((key, index) =>
                   (this.state.entry.etymology[key].map((word,i)=>
-                      <WordItemLikeInup paddingLeft={15*i+15} key={word} word={this.state.entry.etymology[key][i]} />
+                      <WordItemLikeInup paddingLeft={15*i+15} key={word} word={this.state.entry.etymology[key][i]} repeatAudio={this.repeatAudio.bind(this)} />
                     ))
                   )}
                 </List>

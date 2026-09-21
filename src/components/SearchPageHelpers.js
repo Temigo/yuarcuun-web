@@ -79,7 +79,7 @@ export const AudioItem = (props) => {
 }
 
 export const WordItemLikeInup = (props) => {
-  // console.log(props)
+  // console.log("WordItemLikeInup", props)
   let verbkeyStringbool = false
   if ('verbkeyString' in props.word) {
     if (props.word.verbkeyString.keyString.length !== 0 && props.word.pos == 'noun') {

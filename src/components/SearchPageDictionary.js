@@ -428,7 +428,7 @@ class SearchPageDictionary extends Component {
     console.log(audio, this.state.playingAudio)
     if (!this.state.playingAudio) {
 
-      let sound = new Audio(API_URL + "yugtunCrowdsourceAudio/" + audio);
+      let sound = new Audio(API_URL + "/yugtunCrowdsourceAudio/" + audio);
       this.setState({playingAudio: true});
 
       sound.play()

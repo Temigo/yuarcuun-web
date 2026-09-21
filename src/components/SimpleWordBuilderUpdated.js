@@ -83,7 +83,7 @@ let vEnglish = [
 class SimpleWordBuilderUpdated extends Component {
   constructor(props) {
     super(props);
-    // console.log("YupikDetails props: ", props);
+    console.log("SimpleWordBuilderUpdated props: ", props);
     // console.log(props.entry)
     // console.log(props.entry[5][0])
     const queryString = window.location.search;
@@ -487,7 +487,7 @@ class SimpleWordBuilderUpdated extends Component {
   //   // console.log(audio)
   //   if (!this.state.playingAudio) {
 
-  //     let sound = new Audio(API_URL + "yugtunCrowdsourceAudio/" + audio);
+  //     let sound = new Audio(API_URL + "/yugtunCrowdsourceAudio/" + audio);
   //     this.setState({playingAudio: true});
 
   //     sound.play()
@@ -500,7 +500,7 @@ class SimpleWordBuilderUpdated extends Component {
 
   repeatAudio(audio, index, event, data) {
 
-    let audioURL = API_URL + "yugtunCrowdsourceAudio/" +  audio;
+    let audioURL = API_URL + "/yugtunCrowdsourceAudio/" +  audio;
 
     // stop audio on double click
     if (this.state.playingAudio === true && this.state.clickedAudioUrl === audioURL) {

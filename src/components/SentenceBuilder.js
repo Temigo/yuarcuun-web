@@ -5468,7 +5468,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
   //   // console.log(audio)
   //   if (!this.state.playingAudio) {
 
-  //     let sound = new Audio(API_URL + "yugtunCrowdsourceAudio/" + audio);
+  //     let sound = new Audio(API_URL + "/yugtunCrowdsourceAudio/" + audio);
   //     this.setState({playingAudio: true});
 
   //     sound.play()
@@ -5481,7 +5481,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
 
   repeatAudio(audio, index, event, data) {
 
-    let audioURL = API_URL + "yugtunCrowdsourceAudio/" +  audio;
+    let audioURL = API_URL + "/yugtunCrowdsourceAudio/" +  audio;
 
     // stop audio on double click
     if (this.state.playingAudio === true && this.state.clickedAudioUrl === audioURL) {
