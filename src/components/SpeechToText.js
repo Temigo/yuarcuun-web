@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Container, Header, Accordion, Button, Icon, Divider, Grid, Input } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import '../semantic/dist/semantic.min.css';
-import Dropzone from 'react-dropzone';
+// import Dropzone from 'react-dropzone';
 
 let customFontFam = "Roboto,'Helvetica Neue',Arial,Helvetica,sans-serif"
 
@@ -57,6 +57,34 @@ class Symbols extends Component {
 
   render() {
     // const { activeIndex } = this.state
+                // <Dropzone onDrop={this.handleOnDrop}>
+                //   {({ getRootProps, getInputProps, isDragActive }) => (
+                //     <section className="container">
+                //       {/* Bind the root dropzone event handlers */}
+                //       <div {...getRootProps({ className: 'dropzone' })} style={styles.dropzoneBox}>
+                //         {/* Bind hidden native file selection inputs */}
+                //         <input {...getInputProps()} />
+                //         {isDragActive ? (
+                //           <p>Drop the files here ...</p>
+                //         ) : (
+                //           <p>Drag 'n' drop files here, or click to select files</p>
+                //         )}
+                //       </div>
+                      
+                //       {/* Displaying file details */}
+                //       <aside>
+                //         <h4>Files</h4>
+                //         <ul>
+                //           {this.state.files.map((file) => (
+                //             <li key={file.path || file.name}>
+                //               {file.name} - {file.size} bytes
+                //             </li>
+                //           ))}
+                //         </ul>
+                //       </aside>
+                //     </section>
+                //   )}
+                // </Dropzone>
     return (
 
       <Container style={{ margin: 0, padding: 0 }} text>
@@ -79,34 +107,7 @@ class Symbols extends Component {
 
                   </div>
 
-                <Dropzone onDrop={this.handleOnDrop}>
-                  {({ getRootProps, getInputProps, isDragActive }) => (
-                    <section className="container">
-                      {/* Bind the root dropzone event handlers */}
-                      <div {...getRootProps({ className: 'dropzone' })} style={styles.dropzoneBox}>
-                        {/* Bind hidden native file selection inputs */}
-                        <input {...getInputProps()} />
-                        {isDragActive ? (
-                          <p>Drop the files here ...</p>
-                        ) : (
-                          <p>Drag 'n' drop files here, or click to select files</p>
-                        )}
-                      </div>
-                      
-                      {/* Displaying file details */}
-                      <aside>
-                        <h4>Files</h4>
-                        <ul>
-                          {this.state.files.map((file) => (
-                            <li key={file.path || file.name}>
-                              {file.name} - {file.size} bytes
-                            </li>
-                          ))}
-                        </ul>
-                      </aside>
-                    </section>
-                  )}
-                </Dropzone>
+
 
 
                 {this.state.filesSubmittable ?
