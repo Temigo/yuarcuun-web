@@ -234,7 +234,7 @@ class YupikEntry extends Component {
 
 
   displayAudioMic = (audioRetrieved,sentenceid) => {
-    console.log(audioRetrieved)
+    // console.log(audioRetrieved)
     return <Popup
             content={
               <List style={{fontFamily:customFontFam}} divided verticalAlign='middle'>

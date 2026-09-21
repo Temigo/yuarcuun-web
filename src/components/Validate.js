@@ -81,7 +81,7 @@ class Validate extends Component {
 
 	componentDidMount() {
       axios
-        .post(API_URL + "yugtunCrowdsourceValidation", {})
+        .post(API_URL + "/yugtunCrowdsourceValidation", {})
         .then(response => {
         	console.log(response)
         	this.setState({validationData:response.data})
@@ -90,7 +90,7 @@ class Validate extends Component {
 
 	submitEdits = () => {
       axios
-        .post(API_URL + "yugtunCrowdsourceValidation", this.state.validationEdit)
+        .post(API_URL + "/yugtunCrowdsourceValidation", this.state.validationEdit)
         .then(response => {
         	console.log(response)
         	this.setState({validationData:response.data})
@@ -133,7 +133,7 @@ class Validate extends Component {
   sendToCommonVoice = () => {
     console.log('starting send to common voice')
       axios
-      .get(API_URL + "yugtunSendToCommonVoice")
+      .get(API_URL + "/yugtunSendToCommonVoice")
       .then(response => {
         // this.reloadDownloadedData()
         console.log(response.data);
