@@ -5424,7 +5424,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
               <List style={{fontFamily:customFontFam}} divided verticalAlign='middle'>
                 {audioRetrieved.map((k,kindex)=>{
                   return <ListItem style={{display:'flex',flexDirection:'row',alignItems:'center'}}>
-                          <Button style={{float:'left', border:(this.state.playingAudio && this.state.clickedAudioIndex === kindex ? 'solid 1px #4a80b5' : 'solid 1px #dededf'),marginLeft:5,backgroundColor:'white', color:'#106181',cursor:'pointer'}} circular icon='volume up' onClick={()=>this.repeatAudio(k['filename'], kindex)} />
+                          <Button style={{float:'left', border:(this.state.playingAudio && this.state.clickedAudioIndex === kindex ? 'solid 1px #4a80b5' : 'solid 1px #dededf'),marginLeft:5,backgroundColor:'white', color:(k['village'] == 'computer generated' ? '#929292' : '#106181'),cursor:'pointer'}} circular icon='volume up' onClick={()=>this.repeatAudio(k['filename'], kindex)} />
                           <div style={{display:'flex',flexDirection:'column',marginLeft:10,padding:'5px 0px'}}>
                             {k['gender'] != 'do_not_wish_to_say' ?
                               <div>{k['gender'].replaceAll('_',' / ')}</div>
@@ -5441,8 +5441,8 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
                               :
                               null
                             }
-                            {k['gender'] == 'do_not_wish_to_say' && k['age'] == 'do_not_wish_to_say' && k['village'] == 'do_not_wish_to_say' ?
-                              <div>{'Anonymous Clip'}</div>
+                            {(k['gender'] == 'do_not_wish_to_say' || k['gender'] == '') && (k['age'] == 'do_not_wish_to_say' || k['age'] == '') && (k['village'] == 'do_not_wish_to_say' || k['village'] == '') ?
+                              <div>{'Anonymous'}</div>
                               :
                               null
                             }                            
@@ -5460,7 +5460,7 @@ mainScreenMenu = (name, currentEditMode,setState,setStateTo,forEnglish) => {
             onClose={()=>this.setState({openPopup:false})}
             style={{padding:8}}
             position='top right'
-            trigger={<Button size='large' onClick={()=>{this.setState({openPopup:true})}} style={{paddingRight:15, fontSize:'17px',margin:10}} circular basic icon>{audioRetrieved.length == 0 ? <Icon style={{color:'#929292'}} name='microphone' />:<Icon style={{color:'#106181',fontSize:'16px'}} name='volume up' />}<Icon style={{color:'#d2d2d2',paddingLeft:'6px',fontSize:'11px'}} name='chevron down' /> </Button>}
+            trigger={<Button size='large' onClick={()=>{this.setState({openPopup:true})}} style={{paddingRight:15, fontSize:'17px',margin:10}} circular basic icon>{audioRetrieved.length == 0 ? <Icon style={{color:'#929292'}} name='microphone' /> : (audioRetrieved.length == 1 && audioRetrieved[0]['village'] == 'computer generated' ? <Icon style={{color:'#929292',fontSize:'16px'}} name='volume up' /> : <Icon style={{color:'#106181',fontSize:'16px'}} name='volume up' />)}<Icon style={{color:'#d2d2d2',paddingLeft:'6px',fontSize:'11px'}} name='chevron down' /> </Button>}
           />
   }
 
