@@ -1,15 +1,22 @@
 /*
  * ASRComponent.
  * Mic recording or audio file upload -> waveform preview ->
- * POST API_URL/asr -> confidence-colored transcript + .txt download.
+ * POST API_URL/asr -> confidence-colored transcript + downloads.
+ *
  */
 
 import React from 'react';
 import {
-  Button, Segment, Label, Icon, Message,
+  Button, Segment, Label, Icon, Message, Checkbox, Input, Form,
 } from 'semantic-ui-react';
 import AudioWaveform from './AudioWaveform';
 import { API_URL } from '../../App.js';
+
+const FORMATS = {
+  srt: { mime: 'application/x-subrip', ext: 'srt' },
+  vtt: { mime: 'text/vtt', ext: 'vtt' },
+  txt: { mime: 'text/plain;charset=utf-8', ext: 'txt' },
+};
 
 function confidenceColor(p) {
   if (p == null) return '#999999';
@@ -17,6 +24,22 @@ function confidenceColor(p) {
   if (p > 0.6) return '#9a6700'; // medium
   if (p > 0.4) return '#bc4c00'; // low
   return '#cf222e';              // very low
+}
+
+function downloadBlob(content, filename, mime) {
+  const blob = new Blob([content], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function countCues(fmt, s) {
+  if (fmt === 'srt') return (s.match(/^\d+$/gm) || []).length;
+  if (fmt === 'vtt') return (s.match(/-->/g) || []).length;
+  return s.split('\n').filter((l) => l.trim()).length;
 }
 
 /* Stateless helper; fine to keep as a function even in a class codebase. */
@@ -57,6 +80,38 @@ function ConfidenceTranscript({ segments }) {
   );
 }
 
+/* Tabbed preview of whichever subtitle formats the server returned. */
+function SubtitlePreview({ outputs, previewFmt, onSelect }) {
+  const present = Object.keys(FORMATS).filter((f) => typeof outputs[f] === 'string');
+  if (!present.length) return null;
+  const fmt = present.indexOf(previewFmt) !== -1 ? previewFmt : present[0];
+  return (
+    <Segment>
+      <Label attached="top">Subtitle output</Label>
+      <Button.Group size="mini" style={{ marginBottom: 8 }}>
+        {present.map((f) => (
+          <Button
+            key={f}
+            active={f === fmt}
+            onClick={() => onSelect(f)}
+          >
+            {f.toUpperCase()} ({countCues(f, outputs[f])} {f === 'txt' ? 'lines' : 'cues'})
+          </Button>
+        ))}
+      </Button.Group>
+      <pre
+        style={{
+          fontSize: '0.85em', maxHeight: 320, overflow: 'auto',
+          whiteSpace: 'pre-wrap', background: '#f6f8fa',
+          padding: 8, borderRadius: 4, margin: 0,
+        }}
+      >
+        {outputs[fmt]}
+      </pre>
+    </Segment>
+  );
+}
+
 class ASRComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -65,8 +120,17 @@ class ASRComponent extends React.Component {
       audioUrl: null,
       audioName: 'recording.webm',
       segments: null,
+      outputs: null,       // full server response (text, segments, srt, vtt, txt)
+      previewFmt: 'srt',
       loading: false,
       error: null,
+      // Output options
+      wantSrt: true,
+      wantVtt: false,
+      wantTxt: false,
+      useMaxLen: false,
+      maxLen: 42,
+      splitOnWord: true,
     };
     this.audioBlob = null;       // not needed for rendering -> not in state
     this.mediaRecorder = null;
@@ -79,6 +143,8 @@ class ASRComponent extends React.Component {
     this.onFileChosen = this.onFileChosen.bind(this);
     this.transcribe = this.transcribe.bind(this);
     this.downloadTranscript = this.downloadTranscript.bind(this);
+    this.downloadFormat = this.downloadFormat.bind(this);
+    this.toggle = this.toggle.bind(this);
   }
 
   componentWillUnmount() {
@@ -93,6 +159,7 @@ class ASRComponent extends React.Component {
       audioUrl: URL.createObjectURL(blob),
       audioName: name,
       segments: null,
+      outputs: null,
       error: null,
     });
   }
@@ -132,6 +199,31 @@ class ASRComponent extends React.Component {
     e.target.value = '';
   }
 
+  toggle(key) {
+    this.setState((s) => ({ [key]: !s[key] }));
+  }
+
+  /* Query string for /asr. Returns '' when no options are set, so the
+   * request is identical to the pre-v3 behavior. */
+  buildQuery() {
+    const {
+      wantSrt, wantVtt, wantTxt, useMaxLen, maxLen, splitOnWord,
+    } = this.state;
+    const formats = ['json'];
+    if (wantSrt) formats.push('srt');
+    if (wantVtt) formats.push('vtt');
+    if (wantTxt) formats.push('txt');
+
+    const q = new URLSearchParams();
+    if (formats.length > 1) q.set('formats', formats.join(','));
+    if (useMaxLen && parseInt(maxLen, 10) > 0) {
+      q.set('max_line_length', String(parseInt(maxLen, 10)));
+      q.set('split_on_word', splitOnWord ? 'true' : 'false');
+    }
+    const s = q.toString();
+    return s ? '?' + s : '';
+  }
+
   transcribe() {
     if (!this.audioBlob) {
       this.setState({ error: 'Record or upload audio first.' });
@@ -142,14 +234,14 @@ class ASRComponent extends React.Component {
     const form = new FormData();
     form.append('audio', this.audioBlob, this.state.audioName);
 
-    fetch(API_URL + '/asr', { method: 'POST', body: form })
+    fetch(API_URL + '/asr' + this.buildQuery(), { method: 'POST', body: form })
       .then((r) => {
         if (!r.ok) {
           return r.text().then((t) => { throw new Error(t || 'Transcription failed'); });
         }
         return r.json();
       })
-      .then((data) => this.setState({ segments: data.segments || [] }))
+      .then((data) => this.setState({ segments: data.segments || [], outputs: data }))
       .catch((err) => this.setState({ error: err.message }))
       .finally(() => this.setState({ loading: false }));
   }
@@ -161,22 +253,80 @@ class ASRComponent extends React.Component {
       .trim();
   }
 
+  baseName() {
+    return (this.state.audioName || 'transcript').replace(/\.[^.]+$/, '') || 'transcript';
+  }
+
+  /* Legacy button: unwrapped plain transcript, built client-side. */
   downloadTranscript() {
-    const blob = new Blob([this.getPlainText() + '\n'], {
-      type: 'text/plain;charset=utf-8',
-    });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'transcript.txt';
-    a.click();
-    URL.revokeObjectURL(url);
+    downloadBlob(this.getPlainText() + '\n', this.baseName() + '.txt', FORMATS.txt.mime);
+  }
+
+  downloadFormat(fmt) {
+    const content = this.state.outputs && this.state.outputs[fmt];
+    if (typeof content !== 'string') return;
+    downloadBlob(content, this.baseName() + '.' + FORMATS[fmt].ext, FORMATS[fmt].mime);
+  }
+
+  renderOptions() {
+    const {
+      wantSrt, wantVtt, wantTxt, useMaxLen, maxLen, splitOnWord, loading, recording,
+    } = this.state;
+    const disabled = loading || recording;
+    return (
+      <Segment>
+        <Label attached="top">Output options</Label>
+        <Form size="small">
+          <Form.Group inline>
+            <label>Subtitle formats</label>
+            <Form.Field>
+              <Checkbox label="srt" checked={wantSrt} disabled={disabled}
+                onChange={() => this.toggle('wantSrt')} />
+            </Form.Field>
+            <Form.Field>
+              <Checkbox label="vtt" checked={wantVtt} disabled={disabled}
+                onChange={() => this.toggle('wantVtt')} />
+            </Form.Field>
+            <Form.Field>
+              <Checkbox label="txt" checked={wantTxt} disabled={disabled}
+                onChange={() => this.toggle('wantTxt')} />
+            </Form.Field>
+          </Form.Group>
+          <Form.Group inline>
+            <Form.Field>
+              <Checkbox label="Max line length" checked={useMaxLen} disabled={disabled}
+                onChange={() => this.toggle('useMaxLen')} />
+            </Form.Field>
+            <Form.Field>
+              <Input
+                type="number" min={1} size="mini" style={{ width: 80 }}
+                value={maxLen}
+                disabled={disabled || !useMaxLen}
+                onChange={(e, { value }) => this.setState({ maxLen: value })}
+              />
+            </Form.Field>
+            <Form.Field>
+              <Checkbox label="Split on word" checked={splitOnWord}
+                disabled={disabled || !useMaxLen}
+                onChange={() => this.toggle('splitOnWord')} />
+            </Form.Field>
+          </Form.Group>
+        </Form>
+        <div style={{ fontSize: '0.8em', color: '#666' }}>
+          Wrapping affects only the subtitle outputs; the colored transcript is never changed.
+          Request: <code>POST /asr{this.buildQuery()}</code>
+        </div>
+      </Segment>
+    );
   }
 
   render() {
     const {
-      recording, audioUrl, audioName, segments, loading, error,
+      recording, audioUrl, audioName, segments, outputs, previewFmt, loading, error,
     } = this.state;
+    const present = outputs
+      ? Object.keys(FORMATS).filter((f) => typeof outputs[f] === 'string')
+      : [];
 
     return (
       <div>
@@ -201,6 +351,8 @@ class ASRComponent extends React.Component {
 
         <AudioWaveform src={audioUrl} label={'Input: ' + audioName} />
 
+        {this.renderOptions()}
+
         {audioUrl && (
           <Button
             primary
@@ -216,10 +368,25 @@ class ASRComponent extends React.Component {
 
         <ConfidenceTranscript segments={segments} />
 
+        {outputs && (
+          <SubtitlePreview
+            outputs={outputs}
+            previewFmt={previewFmt}
+            onSelect={(f) => this.setState({ previewFmt: f })}
+          />
+        )}
+
         {segments && segments.length > 0 && (
-          <Button basic size="small" onClick={this.downloadTranscript}>
-            <Icon name="download" /> Download transcript (.txt)
-          </Button>
+          <div>
+            <Button basic size="small" onClick={this.downloadTranscript}>
+              <Icon name="download" /> Transcript (.txt, unwrapped)
+            </Button>
+            {present.map((f) => (
+              <Button key={f} basic size="small" onClick={() => this.downloadFormat(f)}>
+                <Icon name="download" /> .{FORMATS[f].ext}
+              </Button>
+            ))}
+          </div>
         )}
       </div>
     );
