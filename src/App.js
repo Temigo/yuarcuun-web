@@ -24,14 +24,15 @@ import axios from 'axios';
 import now from 'performance-now';
 import ReactGA from 'react-ga';
 import {YugtunLoader} from './components/SearchPageHelpers.js';
-import TTSComponent from './components/TTS_ASR/TTSComponent.jsx';
-import ASRComponent from './components/TTS_ASR/ASRComponent.jsx';
+import TTSComponent from './components/TTS_ASR/TTSComponent.js';
+import ASRComponent from './components/TTS_ASR/ASRComponent.js';
 
 // export const API_URL = "https://yugtun-api.herokuapp.com";
 // export const API_URL = "http://127.0.0.1:5000";
 // export const API_URL = "https://inupiaqonline.com/api";
 export const API_URL = "https://www.inupiaqonline.com/fastapi";
 // export const API_URL = "http://127.0.0.1:5001";
+
 
 export const TUTORIAL_URL = 'https://youtu.be/8xW36PYaZHo';
 export const ICON_URL = "https://yuarcuun.inupiaqonline.com/images/logo_final_1.jpeg";
