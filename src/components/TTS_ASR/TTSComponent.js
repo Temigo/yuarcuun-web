@@ -5,10 +5,14 @@
 
 import React from 'react';
 import {
-  Button, Form, TextArea, Icon, Message,
+  Button, Form, TextArea, Icon, Message, Header, Divider, Grid, Container, Input
 } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 import AudioWaveform from './AudioWaveform';
 import { API_URL } from '../../App.js';
+
+let customFontFam = "Roboto,'Helvetica Neue',Arial,Helvetica,sans-serif"
+
 
 class TTSComponent extends React.Component {
   constructor(props) {
@@ -18,6 +22,9 @@ class TTSComponent extends React.Component {
       audioUrl: null,
       loading: false,
       error: null,
+      passkey:'pissurtuq',
+      inputkey:'',
+      visible:false,
     };
     this.fileInputRef = React.createRef();
 
@@ -76,36 +83,78 @@ class TTSComponent extends React.Component {
       .finally(() => this.setState({ loading: false }));
   }
 
+  checkPassword = () => {
+    if (this.state.passkey == this.state.inputkey) {
+      this.setState({visible:true})
+    }
+  }
+
+
   render() {
     const { text, audioUrl, loading, error } = this.state;
     return (
-      <div>
-        <Form error={!!error}>
-          <TextArea
-            value={text}
-            onChange={this.onTextChange}
-            placeholder="Yugtun text"
-            rows={4}
-          />
-          <div style={{ marginTop: 12 }}>
-            <Button primary loading={loading} disabled={loading} onClick={this.synthesize}>
-              <Icon name="sound" /> Synthesize
-            </Button>
-            <Button basic onClick={this.openFilePicker}>
-              <Icon name="file text" /> Load .txt file
-            </Button>
-            <input
-              ref={this.fileInputRef}
-              type="file"
-              accept=".txt,text/plain"
-              style={{ display: 'none' }}
-              onChange={this.loadTextFile}
-            />
-          </div>
-          {error && <Message error content={error} />}
-        </Form>
-        <AudioWaveform src={audioUrl} label="Synthesized speech" />
-      </div>
+      <Container style={{ margin: 0, padding: 0 }} text>
+        {!this.state.visible ?
+          <div style={{textAlign:'center'}}><Input onChange={(data, entry)=>this.setState({inputkey:entry.value})}placeholder='Passkey'/> <Button onClick={()=>this.checkPassword()}>Submit</Button></div>
+          :
+          <div style={{fontFamily:customFontFam}}>
+            <Grid textAlign='center'>
+              <Grid.Row  style={{height:40,paddingBottom:0}}>
+                <Grid.Column style={{ maxWidth: 800, padding: 0 }} textAlign='left'>
+                  <div style={{justifyContent:'space-between',display:'flex'}}>
+                    <div>
+
+                    <Link to={{pathname: "/"}}>
+                    <Icon circular style={{margin:0,marginLeft:5,color:'#B1B1B1',cursor:'pointer',fontSize:'22px'}} name='chevron left' />
+                    </Link>     
+
+                    </div>
+
+                    <div>
+                    <Header as='h2'>Yugtun Text-To-Speech</Header>
+                    </div>
+                    <div style={{width:36}} />
+                  </div>
+                    <Divider />
+                  <Form error={!!error}>
+                    <TextArea
+                      disabled={loading}
+                      value={text}
+                      onChange={this.onTextChange}
+                      placeholder="Yugtun text"
+                      rows={4}
+                    />
+                    <div style={{ marginTop: 12 }}>
+                      <Button primary loading={loading} disabled={loading} onClick={this.synthesize}>
+                        <Icon name="sound" /> Synthesize
+                      </Button>
+                      <Button basic disabled={loading} onClick={this.openFilePicker}>
+                        <Icon name="file text" /> Load .txt file
+                      </Button>
+                      <input
+                        ref={this.fileInputRef}
+                        type="file"
+                        accept=".txt,text/plain"
+                        style={{ display: 'none' }}
+                        onChange={this.loadTextFile}
+                      />
+                    </div>
+                    {error && <Message error content={error} />}
+                  </Form>
+                  <AudioWaveform src={audioUrl} label="Synthesized Speech" />
+                  {audioUrl !== null ?
+                    <Button basic href={audioUrl} download="yugtun_tts_clip.mp3">
+                      Download Audio
+                    </Button>
+                    :
+                    null
+                  }
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </div>
+      }
+    </Container>
     );
   }
 }

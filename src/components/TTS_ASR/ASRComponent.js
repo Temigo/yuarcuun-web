@@ -7,10 +7,12 @@
 
 import React from 'react';
 import {
-  Button, Segment, Label, Icon, Message, Checkbox, Input, Form,
+  Button, Segment, Label, Icon, Message, Checkbox, Input, Form, Grid, Container, Header, Divider
 } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 import AudioWaveform from './AudioWaveform';
 import { API_URL } from '../../App.js';
+let customFontFam = "Roboto,'Helvetica Neue',Arial,Helvetica,sans-serif"
 
 const FORMATS = {
   srt: { mime: 'application/x-subrip', ext: 'srt' },
@@ -47,7 +49,7 @@ function ConfidenceTranscript({ segments }) {
   if (!segments || !segments.length) return null;
   return (
     <Segment>
-      <Label attached="top">Transcription (color = confidence)</Label>
+      <Label attached="top">Transcription</Label>
       <div style={{ fontSize: '1.1em', lineHeight: 1.8, padding: 8 }}>
         {segments.map((seg, si) => (
           <div key={si} style={{ marginBottom: 6 }}>
@@ -62,7 +64,7 @@ function ConfidenceTranscript({ segments }) {
                   title={tok.p != null ? 'p=' + tok.p.toFixed(3) : ''}
                   style={{ color: confidenceColor(tok.p) }}
                 >
-                  {text}
+                  {text.replaceAll('<|endoftext|>','')}
                 </span>
               );
             })}
@@ -87,7 +89,7 @@ function SubtitlePreview({ outputs, previewFmt, onSelect }) {
   const fmt = present.indexOf(previewFmt) !== -1 ? previewFmt : present[0];
   return (
     <Segment>
-      <Label attached="top">Subtitle output</Label>
+      <Label attached="top">Subtitle Outputs</Label>
       <Button.Group size="mini" style={{ marginBottom: 8 }}>
         {present.map((f) => (
           <Button
@@ -95,7 +97,7 @@ function SubtitlePreview({ outputs, previewFmt, onSelect }) {
             active={f === fmt}
             onClick={() => onSelect(f)}
           >
-            {f.toUpperCase()} ({countCues(f, outputs[f])} {f === 'txt' ? 'lines' : 'cues'})
+            {f.toUpperCase()}
           </Button>
         ))}
       </Button.Group>
@@ -126,8 +128,8 @@ class ASRComponent extends React.Component {
       error: null,
       // Output options
       wantSrt: true,
-      wantVtt: false,
-      wantTxt: false,
+      wantVtt: true,
+      wantTxt: true,
       useMaxLen: false,
       maxLen: 42,
       splitOnWord: true,
@@ -312,10 +314,14 @@ class ASRComponent extends React.Component {
             </Form.Field>
           </Form.Group>
         </Form>
-        <div style={{ fontSize: '0.8em', color: '#666' }}>
-          Wrapping affects only the subtitle outputs; the colored transcript is never changed.
-          Request: <code>POST /asr{this.buildQuery()}</code>
-        </div>
+        {false ?
+          <div style={{ fontSize: '0.8em', color: '#666' }}>
+            Wrapping affects only the subtitle outputs; the colored transcript is never changed.
+            Request: <code>POST /asr{this.buildQuery()}</code>
+          </div>
+          :
+          null
+        }
       </Segment>
     );
   }
@@ -329,66 +335,102 @@ class ASRComponent extends React.Component {
       : [];
 
     return (
-      <div>
-        <Button
-          color={recording ? 'red' : 'green'}
-          onClick={recording ? this.stopRecording : this.startRecording}
-          disabled={loading}
-        >
-          <Icon name={recording ? 'stop' : 'microphone'} />
-          {recording ? 'Stop recording' : 'Record'}
-        </Button>
-        <Button basic disabled={recording || loading} onClick={this.openFilePicker}>
-          <Icon name="upload" /> Upload audio
-        </Button>
-        <input
-          ref={this.fileInputRef}
-          type="file"
-          accept="audio/*"
-          style={{ display: 'none' }}
-          onChange={this.onFileChosen}
-        />
+      <Container style={{ margin: 0, padding: 0 }} text>
 
-        <AudioWaveform src={audioUrl} label={'Input: ' + audioName} />
+        <div style={{fontFamily:customFontFam}}>
 
-        {this.renderOptions()}
+          <Grid textAlign='center'>
+            <Grid.Row  style={{height:40,paddingBottom:0}}>
+              <Grid.Column style={{ maxWidth: 800, padding: 0 }} textAlign='left'>
 
-        {audioUrl && (
-          <Button
-            primary
-            loading={loading}
-            disabled={loading || recording}
-            onClick={this.transcribe}
-          >
-            <Icon name="font" /> Transcribe
-          </Button>
-        )}
+              <div style={{justifyContent:'space-between',display:'flex'}}>
+                <div>
 
-        {error && <Message error content={error} />}
+                <Link to={{pathname: "/"}}>
+                <Icon circular style={{margin:0,marginLeft:5,color:'#B1B1B1',cursor:'pointer',fontSize:'22px'}} name='chevron left' />
+                </Link>     
 
-        <ConfidenceTranscript segments={segments} />
+                </div>
 
-        {outputs && (
-          <SubtitlePreview
-            outputs={outputs}
-            previewFmt={previewFmt}
-            onSelect={(f) => this.setState({ previewFmt: f })}
-          />
-        )}
+                <div>
+                <Header as='h2'>Yugtun Speech-To-Text</Header>
+                </div>
+                <div style={{width:36}} />
+              </div>
+                <Divider />
 
-        {segments && segments.length > 0 && (
-          <div>
-            <Button basic size="small" onClick={this.downloadTranscript}>
-              <Icon name="download" /> Transcript (.txt, unwrapped)
-            </Button>
-            {present.map((f) => (
-              <Button key={f} basic size="small" onClick={() => this.downloadFormat(f)}>
-                <Icon name="download" /> .{FORMATS[f].ext}
-              </Button>
-            ))}
-          </div>
-        )}
+
+                <div style={{textAlign:'center'}}>
+                  <Button
+                    color={recording ? 'red' : 'green'}
+                    onClick={recording ? this.stopRecording : this.startRecording}
+                    disabled={loading}
+                  >
+                    <Icon name={recording ? 'stop' : 'microphone'} />
+                    {recording ? 'Stop recording' : 'Record'}
+                  </Button>
+                  <Button basic disabled={recording || loading} onClick={this.openFilePicker}>
+                    <Icon name="upload" /> Upload audio
+                  </Button>
+                </div>
+                <input
+                  ref={this.fileInputRef}
+                  type="file"
+                  accept="audio/*"
+                  style={{ display: 'none' }}
+                  onChange={this.onFileChosen}
+                />
+
+                <AudioWaveform src={audioUrl} label={'Input: ' + audioName} />
+
+                {/*{this.renderOptions()}*/}
+
+                {audioUrl && (
+                  <div style={{textAlign:'center'}}>
+                    <Button
+                      primary
+                      loading={loading}
+                      disabled={loading || recording}
+                      onClick={this.transcribe}
+                    >
+                      <Icon name="font" /> Transcribe
+                    </Button>
+                  </div>
+                )}
+
+                {error && <Message error content={error} />}
+
+                <ConfidenceTranscript segments={segments} />
+
+                {outputs && (
+                  <SubtitlePreview
+                    outputs={outputs}
+                    previewFmt={previewFmt}
+                    onSelect={(f) => this.setState({ previewFmt: f })}
+                  />
+                )}
+
+                {segments && segments.length > 0 && (
+                  <div>
+{/*                    <Button basic size="small" onClick={this.downloadTranscript}>
+                      <Icon name="download" /> Transcript (.txt, unwrapped)
+                    </Button>*/}
+                    {present.map((f) => (
+                      <Button key={f} basic size="small" onClick={() => this.downloadFormat(f)}>
+                        <Icon name="download" /> .{FORMATS[f].ext}
+                      </Button>
+                    ))}
+                  </div>
+                )}
+
+                <div style={{color:'grey',paddingTop:'25px',fontSize:'16px',fontStyle:'italic'}}>
+                  {"Disclaimer: The speech-to-text output is only about 90% accurate. Please do not just copy paste the output for public-facing work, this is irresponsible. Please contact yuarcuun@gmail.com if you'd like resources for verifying and hand-correcting transcripts. This tool is intended to speed up the process of transcription and translation for Yugtun speakers working with Yugtun education or language material."}
+                </div>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
       </div>
+    </Container>
     );
   }
 }

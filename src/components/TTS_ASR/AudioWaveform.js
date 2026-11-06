@@ -168,7 +168,7 @@ class AudioWaveform extends React.Component {
             <canvas
               ref={this.canvasRef}
               onClick={this.seek}
-              style={{ flex: 1, height: 64, marginLeft: 12, cursor: 'pointer' }}
+              style={{ flex: 1, width: '100%', height: 64, marginLeft: 12, cursor: 'pointer' }}
             />
             <span style={{ marginLeft: 12, color: '#666', minWidth: 40 }}>
               {this.formatTime(duration)}
