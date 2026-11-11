@@ -7,7 +7,7 @@
 
 import React from 'react';
 import {
-  Button, Segment, Label, Icon, Message, Checkbox, Input, Form, Grid, Container, Header, Divider
+  Button, Segment, Label, Icon, Message, Checkbox, Input, Form, Grid, Container, Header, Divider, Image
 } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import AudioWaveform from './AudioWaveform';
@@ -423,9 +423,25 @@ class ASRComponent extends React.Component {
                   </div>
                 )}
 
-                <div style={{color:'grey',paddingTop:'25px',fontSize:'16px',fontStyle:'italic'}}>
+                <div style={{color:'grey',paddingTop:'25px', paddingBottom:'30px',fontSize:'16px',fontStyle:'italic'}}>
                   {"Disclaimer: The speech-to-text output is only about 90% accurate. Please do not just copy paste the output for public-facing work, this is irresponsible. Please contact yuarcuun@gmail.com if you'd like resources for verifying and hand-correcting transcripts. This tool is intended to speed up the process of transcription and translation for Yugtun speakers working with Yugtun education or language material."}
                 </div>
+                <div style={{fontFamily:customFontFam}}>
+                    <Grid>
+                        <Grid.Row columns={2}>
+                        <Grid.Column>
+                          <span style={{color:'#555555'}}>This project is supported by a Digitizing Hidden Collections grant from the <a href="https://www.clir.org/" target="_blank" >Council on Library and Information Resources</a> (CLIR). The grant program is made possible by funding from the Mellon Foundation.</span>
+                        </Grid.Column>
+                        <Grid.Column>
+                        <div style={{textAlign:'center'}}>
+                            <Image style={{width:'150px',marginBottom:5}} centered src='CLIR_red_w_wordmark.png'/>
+                            <Image href="https://archive.kyuk.org" style={{width:'150px'}} centered src='npr.brightspotcdn.webp'/>
+                          </div>
+                        </Grid.Column>
+                        </Grid.Row>
+                    </Grid>
+                  </div>
+
             </Grid.Column>
           </Grid.Row>
         </Grid>
