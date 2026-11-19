@@ -170,7 +170,7 @@ import useRecorder  from '../useRecorderEdited.js';
         // console.log(localStorage.getItem('age'))
 
         axios
-          .post(API_URL + "yugtunCrowdsource/", formData)
+          .post(API_URL + "/yugtunCrowdsource", formData)
           .then(response => {
             console.log(response)
 
